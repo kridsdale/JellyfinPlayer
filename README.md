@@ -1,3 +1,18 @@
+# JellyfinPlayer kids experience
+
+This personal tvOS fork of Swiftfin presents only the existing **Kid TV** and **Kid Movies** libraries. Shows offer Next and Shuffle; movies offer a single Play, Resume, or Play again action. Protected parent controls provide episode selection, local progress settings, and connection recovery.
+
+The implementation is under validation and is **not yet a release candidate**. Dedicated restricted-account playback must pass before household use.
+
+- [Build, setup, recovery, and rollback](docs/kids-release-guide.md)
+- [Current validation evidence](docs/kids-validation.md)
+- [Full requirement coverage](docs/kids-requirements.md)
+- [Approved full product brief](docs/kids-product-brief.pdf)
+
+The iOS interface remains upstream Swiftfin. The upstream project information and distribution links below describe Swiftfin, rather than this personal build. Existing MPL licensing and contributor notices remain in place.
+
+---
+
 <div align="center">
   <img alt="Swiftfin" src="./Resources/primary-wide.svg">
 

@@ -17,6 +17,9 @@ extension NetworkLogger {
     static func swiftfin() -> NetworkLogger {
         var configuration = NetworkLogger.Configuration()
 
+        #if os(tvOS)
+        configuration.willHandleEvent = { _ in nil }
+        #else
         configuration.willHandleEvent = { event -> LoggerStore.Event? in
             if case var LoggerStore.Event.networkTaskCompleted(task) = event {
                 guard let url = task.originalRequest.url,
@@ -52,6 +55,7 @@ extension NetworkLogger {
             return event
         }
 
+        #endif
         return NetworkLogger(configuration: configuration)
     }
 }

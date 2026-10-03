@@ -42,6 +42,7 @@ extension MediaPlayerItem {
         }
 
         var item = try await initialItem.getFullItem(userSession: userSession)
+        guard item.id == itemID else { throw ErrorMessage("Playback item identity changed") }
 
         if let modifyItem {
             modifyItem(&item)

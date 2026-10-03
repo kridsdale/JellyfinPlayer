@@ -15,6 +15,10 @@ import UIKit
 extension UserSessionManager {
 
     func observeSocketCommands() {
+        #if os(tvOS)
+        // Kids playback must pass its local catalog boundary and session budget. Remote queue/navigation commands are disabled.
+        return
+        #else
         $currentSession
             .map { session -> AnyPublisher<PlayRequest, Never> in
                 session?.serverSocketManager.playCommands ?? Combine.Empty<PlayRequest, Never>().eraseToAnyPublisher()
@@ -50,6 +54,7 @@ extension UserSessionManager {
                 }
             }
             .store(in: &cancellables)
+        #endif
     }
 
     @MainActor

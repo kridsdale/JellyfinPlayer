@@ -111,8 +111,6 @@ final class MediaPlayerManager: ViewModel {
                     "Playing new item",
                     metadata: [
                         "itemID": .stringConvertible(playbackItem.baseItem.id ?? "Unknown"),
-                        "itemTitle": .stringConvertible(playbackItem.baseItem.displayTitle),
-                        "url": .stringConvertible(playbackItem.url.absoluteString),
                         "isTranscoding": .stringConvertible(playbackItem.mediaSource.transcodingURL != nil),
                     ]
                 )
@@ -188,6 +186,9 @@ final class MediaPlayerManager: ViewModel {
         }
     }
 
+    /// Allows a dedicated presentation to handle authorization failures without inheriting queue navigation.
+    var onPlaybackError: ((Error) -> Void)?
+
     private var initialMediaPlayerItemProvider: MediaPlayerItemProvider?
 
     // MARK: init
@@ -258,23 +259,21 @@ final class MediaPlayerManager: ViewModel {
             logger.error(
                 "Error while playing item",
                 metadata: [
-                    "error": .stringConvertible(error.localizedDescription),
+                    "error": .string("\((error as NSError).domain):\((error as NSError).code)"),
                     "itemID": .stringConvertible(playbackItem.baseItem.id ?? "Unknown"),
-                    "itemTitle": .stringConvertible(playbackItem.baseItem.displayTitle),
-                    "url": .stringConvertible(playbackItem.url.absoluteString),
                 ]
             )
         } else {
             logger.error(
                 "Error with no playback item",
                 metadata: [
-                    "error": .stringConvertible(error.localizedDescription),
+                    "error": .string("\((error as NSError).domain):\((error as NSError).code)"),
                     "itemID": .stringConvertible(item.id ?? "Unknown"),
-                    "itemTitle": .stringConvertible(item.displayTitle),
                 ]
             )
         }
 
+        onPlaybackError?(error)
         proxy?.stop()
         Container.shared.mediaPlayerManagerPublisher().send(nil)
         Container.shared.mediaPlayerManager.reset()
@@ -435,7 +434,6 @@ final class MediaPlayerManager: ViewModel {
             metadata: [
                 "playSessionID": "\(newItem.playSessionID)",
                 "isTranscoding": "\(newItem.mediaSource.transcodingURL != nil)",
-                "url": "\(newItem.url.absoluteString)",
             ]
         )
 

@@ -39,6 +39,7 @@
 		62666E3E27E503FA00EC0ECD /* MediaAccessibility.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5362E4BE267D40E4000E2F71 /* MediaAccessibility.framework */; };
 		62666E3F27E5040300EC0ECD /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5362E4C6267D40F4000E2F71 /* SystemConfiguration.framework */; };
 		BD88CB422D77E6A0006BB5E3 /* TVOSPicker in Frameworks */ = {isa = PBXBuildFile; productRef = BD88CB412D77E6A0006BB5E3 /* TVOSPicker */; };
+		CAFE00000000000000000001 /* KidsCore in Frameworks */ = {isa = PBXBuildFile; productRef = CAFE00000000000000000002 /* KidsCore */; };
 		E1002B682793CFBA00E47059 /* Algorithms in Frameworks */ = {isa = PBXBuildFile; productRef = E1002B672793CFBA00E47059 /* Algorithms */; };
 		E1002B6B2793E36600E47059 /* Algorithms in Frameworks */ = {isa = PBXBuildFile; productRef = E1002B6A2793E36600E47059 /* Algorithms */; };
 		E10706102942F57D00646DAF /* Pulse in Frameworks */ = {isa = PBXBuildFile; productRef = E107060F2942F57D00646DAF /* Pulse */; };
@@ -176,6 +177,7 @@
 		628B95232670CABD0091AF3B /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
 		637FCAF3287B5B2600C0A353 /* UDPBroadcast.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = UDPBroadcast.xcframework; path = Carthage/Build/UDPBroadcast.xcframework; sourceTree = "<group>"; };
 		E1B2AB9628808CDF0072B3B9 /* GoogleCast.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = GoogleCast.xcframework; path = Carthage/Build/GoogleCast.xcframework; sourceTree = "<group>"; };
+		CAFE00000000000000000111 /* KidsUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; path = KidsUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -238,6 +240,7 @@
 		E145669F2DFCAEFD008FF700 /* Swiftfin tvOS */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (E14567272DFCAEFD008FF700 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = "Swiftfin tvOS"; sourceTree = "<group>"; };
 		E1456FC82DFCB323008FF700 /* Translations */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Translations; sourceTree = "<group>"; };
 		E150B7D12DFF2E7C00DC7CF4 /* XcodeConfig */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (E1BE3EDA2FE9DAE800327990 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, E1BE3EDB2FE9DAE800327990 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = XcodeConfig; sourceTree = "<group>"; };
+		CAFE00000000000000000112 /* KidsUITests */ = {isa = PBXFileSystemSynchronizedRootGroup; path = KidsUITests; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -280,6 +283,7 @@
 				E13DD3CD27164CA7009D4DAF /* CoreStore in Frameworks */,
 				E1A7B1652B9A9F7800152546 /* PreferencesView in Frameworks */,
 				E19009260000000000000002 /* SwiftfinMacros in Frameworks */,
+				CAFE00000000000000000001 /* KidsCore in Frameworks */,
 				E12CDBC12FFB593800828742 /* CollectionVGrid in Frameworks */,
 				E1153DD22BBB649C00424D36 /* SVGKit in Frameworks */,
 				62666E1527E501C800EC0ECD /* AVFoundation.framework in Frameworks */,
@@ -370,12 +374,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		CAFE00000000000000000113 /* Frameworks */ = {isa = PBXFrameworksBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
 		5377CBE8263B596A003A4E83 = {
 			isa = PBXGroup;
 			children = (
+                CAFE00000000000000000112 /* KidsUITests */,
 				E14560852DFCAE51008FF700 /* Swiftfin */,
 				E145669F2DFCAEFD008FF700 /* Swiftfin tvOS */,
 				E14563272DFCAE6E008FF700 /* Shared */,
@@ -390,6 +396,7 @@
 		5377CBF2263B596A003A4E83 /* Products */ = {
 			isa = PBXGroup;
 			children = (
+                CAFE00000000000000000111 /* KidsUITests.xctest */,
 				5377CBF1263B596A003A4E83 /* Swiftfin.app */,
 				535870602669D21600D05A09 /* Swiftfin.app */,
 			);
@@ -493,6 +500,7 @@
 				E1B5F7AC29577BDD004B26CF /* OrderedCollections */,
 				E1A7B1642B9A9F7800152546 /* PreferencesView */,
 				E19009260000000000000004 /* SwiftfinMacros */,
+				CAFE00000000000000000002 /* KidsCore */,
 				E1392FEC2BA218A80034110D /* SwiftUIIntrospect */,
 				E1153DD12BBB649C00424D36 /* SVGKit */,
 				E19D41B12BF2BFA50082B8B2 /* KeychainSwift */,
@@ -594,6 +602,7 @@
 			productReference = 5377CBF1263B596A003A4E83 /* Swiftfin.app */;
 			productType = "com.apple.product-type.application";
 		};
+		CAFE00000000000000000110 /* KidsUITests */ = {isa = PBXNativeTarget; buildConfigurationList = CAFE00000000000000000116; buildPhases = (CAFE00000000000000000114, CAFE00000000000000000113, CAFE00000000000000000115); buildRules = (); dependencies = (); fileSystemSynchronizedGroups = (CAFE00000000000000000112); name = KidsUITests; productName = KidsUITests; productReference = CAFE00000000000000000111; productType = "com.apple.product-type.bundle.ui-testing"; };
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -607,6 +616,7 @@
 				LastSwiftUpdateCheck = 1250;
 				LastUpgradeCheck = 2630;
 				TargetAttributes = {
+                    CAFE00000000000000000110 = { CreatedOnToolsVersion = 27.0; TestTargetID = 5358705F2669D21600D05A09; };
 					5358705F2669D21600D05A09 = {
 						CreatedOnToolsVersion = 12.5;
 					};
@@ -678,6 +688,7 @@
 			);
 			mainGroup = 5377CBE8263B596A003A4E83;
 			packageReferences = (
+				CAFE00000000000000000003 /* XCLocalSwiftPackageReference "KidsCore" */,
 				5335256F265EA0A0006CCA86 /* XCRemoteSwiftPackageReference "SwiftUI-Introspect" */,
 				E13DD3C42716499E009D4DAF /* XCRemoteSwiftPackageReference "CoreStore" */,
 				E13DD3D127168E65009D4DAF /* XCRemoteSwiftPackageReference "Defaults" */,
@@ -710,6 +721,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
+                CAFE00000000000000000110 /* KidsUITests */,
 				5377CBF0263B596A003A4E83 /* Swiftfin iOS */,
 				5358705F2669D21600D05A09 /* Swiftfin tvOS */,
 			);
@@ -731,6 +743,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		CAFE00000000000000000115 /* Resources */ = {isa = PBXResourcesBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
@@ -903,6 +916,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		CAFE00000000000000000114 /* Sources */ = {isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
@@ -1177,6 +1191,8 @@
 			};
 			name = Release;
 		};
+		CAFE00000000000000000117 /* Debug */ = {isa = XCBuildConfiguration; buildSettings = {CODE_SIGN_STYLE = Automatic; GENERATE_INFOPLIST_FILE = YES; DEBUG_INFORMATION_FORMAT = ""; PRODUCT_BUNDLE_IDENTIFIER = com.kridsdale.JellyfinPlayer.KidsUITests; PRODUCT_NAME = "$(TARGET_NAME)"; SDKROOT = appletvos; SWIFT_VERSION = 5.0; TARGETED_DEVICE_FAMILY = 3; TVOS_DEPLOYMENT_TARGET = 26.1; TEST_TARGET_NAME = "Swiftfin tvOS"; }; name = Debug; };
+		CAFE00000000000000000118 /* Release */ = {isa = XCBuildConfiguration; buildSettings = {CODE_SIGN_STYLE = Automatic; GENERATE_INFOPLIST_FILE = YES; DEBUG_INFORMATION_FORMAT = ""; PRODUCT_BUNDLE_IDENTIFIER = com.kridsdale.JellyfinPlayer.KidsUITests; PRODUCT_NAME = "$(TARGET_NAME)"; SDKROOT = appletvos; SWIFT_VERSION = 5.0; TARGETED_DEVICE_FAMILY = 3; TVOS_DEPLOYMENT_TARGET = 26.1; TEST_TARGET_NAME = "Swiftfin tvOS"; }; name = Release; };
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -1207,9 +1223,14 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
+		CAFE00000000000000000116 /* KidsUITests configurations */ = {isa = XCConfigurationList; buildConfigurations = (CAFE00000000000000000117, CAFE00000000000000000118); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release; };
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
+		CAFE00000000000000000003 /* XCLocalSwiftPackageReference "KidsCore" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = KidsCore;
+		};
 		E15D4F032B1B0C3C00442DB8 /* XCLocalSwiftPackageReference "PreferencesView" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = PreferencesView;
@@ -1436,6 +1457,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = BD88CB402D77E6A0006BB5E3 /* XCRemoteSwiftPackageReference "TVOSPicker" */;
 			productName = TVOSPicker;
+		};
+		CAFE00000000000000000002 /* KidsCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = CAFE00000000000000000003 /* XCLocalSwiftPackageReference "KidsCore" */;
+			productName = KidsCore;
 		};
 		E1002B672793CFBA00E47059 /* Algorithms */ = {
 			isa = XCSwiftPackageProductDependency;

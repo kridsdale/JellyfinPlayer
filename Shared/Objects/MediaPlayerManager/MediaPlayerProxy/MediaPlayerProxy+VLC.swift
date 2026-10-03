@@ -25,6 +25,8 @@ class VLCMediaPlayerProxy: VideoMediaPlayerProxy,
     let player = Player()
 
     private var pendingStartTime: Duration?
+    /// A catalog-constrained client can own its queue and completion policy.
+    var onNaturalEnd: (() -> Void)?
 
     weak var manager: MediaPlayerManager? {
         didSet {
@@ -151,12 +153,12 @@ class VLCMediaPlayerProxy: VideoMediaPlayerProxy,
     }
 
     private func log(_ error: Error) {
-        manager?.logger.warning("SwiftVLC operation rejected: \(error)")
+        manager?.logger.warning("SwiftVLC operation rejected", metadata: ["reason": "\(String(describing: type(of: error)))"])
     }
 
     private func failPlayback(_ error: Error) {
-        manager?.logger.error("SwiftVLC error: \(error)")
-        manager?.error(ErrorMessage("VLC player error: \(error.localizedDescription)"))
+        manager?.logger.error("SwiftVLC error", metadata: ["reason": "\(String(describing: type(of: error)))"])
+        manager?.error(ErrorMessage("VLC player is unable to perform playback"))
     }
 
     /// Applies the resume position as an absolute seek once libVLC has
@@ -185,7 +187,8 @@ class VLCMediaPlayerProxy: VideoMediaPlayerProxy,
 
             let startSeconds = max(
                 .zero,
-                (item.baseItem.startSeconds ?? .zero) - Duration.seconds(Defaults[.VideoPlayer.resumeOffset])
+                (item.baseItem.startSeconds ?? .zero) -
+                    (onNaturalEnd == nil ? Duration.seconds(Defaults[.VideoPlayer.resumeOffset]) : .zero)
             )
 
             pendingStartTime = !item.baseItem.isLiveStream && startSeconds > .zero ? startSeconds : nil
@@ -305,7 +308,11 @@ extension VLCMediaPlayerProxy {
                             manager.seconds = runtime
                         }
                         proxy.isBuffering.value = false
-                        manager.ended()
+                        if let onNaturalEnd = proxy.onNaturalEnd {
+                            onNaturalEnd()
+                        } else {
+                            manager.ended()
+                        }
                     }
                     .onChange(of: proxy.player.audioTracks) {
                         playbackItem.switchTrack(type: .audio, index: playbackItem.selectedAudioStreamIndex)

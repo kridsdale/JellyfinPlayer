@@ -19,6 +19,17 @@ struct UserSessionRootView: View {
     private var userSessionManager
 
     var body: some View {
+        #if os(tvOS)
+        #if DEBUG
+        if let argument = ProcessInfo.processInfo.arguments.first(where: { $0.hasPrefix("--kids-preview=") }) {
+            KidsRootView(model: KidsPreviewFixtures.model(String(argument.dropFirst("--kids-preview=".count))))
+        } else {
+            KidsRootView().task { await userSessionManager.start() }
+        }
+        #else
+        KidsRootView().task { await userSessionManager.start() }
+        #endif
+        #else
         ZStack {
             switch userSessionManager.state {
             case .initial:
@@ -48,6 +59,7 @@ struct UserSessionRootView: View {
                 )
             }
         }
+        #endif
     }
 }
 
