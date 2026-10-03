@@ -13,7 +13,7 @@ Status: implementation and local validation in progress; **not yet a release can
 
 ## Required before release-candidate evaluation
 
-- Provision and verify the dedicated `kidsplayer` account with only the two existing approved libraries and no admin/deletion permissions. The server chat has staged the proposal but cannot retrieve the driver's human approval. It clarified that separate approval specifically in that chat is not required; verifiable authorization and resolution of its old-PIN comparison prerequisite remain pending. The account and private credential file are absent.
+- Provision and verify the dedicated `kidsplayer` account with only the two existing approved libraries and no admin/deletion permissions. The server chat has staged the proposal but cannot retrieve the driver's human approval. It clarified that separate approval specifically in that chat is not required; verifiable authorization remains pending. Its old-PIN comparison is now optional; independently generated credentials no longer require the legacy secret. The account and private credential file are absent.
 - Use the actual restricted account to play a kids' episode and movie, observe time/frames, pause/resume and seek, kill/relaunch, and complete an episode-to-next transition; obtain server corroboration.
 - Exercise exact-item reconnect, unavailable server, revoked/expired token, account/library change, old-artwork isolation, repeated Select and return-focus behavior. Keep synthetic denied IDs out of child-facing screenshots.
 - Complete the P0 matrix and mark each required gate with current evidence before changing this status.
