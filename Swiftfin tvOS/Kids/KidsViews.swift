@@ -46,7 +46,11 @@ struct KidsRootView: View {
                         model.parentPresented = true
                     }
                 } else if model.problem != nil && model.catalog.isEmpty {
-                    KidsStatusView(symbol: "wifi.slash", title: "Your shows are taking a break.") { Task { await model.refresh() } }
+                    KidsStatusView(
+                        symbol: "wifi.slash",
+                        title: "Your shows are taking a break.",
+                        parentAction: { model.parentPresented = true }
+                    ) { Task { await model.refresh() } }
                 } else {
                     KidsBrowseView(model: model, path: $path)
                 }
@@ -125,6 +129,7 @@ struct KidsStatusView: View {
     var detail: String?
     var actionTitle = "Try again"
     var actionSymbol = "arrow.clockwise"
+    var parentAction: (() -> Void)?
     var action: (() -> Void)?
     var body: some View {
         VStack(spacing: 35) {
@@ -137,6 +142,10 @@ struct KidsStatusView: View {
                 Button(actionTitle, systemImage: actionSymbol, action: action).buttonStyle(.borderedProminent)
             } else {
                 ProgressView().scaleEffect(1.5)
+            }
+            if let parentAction {
+                Button("Parents", systemImage: "lock.fill", action: parentAction)
+                    .buttonStyle(.bordered).accessibilityIdentifier("kids.parents").font(.headline)
             }
         }.frame(maxWidth: .infinity, maxHeight: .infinity).background(kidsBackground)
     }
@@ -217,27 +226,39 @@ struct KidsBrowseView: View {
                     .focused($focused, equals: "parents")
             }
             if let items = model.catalog[model.category], !items.isEmpty {
-                ScrollView {
-                    LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 32), count: 4), spacing: 40) {
-                        ForEach(items) { item in
-                            Button {
-                                model.lastFocus[model.category] = item.id
-                                if item.kind == .series {
-                                    model.selectedShow = item
+                ScrollViewReader { scroll in
+                    ScrollView {
+                        LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 32), count: 4), spacing: 40) {
+                            ForEach(items) { item in
+                                Button {
+                                    model.lastFocus[model.category] = item.id
+                                    if item.kind == .series {
+                                        model.selectedShow = item
+                                    }
+                                    path.append(item)
+                                } label: {
+                                    VStack(spacing: 14) {
+                                        KidsArtwork(model: model, item: item).frame(height: 310)
+                                        Text(item.name).font(.headline).lineLimit(1)
+                                    }.padding(8)
                                 }
-                                path.append(item)
-                            } label: {
-                                VStack(spacing: 14) {
-                                    KidsArtwork(model: model, item: item).frame(height: 310)
-                                    Text(item.name).font(.headline).lineLimit(1)
-                                }.padding(8)
+                                .buttonStyle(.card).focused($focused, equals: item.id)
+                                .accessibilityLabel(item.name).accessibilityIdentifier("kids.card.\(item.id)").id(item.id)
                             }
-                            .buttonStyle(.card).focused($focused, equals: item.id)
-                            .accessibilityLabel(item.name).accessibilityIdentifier("kids.card.\(item.id)")
-                        }
-                    }.padding(.vertical, 24)
+                        }.padding(.vertical, 24).padding(.horizontal, 24)
+                    }
+                    .task {
+                        let category = model.category
+                        let previous = model.lastFocus[category]
+                        let target = items.first(where: { $0.id == previous })?.id ?? items.first?.id
+                        guard let target else { return }
+                        scroll.scrollTo(target, anchor: .center)
+                        try? await Task.sleep(for: .milliseconds(150))
+                        guard !Task.isCancelled, model.category == category,
+                              focused == nil || focused == previous || focused == target else { return }
+                        focused = target
+                    }
                 }
-                .scrollClipDisabled()
             } else {
                 KidsStatusView(
                     symbol: model.category.symbol,
@@ -249,7 +270,10 @@ struct KidsBrowseView: View {
             }
         }
         .padding(.horizontal, 70).padding(.top, 45).background(kidsBackground)
-        .onAppear { focused = model.lastFocus[model.category] ?? model.catalog[model.category]?.first?.id }
+        .onAppear {
+            focused = model.lastFocus[model.category] ?? model.catalog[model.category]?.first?.id
+            model.enterBrowse()
+        }
         .onChange(of: focused) {
             if focused == "parents" {
                 model.narration("Parents")

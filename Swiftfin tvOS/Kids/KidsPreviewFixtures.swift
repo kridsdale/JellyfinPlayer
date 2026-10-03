@@ -81,6 +81,10 @@ enum KidsPreviewFixtures {
             // Seed a prior visible catalog, then use the production denial path to remove it.
             model.show(KidsAPIError.authentication)
         }
+        if scenario == "offline" {
+            model.catalog = [:]
+            model.problem = KidsAPIError.connection.localizedDescription
+        }
         if scenario == "loading" {
             model.loading = true
         }
@@ -95,6 +99,7 @@ enum KidsPreviewFixtures {
 #Preview("Shows - missing art and focus") { KidsRootView(model: KidsPreviewFixtures.model("shows")) }
 #Preview("Movies - posters") { KidsRootView(model: KidsPreviewFixtures.model("movies")) }
 #Preview("Authorization denied - prior catalog hidden") { KidsRootView(model: KidsPreviewFixtures.model("denied")) }
+#Preview("Offline catalog - protected help") { KidsRootView(model: KidsPreviewFixtures.model("offline")) }
 #Preview("Neutral loading") { KidsRootView(model: KidsPreviewFixtures.model("loading")) }
 #Preview("Empty catalog") { KidsRootView(model: KidsPreviewFixtures.model("empty")) }
 #Preview("Ordered series finished") { KidsTitleView(

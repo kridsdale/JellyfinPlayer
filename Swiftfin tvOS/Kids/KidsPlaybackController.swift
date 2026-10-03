@@ -213,6 +213,7 @@ final class KidsPlaybackController: ObservableObject, Identifiable {
     }
 
     func toggle() {
+        guard !stopped else { return }
         if model?.isPreview == true {
             paused.toggle()
         } else {
@@ -229,7 +230,7 @@ final class KidsPlaybackController: ObservableObject, Identifiable {
     }
 
     func seek(_ delta: Double) {
-        guard paused, delta.isFinite else { return }
+        guard !stopped, paused, delta.isFinite else { return }
         guard model?.isPreview == true || proxy.player.isSeekable else { return }
         let runtime = item.runtime ?? 0
         let target = max(0, min(runtime > 0 ? runtime : .greatestFiniteMagnitude, seconds + delta))

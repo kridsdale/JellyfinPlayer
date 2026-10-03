@@ -63,6 +63,33 @@ final class KidsNavigationTests: XCTestCase {
         capture("shows-grid-return")
     }
 
+    func testScrolledCardFocusReturnsAfterTitle() {
+        launch("shows")
+        XCTAssertTrue(app.buttons["kids.card.show-1"].waitForExistence(timeout: 10))
+        XCUIRemote.shared.press(.down)
+        XCUIRemote.shared.press(.down)
+        let card = app.buttons["kids.card.show-9"]
+        select(card)
+        XCTAssertTrue(app.buttons["kids.action.next"].waitForExistence(timeout: 5))
+        XCUIRemote.shared.press(.menu)
+        let restored = XCTNSPredicateExpectation(predicate: NSPredicate(format: "exists == true AND hasFocus == true"), object: card)
+        XCTAssertEqual(XCTWaiter.wait(for: [restored], timeout: 5), .completed)
+        capture("scrolled-grid-focus-return")
+    }
+
+    func testOfflineCatalogCanReachProtectedParents() {
+        launch("offline")
+        XCTAssertTrue(app.buttons["Try again"].waitForExistence(timeout: 10))
+        let parents = app.buttons["kids.parents"]
+        XCTAssertTrue(parents.exists)
+        capture("offline-protected-help")
+        XCUIRemote.shared.press(.down)
+        select(parents)
+        XCTAssertTrue(app.secureTextFields["kids.parent.pin"].waitForExistence(timeout: 5))
+        XCUIRemote.shared.press(.menu)
+        XCTAssertTrue(app.buttons["Try again"].waitForExistence(timeout: 5))
+    }
+
     func testMovieHasOneResumeAction() {
         launch("resume")
         let card = app.buttons["kids.card.movie-1"]

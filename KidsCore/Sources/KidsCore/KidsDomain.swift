@@ -274,7 +274,11 @@ public struct KidsState: Codable, Equatable, Sendable {
         if session?.itemID == item.id && session?.mode == mode {
             session?.seconds = seconds
         }
-        if mode == .ordered, let show = item.seriesID, ordered[show]?.itemID == item.id {
+        // A parent Set Next retires the ordered session, even when it chooses the same item.
+        // Time reported by that old stream must not restore the previous resume position.
+        if mode == .ordered, session?.mode == .ordered, session?.itemID == item.id,
+           let show = item.seriesID, ordered[show]?.itemID == item.id
+        {
             ordered[show]?.seconds = seconds
         } else if mode == .movie {
             movies[item.id] = KidsProgress(itemID: item.id, seconds: seconds)

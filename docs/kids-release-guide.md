@@ -23,7 +23,35 @@ xcodebuild -project Swiftfin.xcodeproj -scheme KidsValidation \
 
 Use a new result-bundle path for each invocation. Ad-hoc simulator signing is necessary for Keychain persistence. `KidsValidation` drives the actual Apple TV simulator with XCTest remote events; it does not require a visible Simulator window. Its launch environment clears inherited DYLD paths so embedded frameworks load from the app, rather than protected host Documents paths. Verbose automatic sysdiagnose collection is disabled because it can stall after a test failure; assertions, logs, screenshots, and xcresults remain available.
 
-The `KidsCore` package exercises authorization, HTTP pagination and ancestry, ordered progress, shuffle bags, interruption budgets, and atomic storage. SwiftUI Previews and Debug-only `--kids-preview=SCENARIO` launches render the real views with synthetic data and no server access or state writes. Scenarios include shows, movies, empty, again, resume, one-episode, movie-complete, paused, controls, hidden-player, reconnecting, countdown, session-end, denied, loading, and movie-paused. The fixture PIN 4242 is only for the synthetic preview model and never initializes a real account or production PIN. Release builds exclude fixtures.
+The `KidsCore` package exercises authorization, HTTP pagination and ancestry, ordered progress, shuffle bags, interruption budgets, and atomic storage. SwiftUI Previews and Debug-only `--kids-preview=SCENARIO` launches render the real views with synthetic data and no server access or state writes. Scenarios include shows, movies, empty, again, resume, one-episode, movie-complete, paused, controls, hidden-player, reconnecting, countdown, session-end, denied, offline, loading, and movie-paused. The fixture PIN 4242 is only for the synthetic preview model and never initializes a real account or production PIN. Release builds exclude fixtures.
+
+## Opt-in real playback tests
+
+The default suite skips `KidsLivePlaybackTests`; those skips are not evidence of working streams. After the actual restricted account is configured in the simulator, enable the two tests using Xcode's runner environment prefix:
+
+```sh
+TEST_RUNNER_KIDS_RUN_LIVE=1 xcodebuild -project Swiftfin.xcodeproj \
+  -scheme KidsValidation -configuration Debug \
+  -destination 'platform=tvOS Simulator,id=DEVICE_UUID' \
+  -derivedDataPath build/DerivedData -skipMacroValidation \
+  CODE_SIGNING_ALLOWED=YES CODE_SIGN_IDENTITY=- -parallel-testing-enabled NO \
+  -collect-test-diagnostics never \
+  -only-testing:KidsUITests/KidsLivePlaybackTests \
+  -resultBundlePath build/validation/Kids-Live-Run.xcresult test
+```
+
+No password or token goes in this command, test environment, or source. The tests use the already configured Keychain session and fail if the real kids browser cannot load; they never substitute fixtures. They select the first approved show/movie, play, pause, seek forward 15 seconds, observe real time progression, and verify ordered resume after relaunch. Use an unfinished representative title with sufficient duration. Review their retained frames and obtain server session evidence. Natural completion/transition, interruption, expired token, and account/library changes remain separate required checks.
+
+A Release compile for physical Apple TV can be checked before device signing:
+
+```sh
+xcodebuild -project Swiftfin.xcodeproj -scheme 'Swiftfin tvOS' \
+  -configuration Release -destination 'generic/platform=tvOS' \
+  -derivedDataPath build/DeviceDerivedData -skipMacroValidation \
+  CODE_SIGNING_ALLOWED=NO build
+```
+
+An unsigned device compile does not install or validate playback on an Apple TV.
 
 ## Initial setup
 

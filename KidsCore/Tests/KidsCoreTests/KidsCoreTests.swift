@@ -242,3 +242,21 @@ func `damaged local state requires deliberate parent recovery`() throws {
     try KidsStateFile.save(KidsState(binding: binding), to: file)
     #expect(try KidsStateFile.load(from: file, binding: binding) == KidsState(binding: binding))
 }
+
+@Test
+func `parent Set Next on the playing episode survives old checkpoints and completion`() throws {
+    var state = KidsState(binding: binding)
+    try state.began(item: episodes[0], mode: .ordered, showID: "show")
+    state.checkpoint(item: episodes[0], mode: .ordered, seconds: 120)
+    try state.setNext(episodes[0])
+    // The currently paused stream can still report time after the parent chooses a fresh start.
+    state.checkpoint(item: episodes[0], mode: .ordered, seconds: 120)
+    #expect(try state.orderedNext(showID: "show", episodes: episodes).1 == 0)
+    #expect(try !state.finished(item: episodes[0], mode: .ordered, episodes: episodes))
+    #expect(try state.orderedNext(showID: "show", episodes: episodes).0.id == "a")
+    #expect(try state.orderedNext(showID: "show", episodes: episodes).1 == 0)
+    // A new explicit Next session owns progress again.
+    try state.began(item: episodes[0], mode: .ordered, showID: "show")
+    state.checkpoint(item: episodes[0], mode: .ordered, seconds: 10)
+    #expect(try state.orderedNext(showID: "show", episodes: episodes).1 == 10)
+}

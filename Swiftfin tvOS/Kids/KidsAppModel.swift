@@ -69,6 +69,7 @@ final class KidsAppModel: ObservableObject {
         Container.shared.currentUserSession()?.server.name ?? "Your Jellyfin server"
     }
 
+    private var skipNextBrowseRefresh = true
     private var refreshGeneration = UUID()
     private var startTask: Task<Void, Never>?
     private var startGeneration = UUID()
@@ -102,8 +103,19 @@ final class KidsAppModel: ObservableObject {
         }
     }
 
+    func enterBrowse() {
+        guard !isPreview, !loading, !requiresParent, activePlayback == nil else { return }
+        if skipNextBrowseRefresh {
+            skipNextBrowseRefresh = false
+            return
+        }
+        Task { await refresh() }
+    }
+
     func refresh() async {
         guard !isPreview else { return }
+        // Re-inserting the browse view after this refresh must not start another refresh loop.
+        skipNextBrowseRefresh = true
         let generation = UUID()
         refreshGeneration = generation
         loading = true
