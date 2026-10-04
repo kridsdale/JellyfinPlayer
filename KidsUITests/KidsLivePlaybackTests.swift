@@ -31,8 +31,8 @@ final class KidsLivePlaybackTests: XCTestCase {
         super.tearDown()
     }
 
-    private func launchRealAccount() {
-        app.launchArguments = []
+    private func launchRealAccount(arguments: [String] = []) {
+        app.launchArguments = arguments
         app.launchEnvironment["DYLD_FRAMEWORK_PATH"] = ""
         app.launchEnvironment["DYLD_LIBRARY_PATH"] = ""
         app.launch()
@@ -58,18 +58,22 @@ final class KidsLivePlaybackTests: XCTestCase {
         XCTAssertTrue(firstCard.waitForExistence(timeout: 10))
         focusedSelect(firstCard)
         XCTAssertTrue(app.buttons[action].waitForExistence(timeout: 20))
+        capture("real-title-before-playback")
         focusedSelect(app.buttons[action])
         XCTAssertTrue(
             app.buttons["kids.player.surface"].waitForExistence(timeout: 20),
             "The real stream must leave buffering and expose the player surface."
         )
+        capture("real-stream-controls-hidden")
     }
 
     private func pauseAndReadPosition() -> Int {
         XCUIRemote.shared.press(.playPause)
         let play = app.buttons["kids.player.playpause"]
         let paused = XCTNSPredicateExpectation(predicate: NSPredicate(format: "exists == true AND label == %@", "Play"), object: play)
-        XCTAssertEqual(XCTWaiter.wait(for: [paused], timeout: 5), .completed)
+        let result = XCTWaiter.wait(for: [paused], timeout: 5)
+        capture("real-stream-after-remote-pause")
+        XCTAssertEqual(result, .completed, "Actual transport control: \(play.exists ? play.label : "missing")")
         let timeline = app.descendants(matching: .any)["kids.player.timeline"]
         XCTAssertTrue(timeline.waitForExistence(timeout: 5))
         return position(timeline)
@@ -98,6 +102,11 @@ final class KidsLivePlaybackTests: XCTestCase {
         let seeked = position(timeline)
         XCTAssertEqual(Double(seeked), Double(before + 15), accuracy: 1)
         XCUIRemote.shared.press(.playPause)
+        let pause = app.buttons["kids.player.playpause"]
+        let resumed = XCTNSPredicateExpectation(predicate: NSPredicate(format: "exists == true AND label == %@", "Pause"), object: pause)
+        let result = XCTWaiter.wait(for: [resumed], timeout: 5)
+        capture("real-stream-after-remote-resume")
+        XCTAssertEqual(result, .completed, "Actual resumed control: \(pause.exists ? pause.label : "missing")")
         allowPlaybackToProgress()
         let after = pauseAndReadPosition()
         XCTAssertGreaterThan(after, seeked + 1, "Resume must advance actual stream time.")
@@ -148,5 +157,122 @@ final class KidsLivePlaybackTests: XCTestCase {
         let play = app.buttons["kids.action.play"]
         XCTAssertTrue(play.waitForExistence(timeout: 10))
         XCTAssertTrue(play.label.contains("Resume"))
+    }
+
+    private func naturalIDs() throws -> (String, String) {
+        let environment = ProcessInfo.processInfo.environment
+        guard environment["KIDS_RUN_NATURAL"] == "1" else {
+            throw XCTSkip("Natural-end tests require a documented near-end local resume checkpoint.")
+        }
+        return try (XCTUnwrap(environment["KIDS_NATURAL_FIRST_ID"]), XCTUnwrap(environment["KIDS_NATURAL_NEXT_ID"]))
+    }
+
+    private func revealAndVerifyTitle(_ itemID: String) {
+        focusedSelect(app.buttons["kids.player.surface"])
+        XCTAssertTrue(app.staticTexts["kids.player.title.\(itemID)"].waitForExistence(timeout: 5))
+    }
+
+    func testRealNaturalEpisodeTransition() throws {
+        let (first, next) = try naturalIDs()
+        launchRealAccount()
+        openFirstTitle(action: "kids.action.next")
+        revealAndVerifyTitle(first)
+        let stop = app.buttons["kids.player.countdown.stop"]
+        XCTAssertTrue(stop.waitForExistence(timeout: 60), "Actual VLC EOF must start the next-episode countdown.")
+        XCTAssertTrue(stop.hasFocus)
+        capture("real-natural-end-countdown")
+        XCTAssertTrue(app.buttons["kids.player.surface"].waitForExistence(timeout: 30), "Countdown must start a new real stream.")
+        revealAndVerifyTitle(next)
+        allowPlaybackToProgress()
+        let position = pauseAndReadPosition()
+        XCTAssertGreaterThan(position, 1)
+        capture("real-natural-next-episode")
+    }
+
+    func testRealSessionCapAtNaturalEnd() throws {
+        let (_, next) = try naturalIDs()
+        launchRealAccount()
+        openFirstTitle(action: "kids.action.next")
+        revealAndVerifyTitle(next)
+        let back = app.buttons["Back to shows"]
+        XCTAssertTrue(back.waitForExistence(timeout: 60), "The second actual EOF must stop at the persisted two-episode limit.")
+        XCTAssertFalse(app.buttons["kids.player.countdown.stop"].exists)
+        XCTAssertFalse(app.buttons["kids.player.surface"].exists)
+        capture("real-natural-two-episode-limit")
+        allowPlaybackToProgress()
+        XCTAssertTrue(back.exists, "Session ending must not autoplay after the cap.")
+        focusedSelect(back)
+        XCTAssertTrue(firstCard.waitForExistence(timeout: 15))
+    }
+
+    func testRealRecoveryClearsCatalogAndPreservesSavedAccount() {
+        launchRealAccount()
+        let showID = firstCard.identifier
+        for (fault, message) in [
+            ("invalid-token", "A grown-up needs to sign in again."),
+            ("changed-libraries", "Use an account with access only to Kid TV and Kid Movies, without administration or deletion."),
+            ("unavailable", "Your shows are taking a break.")
+        ] {
+            app.terminate()
+            app.launchArguments = ["--kids-validation=\(fault)"]
+            app.launch()
+            XCTAssertTrue(app.staticTexts[message].waitForExistence(timeout: 25))
+            XCTAssertEqual(app.buttons.matching(NSPredicate(format: "identifier BEGINSWITH %@", "kids.card.")).count, 0)
+            XCTAssertFalse(app.buttons["kids.category.shows"].exists)
+            XCTAssertFalse(app.buttons["kids.player.surface"].exists)
+            capture("real-http-\(fault)-neutral-screen")
+            app.terminate()
+            launchRealAccount()
+            XCTAssertEqual(firstCard.identifier, showID, "The untouched saved account must recover its approved catalog.")
+        }
+    }
+
+    func testRealStreamFailureRetriesExactItem() throws {
+        guard let expected = ProcessInfo.processInfo.environment["KIDS_RECOVERY_ITEM_ID"] else {
+            throw XCTSkip("Exact-item stream recovery requires the current local cursor ID, without changing that cursor.")
+        }
+        let minimum = Int(ProcessInfo.processInfo.environment["KIDS_RECOVERY_MIN_SECONDS"] ?? "0") ?? 0
+        launchRealAccount(arguments: ["--kids-validation=stream-unavailable"])
+        focusedSelect(firstCard)
+        let next = app.buttons["kids.action.next"]
+        XCTAssertTrue(next.waitForExistence(timeout: 20))
+        focusedSelect(next)
+        // Repeated Select during the disabled pending start must not produce another owner.
+        if next.exists && !next.isEnabled {
+            XCUIRemote.shared.press(.select)
+        }
+        let retry = app.buttons["Try again"]
+        let recovered = retry.waitForExistence(timeout: 35)
+        capture("real-vlc-refused-connection")
+        XCTAssertTrue(recovered, "A real refused VLC connection must expose recovery within the bounded prepare/open wait.")
+        XCTAssertFalse(app.buttons["kids.player.surface"].exists)
+        allowPlaybackToProgress()
+        XCTAssertTrue(retry.exists, "Failed starts must wait for deliberate retry.")
+        focusedSelect(retry)
+        XCTAssertTrue(app.buttons["kids.player.surface"].waitForExistence(timeout: 25))
+        revealAndVerifyTitle(expected)
+        allowPlaybackToProgress()
+        let resumed = pauseAndReadPosition()
+        XCTAssertGreaterThanOrEqual(resumed, minimum - 2, "Retry must preserve the exact failed item's local checkpoint.")
+        XCTAssertGreaterThan(resumed, 1)
+        capture("real-vlc-exact-item-recovered")
+    }
+
+    func testRealShufflePlaysEpisode() {
+        launchRealAccount()
+        focusedSelect(firstCard)
+        let shuffle = app.buttons["kids.action.shuffle"]
+        XCTAssertTrue(shuffle.waitForExistence(timeout: 20))
+        capture("real-shuffle-title")
+        XCUIRemote.shared.press(.right)
+        focusedSelect(shuffle)
+        XCTAssertTrue(app.buttons["kids.player.surface"].waitForExistence(timeout: 25))
+        allowPlaybackToProgress()
+        let elapsed = pauseAndReadPosition()
+        XCTAssertGreaterThan(elapsed, 1)
+        let title = app.staticTexts.matching(NSPredicate(format: "identifier BEGINSWITH %@", "kids.player.title.")).firstMatch
+        XCTAssertTrue(title.exists)
+        XCTAssertEqual(String(title.identifier.dropFirst("kids.player.title.".count)).count, 32)
+        capture("real-shuffle-playing-frame")
     }
 }

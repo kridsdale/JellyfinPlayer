@@ -1,35 +1,51 @@
 # Kids implementation validation record
 
-Status: implementation and local validation in progress; **not yet a release candidate**. Updated 2026-10-03. Branch: `feature/kids-release-candidate`.
+Status: **RC1 ready for simulator release-candidate evaluation**. Updated 2026-10-03 (America/Los_Angeles). Branch: `feature/kids-release-candidate`.
 
-## Verified
+## Account and media boundary
 
-- `swift test --package-path KidsCore`: 26 domain/HTTP tests pass, including damaged local state, immutable binding, policy and ancestry rejection, progress/Shuffle independence, session counting and persistence.
-- Apple TV 4K (3rd generation), tvOS 27.0, Xcode 27, signed Debug build: the full current `KidsValidation` suite passed **15 remote UI tests, zero failures**, in 146.4 seconds; two opt-in live tests were skipped. The result bundle is `build/validation/Kids-Checkpoint-21.xcresult`.
-- The suite drives show/title/Back focus, Movies return, one movie Resume action, ordered Again, masked parent PIN, native keyboard submission, unlock/relock, independently focused Set Next, preservation of another show's progress, movie Start over after the current player's stop checkpoint, empty category, denial clearing a prior catalog, exact-item recovery navigation, paused timeline seek, countdown cancellation/session end, scrolled-card return focus, and access to protected Parents from the offline screen.
-- Retained checkpoint-21 screenshots were exported for visual review, including offline protected help, scrolled-card focus restoration with clipped grid content, the initial grid, and the show title. The focused parent action has readable contrast; the movie Resume label is complete; explicit Start over returns the movie to Play. The fixtures use the production views and local progress methods but do not open a video stream or authenticate a real account.
-- Signed **Release simulator build passed** after the final source changes. `codesign --verify --deep --strict` succeeded; the executable has no `KidsPreviewFixtures` model symbols or `--kids-preview=` launch string. An actual current Release launch with that Debug argument showed the neutral parent-setup screen, with no synthetic catalog. Screenshot: `build/validation/kids-release-neutral.png`. This verifies simulator Release behavior, not physical-device signing or playback.
-- The current **Release device build for generic tvOS passed** with signing disabled, targeting arm64 Apple TV hardware. This establishes device compilation, not installation or physical-device playback.
-- `KidsLivePlaybackTests` compiles against the real simulator runner and is disabled by default. Its two skipped tests are not playback passes. When enabled after restricted-account setup, it launches without preview arguments and checks episode/movie time progression, pause/resume, 15-second seeking, and ordered resume after relaunch. Natural transition and server corroboration still need separate evidence.
-- 1531Server read-only probe on 2026-10-03 confirmed `/Items/{id}/Ancestors` returns the approved root ID for a series, regular episode, and movie. The server also checked the sampled paths against its internal curated allowlist. This used the existing player identity and admin-authenticated metadata access; it does not prove restricted-account isolation.
+The user entered the real `kidsplayer` credentials privately in the simulator. The saved binding and actual catalog/playback use server `da8484ff10f7486e8e486b19c91db348`, user `81015b5fdef84cb4af7740c43aae8e73`, Kid TV `5af46e92f8eafe27a878a84b7850e143`, and Kid Movies `f146a2eeab6dfc87c7cfc04fc89ca28e`. No credentials appear in source, commands, or the test environment.
 
-## Required before release-candidate evaluation
+The server chat verified the account is non-admin, limited to those two existing libraries, and cannot delete content. A read-only audit selected one existing item with existing artwork in each of the four other libraries. Restricted GET item, GET ancestors, GET image metadata, and HEAD artwork returned **16/16 HTTP 404**, while matching admin positive controls returned **16/16 HTTP 200**. No forbidden image/video bytes were fetched. PlaybackInfo and forbidden stream routes were deliberately skipped because this audit did not authorize creating their playback state or retrieving their media.
 
-- Provision and verify the dedicated `kidsplayer` account with only the two existing approved libraries and no admin/deletion permissions. The server chat has staged the proposal but cannot retrieve the driver's human approval. It clarified that separate approval specifically in that chat is not required; verifiable authorization remains pending. Its old-PIN comparison is now optional; independently generated credentials no longer require the legacy secret. The account and private credential file are absent.
-- Use the actual restricted account to play a kids' episode and movie, observe time/frames, pause/resume and seek, kill/relaunch, and complete an episode-to-next transition; obtain server corroboration.
-- Exercise exact-item reconnect, unavailable server, revoked/expired token, account/library change, old-artwork isolation, repeated Select and return-focus behavior. Keep synthetic denied IDs out of child-facing screenshots.
-- Complete the P0 matrix and mark each required gate with current evidence before changing this status.
+All client artifacts and local state remain on internal storage. The app uses the curated Jellyfin API; it has no drive scanning or media-file mutation paths. Server observations ran under its existing RAID write-denial boundaries. No library/catalog/account/media changes were part of this validation.
 
-## Local code review
+## Passed checks
 
-- Reproduced an ordered-progress bug: Set Next to the currently playing episode reset its position, then an old stream checkpoint restored the old position. The new regression failed before the fix and passes afterward. Retired ordered sessions no longer overwrite that parent choice; retired player controls also ignore toggle/seek events.
-- A new browse visit refreshes the verified catalog and restores the selected card and scroll position. Reinsertion after that refresh does not trigger a refresh loop. The remote fixture test verifies scrolled focus; actual server additions still require live integration.
+| Check | Evidence | What it establishes |
+| --- | --- | --- |
+| Core and HTTP contracts | `swift test --package-path KidsCore`, 26 tests; `build/validation/kids-core-rc.log` | Exact permissions and ancestry, old identity isolation, state corruption, ordered/Shuffle independence, bags, session budgets, gate timing and atomic persistence |
+| Complete remote navigation suite | All 15 `KidsNavigationTests` pass in `build/validation/Kids-Live-10.xcresult` | Actual production SwiftUI views driven with synthetic catalog data: browse/category/Back/focus, protected PIN/picker/reset actions, paused timeline remote transport, recovery and endings |
+| Real episode transport and relaunch | `Kids-Live-05.xcresult`, 94.780 seconds | Frames, pause, +15-second seek, physical Play/Pause resume, clock progression, terminate/relaunch without autoplay, restored ordered checkpoint |
+| Real movie transport | `Kids-Live-06.xcresult`, 40.133 seconds | Frames, pause/seek/resume and advancing time; return to one Resume action |
+| Natural episode-to-next | `Kids-Live-07.xcresult`, 92.494 seconds | Actual VLC EOF, ten-second countdown with Stop focused, exact next regular episode playing |
+| Actual HTTP failure isolation/recovery | `Kids-Live-07.xcresult`, 64.218 seconds | Real server HTTP denial with a deliberately invalid token, mismatch against real account policy, and real loopback connection refusal; no child cards/player; saved valid account recovers afterward |
+| Natural two-episode limit after relaunch | `Kids-Live-09.xcresult`, 71.684 seconds | The genuine first completion budget persisted; actual second EOF produced All Done, no further autoplay, Back to Shows |
+| Actual VLC connection refusal and exact retry | `Kids-Live-11.xcresult`, 79.072 seconds | A one-shot refused stream waits for deliberate Retry, then renders the exact approved episode at/after its saved 84-second checkpoint; retained frame is at 1:31 |
+| Actual Release Shuffle | `Kids-Release-Live-01.xcresult`, 42.140 seconds | Real approved episode frames and clock progression using the signed Release app; before/after local snapshots confirm ordered Next is unchanged |
+| Signed simulator Release | Final `Swiftfin tvOS` Release build and `codesign --verify --deep --strict` | Valid signature; executable strings/symbols exclude both preview and integration-fault hooks; an observed launch with both Debug arguments still displayed the real approved catalog |
+| arm64 Apple TV Release compile | Final generic tvOS device Release build, signing disabled | Compiles for physical Apple TV hardware; installation/signing and physical playback remain unverified |
 
-- Delayed parent-episode and playback-start responses are discarded after refresh or identity changes. Parent-episode authorization failures use the same neutral catalog-clearing path as other denied requests. These paths are implemented and reviewed; actual token/identity-change integration evidence remains required below.
-- All generated app, test, and checkpoint artifacts are on the local internal APFS data volume; `KidsCore/.build` and `build/` are ignored. No server library/media operation was performed by this client work.
+These are separate test results, not one combined all-green run. `Kids-Live-06` also contained a recovery assertion with the wrong expected error message; `Kids-Live-10` also contained the earlier failed stream-recovery check. Those failures were diagnosed and their replacements passed in 07 and 11 respectively. The full navigation suite in 10 had zero failures.
 
-## Scope
+The first live checks reproduced a blurred fullscreen focus surface, poster-driven layout overflow, and a remote Resume press lost while the seek timeline owned focus. The surface now uses a transparent custom button style, artwork cannot dictate layout dimensions, and each focused transport control handles Play/Pause. Now Playing time updates retain paused state and publish rate zero when paused. A real-start watchdog bounds failed opens even without an error notification, and an unexpected stopped clock cannot erase the last valid resume position. The stream test's original 25-second assertion was also shorter than the combined preparation/open bounds; its corrected bound does not waive the production watchdog.
 
-The earlier `build/validation/SIMULATOR-VALIDATION.md` establishes the upstream playback foundation only. It does not prove this kids implementation. All local builds/test results stay under ignored `build/`. No RAID file or catalog changes are part of client validation.
+## Natural-end test setup
 
-Physical Apple TV audio/HDR/formats, sleep/wake, signing/TestFlight installation, child observation and the one-week family pilot remain user evaluation activities following a simulator candidate. Unattended server startup and Plex retirement are not claimed here.
+To observe real EOF without watching two entire episodes, `Scripts/Kids/simulator_resume.py` backed up only the simulator's internal state and temporarily set valid ordered resume positions 25 seconds before the verified runtimes. Episode 1 was `1f74938947519192e646194fd9e6b86c`, season 1 episode 1, runtime 1353.194 seconds. Its immediate regular successor was `4ab00c91031efca8643d24373020a0c5`, season 1 episode 2, runtime 1353.898 seconds. Both belong to the approved Kid TV series `92835060f3344b9b3b57a281e15b5626`.
+
+The second setup required the genuine first completion count and exact next item to already be persisted, and retained the limit of two. It did not synthesize EOF, invoke a completion function, or bypass account/item authorization. The original local progress was restored afterward; the required internal backup remains retained and ignored by Git. Real playback reports may update ordinary Jellyfin watch/progress data; no media/catalog files were modified.
+
+## Independent server corroboration
+
+Read-only session samples showed the approved episode and movie using DirectPlay with advancing positions. The ten-minute record `sessions-20261004T025613Z.jsonl` contains 196 samples, 19 with playback, zero observer errors, and at most one active kidsplayer stream. It recorded episode 1 advancing from 1334.818 to 1350.128 seconds, episode 2 playing afterward, and a later near-end episode-2 run followed by cessation. The client screenshots/assertions establish natural completion, countdown and budget persistence; session sampling alone does not.
+
+Earlier three-second samples captured stable pauses after seeks. Not every short pause/resume falls in a server sample, and a later new session must not be mistaken for remote Resume. Session telemetry also cannot prove rendered frames for a deliberately refused client transport; actual Retry success is established by the client frame/clock assertions in 11.
+
+Server evidence is retained under `/Users/kridsdale/Documents/Codex/2026-09-28/boo/outputs/jellyfin-playback-evidence/` on 1531Server. The access audit is `restricted-reads-20261004T025951Z.json`. These remote paths are evidence references, not files in this local checkout.
+
+## Evidence limits and evaluation
+
+Fault checks are opt-in Debug integration hooks: they substitute an invalid request token, an expected-library mismatch, or a refused local URL without changing saved credentials, server account policy, or household network availability. They exercise genuine HTTP/VLC failure paths but do not claim an actual token revocation, server replacement, or LAN outage. Changed user/server identity and stale artwork ownership are also covered by contract tests, synthetic denial-after-browse UI tests, and reviewed cancellation/scope checks. Parent PIN unlock, Set Next, Start over and relock were exercised with synthetic data; the user's private production PIN was not retrieved or entered by automation.
+
+Physical Apple TV signing/install, audio/HDR/format coverage, sleep/wake, the child's usability observation and the one-week household pilot remain evaluation activities after this simulator candidate. The ten representative starts and <=3-second warm-LAN median are evaluation targets, not measured promises. Server unattended startup and Plex retirement remain separate workstreams.

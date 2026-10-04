@@ -2,7 +2,7 @@
 
 This tvOS fork opens on Shows and exposes only Kid TV and Kid Movies. A title offers Next and Shuffle; a movie offers one Play, Resume, or Play again action. The existing Swiftfin VLC playback foundation remains responsible for formats and streaming.
 
-The implementation is under validation. See [the evidence record](kids-validation.md) and [requirement coverage](kids-requirements.md) before treating a build as a release candidate. The approved [full product brief](kids-product-brief.pdf) defines the scope; the seven-page memo is a review aid.
+RC1 is ready for simulator evaluation. See [the evidence record](kids-validation.md) and [requirement coverage](kids-requirements.md) for the passed checks and their limits. The approved [full product brief](kids-product-brief.pdf) defines the scope; the seven-page memo is a review aid.
 
 ## Build and test
 
@@ -27,7 +27,7 @@ The `KidsCore` package exercises authorization, HTTP pagination and ancestry, or
 
 ## Opt-in real playback tests
 
-The default suite skips `KidsLivePlaybackTests`; those skips are not evidence of working streams. After the actual restricted account is configured in the simulator, enable the two tests using Xcode's runner environment prefix:
+The default suite skips all seven `KidsLivePlaybackTests`; those skips are not evidence of working streams. After the actual restricted account is configured in the simulator, enable the basic episode/movie/Shuffle checks using Xcode's runner environment prefix:
 
 ```sh
 TEST_RUNNER_KIDS_RUN_LIVE=1 xcodebuild -project Swiftfin.xcodeproj \
@@ -36,11 +36,17 @@ TEST_RUNNER_KIDS_RUN_LIVE=1 xcodebuild -project Swiftfin.xcodeproj \
   -derivedDataPath build/DerivedData -skipMacroValidation \
   CODE_SIGNING_ALLOWED=YES CODE_SIGN_IDENTITY=- -parallel-testing-enabled NO \
   -collect-test-diagnostics never \
-  -only-testing:KidsUITests/KidsLivePlaybackTests \
+  -only-testing:KidsUITests/KidsLivePlaybackTests/testRealEpisodePauseSeekAndResumeAfterRelaunch \
+  -only-testing:KidsUITests/KidsLivePlaybackTests/testRealMoviePauseSeekAndResume \
+  -only-testing:KidsUITests/KidsLivePlaybackTests/testRealShufflePlaysEpisode \
   -resultBundlePath build/validation/Kids-Live-Run.xcresult test
 ```
 
-No password or token goes in this command, test environment, or source. The tests use the already configured Keychain session and fail if the real kids browser cannot load; they never substitute fixtures. They select the first approved show/movie, play, pause, seek forward 15 seconds, observe real time progression, and verify ordered resume after relaunch. Use an unfinished representative title with sufficient duration. Review their retained frames and obtain server session evidence. Natural completion/transition, interruption, expired token, and account/library changes remain separate required checks.
+No password or token goes in this command, test environment, or source. The tests use the already configured Keychain session and fail if the real kids browser cannot load; they never substitute fixtures. They select the first approved show/movie, play, pause, seek forward 15 seconds, observe real time progression, verify ordered resume after relaunch, and exercise Shuffle. Use an unfinished representative title with sufficient duration. Review retained frames and server evidence. `testRealShufflePlaysEpisode` can also run alone with `-configuration Release` to verify the actual candidate.
+
+`testRealRecoveryClearsCatalogAndPreservesSavedAccount` requires Debug. It uses opt-in `--kids-validation=` arguments to exercise genuine invalid-token HTTP denial, expected-binding mismatch and loopback connection refusal without altering the valid saved account or the household server. `testRealStreamFailureRetriesExactItem` additionally needs `TEST_RUNNER_KIDS_RECOVERY_ITEM_ID` set to the current real ordered item and `TEST_RUNNER_KIDS_RECOVERY_MIN_SECONDS` set to its local checkpoint. It replaces one approved item's stream URL with a refused loopback URL once, then verifies deliberate Retry uses the exact real item and saved position. These hooks are excluded from Release.
+
+Natural-end tests require verified regular-episode metadata and a valid near-end checkpoint. Use `Scripts/Kids/simulator_resume.py` only against the simulator. `seed --device DEVICE_UUID --backup build/validation/UNIQUE_BACKUP.json --show-id SHOW_ID --item-id FIRST_ID --season SEASON --episode EPISODE --runtime RUNTIME_SECONDS --completed 0` terminates the app, requires a new internal backup, and sets local resume time 25 seconds before EOF. Run only `testRealNaturalEpisodeTransition` with `TEST_RUNNER_KIDS_RUN_LIVE=1`, `TEST_RUNNER_KIDS_RUN_NATURAL=1`, `TEST_RUNNER_KIDS_NATURAL_FIRST_ID=FIRST_ID` and `TEST_RUNNER_KIDS_NATURAL_NEXT_ID=NEXT_ID`. Seed the next verified item with `--completed 1` using the same backup; the helper refuses unless the genuine first completion budget and exact next item already persisted. Run only `testRealSessionCapAtNaturalEnd`, then always `restore --device DEVICE_UUID --backup build/validation/UNIQUE_BACKUP.json`. These tests observe actual VLC EOF; they never call a synthetic completion function, bypass authorization, or alter media files. Retain the backup. The first show in the test must match the verified show ID. See the evidence record for the completed local run.
 
 A Release compile for physical Apple TV can be checked before device signing:
 

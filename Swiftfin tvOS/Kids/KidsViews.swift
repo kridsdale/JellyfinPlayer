@@ -168,37 +168,37 @@ struct KidsArtwork: View {
     }
 
     var body: some View {
-        ZStack {
-            RoundedRectangle(cornerRadius: 24).fill(placeholderColor.gradient)
-            if let image {
-                Image(uiImage: image).resizable().scaledToFill()
-            } else {
-                Image(systemName: item.kind == .movie ? "film.fill" : "tv.fill").resizable().scaledToFit().padding(55)
-                    .foregroundStyle(.white.opacity(0.7))
-            }
-        }
-        .aspectRatio(wide ? 1.65 : (item.kind == .movie ? 0.68 : 1.3), contentMode: .fit)
-        .clipShape(RoundedRectangle(cornerRadius: 24))
-        .accessibilityHidden(true)
-        .task(id: scope) {
-            image = nil
-            guard let api = model.api, let binding = model.binding,
-                  let request = try? api.imageRequest(for: item, binding: binding) else { return }
-            let config = URLSessionConfiguration.ephemeral
-            config.urlCache = nil
-            do {
-                let (data, response) = try await URLSession(configuration: config).data(for: request)
-                guard !Task.isCancelled, model.binding == binding else { return }
-                if let status = (response as? HTTPURLResponse)?.statusCode,
-                   status == 401 || status == 403
-                {
-                    model.show(KidsAPIError.authentication)
-                    return
+        RoundedRectangle(cornerRadius: 24).fill(placeholderColor.gradient)
+            .overlay {
+                if let image {
+                    Image(uiImage: image).resizable().scaledToFill()
+                } else {
+                    Image(systemName: item.kind == .movie ? "film.fill" : "tv.fill").resizable().scaledToFit().padding(55)
+                        .foregroundStyle(.white.opacity(0.7))
                 }
-                guard (response as? HTTPURLResponse)?.statusCode == 200 else { return }
-                image = UIImage(data: data)
-            } catch { /* Missing artwork has an explicit, accessible placeholder. */ }
-        }
+            }
+            .aspectRatio(wide ? 1.65 : (item.kind == .movie ? 0.68 : 1.3), contentMode: .fit)
+            .clipShape(RoundedRectangle(cornerRadius: 24))
+            .accessibilityHidden(true)
+            .task(id: scope) {
+                image = nil
+                guard let api = model.api, let binding = model.binding,
+                      let request = try? api.imageRequest(for: item, binding: binding) else { return }
+                let config = URLSessionConfiguration.ephemeral
+                config.urlCache = nil
+                do {
+                    let (data, response) = try await URLSession(configuration: config).data(for: request)
+                    guard !Task.isCancelled, model.binding == binding else { return }
+                    if let status = (response as? HTTPURLResponse)?.statusCode,
+                       status == 401 || status == 403
+                    {
+                        model.show(KidsAPIError.authentication)
+                        return
+                    }
+                    guard (response as? HTTPURLResponse)?.statusCode == 200 else { return }
+                    image = UIImage(data: data)
+                } catch { /* Missing artwork has an explicit, accessible placeholder. */ }
+            }
     }
 }
 
@@ -412,6 +412,13 @@ struct KidsTitleView: View {
     }
 }
 
+// The fullscreen focus target must never apply the system button's material over the video.
+private struct KidsPlaybackSurfaceStyle: ButtonStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+    }
+}
+
 struct KidsPlayerView: View {
     @ObservedObject
     var model: KidsAppModel
@@ -433,17 +440,19 @@ struct KidsPlayerView: View {
             }
             if !playback.controlsVisible && !playback.recovery && !playback.showCountdown && !playback.buffering {
                 Button { playback.reveal() } label: { Color.clear.contentShape(Rectangle()) }
-                    .buttonStyle(.plain).focusEffectDisabled()
+                    .buttonStyle(KidsPlaybackSurfaceStyle()).focusEffectDisabled()
                     .accessibilityLabel("Playback controls").accessibilityIdentifier("kids.player.surface")
+                    .onPlayPauseCommand { playback.toggle() }
             }
             if playback.showCountdown {
                 VStack(spacing: 35) {
                     if let next = playback.nextEpisode {
-                        KidsArtwork(model: model, item: next, wide: true).frame(width: 500)
+                        KidsArtwork(model: model, item: next.imageTag == nil ? playback.title : next, wide: true).frame(width: 500)
                     }
                     Text("Next episode in \(playback.countdown)").font(.largeTitle.bold())
                     Button("Stop", systemImage: "stop.fill") { Task { await model.stopPlayback() } }
                         .buttonStyle(.borderedProminent).focused($control, equals: "stop")
+                        .accessibilityIdentifier("kids.player.countdown.stop")
                 }.frame(maxWidth: .infinity, maxHeight: .infinity).background(.black.opacity(0.9))
                     .defaultFocus($control, "stop")
                     .onAppear { control = "stop" }
@@ -458,6 +467,7 @@ struct KidsPlayerView: View {
                 VStack {
                     Spacer()
                     Text(playback.item.name).font(.title2.bold()).lineLimit(2)
+                        .accessibilityIdentifier("kids.player.title.\(playback.item.id)")
                     if playback.paused {
                         VStack {
                             ProgressView(
@@ -470,6 +480,7 @@ struct KidsPlayerView: View {
                             .accessibilityElement(children: .ignore)
                             .accessibilityLabel("Playback position").accessibilityIdentifier("kids.player.timeline")
                             .accessibilityValue(time(playback.seconds))
+                            .onPlayPauseCommand { playback.toggle() }
                             .accessibilityAdjustableAction { playback.seek($0 == .increment ? 15 : -15) }
                             .onMoveCommand { direction in
                                 if control ==
@@ -492,13 +503,13 @@ struct KidsPlayerView: View {
                             model.parentPresented = true
                         }.accessibilityIdentifier("kids.player.parents")
                     }.buttonStyle(.borderedProminent)
+                        .onPlayPauseCommand { playback.toggle() }
                 }.padding(65).background(LinearGradient(colors: [.clear, .black.opacity(0.9)], startPoint: .top, endPoint: .bottom))
                     .defaultFocus($control, "playpause")
                     .onAppear { control = "playpause" }
             }
         }
         .ignoresSafeArea()
-        .onPlayPauseCommand { playback.toggle() }
         .onExitCommand { Task { await playback.handleBack() } }
         .onMoveCommand { _ in playback.reveal() }
         .onTapGesture { playback.reveal() }

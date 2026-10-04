@@ -62,8 +62,31 @@ final class KidsAppModel: ObservableObject {
 
     var api: KidsAPI? {
         guard !isPreview, let session = Container.shared.currentUserSession() else { return nil }
+        #if DEBUG
+        // Opt-in integration faults use real HTTP errors without altering the saved account or server.
+        if validationScenario == "unavailable" {
+            return KidsAPI(serverURL: URL(string: "http://127.0.0.1:9")!, token: "invalid-validation-token")
+        }
+        if validationScenario == "invalid-token" {
+            return KidsAPI(serverURL: session.server.effectiveServerURL, token: "invalid-validation-token")
+        }
+        #endif
         return KidsAPI(serverURL: session.server.effectiveServerURL, token: session.user.accessToken)
     }
+
+    #if DEBUG
+    private var validationStreamFailureUsed = false
+    func consumeValidationStreamFailure() -> Bool {
+        guard validationScenario == "stream-unavailable", !validationStreamFailureUsed else { return false }
+        validationStreamFailureUsed = true
+        return true
+    }
+
+    private var validationScenario: String? {
+        ProcessInfo.processInfo.arguments.first(where: { $0.hasPrefix("--kids-validation=") })?
+            .replacingOccurrences(of: "--kids-validation=", with: "")
+    }
+    #endif
 
     var serverName: String {
         Container.shared.currentUserSession()?.server.name ?? "Your Jellyfin server"
@@ -139,7 +162,18 @@ final class KidsAppModel: ObservableObject {
             return
         }
         do {
-            try await api.validate(stored)
+            var expected = stored
+            #if DEBUG
+            if validationScenario == "changed-libraries" {
+                expected = KidsBinding(
+                    serverID: stored.serverID,
+                    userID: stored.userID,
+                    showsID: "invalid-validation-library",
+                    moviesID: stored.moviesID
+                )
+            }
+            #endif
+            try await api.validate(expected)
             let restored = try KidsStateFile.load(from: stateURL, binding: stored)
             async let shows = api.catalog(.shows, binding: stored)
             async let movies = api.catalog(.movies, binding: stored)

@@ -97,8 +97,9 @@ class NowPlayableObserver: ViewModel, MediaPlayerObserver {
     }
 
     private func secondsDidChange(_ newSeconds: Duration) {
+        // Seeking while paused changes time without changing transport state.
         handleNowPlayablePlaybackChange(
-            playing: true,
+            playing: manager?.playbackRequestStatus == .playing,
             metadata: .init(
                 position: newSeconds,
                 duration: manager?.item.runtime ?? .zero
@@ -233,7 +234,7 @@ class NowPlayableObserver: ViewModel, MediaPlayerObserver {
         playing: Bool,
         metadata: NowPlayableDynamicMetadata
     ) {
-        setNowPlayingPlaybackInfo(metadata)
+        setNowPlayingPlaybackInfo(metadata, playing: playing)
         MPNowPlayingInfoCenter.default().playbackState = playing ? .playing : .paused
     }
 
@@ -265,14 +266,14 @@ class NowPlayableObserver: ViewModel, MediaPlayerObserver {
         nowPlayingInfoCenter.nowPlayingInfo = nowPlayingInfo
     }
 
-    private func setNowPlayingPlaybackInfo(_ metadata: NowPlayableDynamicMetadata) {
+    private func setNowPlayingPlaybackInfo(_ metadata: NowPlayableDynamicMetadata, playing: Bool) {
 
         let nowPlayingInfoCenter = MPNowPlayingInfoCenter.default()
         var nowPlayingInfo: [String: Any] = nowPlayingInfoCenter.nowPlayingInfo ?? [:]
 
         nowPlayingInfo[MPMediaItemPropertyPlaybackDuration] = Float(metadata.duration.seconds)
         nowPlayingInfo[MPNowPlayingInfoPropertyElapsedPlaybackTime] = Float(metadata.position.seconds)
-        nowPlayingInfo[MPNowPlayingInfoPropertyPlaybackRate] = metadata.rate
+        nowPlayingInfo[MPNowPlayingInfoPropertyPlaybackRate] = playing ? metadata.rate : 0
         nowPlayingInfo[MPNowPlayingInfoPropertyDefaultPlaybackRate] = 1.0
         nowPlayingInfo[MPNowPlayingInfoPropertyCurrentLanguageOptions] = metadata.currentLanguageOptions
         nowPlayingInfo[MPNowPlayingInfoPropertyAvailableLanguageOptions] = metadata.availableLanguageOptionGroups

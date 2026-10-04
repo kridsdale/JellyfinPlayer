@@ -284,6 +284,10 @@ final class KidsNavigationTests: XCTestCase {
         XCTAssertTrue(timeline.hasFocus)
         XCUIRemote.shared.press(.right)
         XCTAssertEqual(timeline.value as? String, "2:15")
+        XCUIRemote.shared.press(.playPause)
+        XCTAssertEqual(play.label, "Pause", "Play/Pause must work while the seek timeline owns focus.")
+        XCUIRemote.shared.press(.playPause)
+        XCTAssertEqual(play.label, "Play")
         XCUIRemote.shared.press(.menu)
         XCTAssertTrue(app.buttons["kids.player.surface"].waitForExistence(timeout: 5))
     }

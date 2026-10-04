@@ -80,6 +80,12 @@ final class KidsPlaybackController: ObservableObject, Identifiable {
             }
         }.store(in: &observers)
         if !model.isPreview {
+            // System transport commands can reach NowPlayableObserver instead of the SwiftUI handler.
+            // Keep the kids controls visible for either route, while the VLC clock remains authoritative.
+            manager.$playbackRequestStatus.dropFirst().sink { [weak self] _ in
+                guard let self, self.began, !self.stopped else { return }
+                self.reveal()
+            }.store(in: &observers)
             manager.onPlaybackError = { [weak self] error in
                 guard let self, let model = self.model, model.activePlayback === self else { return }
                 if case let Get.APIError.unacceptableStatusCode(status) = error, status == 401 || status == 403 {
@@ -120,13 +126,34 @@ final class KidsPlaybackController: ObservableObject, Identifiable {
               (item.kind == .episode && raw.type == .episode) || (item.kind == .movie && raw.type == .movie)
         else { throw KidsContractError.denied }
         let start = max(0, position)
+        #if DEBUG
+        let failStreamOnce = model.consumeValidationStreamFailure()
+        #endif
         let provider = MediaPlayerItemProvider(item: raw) { base, _ in
-            try await MediaPlayerItem.build(for: base, videoPlayerType: .vlc, modifyItem: { dto in
+            let built = try await MediaPlayerItem.build(for: base, videoPlayerType: .vlc, modifyItem: { dto in
                 if dto.userData == nil {
                     dto.userData = UserItemDataDto(key: "")
                 }
                 dto.userData?.playbackPositionTicks = Int(start * 10_000_000)
             })
+            #if DEBUG
+            // A one-shot real connection refusal exercises VLC recovery without interrupting the household server.
+            if failStreamOnce {
+                return await MediaPlayerItem(
+                    baseItem: built.baseItem,
+                    mediaSource: built.mediaSource,
+                    playSessionID: built.playSessionID,
+                    url: URL(string: "http://127.0.0.1:9")!,
+                    requestedBitrate: built.requestedBitrate,
+                    deviceProfile: built.deviceProfile,
+                    initialAudioStreamIndex: built.selectedAudioStreamIndex,
+                    initialSubtitleStreamIndex: built.selectedSubtitleStreamIndex,
+                    previewImageProvider: built.previewImageProvider,
+                    thumbnailProvider: built.thumbnailProvider
+                )
+            }
+            #endif
+            return built
         }
         let manager = MediaPlayerManager(provider: provider, queue: nil)
         return KidsPlaybackController(item: item, title: title, mode: mode, episodes: episodes, manager: manager, model: model)
@@ -181,17 +208,22 @@ final class KidsPlaybackController: ObservableObject, Identifiable {
             return
         }
         guard !stopped else { return }
+        let playerState = proxy.player.state
+        let terminal = playerState == .stopped || playerState == .idle || playerState == .stopping
         let time = manager.seconds.seconds
-        if time.isFinite {
+        // libVLC resets its clock after an unexpected stop. Keep the last valid resume position.
+        if time.isFinite && !(terminal && began) {
             seconds = max(0, time)
         }
-        paused = proxy.player.state == .paused
-        let playing = proxy.player.state == .playing
-        buffering = proxy.isBuffering.value || manager.state == .loadingItem
+        paused = playerState == .paused
+        let playing = playerState == .playing
         if playing && !began {
             began = true
             model?.playbackBegan(self)
         }
+        // Some failed HTTP opens stop without a VLC error notification. A prepared item is not a playing stream.
+        buffering = proxy.isBuffering.value || manager.state == .loadingItem || (!began && !recovery) ||
+            (terminal && began && !finished && !proxy.player.didReachEnd)
         if began && !finished && Date.now.timeIntervalSince(lastCheckpoint) >= 10 {
             model?.playbackCheckpoint(self, seconds: seconds)
             lastCheckpoint = .now
