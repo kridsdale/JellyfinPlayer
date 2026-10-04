@@ -646,6 +646,8 @@
 				TargetAttributes = {
 					5358705F2669D21600D05A09 = {
 						CreatedOnToolsVersion = 12.5;
+						DevelopmentTeam = Z3LBQE3J8T;
+						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.iCloud = {enabled = 1;};
 							com.apple.Push = {enabled = 1;};
@@ -654,9 +656,13 @@
 					};
 					5377CBF0263B596A003A4E83 = {
 						CreatedOnToolsVersion = 12.5;
+						DevelopmentTeam = Z3LBQE3J8T;
+						ProvisioningStyle = Automatic;
 					};
 					CAFE00000000000000000110 = {
 						CreatedOnToolsVersion = 27.0;
+						DevelopmentTeam = Z3LBQE3J8T;
+						ProvisioningStyle = Automatic;
 						TestTargetID = 5358705F2669D21600D05A09;
 					};
 				};
@@ -1107,6 +1113,8 @@
 		};
 		5377CC1A263B596B003A4E83 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReferenceAnchor = E150B7D12DFF2E7C00DC7CF4 /* XcodeConfig */;
+			baseConfigurationReferenceRelativePath = Shared.xcconfig;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;

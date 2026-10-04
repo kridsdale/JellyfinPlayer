@@ -6,7 +6,7 @@ RC1 is ready for simulator evaluation. See [the evidence record](kids-validation
 
 ## Build and test
 
-Use Xcode 27, the `Swiftfin tvOS` scheme, and a tvOS simulator. The current project deployment target is tvOS 26.1. Choose a device UUID with `xcrun simctl list devices available`.
+Use Xcode 27, the `Swiftfin tvOS` scheme, and a tvOS simulator. Debug and Release default to Kevin Ridsdale's paid team (`Z3LBQE3J8T`) with automatic signing; `XcodeConfig/DevelopmentTeam.xcconfig` remains an ignored optional override. The current project deployment target is tvOS 26.1. Choose a device UUID with `xcrun simctl list devices available`.
 
 ```sh
 swift test --package-path KidsCore
@@ -58,6 +58,17 @@ xcodebuild -project Swiftfin.xcodeproj -scheme 'Swiftfin tvOS' \
 ```
 
 An unsigned device compile does not install or validate playback on an Apple TV.
+
+To request a signed hardware build using the account in Xcode > Settings > Accounts:
+
+```sh
+xcodebuild -project Swiftfin.xcodeproj -scheme 'Swiftfin tvOS' \
+  -configuration Release -destination 'generic/platform=tvOS' \
+  -derivedDataPath build/DeviceDerivedData -skipMacroValidation \
+  -allowProvisioningUpdates build
+```
+
+Automatic signing may create/download signing assets. The latest attempt selected the correct paid team but failed with `No Accounts`; resolve the Xcode login before treating a hardware build or iCloud provisioning as verified. See [the current iCloud status](kids-icloud.md).
 
 ## Initial setup
 
