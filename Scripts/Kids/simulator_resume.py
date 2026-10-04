@@ -8,6 +8,8 @@ import argparse
 import json
 import math
 import os
+import plistlib
+import uuid
 from pathlib import Path
 import subprocess
 import tempfile
@@ -52,8 +54,39 @@ def main():
     state_path = container / 'Library/Application Support/KidsPlayer/state-v1.json'
     if not state_path.resolve().is_relative_to(container):
         raise ValueError('Refusing a redirected state path')
-    original = state_path.read_bytes()
+    store_path = state_path.parent / 'progress.store'
+    is_swiftdata = store_path.exists()
+    binding = None
+    if is_swiftdata:
+        preferences = plistlib.loads((container / 'Library/Preferences' / (BUNDLE + '.plist')).read_bytes())
+        binding = json.loads(preferences['kids.binding.v1'])
+        app_path = Path(subprocess.check_output(['xcrun', 'simctl', 'get_app_container', args.device, BUNDLE, 'app'], text=True).strip())
+        if plistlib.loads((app_path / 'Info.plist').read_bytes()).get('KidsCloudSyncEnabled') == 'YES':
+            raise ValueError('Refusing test seeds in a live iCloud-enabled build')
+        with tempfile.TemporaryDirectory(prefix='kids-state-export-') as temporary:
+            bind_file = Path(temporary) / 'binding.json'
+            export_file = Path(temporary) / 'state.json'
+            bind_file.write_text(json.dumps(binding))
+            subprocess.run(['swift', 'run', '--package-path', str(REPO / 'KidsCore'), 'KidsStateTool',
+                            'export', str(store_path), str(bind_file), str(export_file)], check=True)
+            original = export_file.read_bytes()
+    else:
+        original = state_path.read_bytes()
     state = json.loads(original)
+
+    def write_state(data):
+        if not is_swiftdata:
+            atomic_write(state_path, data)
+            return
+        if json.loads(data)['binding'] != binding:
+            raise ValueError('Refusing to write across account/library identity')
+        with tempfile.TemporaryDirectory(prefix='kids-state-import-') as temporary:
+            bind_file = Path(temporary) / 'binding.json'
+            import_file = Path(temporary) / 'state.json'
+            bind_file.write_text(json.dumps(binding))
+            import_file.write_bytes(data)
+            subprocess.run(['swift', 'run', '--package-path', str(REPO / 'KidsCore'), 'KidsStateTool',
+                            'import', str(store_path), str(bind_file), str(import_file)], check=True)
     if state.get('version') != 1 or len(set(state['binding'].values())) != 4:
         raise ValueError('Unexpected state schema or identity')
     if args.action == 'inspect':
@@ -66,7 +99,7 @@ def main():
         data = backup.read_bytes()
         if json.loads(data)['binding'] != state['binding']:
             raise ValueError('Refusing to restore across account/library identity')
-        atomic_write(state_path, data)
+        write_state(data)
         print('Restored the original local progress; retained backup.')
         return
     if not all([args.show_id, args.item_id, args.season and args.season > 0, args.episode and args.episode > 0,
@@ -87,10 +120,10 @@ def main():
     seconds = args.runtime - 25
     state['preferences']['episodeLimit'] = 2
     state['ordered'][args.show_id] = {'itemID': args.item_id, 'seconds': seconds, 'complete': False,
-                                     'season': args.season, 'episode': args.episode}
+                                     'season': args.season, 'episode': args.episode, 'selectionID': str(uuid.uuid4())}
     state['session'] = {'showID': args.show_id, 'mode': 'ordered', 'completed': args.completed, 'limit': 2,
                         'itemID': args.item_id, 'seconds': seconds}
-    atomic_write(state_path, json.dumps(state, sort_keys=True).encode())
+    write_state(json.dumps(state, sort_keys=True).encode())
     print(json.dumps({'itemID': args.item_id, 'resumeSeconds': seconds, 'completed': args.completed, 'limit': 2}))
 
 

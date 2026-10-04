@@ -118,7 +118,7 @@ final class KidsNavigationTests: XCTestCase {
         XCTAssertTrue(parents.waitForExistence(timeout: 10))
         selectParents(parents)
         XCTAssertTrue(app.secureTextFields["kids.parent.pin"].waitForExistence(timeout: 5))
-        XCTAssertFalse(app.buttons["Reset local progress and playback settings"].exists)
+        XCTAssertFalse(app.buttons["kids.parent.resetall"].exists)
         capture("parent-pin-gate")
         XCUIRemote.shared.press(.menu)
         XCTAssertTrue(app.buttons["kids.card.show-1"].waitForExistence(timeout: 5))
@@ -161,7 +161,7 @@ final class KidsNavigationTests: XCTestCase {
     func testParentUnlockAndRelock() {
         launch("shows")
         unlockParents()
-        XCTAssertTrue(app.buttons["Reset local progress and playback settings"].waitForExistence(timeout: 5))
+        XCTAssertTrue(app.buttons["kids.parent.resetall"].waitForExistence(timeout: 5))
         XCTAssertFalse(app.secureTextFields["kids.parent.pin"].exists)
         capture("parent-controls-unlocked")
         XCUIRemote.shared.press(.menu)

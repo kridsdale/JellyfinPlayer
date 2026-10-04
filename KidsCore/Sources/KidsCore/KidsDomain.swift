@@ -146,17 +146,27 @@ public struct KidsProgress: Codable, Equatable, Sendable {
     public var complete = false
     public var season: Int?
     public var episode: Int?
-    public init(itemID: String? = nil, seconds: Double = 0, complete: Bool = false, season: Int? = nil, episode: Int? = nil) {
+    public var selectionID: String?
+    public init(
+        itemID: String? = nil,
+        seconds: Double = 0,
+        complete: Bool = false,
+        season: Int? = nil,
+        episode: Int? = nil,
+        selectionID: String? = nil
+    ) {
         self.itemID = itemID
         self.seconds = seconds
         self.complete = complete
         self.season = season
         self.episode = episode
+        self.selectionID = selectionID
     }
 }
 
 public struct KidsShuffleBag: Codable, Equatable, Sendable {
     public var remaining: [String] = []
+    public var cycleID: String?
     public var last: String?
     public init() {}
 }
@@ -225,6 +235,7 @@ public struct KidsState: Codable, Equatable, Sendable {
             let proposed = randomOrder ?? eligible.map(\.id).shuffled()
             guard Set(proposed) == ids && proposed.count == ids.count else { throw KidsContractError.denied }
             bag.remaining = proposed
+            bag.cycleID = UUID().uuidString
             if bag.remaining.count > 1 && bag.remaining.first == bag.last {
                 bag.remaining.swapAt(0, 1)
             }
@@ -259,7 +270,8 @@ public struct KidsState: Codable, Equatable, Sendable {
                 itemID: item.id,
                 seconds: old?.itemID == item.id && old?.complete != true ? old!.seconds : 0,
                 season: item.season,
-                episode: item.episode
+                episode: item.episode,
+                selectionID: old?.itemID == item.id ? old?.selectionID : UUID().uuidString
             )
         } else {
             var bag = shuffle[showID] ?? KidsShuffleBag()
@@ -300,7 +312,12 @@ public struct KidsState: Codable, Equatable, Sendable {
             let eligible = try KidsEligibility.episodes(episodes, showID: showID, binding: binding)
             guard let i = eligible.firstIndex(where: { $0.id == item.id }) else { throw KidsContractError.unavailable }
             if i + 1 < eligible.count {
-                ordered[showID] = KidsProgress(itemID: eligible[i + 1].id, season: eligible[i + 1].season, episode: eligible[i + 1].episode)
+                ordered[showID] = KidsProgress(
+                    itemID: eligible[i + 1].id,
+                    season: eligible[i + 1].season,
+                    episode: eligible[i + 1].episode,
+                    selectionID: UUID().uuidString
+                )
             } else {
                 ordered[showID] = KidsProgress(itemID: item.id, complete: true, season: item.season, episode: item.episode)
                 return false
@@ -317,7 +334,7 @@ public struct KidsState: Codable, Equatable, Sendable {
         guard KidsEligibility.permits(item, binding: binding), item.kind == .episode, let show = item.seriesID else {
             throw KidsContractError.denied
         }
-        ordered[show] = KidsProgress(itemID: item.id, season: item.season, episode: item.episode)
+        ordered[show] = KidsProgress(itemID: item.id, season: item.season, episode: item.episode, selectionID: UUID().uuidString)
         session = nil
     }
 }

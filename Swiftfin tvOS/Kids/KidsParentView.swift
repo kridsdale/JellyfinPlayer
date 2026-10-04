@@ -70,7 +70,7 @@ struct KidsParentView: View {
                             .accessibilityIdentifier("kids.parent.unlock")
                         Text("The parent PIN is separate from the Jellyfin password.").foregroundStyle(.secondary)
                         KidsParentAction("Recover parent setup") { recovering = true
-                            message = "Sign in with the previous kids account to reset local setup. Your media stays unchanged."
+                            message = "Sign in with the previous kids account to reset synced playback setup. Your media stays unchanged."
                         }
                     }
                 } else if model.needsLocalReset && !recovering {
@@ -78,7 +78,7 @@ struct KidsParentView: View {
                         Text(
                             "Local playback settings could not be read. Reset them after verifying the same kids account and both approved libraries. Media files stay unchanged."
                         )
-                        KidsParentAction("Reset local progress and playback settings", role: .destructive) {
+                        KidsParentAction("Reset synced progress and playback settings", role: .destructive) {
                             resetShowID = nil
                             confirmReset = true
                         }
@@ -104,12 +104,12 @@ struct KidsParentView: View {
                         }.disabled(newPIN.isEmpty)
                     }
                     Section("Recovery") {
-                        KidsParentAction("Reset local progress and playback settings", role: .destructive) { model.touchGate()
+                        KidsParentAction("Reset synced progress and playback settings", role: .destructive) { model.touchGate()
                             resetShowID = nil
                             confirmReset = true
                         }.accessibilityIdentifier("kids.parent.resetall")
                         Text(
-                            "This resets this Apple TV's ordered positions, movie progress, and preferences. Media files are never changed."
+                            "This resets ordered positions, movie progress, shuffle history, and preferences on Apple TVs using the same iCloud and Jellyfin accounts. Media files are never changed."
                         )
                         .foregroundStyle(.secondary)
                     }
@@ -122,7 +122,7 @@ struct KidsParentView: View {
                 } }
             }
             .navigationTitle("Parents")
-            .alert(resetShowID == nil ? "Reset local playback state?" : "Reset this show’s progress?", isPresented: $confirmReset) {
+            .alert(resetShowID == nil ? "Reset synced playback state?" : "Reset this show’s progress?", isPresented: $confirmReset) {
                 Button("Reset", role: .destructive) {
                     if let resetShowID {
                         model.resetProgress(showID: resetShowID)
@@ -131,7 +131,7 @@ struct KidsParentView: View {
                         Task {
                             do {
                                 try await model.resetLocalState()
-                                message = "Local playback state reset."
+                                message = "Synced playback state reset."
                             } catch {
                                 message = "Unable to verify the kids account. Check the connection before resetting."
                             }
@@ -295,6 +295,8 @@ struct KidsParentView: View {
         Section("Connection & Help") {
             LabeledContent("Server", value: model.serverName)
             LabeledContent("Account", value: "Restricted kids playback")
+            LabeledContent("Playback sync", value: model.cloudSyncStatus)
+                .accessibilityIdentifier("kids.parent.syncstatus")
             if let date = model.lastPlayback {
                 LabeledContent(
                     "Last successful playback",

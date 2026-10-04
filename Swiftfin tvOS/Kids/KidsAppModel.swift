@@ -9,12 +9,15 @@
 // SPDX-License-Identifier: MPL-2.0
 import AVFoundation
 import Combine
+import CoreData
 import Defaults
 import FactoryKit
 import Foundation
 import JellyfinAPI
 import KidsCore
+import KidsPersistence
 import Security
+import SwiftData
 import UIKit
 
 @MainActor
@@ -54,6 +57,12 @@ final class KidsAppModel: ObservableObject {
     var state: KidsState?
     @Published
     var lastPlayback: Date?
+    @Published
+    var cloudSyncStatus = "Playback is saved on this Apple TV."
+    private var persistence: KidsStateRepository?
+    private var cloudActive = false
+    private var syncBaseline: KidsSyncSnapshot?
+    private var syncObservers = Set<AnyCancellable>()
     var lastFocus: [KidsCategory: String] = [:]
     var episodeCache: [String: [KidsItem]] = [:]
     var binding: KidsBinding? {
@@ -103,6 +112,72 @@ final class KidsAppModel: ObservableObject {
             .appendingPathComponent("KidsPlayer/state-v1.json")
     }
 
+    private var cloudRequested: Bool {
+        (Bundle.main.object(forInfoDictionaryKey: "KidsCloudSyncEnabled") as? String) == "YES"
+    }
+
+    private func repository() throws -> KidsStateRepository {
+        if let persistence {
+            return persistence
+        }
+        let defaults = UserDefaults.standard
+        let writerKey = "kids.sync.installation.v1"
+        let writerID = defaults.string(forKey: writerKey) ?? UUID().uuidString
+        defaults.set(writerID, forKey: writerKey)
+        let url = stateURL.deletingLastPathComponent().appendingPathComponent("progress.store")
+        let container: ModelContainer
+        do {
+            container = try KidsStateRepository.makeContainer(url: url, cloud: cloudRequested)
+            cloudActive = cloudRequested
+            cloudSyncStatus = cloudRequested ? "iCloud sync configured. Updates sync when connected." :
+                "Saved on this simulator. iCloud requires a signed iCloud-enabled build."
+        } catch {
+            guard cloudRequested else { throw error }
+            // Opening the same SDK store locally retains durable progress if CloudKit
+            // cannot initialize. No JSON fallback, store deletion or silent reset.
+            container = try KidsStateRepository.makeContainer(url: url, cloud: false)
+            cloudActive = false
+            cloudSyncStatus = "Saved on this Apple TV. iCloud could not start; reopen the app to retry."
+        }
+        let store = KidsStateRepository(container: container, writerID: writerID)
+        persistence = store
+        return store
+    }
+
+    private func receiveStoredProgress() {
+        guard !isPreview, !starting, activePlayback == nil, let binding, let persistence else { return }
+        do {
+            let restored = try persistence.load(binding: binding)
+            syncBaseline = restored
+            state = restored.state
+        } catch { show(error) }
+    }
+
+    private func observeCloudChanges() {
+        NotificationCenter.default.publisher(for: .NSPersistentStoreRemoteChange)
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in self?.receiveStoredProgress() }.store(in: &syncObservers)
+        NotificationCenter.default.publisher(for: ModelContext.didSave)
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in self?.receiveStoredProgress() }.store(in: &syncObservers)
+        NotificationCenter.default.publisher(for: NSPersistentCloudKitContainer.eventChangedNotification)
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] note in
+                guard let self, self.cloudActive, let event = note.userInfo?[NSPersistentCloudKitContainer.eventNotificationUserInfoKey]
+                    as? NSPersistentCloudKitContainer.Event, event.endDate != nil else { return }
+                if event.succeeded {
+                    if event.type == .export {
+                        self.cloudSyncStatus = "Last iCloud save: " + event.endDate!.formatted(date: .abbreviated, time: .shortened)
+                    }
+                    if event.type == .import {
+                        self.receiveStoredProgress()
+                    }
+                } else {
+                    self.cloudSyncStatus = "Saved on this Apple TV. iCloud is waiting; it will retry automatically."
+                }
+            }.store(in: &syncObservers)
+    }
+
     private let bindingKey = "kids.binding.v1"
     private let recoveryBindingKey = "kids.recoveryBinding.v1"
     private let gateKey = "kids.gate.v1"
@@ -120,6 +195,7 @@ final class KidsAppModel: ObservableObject {
             isPreview = true
             return
         }
+        observeCloudChanges()
         if let data = UserDefaults.standard.data(forKey: gateKey), let saved = try? JSONDecoder().decode(KidsGate.self, from: data) {
             gate = saved
             gate.lock()
@@ -174,12 +250,13 @@ final class KidsAppModel: ObservableObject {
             }
             #endif
             try await api.validate(expected)
-            let restored = try KidsStateFile.load(from: stateURL, binding: stored)
+            let restored = try repository().load(binding: stored, legacyURL: stateURL)
             async let shows = api.catalog(.shows, binding: stored)
             async let movies = api.catalog(.movies, binding: stored)
             let result = try await (shows, movies)
             guard generation == refreshGeneration, !Task.isCancelled else { return }
-            state = restored
+            syncBaseline = restored
+            state = restored.state
             catalog = [.shows: result.0, .movies: result.1]
             requiresParent = !hasParentPIN
             loading = false
@@ -211,7 +288,7 @@ final class KidsAppModel: ObservableObject {
             requiresParent = true
             needsLocalReset = true
             state = nil
-            problem = "A grown-up needs to reset local playback settings."
+            problem = "A grown-up needs to restore playback settings."
         } else {
             problem = "Your shows are taking a break. Try again."
             requiresParent = false
@@ -245,10 +322,27 @@ final class KidsAppModel: ObservableObject {
         }
     }
 
-    func persist() {
+    func persist(intent: KidsSyncWriteIntent = .edit) {
         guard !isPreview, let state else { return }
-        do { try KidsStateFile.save(state, to: stateURL) }
-        catch { problem = "Playback progress could not be saved. A grown-up can check storage." }
+        do {
+            let store = try repository()
+            let baseline = try syncBaseline ?? store.load(binding: state.binding, legacyURL: stateURL)
+            let activeKey = activePlayback.flatMap { controller -> String? in
+                switch controller.mode {
+                case .ordered: "ordered/" + controller.title.id
+                case .movie: "movie/" + controller.item.id
+                default: nil
+                }
+            }
+            let saved = try store.commit(state, since: baseline, intent: intent, activeKey: activeKey)
+            syncBaseline = saved
+            self.state = saved.state
+            if saved.invalidatesPlayback, let controller = activePlayback {
+                controller.allowsCheckpoints = false
+                cancelPendingStart()
+                Task { await stopPlayback(endSession: false) }
+            }
+        } catch { problem = "Playback progress could not be saved. A grown-up can check storage." }
     }
 
     func savePreferences(limit: Int? = nil, spoken: Bool? = nil) {
@@ -300,8 +394,13 @@ final class KidsAppModel: ObservableObject {
             try await api.validate(confirmed)
         }
         await stopPlayback()
-        state = KidsState(binding: confirmed)
-        persist()
+        if isPreview {
+            state = KidsState(binding: confirmed)
+        } else {
+            let reset = try repository().reset(binding: confirmed)
+            syncBaseline = reset
+            state = reset.state
+        }
         needsLocalReset = false
         touchGate()
         await refresh()
@@ -376,20 +475,20 @@ final class KidsAppModel: ObservableObject {
         else { throw KidsAPIError.libraryChanged }
         let binding = KidsBinding(serverID: info.id, userID: userID, showsID: shows.id, moviesID: movies.id)
         try await newAPI.validate(binding)
-        let restored: KidsState
+        let restored: KidsSyncSnapshot
         if recovering {
             guard let data = UserDefaults.standard.data(forKey: bindingKey) ?? UserDefaults.standard.data(forKey: recoveryBindingKey),
                   let previous = try? JSONDecoder().decode(KidsBinding.self, from: data), previous == binding
             else { throw KidsContractError.denied }
             // Verify the same restricted account and both library identities before resetting the gate.
             guard gate.attempt(correct: true, now: .now) else { throw KidsContractError.denied }
-            restored = KidsState(binding: binding)
+            restored = try repository().reset(binding: binding)
         } else {
             if hasParentPIN {
                 guard Container.shared.keychainService().get(pinKey) == parentPIN else { throw KidsContractError.denied }
             }
             // Refreshing credentials for the same binding retains ordered progress, bags, and session budget.
-            restored = try KidsStateFile.load(from: stateURL, binding: binding)
+            restored = try repository().load(binding: binding, legacyURL: stateURL)
         }
         try setPIN(parentPIN)
         await stopPlayback()
@@ -410,8 +509,8 @@ final class KidsAppModel: ObservableObject {
         let encodedBinding = try JSONEncoder().encode(binding)
         UserDefaults.standard.set(encodedBinding, forKey: bindingKey)
         UserDefaults.standard.set(encodedBinding, forKey: recoveryBindingKey)
-        state = restored
-        persist()
+        syncBaseline = restored
+        state = restored.state
         // Use the existing session lifecycle for playback SDK integration, without exposing its library UI.
         try await Container.shared.userSessionManager().signIn(userID: userID)
         await refresh()
@@ -594,7 +693,7 @@ final class KidsAppModel: ObservableObject {
         if endSession {
             state?.endSession()
         }
-        persist()
+        persist(intent: .playback)
     }
 
     func cancelPendingStart() {
@@ -614,26 +713,26 @@ final class KidsAppModel: ObservableObject {
         guard activePlayback === controller else { return }
         do { try state?.began(item: controller.item, mode: controller.mode, showID: controller.title.id)
             lastPlayback = .now
-            persist()
+            persist(intent: .playback)
         } catch { Task { await stopPlayback() }
             show(error)
         }
     }
 
     func playbackCheckpoint(_ controller: KidsPlaybackController, seconds: Double) {
-        guard activePlayback === controller else { return }
+        guard activePlayback === controller, controller.allowsCheckpoints else { return }
         state?.checkpoint(item: controller.item, mode: controller.mode, seconds: seconds)
-        persist()
+        persist(intent: .playback)
     }
 
     func completed(_ controller: KidsPlaybackController) async {
-        guard activePlayback === controller else { return }
+        guard activePlayback === controller, controller.allowsCheckpoints else { return }
         do {
             let more = try state?.finished(item: controller.item, mode: controller.mode, episodes: controller.episodes) ?? false
             if !more {
                 state?.endSession()
             }
-            persist()
+            persist(intent: .playback)
             if more {
                 controller.nextEpisode = controller.mode == .shuffle ? try state?.nextShuffle(
                     showID: controller.title.id,
@@ -641,7 +740,7 @@ final class KidsAppModel: ObservableObject {
                 ) : try state?.orderedNext(showID: controller.title.id, episodes: controller.episodes).0
                 controller.countdown = 10
                 controller.showCountdown = true
-                persist()
+                persist(intent: .playback)
             }
             await controller.stop()
             if !more {

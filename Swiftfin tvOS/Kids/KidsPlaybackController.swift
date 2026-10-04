@@ -48,6 +48,7 @@ final class KidsPlaybackController: ObservableObject, Identifiable {
     private weak var model: KidsAppModel?
     private var began = false
     private var finished = false
+    var allowsCheckpoints = true
     private var stopped = false
     private var tickTask: Task<Void, Never>?
     private var waitingSince: Date?
@@ -82,9 +83,17 @@ final class KidsPlaybackController: ObservableObject, Identifiable {
         if !model.isPreview {
             // System transport commands can reach NowPlayableObserver instead of the SwiftUI handler.
             // Keep the kids controls visible for either route, while the VLC clock remains authoritative.
-            manager.$playbackRequestStatus.dropFirst().sink { [weak self] _ in
+            manager.$playbackRequestStatus.dropFirst().sink { [weak self] status in
                 guard let self, self.began, !self.stopped else { return }
                 self.reveal()
+                if status == .paused {
+                    let clock = self.manager.seconds.seconds
+                    let playerState = self.proxy.player.state
+                    if clock.isFinite && playerState != .stopped && playerState != .idle && playerState != .stopping {
+                        self.seconds = max(0, clock)
+                    }
+                    self.model?.playbackCheckpoint(self, seconds: self.seconds)
+                }
             }.store(in: &observers)
             manager.onPlaybackError = { [weak self] error in
                 guard let self, let model = self.model, model.activePlayback === self else { return }

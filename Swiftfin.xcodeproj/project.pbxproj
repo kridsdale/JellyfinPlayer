@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		CAFE00000000000000000004 /* KidsPersistence in Frameworks */ = {isa = PBXBuildFile; productRef = CAFE00000000000000000005 /* KidsPersistence */; };
 		53ABFDDC267972BF00886593 /* TVServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53ABFDDB267972BF00886593 /* TVServices.framework */; };
 		62666DFD27E5014F00EC0ECD /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5362E4AE267D40B5000E2F71 /* AudioToolbox.framework */; };
 		62666DFE27E5015700EC0ECD /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5362E4AA267D40AD000E2F71 /* AVFoundation.framework */; };
@@ -284,6 +285,7 @@
 				E1A7B1652B9A9F7800152546 /* PreferencesView in Frameworks */,
 				E19009260000000000000002 /* SwiftfinMacros in Frameworks */,
 				CAFE00000000000000000001 /* KidsCore in Frameworks */,
+				CAFE00000000000000000004 /* KidsPersistence in Frameworks */,
 				E12CDBC12FFB593800828742 /* CollectionVGrid in Frameworks */,
 				E1153DD22BBB649C00424D36 /* SVGKit in Frameworks */,
 				62666E1527E501C800EC0ECD /* AVFoundation.framework in Frameworks */,
@@ -507,6 +509,7 @@
 				E1A7B1642B9A9F7800152546 /* PreferencesView */,
 				E19009260000000000000004 /* SwiftfinMacros */,
 				CAFE00000000000000000002 /* KidsCore */,
+				CAFE00000000000000000005 /* KidsPersistence */,
 				E1392FEC2BA218A80034110D /* SwiftUIIntrospect */,
 				E1153DD12BBB649C00424D36 /* SVGKit */,
 				E19D41B12BF2BFA50082B8B2 /* KeychainSwift */,
@@ -643,6 +646,11 @@
 				TargetAttributes = {
 					5358705F2669D21600D05A09 = {
 						CreatedOnToolsVersion = 12.5;
+						SystemCapabilities = {
+							com.apple.iCloud = {enabled = 1;};
+							com.apple.Push = {enabled = 1;};
+							com.apple.BackgroundModes = {enabled = 1;};
+						};
 					};
 					5377CBF0263B596A003A4E83 = {
 						CreatedOnToolsVersion = 12.5;
@@ -975,7 +983,10 @@
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
+				CODE_SIGN_ENTITLEMENTS = "Swiftfin tvOS/Resources/JellyfinPlayer.entitlements";
 				INFOPLIST_FILE = "Swiftfin tvOS/Resources/Info.plist";
+				KIDS_CLOUD_SYNC_ENABLED = YES;
+				"KIDS_CLOUD_SYNC_ENABLED[sdk=appletvsimulator*]" = NO;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1006,7 +1017,10 @@
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
+				CODE_SIGN_ENTITLEMENTS = "Swiftfin tvOS/Resources/JellyfinPlayer.entitlements";
 				INFOPLIST_FILE = "Swiftfin tvOS/Resources/Info.plist";
+				KIDS_CLOUD_SYNC_ENABLED = YES;
+				"KIDS_CLOUD_SYNC_ENABLED[sdk=appletvsimulator*]" = NO;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1531,6 +1545,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		CAFE00000000000000000005 /* KidsPersistence */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = CAFE00000000000000000003 /* XCLocalSwiftPackageReference "KidsCore" */;
+			productName = KidsPersistence;
+		};
 		BD88CB412D77E6A0006BB5E3 /* TVOSPicker */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = BD88CB402D77E6A0006BB5E3 /* XCRemoteSwiftPackageReference "TVOSPicker" */;

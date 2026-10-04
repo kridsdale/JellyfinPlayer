@@ -11,6 +11,9 @@ import SwiftUI
 @main
 struct SwiftfinApp: App {
 
+    @UIApplicationDelegateAdaptor(KidsCloudAppDelegate.self)
+    private var cloudDelegate
+
     init() {
         Self.configure()
 
@@ -25,5 +28,18 @@ struct SwiftfinApp: App {
                 }
             }
         }
+    }
+}
+
+/// Silent CloudKit pushes are handled by the SDK's persistent-store mirroring.
+final class KidsCloudAppDelegate: NSObject, UIApplicationDelegate {
+    func application(
+        _ application: UIApplication,
+        didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil
+    ) -> Bool {
+        if (Bundle.main.object(forInfoDictionaryKey: "KidsCloudSyncEnabled") as? String) == "YES" {
+            application.registerForRemoteNotifications()
+        }
+        return true
     }
 }

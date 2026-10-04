@@ -267,12 +267,25 @@ final class KidsLivePlaybackTests: XCTestCase {
         XCUIRemote.shared.press(.right)
         focusedSelect(shuffle)
         XCTAssertTrue(app.buttons["kids.player.surface"].waitForExistence(timeout: 25))
-        allowPlaybackToProgress()
-        let elapsed = pauseAndReadPosition()
-        XCTAssertGreaterThan(elapsed, 1)
+        let elapsed = provePauseSeekAndProgress("real-shuffle-paused-frame")
+        XCTAssertGreaterThan(elapsed, 15)
         let title = app.staticTexts.matching(NSPredicate(format: "identifier BEGINSWITH %@", "kids.player.title.")).firstMatch
         XCTAssertTrue(title.exists)
         XCTAssertEqual(String(title.identifier.dropFirst("kids.player.title.".count)).count, 32)
+        let episodeID = title.identifier
         capture("real-shuffle-playing-frame")
+        app.terminate()
+        launchRealAccount()
+        XCTAssertFalse(app.buttons["kids.player.surface"].exists, "Relaunch must never autoplay.")
+        focusedSelect(firstCard)
+        XCTAssertTrue(app.buttons["kids.action.shuffle"].waitForExistence(timeout: 20))
+        XCUIRemote.shared.press(.right)
+        focusedSelect(app.buttons["kids.action.shuffle"])
+        XCTAssertTrue(app.buttons["kids.player.surface"].waitForExistence(timeout: 25))
+        allowPlaybackToProgress()
+        let restored = pauseAndReadPosition()
+        XCTAssertGreaterThanOrEqual(restored, elapsed - 2, "An interrupted Shuffle must restore its paused checkpoint.")
+        XCTAssertTrue(app.staticTexts[episodeID].exists, "An interrupted Shuffle must resume the same episode.")
+        capture("real-shuffle-restored-position")
     }
 }

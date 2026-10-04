@@ -1,0 +1,44 @@
+# Playback state and iCloud
+
+The kids experience now uses SwiftData for active storage, with the SDK's automatic CloudKit mirroring into the private `iCloud.com.kridsdale.JellyfinPlayer` container. The shipping tvOS configuration enables CloudKit. It does not run an application server or upload media. Apple documents the setup in [Syncing model data across a person's devices](https://developer.apple.com/documentation/swiftdata/syncing-model-data-across-a-persons-devices).
+
+## What synchronizes
+
+Ordered Next/resume per show, movie positions/completion, per-show Shuffle bags, the interrupted viewing session and its episode count, and the two playback preferences synchronize between installations using the same Apple iCloud account and the same verified Jellyfin server/user/library IDs. Positions are saved every ten seconds and on pause (including system transport controls), seek, background, stop, and completion. Cloud delivery is eventual, not a synchronous handoff or a distributed playback lock. Two disconnected TVs can initially draw the same episode; once changes arrive, episodes consumed on either TV remain consumed in that shuffle cycle. The session count is viewing-session state, not an aggregate household screen-time meter.
+
+Library authorization, the Jellyfin login token, and the parent PIN do not synchronize through this store. Each new TV still requires deliberate setup with a restricted Jellyfin account and its own parent PIN. No media bytes, credentials, catalog metadata, server access policy, or RAID paths are stored in CloudKit. Jellyfin still receives its ordinary authenticated playback reports.
+
+## Store and migration
+
+The SDK store is `Library/Application Support/KidsPlayer/progress.store` inside the client container. Each component has its own SwiftData row per installation. Independent shows, movies and preferences cannot overwrite one another. A single encoded payload contains both a value and its revision, so CloudKit cannot combine another writer's position with an unrelated revision. Defaults on every model property and the absence of uniqueness constraints/required relationships satisfy CloudKit's schema requirements.
+
+At first use, the app imports the previous `state-v1.json` without modifying it. SwiftData stores a migration receipt, so a subsequent reset or relaunch does not re-import the old JSON. Migration has lower priority than live changes, including a delayed initial cloud import. A different Jellyfin user, server, or approved library binding gets isolated state.
+
+Only changes from the last loaded snapshot are saved. Conflicting edits of the same component use a deterministic latest revision; observed revisions also prevent the local clock moving backward from regressing a causal edit. Shuffle draws in one shared cycle merge the consumed sets, and new cycles are separate. A full parent reset creates a new generation; delayed writes from the old generation cannot restore it. Per-show/movie reset uses a deletion tombstone. A remote parent Set Next/reset invalidates an obsolete active checkpoint and stops that local stream without starting another.
+
+Local SwiftData saves work without WAN connectivity or an iCloud sign-in; the SDK queues cloud changes when configured. If CloudKit initialization fails, the same database opens locally without being deleted or replaced. Parents > Connection & Help shows whether sync is configured, waiting, or has completed an export. An export event is not proof that a second device has imported it.
+
+## Enable and verify Apple's service
+
+Source configuration is complete, but live transport requires valid Apple provisioning. At implementation time, `DevelopmentTeam.xcconfig` had an empty team and `security find-identity -v -p codesigning` reported no valid identities. No live cross-device iCloud exchange has been claimed.
+
+1. Add a paid Apple Developer Program account in Xcode > Settings > Accounts. Select its team for the **Swiftfin tvOS** target and use automatic signing with bundle ID `com.kridsdale.JellyfinPlayer`.
+2. Under Signing & Capabilities, ensure **iCloud > CloudKit** selects `iCloud.com.kridsdale.JellyfinPlayer`. Create/register that container for the chosen team if it does not yet exist. Push Notifications and the Remote notifications background mode are configured in the project. Provisioning must authorize these capabilities. Xcode/export signing supplies the CloudKit/APNs environment appropriate to development or distribution.
+3. Run two signed clients using the same iCloud account, then privately configure the same restricted Jellyfin user and separate parent PIN on each. Simulators deliberately default to local SwiftData (`KIDS_CLOUD_SYNC_ENABLED=NO`) because the current ad-hoc build is unprovisioned. For a properly provisioned simulator cloud check, override `KIDS_CLOUD_SYNC_ENABLED=YES`; this alone does not grant entitlements or authenticate iCloud. Physical devices are the preferred transport test.
+4. On TV A, pause an ordered episode after a distinct seek and stop playback. Wait for a successful export/import, then select Next on TV B: verify the same episode resumes at the saved time. Change a different show/movie on B and verify both updates survive on A. Exercise Shuffle on both and inspect the remaining bag after synchronization. Repeat with one client temporarily offline.
+5. Perform an explicit per-show reset and a full reset, verify propagation, then reconnect an offline client with older state. Verify no automatic playback starts and approved-library boundaries remain unchanged.
+6. Before TestFlight, deploy the generated development schema to **Production** in CloudKit Console and use distribution provisioning for the same container. Development and production are separate databases; a simulator development save will not appear in a TestFlight production install.
+
+Passwords and PINs stay in the GUI. Do not paste them into build commands or test logs. No router or Jellyfin catalog changes are needed.
+
+## Automated and real-client evidence
+
+`swift test --package-path KidsCore` runs the original 26 core/HTTP tests plus 23 native SwiftData persistence tests. The latter cover full JSON migration and its immutable backup, durable reopen, stale independent edits, deterministic same-item conflicts, offline convergence, clock rollback, concurrent Shuffle consumption/new cycles, reset generations/tombstones, same-episode Set Next, movie Start over, binding isolation, corruption/receipt repair, delayed cloud imports, independent preferences, and the generated schema's default/uniqueness requirements.
+
+The two-store tests transfer records through independent actual SwiftData containers with CloudKit transport disabled. They prove storage and application-level merge behavior, not Apple's external service. Simulator result bundles and the current verification status are recorded in [kids-validation.md](kids-validation.md).
+
+The existing `Scripts/Kids/simulator_resume.py` helper now reads/writes SwiftData through the internal `KidsStateTool` SDK executable. It retains the same verified episode metadata, required retained backup, account binding checks, genuine first-EOF budget requirement, and simulator-only path boundary. It refuses test seeds in a live iCloud-enabled simulator build. The old JSON is no longer an active seed mechanism after migration.
+
+## Rollback
+
+Keep the prior signed simulator archive and the untouched pre-migration JSON. Reinstalling an older RC1 without uninstalling will read the older JSON snapshot, not new SwiftData progress. For an up-to-date simulator rollback, export the SDK state first using the simulator helper/tool and preserve it as an internal artifact; do not modify media as part of rollback. The CloudKit model is additive; do not delete production schema fields or the container as an app rollback step.
