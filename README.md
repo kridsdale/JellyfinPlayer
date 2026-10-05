@@ -4,6 +4,8 @@ This tvOS fork of Swiftfin presents only the existing **Kid TV** and **Kid Movie
 
 The implementation is under validation and is **not yet a release candidate**. Dedicated restricted-account playback must pass before household use.
 
+- [Support and setup help](docs/app-store/support.md)
+- [Privacy policy](docs/app-store/privacy.md)
 - [Build, setup, recovery, and rollback](docs/kids-release-guide.md)
 - [Current validation evidence](docs/kids-validation.md)
 - [Full requirement coverage](docs/kids-requirements.md)

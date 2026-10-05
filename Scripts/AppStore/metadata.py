@@ -12,7 +12,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 EDITABLE = {'PREPARE_FOR_SUBMISSION', 'DEVELOPER_REJECTED', 'REJECTED', 'METADATA_REJECTED'}
-LIMITS = {'name': 30, 'subtitle': 30, 'description': 4000, 'promotionalText': 170}
+LIMITS = {'name': 30, 'subtitle': 30, 'description': 4000, 'promotionalText': 170, 'privacyPolicyText': 2000, 'supportUrl': 70}
 INFO_FIELDS = {'name', 'subtitle', 'privacyPolicyUrl', 'privacyPolicyText'}
 VERSION_FIELDS = {'description', 'keywords', 'promotionalText', 'supportUrl', 'marketingUrl'}
 
@@ -83,10 +83,14 @@ class API:
         except urllib.error.HTTPError as error:
             # Never echo request headers, a JWT or arbitrary response content.
             try:
-                codes = [item.get('code', 'UNKNOWN') for item in json.load(error).get('errors', [])]
+                errors = json.load(error).get('errors', [])
+                codes = [item.get('code', 'UNKNOWN') for item in errors]
+                pointers = [item.get('source', {}).get('pointer', '') for item in errors]
+                # Apple field errors refer to our public listing text, never API credentials.
+                detail = ' '.join(item.get('detail', '') for item in errors)[:300]
             except Exception:
-                codes = ['UNKNOWN']
-            raise MetadataError(f'Apple HTTP {error.code}: {", ".join(codes)}') from None
+                codes = ['UNKNOWN']; pointers = []; detail = ''
+            raise MetadataError(f'Apple HTTP {error.code}: {", ".join(codes)}; fields={pointers}; {detail}') from None
 
     def list(self, path):
         result = self.request('GET', path + '?limit=200')
