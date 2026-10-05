@@ -1,0 +1,2167 @@
+{
+  "limitations": [
+    "Warm server/storage, tvOS simulator, representative approved H264 show/movie only.",
+    "Metadata and artwork prefetch only; no full-media prefetch or RAID writes.",
+    "Decoded statistics and presentation opportunity are observations, not hardware/GPU fences.",
+    "Per-video http counter excludes SDK metadata, PlaybackInfo, reporting and uninstrumented stream/preview requests.",
+    "The prior opt04 had three TV starts; opt05/06/07 have four including the longer reporting lifecycle.",
+    "Opt05 server capture covers the first long lifecycle and some later TV activity; it does not cover the full client profiling run.",
+    "Opt06/07 have no independent server capture.",
+    "Failed pre-session catalog spans, rejected dismissal status requests and synchronous audio-session warnings remain disclosed.",
+    "Excluded MPEG4/AVI and zero-numbered episode cases remain unresolved; broad Swift 6 target migration is incomplete."
+  ],
+  "state_restored": true,
+  "summary": {
+    "artwork_sources": {
+      "memoryHit": 10,
+      "network": 29
+    },
+    "cancellations": {
+      "episodeCache": 2,
+      "prefetch": 2
+    },
+    "combined_playback": {
+      "movie": {
+        "first_output_median_ms": 768.77,
+        "n": 4,
+        "surface_median_ms": 1290.011
+      },
+      "tv": {
+        "first_output_median_ms": 805.919,
+        "n": 4,
+        "surface_median_ms": 1106.512
+      }
+    },
+    "events": 6939,
+    "failures": {
+      "catalog": 3
+    },
+    "files": 3,
+    "http": {
+      "ancestors": {
+        "excluded_negative": 0,
+        "max_ms": 915.765,
+        "median_ms": 212.067,
+        "min_ms": 39.034,
+        "n": 895,
+        "p95_ms": 551.653
+      },
+      "artwork": {
+        "excluded_negative": 0,
+        "max_ms": 131.032,
+        "median_ms": 71.745,
+        "min_ms": 28.368,
+        "n": 29,
+        "p95_ms": 120.462
+      },
+      "bitrate": {
+        "excluded_negative": 0,
+        "max_ms": 45.467,
+        "median_ms": 37.423,
+        "min_ms": 26.524,
+        "n": 8,
+        "p95_ms": 45.467
+      },
+      "episodeList": {
+        "excluded_negative": 0,
+        "max_ms": 68.617,
+        "median_ms": 60.207,
+        "min_ms": 59.838,
+        "n": 3,
+        "p95_ms": 68.617
+      },
+      "items": {
+        "excluded_negative": 0,
+        "max_ms": 229.33,
+        "median_ms": 47.727,
+        "min_ms": 27.379,
+        "n": 19,
+        "p95_ms": 229.33
+      },
+      "libraries": {
+        "excluded_negative": 0,
+        "max_ms": 107.39,
+        "median_ms": 58.737,
+        "min_ms": 35.869,
+        "n": 15,
+        "p95_ms": 107.39
+      },
+      "serverInfo": {
+        "excluded_negative": 0,
+        "max_ms": 100.06,
+        "median_ms": 14.077,
+        "min_ms": 10.683,
+        "n": 15,
+        "p95_ms": 100.06
+      },
+      "userPolicy": {
+        "excluded_negative": 0,
+        "max_ms": 82.945,
+        "median_ms": 30.605,
+        "min_ms": 18.889,
+        "n": 15,
+        "p95_ms": 82.945
+      }
+    },
+    "incomplete_spans": {
+      "launch": 3
+    },
+    "malformed_lines": 0,
+    "metrics": {
+      "artwork.artworkPresented.grid": {
+        "excluded_negative": 0,
+        "max_ms": 244.04,
+        "median_ms": 167.584,
+        "min_ms": 19.331,
+        "n": 36,
+        "p95_ms": 229.154
+      },
+      "artwork.artworkPresented.title": {
+        "excluded_negative": 0,
+        "max_ms": 37.239,
+        "median_ms": 15.872,
+        "min_ms": 13.198,
+        "n": 3,
+        "p95_ms": 37.239
+      },
+      "artwork.imageConstructed.grid": {
+        "excluded_negative": 0,
+        "max_ms": 213.352,
+        "median_ms": 126.602,
+        "min_ms": 0.3,
+        "n": 43,
+        "p95_ms": 178.884
+      },
+      "artwork.imageConstructed.title": {
+        "excluded_negative": 0,
+        "max_ms": 0.624,
+        "median_ms": 0.386,
+        "min_ms": 0.345,
+        "n": 3,
+        "p95_ms": 0.624
+      },
+      "artwork.presented.memoryHit.grid": {
+        "excluded_negative": 0,
+        "max_ms": 21.64,
+        "median_ms": 20.4,
+        "min_ms": 19.331,
+        "n": 7,
+        "p95_ms": 21.64
+      },
+      "artwork.presented.memoryHit.title": {
+        "excluded_negative": 0,
+        "max_ms": 37.239,
+        "median_ms": 15.872,
+        "min_ms": 13.198,
+        "n": 3,
+        "p95_ms": 37.239
+      },
+      "artwork.presented.network.grid": {
+        "excluded_negative": 0,
+        "max_ms": 244.04,
+        "median_ms": 168.788,
+        "min_ms": 112.011,
+        "n": 29,
+        "p95_ms": 229.154
+      },
+      "catalog.presented": {
+        "excluded_negative": 0,
+        "max_ms": 3092.178,
+        "median_ms": 2820.45,
+        "min_ms": 2718.386,
+        "n": 4,
+        "p95_ms": 3092.178
+      },
+      "catalog.ready": {
+        "excluded_negative": 0,
+        "max_ms": 3002.323,
+        "median_ms": 2748.342,
+        "min_ms": 2672.794,
+        "n": 4,
+        "p95_ms": 3002.323
+      },
+      "launch.browsePresented": {
+        "excluded_negative": 0,
+        "max_ms": 3460.947,
+        "median_ms": 3164.852,
+        "min_ms": 3151.519,
+        "n": 3,
+        "p95_ms": 3460.947
+      },
+      "launch.catalogReady": {
+        "excluded_negative": 0,
+        "max_ms": 3415.054,
+        "median_ms": 3127.772,
+        "min_ms": 3114.907,
+        "n": 3,
+        "p95_ms": 3415.054
+      },
+      "operation.ancestry": {
+        "excluded_negative": 0,
+        "max_ms": 4830.731,
+        "median_ms": 2461.684,
+        "min_ms": 960.484,
+        "n": 11,
+        "p95_ms": 4830.731
+      },
+      "operation.authorize": {
+        "excluded_negative": 0,
+        "max_ms": 258.805,
+        "median_ms": 190.132,
+        "min_ms": 155.451,
+        "n": 11,
+        "p95_ms": 258.805
+      },
+      "operation.bitrate": {
+        "excluded_negative": 0,
+        "max_ms": 46.372,
+        "median_ms": 37.947,
+        "min_ms": 27.952,
+        "n": 8,
+        "p95_ms": 46.372
+      },
+      "operation.episodes": {
+        "excluded_negative": 0,
+        "max_ms": 5080.884,
+        "median_ms": 5044.453,
+        "min_ms": 5022.391,
+        "n": 3,
+        "p95_ms": 5080.884
+      },
+      "operation.metadata": {
+        "excluded_negative": 0,
+        "max_ms": 68.058,
+        "median_ms": 48.533,
+        "min_ms": 37.224,
+        "n": 8,
+        "p95_ms": 68.058
+      },
+      "operation.playbackInfo": {
+        "excluded_negative": 0,
+        "max_ms": 48.943,
+        "median_ms": 37.141,
+        "min_ms": 25.754,
+        "n": 8,
+        "p95_ms": 48.943
+      },
+      "operation.policy": {
+        "excluded_negative": 0,
+        "max_ms": 243.506,
+        "median_ms": 105.965,
+        "min_ms": 67.055,
+        "n": 15,
+        "p95_ms": 243.506
+      },
+      "operation.storeLoad": {
+        "excluded_negative": 0,
+        "max_ms": 13.11,
+        "median_ms": 12.429,
+        "min_ms": 0.989,
+        "n": 4,
+        "p95_ms": 13.11
+      },
+      "operation.storeOpen": {
+        "excluded_negative": 0,
+        "max_ms": 6.542,
+        "median_ms": 6.498,
+        "min_ms": 6.209,
+        "n": 3,
+        "p95_ms": 6.542
+      },
+      "operation.storeSave": {
+        "excluded_negative": 0,
+        "max_ms": 21.882,
+        "median_ms": 1.917,
+        "min_ms": 1.097,
+        "n": 42,
+        "p95_ms": 9.559
+      },
+      "playback.authorized.movie": {
+        "excluded_negative": 0,
+        "max_ms": 257.377,
+        "median_ms": 188.337,
+        "min_ms": 186.612,
+        "n": 4,
+        "p95_ms": 257.377
+      },
+      "playback.authorized.ordered": {
+        "excluded_negative": 0,
+        "max_ms": 272.11,
+        "median_ms": 256.903,
+        "min_ms": 175.49,
+        "n": 3,
+        "p95_ms": 272.11
+      },
+      "playback.authorized.shuffle": {
+        "excluded_negative": 0,
+        "max_ms": 239.665,
+        "median_ms": 239.665,
+        "min_ms": 239.665,
+        "n": 1,
+        "p95_ms": 239.665
+      },
+      "playback.component.authorization.movie": {
+        "excluded_negative": 0,
+        "max_ms": 246.188,
+        "median_ms": 180.919,
+        "min_ms": 178.068,
+        "n": 4,
+        "p95_ms": 246.188
+      },
+      "playback.component.authorization.ordered": {
+        "excluded_negative": 0,
+        "max_ms": 258.866,
+        "median_ms": 235.72,
+        "min_ms": 155.485,
+        "n": 3,
+        "p95_ms": 258.866
+      },
+      "playback.component.authorization.shuffle": {
+        "excluded_negative": 0,
+        "max_ms": 230.232,
+        "median_ms": 230.232,
+        "min_ms": 230.232,
+        "n": 1,
+        "p95_ms": 230.232
+      },
+      "playback.component.controllerPreparation.movie": {
+        "excluded_negative": 0,
+        "max_ms": 127.837,
+        "median_ms": 54.875,
+        "min_ms": 52.507,
+        "n": 4,
+        "p95_ms": 127.837
+      },
+      "playback.component.controllerPreparation.ordered": {
+        "excluded_negative": 0,
+        "max_ms": 174.96,
+        "median_ms": 155.475,
+        "min_ms": 67.193,
+        "n": 3,
+        "p95_ms": 174.96
+      },
+      "playback.component.controllerPreparation.shuffle": {
+        "excluded_negative": 0,
+        "max_ms": 66.519,
+        "median_ms": 66.519,
+        "min_ms": 66.519,
+        "n": 1,
+        "p95_ms": 66.519
+      },
+      "playback.component.openToPlaying.movie": {
+        "excluded_negative": 0,
+        "max_ms": 159.862,
+        "median_ms": 118.177,
+        "min_ms": 115.116,
+        "n": 4,
+        "p95_ms": 159.862
+      },
+      "playback.component.openToPlaying.ordered": {
+        "excluded_negative": 0,
+        "max_ms": 97.194,
+        "median_ms": 92.957,
+        "min_ms": 79.251,
+        "n": 3,
+        "p95_ms": 97.194
+      },
+      "playback.component.openToPlaying.shuffle": {
+        "excluded_negative": 0,
+        "max_ms": 107.341,
+        "median_ms": 107.341,
+        "min_ms": 107.341,
+        "n": 1,
+        "p95_ms": 107.341
+      },
+      "playback.component.openToVideoOutput.movie": {
+        "excluded_negative": 0,
+        "max_ms": 525.259,
+        "median_ms": 420.602,
+        "min_ms": 419.169,
+        "n": 4,
+        "p95_ms": 525.259
+      },
+      "playback.component.openToVideoOutput.ordered": {
+        "excluded_negative": 0,
+        "max_ms": 421.038,
+        "median_ms": 373.196,
+        "min_ms": 360.313,
+        "n": 3,
+        "p95_ms": 421.038
+      },
+      "playback.component.openToVideoOutput.shuffle": {
+        "excluded_negative": 0,
+        "max_ms": 372.674,
+        "median_ms": 372.674,
+        "min_ms": 372.674,
+        "n": 1,
+        "p95_ms": 372.674
+      },
+      "playback.component.outputToSurface.movie": {
+        "excluded_negative": 0,
+        "max_ms": 522.234,
+        "median_ms": 477.929,
+        "min_ms": 269.984,
+        "n": 4,
+        "p95_ms": 522.234
+      },
+      "playback.component.outputToSurface.ordered": {
+        "excluded_negative": 0,
+        "max_ms": 307.784,
+        "median_ms": 293.401,
+        "min_ms": 259.585,
+        "n": 3,
+        "p95_ms": 307.784
+      },
+      "playback.component.outputToSurface.shuffle": {
+        "excluded_negative": 0,
+        "max_ms": 289.93,
+        "median_ms": 289.93,
+        "min_ms": 289.93,
+        "n": 1,
+        "p95_ms": 289.93
+      },
+      "playback.component.provider.movie": {
+        "excluded_negative": 0,
+        "max_ms": 114.7,
+        "median_ms": 107.194,
+        "min_ms": 93.211,
+        "n": 4,
+        "p95_ms": 114.7
+      },
+      "playback.component.provider.ordered": {
+        "excluded_negative": 0,
+        "max_ms": 145.315,
+        "median_ms": 106.933,
+        "min_ms": 92.882,
+        "n": 3,
+        "p95_ms": 145.315
+      },
+      "playback.component.provider.shuffle": {
+        "excluded_negative": 0,
+        "max_ms": 111.299,
+        "median_ms": 111.299,
+        "min_ms": 111.299,
+        "n": 1,
+        "p95_ms": 111.299
+      },
+      "playback.component.selection.movie": {
+        "excluded_negative": 0,
+        "max_ms": 11.187,
+        "median_ms": 8.491,
+        "min_ms": 6.395,
+        "n": 4,
+        "p95_ms": 11.187
+      },
+      "playback.component.selection.ordered": {
+        "excluded_negative": 0,
+        "max_ms": 21.18,
+        "median_ms": 20.004,
+        "min_ms": 13.243,
+        "n": 3,
+        "p95_ms": 21.18
+      },
+      "playback.component.selection.shuffle": {
+        "excluded_negative": 0,
+        "max_ms": 9.432,
+        "median_ms": 9.432,
+        "min_ms": 9.432,
+        "n": 1,
+        "p95_ms": 9.432
+      },
+      "playback.component.viewAndOpen.movie": {
+        "excluded_negative": 0,
+        "max_ms": 5.245,
+        "median_ms": 1.662,
+        "min_ms": 1.552,
+        "n": 4,
+        "p95_ms": 5.245
+      },
+      "playback.component.viewAndOpen.ordered": {
+        "excluded_negative": 0,
+        "max_ms": 6.852,
+        "median_ms": 6.584,
+        "min_ms": 1.664,
+        "n": 3,
+        "p95_ms": 6.852
+      },
+      "playback.component.viewAndOpen.shuffle": {
+        "excluded_negative": 0,
+        "max_ms": 1.943,
+        "median_ms": 1.943,
+        "min_ms": 1.943,
+        "n": 1,
+        "p95_ms": 1.943
+      },
+      "playback.controllerReady.movie": {
+        "excluded_negative": 0,
+        "max_ms": 385.214,
+        "median_ms": 242.724,
+        "min_ms": 240.096,
+        "n": 4,
+        "p95_ms": 385.214
+      },
+      "playback.controllerReady.ordered": {
+        "excluded_negative": 0,
+        "max_ms": 431.863,
+        "median_ms": 339.303,
+        "min_ms": 330.965,
+        "n": 3,
+        "p95_ms": 431.863
+      },
+      "playback.controllerReady.shuffle": {
+        "excluded_negative": 0,
+        "max_ms": 306.184,
+        "median_ms": 306.184,
+        "min_ms": 306.184,
+        "n": 1,
+        "p95_ms": 306.184
+      },
+      "playback.firstClock.movie": {
+        "excluded_negative": 0,
+        "max_ms": 1262.693,
+        "median_ms": 1017.098,
+        "min_ms": 741.403,
+        "n": 4,
+        "p95_ms": 1262.693
+      },
+      "playback.firstClock.ordered": {
+        "excluded_negative": 0,
+        "max_ms": 981.103,
+        "median_ms": 804.357,
+        "min_ms": 802.483,
+        "n": 3,
+        "p95_ms": 981.103
+      },
+      "playback.firstClock.shuffle": {
+        "excluded_negative": 0,
+        "max_ms": 787.106,
+        "median_ms": 787.106,
+        "min_ms": 787.106,
+        "n": 1,
+        "p95_ms": 787.106
+      },
+      "playback.firstDecode.movie": {
+        "excluded_negative": 0,
+        "max_ms": 1030.109,
+        "median_ms": 768.758,
+        "min_ms": 761.133,
+        "n": 4,
+        "p95_ms": 1030.109
+      },
+      "playback.firstDecode.ordered": {
+        "excluded_negative": 0,
+        "max_ms": 1005.06,
+        "median_ms": 807.006,
+        "min_ms": 804.791,
+        "n": 3,
+        "p95_ms": 1005.06
+      },
+      "playback.firstDecode.shuffle": {
+        "excluded_negative": 0,
+        "max_ms": 792.072,
+        "median_ms": 792.072,
+        "min_ms": 792.072,
+        "n": 1,
+        "p95_ms": 792.072
+      },
+      "playback.firstInput.movie": {
+        "excluded_negative": 0,
+        "max_ms": 666.149,
+        "median_ms": 506.446,
+        "min_ms": 497.124,
+        "n": 4,
+        "p95_ms": 666.149
+      },
+      "playback.firstInput.ordered": {
+        "excluded_negative": 0,
+        "max_ms": 690.119,
+        "median_ms": 546.026,
+        "min_ms": 541.366,
+        "n": 3,
+        "p95_ms": 690.119
+      },
+      "playback.firstInput.shuffle": {
+        "excluded_negative": 0,
+        "max_ms": 578.995,
+        "median_ms": 578.995,
+        "min_ms": 578.995,
+        "n": 1,
+        "p95_ms": 578.995
+      },
+      "playback.firstVideoOutput.movie": {
+        "excluded_negative": 0,
+        "max_ms": 1030.118,
+        "median_ms": 768.77,
+        "min_ms": 761.151,
+        "n": 4,
+        "p95_ms": 1030.118
+      },
+      "playback.firstVideoOutput.ordered": {
+        "excluded_negative": 0,
+        "max_ms": 1005.067,
+        "median_ms": 807.044,
+        "min_ms": 804.794,
+        "n": 3,
+        "p95_ms": 1005.067
+      },
+      "playback.firstVideoOutput.shuffle": {
+        "excluded_negative": 0,
+        "max_ms": 792.1,
+        "median_ms": 792.1,
+        "min_ms": 792.1,
+        "n": 1,
+        "p95_ms": 792.1
+      },
+      "playback.playbackBegan.movie": {
+        "excluded_negative": 0,
+        "max_ms": 1415.854,
+        "median_ms": 1252.776,
+        "min_ms": 992.768,
+        "n": 4,
+        "p95_ms": 1415.854
+      },
+      "playback.playbackBegan.ordered": {
+        "excluded_negative": 0,
+        "max_ms": 1229.041,
+        "median_ms": 1080.742,
+        "min_ms": 1059.849,
+        "n": 3,
+        "p95_ms": 1229.041
+      },
+      "playback.playbackBegan.shuffle": {
+        "excluded_negative": 0,
+        "max_ms": 1042.8,
+        "median_ms": 1042.8,
+        "min_ms": 1042.8,
+        "n": 1,
+        "p95_ms": 1042.8
+      },
+      "playback.playerSurfacePresented.movie": {
+        "excluded_negative": 0,
+        "max_ms": 1465.268,
+        "median_ms": 1290.011,
+        "min_ms": 1031.596,
+        "n": 4,
+        "p95_ms": 1465.268
+      },
+      "playback.playerSurfacePresented.ordered": {
+        "excluded_negative": 0,
+        "max_ms": 1264.651,
+        "median_ms": 1114.828,
+        "min_ms": 1098.195,
+        "n": 3,
+        "p95_ms": 1264.651
+      },
+      "playback.playerSurfacePresented.shuffle": {
+        "excluded_negative": 0,
+        "max_ms": 1082.03,
+        "median_ms": 1082.03,
+        "min_ms": 1082.03,
+        "n": 1,
+        "p95_ms": 1082.03
+      },
+      "playback.providerReady.movie": {
+        "excluded_negative": 0,
+        "max_ms": 499.614,
+        "median_ms": 347.843,
+        "min_ms": 337.756,
+        "n": 4,
+        "p95_ms": 499.614
+      },
+      "playback.providerReady.ordered": {
+        "excluded_negative": 0,
+        "max_ms": 577.178,
+        "median_ms": 437.898,
+        "min_ms": 432.185,
+        "n": 3,
+        "p95_ms": 577.178
+      },
+      "playback.providerReady.shuffle": {
+        "excluded_negative": 0,
+        "max_ms": 417.483,
+        "median_ms": 417.483,
+        "min_ms": 417.483,
+        "n": 1,
+        "p95_ms": 417.483
+      },
+      "playback.vlcOpen.movie": {
+        "excluded_negative": 0,
+        "max_ms": 504.858,
+        "median_ms": 349.495,
+        "min_ms": 339.33,
+        "n": 4,
+        "p95_ms": 504.858
+      },
+      "playback.vlcOpen.ordered": {
+        "excluded_negative": 0,
+        "max_ms": 584.029,
+        "median_ms": 444.482,
+        "min_ms": 433.849,
+        "n": 3,
+        "p95_ms": 584.029
+      },
+      "playback.vlcOpen.shuffle": {
+        "excluded_negative": 0,
+        "max_ms": 419.426,
+        "median_ms": 419.426,
+        "min_ms": 419.426,
+        "n": 1,
+        "p95_ms": 419.426
+      },
+      "playback.vlcPlaying.movie": {
+        "excluded_negative": 0,
+        "max_ms": 664.72,
+        "median_ms": 466.116,
+        "min_ms": 457.558,
+        "n": 4,
+        "p95_ms": 664.72
+      },
+      "playback.vlcPlaying.ordered": {
+        "excluded_negative": 0,
+        "max_ms": 681.223,
+        "median_ms": 526.806,
+        "min_ms": 523.732,
+        "n": 3,
+        "p95_ms": 681.223
+      },
+      "playback.vlcPlaying.shuffle": {
+        "excluded_negative": 0,
+        "max_ms": 526.767,
+        "median_ms": 526.767,
+        "min_ms": 526.767,
+        "n": 1,
+        "p95_ms": 526.767
+      },
+      "report.duration.playbackProgress": {
+        "excluded_negative": 0,
+        "max_ms": 177.85,
+        "median_ms": 45.03,
+        "min_ms": 35.864,
+        "n": 20,
+        "p95_ms": 56.066
+      },
+      "report.duration.playbackStart": {
+        "excluded_negative": 0,
+        "max_ms": 64.058,
+        "median_ms": 54.056,
+        "min_ms": 45.073,
+        "n": 8,
+        "p95_ms": 64.058
+      },
+      "report.duration.playbackStop": {
+        "excluded_negative": 0,
+        "max_ms": 50.88,
+        "median_ms": 45.794,
+        "min_ms": 42.038,
+        "n": 8,
+        "p95_ms": 50.88
+      },
+      "title.actionsReady.movies": {
+        "excluded_negative": 0,
+        "max_ms": 11.703,
+        "median_ms": 11.703,
+        "min_ms": 11.703,
+        "n": 1,
+        "p95_ms": 11.703
+      },
+      "title.actionsReady.shows": {
+        "excluded_negative": 0,
+        "max_ms": 829.153,
+        "median_ms": 429.63,
+        "min_ms": 30.107,
+        "n": 2,
+        "p95_ms": 829.153
+      }
+    },
+    "network": {
+      "ancestors": {
+        "connect_ms": {
+          "excluded_negative": 0,
+          "max_ms": 3.0,
+          "median_ms": 2.0,
+          "min_ms": 1.0,
+          "n": 12,
+          "p95_ms": 3.0
+        },
+        "dns_ms": {
+          "excluded_negative": 0,
+          "max_ms": 51.0,
+          "median_ms": 23.0,
+          "min_ms": 9.0,
+          "n": 12,
+          "p95_ms": 51.0
+        },
+        "fetch_ms": {
+          "excluded_negative": 0,
+          "max_ms": 915.133,
+          "median_ms": 210.914,
+          "min_ms": 37.741,
+          "n": 895,
+          "p95_ms": 550.298
+        },
+        "fetch_type": {
+          "median": 1,
+          "n": 895,
+          "sum": 895
+        },
+        "pre_request_ms": {
+          "excluded_negative": 0,
+          "max_ms": 389.785,
+          "median_ms": 58.343,
+          "min_ms": 0.324,
+          "n": 895,
+          "p95_ms": 206.474
+        },
+        "received_bytes": {
+          "median": 1313,
+          "n": 895,
+          "sum": 2353462
+        },
+        "redirects": {
+          "median": 0,
+          "n": 895,
+          "sum": 0
+        },
+        "request_ms": {
+          "excluded_negative": 0,
+          "max_ms": 6.796,
+          "median_ms": 0.083,
+          "min_ms": 0.007,
+          "n": 895,
+          "p95_ms": 0.657
+        },
+        "reused": {
+          "median": 1,
+          "n": 895,
+          "sum": 883
+        },
+        "task_ms": {
+          "excluded_negative": 0,
+          "max_ms": 915.512,
+          "median_ms": 211.592,
+          "min_ms": 38.357,
+          "n": 895,
+          "p95_ms": 550.705
+        },
+        "transfer_ms": {
+          "excluded_negative": 0,
+          "max_ms": 6.076,
+          "median_ms": 0.331,
+          "min_ms": 0.067,
+          "n": 895,
+          "p95_ms": 0.916
+        },
+        "ttfb_ms": {
+          "excluded_negative": 0,
+          "max_ms": 680.896,
+          "median_ms": 96.669,
+          "min_ms": 35.569,
+          "n": 895,
+          "p95_ms": 384.117
+        }
+      },
+      "artwork": {
+        "connect_ms": {
+          "excluded_negative": 0,
+          "max_ms": 29.0,
+          "median_ms": 1.0,
+          "min_ms": 1.0,
+          "n": 12,
+          "p95_ms": 29.0
+        },
+        "dns_ms": {
+          "excluded_negative": 0,
+          "max_ms": 32.0,
+          "median_ms": 15.5,
+          "min_ms": 9.0,
+          "n": 12,
+          "p95_ms": 32.0
+        },
+        "fetch_ms": {
+          "excluded_negative": 0,
+          "max_ms": 130.478,
+          "median_ms": 71.287,
+          "min_ms": 28.107,
+          "n": 29,
+          "p95_ms": 119.998
+        },
+        "fetch_type": {
+          "median": 1,
+          "n": 29,
+          "sum": 29
+        },
+        "pre_request_ms": {
+          "excluded_negative": 0,
+          "max_ms": 50.717,
+          "median_ms": 3.347,
+          "min_ms": 0.22,
+          "n": 29,
+          "p95_ms": 50.633
+        },
+        "received_bytes": {
+          "median": 303572,
+          "n": 29,
+          "sum": 8396065
+        },
+        "redirects": {
+          "median": 0,
+          "n": 29,
+          "sum": 0
+        },
+        "request_ms": {
+          "excluded_negative": 0,
+          "max_ms": 0.057,
+          "median_ms": 0.024,
+          "min_ms": 0.01,
+          "n": 29,
+          "p95_ms": 0.052
+        },
+        "reused": {
+          "median": 1,
+          "n": 29,
+          "sum": 17
+        },
+        "task_ms": {
+          "excluded_negative": 0,
+          "max_ms": 130.894,
+          "median_ms": 71.601,
+          "min_ms": 28.277,
+          "n": 29,
+          "p95_ms": 120.297
+        },
+        "transfer_ms": {
+          "excluded_negative": 0,
+          "max_ms": 6.719,
+          "median_ms": 1.291,
+          "min_ms": 0.224,
+          "n": 29,
+          "p95_ms": 6.408
+        },
+        "ttfb_ms": {
+          "excluded_negative": 0,
+          "max_ms": 126.549,
+          "median_ms": 28.724,
+          "min_ms": 22.761,
+          "n": 29,
+          "p95_ms": 118.494
+        }
+      },
+      "bitrate": {
+        "fetch_ms": {
+          "excluded_negative": 0,
+          "max_ms": 43.558,
+          "median_ms": 35.101,
+          "min_ms": 24.961,
+          "n": 8,
+          "p95_ms": 43.558
+        },
+        "fetch_type": {
+          "median": 1.0,
+          "n": 8,
+          "sum": 8
+        },
+        "pre_request_ms": {
+          "excluded_negative": 0,
+          "max_ms": 0.86,
+          "median_ms": 0.707,
+          "min_ms": 0.428,
+          "n": 8,
+          "p95_ms": 0.86
+        },
+        "received_bytes": {
+          "median": 8388608.0,
+          "n": 8,
+          "sum": 67108864
+        },
+        "redirects": {
+          "median": 0.0,
+          "n": 8,
+          "sum": 0
+        },
+        "request_ms": {
+          "excluded_negative": 0,
+          "max_ms": 0.07,
+          "median_ms": 0.062,
+          "min_ms": 0.058,
+          "n": 8,
+          "p95_ms": 0.07
+        },
+        "reused": {
+          "median": 1.0,
+          "n": 8,
+          "sum": 8
+        },
+        "task_ms": {
+          "excluded_negative": 0,
+          "max_ms": 45.022,
+          "median_ms": 36.993,
+          "min_ms": 26.129,
+          "n": 8,
+          "p95_ms": 45.022
+        },
+        "transfer_ms": {
+          "excluded_negative": 0,
+          "max_ms": 12.935,
+          "median_ms": 10.838,
+          "min_ms": 9.618,
+          "n": 8,
+          "p95_ms": 12.935
+        },
+        "ttfb_ms": {
+          "excluded_negative": 0,
+          "max_ms": 31.443,
+          "median_ms": 23.349,
+          "min_ms": 13.847,
+          "n": 8,
+          "p95_ms": 31.443
+        }
+      },
+      "episodeList": {
+        "fetch_ms": {
+          "excluded_negative": 0,
+          "max_ms": 65.533,
+          "median_ms": 57.418,
+          "min_ms": 57.371,
+          "n": 3,
+          "p95_ms": 65.533
+        },
+        "fetch_type": {
+          "median": 1,
+          "n": 3,
+          "sum": 3
+        },
+        "pre_request_ms": {
+          "excluded_negative": 0,
+          "max_ms": 1.92,
+          "median_ms": 1.802,
+          "min_ms": 1.159,
+          "n": 3,
+          "p95_ms": 1.92
+        },
+        "received_bytes": {
+          "median": 19165,
+          "n": 3,
+          "sum": 57564
+        },
+        "redirects": {
+          "median": 0,
+          "n": 3,
+          "sum": 0
+        },
+        "request_ms": {
+          "excluded_negative": 0,
+          "max_ms": 0.1,
+          "median_ms": 0.096,
+          "min_ms": 0.067,
+          "n": 3,
+          "p95_ms": 0.1
+        },
+        "reused": {
+          "median": 1,
+          "n": 3,
+          "sum": 3
+        },
+        "task_ms": {
+          "excluded_negative": 0,
+          "max_ms": 66.063,
+          "median_ms": 57.841,
+          "min_ms": 57.83,
+          "n": 3,
+          "p95_ms": 66.063
+        },
+        "transfer_ms": {
+          "excluded_negative": 0,
+          "max_ms": 4.222,
+          "median_ms": 3.836,
+          "min_ms": 3.746,
+          "n": 3,
+          "p95_ms": 4.222
+        },
+        "ttfb_ms": {
+          "excluded_negative": 0,
+          "max_ms": 59.677,
+          "median_ms": 51.923,
+          "min_ms": 51.774,
+          "n": 3,
+          "p95_ms": 59.677
+        }
+      },
+      "itemDetails": {
+        "fetch_ms": {
+          "excluded_negative": 0,
+          "max_ms": 56.812,
+          "median_ms": 15.854,
+          "min_ms": 0.235,
+          "n": 16,
+          "p95_ms": 56.812
+        },
+        "fetch_type": {
+          "median": 2.0,
+          "n": 16,
+          "sum": 32
+        },
+        "pre_request_ms": {
+          "excluded_negative": 0,
+          "max_ms": 1.98,
+          "median_ms": 0.448,
+          "min_ms": 0.019,
+          "n": 16,
+          "p95_ms": 1.98
+        },
+        "received_bytes": {
+          "median": 1538.0,
+          "n": 16,
+          "sum": 27215
+        },
+        "redirects": {
+          "median": 0.0,
+          "n": 16,
+          "sum": 0
+        },
+        "request_ms": {
+          "excluded_negative": 0,
+          "max_ms": 0.286,
+          "median_ms": 0.031,
+          "min_ms": 0,
+          "n": 16,
+          "p95_ms": 0.286
+        },
+        "reused": {
+          "median": 0.5,
+          "n": 16,
+          "sum": 8
+        },
+        "task_ms": {
+          "excluded_negative": 0,
+          "max_ms": 57.493,
+          "median_ms": 45.762,
+          "min_ms": 31.466,
+          "n": 16,
+          "p95_ms": 57.493
+        },
+        "transfer_ms": {
+          "excluded_negative": 0,
+          "max_ms": 0.883,
+          "median_ms": 0.196,
+          "min_ms": 0,
+          "n": 16,
+          "p95_ms": 0.883
+        },
+        "ttfb_ms": {
+          "excluded_negative": 0,
+          "max_ms": 55.175,
+          "median_ms": 14.801,
+          "min_ms": 0.215,
+          "n": 16,
+          "p95_ms": 55.175
+        }
+      },
+      "items": {
+        "connect_ms": {
+          "excluded_negative": 0,
+          "max_ms": 1.0,
+          "median_ms": 1.0,
+          "min_ms": 1.0,
+          "n": 3,
+          "p95_ms": 1.0
+        },
+        "dns_ms": {
+          "excluded_negative": 0,
+          "max_ms": 12.0,
+          "median_ms": 9.0,
+          "min_ms": 8.0,
+          "n": 3,
+          "p95_ms": 12.0
+        },
+        "fetch_ms": {
+          "excluded_negative": 0,
+          "max_ms": 228.537,
+          "median_ms": 46.796,
+          "min_ms": 26.94,
+          "n": 19,
+          "p95_ms": 228.537
+        },
+        "fetch_type": {
+          "median": 1,
+          "n": 19,
+          "sum": 19
+        },
+        "pre_request_ms": {
+          "excluded_negative": 0,
+          "max_ms": 15.19,
+          "median_ms": 0.745,
+          "min_ms": 0.235,
+          "n": 19,
+          "p95_ms": 15.19
+        },
+        "received_bytes": {
+          "median": 1311,
+          "n": 19,
+          "sum": 291510
+        },
+        "redirects": {
+          "median": 0,
+          "n": 19,
+          "sum": 0
+        },
+        "request_ms": {
+          "excluded_negative": 0,
+          "max_ms": 0.084,
+          "median_ms": 0.059,
+          "min_ms": 0.015,
+          "n": 19,
+          "p95_ms": 0.084
+        },
+        "reused": {
+          "median": 1,
+          "n": 19,
+          "sum": 16
+        },
+        "task_ms": {
+          "excluded_negative": 0,
+          "max_ms": 228.749,
+          "median_ms": 47.195,
+          "min_ms": 27.134,
+          "n": 19,
+          "p95_ms": 228.749
+        },
+        "transfer_ms": {
+          "excluded_negative": 0,
+          "max_ms": 7.729,
+          "median_ms": 0.462,
+          "min_ms": 0.16,
+          "n": 19,
+          "p95_ms": 7.729
+        },
+        "ttfb_ms": {
+          "excluded_negative": 0,
+          "max_ms": 227.674,
+          "median_ms": 45.573,
+          "min_ms": 26.174,
+          "n": 19,
+          "p95_ms": 227.674
+        }
+      },
+      "libraries": {
+        "fetch_ms": {
+          "excluded_negative": 0,
+          "max_ms": 106.109,
+          "median_ms": 57.752,
+          "min_ms": 35.539,
+          "n": 15,
+          "p95_ms": 106.109
+        },
+        "fetch_type": {
+          "median": 1,
+          "n": 15,
+          "sum": 15
+        },
+        "pre_request_ms": {
+          "excluded_negative": 0,
+          "max_ms": 1.624,
+          "median_ms": 0.33,
+          "min_ms": 0.191,
+          "n": 15,
+          "p95_ms": 1.624
+        },
+        "received_bytes": {
+          "median": 1328,
+          "n": 15,
+          "sum": 19920
+        },
+        "redirects": {
+          "median": 0,
+          "n": 15,
+          "sum": 0
+        },
+        "request_ms": {
+          "excluded_negative": 0,
+          "max_ms": 0.079,
+          "median_ms": 0.055,
+          "min_ms": 0.032,
+          "n": 15,
+          "p95_ms": 0.079
+        },
+        "reused": {
+          "median": 1,
+          "n": 15,
+          "sum": 15
+        },
+        "task_ms": {
+          "excluded_negative": 0,
+          "max_ms": 106.266,
+          "median_ms": 57.912,
+          "min_ms": 35.712,
+          "n": 15,
+          "p95_ms": 106.266
+        },
+        "transfer_ms": {
+          "excluded_negative": 0,
+          "max_ms": 0.565,
+          "median_ms": 0.206,
+          "min_ms": 0.127,
+          "n": 15,
+          "p95_ms": 0.565
+        },
+        "ttfb_ms": {
+          "excluded_negative": 0,
+          "max_ms": 105.733,
+          "median_ms": 57.34,
+          "min_ms": 35.006,
+          "n": 15,
+          "p95_ms": 105.733
+        }
+      },
+      "playbackInfo": {
+        "fetch_ms": {
+          "excluded_negative": 0,
+          "max_ms": 47.756,
+          "median_ms": 12.504,
+          "min_ms": 0.124,
+          "n": 16,
+          "p95_ms": 47.756
+        },
+        "fetch_type": {
+          "median": 2.0,
+          "n": 16,
+          "sum": 32
+        },
+        "pre_request_ms": {
+          "excluded_negative": 0,
+          "max_ms": 0.551,
+          "median_ms": 0.205,
+          "min_ms": 0.009,
+          "n": 16,
+          "p95_ms": 0.551
+        },
+        "received_bytes": {
+          "median": 706.5,
+          "n": 16,
+          "sum": 13199
+        },
+        "redirects": {
+          "median": 0.0,
+          "n": 16,
+          "sum": 0
+        },
+        "request_ms": {
+          "excluded_negative": 0,
+          "max_ms": 0.231,
+          "median_ms": 0.069,
+          "min_ms": 0,
+          "n": 16,
+          "p95_ms": 0.231
+        },
+        "reused": {
+          "median": 0.5,
+          "n": 16,
+          "sum": 8
+        },
+        "task_ms": {
+          "excluded_negative": 0,
+          "max_ms": 48.027,
+          "median_ms": 36.443,
+          "min_ms": 24.975,
+          "n": 16,
+          "p95_ms": 48.027
+        },
+        "transfer_ms": {
+          "excluded_negative": 0,
+          "max_ms": 0.229,
+          "median_ms": 0.059,
+          "min_ms": 0,
+          "n": 16,
+          "p95_ms": 0.229
+        },
+        "ttfb_ms": {
+          "excluded_negative": 0,
+          "max_ms": 46.965,
+          "median_ms": 12.023,
+          "min_ms": 0.109,
+          "n": 16,
+          "p95_ms": 46.965
+        }
+      },
+      "playbackProgress": {
+        "fetch_ms": {
+          "excluded_negative": 0,
+          "max_ms": 174.92,
+          "median_ms": 43.142,
+          "min_ms": 32.863,
+          "n": 20,
+          "p95_ms": 53.836
+        },
+        "fetch_type": {
+          "median": 1.0,
+          "n": 20,
+          "sum": 20
+        },
+        "pre_request_ms": {
+          "excluded_negative": 0,
+          "max_ms": 3.637,
+          "median_ms": 1.048,
+          "min_ms": 0.409,
+          "n": 20,
+          "p95_ms": 2.992
+        },
+        "received_bytes": {
+          "median": 0.0,
+          "n": 20,
+          "sum": 0
+        },
+        "redirects": {
+          "median": 0.0,
+          "n": 20,
+          "sum": 0
+        },
+        "request_ms": {
+          "excluded_negative": 0,
+          "max_ms": 0.618,
+          "median_ms": 0.323,
+          "min_ms": 0.188,
+          "n": 20,
+          "p95_ms": 0.56
+        },
+        "reused": {
+          "median": 1.0,
+          "n": 20,
+          "sum": 20
+        },
+        "task_ms": {
+          "excluded_negative": 0,
+          "max_ms": 176.256,
+          "median_ms": 44.331,
+          "min_ms": 34.088,
+          "n": 20,
+          "p95_ms": 54.815
+        },
+        "transfer_ms": {
+          "excluded_negative": 0,
+          "max_ms": 0.529,
+          "median_ms": 0.206,
+          "min_ms": 0.092,
+          "n": 20,
+          "p95_ms": 0.379
+        },
+        "ttfb_ms": {
+          "excluded_negative": 0,
+          "max_ms": 172.579,
+          "median_ms": 41.686,
+          "min_ms": 30.814,
+          "n": 20,
+          "p95_ms": 52.014
+        }
+      },
+      "playbackStart": {
+        "fetch_ms": {
+          "excluded_negative": 0,
+          "max_ms": 62.469,
+          "median_ms": 52.663,
+          "min_ms": 44.42,
+          "n": 8,
+          "p95_ms": 62.469
+        },
+        "fetch_type": {
+          "median": 1.0,
+          "n": 8,
+          "sum": 8
+        },
+        "pre_request_ms": {
+          "excluded_negative": 0,
+          "max_ms": 2.082,
+          "median_ms": 0.706,
+          "min_ms": 0.333,
+          "n": 8,
+          "p95_ms": 2.082
+        },
+        "received_bytes": {
+          "median": 0.0,
+          "n": 8,
+          "sum": 0
+        },
+        "redirects": {
+          "median": 0.0,
+          "n": 8,
+          "sum": 0
+        },
+        "request_ms": {
+          "excluded_negative": 0,
+          "max_ms": 0.708,
+          "median_ms": 0.31,
+          "min_ms": 0.172,
+          "n": 8,
+          "p95_ms": 0.708
+        },
+        "reused": {
+          "median": 1.0,
+          "n": 8,
+          "sum": 8
+        },
+        "task_ms": {
+          "excluded_negative": 0,
+          "max_ms": 63.44,
+          "median_ms": 53.451,
+          "min_ms": 44.707,
+          "n": 8,
+          "p95_ms": 63.44
+        },
+        "transfer_ms": {
+          "excluded_negative": 0,
+          "max_ms": 0.123,
+          "median_ms": 0.1,
+          "min_ms": 0.094,
+          "n": 8,
+          "p95_ms": 0.123
+        },
+        "ttfb_ms": {
+          "excluded_negative": 0,
+          "max_ms": 60.356,
+          "median_ms": 51.179,
+          "min_ms": 43.65,
+          "n": 8,
+          "p95_ms": 60.356
+        }
+      },
+      "playbackStop": {
+        "fetch_ms": {
+          "excluded_negative": 0,
+          "max_ms": 49.842,
+          "median_ms": 44.939,
+          "min_ms": 41.307,
+          "n": 8,
+          "p95_ms": 49.842
+        },
+        "fetch_type": {
+          "median": 1.0,
+          "n": 8,
+          "sum": 8
+        },
+        "pre_request_ms": {
+          "excluded_negative": 0,
+          "max_ms": 0.584,
+          "median_ms": 0.425,
+          "min_ms": 0.345,
+          "n": 8,
+          "p95_ms": 0.584
+        },
+        "received_bytes": {
+          "median": 0.0,
+          "n": 8,
+          "sum": 0
+        },
+        "redirects": {
+          "median": 0.0,
+          "n": 8,
+          "sum": 0
+        },
+        "request_ms": {
+          "excluded_negative": 0,
+          "max_ms": 0.287,
+          "median_ms": 0.181,
+          "min_ms": 0.163,
+          "n": 8,
+          "p95_ms": 0.287
+        },
+        "reused": {
+          "median": 1.0,
+          "n": 8,
+          "sum": 8
+        },
+        "task_ms": {
+          "excluded_negative": 0,
+          "max_ms": 50.403,
+          "median_ms": 45.373,
+          "min_ms": 41.685,
+          "n": 8,
+          "p95_ms": 50.403
+        },
+        "transfer_ms": {
+          "excluded_negative": 0,
+          "max_ms": 0.125,
+          "median_ms": 0.112,
+          "min_ms": 0.096,
+          "n": 8,
+          "p95_ms": 0.125
+        },
+        "ttfb_ms": {
+          "excluded_negative": 0,
+          "max_ms": 49.155,
+          "median_ms": 44.087,
+          "min_ms": 40.659,
+          "n": 8,
+          "p95_ms": 49.155
+        }
+      },
+      "serverInfo": {
+        "connect_ms": {
+          "excluded_negative": 0,
+          "max_ms": 21.0,
+          "median_ms": 11.0,
+          "min_ms": 8.0,
+          "n": 3,
+          "p95_ms": 21.0
+        },
+        "dns_ms": {
+          "excluded_negative": 0,
+          "max_ms": 40.0,
+          "median_ms": 20.0,
+          "min_ms": 13.0,
+          "n": 3,
+          "p95_ms": 40.0
+        },
+        "fetch_ms": {
+          "excluded_negative": 0,
+          "max_ms": 97.74,
+          "median_ms": 13.607,
+          "min_ms": 9.93,
+          "n": 15,
+          "p95_ms": 97.74
+        },
+        "fetch_type": {
+          "median": 1,
+          "n": 15,
+          "sum": 15
+        },
+        "pre_request_ms": {
+          "excluded_negative": 0,
+          "max_ms": 66.75,
+          "median_ms": 0.563,
+          "min_ms": 0.289,
+          "n": 15,
+          "p95_ms": 66.75
+        },
+        "received_bytes": {
+          "median": 238,
+          "n": 15,
+          "sum": 3570
+        },
+        "redirects": {
+          "median": 0,
+          "n": 15,
+          "sum": 0
+        },
+        "request_ms": {
+          "excluded_negative": 0,
+          "max_ms": 0.103,
+          "median_ms": 0.076,
+          "min_ms": 0.056,
+          "n": 15,
+          "p95_ms": 0.103
+        },
+        "reused": {
+          "median": 1,
+          "n": 15,
+          "sum": 12
+        },
+        "task_ms": {
+          "excluded_negative": 0,
+          "max_ms": 98.482,
+          "median_ms": 13.874,
+          "min_ms": 10.304,
+          "n": 15,
+          "p95_ms": 98.482
+        },
+        "transfer_ms": {
+          "excluded_negative": 0,
+          "max_ms": 0.337,
+          "median_ms": 0.151,
+          "min_ms": 0.111,
+          "n": 15,
+          "p95_ms": 0.337
+        },
+        "ttfb_ms": {
+          "excluded_negative": 0,
+          "max_ms": 30.712,
+          "median_ms": 12.486,
+          "min_ms": 8.715,
+          "n": 15,
+          "p95_ms": 30.712
+        }
+      },
+      "userPolicy": {
+        "fetch_ms": {
+          "excluded_negative": 0,
+          "max_ms": 82.447,
+          "median_ms": 30.289,
+          "min_ms": 18.504,
+          "n": 15,
+          "p95_ms": 82.447
+        },
+        "fetch_type": {
+          "median": 1,
+          "n": 15,
+          "sum": 15
+        },
+        "pre_request_ms": {
+          "excluded_negative": 0,
+          "max_ms": 1.367,
+          "median_ms": 0.301,
+          "min_ms": 0.201,
+          "n": 15,
+          "p95_ms": 1.367
+        },
+        "received_bytes": {
+          "median": 1187,
+          "n": 15,
+          "sum": 17804
+        },
+        "redirects": {
+          "median": 0,
+          "n": 15,
+          "sum": 0
+        },
+        "request_ms": {
+          "excluded_negative": 0,
+          "max_ms": 0.072,
+          "median_ms": 0.041,
+          "min_ms": 0.035,
+          "n": 15,
+          "p95_ms": 0.072
+        },
+        "reused": {
+          "median": 1,
+          "n": 15,
+          "sum": 15
+        },
+        "task_ms": {
+          "excluded_negative": 0,
+          "max_ms": 82.646,
+          "median_ms": 30.431,
+          "min_ms": 18.666,
+          "n": 15,
+          "p95_ms": 82.646
+        },
+        "transfer_ms": {
+          "excluded_negative": 0,
+          "max_ms": 0.731,
+          "median_ms": 0.168,
+          "min_ms": 0.112,
+          "n": 15,
+          "p95_ms": 0.731
+        },
+        "ttfb_ms": {
+          "excluded_negative": 0,
+          "max_ms": 81.546,
+          "median_ms": 29.902,
+          "min_ms": 18.033,
+          "n": 15,
+          "p95_ms": 81.546
+        }
+      }
+    },
+    "playback_starts": [
+      {
+        "ancestor_http_count": 1,
+        "authorization_ms": 235.72,
+        "authorized_ms": 256.903,
+        "begin_ms": 0.003,
+        "bit_depth": 8,
+        "controllerPreparation_ms": 174.96,
+        "controllerReady_ms": 431.863,
+        "decoded_video": 10,
+        "displayed_pictures": 5,
+        "end_ms": 1005.068,
+        "episodes": 84,
+        "firstClock_ms": 981.103,
+        "firstDecode_ms": 1005.06,
+        "firstInput_ms": 690.119,
+        "firstVideoOutput_ms": 1005.067,
+        "height": 384,
+        "instrumented_http_count": 6,
+        "itemSelected_ms": 21.183,
+        "lost_pictures": 0,
+        "managerStart_ms": 431.929,
+        "mode": "ordered",
+        "openToPlaying_ms": 97.194,
+        "openToVideoOutput_ms": 421.038,
+        "outcome": "success",
+        "outputToSurface_ms": 259.585,
+        "playbackBegan_ms": 1229.041,
+        "playerSurfacePresented_ms": 1264.651,
+        "providerReady_ms": 577.178,
+        "provider_ms": 145.315,
+        "read_bytes": 19155920,
+        "resumeSeek_ms": 673.716,
+        "resume_pending": 0,
+        "resume_seconds": 113.694,
+        "run_id": "4B87F47A-239C-40CD-BB95-8E74897ABA75",
+        "selection_ms": 21.18,
+        "trace_id": "EAA117FF-1287-4799-8C99-D3A612FEB1C8",
+        "transcoding": 0,
+        "validated_timing_sample": true,
+        "video_bitrate": 632373,
+        "video_codec": 1,
+        "video_fps": 23.976024627685547,
+        "viewAndOpen_ms": 6.852,
+        "vlcBuffering_ms": 587.305,
+        "vlcOpenReturned_ms": 584.784,
+        "vlcOpen_ms": 584.029,
+        "vlcOpening_ms": 586.9,
+        "vlcPlaying_ms": 681.223,
+        "width": 510
+      },
+      {
+        "ancestor_http_count": 1,
+        "authorization_ms": 258.866,
+        "authorized_ms": 272.11,
+        "begin_ms": 0.001,
+        "bit_depth": 8,
+        "controllerPreparation_ms": 67.193,
+        "controllerReady_ms": 339.303,
+        "decoded_video": 38,
+        "displayed_pictures": 6,
+        "end_ms": 807.048,
+        "episodes": 84,
+        "firstClock_ms": 802.483,
+        "firstDecode_ms": 807.006,
+        "firstInput_ms": 541.366,
+        "firstVideoOutput_ms": 807.044,
+        "height": 384,
+        "instrumented_http_count": 6,
+        "itemSelected_ms": 13.245,
+        "lost_pictures": 0,
+        "managerStart_ms": 339.41,
+        "mode": "ordered",
+        "openToPlaying_ms": 92.957,
+        "openToVideoOutput_ms": 373.196,
+        "outcome": "success",
+        "outputToSurface_ms": 307.784,
+        "playbackBegan_ms": 1080.742,
+        "playerSurfacePresented_ms": 1114.828,
+        "providerReady_ms": 432.185,
+        "provider_ms": 92.882,
+        "read_bytes": 17744178,
+        "resumeSeek_ms": 525.178,
+        "resume_pending": 0,
+        "resume_seconds": 116.324,
+        "run_id": "4B87F47A-239C-40CD-BB95-8E74897ABA75",
+        "selection_ms": 13.243,
+        "trace_id": "F550C0C2-204D-4B49-998D-9DFB0AF5FBC7",
+        "transcoding": 0,
+        "validated_timing_sample": true,
+        "video_bitrate": 632373,
+        "video_codec": 1,
+        "video_fps": 23.976024627685547,
+        "viewAndOpen_ms": 1.664,
+        "vlcBuffering_ms": 435.446,
+        "vlcOpenReturned_ms": 433.99,
+        "vlcOpen_ms": 433.849,
+        "vlcOpening_ms": 435.301,
+        "vlcPlaying_ms": 526.806,
+        "width": 510
+      },
+      {
+        "ancestor_http_count": 1,
+        "authorization_ms": 230.232,
+        "authorized_ms": 239.665,
+        "begin_ms": 0.001,
+        "bit_depth": 8,
+        "controllerPreparation_ms": 66.519,
+        "controllerReady_ms": 306.184,
+        "decoded_video": 9,
+        "displayed_pictures": 8,
+        "end_ms": 792.104,
+        "episodes": 84,
+        "firstClock_ms": 787.106,
+        "firstDecode_ms": 792.072,
+        "firstInput_ms": 578.995,
+        "firstVideoOutput_ms": 792.1,
+        "height": 384,
+        "instrumented_http_count": 6,
+        "itemSelected_ms": 9.433,
+        "lost_pictures": 0,
+        "managerStart_ms": 306.307,
+        "mode": "shuffle",
+        "openToPlaying_ms": 107.341,
+        "openToVideoOutput_ms": 372.674,
+        "outcome": "success",
+        "outputToSurface_ms": 289.93,
+        "playbackBegan_ms": 1042.8,
+        "playerSurfacePresented_ms": 1082.03,
+        "providerReady_ms": 417.483,
+        "provider_ms": 111.299,
+        "read_bytes": 17091661,
+        "resume_pending": 0,
+        "resume_seconds": 0,
+        "run_id": "4B87F47A-239C-40CD-BB95-8E74897ABA75",
+        "selection_ms": 9.432,
+        "trace_id": "7A0CDEA7-4BA5-4A1D-934A-1BABC66BA9F1",
+        "transcoding": 0,
+        "validated_timing_sample": true,
+        "video_bitrate": 647474,
+        "video_codec": 1,
+        "video_fps": 23.976024627685547,
+        "viewAndOpen_ms": 1.943,
+        "vlcBuffering_ms": 422.253,
+        "vlcOpenReturned_ms": 419.618,
+        "vlcOpen_ms": 419.426,
+        "vlcOpening_ms": 421.348,
+        "vlcPlaying_ms": 526.767,
+        "width": 510
+      },
+      {
+        "ancestor_http_count": 1,
+        "authorization_ms": 155.485,
+        "authorized_ms": 175.49,
+        "begin_ms": 0.001,
+        "bit_depth": 8,
+        "controllerPreparation_ms": 155.475,
+        "controllerReady_ms": 330.965,
+        "decoded_video": 67,
+        "displayed_pictures": 4,
+        "end_ms": 804.795,
+        "episodes": 84,
+        "firstClock_ms": 804.357,
+        "firstDecode_ms": 804.791,
+        "firstInput_ms": 546.026,
+        "firstVideoOutput_ms": 804.794,
+        "height": 384,
+        "instrumented_http_count": 6,
+        "itemSelected_ms": 20.005,
+        "lost_pictures": 0,
+        "managerStart_ms": 331.031,
+        "mode": "ordered",
+        "openToPlaying_ms": 79.251,
+        "openToVideoOutput_ms": 360.313,
+        "outcome": "success",
+        "outputToSurface_ms": 293.401,
+        "playbackBegan_ms": 1059.849,
+        "playerSurfacePresented_ms": 1098.195,
+        "providerReady_ms": 437.898,
+        "provider_ms": 106.933,
+        "read_bytes": 19249698,
+        "resumeSeek_ms": 521.556,
+        "resume_pending": 0,
+        "resume_seconds": 118.879,
+        "run_id": "72760899-DE7B-48A6-8B8C-332BDCD74DF4",
+        "selection_ms": 20.004,
+        "trace_id": "36C7B577-0F95-406F-8F4E-768AB122C1D3",
+        "transcoding": 0,
+        "validated_timing_sample": true,
+        "video_bitrate": 632373,
+        "video_codec": 1,
+        "video_fps": 23.976024627685547,
+        "viewAndOpen_ms": 6.584,
+        "vlcBuffering_ms": 446.171,
+        "vlcOpenReturned_ms": 444.751,
+        "vlcOpen_ms": 444.482,
+        "vlcOpening_ms": 445.663,
+        "vlcPlaying_ms": 523.732,
+        "width": 510
+      },
+      {
+        "ancestor_http_count": 1,
+        "authorization_ms": 246.188,
+        "authorized_ms": 257.377,
+        "begin_ms": 0.002,
+        "bit_depth": 8,
+        "controllerPreparation_ms": 127.837,
+        "controllerReady_ms": 385.214,
+        "decoded_video": 35,
+        "displayed_pictures": 1,
+        "end_ms": 1030.119,
+        "episodes": 0,
+        "firstClock_ms": 1262.693,
+        "firstDecode_ms": 1030.109,
+        "firstInput_ms": 666.149,
+        "firstVideoOutput_ms": 1030.118,
+        "height": 802,
+        "instrumented_http_count": 6,
+        "itemSelected_ms": 11.189,
+        "lost_pictures": 0,
+        "managerStart_ms": 385.296,
+        "mode": "movie",
+        "openToPlaying_ms": 159.862,
+        "openToVideoOutput_ms": 525.259,
+        "outcome": "success",
+        "outputToSurface_ms": 435.15,
+        "playbackBegan_ms": 1415.854,
+        "playerSurfacePresented_ms": 1465.268,
+        "providerReady_ms": 499.614,
+        "provider_ms": 114.4,
+        "read_bytes": 24965294,
+        "resumeSeek_ms": 662.594,
+        "resume_pending": 0,
+        "resume_seconds": 181.405,
+        "run_id": "A5FFF1DA-A362-4934-A228-007007BC562E",
+        "selection_ms": 11.187,
+        "trace_id": "8A59CE03-6019-4F1B-BE3D-A3FC7F89E1EE",
+        "transcoding": 0,
+        "validated_timing_sample": true,
+        "video_bitrate": 14794025,
+        "video_codec": 1,
+        "video_fps": 23.976024627685547,
+        "viewAndOpen_ms": 5.245,
+        "vlcBuffering_ms": 507.733,
+        "vlcOpenReturned_ms": 505.165,
+        "vlcOpen_ms": 504.858,
+        "vlcOpening_ms": 507.326,
+        "vlcPlaying_ms": 664.72,
+        "width": 1920
+      },
+      {
+        "ancestor_http_count": 1,
+        "authorization_ms": 182.69,
+        "authorized_ms": 189.085,
+        "begin_ms": 0.001,
+        "bit_depth": 8,
+        "controllerPreparation_ms": 55.46,
+        "controllerReady_ms": 244.545,
+        "decoded_video": 22,
+        "displayed_pictures": 1,
+        "end_ms": 761.152,
+        "episodes": 0,
+        "firstClock_ms": 1029.737,
+        "firstDecode_ms": 761.133,
+        "firstInput_ms": 497.124,
+        "firstVideoOutput_ms": 761.151,
+        "height": 802,
+        "instrumented_http_count": 6,
+        "itemSelected_ms": 6.395,
+        "lost_pictures": 0,
+        "managerStart_ms": 244.652,
+        "mode": "movie",
+        "openToPlaying_ms": 120.591,
+        "openToVideoOutput_ms": 421.822,
+        "outcome": "success",
+        "outputToSurface_ms": 520.708,
+        "playbackBegan_ms": 1250.857,
+        "playerSurfacePresented_ms": 1281.859,
+        "providerReady_ms": 337.756,
+        "provider_ms": 93.211,
+        "read_bytes": 23364018,
+        "resumeSeek_ms": 458.834,
+        "resume_pending": 0,
+        "resume_seconds": 184.755,
+        "run_id": "A5FFF1DA-A362-4934-A228-007007BC562E",
+        "selection_ms": 6.395,
+        "trace_id": "0DC28112-F7F2-4990-A1A7-2BFE80725078",
+        "transcoding": 0,
+        "validated_timing_sample": true,
+        "video_bitrate": 14794025,
+        "video_codec": 1,
+        "video_fps": 23.976024627685547,
+        "viewAndOpen_ms": 1.574,
+        "vlcBuffering_ms": 340.495,
+        "vlcOpenReturned_ms": 339.477,
+        "vlcOpen_ms": 339.33,
+        "vlcOpening_ms": 340.389,
+        "vlcPlaying_ms": 459.921,
+        "width": 1920
+      },
+      {
+        "ancestor_http_count": 1,
+        "authorization_ms": 178.068,
+        "authorized_ms": 186.612,
+        "begin_ms": 0.001,
+        "bit_depth": 8,
+        "controllerPreparation_ms": 54.291,
+        "controllerReady_ms": 240.902,
+        "decoded_video": 12,
+        "displayed_pictures": 6,
+        "end_ms": 761.612,
+        "episodes": 0,
+        "firstClock_ms": 741.403,
+        "firstDecode_ms": 761.598,
+        "firstInput_ms": 500.886,
+        "firstVideoOutput_ms": 761.611,
+        "height": 802,
+        "instrumented_http_count": 6,
+        "itemSelected_ms": 8.543,
+        "lost_pictures": 0,
+        "managerStart_ms": 241.045,
+        "mode": "movie",
+        "openToPlaying_ms": 115.116,
+        "openToVideoOutput_ms": 419.169,
+        "outcome": "success",
+        "outputToSurface_ms": 269.984,
+        "playbackBegan_ms": 992.768,
+        "playerSurfacePresented_ms": 1031.596,
+        "providerReady_ms": 340.89,
+        "provider_ms": 99.987,
+        "read_bytes": 21212106,
+        "resumeSeek_ms": 456.474,
+        "resume_pending": 0,
+        "resume_seconds": 187.219,
+        "run_id": "A5FFF1DA-A362-4934-A228-007007BC562E",
+        "selection_ms": 8.543,
+        "trace_id": "68F8F1B8-2874-4A2F-B76B-9B9B3E4CA80B",
+        "transcoding": 0,
+        "validated_timing_sample": true,
+        "video_bitrate": 14794025,
+        "video_codec": 1,
+        "video_fps": 23.976024627685547,
+        "viewAndOpen_ms": 1.552,
+        "vlcBuffering_ms": 344.04,
+        "vlcOpenReturned_ms": 342.606,
+        "vlcOpen_ms": 342.442,
+        "vlcOpening_ms": 343.385,
+        "vlcPlaying_ms": 457.558,
+        "width": 1920
+      },
+      {
+        "ancestor_http_count": 1,
+        "authorization_ms": 179.148,
+        "authorized_ms": 187.589,
+        "begin_ms": 0.002,
+        "bit_depth": 8,
+        "controllerPreparation_ms": 52.507,
+        "controllerReady_ms": 240.096,
+        "decoded_video": 20,
+        "displayed_pictures": 4,
+        "end_ms": 775.93,
+        "episodes": 0,
+        "firstClock_ms": 1004.46,
+        "firstDecode_ms": 775.918,
+        "firstInput_ms": 512.006,
+        "firstVideoOutput_ms": 775.929,
+        "height": 802,
+        "instrumented_http_count": 6,
+        "itemSelected_ms": 8.441,
+        "lost_pictures": 0,
+        "managerStart_ms": 240.191,
+        "mode": "movie",
+        "openToPlaying_ms": 115.764,
+        "openToVideoOutput_ms": 419.382,
+        "outcome": "success",
+        "outputToSurface_ms": 522.234,
+        "playbackBegan_ms": 1254.695,
+        "playerSurfacePresented_ms": 1298.163,
+        "providerReady_ms": 354.796,
+        "provider_ms": 114.7,
+        "read_bytes": 22966002,
+        "resumeSeek_ms": 471.408,
+        "resume_pending": 0,
+        "resume_seconds": 189.758,
+        "run_id": "A5FFF1DA-A362-4934-A228-007007BC562E",
+        "selection_ms": 8.439,
+        "trace_id": "08925714-E501-4478-B318-3F84124B2C00",
+        "transcoding": 0,
+        "validated_timing_sample": true,
+        "video_bitrate": 14794025,
+        "video_codec": 1,
+        "video_fps": 23.976024627685547,
+        "viewAndOpen_ms": 1.751,
+        "vlcBuffering_ms": 358.052,
+        "vlcOpenReturned_ms": 356.711,
+        "vlcOpen_ms": 356.547,
+        "vlcOpening_ms": 357.679,
+        "vlcPlaying_ms": 472.311,
+        "width": 1920
+      }
+    ],
+    "response_status": {
+      "http": {
+        "200": 991
+      }
+    },
+    "spans": 2299
+  },
+  "trial": {
+    "configuration": "Release",
+    "executable_sha256": "2cba99f1eceab8fe350753dd8378be227fa2b774c2416d2063b7c545c36abaca",
+    "probe_revision": 7,
+    "source_commit": "7af81f530a3f94040dd107a9a9d5ce0e42cfa525",
+    "trial": "opt07"
+  }
+}
