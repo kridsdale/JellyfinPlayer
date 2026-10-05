@@ -11,7 +11,7 @@ import XCTest
 /// Opt-in tests of an already configured real restricted account. Never substitutes a fixture or logs credentials.
 @MainActor
 final class KidsLivePlaybackTests: XCTestCase {
-    private let app = XCUIApplication(bundleIdentifier: "com.kridsdale.JellyfinPlayer")
+    private let app = XCUIApplication()
 
     private var didLaunch = false
 

@@ -229,6 +229,7 @@ public final class KidsPerformanceSpan: @unchecked Sendable {
         "bit_depth",
         "video_fps",
         "video_bitrate",
+        "probe_revision",
         "cache_hit",
         "shared_wait",
         "prefetch_count",
@@ -350,7 +351,7 @@ public enum KidsPerformance {
         return KidsPerformanceRecorder(enabled: enabled, directory: directory)
     }()
 
-    public static let launch = recorder.begin(.launch)
+    public static let launch = recorder.begin(.launch, values: ["probe_revision": 2])
     public static func begin(
         _ operation: KidsPerformanceOperation,
         variant: KidsPerformanceVariant = .unknown,

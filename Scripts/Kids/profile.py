@@ -176,7 +176,7 @@ def analyze(directory):
     for k, v in result['http'].items():
         if v['n']:
             lines.append(f'| {k} | {v["n"]} | {v["median_ms"]:.1f} | {v["p95_ms"]:.1f} |')
-    lines.extend(['', 'First video output uses libVLC cumulative statistics, observed every 50 ms; libVLC updates some counters more slowly. Presentation markers are the next main-run-loop frame opportunity, not GPU fences. HTTP first-byte wait includes server processing and network transit and cannot isolate a disk seek. Fresh process is not cold RAID/OS/server cache. Negative milestone differences are excluded from latency distributions and counted explicitly in summary.json, since asynchronous counter observations can trail the UI surface. No cache purge or performance optimization occurred.'])
+    lines.extend(['', 'First video output uses libVLC cumulative statistics, observed every 50 ms; libVLC updates some counters more slowly. Presentation markers are the next main-run-loop frame opportunity, not GPU fences. HTTP first-byte wait includes server processing and network transit and cannot isolate a disk seek. Fresh process is not cold RAID/OS/server cache. Negative milestone differences are excluded from latency distributions and counted explicitly in summary.json, since asynchronous counter observations can trail the UI surface. Collection does not purge caches. Source/build identity and applied optimizations are recorded separately for each trial.'])
     (directory / 'summary.md').write_text('\n'.join(lines) + '\n')
     return result
 

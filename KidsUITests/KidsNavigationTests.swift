@@ -10,7 +10,7 @@ import XCTest
 
 @MainActor
 final class KidsNavigationTests: XCTestCase {
-    private let app = XCUIApplication(bundleIdentifier: "com.kridsdale.JellyfinPlayer")
+    private let app = XCUIApplication()
     override func setUpWithError() throws {
         continueAfterFailure = false
     }

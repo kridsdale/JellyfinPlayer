@@ -13,7 +13,7 @@ import XCTest
 /// credentials, artificial EOF, server changes or media/cache mutations.
 @MainActor
 final class KidsPerformanceTests: XCTestCase {
-    private let app = XCUIApplication(bundleIdentifier: "com.kridsdale.JellyfinPlayer")
+    private let app = XCUIApplication()
     override func setUpWithError() throws {
         continueAfterFailure = false
         guard ProcessInfo.processInfo.environment["KIDS_RUN_PROFILE"] == "1" else {
@@ -47,6 +47,7 @@ final class KidsPerformanceTests: XCTestCase {
         app.launchEnvironment["DYLD_FRAMEWORK_PATH"] = ""
         app.launchEnvironment["DYLD_LIBRARY_PATH"] = ""
         app.launch()
+        XCTAssertEqual(app.label, "KidsJellyFin", "Profile the selected Xcode target rather than a cached app with the same bundle ID.")
         XCTAssertTrue(app.buttons["kids.category.shows"].waitForExistence(timeout: 40))
         XCTAssertTrue(firstCard.waitForExistence(timeout: 10))
         XCTAssertFalse(app.buttons["kids.player.surface"].exists, "No automatic playback during fresh launch.")
