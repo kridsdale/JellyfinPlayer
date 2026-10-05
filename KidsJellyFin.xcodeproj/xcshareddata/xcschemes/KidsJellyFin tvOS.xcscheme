@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "5358705F2669D21600D05A09"
-               BuildableName = "Swiftfin.app"
-               BlueprintName = "Swiftfin tvOS"
-               ReferencedContainer = "container:Swiftfin.xcodeproj">
+               BuildableName = "KidsJellyFin.app"
+               BlueprintName = "KidsJellyFin tvOS"
+               ReferencedContainer = "container:KidsJellyFin.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -45,9 +45,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "5358705F2669D21600D05A09"
-            BuildableName = "Swiftfin.app"
-            BlueprintName = "Swiftfin tvOS"
-            ReferencedContainer = "container:Swiftfin.xcodeproj">
+            BuildableName = "KidsJellyFin.app"
+            BlueprintName = "KidsJellyFin tvOS"
+            ReferencedContainer = "container:KidsJellyFin.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -62,9 +62,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "5358705F2669D21600D05A09"
-            BuildableName = "Swiftfin.app"
-            BlueprintName = "Swiftfin tvOS"
-            ReferencedContainer = "container:Swiftfin.xcodeproj">
+            BuildableName = "KidsJellyFin.app"
+            BlueprintName = "KidsJellyFin tvOS"
+            ReferencedContainer = "container:KidsJellyFin.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

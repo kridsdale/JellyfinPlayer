@@ -1,0 +1,20 @@
+Family TV, made simple.
+
+KidsJellyFin brings the shows and movies you have chosen for your family to Apple TV, with a picture-led interface designed for children who are still learning to read.
+
+TWO PLACES TO EXPLORE
+Browse Shows and Movies through large artwork. KidsJellyFin uses only the Kid TV and Kid Movies libraries on your Jellyfin server.
+
+NEXT OR SHUFFLE
+Choose a show, then press Next to continue in order or Shuffle for a surprise. Shuffle keeps track of its choices to reduce repeats within a cycle. Picking an individual season or episode lives in the protected Parents area.
+
+PICK UP WHERE YOU LEFT OFF
+Resume an unfinished episode or movie. Pause, seek, and return to browsing with the Apple TV remote.
+
+PARENTS HANDLE THE DETAILS
+A parent PIN protects setup, episode selection, playback preferences, and connection help. Use your Jellyfin server to maintain the approved libraries and a restricted account to control access. Parents remain responsible for choosing suitable content.
+
+BRING YOUR OWN SERVER AND MEDIA
+KidsJellyFin requires a compatible Jellyfin server, network access to it, and a non-administrator Jellyfin account with access limited to libraries named Kid TV and Kid Movies. Setup is required before children can watch. The app does not include movies, television shows, or a streaming subscription.
+
+KidsJellyFin is an independent client derived from the open-source Swiftfin project. Jellyfin and Swiftfin are separate open-source projects.

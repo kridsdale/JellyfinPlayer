@@ -76,7 +76,7 @@ For this saved simulator fixture, build and test with the original simulator ide
 
 ```sh
 TEST_RUNNER_KIDS_RUN_PROFILE=1 xcodebuild \
-  -project Swiftfin.xcodeproj -scheme KidsValidation -configuration Release \
+  -project KidsJellyFin.xcodeproj -scheme KidsValidation -configuration Release \
   -destination 'platform=tvOS Simulator,id=C185BD69-BF46-4520-AC7E-8174AEA534E3' \
   -derivedDataPath build/DerivedData -skipMacroValidation \
   DEVELOPMENT_TEAM=FAKETEAMID AppIdentifierPrefix=FAKETEAMID. \

@@ -109,3 +109,7 @@ XcodeConfig/DevelopmentTeam.xcconfig
 # Local Swift package build products
 KidsCore/.build/
 KidsCore/.swiftpm/
+
+# Apple API private keys must never enter source control
+AuthKey_*.p8
+__pycache__/

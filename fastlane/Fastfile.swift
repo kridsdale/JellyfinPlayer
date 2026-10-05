@@ -10,8 +10,8 @@ import Foundation
 
 class Fastfile: LaneFile {
     
-    private let bundleIdentifier = "org.jellyfin.swiftfin"
-    private let xcodeProject = "Swiftfin.xcodeproj"
+    private let bundleIdentifier = "com.kridsdale.JellyfinPlayer"
+    private let xcodeProject = "KidsJellyFin.xcodeproj"
     private let sourcePackagesPath = "build/SourcePackages"
     
     // MARK: - Version

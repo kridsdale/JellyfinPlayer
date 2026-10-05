@@ -1,4 +1,4 @@
-# JellyfinPlayer kids experience
+# KidsJellyFin
 
 This tvOS fork opens on Shows and exposes only Kid TV and Kid Movies. A title offers Next and Shuffle; a movie offers one Play, Resume, or Play again action. The existing Swiftfin VLC playback foundation remains responsible for formats and streaming.
 
@@ -6,15 +6,15 @@ RC1 is ready for simulator evaluation. See [the evidence record](kids-validation
 
 ## Build and test
 
-Use Xcode 27, the `Swiftfin tvOS` scheme, and a tvOS simulator. Debug and Release default to Kevin Ridsdale's paid team (`Z3LBQE3J8T`) with automatic signing; `XcodeConfig/DevelopmentTeam.xcconfig` remains an ignored optional override. The current project deployment target is tvOS 26.1. Choose a device UUID with `xcrun simctl list devices available`.
+Use Xcode 27, the `KidsJellyFin tvOS` scheme, and a tvOS simulator. Debug and Release default to Kevin Ridsdale's paid team (`Z3LBQE3J8T`) with automatic signing; `XcodeConfig/DevelopmentTeam.xcconfig` remains an ignored optional override. The current project deployment target is tvOS 26.1. Choose a device UUID with `xcrun simctl list devices available`.
 
 ```sh
 swift test --package-path KidsCore
-xcodebuild -project Swiftfin.xcodeproj -scheme 'Swiftfin tvOS' \
+xcodebuild -project KidsJellyFin.xcodeproj -scheme 'KidsJellyFin tvOS' \
   -configuration Debug -destination 'platform=tvOS Simulator,id=DEVICE_UUID' \
   -derivedDataPath build/DerivedData -skipMacroValidation \
   CODE_SIGNING_ALLOWED=YES CODE_SIGN_IDENTITY=- build
-xcodebuild -project Swiftfin.xcodeproj -scheme KidsValidation \
+xcodebuild -project KidsJellyFin.xcodeproj -scheme KidsValidation \
   -configuration Debug -destination 'platform=tvOS Simulator,id=DEVICE_UUID' \
   -derivedDataPath build/DerivedData -skipMacroValidation \
   CODE_SIGNING_ALLOWED=YES CODE_SIGN_IDENTITY=- -parallel-testing-enabled NO \
@@ -30,7 +30,7 @@ The `KidsCore` package exercises authorization, HTTP pagination and ancestry, or
 The default suite skips all seven `KidsLivePlaybackTests`; those skips are not evidence of working streams. After the actual restricted account is configured in the simulator, enable the basic episode/movie/Shuffle checks using Xcode's runner environment prefix:
 
 ```sh
-TEST_RUNNER_KIDS_RUN_LIVE=1 xcodebuild -project Swiftfin.xcodeproj \
+TEST_RUNNER_KIDS_RUN_LIVE=1 xcodebuild -project KidsJellyFin.xcodeproj \
   -scheme KidsValidation -configuration Debug \
   -destination 'platform=tvOS Simulator,id=DEVICE_UUID' \
   -derivedDataPath build/DerivedData -skipMacroValidation \
@@ -51,7 +51,7 @@ Natural-end tests require verified regular-episode metadata and a valid near-end
 A Release compile for physical Apple TV can be checked before device signing:
 
 ```sh
-xcodebuild -project Swiftfin.xcodeproj -scheme 'Swiftfin tvOS' \
+xcodebuild -project KidsJellyFin.xcodeproj -scheme 'KidsJellyFin tvOS' \
   -configuration Release -destination 'generic/platform=tvOS' \
   -derivedDataPath build/DeviceDerivedData -skipMacroValidation \
   CODE_SIGNING_ALLOWED=NO build
@@ -62,7 +62,7 @@ An unsigned device compile does not install or validate playback on an Apple TV.
 To request a signed hardware build using the account in Xcode > Settings > Accounts:
 
 ```sh
-xcodebuild -project Swiftfin.xcodeproj -scheme 'Swiftfin tvOS' \
+xcodebuild -project KidsJellyFin.xcodeproj -scheme 'KidsJellyFin tvOS' \
   -configuration Release -destination 'generic/platform=tvOS' \
   -derivedDataPath build/DeviceDerivedData -skipMacroValidation \
   -allowProvisioningUpdates build
@@ -101,4 +101,4 @@ Physical Apple TV signing, audio/HDR/format coverage, sleep/wake, TestFlight dis
 
 ## Storage and privacy boundary
 
-The app uses only the curated Jellyfin API catalog. It never scans or mounts the RAID, creates sidecars, renames/deletes files, changes permissions, or broadens the Plex-indexed media set. Catalog authorization and ephemeral artwork are tied to server/user/library scope. Local state and diagnostics stay in internal app storage; HTTP payload/token logging is disabled for tvOS. No external analytics or cloud synchronization is added.
+The app uses only the curated Jellyfin API catalog. It never scans or mounts the RAID, creates sidecars, renames/deletes files, changes permissions, or broadens the Plex-indexed media set. Catalog authorization and ephemeral artwork are tied to server/user/library scope. Local state and diagnostics stay in internal app storage; HTTP payload/token logging is disabled for tvOS. No external analytics is added. Playback state can synchronize through the private Apple CloudKit container when provisioned; media, artwork, credentials, and the parent PIN are excluded.
