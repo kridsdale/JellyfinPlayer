@@ -28,6 +28,10 @@ class VLCMediaPlayerProxy: VideoMediaPlayerProxy,
     let player = Player()
 
     #if os(tvOS)
+    var isApplyingStartPosition: Bool {
+        pendingStartTime != nil
+    }
+
     var performance: KidsPerformanceSpan?
     private var performanceSampler: Task<Void, Never>?
     private var firstClockBaseline: Double?

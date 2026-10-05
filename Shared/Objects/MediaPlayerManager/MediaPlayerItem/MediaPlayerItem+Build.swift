@@ -23,6 +23,7 @@ extension MediaPlayerItem {
     /// The main `MediaPlayerItem` builder for normal online usage.
     static func build(
         for initialItem: BaseItemDto,
+        preparedItem: BaseItemDto? = nil,
         mediaSource _initialMediaSource: MediaSourceInfo? = nil,
         audioStreamIndex: Int? = nil,
         subtitleStreamIndex: Int? = nil,
@@ -44,17 +45,24 @@ extension MediaPlayerItem {
             throw ErrorMessage(L10n.unknownError)
         }
 
-        #if os(tvOS)
-        let metadataTrace = KidsPerformance.begin(.metadata, endpoint: .itemDetails)
-        defer { metadataTrace?.finish(Task.isCancelled ? .cancelled : .failure) }
-        var item = try await initialItem.getFullItem(
-            userSession: userSession,
-            taskDelegate: metadataTrace.map(KidsPerformanceTaskDelegate.init(span:))
-        )
-        metadataTrace?.finish()
-        #else
-        var item = try await initialItem.getFullItem(userSession: userSession)
-        #endif
+        var item: BaseItemDto
+        if let preparedItem {
+            // The kids path fetched and validated this full DTO for this exact
+            // start. Other callers retain their existing fresh-fetch behavior.
+            item = preparedItem
+        } else {
+            #if os(tvOS)
+            let metadataTrace = KidsPerformance.begin(.metadata, endpoint: .itemDetails)
+            defer { metadataTrace?.finish(Task.isCancelled ? .cancelled : .failure) }
+            item = try await initialItem.getFullItem(
+                userSession: userSession,
+                taskDelegate: metadataTrace.map(KidsPerformanceTaskDelegate.init(span:))
+            )
+            metadataTrace?.finish()
+            #else
+            item = try await initialItem.getFullItem(userSession: userSession)
+            #endif
+        }
         guard item.id == itemID else { throw ErrorMessage("Playback item identity changed") }
 
         if let modifyItem {

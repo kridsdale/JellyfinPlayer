@@ -52,6 +52,8 @@ final class KidsPlaybackController: ObservableObject, Identifiable {
     var allowsCheckpoints = true
     private var stopped = false
     private var tickTask: Task<Void, Never>?
+    private var eventTask: Task<Void, Never>?
+    private var requestedStartPosition = 0.0
     private var waitingSince: Date?
     private var lastCheckpoint = Date.distantPast
     private var lastControl = Date.now
@@ -132,6 +134,12 @@ final class KidsPlaybackController: ObservableObject, Identifiable {
         performance: KidsPerformanceSpan? = nil
     ) async throws -> KidsPlaybackController {
         guard let session = Container.shared.currentUserSession() else { throw KidsAPIError.authentication }
+        let identity = (
+            server: session.server.id,
+            user: session.user.id,
+            url: session.server.effectiveServerURL,
+            token: session.user.accessToken
+        )
         let metadata = KidsPerformance.begin(.metadata, endpoint: .itemDetails)
         defer { metadata?.finish(Task.isCancelled ? .cancelled : .failure) }
         let raw = try await session.client.send(
@@ -147,10 +155,15 @@ final class KidsPlaybackController: ObservableObject, Identifiable {
         let failStreamOnce = model.consumeValidationStreamFailure()
         #endif
         let provider = MediaPlayerItemProvider(item: raw) { base, _ in
-            try await KidsPerformance.$current.withValue(performance) {
+            guard let current = Container.shared.currentUserSession(),
+                  current.server.id == identity.server, current.user.id == identity.user,
+                  current.server.effectiveServerURL == identity.url,
+                  current.user.accessToken == identity.token else { throw KidsAPIError.authentication }
+            try Task.checkCancellation()
+            return try await KidsPerformance.$current.withValue(performance) {
                 let build = KidsPerformance.begin(.provider)
                 defer { build?.finish(Task.isCancelled ? .cancelled : .failure) }
-                let built = try await MediaPlayerItem.build(for: base, videoPlayerType: .vlc, modifyItem: { dto in
+                let built = try await MediaPlayerItem.build(for: base, preparedItem: raw, videoPlayerType: .vlc, modifyItem: { dto in
                     if dto.userData == nil {
                         dto.userData = UserItemDataDto(key: "")
                     }
@@ -188,6 +201,7 @@ final class KidsPlaybackController: ObservableObject, Identifiable {
         }
         let manager = MediaPlayerManager(provider: provider, queue: nil)
         let controller = KidsPlaybackController(item: item, title: title, mode: mode, episodes: episodes, manager: manager, model: model)
+        controller.requestedStartPosition = start
         controller.performance = performance
         controller.proxy.performance = performance
         return controller
@@ -223,6 +237,25 @@ final class KidsPlaybackController: ObservableObject, Identifiable {
 
     func start() {
         performance?.mark(.managerStart)
+        if model?.isPreview != true {
+            // Register before the media can open. Each subscription is independent;
+            // this does not consume the bridge used by SwiftVLC or the view.
+            let events = proxy.player.events(policy: .newest(64), filter: { event in
+                switch event {
+                case .stateChanged, .timeChanged, .voutChanged, .bufferingProgress: true
+                default: false
+                }
+            })
+            eventTask = Task { [weak self] in
+                for await _ in events {
+                    guard !Task.isCancelled else { return }
+                    // Let SwiftVLC's own main-actor event mirror update first.
+                    await Task.yield()
+                    guard let self, !self.stopped else { return }
+                    self.updatePlaybackState()
+                }
+            }
+        }
         manager.start()
         tickTask = Task { [weak self] in
             while !Task.isCancelled {
@@ -243,23 +276,7 @@ final class KidsPlaybackController: ObservableObject, Identifiable {
             return
         }
         guard !stopped else { return }
-        let playerState = proxy.player.state
-        let terminal = playerState == .stopped || playerState == .idle || playerState == .stopping
-        let time = manager.seconds.seconds
-        // libVLC resets its clock after an unexpected stop. Keep the last valid resume position.
-        if time.isFinite && !(terminal && began) {
-            seconds = max(0, time)
-        }
-        paused = playerState == .paused
-        let playing = playerState == .playing
-        if playing && !began {
-            performance?.mark(.playbackBegan)
-            began = true
-            model?.playbackBegan(self)
-        }
-        // Some failed HTTP opens stop without a VLC error notification. A prepared item is not a playing stream.
-        buffering = proxy.isBuffering.value || manager.state == .loadingItem || (!began && !recovery) ||
-            (terminal && began && !finished && !proxy.player.didReachEnd)
+        updatePlaybackState() // Recovery fallback if event delivery was interrupted.
         if began && !finished && Date.now.timeIntervalSince(lastCheckpoint) >= 10 {
             model?.playbackCheckpoint(self, seconds: seconds)
             lastCheckpoint = .now
@@ -278,6 +295,37 @@ final class KidsPlaybackController: ObservableObject, Identifiable {
         if !paused && !recovery && Date.now.timeIntervalSince(lastControl) > 5 {
             controlsVisible = false
         }
+    }
+
+    private func updatePlaybackState() {
+        guard !stopped, model?.isPreview != true else { return }
+        let playerState = proxy.player.state
+        let terminal = playerState == .stopped || playerState == .idle || playerState == .stopping
+        let time = proxy.player.currentTime.seconds
+        // Do not publish a stale pre-seek clock or overwrite a durable checkpoint
+        // when VLC resets its clock after a stop.
+        if time.isFinite, !proxy.isApplyingStartPosition, !(terminal && began),
+           began || time >= requestedStartPosition
+        {
+            seconds = max(0, time)
+        }
+        paused = playerState == .paused
+        if !began, KidsPlaybackReadiness.permitsPresentation(
+            playingOrPaused: playerState == .playing || paused,
+            buffering: proxy.isBuffering.value,
+            preparing: manager.state == .loadingItem,
+            resumePending: proxy.isApplyingStartPosition,
+            requestedPosition: requestedStartPosition,
+            clock: time,
+            displayedPictures: Int(clamping: proxy.player.statistics?.displayedPictures ?? 0)
+        ) {
+            performance?.once(.firstClock, values: ["seconds": time])
+            performance?.mark(.playbackBegan)
+            began = true
+            model?.playbackBegan(self)
+        }
+        buffering = proxy.isBuffering.value || manager.state == .loadingItem || (!began && !recovery) ||
+            (terminal && began && !finished && !proxy.player.didReachEnd)
     }
 
     func toggle() {
@@ -325,6 +373,8 @@ final class KidsPlaybackController: ObservableObject, Identifiable {
                 model?.playbackCheckpoint(self, seconds: seconds)
             }
             stopped = true
+            eventTask?.cancel()
+            eventTask = nil
             if model?.isPreview != true {
                 proxy.pause()
                 await manager.stop()
@@ -359,5 +409,6 @@ final class KidsPlaybackController: ObservableObject, Identifiable {
 
     deinit {
         tickTask?.cancel()
+        eventTask?.cancel()
     }
 }

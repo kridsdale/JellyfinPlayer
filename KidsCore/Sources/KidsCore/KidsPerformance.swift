@@ -353,7 +353,7 @@ public enum KidsPerformance {
         return KidsPerformanceRecorder(enabled: enabled, directory: directory)
     }()
 
-    public static let launch = recorder.begin(.launch, values: ["probe_revision": 3])
+    public static let launch = recorder.begin(.launch, values: ["probe_revision": 4])
     public static func begin(
         _ operation: KidsPerformanceOperation,
         variant: KidsPerformanceVariant = .unknown,
