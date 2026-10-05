@@ -95,6 +95,26 @@ class EvidenceTests(unittest.TestCase):
         self.assertEqual(result["metrics"]["artwork.presented.memoryHit.grid"]["median_ms"], 16)
         self.assertEqual(result["metrics"]["artwork.presented.network.grid"]["median_ms"], 100)
 
+    def test_report_latency_is_separate_from_playback_preparation_requests(self):
+        result = self.analyze([
+            event("reportStart", "playbackReport", "begin", 0, endpoint="playbackStart"),
+            event("reportStart", "playbackReport", "end", 65, endpoint="playbackStart", outcome="success"),
+            event("reportStop", "playbackReport", "begin", 0, endpoint="playbackStop"),
+            event("reportStop", "playbackReport", "end", 45, endpoint="playbackStop", outcome="success"),
+        ])
+        self.assertEqual(result["metrics"]["report.duration.playbackStart"]["median_ms"], 65)
+        self.assertEqual(result["metrics"]["report.duration.playbackStop"]["median_ms"], 45)
+        self.assertEqual(result["http"], {})
+        self.assertEqual(result["playback_starts"], [])
+
+    def test_failed_reports_remain_failures_and_never_enter_success_latency(self):
+        result = self.analyze([
+            event("report", "playbackReport", "begin", 0, endpoint="playbackProgress"),
+            event("report", "playbackReport", "end", 50, endpoint="playbackProgress", outcome="failure"),
+        ])
+        self.assertEqual(result["failures"], {"playbackReport": 1})
+        self.assertNotIn("report.duration.playbackProgress", result["metrics"])
+
     def test_nearest_rank_p95_is_observed_not_extrapolated(self):
         result = profile.stats([10, 20, 30, float("nan")])
         self.assertEqual(result["n"], 3)

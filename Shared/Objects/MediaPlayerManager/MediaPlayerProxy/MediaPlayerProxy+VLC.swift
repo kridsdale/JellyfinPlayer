@@ -303,6 +303,8 @@ extension VLCMediaPlayerProxy {
                         proxy.play(playbackItem, subtitleConfiguration: subtitleConfiguration)
                     }
                     .onChange(of: proxy.player.currentTime) { _, newSeconds in
+                        guard manager.state != .stopped, manager.state != .error,
+                              manager.playbackItem === playbackItem else { return }
                         // Ignore an initial or already superseded timestamp while
                         // the absolute resume seek is being established.
                         guard proxy.player.state == .playing || proxy.player.state == .paused,
@@ -331,6 +333,8 @@ extension VLCMediaPlayerProxy {
                         }
                     }
                     .onChange(of: proxy.player.state) { _, state in
+                        guard manager.state != .stopped, manager.state != .error,
+                              manager.playbackItem === playbackItem else { return }
                         manager.logger.trace("SwiftVLC state updated: \(state)")
                         #if os(tvOS)
                         switch state {
@@ -365,6 +369,8 @@ extension VLCMediaPlayerProxy {
                         proxy.videoSize.value = proxy.player.videoSize ?? .zero
                     }
                     .onChange(of: proxy.player.bufferFill) { _, fill in
+                        guard manager.state != .stopped, manager.state != .error,
+                              manager.playbackItem === playbackItem else { return }
                         guard proxy.player.state == .playing else { return }
                         if fill < 0.9 {
                             proxy.isBuffering.value = true
@@ -373,10 +379,14 @@ extension VLCMediaPlayerProxy {
                         }
                     }
                     .onChange(of: proxy.player.isSeekable) { _, isSeekable in
+                        guard manager.state != .stopped, manager.state != .error,
+                              manager.playbackItem === playbackItem else { return }
                         guard isSeekable else { return }
                         proxy.applyPendingStartTimeIfPossible()
                     }
                     .onChange(of: proxy.player.didReachEnd) { _, didReachEnd in
+                        guard manager.state != .stopped, manager.state != .error,
+                              manager.playbackItem === playbackItem else { return }
                         guard didReachEnd, manager.playbackItem?.baseItem.isLiveStream == false else { return }
                         // libVLC resets its clock on stop. Report the completed
                         // timeline before the manager decides whether to advance.
@@ -391,9 +401,13 @@ extension VLCMediaPlayerProxy {
                         }
                     }
                     .onChange(of: proxy.player.audioTracks) {
+                        guard manager.state != .stopped, manager.state != .error,
+                              manager.playbackItem === playbackItem else { return }
                         playbackItem.switchTrack(type: .audio, index: playbackItem.selectedAudioStreamIndex)
                     }
                     .onChange(of: proxy.player.subtitleTracks) {
+                        guard manager.state != .stopped, manager.state != .error,
+                              manager.playbackItem === playbackItem else { return }
                         let subtitleTracks = proxy.player.subtitleTracks.enumerated().map {
                             (playerIndex: $0.offset, id: $0.element.id)
                         }

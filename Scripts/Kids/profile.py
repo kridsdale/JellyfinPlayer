@@ -127,6 +127,8 @@ def analyze(directory):
                 artwork_sources[source] += 1
                 metrics['artwork.presented.' + source + '.' + variant].append(phases['artworkPresented']['elapsedMS'])
         if end and end.get('outcome') == 'success':
+            if operation == 'playbackReport' and base.get('endpoint') in ('playbackStart', 'playbackProgress', 'playbackStop'):
+                metrics['report.duration.' + base['endpoint']].append(end['elapsedMS'])
             if operation in ('storeOpen', 'storeLoad', 'storeSave', 'metadata', 'bitrate', 'playbackInfo', 'policy', 'episodes', 'authorize', 'ancestry'):
                 metrics['operation.' + operation].append(end['elapsedMS'])
             if operation == 'http':
