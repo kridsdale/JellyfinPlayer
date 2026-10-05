@@ -103,6 +103,17 @@ public actor KidsEpisodeCache {
         }
     }
 
+    /// Background warming may join an existing request but never queues a
+    /// second show's scan while another metadata flight is active. Foreground
+    /// requests remain available immediately through episodes(for:binding:).
+    public func prefetch(for show: KidsItem, binding expected: KidsBinding) async throws -> [KidsItem]? {
+        try Task.checkCancellation()
+        guard expected == binding, binding.isValid, show.kind == .series,
+              KidsEligibility.permits(show, binding: binding) else { throw KidsContractError.denied }
+        guard flights.isEmpty || flights[show.id] != nil else { return nil }
+        return try await episodes(for: show, binding: expected)
+    }
+
     public func invalidate() {
         generation = UUID()
         entries.removeAll()

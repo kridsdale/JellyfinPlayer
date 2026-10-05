@@ -163,3 +163,21 @@ func `invalidated old failures cannot remove a newer in-flight fetch`() async th
     #expect(try await joined.value == [cacheEpisode()])
     #expect(await gate.requestCount == 2)
 }
+
+@Test
+func `background metadata warming skips other shows while sharing an existing fetch`() async throws {
+    let gate = CacheGate()
+    let cache = KidsEpisodeCache(binding: cacheBinding) { try await gate.fetch($0) }
+    let first = Task { try await cache.prefetch(for: cacheShow(), binding: cacheBinding) }
+    try await gate.wait(for: 1)
+    #expect(try await cache.prefetch(for: cacheShow("another"), binding: cacheBinding) == nil)
+    let joined = Task { try await cache.prefetch(for: cacheShow(), binding: cacheBinding) }
+    // A deliberate user selection still works while speculative warming runs.
+    let foreground = Task { try await cache.episodes(for: cacheShow("selected"), binding: cacheBinding) }
+    try await gate.wait(for: 2)
+    await gate.completeAll()
+    #expect(try await first.value == [cacheEpisode()])
+    #expect(try await joined.value == [cacheEpisode()])
+    #expect(try await foreground.value == [cacheEpisode("selected")])
+    #expect(await gate.requestCount == 2)
+}

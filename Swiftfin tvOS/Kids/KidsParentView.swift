@@ -305,7 +305,7 @@ struct KidsParentView: View {
             }
             KidsParentAction("Test connection and refresh approved catalog") {
                 model.touchGate()
-                Task { await model.refresh()
+                Task { await model.refresh(forceMetadata: true)
                     message = model.problem ?? "Connected. Both approved libraries verified."
                 }
             }

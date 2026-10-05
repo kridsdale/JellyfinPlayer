@@ -78,9 +78,18 @@ final class KidsAppModel: ObservableObject {
         let token: String
     }
 
+    @Published
+    private(set) var artworkRevision = UUID()
+    private var artworkStore: (binding: KidsBinding, value: KidsArtworkStore)?
     private var retainedAPI: (identity: APIIdentity, value: KidsAPI)?
     private var verifiedEpisodes: (binding: KidsBinding, value: KidsEpisodeCache)?
     private var refreshFlight: (id: UUID, identity: APIIdentity?, task: Task<Void, Never>)?
+
+    private func invalidateArtwork() {
+        artworkStore?.value.invalidate()
+        artworkStore = nil
+        artworkRevision = UUID()
+    }
 
     private func invalidateEpisodeMetadata() {
         let old = verifiedEpisodes?.value
@@ -97,6 +106,7 @@ final class KidsAppModel: ObservableObject {
                 retainedAPI = nil
                 refreshGeneration = UUID()
                 invalidateEpisodeMetadata()
+                invalidateArtwork()
             }
             return nil
         }
@@ -116,6 +126,7 @@ final class KidsAppModel: ObservableObject {
         }
         refreshGeneration = UUID()
         invalidateEpisodeMetadata()
+        invalidateArtwork()
         let value = KidsAPI(serverURL: url, token: token)
         retainedAPI = (identity, value)
         return value
@@ -252,8 +263,14 @@ final class KidsAppModel: ObservableObject {
         Task { await refresh() }
     }
 
-    func refresh() async {
+    func refresh(forceMetadata: Bool = false) async {
         guard !isPreview else { return }
+        if forceMetadata {
+            refreshFlight?.task.cancel()
+            refreshFlight = nil
+            invalidateEpisodeMetadata()
+            invalidateArtwork()
+        }
         _ = api // Bind the shared request to the complete current network/account identity.
         let identity = retainedAPI?.identity
         if let flight = refreshFlight, flight.identity == identity {
@@ -344,6 +361,7 @@ final class KidsAppModel: ObservableObject {
         }
         catalog = [:]
         invalidateEpisodeMetadata()
+        invalidateArtwork()
         if let error = error as? KidsAPIError {
             problem = error.localizedDescription
             requiresParent = error == .authentication || error == .policy || error == .libraryChanged
@@ -367,7 +385,7 @@ final class KidsAppModel: ObservableObject {
         }
     }
 
-    func episodes(for show: KidsItem) async throws -> [KidsItem] {
+    func episodes(for show: KidsItem, prefetch: Bool = false) async throws -> [KidsItem] {
         #if DEBUG
         if isPreview {
             return KidsPreviewFixtures.episodes(showID: show.id)
@@ -382,7 +400,13 @@ final class KidsAppModel: ObservableObject {
                 verifiedEpisodes = (binding, KidsEpisodeCache(api: api, binding: binding))
             }
             guard let cached = verifiedEpisodes?.value else { throw KidsContractError.denied }
-            let items = try await cached.episodes(for: show, binding: binding)
+            let items: [KidsItem]
+            if prefetch {
+                guard let warmed = try await cached.prefetch(for: show, binding: binding) else { return [] }
+                items = warmed
+            } else {
+                items = try await cached.episodes(for: show, binding: binding)
+            }
             guard !Task.isCancelled, self.binding == binding, refreshGeneration == generation else {
                 throw CancellationError()
             }
@@ -397,6 +421,76 @@ final class KidsAppModel: ObservableObject {
             }
             throw error
         }
+    }
+
+    func artworkImage(for item: KidsItem) async throws -> UIImage {
+        guard let api, let binding, !loading, !requiresParent,
+              KidsEligibility.permits(item, binding: binding) else { throw KidsContractError.denied }
+        // Only objects from this verified catalog or a verified episode list may
+        // reach the image pool. A cache hit never widens discovery.
+        let listed = item.kind == .episode ? episodeCache[item.seriesID ?? ""]?.contains(item) == true :
+            catalog.values.contains { $0.contains(item) }
+        guard listed else { throw KidsContractError.denied }
+        if artworkStore?.binding != binding {
+            if artworkStore != nil {
+                invalidateArtwork()
+            }
+            artworkStore = (binding, KidsArtworkStore(api: api, binding: binding))
+        }
+        guard let store = artworkStore?.value else { throw KidsContractError.denied }
+        let revision = artworkRevision
+        do {
+            let image = try await store.image(for: item, binding: binding)
+            guard !Task.isCancelled, self.binding == binding, artworkRevision == revision,
+                  !loading, !requiresParent else { throw CancellationError() }
+            return image
+        } catch {
+            guard !Task.isCancelled, self.binding == binding, artworkRevision == revision else { throw CancellationError() }
+            if (error as? KidsAPIError) == .authentication {
+                show(error)
+            }
+            throw error
+        }
+    }
+
+    func prefetch(around focusedID: String?, category: KidsCategory) async {
+        guard !isPreview, !loading, !requiresParent, !starting, activePlayback == nil,
+              let focusedID, let items = catalog[category], items.contains(where: { $0.id == focusedID }) else { return }
+        guard let binding else { return }
+        let plan = KidsPrefetchPlan.make(focusedID: focusedID, category: category, items: items, binding: binding)
+        let trace = KidsPerformance.begin(.prefetch, variant: category == .shows ? .shows : .movies)
+        let result = await KidsPerformance.$current.withValue(trace) {
+            await withTaskGroup(of: Bool.self, returning: (Int, Int).self) { group in
+                for item in plan.artwork {
+                    group.addTask { @MainActor in
+                        guard !Task.isCancelled else { return false }
+                        do { _ = try await self.artworkImage(for: item)
+                            return true
+                        } catch { return false }
+                    }
+                }
+                if let show = plan.show {
+                    group.addTask { @MainActor in
+                        guard !Task.isCancelled else { return false }
+                        do { return try await !self.episodes(for: show, prefetch: true).isEmpty
+                        } catch { return false }
+                    }
+                }
+                var completed = 0, failed = 0
+                for await success in group {
+                    if success {
+                        completed += 1
+                    } else {
+                        failed += 1
+                    }
+                }
+                return (completed, failed)
+            }
+        }
+        trace?.finish(
+            Task.isCancelled ? .cancelled : (result.1 > 0 ? .failure : .success),
+            values: ["prefetch_count": Double(result.0), "prefetch_failures": Double(result.1)]
+        )
     }
 
     func persist(intent: KidsSyncWriteIntent = .edit) {
@@ -603,6 +697,7 @@ final class KidsAppModel: ObservableObject {
         refreshGeneration = UUID()
         retainedAPI = nil
         invalidateEpisodeMetadata()
+        invalidateArtwork()
         await stopPlayback()
         catalog = [:]
         lastFocus = [:]

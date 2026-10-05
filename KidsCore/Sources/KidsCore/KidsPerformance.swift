@@ -233,7 +233,9 @@ public final class KidsPerformanceSpan: @unchecked Sendable {
         "cache_hit",
         "shared_wait",
         "prefetch_count",
-        "cache_bytes"
+        "prefetch_failures",
+        "cache_bytes",
+        "placeholder"
     ]
     private let start = DispatchTime.now().uptimeNanoseconds
     private let lock = NSLock()
@@ -351,7 +353,7 @@ public enum KidsPerformance {
         return KidsPerformanceRecorder(enabled: enabled, directory: directory)
     }()
 
-    public static let launch = recorder.begin(.launch, values: ["probe_revision": 2])
+    public static let launch = recorder.begin(.launch, values: ["probe_revision": 3])
     public static func begin(
         _ operation: KidsPerformanceOperation,
         variant: KidsPerformanceVariant = .unknown,

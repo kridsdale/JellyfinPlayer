@@ -160,7 +160,7 @@ struct KidsArtwork: View {
     @State
     private var image: UIImage?
     private var scope: String {
-        "\(model.binding?.serverID ?? ""):\(model.binding?.userID ?? ""):\(model.binding?.showsID ?? ""):\(model.binding?.moviesID ?? ""):\(item.id):\(item.imageTag ?? "")"
+        "\(model.artworkRevision):\(item.id):\(item.imageOwnerID ?? ""):\(item.imageTag ?? "")"
     }
 
     private var placeholderColor: Color {
@@ -196,43 +196,20 @@ struct KidsArtwork: View {
                     parent: role == .grid ? model.catalogPerformance : model.titlePerformance
                 )
                 performance = trace
-                guard let api = model.api, let binding = model.binding,
-                      let request = try? api.imageRequest(for: item, binding: binding)
-                else { trace?.finish(.failure)
+                guard item.imageTag != nil, item.imageOwnerID != nil, !model.isPreview else {
+                    trace?.finish(values: ["placeholder": 1])
                     return
                 }
-                let config = URLSessionConfiguration.ephemeral
-                config.urlCache = nil
                 do {
-                    let delegate = trace.map(KidsPerformanceTaskDelegate.init(span:))
-                    let (data, response) = try await URLSession(configuration: config).data(for: request, delegate: delegate)
-                    trace?.mark(
-                        .response,
-                        values: ["bytes": Double(data.count), "status": Double((response as? HTTPURLResponse)?.statusCode ?? 0)]
-                    )
-                    guard !Task.isCancelled, model.binding == binding else { trace?.finish(.cancelled)
-                        return
+                    let prepared = try await KidsPerformance.$current.withValue(trace) {
+                        try await model.artworkImage(for: item)
                     }
-                    if let status = (response as? HTTPURLResponse)?.statusCode,
-                       status == 401 || status == 403
-                    {
-                        trace?.finish(.failure)
-                        model.show(KidsAPIError.authentication)
-                        return
-                    }
-                    guard (response as? HTTPURLResponse)?.statusCode == 200 else { trace?.finish(.failure)
-                        return
-                    }
-                    let decode = KidsPerformance.recorder.begin(.decode, endpoint: .artwork, parent: trace)
-                    image = UIImage(data: data)
-                    decode?.finish(image == nil ? .failure : .success)
-                    trace?.mark(
-                        .imageConstructed,
-                        values: ["width": Double(image?.size.width ?? 0), "height": Double(image?.size.height ?? 0)]
-                    )
+                    try Task.checkCancellation()
+                    image = prepared
+                    trace?.mark(.imageConstructed, values: ["width": Double(prepared.size.width), "height": Double(prepared.size.height)])
                     trace?.mark(.imagePublished)
-                    trace?.finish(image == nil ? .failure : .success)
-                } catch { trace?.finish(Task.isCancelled ? .cancelled : .failure) /* Missing artwork retains its placeholder. */ }
+                    trace?.finish()
+                } catch { trace?.finish(error: error) /* Missing artwork retains its placeholder. */ }
             }
     }
 }
@@ -327,6 +304,10 @@ struct KidsBrowseView: View {
                 model.lastFocus[model.category] = item.id
                 model.narration(item.name)
             }
+        }
+        .task(id: [focused ?? "", model.category.rawValue, model.artworkRevision.uuidString]) {
+            do { try await Task.sleep(for: .milliseconds(350)) } catch { return }
+            await model.prefetch(around: focused, category: model.category)
         }
         .onExitCommand(perform: model.category == .movies ? { model.category = .shows } : nil)
     }
