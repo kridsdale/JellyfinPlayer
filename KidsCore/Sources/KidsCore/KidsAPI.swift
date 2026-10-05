@@ -139,59 +139,95 @@ public struct KidsAPI: Sendable {
     }
 
     public func validate(_ binding: KidsBinding) async throws {
-        let info = try await serverInfo()
-        guard info.id == binding.serverID else { throw KidsAPIError.libraryChanged }
-        let user: UserResponse = try await get("Users/Me")
-        guard user.id == binding.userID else { throw KidsAPIError.authentication }
-        let policy = KidsAccessPolicy(
-            administrator: user.policy.isAdministrator ?? true,
-            allLibraries: user.policy.enableAllFolders ?? true,
-            deletion: user.policy.enableContentDeletion ?? true,
-            enabledLibraries: Set(user.policy.enabledFolders ?? [])
-        )
-        guard policy.permits(binding) else { throw KidsAPIError.policy }
-        let libs = try await libraries(userID: binding.userID)
-        guard Set(libs.map(\.id)) == binding.libraryIDs,
-              libs.contains(where: { $0.id == binding.showsID && $0.collectionType == "tvshows" }),
-              libs.contains(where: { $0.id == binding.moviesID && $0.collectionType == "movies" })
-        else {
-            throw KidsAPIError.libraryChanged
+        let trace = KidsPerformance.begin(.policy)
+        do {
+            let result: Void = try await KidsPerformance.$current.withValue(trace) {
+                let info = try await serverInfo()
+                guard info.id == binding.serverID else { throw KidsAPIError.libraryChanged }
+                let user: UserResponse = try await get("Users/Me")
+                guard user.id == binding.userID else { throw KidsAPIError.authentication }
+                let policy = KidsAccessPolicy(
+                    administrator: user.policy.isAdministrator ?? true,
+                    allLibraries: user.policy.enableAllFolders ?? true,
+                    deletion: user.policy.enableContentDeletion ?? true,
+                    enabledLibraries: Set(user.policy.enabledFolders ?? [])
+                )
+                guard policy.permits(binding) else { throw KidsAPIError.policy }
+                let libs = try await libraries(userID: binding.userID)
+                guard Set(libs.map(\.id)) == binding.libraryIDs,
+                      libs.contains(where: { $0.id == binding.showsID && $0.collectionType == "tvshows" }),
+                      libs.contains(where: { $0.id == binding.moviesID && $0.collectionType == "movies" })
+                else {
+                    throw KidsAPIError.libraryChanged
+                }
+            }
+            trace?.finish()
+            return result
+        } catch { trace?.finish(error: error)
+            throw error
         }
     }
 
     public func catalog(_ category: KidsCategory, binding: KidsBinding) async throws -> [KidsItem] {
-        let candidates = try await items(
-            libraryID: binding.library(for: category),
-            binding: binding,
-            extra: ["IncludeItemTypes": category == .shows ? "Series" : "Movie"]
-        )
-        .filter { KidsEligibility.permits($0, binding: binding) && $0.kind == (category == .shows ? .series : .movie) }
-        return try await verified(candidates, libraryID: binding.library(for: category), binding: binding)
+        let trace = KidsPerformance.begin(.catalog, variant: category == .shows ? .shows : .movies)
+        do {
+            let result = try await KidsPerformance.$current.withValue(trace) {
+                let candidates = try await items(
+                    libraryID: binding.library(for: category),
+                    binding: binding,
+                    extra: ["IncludeItemTypes": category == .shows ? "Series" : "Movie"]
+                )
+                .filter { KidsEligibility.permits($0, binding: binding) && $0.kind == (category == .shows ? .series : .movie) }
+                return try await verified(candidates, libraryID: binding.library(for: category), binding: binding)
+            }
+            trace?.finish()
+            return result
+        } catch { trace?.finish(error: error)
+            throw error
+        }
     }
 
     public func episodes(showID: String, binding: KidsBinding) async throws -> [KidsItem] {
-        try await authorize(itemID: showID, expectedKind: .series, binding: binding)
-        // Library ancestry remains explicit; SeriesId alone is never the content boundary.
-        let values = try await items(
-            libraryID: binding.showsID,
-            binding: binding,
-            extra: ["IncludeItemTypes": "Episode", "SeriesId": showID]
-        )
-        let eligible = try KidsEligibility.episodes(values, showID: showID, binding: binding)
-        let checked = try await verified(eligible, libraryID: binding.showsID, binding: binding)
-        guard !checked.isEmpty else { throw KidsContractError.unavailable }
-        return checked
+        let trace = KidsPerformance.begin(.episodes)
+        do {
+            let result = try await KidsPerformance.$current.withValue(trace) {
+                try await authorize(itemID: showID, expectedKind: .series, binding: binding)
+                // Library ancestry remains explicit; SeriesId alone is never the content boundary.
+                let values = try await items(
+                    libraryID: binding.showsID,
+                    binding: binding,
+                    extra: ["IncludeItemTypes": "Episode", "SeriesId": showID]
+                )
+                let eligible = try KidsEligibility.episodes(values, showID: showID, binding: binding)
+                let checked = try await verified(eligible, libraryID: binding.showsID, binding: binding)
+                guard !checked.isEmpty else { throw KidsContractError.unavailable }
+                return checked
+            }
+            trace?.finish()
+            return result
+        } catch { trace?.finish(error: error)
+            throw error
+        }
     }
 
     @discardableResult
     public func authorize(itemID: String, expectedKind: KidsItem.Kind, binding: KidsBinding) async throws -> KidsItem {
-        try await validate(binding)
-        let library = expectedKind == .movie ? binding.moviesID : binding.showsID
-        let values = try await items(libraryID: library, binding: binding, extra: ["Ids": itemID])
-        guard let item = values.first(where: { $0.id == itemID && $0.kind == expectedKind }),
-              KidsEligibility.permits(item, binding: binding) else { throw KidsContractError.denied }
-        try await verifyMembership(item.id, libraryID: library, binding: binding)
-        return item
+        let trace = KidsPerformance.begin(.authorize)
+        do {
+            let result = try await KidsPerformance.$current.withValue(trace) {
+                try await validate(binding)
+                let library = expectedKind == .movie ? binding.moviesID : binding.showsID
+                let values = try await items(libraryID: library, binding: binding, extra: ["Ids": itemID])
+                guard let item = values.first(where: { $0.id == itemID && $0.kind == expectedKind }),
+                      KidsEligibility.permits(item, binding: binding) else { throw KidsContractError.denied }
+                try await verifyMembership(item.id, libraryID: library, binding: binding)
+                return item
+            }
+            trace?.finish()
+            return result
+        } catch { trace?.finish(error: error)
+            throw error
+        }
     }
 
     /// The scoped Items response is not itself proof of membership. Confirm ancestry
@@ -202,31 +238,40 @@ public struct KidsAPI: Sendable {
     }
 
     private func verified(_ items: [KidsItem], libraryID: String, binding: KidsBinding) async throws -> [KidsItem] {
-        try await withThrowingTaskGroup(of: (Int, Bool).self) { group in
-            var next = 0
-            var approved = Set<Int>()
-            func add(_ index: Int) {
-                group.addTask {
-                    do { try await verifyMembership(items[index].id, libraryID: libraryID, binding: binding)
-                        return (index, true)
-                    } catch KidsContractError.denied { return (index, false) }
-                    catch KidsAPIError.unavailable { return (index, false) }
+        let trace = KidsPerformance.begin(.ancestry)
+        do {
+            let result = try await KidsPerformance.$current.withValue(trace) {
+                try await withThrowingTaskGroup(of: (Int, Bool).self) { group in
+                    var next = 0
+                    var approved = Set<Int>()
+                    func add(_ index: Int) {
+                        group.addTask {
+                            do { try await verifyMembership(items[index].id, libraryID: libraryID, binding: binding)
+                                return (index, true)
+                            } catch KidsContractError.denied { return (index, false) }
+                            catch KidsAPIError.unavailable { return (index, false) }
+                        }
+                    }
+                    while next < min(8, items.count) {
+                        add(next)
+                        next += 1
+                    }
+                    for try await (index, allowed) in group {
+                        if allowed {
+                            approved.insert(index)
+                        }
+                        if next < items.count {
+                            add(next)
+                            next += 1
+                        }
+                    }
+                    return items.enumerated().compactMap { approved.contains($0.offset) ? $0.element : nil }
                 }
             }
-            while next < min(8, items.count) {
-                add(next)
-                next += 1
-            }
-            for try await (index, allowed) in group {
-                if allowed {
-                    approved.insert(index)
-                }
-                if next < items.count {
-                    add(next)
-                    next += 1
-                }
-            }
-            return items.enumerated().compactMap { approved.contains($0.offset) ? $0.element : nil }
+            trace?.finish()
+            return result
+        } catch { trace?.finish(error: error)
+            throw error
         }
     }
 
@@ -289,19 +334,36 @@ public struct KidsAPI: Sendable {
     }
 
     private func get<T: Decodable>(_ path: String, query: [String: String] = [:]) async throws -> T {
+        let endpoint: KidsPerformanceEndpoint = path == "System/Info/Public" ? .serverInfo :
+            path == "Users/Me" ? .userPolicy : path.hasSuffix("/Views") ? .libraries :
+            path.hasSuffix("/Ancestors") ? .ancestors : path == "Items" ? .items : .other
+        let trace = KidsPerformance.begin(.http, endpoint: endpoint)
         do {
-            let (data, response) = try await session.data(for: request(path, query: query))
+            let delegate = trace.map(KidsPerformanceTaskDelegate.init(span:))
+            let (data, response) = try await session.data(for: request(path, query: query), delegate: delegate)
             guard let http = response as? HTTPURLResponse else { throw KidsAPIError.invalidResponse }
+            trace?.mark(.response, values: ["status": Double(http.statusCode), "bytes": Double(data.count)])
             switch http.statusCode {
             case 200 ..< 300: break
             case 401, 403: throw KidsAPIError.authentication
             case 404: throw KidsAPIError.unavailable
             default: throw KidsAPIError.connection
             }
-            do { return try JSONDecoder().decode(T.self, from: data) }
-            catch { throw KidsAPIError.invalidResponse }
-        } catch let error as KidsAPIError { throw error }
-        catch is CancellationError { throw CancellationError() }
-        catch { throw KidsAPIError.connection }
+            let decode = KidsPerformance.recorder.begin(.decode, endpoint: endpoint, parent: trace)
+            do {
+                let result = try JSONDecoder().decode(T.self, from: data)
+                decode?.finish(values: ["bytes": Double(data.count)])
+                trace?.finish()
+                return result
+            } catch { decode?.finish(.failure)
+                throw KidsAPIError.invalidResponse
+            }
+        } catch let error as KidsAPIError { trace?.finish(error: error)
+            throw error
+        } catch is CancellationError { trace?.finish(.cancelled)
+            throw CancellationError()
+        } catch { trace?.finish(.failure)
+            throw KidsAPIError.connection
+        }
     }
 }

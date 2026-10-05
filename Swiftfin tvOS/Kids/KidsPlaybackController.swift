@@ -24,6 +24,7 @@ final class KidsPlaybackController: ObservableObject, Identifiable {
     let mode: KidsPlaybackMode
     let episodes: [KidsItem]
     let manager: MediaPlayerManager
+    var performance: KidsPerformanceSpan?
     lazy var proxy = VLCMediaPlayerProxy()
     @Published
     var controlsVisible = false
@@ -127,10 +128,17 @@ final class KidsPlaybackController: ObservableObject, Identifiable {
         mode: KidsPlaybackMode,
         position: Double,
         episodes: [KidsItem],
-        model: KidsAppModel
+        model: KidsAppModel,
+        performance: KidsPerformanceSpan? = nil
     ) async throws -> KidsPlaybackController {
         guard let session = Container.shared.currentUserSession() else { throw KidsAPIError.authentication }
-        let raw = try await session.client.send(Paths.getItem(itemID: item.id, userID: session.user.id)).value
+        let metadata = KidsPerformance.begin(.metadata, endpoint: .itemDetails)
+        defer { metadata?.finish(Task.isCancelled ? .cancelled : .failure) }
+        let raw = try await session.client.send(
+            Paths.getItem(itemID: item.id, userID: session.user.id),
+            delegate: metadata.map(KidsPerformanceTaskDelegate.init(span:))
+        ).value
+        metadata?.finish()
         guard raw.id == item.id, raw.mediaType == .video,
               (item.kind == .episode && raw.type == .episode) || (item.kind == .movie && raw.type == .movie)
         else { throw KidsContractError.denied }
@@ -139,33 +147,50 @@ final class KidsPlaybackController: ObservableObject, Identifiable {
         let failStreamOnce = model.consumeValidationStreamFailure()
         #endif
         let provider = MediaPlayerItemProvider(item: raw) { base, _ in
-            let built = try await MediaPlayerItem.build(for: base, videoPlayerType: .vlc, modifyItem: { dto in
-                if dto.userData == nil {
-                    dto.userData = UserItemDataDto(key: "")
+            try await KidsPerformance.$current.withValue(performance) {
+                let build = KidsPerformance.begin(.provider)
+                defer { build?.finish(Task.isCancelled ? .cancelled : .failure) }
+                let built = try await MediaPlayerItem.build(for: base, videoPlayerType: .vlc, modifyItem: { dto in
+                    if dto.userData == nil {
+                        dto.userData = UserItemDataDto(key: "")
+                    }
+                    dto.userData?.playbackPositionTicks = Int(start * 10_000_000)
+                })
+                build?.finish()
+                #if DEBUG
+                // A one-shot real connection refusal exercises VLC recovery without interrupting the household server.
+                if failStreamOnce {
+                    return await MediaPlayerItem(
+                        baseItem: built.baseItem,
+                        mediaSource: built.mediaSource,
+                        playSessionID: built.playSessionID,
+                        url: URL(string: "http://127.0.0.1:9")!,
+                        requestedBitrate: built.requestedBitrate,
+                        deviceProfile: built.deviceProfile,
+                        initialAudioStreamIndex: built.selectedAudioStreamIndex,
+                        initialSubtitleStreamIndex: built.selectedSubtitleStreamIndex,
+                        previewImageProvider: built.previewImageProvider,
+                        thumbnailProvider: built.thumbnailProvider
+                    )
                 }
-                dto.userData?.playbackPositionTicks = Int(start * 10_000_000)
-            })
-            #if DEBUG
-            // A one-shot real connection refusal exercises VLC recovery without interrupting the household server.
-            if failStreamOnce {
-                return await MediaPlayerItem(
-                    baseItem: built.baseItem,
-                    mediaSource: built.mediaSource,
-                    playSessionID: built.playSessionID,
-                    url: URL(string: "http://127.0.0.1:9")!,
-                    requestedBitrate: built.requestedBitrate,
-                    deviceProfile: built.deviceProfile,
-                    initialAudioStreamIndex: built.selectedAudioStreamIndex,
-                    initialSubtitleStreamIndex: built.selectedSubtitleStreamIndex,
-                    previewImageProvider: built.previewImageProvider,
-                    thumbnailProvider: built.thumbnailProvider
-                )
+                #endif
+                let video = built.mediaSource.mediaStreams?.first { $0.type == .video }
+                performance?.mark(.providerReady, values: [
+                    "transcoding": built.mediaSource.transcodingURL == nil ? 0 : 1,
+                    "video_codec": Double(KidsPerformanceCodec(video?.codec).rawValue),
+                    "width": Double(video?.width ?? 0), "height": Double(video?.height ?? 0),
+                    "bit_depth": Double(video?.bitDepth ?? 0),
+                    "video_fps": Double(video?.averageFrameRate ?? 0),
+                    "video_bitrate": Double(video?.bitRate ?? 0)
+                ])
+                return built
             }
-            #endif
-            return built
         }
         let manager = MediaPlayerManager(provider: provider, queue: nil)
-        return KidsPlaybackController(item: item, title: title, mode: mode, episodes: episodes, manager: manager, model: model)
+        let controller = KidsPlaybackController(item: item, title: title, mode: mode, episodes: episodes, manager: manager, model: model)
+        controller.performance = performance
+        controller.proxy.performance = performance
+        return controller
     }
 
     #if DEBUG
@@ -197,6 +222,7 @@ final class KidsPlaybackController: ObservableObject, Identifiable {
     #endif
 
     func start() {
+        performance?.mark(.managerStart)
         manager.start()
         tickTask = Task { [weak self] in
             while !Task.isCancelled {
@@ -227,6 +253,7 @@ final class KidsPlaybackController: ObservableObject, Identifiable {
         paused = playerState == .paused
         let playing = playerState == .playing
         if playing && !began {
+            performance?.mark(.playbackBegan)
             began = true
             model?.playbackBegan(self)
         }

@@ -11,6 +11,9 @@ import Foundation
 import JellyfinAPI
 import SwiftUI
 import SwiftVLC
+#if os(tvOS)
+import KidsCore
+#endif
 
 @MainActor
 class VLCMediaPlayerProxy: VideoMediaPlayerProxy,
@@ -23,6 +26,46 @@ class VLCMediaPlayerProxy: VideoMediaPlayerProxy,
     let droppedFrames: PublishedBox<Int> = .init(initialValue: 0)
     let corruptedFrames: PublishedBox<Int> = .init(initialValue: 0)
     let player = Player()
+
+    #if os(tvOS)
+    var performance: KidsPerformanceSpan?
+    private var performanceSampler: Task<Void, Never>?
+    private var firstClockBaseline: Double?
+
+    private func observeStartup() {
+        guard let performance else { return }
+        performanceSampler?.cancel()
+        // Counts are observed at 50 ms intervals. libVLC refreshes some statistics less
+        // often; these are upper bounds, not decoder/GPU callback timestamps.
+        performanceSampler = Task { [weak self] in
+            for _ in 0 ..< 400 {
+                guard !Task.isCancelled, let self else { return }
+                if let stats = self.player.statistics {
+                    let values: [String: Double] = [
+                        "read_bytes": Double(stats.readBytes),
+                        "decoded_video": Double(stats.decodedVideo),
+                        "displayed_pictures": Double(stats.displayedPictures),
+                        "lost_pictures": Double(stats.lostPictures),
+                        "resume_pending": self.pendingStartTime == nil ? 0 : 1
+                    ]
+                    if stats.readBytes > 0 {
+                        performance.once(.firstInput, values: values)
+                    }
+                    if stats.decodedVideo > 0 {
+                        performance.once(.firstDecode, values: values)
+                    }
+                    if stats.displayedPictures > 0 {
+                        performance.once(.firstVideoOutput, values: values)
+                        performance.finish()
+                        return
+                    }
+                }
+                try? await Task.sleep(for: .milliseconds(50))
+            }
+            performance.once(.observationTimeout)
+        }
+    }
+    #endif
 
     private var pendingStartTime: Duration?
     /// A catalog-constrained client can own its queue and completion policy.
@@ -57,6 +100,9 @@ class VLCMediaPlayerProxy: VideoMediaPlayerProxy,
     }
 
     func stop() {
+        #if os(tvOS)
+        performanceSampler?.cancel()
+        #endif
         pendingStartTime = nil
         isBuffering.value = false
         player.stop()
@@ -170,6 +216,9 @@ class VLCMediaPlayerProxy: VideoMediaPlayerProxy,
         guard player.isSeekable else { return false }
 
         self.pendingStartTime = nil
+        #if os(tvOS)
+        performance?.once(.resumeSeek, values: ["seconds": pendingStartTime.seconds])
+        #endif
 
         do {
             try player.seek(to: pendingStartTime)
@@ -207,7 +256,15 @@ class VLCMediaPlayerProxy: VideoMediaPlayerProxy,
                 media.addOption(":freetype-color=\(color)")
             }
 
+            #if os(tvOS)
+            performance?.mark(.vlcOpen, values: ["resume_seconds": startSeconds.seconds])
+            firstClockBaseline = startSeconds.seconds
+            #endif
             try player.play(media)
+            #if os(tvOS)
+            performance?.mark(.vlcOpenReturned)
+            observeStartup()
+            #endif
             setSubtitleConfiguration(subtitleConfiguration)
         } catch {
             pendingStartTime = nil
@@ -253,6 +310,11 @@ extension VLCMediaPlayerProxy {
                             containerState.scrubbedSeconds.value = newSeconds
                         }
 
+                        #if os(tvOS)
+                        if newSeconds.seconds > (proxy.firstClockBaseline ?? 0) + 0.1 {
+                            proxy.performance?.once(.firstClock, values: ["seconds": newSeconds.seconds])
+                        }
+                        #endif
                         manager.seconds = newSeconds
                         if proxy.player.state == .playing {
                             proxy.isBuffering.value = false
@@ -266,6 +328,16 @@ extension VLCMediaPlayerProxy {
                     }
                     .onChange(of: proxy.player.state) { _, state in
                         manager.logger.trace("SwiftVLC state updated: \(state)")
+                        #if os(tvOS)
+                        switch state {
+                        case .opening: proxy.performance?.once(.vlcOpening)
+                        case .buffering: proxy.performance?.once(.vlcBuffering)
+                        case .playing: proxy.performance?.once(.vlcPlaying)
+                        case .error: proxy.performance?.once(.playerError)
+                            proxy.performance?.finish(.failure)
+                        default: break
+                        }
+                        #endif
 
                         switch state {
                         case .buffering, .opening:

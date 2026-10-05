@@ -1,0 +1,811 @@
+{
+  "app_bundle": "com.kridsdale.JellyfinPlayer",
+  "app_commit_before_instrumentation": "5728d209905babe1ce28a35d2a3535c94b2417f2",
+  "limits": [
+    "Fresh process, warm OS/server/RAID caches; no cache purges or disk-seek measurement",
+    "Repeated one verified show (84 episodes) and one verified movie; final measured sources H.264 510x384 and 1920x802",
+    "First video output is a libVLC cumulative counter observed at 50ms cadence; counters can update more slowly",
+    "Artwork and player surface use next CADisplayLink presentation opportunity, not a GPU fence",
+    "Launch browse marker is view appearance; launch origin is SwiftUI App init",
+    "No physical Apple TV result, iCloud transport result, or optimization speedup claimed"
+  ],
+  "measurement_date_local": "2026-10-04",
+  "metrics": {
+    "artwork.artworkPresented.grid": {
+      "excluded_negative": 0,
+      "max_ms": 414.536,
+      "median_ms": 172.124,
+      "min_ms": 119.113,
+      "n": 279,
+      "p95_ms": 229.869
+    },
+    "artwork.artworkPresented.title": {
+      "excluded_negative": 0,
+      "max_ms": 120.741,
+      "median_ms": 69.527,
+      "min_ms": 54.609,
+      "n": 15,
+      "p95_ms": 120.741
+    },
+    "artwork.response.grid": {
+      "excluded_negative": 0,
+      "max_ms": 395.034,
+      "median_ms": 147.483,
+      "min_ms": 102.369,
+      "n": 279,
+      "p95_ms": 202.882
+    },
+    "artwork.responseToPresentation.grid": {
+      "excluded_negative": 0,
+      "max_ms": 53.589,
+      "median_ms": 25.079,
+      "min_ms": 7.739,
+      "n": 279,
+      "p95_ms": 34.615
+    },
+    "launch.browsePresented": {
+      "excluded_negative": 0,
+      "max_ms": 9535.086,
+      "median_ms": 8310.789,
+      "min_ms": 7661.48,
+      "n": 14,
+      "p95_ms": 9535.086
+    },
+    "launch.catalogReady": {
+      "excluded_negative": 0,
+      "max_ms": 9504.354,
+      "median_ms": 8277.285,
+      "min_ms": 7629.511,
+      "n": 14,
+      "p95_ms": 9504.354
+    },
+    "movie.authorization_ms": {
+      "excluded_negative": 0,
+      "max_ms": 242.464,
+      "median_ms": 216.323,
+      "min_ms": 175.346,
+      "n": 6,
+      "p95_ms": 242.464
+    },
+    "movie.controllerPreparation_ms": {
+      "excluded_negative": 0,
+      "max_ms": 178.776,
+      "median_ms": 55.464,
+      "min_ms": 50.361,
+      "n": 6,
+      "p95_ms": 178.776
+    },
+    "movie.firstVideoOutput_ms": {
+      "excluded_negative": 0,
+      "max_ms": 1552.7,
+      "median_ms": 1377.731,
+      "min_ms": 951.479,
+      "n": 6,
+      "p95_ms": 1552.7
+    },
+    "movie.openToVideoOutput_ms": {
+      "excluded_negative": 0,
+      "max_ms": 1109.402,
+      "median_ms": 813.965,
+      "min_ms": 525.952,
+      "n": 6,
+      "p95_ms": 1109.402
+    },
+    "movie.outputToSurface_ms": {
+      "excluded_negative": 0,
+      "max_ms": 947.366,
+      "median_ms": 369.195,
+      "min_ms": 38.143,
+      "n": 6,
+      "p95_ms": 947.366
+    },
+    "movie.playerSurfacePresented_ms": {
+      "excluded_negative": 0,
+      "max_ms": 2282.72,
+      "median_ms": 1507.101,
+      "min_ms": 1331.336,
+      "n": 6,
+      "p95_ms": 2282.72
+    },
+    "movie.provider_ms": {
+      "excluded_negative": 0,
+      "max_ms": 211.724,
+      "median_ms": 167.34,
+      "min_ms": 130.481,
+      "n": 6,
+      "p95_ms": 211.724
+    },
+    "movie.residual_without_selection_ms": {
+      "excluded_negative": 0,
+      "max_ms": 2274.556,
+      "median_ms": 1495.333,
+      "min_ms": 1322.706,
+      "n": 6,
+      "p95_ms": 2274.556
+    },
+    "movie.selection_ms": {
+      "excluded_negative": 0,
+      "max_ms": 12.471,
+      "median_ms": 8.678,
+      "min_ms": 7.25,
+      "n": 6,
+      "p95_ms": 12.471
+    },
+    "movie.vlcOpen_ms": {
+      "excluded_negative": 0,
+      "max_ms": 641.337,
+      "median_ms": 445.234,
+      "min_ms": 365.464,
+      "n": 6,
+      "p95_ms": 641.337
+    },
+    "operation.storeLoad": {
+      "excluded_negative": 0,
+      "max_ms": 17.895,
+      "median_ms": 1.16,
+      "min_ms": 0.522,
+      "n": 54,
+      "p95_ms": 17.013
+    },
+    "operation.storeOpen": {
+      "excluded_negative": 0,
+      "max_ms": 9.462,
+      "median_ms": 7.534,
+      "min_ms": 6.686,
+      "n": 14,
+      "p95_ms": 9.462
+    },
+    "operation.storeSave": {
+      "excluded_negative": 0,
+      "max_ms": 22.774,
+      "median_ms": 1.71,
+      "min_ms": 0.676,
+      "n": 79,
+      "p95_ms": 10.068
+    },
+    "title.actionsReady.shows": {
+      "excluded_negative": 0,
+      "max_ms": 9723.497,
+      "median_ms": 9619.58,
+      "min_ms": 9612.166,
+      "n": 3,
+      "p95_ms": 9723.497
+    },
+    "tv.authorization_ms": {
+      "excluded_negative": 0,
+      "max_ms": 297.606,
+      "median_ms": 248.577,
+      "min_ms": 224.639,
+      "n": 9,
+      "p95_ms": 297.606
+    },
+    "tv.controllerPreparation_ms": {
+      "excluded_negative": 0,
+      "max_ms": 218.267,
+      "median_ms": 64.221,
+      "min_ms": 53.822,
+      "n": 9,
+      "p95_ms": 218.267
+    },
+    "tv.firstVideoOutput_ms": {
+      "excluded_negative": 0,
+      "max_ms": 11438.663,
+      "median_ms": 10897.564,
+      "min_ms": 10292.324,
+      "n": 9,
+      "p95_ms": 11438.663
+    },
+    "tv.openToVideoOutput_ms": {
+      "excluded_negative": 0,
+      "max_ms": 722.165,
+      "median_ms": 416.971,
+      "min_ms": 369.168,
+      "n": 9,
+      "p95_ms": 722.165
+    },
+    "tv.outputToSurface_ms": {
+      "excluded_negative": 0,
+      "max_ms": 548.887,
+      "median_ms": 466.238,
+      "min_ms": 191.378,
+      "n": 9,
+      "p95_ms": 548.887
+    },
+    "tv.playerSurfacePresented_ms": {
+      "excluded_negative": 0,
+      "max_ms": 11865.779,
+      "median_ms": 11331.708,
+      "min_ms": 10831.888,
+      "n": 9,
+      "p95_ms": 11865.779
+    },
+    "tv.provider_ms": {
+      "excluded_negative": 0,
+      "max_ms": 210.865,
+      "median_ms": 156.408,
+      "min_ms": 139.231,
+      "n": 9,
+      "p95_ms": 210.865
+    },
+    "tv.residual_without_selection_ms": {
+      "excluded_negative": 0,
+      "max_ms": 1598.535,
+      "median_ms": 1388.044,
+      "min_ms": 1339.444,
+      "n": 9,
+      "p95_ms": 1598.535
+    },
+    "tv.selection_ms": {
+      "excluded_negative": 0,
+      "max_ms": 10503.624,
+      "median_ms": 9792.355,
+      "min_ms": 9492.444,
+      "n": 9,
+      "p95_ms": 10503.624
+    },
+    "tv.vlcOpen_ms": {
+      "excluded_negative": 0,
+      "max_ms": 10961.92,
+      "median_ms": 10424.725,
+      "min_ms": 9923.156,
+      "n": 9,
+      "p95_ms": 10961.92
+    }
+  },
+  "network": {
+    "ancestors": {
+      "connect_ms": {
+        "excluded_negative": 0,
+        "max_ms": 17.0,
+        "median_ms": 3.0,
+        "min_ms": 1.0,
+        "n": 277,
+        "p95_ms": 9.0
+      },
+      "dns_ms": {
+        "excluded_negative": 0,
+        "max_ms": 137.0,
+        "median_ms": 34.0,
+        "min_ms": 10.0,
+        "n": 277,
+        "p95_ms": 85.0
+      },
+      "fetch_ms": {
+        "excluded_negative": 0,
+        "max_ms": 1591.281,
+        "median_ms": 371.742,
+        "min_ms": 29.39,
+        "n": 9569,
+        "p95_ms": 800.26
+      },
+      "fetch_type": {
+        "median": 1,
+        "n": 9569,
+        "sum": 9569
+      },
+      "pre_request_ms": {
+        "excluded_negative": 0,
+        "max_ms": 1473.902,
+        "median_ms": 118.146,
+        "min_ms": 0.362,
+        "n": 9569,
+        "p95_ms": 510.606
+      },
+      "received_bytes": {
+        "median": 1313,
+        "n": 9569,
+        "sum": 17250859
+      },
+      "redirects": {
+        "median": 0,
+        "n": 9569,
+        "sum": 0
+      },
+      "request_ms": {
+        "excluded_negative": 0,
+        "max_ms": 56.785,
+        "median_ms": 0.047,
+        "min_ms": 0.009,
+        "n": 9569,
+        "p95_ms": 0.546
+      },
+      "reused": {
+        "median": 1,
+        "n": 9569,
+        "sum": 9292
+      },
+      "task_ms": {
+        "excluded_negative": 0,
+        "max_ms": 1591.697,
+        "median_ms": 372.621,
+        "min_ms": 29.648,
+        "n": 9569,
+        "p95_ms": 800.831
+      },
+      "transfer_ms": {
+        "excluded_negative": 0,
+        "max_ms": 142.085,
+        "median_ms": 0.357,
+        "min_ms": 0.057,
+        "n": 9569,
+        "p95_ms": 1.348
+      },
+      "ttfb_ms": {
+        "excluded_negative": 0,
+        "max_ms": 1551.089,
+        "median_ms": 240.932,
+        "min_ms": 0.141,
+        "n": 9569,
+        "p95_ms": 397.124
+      }
+    },
+    "artwork": {
+      "connect_ms": {
+        "excluded_negative": 0,
+        "max_ms": 68.0,
+        "median_ms": 3.0,
+        "min_ms": 1.0,
+        "n": 294,
+        "p95_ms": 58.0
+      },
+      "dns_ms": {
+        "excluded_negative": 0,
+        "max_ms": 77.0,
+        "median_ms": 34.0,
+        "min_ms": 8.0,
+        "n": 294,
+        "p95_ms": 67.0
+      },
+      "fetch_ms": {
+        "excluded_negative": 0,
+        "max_ms": 392.879,
+        "median_ms": 143.515,
+        "min_ms": 33.643,
+        "n": 294,
+        "p95_ms": 196.973
+      },
+      "fetch_type": {
+        "median": 1,
+        "n": 387,
+        "sum": 387
+      },
+      "pre_request_ms": {
+        "excluded_negative": 0,
+        "max_ms": 115.729,
+        "median_ms": 89.652,
+        "min_ms": 12.054,
+        "n": 294,
+        "p95_ms": 103.891
+      },
+      "received_bytes": {
+        "median": 111776,
+        "n": 387,
+        "sum": 62060175
+      },
+      "redirects": {
+        "median": 0,
+        "n": 387,
+        "sum": 0
+      },
+      "request_ms": {
+        "excluded_negative": 0,
+        "max_ms": 0.078,
+        "median_ms": 0.021,
+        "min_ms": 0.01,
+        "n": 294,
+        "p95_ms": 0.051
+      },
+      "reused": {
+        "median": 0,
+        "n": 387,
+        "sum": 0
+      },
+      "task_ms": {
+        "excluded_negative": 0,
+        "max_ms": 394.134,
+        "median_ms": 135.888,
+        "min_ms": 20.977,
+        "n": 387,
+        "p95_ms": 181.365
+      },
+      "transfer_ms": {
+        "excluded_negative": 0,
+        "max_ms": 127.683,
+        "median_ms": 1.368,
+        "min_ms": 0.12,
+        "n": 294,
+        "p95_ms": 10.773
+      },
+      "ttfb_ms": {
+        "excluded_negative": 0,
+        "max_ms": 178.11,
+        "median_ms": 51.066,
+        "min_ms": 15.371,
+        "n": 294,
+        "p95_ms": 98.272
+      }
+    },
+    "bitrate": {
+      "fetch_ms": {
+        "excluded_negative": 0,
+        "max_ms": 53.984,
+        "median_ms": 43.341,
+        "min_ms": 35.284,
+        "n": 16,
+        "p95_ms": 53.984
+      },
+      "fetch_type": {
+        "median": 1.0,
+        "n": 16,
+        "sum": 16
+      },
+      "pre_request_ms": {
+        "excluded_negative": 0,
+        "max_ms": 1.085,
+        "median_ms": 0.486,
+        "min_ms": 0.357,
+        "n": 16,
+        "p95_ms": 1.085
+      },
+      "received_bytes": {
+        "median": 8388608.0,
+        "n": 16,
+        "sum": 134217728
+      },
+      "redirects": {
+        "median": 0.0,
+        "n": 16,
+        "sum": 0
+      },
+      "request_ms": {
+        "excluded_negative": 0,
+        "max_ms": 0.059,
+        "median_ms": 0.051,
+        "min_ms": 0.043,
+        "n": 16,
+        "p95_ms": 0.059
+      },
+      "reused": {
+        "median": 1.0,
+        "n": 16,
+        "sum": 16
+      },
+      "task_ms": {
+        "excluded_negative": 0,
+        "max_ms": 56.32,
+        "median_ms": 45.281,
+        "min_ms": 37.495,
+        "n": 16,
+        "p95_ms": 56.32
+      },
+      "transfer_ms": {
+        "excluded_negative": 0,
+        "max_ms": 15.662,
+        "median_ms": 11.675,
+        "min_ms": 7.455,
+        "n": 16,
+        "p95_ms": 15.662
+      },
+      "ttfb_ms": {
+        "excluded_negative": 0,
+        "max_ms": 42.687,
+        "median_ms": 31.724,
+        "min_ms": 26.325,
+        "n": 16,
+        "p95_ms": 42.687
+      }
+    },
+    "itemDetails": {
+      "connect_ms": {
+        "excluded_negative": 0,
+        "max_ms": 3.0,
+        "median_ms": 3.0,
+        "min_ms": 2.0,
+        "n": 3,
+        "p95_ms": 3.0
+      },
+      "dns_ms": {
+        "excluded_negative": 0,
+        "max_ms": 17.0,
+        "median_ms": 15.0,
+        "min_ms": 10.0,
+        "n": 3,
+        "p95_ms": 17.0
+      },
+      "fetch_ms": {
+        "excluded_negative": 0,
+        "max_ms": 78.06,
+        "median_ms": 35.239,
+        "min_ms": 0.159,
+        "n": 60,
+        "p95_ms": 62.996
+      },
+      "fetch_type": {
+        "median": 1.0,
+        "n": 60,
+        "sum": 116
+      },
+      "pre_request_ms": {
+        "excluded_negative": 0,
+        "max_ms": 28.359,
+        "median_ms": 0.783,
+        "min_ms": 0.007,
+        "n": 60,
+        "p95_ms": 16.472
+      },
+      "received_bytes": {
+        "median": 2589.0,
+        "n": 60,
+        "sum": 108080
+      },
+      "redirects": {
+        "median": 0.0,
+        "n": 60,
+        "sum": 0
+      },
+      "request_ms": {
+        "excluded_negative": 0,
+        "max_ms": 0.222,
+        "median_ms": 0.043,
+        "min_ms": 0,
+        "n": 60,
+        "p95_ms": 0.089
+      },
+      "reused": {
+        "median": 0.0,
+        "n": 60,
+        "sum": 29
+      },
+      "task_ms": {
+        "excluded_negative": 0,
+        "max_ms": 79.547,
+        "median_ms": 48.836,
+        "min_ms": 27.565,
+        "n": 60,
+        "p95_ms": 74.682
+      },
+      "transfer_ms": {
+        "excluded_negative": 0,
+        "max_ms": 1.169,
+        "median_ms": 0.157,
+        "min_ms": 0,
+        "n": 60,
+        "p95_ms": 0.696
+      },
+      "ttfb_ms": {
+        "excluded_negative": 0,
+        "max_ms": 61.695,
+        "median_ms": 33.058,
+        "min_ms": 0.149,
+        "n": 60,
+        "p95_ms": 51.77
+      }
+    },
+    "items": {
+      "connect_ms": {
+        "excluded_negative": 0,
+        "max_ms": 16.0,
+        "median_ms": 2.0,
+        "min_ms": 1.0,
+        "n": 54,
+        "p95_ms": 3.0
+      },
+      "dns_ms": {
+        "excluded_negative": 0,
+        "max_ms": 36.0,
+        "median_ms": 13.0,
+        "min_ms": 8.0,
+        "n": 54,
+        "p95_ms": 28.0
+      },
+      "fetch_ms": {
+        "excluded_negative": 0,
+        "max_ms": 1199.418,
+        "median_ms": 234.97,
+        "min_ms": 22.474,
+        "n": 423,
+        "p95_ms": 446.766
+      },
+      "fetch_type": {
+        "median": 1,
+        "n": 423,
+        "sum": 423
+      },
+      "pre_request_ms": {
+        "excluded_negative": 0,
+        "max_ms": 44.548,
+        "median_ms": 1.531,
+        "min_ms": 0.257,
+        "n": 423,
+        "p95_ms": 31.58
+      },
+      "received_bytes": {
+        "median": 43011,
+        "n": 423,
+        "sum": 18404990
+      },
+      "redirects": {
+        "median": 0,
+        "n": 423,
+        "sum": 0
+      },
+      "request_ms": {
+        "excluded_negative": 0,
+        "max_ms": 0.285,
+        "median_ms": 0.069,
+        "min_ms": 0.012,
+        "n": 423,
+        "p95_ms": 0.149
+      },
+      "reused": {
+        "median": 1,
+        "n": 423,
+        "sum": 369
+      },
+      "task_ms": {
+        "excluded_negative": 0,
+        "max_ms": 1200.273,
+        "median_ms": 235.306,
+        "min_ms": 22.719,
+        "n": 423,
+        "p95_ms": 447.27
+      },
+      "transfer_ms": {
+        "excluded_negative": 0,
+        "max_ms": 107.273,
+        "median_ms": 7.18,
+        "min_ms": 0.102,
+        "n": 423,
+        "p95_ms": 17.491
+      },
+      "ttfb_ms": {
+        "excluded_negative": 0,
+        "max_ms": 1192.658,
+        "median_ms": 218.815,
+        "min_ms": 21.527,
+        "n": 423,
+        "p95_ms": 408.668
+      }
+    },
+    "playbackInfo": {
+      "fetch_ms": {
+        "excluded_negative": 0,
+        "max_ms": 49.343,
+        "median_ms": 37.176,
+        "min_ms": 0.152,
+        "n": 28,
+        "p95_ms": 49.179
+      },
+      "fetch_type": {
+        "median": 1.0,
+        "n": 28,
+        "sum": 52
+      },
+      "pre_request_ms": {
+        "excluded_negative": 0,
+        "max_ms": 1.584,
+        "median_ms": 0.445,
+        "min_ms": 0.009,
+        "n": 28,
+        "p95_ms": 1.533
+      },
+      "received_bytes": {
+        "median": 1411.0,
+        "n": 28,
+        "sum": 25349
+      },
+      "redirects": {
+        "median": 0.0,
+        "n": 28,
+        "sum": 0
+      },
+      "request_ms": {
+        "excluded_negative": 0,
+        "max_ms": 0.25,
+        "median_ms": 0.127,
+        "min_ms": 0,
+        "n": 28,
+        "p95_ms": 0.249
+      },
+      "reused": {
+        "median": 1.0,
+        "n": 28,
+        "sum": 16
+      },
+      "task_ms": {
+        "excluded_negative": 0,
+        "max_ms": 49.786,
+        "median_ms": 43.64,
+        "min_ms": 30.855,
+        "n": 28,
+        "p95_ms": 49.499
+      },
+      "transfer_ms": {
+        "excluded_negative": 0,
+        "max_ms": 0.348,
+        "median_ms": 0.187,
+        "min_ms": 0,
+        "n": 28,
+        "p95_ms": 0.315
+      },
+      "ttfb_ms": {
+        "excluded_negative": 0,
+        "max_ms": 48.408,
+        "median_ms": 35.492,
+        "min_ms": 0.14,
+        "n": 28,
+        "p95_ms": 48.174
+      }
+    }
+  },
+  "request_shape": {
+    "launch": {
+      "ancestor_requests_per_refresh": 158,
+      "http_requests_per_refresh": 163,
+      "overlapping_full_refreshes_in_final_tv_launch": 3
+    },
+    "movie": {
+      "ancestor_requests": 1,
+      "instrumented_http_requests_per_start": 6
+    },
+    "tv": {
+      "ancestor_requests": 86,
+      "eligible_episodes": 84,
+      "episode_pages": 22,
+      "instrumented_http_requests_per_start": 117,
+      "items_requests": 24
+    }
+  },
+  "samples": {
+    "events": 66292,
+    "excluded_movie_start_without_clock_or_video_output": 1,
+    "grid_artwork_presentations": 279,
+    "malformed_lines": 0,
+    "movie_starts": 6,
+    "processes": 14,
+    "rejected_show_titles": 1,
+    "tv_starts": 9
+  },
+  "schema_version": 1,
+  "scope": "Release Apple TV simulator on Mac Studio; actual restricted Jellyfin LAN account; repeated representative H.264 content; no performance optimizations",
+  "server_observer": {
+    "cadence_seconds": 3,
+    "limits": "Brief sessions can be missed; sampled states are not a count of starts; host disk/network counters include other processes; second captured movie state was the failed renderer case.",
+    "provenance": "Reported by the connected server chat Ongoing Maintenance; raw traces retained on server internal disk",
+    "sampled_transcoding": 0,
+    "windows": [
+      {
+        "cpu_at_directplay_percent_one_core": 2.919,
+        "cpu_max_percent_one_core": 286.464,
+        "cpu_median_percent_one_core": 1.143,
+        "cpu_p95_percent_one_core": 270.709,
+        "directplay_sample_unix_ms": 1791161171996,
+        "end_unix_ms": 1791161543997,
+        "errors": 0,
+        "samples": 200,
+        "start_unix_ms": 1791160943984
+      },
+      {
+        "cpu_at_directplay_percent_one_core": 2.674,
+        "cpu_max_percent_one_core": 271.88,
+        "cpu_median_percent_one_core": 0.909,
+        "cpu_p95_percent_one_core": 268.743,
+        "directplay_sample_unix_ms": 1791161734286,
+        "end_unix_ms": 1791161944286,
+        "errors": 0,
+        "samples": 120,
+        "start_unix_ms": 1791161584274
+      }
+    ]
+  },
+  "validation": {
+    "analysis_tests_passed": 5,
+    "enabled_http_tests_passed": 8,
+    "final_targeted_live_tests_passed": 2,
+    "fresh_launch_artwork_sweeps_passed": 8,
+    "full_client_state_restored_and_verified": true,
+    "legacy_json_unchanged": true,
+    "native_tests_passed": 54,
+    "raid_media_modified": false
+  }
+}

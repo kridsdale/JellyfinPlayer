@@ -11,6 +11,9 @@ import FactoryKit
 import Foundation
 import JellyfinAPI
 import Logging
+#if os(tvOS)
+import KidsCore
+#endif
 
 // TODO: build report of determined values for playback information
 //       - transcode, video stream, path
@@ -41,7 +44,17 @@ extension MediaPlayerItem {
             throw ErrorMessage(L10n.unknownError)
         }
 
+        #if os(tvOS)
+        let metadataTrace = KidsPerformance.begin(.metadata, endpoint: .itemDetails)
+        defer { metadataTrace?.finish(Task.isCancelled ? .cancelled : .failure) }
+        var item = try await initialItem.getFullItem(
+            userSession: userSession,
+            taskDelegate: metadataTrace.map(KidsPerformanceTaskDelegate.init(span:))
+        )
+        metadataTrace?.finish()
+        #else
         var item = try await initialItem.getFullItem(userSession: userSession)
+        #endif
         guard item.id == itemID else { throw ErrorMessage("Playback item identity changed") }
 
         if let modifyItem {
@@ -64,7 +77,14 @@ extension MediaPlayerItem {
             throw ErrorMessage(L10n.unknownError)
         }
 
+        #if os(tvOS)
+        let bitrateTrace = KidsPerformance.begin(.bitrate, endpoint: .bitrate, values: ["automatic": requestedBitrate == .auto ? 1 : 0])
+        defer { bitrateTrace?.finish(Task.isCancelled ? .cancelled : .failure) }
+        #endif
         let maxBitrate = try await MediaPlayerManager.getMaxBitrate(for: requestedBitrate)
+        #if os(tvOS)
+        bitrateTrace?.finish(values: ["bits_per_second": Double(maxBitrate)])
+        #endif
 
         let deviceProfile = DeviceProfile.build(
             for: videoPlayerType,
@@ -90,7 +110,14 @@ extension MediaPlayerItem {
             playbackInfo
         )
 
+        #if os(tvOS)
+        let infoTrace = KidsPerformance.begin(.playbackInfo, endpoint: .playbackInfo)
+        defer { infoTrace?.finish(Task.isCancelled ? .cancelled : .failure) }
+        let response = try await userSession.client.send(request, delegate: infoTrace.map(KidsPerformanceTaskDelegate.init(span:)))
+        infoTrace?.finish()
+        #else
         let response = try await userSession.client.send(request)
+        #endif
 
         let mediaSource: MediaSourceInfo? = {
 

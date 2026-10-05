@@ -156,6 +156,9 @@ struct KidsArtwork: View {
     var model: KidsAppModel
     let item: KidsItem
     var wide = false
+    var role: KidsPerformanceVariant = .grid
+    @State
+    private var performance: KidsPerformanceSpan?
     @State
     private var image: UIImage?
     private var scope: String {
@@ -172,6 +175,12 @@ struct KidsArtwork: View {
             .overlay {
                 if let image {
                     Image(uiImage: image).resizable().scaledToFill()
+                        .overlay {
+                            if let performance {
+                                KidsPresentationProbe(span: performance, phase: .artworkPresented)
+                                    .allowsHitTesting(false).accessibilityHidden(true)
+                            }
+                        }
                 } else {
                     Image(systemName: item.kind == .movie ? "film.fill" : "tv.fill").resizable().scaledToFit().padding(55)
                         .foregroundStyle(.white.opacity(0.7))
@@ -182,22 +191,50 @@ struct KidsArtwork: View {
             .accessibilityHidden(true)
             .task(id: scope) {
                 image = nil
+                let trace = KidsPerformance.recorder.begin(
+                    .artwork,
+                    variant: role,
+                    endpoint: .artwork,
+                    parent: role == .grid ? model.catalogPerformance : model.titlePerformance
+                )
+                performance = trace
                 guard let api = model.api, let binding = model.binding,
-                      let request = try? api.imageRequest(for: item, binding: binding) else { return }
+                      let request = try? api.imageRequest(for: item, binding: binding)
+                else { trace?.finish(.failure)
+                    return
+                }
                 let config = URLSessionConfiguration.ephemeral
                 config.urlCache = nil
                 do {
-                    let (data, response) = try await URLSession(configuration: config).data(for: request)
-                    guard !Task.isCancelled, model.binding == binding else { return }
+                    let delegate = trace.map(KidsPerformanceTaskDelegate.init(span:))
+                    let (data, response) = try await URLSession(configuration: config).data(for: request, delegate: delegate)
+                    trace?.mark(
+                        .response,
+                        values: ["bytes": Double(data.count), "status": Double((response as? HTTPURLResponse)?.statusCode ?? 0)]
+                    )
+                    guard !Task.isCancelled, model.binding == binding else { trace?.finish(.cancelled)
+                        return
+                    }
                     if let status = (response as? HTTPURLResponse)?.statusCode,
                        status == 401 || status == 403
                     {
+                        trace?.finish(.failure)
                         model.show(KidsAPIError.authentication)
                         return
                     }
-                    guard (response as? HTTPURLResponse)?.statusCode == 200 else { return }
+                    guard (response as? HTTPURLResponse)?.statusCode == 200 else { trace?.finish(.failure)
+                        return
+                    }
+                    let decode = KidsPerformance.recorder.begin(.decode, endpoint: .artwork, parent: trace)
                     image = UIImage(data: data)
-                } catch { /* Missing artwork has an explicit, accessible placeholder. */ }
+                    decode?.finish(image == nil ? .failure : .success)
+                    trace?.mark(
+                        .imageConstructed,
+                        values: ["width": Double(image?.size.width ?? 0), "height": Double(image?.size.height ?? 0)]
+                    )
+                    trace?.mark(.imagePublished)
+                    trace?.finish(image == nil ? .failure : .success)
+                } catch { trace?.finish(Task.isCancelled ? .cancelled : .failure) /* Missing artwork retains its placeholder. */ }
             }
     }
 }
@@ -231,6 +268,9 @@ struct KidsBrowseView: View {
                         LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 32), count: 4), spacing: 40) {
                             ForEach(items) { item in
                                 Button {
+                                    let trace = KidsPerformance.begin(.title, variant: item.kind == .movie ? .movies : .shows)
+                                    model.titlePerformance = trace
+                                    trace?.mark(.titleSelected)
                                     model.lastFocus[model.category] = item.id
                                     if item.kind == .series {
                                         model.selectedShow = item
@@ -270,7 +310,13 @@ struct KidsBrowseView: View {
             }
         }
         .padding(.horizontal, 70).padding(.top, 45).background(kidsBackground)
+        .overlay {
+            if let trace = model.catalogPerformance {
+                KidsPresentationProbe(span: trace, phase: .browsePresented).allowsHitTesting(false).accessibilityHidden(true)
+            }
+        }
         .onAppear {
+            KidsPerformance.launch?.once(.browsePresented)
             focused = model.lastFocus[model.category] ?? model.catalog[model.category]?.first?.id
             model.enterBrowse()
         }
@@ -307,7 +353,7 @@ struct KidsTitleView: View {
     var body: some View {
         VStack(spacing: 30) {
             HStack(alignment: .center, spacing: 75) {
-                KidsArtwork(model: model, item: item, wide: item.kind != .movie).frame(width: item.kind == .movie ? 400 : 680)
+                KidsArtwork(model: model, item: item, wide: item.kind != .movie, role: .title).frame(width: item.kind == .movie ? 400 : 680)
                 VStack(alignment: .leading, spacing: 40) {
                     Text(item.name).font(.system(size: 54, weight: .bold)).lineLimit(3)
                     if loading {
@@ -398,6 +444,10 @@ struct KidsTitleView: View {
     }
 
     private func load() async {
+        await KidsPerformance.$current.withValue(model.titlePerformance) { await loadMeasured() }
+    }
+
+    private func loadMeasured() async {
         loading = true
         error = nil
         do {
@@ -405,8 +455,11 @@ struct KidsTitleView: View {
                 episodes = try await model.episodes(for: item)
             }
             loading = false
+            model.titlePerformance?.mark(.actionsReady)
+            model.titlePerformance?.finish()
             focused = item.kind == .series ? "next" : "play"
-        } catch { loading = false
+        } catch { model.titlePerformance?.finish(error: error)
+            loading = false
             self.error = "A grown-up can check this show."
         }
     }
@@ -442,12 +495,19 @@ struct KidsPlayerView: View {
                 Button { playback.reveal() } label: { Color.clear.contentShape(Rectangle()) }
                     .buttonStyle(KidsPlaybackSurfaceStyle()).focusEffectDisabled()
                     .accessibilityLabel("Playback controls").accessibilityIdentifier("kids.player.surface")
+                    .overlay {
+                        if let trace = playback.performance {
+                            KidsPresentationProbe(span: trace, phase: .playerSurfacePresented).allowsHitTesting(false)
+                                .accessibilityHidden(true)
+                        }
+                    }
                     .onPlayPauseCommand { playback.toggle() }
             }
             if playback.showCountdown {
                 VStack(spacing: 35) {
                     if let next = playback.nextEpisode {
-                        KidsArtwork(model: model, item: next.imageTag == nil ? playback.title : next, wide: true).frame(width: 500)
+                        KidsArtwork(model: model, item: next.imageTag == nil ? playback.title : next, wide: true, role: .countdown)
+                            .frame(width: 500)
                     }
                     Text("Next episode in \(playback.countdown)").font(.largeTitle.bold())
                     Button("Stop", systemImage: "stop.fill") { Task { await model.stopPlayback() } }

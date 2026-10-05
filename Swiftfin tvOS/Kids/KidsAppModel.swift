@@ -59,6 +59,8 @@ final class KidsAppModel: ObservableObject {
     var lastPlayback: Date?
     @Published
     var cloudSyncStatus = "Playback is saved on this Apple TV."
+    var catalogPerformance: KidsPerformanceSpan?
+    var titlePerformance: KidsPerformanceSpan?
     private var persistence: KidsStateRepository?
     private var cloudActive = false
     private var syncBaseline: KidsSyncSnapshot?
@@ -120,6 +122,8 @@ final class KidsAppModel: ObservableObject {
         if let persistence {
             return persistence
         }
+        let trace = KidsPerformance.begin(.storeOpen)
+        defer { trace?.finish(Task.isCancelled ? .cancelled : .failure) }
         let defaults = UserDefaults.standard
         let writerKey = "kids.sync.installation.v1"
         let writerID = defaults.string(forKey: writerKey) ?? UUID().uuidString
@@ -141,6 +145,7 @@ final class KidsAppModel: ObservableObject {
         }
         let store = KidsStateRepository(container: container, writerID: writerID)
         persistence = store
+        trace?.finish()
         return store
     }
 
@@ -213,6 +218,13 @@ final class KidsAppModel: ObservableObject {
 
     func refresh() async {
         guard !isPreview else { return }
+        let trace = KidsPerformance.recorder.begin(.catalog, parent: KidsPerformance.launch)
+        catalogPerformance = trace
+        let outcome = await KidsPerformance.$current.withValue(trace) { await refreshMeasured() }
+        trace?.finish(outcome)
+    }
+
+    private func refreshMeasured() async -> KidsPerformanceOutcome {
         // Re-inserting the browse view after this refresh must not start another refresh loop.
         skipNextBrowseRefresh = true
         let generation = UUID()
@@ -235,7 +247,7 @@ final class KidsAppModel: ObservableObject {
             loading = false
             requiresParent = true
             problem = "A grown-up needs to set up your shows."
-            return
+            return .failure
         }
         do {
             var expected = stored
@@ -250,19 +262,26 @@ final class KidsAppModel: ObservableObject {
             }
             #endif
             try await api.validate(expected)
+            let load = KidsPerformance.begin(.storeLoad)
+            defer { load?.finish(Task.isCancelled ? .cancelled : .failure) }
             let restored = try repository().load(binding: stored, legacyURL: stateURL)
+            load?.finish()
             async let shows = api.catalog(.shows, binding: stored)
             async let movies = api.catalog(.movies, binding: stored)
             let result = try await (shows, movies)
-            guard generation == refreshGeneration, !Task.isCancelled else { return }
+            guard generation == refreshGeneration, !Task.isCancelled else { return .cancelled }
             syncBaseline = restored
             state = restored.state
             catalog = [.shows: result.0, .movies: result.1]
+            KidsPerformance.current?.mark(.catalogReady, values: ["shows": Double(result.0.count), "movies": Double(result.1.count)])
+            KidsPerformance.launch?.once(.catalogReady)
             requiresParent = !hasParentPIN
             loading = false
-        } catch { guard generation == refreshGeneration else { return }
+            return requiresParent ? .failure : .success
+        } catch { guard generation == refreshGeneration else { return .cancelled }
             show(error)
             loading = false
+            return Task.isCancelled || error is CancellationError ? .cancelled : .failure
         }
     }
 
@@ -324,6 +343,8 @@ final class KidsAppModel: ObservableObject {
 
     func persist(intent: KidsSyncWriteIntent = .edit) {
         guard !isPreview, let state else { return }
+        let trace = KidsPerformance.begin(.storeSave)
+        defer { trace?.finish(Task.isCancelled ? .cancelled : .failure) }
         do {
             let store = try repository()
             let baseline = try syncBaseline ?? store.load(binding: state.binding, legacyURL: stateURL)
@@ -342,6 +363,7 @@ final class KidsAppModel: ObservableObject {
                 cancelPendingStart()
                 Task { await stopPlayback(endSession: false) }
             }
+            trace?.finish()
         } catch { problem = "Playback progress could not be saved. A grown-up can check storage." }
     }
 
@@ -588,6 +610,8 @@ final class KidsAppModel: ObservableObject {
         continuing: Bool = false
     ) {
         guard startTask == nil, activePlayback == nil, let api, let binding else { return }
+        let variant = KidsPerformanceVariant(rawValue: mode.rawValue) ?? .unknown
+        let trace = KidsPerformance.begin(.playback, variant: variant, values: ["retry": retryItem == nil ? 0 : 1])
         starting = true
         sessionFinished = false
         missingItemReplacement = nil
@@ -608,74 +632,89 @@ final class KidsAppModel: ObservableObject {
                     self.starting = false
                 }
             }
-            do {
-                var item: KidsItem
-                var position = 0.0
-                var allEpisodes: [KidsItem] = []
-                if title.kind == .series {
-                    selectedShow = title
-                    allEpisodes = try await episodes(for: title)
-                    if let retryItem {
-                        guard let current = allEpisodes.first(where: { $0.id == retryItem.id }) else { throw KidsContractError.unavailable }
-                        item = current
-                        position = retryPosition
-                    } else if let explicitEpisode {
-                        guard let current = allEpisodes.first(where: { $0.id == explicitEpisode.id })
-                        else { throw KidsContractError.denied }
-                        item = current
-                    } else if mode == .shuffle, let retained = state?.session, retained.showID == title.id, retained.mode == .shuffle,
-                              let id = retained.itemID
-                    {
-                        guard let current = allEpisodes.first(where: { $0.id == id }) else { throw KidsContractError.missingCursor }
-                        item = current
-                        position = retained.seconds
-                    } else if mode == .shuffle {
-                        guard let draw = try state?.nextShuffle(showID: title.id, episodes: allEpisodes)
-                        else { throw KidsContractError.unavailable }
-                        item = draw
+            await KidsPerformance.$current.withValue(trace) { [self] in
+                do {
+                    var item: KidsItem
+                    var position = 0.0
+                    var allEpisodes: [KidsItem] = []
+                    if title.kind == .series {
+                        self.selectedShow = title
+                        allEpisodes = try await self.episodes(for: title)
+                        if let retryItem {
+                            guard let current = allEpisodes.first(where: { $0.id == retryItem.id })
+                            else { throw KidsContractError.unavailable }
+                            item = current
+                            position = retryPosition
+                        } else if let explicitEpisode {
+                            guard let current = allEpisodes.first(where: { $0.id == explicitEpisode.id })
+                            else { throw KidsContractError.denied }
+                            item = current
+                        } else if mode == .shuffle, let retained = self.state?.session, retained.showID == title.id,
+                                  retained.mode == .shuffle,
+                                  let id = retained.itemID
+                        {
+                            guard let current = allEpisodes.first(where: { $0.id == id }) else { throw KidsContractError.missingCursor }
+                            item = current
+                            position = retained.seconds
+                        } else if mode == .shuffle {
+                            guard let draw = try self.state?.nextShuffle(showID: title.id, episodes: allEpisodes)
+                            else { throw KidsContractError.unavailable }
+                            item = draw
+                        } else {
+                            guard let next = try self.state?.orderedNext(showID: title.id, episodes: allEpisodes)
+                            else { throw KidsContractError.unavailable }
+                            item = next.0
+                            position = next.1
+                        }
                     } else {
-                        guard let next = try state?.orderedNext(showID: title.id, episodes: allEpisodes)
-                        else { throw KidsContractError.unavailable }
-                        item = next.0
-                        position = next.1
+                        item = title
+                        if retryItem != nil {
+                            position = retryPosition
+                        } else if let progress = self.state?.movies[item.id], !progress.complete {
+                            position = progress.seconds
+                        }
                     }
-                } else {
-                    item = title
-                    if retryItem != nil {
-                        position = retryPosition
-                    } else if let progress = state?.movies[item.id], !progress.complete {
-                        position = progress.seconds
+                    trace?.mark(.itemSelected, values: ["resume_seconds": position, "episodes": Double(allEpisodes.count)])
+                    let verified = try await api.authorize(itemID: item.id, expectedKind: item.kind, binding: binding)
+                    trace?.mark(.authorized)
+                    guard !Task.isCancelled, self.binding == binding else { trace?.finish(.cancelled)
+                        return
                     }
-                }
-                let verified = try await api.authorize(itemID: item.id, expectedKind: item.kind, binding: binding)
-                guard !Task.isCancelled, self.binding == binding else { return }
-                if verified.kind == .episode {
-                    guard verified.seriesID == title.id else { throw KidsContractError.denied }
-                }
-                let controller = try await KidsPlaybackController.prepare(
-                    item: verified,
-                    title: title,
-                    mode: mode,
-                    position: position,
-                    episodes: allEpisodes,
-                    model: self
-                )
-                guard !Task.isCancelled, self.binding == binding, startGeneration == generation else { await controller.stop()
-                    return
-                }
-                activePlayback = controller
-                controller.start()
-            } catch {
-                guard !Task.isCancelled, self.startGeneration == generation, self.binding == binding else { return }
-                if (error as? KidsContractError) ==
-                    .missingCursor
-                {
-                    missingItemReplacement = try? state?.missingSuccessor(showID: title.id, episodes: episodeCache[title.id] ?? [])
-                    problem = missingItemReplacement == nil ? "This episode is missing. A grown-up can choose another." : "This episode is missing. You can choose the next picture."
-                } else if (error as? KidsContractError) == .ambiguousEpisodes {
-                    problem = "A grown-up needs to check episode numbering."
-                } else {
-                    show(error)
+                    if verified.kind == .episode {
+                        guard verified.seriesID == title.id else { throw KidsContractError.denied }
+                    }
+                    let controller = try await KidsPlaybackController.prepare(
+                        item: verified,
+                        title: title,
+                        mode: mode,
+                        position: position,
+                        episodes: allEpisodes,
+                        model: self,
+                        performance: trace
+                    )
+                    guard !Task.isCancelled, self.binding == binding, self.startGeneration == generation else { await controller.stop()
+                        trace?.finish(.cancelled)
+                        return
+                    }
+                    trace?.mark(.controllerReady)
+                    self.activePlayback = controller
+                    controller.start()
+                } catch {
+                    trace?.finish(error: error)
+                    guard !Task.isCancelled, self.startGeneration == generation, self.binding == binding else { return }
+                    if (error as? KidsContractError) ==
+                        .missingCursor
+                    {
+                        self.missingItemReplacement = try? self.state?.missingSuccessor(
+                            showID: title.id,
+                            episodes: self.episodeCache[title.id] ?? []
+                        )
+                        self.problem = self.missingItemReplacement == nil ? "This episode is missing. A grown-up can choose another." : "This episode is missing. You can choose the next picture."
+                    } else if (error as? KidsContractError) == .ambiguousEpisodes {
+                        self.problem = "A grown-up needs to check episode numbering."
+                    } else {
+                        self.show(error)
+                    }
                 }
             }
         }

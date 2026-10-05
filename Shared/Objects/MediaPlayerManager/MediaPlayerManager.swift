@@ -11,6 +11,9 @@ import Defaults
 import FactoryKit
 import Foundation
 import JellyfinAPI
+#if os(tvOS)
+import KidsCore
+#endif
 
 // TODO: proper error catching
 // TODO: be a UserSessionService?
@@ -453,7 +456,17 @@ final class MediaPlayerManager: ViewModel {
         }
 
         let testStartTime = Date()
+        #if os(tvOS)
+        let transfer = KidsPerformance.begin(.http, endpoint: .bitrate, values: ["bytes": Double(testSize.rawValue)])
+        defer { transfer?.finish(Task.isCancelled ? .cancelled : .failure) }
+        let _ = try await userSession.client.send(
+            Paths.getBitrateTestBytes(size: testSize.rawValue),
+            delegate: transfer.map(KidsPerformanceTaskDelegate.init(span:))
+        )
+        transfer?.finish()
+        #else
         let _ = try await userSession.client.send(Paths.getBitrateTestBytes(size: testSize.rawValue))
+        #endif
         let testDuration = Date().timeIntervalSince(testStartTime)
         let testSizeBits = Double(testSize.rawValue * 8)
         let testBitrate = testSizeBits / testDuration

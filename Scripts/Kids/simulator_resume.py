@@ -85,8 +85,9 @@ def main():
             import_file = Path(temporary) / 'state.json'
             bind_file.write_text(json.dumps(binding))
             import_file.write_bytes(data)
+            mode = 'restore' if args.action == 'restore' else 'import'
             subprocess.run(['swift', 'run', '--package-path', str(REPO / 'KidsCore'), 'KidsStateTool',
-                            'import', str(store_path), str(bind_file), str(import_file)], check=True)
+                            mode, str(store_path), str(bind_file), str(import_file)], check=True)
     if state.get('version') != 1 or len(set(state['binding'].values())) != 4:
         raise ValueError('Unexpected state schema or identity')
     if args.action == 'inspect':

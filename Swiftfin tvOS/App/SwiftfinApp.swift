@@ -6,6 +6,7 @@
 // Copyright (c) 2026 Jellyfin & Jellyfin Contributors
 //
 
+import KidsCore
 import SwiftUI
 
 @main
@@ -15,6 +16,7 @@ struct SwiftfinApp: App {
     private var cloudDelegate
 
     init() {
+        _ = KidsPerformance.launch
         Self.configure()
 
         UINavigationBar.appearance().titleTextAttributes = [.foregroundColor: UIColor.label]

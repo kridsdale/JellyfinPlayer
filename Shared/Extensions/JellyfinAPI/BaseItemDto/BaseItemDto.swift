@@ -639,13 +639,17 @@ extension BaseItemDto {
         }
     }
 
-    func getFullItem(userSession: UserSession, sendNotification: Bool = false) async throws -> BaseItemDto {
+    func getFullItem(
+        userSession: UserSession,
+        sendNotification: Bool = false,
+        taskDelegate: URLSessionDataDelegate? = nil
+    ) async throws -> BaseItemDto {
         guard let id else {
             throw ErrorMessage(L10n.unknownError)
         }
 
         let request = Paths.getItem(itemID: id, userID: userSession.user.id)
-        let response = try await userSession.client.send(request)
+        let response = try await userSession.client.send(request, delegate: taskDelegate)
 
         // A check against `id` would typically be done, but a plugin
         // may have provided `self` or the response item and may not

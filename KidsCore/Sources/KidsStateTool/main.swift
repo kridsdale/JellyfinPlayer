@@ -18,8 +18,8 @@ struct KidsStateTool {
     @MainActor
     static func main() throws {
         let args = CommandLine.arguments
-        guard args.count == 5, ["export", "import"].contains(args[1]) else {
-            throw NSError(domain: "KidsStateTool usage: export|import STORE BINDING_JSON STATE_JSON", code: 1)
+        guard args.count == 5, ["export", "import", "restore"].contains(args[1]) else {
+            throw NSError(domain: "KidsStateTool usage: export|import|restore STORE BINDING_JSON STATE_JSON", code: 1)
         }
         let storeURL = URL(fileURLWithPath: args[2]).resolvingSymlinksInPath()
         let root = FileManager.default.homeDirectoryForCurrentUser.appendingPathComponent("Library/Developer/CoreSimulator/Devices/")
@@ -42,6 +42,27 @@ struct KidsStateTool {
             guard desired.version == 1, desired.binding == binding else { throw KidsContractError.denied }
             let repository = KidsStateRepository(container: container, writerID: "simulator-validation")
             _ = try repository.commit(desired, since: snapshot)
+            if args[1] == "restore" {
+                // Validation rollback is distinct from normal monotonic sync. Returning
+                // consumed Shuffle entries requires restoring each local writer's bag;
+                // the resolver otherwise intersects the old and restored versions.
+                // The calling helper rejects live CloudKit builds; this tool accepts
+                // only the existing simulator store and exact account/library binding.
+                let restoreContext = ModelContext(container)
+                let localRows = try restoreContext.fetch(FetchDescriptor<KidsCloudRow>(predicate: #Predicate { $0.namespace == namespace }))
+                let encoder = JSONEncoder()
+                encoder.outputFormatting = .sortedKeys
+                for row in localRows {
+                    var entry = try JSONDecoder().decode(KidsSyncEntry.self, from: row.payload)
+                    guard entry.binding == binding, entry.resetID == snapshot.resetID,
+                          entry.key.hasPrefix("shuffle/"),
+                          let bag = desired.shuffle[String(entry.key.dropFirst("shuffle/".count))]
+                    else { continue }
+                    entry.value = .shuffle(bag)
+                    row.payload = try encoder.encode(entry)
+                }
+                try restoreContext.save()
+            }
         }
     }
 }
