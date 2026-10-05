@@ -68,6 +68,7 @@ def analyze(directory):
         events.sort(key=lambda event: event['uptimeMS'])
     metrics = defaultdict(list)
     starts = []
+    artwork_sources = defaultdict(int)
     http = defaultdict(list)
     network = defaultdict(lambda: defaultdict(list))
     failures = defaultdict(int)
@@ -115,6 +116,16 @@ def analyze(directory):
             if 'response' in phases and 'artworkPresented' in phases:
                 metrics['artwork.responseToPresentation.' + variant].append(
                     phases['artworkPresented']['elapsedMS'] - phases['response']['elapsedMS'])
+            if end and end.get('outcome') == 'success' and 'artworkPresented' in phases:
+                nested = [spans[x] for x in descendants(key)]
+                hit = any(e['operation'] == 'artworkCache' and e.get('values', {}).get('cache_hit') == 1
+                          for values in nested for e in values)
+                request = any(values[0]['operation'] == 'http' and values[0].get('endpoint') == 'artwork'
+                              for values in nested)
+                direct_request = 'response' in phases and phases['response'].get('values', {}).get('status') == 200
+                source = 'memoryHit' if hit else ('network' if request or direct_request else 'sharedOrUnclassified')
+                artwork_sources[source] += 1
+                metrics['artwork.presented.' + source + '.' + variant].append(phases['artworkPresented']['elapsedMS'])
         if end and end.get('outcome') == 'success':
             if operation in ('storeOpen', 'storeLoad', 'storeSave', 'metadata', 'bitrate', 'playbackInfo', 'policy', 'episodes', 'authorize', 'ancestry'):
                 metrics['operation.' + operation].append(end['elapsedMS'])
@@ -161,7 +172,7 @@ def analyze(directory):
               'http': {k: stats(v) for k, v in sorted(http.items())},
               'network': {endpoint: {k: stats(v) if k.endswith('_ms') else {'n': len(v), 'sum': sum(v), 'median': statistics.median(v)}
                                       for k, v in values.items()} for endpoint, values in network.items()},
-              'playback_starts': starts}
+              'playback_starts': starts, 'artwork_sources': dict(artwork_sources)}
     (directory / 'summary.json').write_text(json.dumps(result, indent=2, sort_keys=True) + '\n')
     lines = ['# Measured client timing summary', '',
              'Opt-in Release simulator probes, actual approved Jellyfin content. Values in milliseconds. P95 is the observed nearest rank; small samples are not a population guarantee.', '',

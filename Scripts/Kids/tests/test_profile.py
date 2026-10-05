@@ -77,6 +77,24 @@ class EvidenceTests(unittest.TestCase):
         self.assertFalse(result["playback_starts"][0]["validated_timing_sample"])
         self.assertNotIn("playback.playerSurfacePresented.ordered", result["metrics"])
 
+    def test_artwork_cache_hit_is_distinct_from_network_and_unclassified_shared_load(self):
+        result = self.analyze([
+            event("art", "artwork", "begin", 0),
+            event("cache", "artworkCache", "end", 1, parent="art", outcome="success", values={"cache_hit": 1}),
+            event("art", "artwork", "end", 1, outcome="success"),
+            event("art", "artwork", "artworkPresented", 16),
+            event("networkArt", "artwork", "begin", 0),
+            event("network", "http", "end", 80, parent="networkArt", endpoint="artwork", outcome="success"),
+            event("networkArt", "artwork", "end", 85, outcome="success"),
+            event("networkArt", "artwork", "artworkPresented", 100),
+            event("shared", "artwork", "end", 80, outcome="success"),
+            event("shared", "artwork", "artworkPresented", 90),
+            event("canceled", "artwork", "end", 1, outcome="cancelled"),
+        ])
+        self.assertEqual(result["artwork_sources"], {"memoryHit": 1, "network": 1, "sharedOrUnclassified": 1})
+        self.assertEqual(result["metrics"]["artwork.presented.memoryHit.grid"]["median_ms"], 16)
+        self.assertEqual(result["metrics"]["artwork.presented.network.grid"]["median_ms"], 100)
+
     def test_nearest_rank_p95_is_observed_not_extrapolated(self):
         result = profile.stats([10, 20, 30, float("nan")])
         self.assertEqual(result["n"], 3)
