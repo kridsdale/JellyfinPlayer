@@ -21,7 +21,7 @@ public enum KidsCategory: String, Codable, CaseIterable, Sendable {
     }
 }
 
-public struct KidsBinding: Codable, Equatable, Sendable {
+public struct KidsBinding: Codable, Equatable, Hashable, Sendable {
     public var serverID: String
     public var userID: String
     public var showsID: String

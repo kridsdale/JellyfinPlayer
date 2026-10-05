@@ -192,12 +192,10 @@ public struct KidsAPI: Sendable {
         do {
             let result = try await KidsPerformance.$current.withValue(trace) {
                 try await authorize(itemID: showID, expectedKind: .series, binding: binding)
-                // Library ancestry remains explicit; SeriesId alone is never the content boundary.
-                let values = try await items(
-                    libraryID: binding.showsID,
-                    binding: binding,
-                    extra: ["IncludeItemTypes": "Episode", "SeriesId": showID]
-                )
+                // The dedicated endpoint limits pagination to this already-authorized
+                // show. Series identity, regular numbering and library ancestry are
+                // still verified locally; the endpoint is not an authorization boundary.
+                let values = try await episodeItems(showID: showID, binding: binding)
                 let eligible = try KidsEligibility.episodes(values, showID: showID, binding: binding)
                 let checked = try await verified(eligible, libraryID: binding.showsID, binding: binding)
                 guard !checked.isEmpty else { throw KidsContractError.unavailable }
@@ -313,6 +311,35 @@ public struct KidsAPI: Sendable {
         return result
     }
 
+    private func episodeItems(showID: String, binding: KidsBinding) async throws -> [KidsItem] {
+        guard binding.isValid, !showID.isEmpty,
+              showID.utf8
+                  .allSatisfy({ (48 ... 57).contains($0) || (65 ... 90).contains($0) || (97 ... 122).contains($0) || $0 == 45 || $0 == 95 })
+        else { throw KidsContractError.denied }
+        var values: [KidsItem] = []
+        var seen = Set<String>()
+        var start = 0
+        while true {
+            try Task.checkCancellation()
+            let page: ItemPage = try await get("Shows/\(showID)/Episodes", query: [
+                "UserId": binding.userID, "StartIndex": String(start), "Limit": "200",
+                "Fields": "PrimaryImageAspectRatio"
+            ])
+            for raw in page.items {
+                if let item = raw.item(libraryID: binding.showsID) {
+                    guard seen.insert(item.id).inserted else { throw KidsContractError.ambiguousEpisodes }
+                    values.append(item)
+                }
+            }
+            start += page.items.count
+            if page.items.isEmpty || start >= (page.total ?? start) {
+                break
+            }
+            guard start < 100_000 else { throw KidsAPIError.invalidResponse }
+        }
+        return values
+    }
+
     public func imageRequest(for item: KidsItem, binding: KidsBinding, width: Int = 600) throws -> URLRequest {
         guard KidsEligibility.permits(item, binding: binding), let tag = item.imageTag,
               let owner = item.imageOwnerID,
@@ -336,7 +363,7 @@ public struct KidsAPI: Sendable {
     private func get<T: Decodable>(_ path: String, query: [String: String] = [:]) async throws -> T {
         let endpoint: KidsPerformanceEndpoint = path == "System/Info/Public" ? .serverInfo :
             path == "Users/Me" ? .userPolicy : path.hasSuffix("/Views") ? .libraries :
-            path.hasSuffix("/Ancestors") ? .ancestors : path == "Items" ? .items : .other
+            path.hasSuffix("/Ancestors") ? .ancestors : path.hasSuffix("/Episodes") ? .episodeList : path == "Items" ? .items : .other
         let trace = KidsPerformance.begin(.http, endpoint: endpoint)
         do {
             let delegate = trace.map(KidsPerformanceTaskDelegate.init(span:))
@@ -362,7 +389,12 @@ public struct KidsAPI: Sendable {
             throw error
         } catch is CancellationError { trace?.finish(.cancelled)
             throw CancellationError()
-        } catch { trace?.finish(.failure)
+        } catch {
+            if Task.isCancelled || (error as? URLError)?.code == .cancelled {
+                trace?.finish(.cancelled)
+                throw CancellationError()
+            }
+            trace?.finish(.failure)
             throw KidsAPIError.connection
         }
     }

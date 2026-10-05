@@ -31,6 +31,9 @@ public enum KidsPerformanceOperation: String, Codable, Sendable {
     case storeOpen
     case storeLoad
     case storeSave
+    case episodeCache
+    case artworkCache
+    case prefetch
 }
 
 public enum KidsPerformanceVariant: String, Codable, Sendable {
@@ -54,6 +57,7 @@ public enum KidsPerformanceEndpoint: String, Codable, Sendable {
     case ancestors
     case artwork
     case itemDetails
+    case episodeList
     case playbackInfo
     case bitrate
     case other
@@ -224,7 +228,11 @@ public final class KidsPerformanceSpan: @unchecked Sendable {
         "video_codec",
         "bit_depth",
         "video_fps",
-        "video_bitrate"
+        "video_bitrate",
+        "cache_hit",
+        "shared_wait",
+        "prefetch_count",
+        "cache_bytes"
     ]
     private let start = DispatchTime.now().uptimeNanoseconds
     private let lock = NSLock()

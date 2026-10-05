@@ -95,16 +95,14 @@ struct KidsRootView: View {
                     model.category = .shows
                 }
         }
-        .task { await model.refresh() }
-        .onChange(of: sessions.currentSession?.user.id) { path = []
-            Task { await model.stopPlayback(endSession: false)
-                await model.refresh()
-            }
-        }
-        .onChange(of: sessions.currentSession?.server.id) { path = []
-            Task { await model.stopPlayback(endSession: false)
-                await model.refresh()
-            }
+        .task(id: [
+            sessions.currentSession?.server.id,
+            sessions.currentSession?.user.id,
+            sessions.currentSession?.server.effectiveServerURL.absoluteString
+        ]) {
+            path = []
+            await model.stopPlayback(endSession: false)
+            await model.refresh()
         }
         .onChange(of: scenePhase) {
             if scenePhase != .active {

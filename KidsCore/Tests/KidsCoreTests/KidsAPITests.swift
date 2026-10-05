@@ -293,3 +293,33 @@ func `forged same-type upstream catalog item never enters approved results`() as
         binding: fixtureBinding
     ) }
 }
+
+@Test
+func `episode pagination uses the authorized show endpoint and never walks the library`() async throws {
+    let (api, log) = fixture { request in
+        if let reply = validRoute(request) {
+            return reply
+        }
+        if request.url?.path.hasSuffix("/Items") == true {
+            return Reply(body: #"{"Items":[{"Id":"show","Name":"Show","Type":"Series"}]}"#)
+        }
+        guard request.url?.path.hasSuffix("/Shows/show/Episodes") == true else { return Reply(status: 404, body: "{}") }
+        if query(request)["StartIndex"] == "0" {
+            return Reply(
+                body: #"{"TotalRecordCount":2,"Items":[{"Id":"a","Name":"One","Type":"Episode","SeriesId":"show","ParentIndexNumber":1,"IndexNumber":1}]}"#
+            )
+        }
+        return Reply(
+            body: #"{"TotalRecordCount":2,"Items":[{"Id":"b","Name":"Two","Type":"Episode","SeriesId":"show","ParentIndexNumber":1,"IndexNumber":2}]}"#
+        )
+    }
+    let episodes = try await api.episodes(showID: "show", binding: fixtureBinding)
+    #expect(episodes.map(\.id) == ["a", "b"])
+    let pages = log.requests.filter { $0.url?.path.hasSuffix("/Episodes") == true }
+    #expect(pages.count == 2)
+    #expect(pages.map { query($0)["StartIndex"] } == ["0", "1"])
+    #expect(pages.allSatisfy { query($0)["UserId"] == "kid" && query($0)["SeriesId"] == nil })
+    let libraryRequests = log.requests.filter { $0.url?.path.hasSuffix("/Items") == true }
+    #expect(libraryRequests.count == 1)
+    #expect(libraryRequests.allSatisfy { query($0)["ParentId"] == "tv" && query($0)["Ids"] == "show" })
+}

@@ -71,18 +71,54 @@ final class KidsAppModel: ObservableObject {
         state?.binding
     }
 
-    var api: KidsAPI? {
-        guard !isPreview, let session = Container.shared.currentUserSession() else { return nil }
-        #if DEBUG
-        // Opt-in integration faults use real HTTP errors without altering the saved account or server.
-        if validationScenario == "unavailable" {
-            return KidsAPI(serverURL: URL(string: "http://127.0.0.1:9")!, token: "invalid-validation-token")
+    private struct APIIdentity: Equatable {
+        let url: URL
+        let serverID: String
+        let userID: String
+        let token: String
+    }
+
+    private var retainedAPI: (identity: APIIdentity, value: KidsAPI)?
+    private var verifiedEpisodes: (binding: KidsBinding, value: KidsEpisodeCache)?
+    private var refreshFlight: (id: UUID, identity: APIIdentity?, task: Task<Void, Never>)?
+
+    private func invalidateEpisodeMetadata() {
+        let old = verifiedEpisodes?.value
+        verifiedEpisodes = nil
+        episodeCache = [:]
+        if let old {
+            Task { await old.invalidate() }
         }
-        if validationScenario == "invalid-token" {
-            return KidsAPI(serverURL: session.server.effectiveServerURL, token: "invalid-validation-token")
+    }
+
+    var api: KidsAPI? {
+        guard !isPreview, let session = Container.shared.currentUserSession() else {
+            if retainedAPI != nil {
+                retainedAPI = nil
+                refreshGeneration = UUID()
+                invalidateEpisodeMetadata()
+            }
+            return nil
+        }
+        var url = session.server.effectiveServerURL
+        var token = session.user.accessToken
+        #if DEBUG
+        if validationScenario == "unavailable" {
+            url = URL(string: "http://127.0.0.1:9")!
+            token = "invalid-validation-token"
+        } else if validationScenario == "invalid-token" {
+            token = "invalid-validation-token"
         }
         #endif
-        return KidsAPI(serverURL: session.server.effectiveServerURL, token: session.user.accessToken)
+        let identity = APIIdentity(url: url, serverID: session.server.id, userID: session.user.id, token: token)
+        if let retainedAPI, retainedAPI.identity == identity {
+            return retainedAPI.value
+        }
+        refreshGeneration = UUID()
+        invalidateEpisodeMetadata()
+        let value = KidsAPI(serverURL: url, token: token)
+        retainedAPI = (identity, value)
+        return value
     }
 
     #if DEBUG
@@ -218,6 +254,23 @@ final class KidsAppModel: ObservableObject {
 
     func refresh() async {
         guard !isPreview else { return }
+        _ = api // Bind the shared request to the complete current network/account identity.
+        let identity = retainedAPI?.identity
+        if let flight = refreshFlight, flight.identity == identity {
+            await flight.task.value
+            return
+        }
+        refreshFlight?.task.cancel()
+        let id = UUID()
+        let task = Task { await refreshCatalog() }
+        refreshFlight = (id, identity, task)
+        await task.value
+        if refreshFlight?.id == id {
+            refreshFlight = nil
+        }
+    }
+
+    private func refreshCatalog() async {
         let trace = KidsPerformance.recorder.begin(.catalog, parent: KidsPerformance.launch)
         catalogPerformance = trace
         let outcome = await KidsPerformance.$current.withValue(trace) { await refreshMeasured() }
@@ -290,7 +343,7 @@ final class KidsAppModel: ObservableObject {
             return
         }
         catalog = [:]
-        episodeCache = [:]
+        invalidateEpisodeMetadata()
         if let error = error as? KidsAPIError {
             problem = error.localizedDescription
             requiresParent = error == .authentication || error == .policy || error == .libraryChanged
@@ -324,7 +377,12 @@ final class KidsAppModel: ObservableObject {
               show.kind == .series else { throw KidsContractError.denied }
         let generation = refreshGeneration
         do {
-            let items = try await api.episodes(showID: show.id, binding: binding)
+            if verifiedEpisodes?.binding != binding {
+                invalidateEpisodeMetadata()
+                verifiedEpisodes = (binding, KidsEpisodeCache(api: api, binding: binding))
+            }
+            guard let cached = verifiedEpisodes?.value else { throw KidsContractError.denied }
+            let items = try await cached.episodes(for: show, binding: binding)
             guard !Task.isCancelled, self.binding == binding, refreshGeneration == generation else {
                 throw CancellationError()
             }
@@ -540,9 +598,13 @@ final class KidsAppModel: ObservableObject {
 
     func signOut() async {
         guard unlocked else { return }
+        refreshFlight?.task.cancel()
+        refreshFlight = nil
+        refreshGeneration = UUID()
+        retainedAPI = nil
+        invalidateEpisodeMetadata()
         await stopPlayback()
         catalog = [:]
-        episodeCache = [:]
         lastFocus = [:]
         state = nil
         if let data = UserDefaults.standard.data(forKey: bindingKey) {

@@ -34,7 +34,7 @@ def atomic_write(path, data):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('action', choices=['inspect', 'seed', 'restore'])
+    parser.add_argument('action', choices=['inspect', 'snapshot', 'seed', 'restore'])
     parser.add_argument('--device', required=True)
     parser.add_argument('--backup', type=Path)
     parser.add_argument('--show-id')
@@ -96,6 +96,13 @@ def main():
     if not args.backup or not args.backup.resolve().is_relative_to(REPO / 'build/validation'):
         raise ValueError('A backup under this checkout build/validation directory is required')
     backup = args.backup.resolve()
+    if args.action == 'snapshot':
+        backup.parent.mkdir(parents=True, exist_ok=True)
+        with backup.open('xb') as stream:
+            os.fchmod(stream.fileno(), 0o600)
+            stream.write(original)
+        print('Saved a scoped simulator-state snapshot without changing playback state.')
+        return
     if args.action == 'restore':
         data = backup.read_bytes()
         if json.loads(data)['binding'] != state['binding']:
