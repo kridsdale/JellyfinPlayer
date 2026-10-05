@@ -10,7 +10,7 @@
 
 The stable bundle, CloudKit and Swift module identities are retained across the branding rename. The local checkout location remains unchanged so existing tooling and state references remain valid. iOS retains the upstream interface; macOS and visionOS binaries are not supplied by this project. Only the existing tvOS draft receives platform-specific metadata.
 
-English-US listing sources live in `AppStore/en-US/metadata.json`, with description and Apple TV privacy text as separate reviewable files. Public support and privacy pages live beside this document. GitHub issues provide the maintainer contact channel. Do not delete the published source branch without moving and updating the listing URLs.
+English-US listing sources live in `AppStore/en-US/metadata.json`, with description and Apple TV privacy text as separate reviewable files. Public support and privacy pages live beside this document. GitHub issues provide the maintainer contact channel. The published privacy and marketing URLs use immutable source revisions. Update them deliberately when publishing revised policy or product information.
 
 ## Repeatable metadata updates
 

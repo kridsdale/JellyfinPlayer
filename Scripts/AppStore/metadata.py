@@ -188,7 +188,9 @@ def main():
     meta['sku'] = args.expected_sku
     api = API(token(args.key_file, args.key_id, args.issuer_id))
     proposal = plan(api, meta)
-    (destination / 'metadata-plan.json').write_text(json.dumps(proposal, indent=2) + '\n')
+    serialized = json.dumps(proposal, indent=2) + '\n'
+    (destination / f'metadata-plan-{time.time_ns()}.json').write_text(serialized)
+    (destination / 'metadata-plan.json').write_text(serialized)
     print(json.dumps({key: value for key, value in proposal.items() if key != 'operations'}))
     print(f'Planned metadata operations: {len(proposal["operations"])}')
     if args.apply:
