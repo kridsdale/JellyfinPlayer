@@ -251,7 +251,8 @@ func `artwork permits only an eligible item's own or show image owner`() throws 
     var item = KidsItem(id: "show", name: "Show", kind: .series, libraryID: "tv", imageTag: "tag", imageOwnerID: "show")
     let request = try api.imageRequest(for: item, binding: fixtureBinding)
     #expect(request.url?.path == "/jellyfin/Items/show/Images/Primary")
-    #expect(try !#require(request.url?.absoluteString.contains("fixture-secret")))
+    let url = try #require(request.url)
+    #expect(!url.absoluteString.contains("fixture-secret"))
     item.imageOwnerID = "outside"
     #expect(throws: KidsContractError.denied) { try api.imageRequest(for: item, binding: fixtureBinding) }
     item.libraryID = "outside"

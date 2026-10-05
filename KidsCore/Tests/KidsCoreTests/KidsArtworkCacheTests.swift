@@ -181,3 +181,37 @@ func `a failed image fetch is retriable rather than cached`() async throws {
     #expect(try await second.value == Data([1, 2, 3]))
     #expect(await gate.requestCount == 2)
 }
+
+@Test
+func `memory pressure drops completed art while leaving future requests authorized`() async throws {
+    let counter = ArtCounter()
+    let cache = KidsArtworkCache(binding: artBinding) { await counter.fetch($0, $1) }
+    _ = try await cache.data(for: artItem(), binding: artBinding)
+    await cache.trimForMemoryPressure()
+    _ = try await cache.data(for: artItem(), binding: artBinding)
+    _ = try await cache.data(for: artItem(), binding: artBinding)
+    #expect(await counter.requestCount == 2)
+    var other = artBinding
+    other.userID = "another"
+    do {
+        _ = try await cache.data(for: artItem(), binding: other)
+        Issue.record("Trimming weakened binding authorization")
+    } catch { #expect(error as? KidsContractError == .denied) }
+}
+
+@Test
+func `pre-warning shared loads complete without refilling the art cache`() async throws {
+    let gate = ArtGate()
+    let cache = KidsArtworkCache(binding: artBinding) { _, _ in try await gate.fetch() }
+    let visible = Task { try await cache.data(for: artItem(), binding: artBinding) }
+    try await gate.wait(for: 1)
+    await cache.trimForMemoryPressure()
+    await gate.completeAll()
+    #expect(try await visible.value == Data([1, 2, 3]))
+    let afterWarning = Task { try await cache.data(for: artItem(), binding: artBinding) }
+    try await gate.wait(for: 2)
+    await gate.completeAll()
+    #expect(try await afterWarning.value == Data([1, 2, 3]))
+    #expect(try await cache.data(for: artItem(), binding: artBinding) == Data([1, 2, 3]))
+    #expect(await gate.requestCount == 2)
+}

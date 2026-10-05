@@ -110,7 +110,13 @@ final class KidsPerformanceTests: XCTestCase {
         return target
     }
 
-    private func playAndStop(action: String, shuffle: Bool = false, captureName: String?) {
+    private func playAndStop(
+        action: String,
+        shuffle: Bool = false,
+        captureName: String?,
+        playingSeconds: Double = 2,
+        pausedSeconds: Double = 0
+    ) {
         let button = app.buttons[action]
         XCTAssertTrue(button.waitForExistence(timeout: 30))
         if shuffle {
@@ -118,7 +124,7 @@ final class KidsPerformanceTests: XCTestCase {
         }
         select(button)
         XCTAssertTrue(app.buttons["kids.player.surface"].waitForExistence(timeout: 30), "A real VLC stream must become visible.")
-        wait(2)
+        wait(playingSeconds)
         XCUIRemote.shared.press(.playPause)
         let play = app.buttons["kids.player.playpause"]
         let paused = XCTNSPredicateExpectation(predicate: NSPredicate(format: "exists == true AND label == %@", "Play"), object: play)
@@ -133,9 +139,23 @@ final class KidsPerformanceTests: XCTestCase {
         if let captureName {
             capture(captureName)
         }
+        if pausedSeconds > 0 {
+            wait(pausedSeconds)
+        }
         XCUIRemote.shared.press(.menu)
         XCUIRemote.shared.press(.menu)
         XCTAssertTrue(app.buttons[action].waitForExistence(timeout: 15))
+    }
+
+    /// A finite real stream gives the read-only server observer several playing,
+    /// paused and successfully cleared samples; short startup samples cannot do so.
+    func testProfileReportingLifecycle() {
+        launch()
+        select(focusCard(sampleCardIDs()[0]))
+        playAndStop(action: "kids.action.next", captureName: "profile-reporting-paused", playingSeconds: 18, pausedSeconds: 6)
+        wait(15)
+        XCTAssertFalse(app.buttons["kids.player.surface"].exists)
+        capture("profile-reporting-stopped")
     }
 
     func testProfileFreshLaunchAndArtworkRevisits() {

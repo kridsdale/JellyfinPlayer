@@ -27,6 +27,7 @@ public enum KidsPerformanceOperation: String, Codable, Sendable {
     case metadata
     case bitrate
     case playbackInfo
+    case playbackReport
     case provider
     case storeOpen
     case storeLoad
@@ -60,6 +61,9 @@ public enum KidsPerformanceEndpoint: String, Codable, Sendable {
     case episodeList
     case playbackInfo
     case bitrate
+    case playbackStart
+    case playbackProgress
+    case playbackStop
     case other
 }
 
@@ -353,7 +357,7 @@ public enum KidsPerformance {
         return KidsPerformanceRecorder(enabled: enabled, directory: directory)
     }()
 
-    public static let launch = recorder.begin(.launch, values: ["probe_revision": 4])
+    public static let launch = recorder.begin(.launch, values: ["probe_revision": 6])
     public static func begin(
         _ operation: KidsPerformanceOperation,
         variant: KidsPerformanceVariant = .unknown,

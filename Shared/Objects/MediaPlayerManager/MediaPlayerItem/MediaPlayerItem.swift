@@ -117,7 +117,11 @@ class MediaPlayerItem: ViewModel, MediaPlayerObserver {
             ?? mediaSource.defaultSubtitleStreamIndex
             ?? -1
 
+        #if os(tvOS)
+        observers.append(KidsMediaProgressObserver(item: self))
+        #else
         observers.append(MediaProgressObserver(item: self))
+        #endif
     }
 
     /// Decides whether a track change can be performed by the player in place, or whether the server must produce a new stream.

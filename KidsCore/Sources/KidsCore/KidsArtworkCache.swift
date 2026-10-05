@@ -28,6 +28,7 @@ public actor KidsArtworkCache {
     private struct Flight {
         let id: UUID
         let generation: UUID
+        let retentionGeneration: UUID
         let task: Task<Data, Error>
     }
 
@@ -42,6 +43,7 @@ public actor KidsArtworkCache {
     private var retainedBytes = 0
     private var access: UInt64 = 0
     private var generation = UUID()
+    private var retentionGeneration = UUID()
 
     public init(
         binding: KidsBinding,
@@ -120,7 +122,7 @@ public actor KidsArtworkCache {
                 // Bound waiting tasks as well as retained bytes and active requests.
                 guard flights.count < 64 else { throw KidsAPIError.connection }
                 let fetch = self.fetch, gate = self.gate
-                flight = Flight(id: UUID(), generation: generation, task: Task {
+                flight = Flight(id: UUID(), generation: generation, retentionGeneration: retentionGeneration, task: Task {
                     try await gate.perform { try await fetch(item, width) }
                 })
                 flights[key] = flight
@@ -131,7 +133,7 @@ public actor KidsArtworkCache {
             guard generation == flight.generation else { throw CancellationError() }
             if flights[key]?.id == flight.id {
                 flights[key] = nil
-                if !data.isEmpty, data.count <= byteLimit {
+                if flight.retentionGeneration == retentionGeneration, !data.isEmpty, data.count <= byteLimit {
                     entries[key] = Entry(data: data, expires: .now.advanced(by: lifetime), access: access)
                     retainedBytes += data.count
                     while entries.count > entryLimit || retainedBytes > byteLimit {
@@ -156,6 +158,15 @@ public actor KidsArtworkCache {
         if let removed = entries.removeValue(forKey: key) {
             retainedBytes -= removed.data.count
         }
+    }
+
+    /// Release retained bytes without revoking authorization or interrupting a
+    /// shared visible load. Pre-warning flights may return, but cannot refill
+    /// the cache; a subsequent request can populate it normally.
+    public func trimForMemoryPressure() {
+        retentionGeneration = UUID()
+        entries.removeAll()
+        retainedBytes = 0
     }
 
     public func invalidate() {

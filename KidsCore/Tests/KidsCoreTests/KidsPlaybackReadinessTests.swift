@@ -53,3 +53,12 @@ func `nonfinite or invalid clocks and resume positions never begin playback`() {
         #expect(!ready(position: position))
     }
 }
+
+@Test
+func `failed or recovering startup never presents partial output as successful playback`() {
+    #expect(!KidsPlaybackReadiness.permitsPresentation(
+        playingOrPaused: true, buffering: false, preparing: false,
+        resumePending: false, failedOrRecovering: true,
+        requestedPosition: 0, clock: 2, displayedPictures: 12
+    ))
+}

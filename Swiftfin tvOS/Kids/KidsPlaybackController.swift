@@ -307,14 +307,21 @@ final class KidsPlaybackController: ObservableObject, Identifiable {
         if time.isFinite, !proxy.isApplyingStartPosition, !(terminal && began),
            began || time >= requestedStartPosition
         {
-            seconds = max(0, time)
+            let currentSeconds = max(0, time)
+            if seconds != currentSeconds {
+                seconds = currentSeconds
+            }
         }
-        paused = playerState == .paused
+        let currentlyPaused = playerState == .paused
+        if paused != currentlyPaused {
+            paused = currentlyPaused
+        }
         if !began, KidsPlaybackReadiness.permitsPresentation(
             playingOrPaused: playerState == .playing || paused,
             buffering: proxy.isBuffering.value,
             preparing: manager.state == .loadingItem,
             resumePending: proxy.isApplyingStartPosition,
+            failedOrRecovering: failed || recovery || manager.state == .error,
             requestedPosition: requestedStartPosition,
             clock: time,
             displayedPictures: Int(clamping: proxy.player.statistics?.displayedPictures ?? 0)
@@ -322,10 +329,16 @@ final class KidsPlaybackController: ObservableObject, Identifiable {
             performance?.once(.firstClock, values: ["seconds": time])
             performance?.mark(.playbackBegan)
             began = true
+            for observer in manager.playbackItem?.observers ?? [] {
+                (observer as? KidsMediaProgressObserver)?.beginPlayback()
+            }
             model?.playbackBegan(self)
         }
-        buffering = proxy.isBuffering.value || manager.state == .loadingItem || (!began && !recovery) ||
+        let currentlyBuffering = proxy.isBuffering.value || manager.state == .loadingItem || (!began && !recovery) ||
             (terminal && began && !finished && !proxy.player.didReachEnd)
+        if buffering != currentlyBuffering {
+            buffering = currentlyBuffering
+        }
     }
 
     func toggle() {

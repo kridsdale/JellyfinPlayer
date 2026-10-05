@@ -17,11 +17,12 @@ public enum KidsPlaybackReadiness {
         buffering: Bool,
         preparing: Bool,
         resumePending: Bool,
+        failedOrRecovering: Bool = false,
         requestedPosition: Double,
         clock: Double,
         displayedPictures: Int
     ) -> Bool {
-        guard playingOrPaused, !buffering, !preparing, !resumePending,
+        guard playingOrPaused, !buffering, !preparing, !resumePending, !failedOrRecovering,
               requestedPosition.isFinite, requestedPosition >= 0,
               clock.isFinite, clock > requestedPosition + 0.1,
               displayedPictures > 0 else { return false }

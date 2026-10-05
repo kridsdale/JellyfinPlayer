@@ -7,6 +7,7 @@
 //
 
 // SPDX-License-Identifier: MPL-2.0
+import Combine
 import KidsCore
 import UIKit
 
@@ -29,6 +30,7 @@ final class KidsArtworkStore {
 
     private struct Flight {
         let id: UUID
+        let retentionGeneration: UUID
         let task: Task<UIImage, Error>
     }
 
@@ -39,10 +41,17 @@ final class KidsArtworkStore {
     private var cost = 0
     private var access: UInt64 = 0
     private var valid = true
+    private var retentionGeneration = UUID()
+    private var memoryWarning: AnyCancellable?
 
     init(api: KidsAPI, binding: KidsBinding) {
         self.binding = binding
         bytes = KidsArtworkCache(api: api, binding: binding)
+        memoryWarning = NotificationCenter.default.publisher(for: UIApplication.didReceiveMemoryWarningNotification)
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                MainActor.assumeIsolated { self?.trimForMemoryPressure() }
+            }
     }
 
     func image(for item: KidsItem, binding expected: KidsBinding, width: Int = 600) async throws -> UIImage {
@@ -66,7 +75,7 @@ final class KidsArtworkStore {
             flight = existing
         } else {
             let bytes = self.bytes, binding = self.binding
-            flight = Flight(id: UUID(), task: Task {
+            flight = Flight(id: UUID(), retentionGeneration: retentionGeneration, task: Task {
                 let data = try await bytes.data(for: item, binding: binding, width: width)
                 try Task.checkCancellation()
                 let trace = KidsPerformance.begin(.decode, endpoint: .artwork)
@@ -88,7 +97,7 @@ final class KidsArtworkStore {
             if flights[key]?.id == flight.id {
                 flights[key] = nil
                 let imageCost = image.cgImage.map { $0.bytesPerRow * $0.height } ?? 0
-                if imageCost > 0, imageCost <= 48 * 1024 * 1024 {
+                if flight.retentionGeneration == retentionGeneration, imageCost > 0, imageCost <= 48 * 1024 * 1024 {
                     entries[key] = Entry(image: image, expires: .now.advanced(by: .seconds(300)), cost: imageCost, access: access)
                     cost += imageCost
                     while entries.count > 64 || cost > 48 * 1024 * 1024 {
@@ -113,8 +122,18 @@ final class KidsArtworkStore {
         }
     }
 
+    private func trimForMemoryPressure() {
+        retentionGeneration = UUID()
+        entries.removeAll()
+        cost = 0
+        // No revision change: visible SwiftUI images keep their pixels, and
+        // memory pressure does not trigger an immediate grid-wide reload.
+        Task { await bytes.trimForMemoryPressure() }
+    }
+
     func invalidate() {
         valid = false
+        memoryWarning = nil
         entries.removeAll()
         cost = 0
         for flight in flights.values {
