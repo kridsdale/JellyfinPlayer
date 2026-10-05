@@ -47,3 +47,25 @@ The image pool uses one ephemeral connection session, single-flight loads, four 
 The native suite has 73 passing tests, including artwork isolation, image owner/tag/size keys, capacity/expiry, cancellation/invalidation races, four-request concurrency, and bounded category/focus plans. Six analyzer and six App Store client tests passed. Release build-for-testing and all three live profiling methods passed. Opt03 produced 16,628 events across six traces with zero malformed lines. Six short pre-session catalog failures and canceled warmups remain in the aggregate. No server observer ran for this trial. Full simulator state matched its pre-test backup after SDK restoration; the legacy state hash remained unchanged, and the app was relaunched without profiling.
 
 Remaining optimization and robustness work includes duplicate SDK metadata and bitrate work, decoder-driven presentation, playback-report timing, the excluded metadata/render cases, memory-pressure handling, broader Swift 6 migration and physical-device/format coverage. New cache and prefetch contracts compile in Swift 6; the inherited app target remains in Swift 5 language mode. Server tuning remains conditional on measured evidence and RAID write protection.
+
+## Decoder-driven startup and one full metadata fetch
+
+Candidate source `d2405816`, simulator executable SHA256 `10e230b2e3f1b0c175564dc0d3ec92326e5d641f765178466fea1f8e51fc803f`, probe revision 4. Compiled and during-test installed hashes matched; all six launches report revision 4. [Sanitized opt04 aggregate](performance/2026-10-05-opt04.json).
+
+| Metric | Artwork candidate (opt03) | Startup candidate (opt04) | Opt04 n |
+|---|---:|---:|---:|
+| TV Play to output | 0.997 s | 0.796 s | 3 |
+| TV Play to surface | 1.499 s | 1.032 s | 3 |
+| TV output to surface, per-start median | 0.482 s | 0.260 s | 3 |
+| Movie Play to output | 0.820 s | 0.931 s | 4 |
+| Movie Play to surface | 1.299 s | 1.290 s | 4 |
+| Grid art to presentation | 109.641 ms | 97.789 ms | 121 |
+| Launch to catalog | 2.962 s | 2.998 s | 6 |
+
+The TV surface wait improved in this small trial; movie surface was essentially unchanged, and movie first output was slower. This does not establish general speedups across codecs or devices. The readiness consumer subscribes to a bounded independent VLC event stream before opening media. It requires displayed-picture evidence and an advancing clock beyond the requested resume position, with the seek applied and no preparation/buffering. Playing state alone no longer begins the viewing session. The one-second timer remains for checkpoints, countdown, recovery and a fallback state check. Stop/deinit cancel the subscription.
+
+The per-start full item fetched by the controller is passed to the provider rather than fetched again. Identity is checked against an immutable server/user/URL/token snapshot before provider preparation; final selected-item policy, type and ancestry authorization remains fresh. The trace now contains one full SDK metadata GET rather than two, with seven metadata operations for seven starts. Request accounting has two scopes: the existing `http` operation counter remains six (policy/server/libraries/items/ancestry plus bitrate), while eight request spans have network metrics, including SDK metadata and PlaybackInfo. Opt03 had nine. Neither counts uninstrumented native stream/preview requests. The failed expectation that `http` alone would drop to five was corrected; restored state was verified separately afterward.
+
+All three real-server profiling methods passed again: seven starts show output, advancing clock and player surface. The native suite has 77 passing tests, including failed/no-output readiness, pending or stale resume clocks, buffering/preparation and invalid numeric inputs. There were 16,600 events, zero malformed lines, six brief pre-session catalog failures, and no artwork or playback failure samples. Complete simulator state matched its backup after SDK restoration; legacy JSON was unchanged and the app relaunched without profiling. No server capture or configuration changes occurred in opt04.
+
+The separate read-only server audit found one excluded series with an explicit season-1/episode-0 entry and 17 other numbered entries; current strict regular-episode validation rejects the zero entry. All episode ancestry links and saved allowlist matches were verified. Its numbering matches the saved migration baseline; semantic numbering correctness is not established. The excluded movie uses AVI/MPEG-4 Advanced Simple Profile, 8-bit yuv420p, with AC-3 audio. That differs from successful H264 fixtures but does not prove source corruption or a decoder defect. No media bytes, scans, repairs, renumbering, conversion or RAID writes were performed by that audit. These cases require separate client/metadata acceptance decisions and evidence.
