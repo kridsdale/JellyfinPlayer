@@ -7,6 +7,7 @@
 //
 
 import SwiftfinLocalization
+import SwiftfinStoredValues
 
 enum AudioCodec: String, CaseIterable, Codable, Displayable, Storable {
 

@@ -11,7 +11,15 @@ import re
 import subprocess
 
 # Explicit responsibilities, not a permission derived from whatever code happens to import.
+EXTERNAL_POLICIES = {
+    "SwiftfinVLC": ("swiftvlc", "https://github.com/harflabs/SwiftVLC", "1.0.0"),
+    "SwiftfinStorage": ("corestore", "https://github.com/JohnEstropia/CoreStore.git", "9.2.0"),
+    "SwiftfinStoredValues": ("defaults", "https://github.com/sindresorhus/Defaults", "9.0.9"),
+}
 POLICIES = {
+    "SwiftfinStorage": ({}, {"CoreStore", "Foundation"}),
+    "SwiftfinStoredValues": ({"SwiftfinStorage"}, {"Defaults", "Foundation", "Combine"}),
+    "SwiftfinStoredValuesUI": ({"SwiftfinStoredValues"}, {"SwiftUI"}),
     "SwiftfinVLC": ({"KidsDiagnostics"}, {"Foundation", "Combine", "SwiftUI", "SwiftVLC"}),
     "SwiftfinNowPlaying": ({}, {"Foundation", "MediaPlayer", "UIKit"}),
     "SwiftfinAudioSession": ({"KidsDiagnostics"}, {"Foundation", "OSLog", "AVFAudio"}),
@@ -70,18 +78,19 @@ def inspect_package(path, root):
         filesystem = dependency.get("fileSystem")
         if not filesystem:
             source = dependency.get("sourceControl", [])
-            if (path.name != "SwiftfinVLC" or len(source) != 1
-                    or source[0].get("identity") != "swiftvlc"
-                    or source[0].get("location") != {"remote": [{"urlString": "https://github.com/harflabs/SwiftVLC"}]}
-                    or source[0].get("requirement") != {"exact": ["1.0.0"]}):
+            policy = EXTERNAL_POLICIES.get(path.name)
+            if (policy is None or len(source) != 1
+                    or source[0].get("identity") != policy[0]
+                    or source[0].get("location") != {"remote": [{"urlString": policy[1]}]}
+                    or source[0].get("requirement") != {"exact": [policy[2]]}):
                 raise ValueError(f"{path.name}: external dependency is outside its recorded responsibility")
             continue
         destination = Path(filesystem[0]["path"]).resolve()
         if not destination.is_relative_to(root / "Packages"):
             raise ValueError(f"{path.name}: dependency escapes the local library graph")
         dependencies.add(destination.name)
-    if path.name == "SwiftfinVLC" and sum("sourceControl" in d for d in manifest["dependencies"]) != 1:
-        raise ValueError("SwiftfinVLC: exactly one pinned native SDK dependency is required")
+    if path.name in EXTERNAL_POLICIES and sum("sourceControl" in d for d in manifest["dependencies"]) != 1:
+        raise ValueError(f"{path.name}: exactly one pinned owned SDK dependency is required")
     return manifest, dependencies
 
 

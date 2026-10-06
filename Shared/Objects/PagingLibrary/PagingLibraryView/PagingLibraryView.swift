@@ -9,6 +9,7 @@
 import CollectionVGrid
 import Defaults
 import SwiftfinLocalization
+import SwiftfinStoredValuesUI
 import SwiftUI
 @_spi(Advanced) import SwiftUIIntrospect
 

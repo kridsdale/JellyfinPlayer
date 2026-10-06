@@ -9,6 +9,7 @@
 import Foundation
 import JellyfinAPI
 import SwiftfinLocalization
+import SwiftfinStoredValues
 
 enum PlaybackBitrate: Int, CaseIterable, Displayable, Storable {
     case auto = 0

@@ -7,6 +7,7 @@
 //
 
 import SwiftfinLocalization
+import SwiftfinStoredValues
 import UniformTypeIdentifiers
 
 enum SubtitleFormat: String, CaseIterable, Codable, Displayable, Storable {

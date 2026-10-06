@@ -9,6 +9,7 @@
 import Defaults
 import JellyfinAPI
 import SwiftfinLocalization
+import SwiftfinStoredValuesUI
 import SwiftUI
 
 struct PlaybackQualitySettingsView: View {

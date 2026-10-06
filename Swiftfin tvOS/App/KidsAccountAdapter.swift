@@ -6,7 +6,6 @@
 // Copyright (c) 2026 Jellyfin & Jellyfin Contributors
 //
 
-// SPDX-License-Identifier: MPL-2.0
 import Combine
 import FactoryKit
 import Foundation
@@ -14,6 +13,9 @@ import JellyfinAPI
 import KidsAccounts
 import KidsCatalog
 import KidsDomain
+
+// SPDX-License-Identifier: MPL-2.0
+import SwiftfinStoredValues
 
 /// Composition adapter for the retained Swiftfin secure account lifecycle.
 /// No SDK user, global container, or Keychain type crosses the kids account port.

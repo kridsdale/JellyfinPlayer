@@ -38,3 +38,5 @@ enum SelectUserServerSelection: RawRepresentable, Hashable, Storable {
         }
     }
 }
+
+import SwiftfinStoredValues

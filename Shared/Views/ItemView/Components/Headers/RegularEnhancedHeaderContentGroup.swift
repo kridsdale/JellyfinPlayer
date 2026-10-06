@@ -7,6 +7,7 @@
 //
 
 import JellyfinAPI
+import SwiftfinStoredValuesUI
 import SwiftUI
 
 extension ItemView {

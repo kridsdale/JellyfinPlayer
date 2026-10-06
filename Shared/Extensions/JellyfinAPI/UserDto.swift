@@ -12,6 +12,7 @@ import SwiftfinLocalization
 
 extension UserDto {
 
+    @MainActor
     func profileImageSource(
         client: JellyfinClient,
         maxWidth: CGFloat? = nil

@@ -9,6 +9,7 @@
 import Foundation
 import JellyfinAPI
 import SwiftfinLocalization
+import SwiftfinStoredValues
 
 enum PlaybackResolution: Int, CaseIterable, Displayable, Storable {
 

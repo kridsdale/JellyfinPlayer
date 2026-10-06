@@ -10,3 +10,4 @@
 // https://github.com/sindresorhus/Defaults/issues/54
 
 protocol GestureAction: CaseIterable, Displayable, Storable {}
+import SwiftfinStoredValues

@@ -10,6 +10,7 @@ import Defaults
 import FactoryKit
 import JellyfinAPI
 import SwiftfinLocalization
+import SwiftfinStoredValuesUI
 import SwiftUI
 
 struct VideoPlayerSettingsView: View {

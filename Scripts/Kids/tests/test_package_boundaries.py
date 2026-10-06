@@ -68,5 +68,29 @@ class PackageBoundariesTests(unittest.TestCase):
                 MODULE.inspect_package(root / "Packages/SwiftfinVLC", root)
 
 
+    def test_storage_sdks_have_separate_exact_owners(self):
+        root = Path("/fixture")
+        for owner, (identity, url, version) in MODULE.EXTERNAL_POLICIES.items():
+            remote = {"sourceControl": [{"identity": identity, "location": {"remote": [{"urlString": url}]}, "requirement": {"exact": [version]}}]}
+            with self.subTest(owner=owner), patch.object(MODULE.subprocess, "check_output", return_value=json.dumps({"dependencies": [remote]})):
+                _, dependencies = MODULE.inspect_package(root / "Packages" / owner, root)
+                self.assertEqual(dependencies, set())
+            for field, value in [("requirement", {"range": [version, "99.0.0"]}), ("identity", "another-sdk")]:
+                changed = copy.deepcopy(remote)
+                changed["sourceControl"][0][field] = value
+                with self.subTest(owner=owner, field=field), patch.object(MODULE.subprocess, "check_output", return_value=json.dumps({"dependencies": [changed]})):
+                    with self.assertRaises(ValueError):
+                        MODULE.inspect_package(root / "Packages" / owner, root)
+            with self.subTest(owner=owner, missing=True), patch.object(MODULE.subprocess, "check_output", return_value=json.dumps({"dependencies": []})):
+                with self.assertRaises(ValueError):
+                    MODULE.inspect_package(root / "Packages" / owner, root)
+
+    def test_native_storage_cannot_import_presentation_or_credentials(self):
+        for module in ["SwiftUI", "Defaults", "FactoryKit", "KeychainSwift", "JellyfinAPI"]:
+            with self.subTest(module=module):
+                edges, frameworks = MODULE.POLICIES["SwiftfinStorage"]
+                self.assertTrue(MODULE.validate_source("SwiftfinStorage", "import " + module, edges, frameworks))
+
+
 if __name__ == "__main__":
     unittest.main()

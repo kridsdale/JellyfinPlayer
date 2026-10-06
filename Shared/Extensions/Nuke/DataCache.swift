@@ -51,11 +51,8 @@ extension DataCache.Swiftfin {
                 // Account for hosting at a path
                 guard let prefixURL = url.absoluteString.trimmingSuffix("/Branding/Splashscreen?").url else { return nil }
 
-                guard let server = StoredValues[.Server.servers].first(
-                    where: { $0.hasServerConnection(url: prefixURL) }
-                ) else { return nil }
-
-                return "\(server.id)-splashscreen".sha1
+                guard let serverID = ServerImageCacheIdentity.serverID(for: prefixURL) else { return nil }
+                return "\(serverID)-splashscreen".sha1
             } else {
                 return ImagePipeline.cacheKey(for: url)
             }

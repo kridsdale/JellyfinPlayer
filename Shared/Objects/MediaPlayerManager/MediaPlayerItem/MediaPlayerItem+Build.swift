@@ -12,6 +12,7 @@ import Foundation
 import JellyfinAPI
 import Logging
 import SwiftfinLocalization
+import SwiftfinStoredValues
 #if os(tvOS)
 import KidsDiagnostics
 #endif

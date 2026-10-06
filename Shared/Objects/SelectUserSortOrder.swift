@@ -7,6 +7,7 @@
 //
 
 import SwiftfinLocalization
+import SwiftfinStoredValues
 
 enum SelectUserSortOrder: String, CaseIterable, Displayable, Storable, SystemImageable {
 

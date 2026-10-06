@@ -9,6 +9,7 @@
 import JellyfinAPI
 import Logging
 import SwiftfinLocalization
+import SwiftfinStoredValuesUI
 import SwiftUI
 
 extension ItemActionButtons {

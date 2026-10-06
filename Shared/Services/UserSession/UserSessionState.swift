@@ -28,3 +28,5 @@ enum UserSessionState: RawRepresentable, Storable {
         }
     }
 }
+
+import SwiftfinStoredValues

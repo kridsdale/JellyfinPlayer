@@ -7,6 +7,7 @@
 //
 
 import SwiftfinLocalization
+import SwiftfinStoredValues
 import SwiftUI
 
 struct EditLocalServerView: View {

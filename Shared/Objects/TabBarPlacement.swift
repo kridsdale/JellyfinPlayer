@@ -7,6 +7,7 @@
 //
 
 import SwiftfinLocalization
+import SwiftfinStoredValues
 
 enum TabBarPlacement: String, CaseIterable, Displayable, Storable {
 

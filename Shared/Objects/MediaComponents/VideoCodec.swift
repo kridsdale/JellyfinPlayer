@@ -7,6 +7,7 @@
 //
 
 import SwiftfinLocalization
+import SwiftfinStoredValues
 
 enum VideoCodec: String, CaseIterable, Codable, Displayable, Storable {
 

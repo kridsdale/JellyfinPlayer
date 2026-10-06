@@ -15,6 +15,7 @@ import KeychainSwift
 import Logging
 import OrderedCollections
 import SwiftfinLocalization
+import SwiftfinStoredValues
 import SwiftUI
 
 // TODO: instead of just signing in duplicate user, send event for alert

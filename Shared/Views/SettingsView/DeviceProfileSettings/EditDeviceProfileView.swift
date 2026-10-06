@@ -7,6 +7,7 @@
 //
 
 import SwiftfinLocalization
+import SwiftfinStoredValuesUI
 import SwiftUI
 
 extension CustomDeviceProfilesView {

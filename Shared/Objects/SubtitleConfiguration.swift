@@ -6,6 +6,7 @@
 // Copyright (c) 2026 Jellyfin & Jellyfin Contributors
 //
 
+import SwiftfinStoredValues
 import SwiftUI
 
 struct SubtitleConfiguration: Hashable, Storable, WithDefaultValue {

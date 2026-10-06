@@ -20,3 +20,5 @@ struct PosterIndicator: Hashable, Storable {
         [.favorited, .played, .progress, .unplayed]
     }
 }
+
+import SwiftfinStoredValues

@@ -6,8 +6,10 @@
 // Copyright (c) 2026 Jellyfin & Jellyfin Contributors
 //
 
-// TODO: chapters fallback
 import SwiftfinLocalization
+
+// TODO: chapters fallback
+import SwiftfinStoredValues
 
 enum PreviewImageScrubbingOption: CaseIterable, Displayable, Hashable, Storable {
 

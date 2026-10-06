@@ -10,19 +10,21 @@ import Defaults
 import FactoryKit
 import Foundation
 import JellyfinAPI
+import SwiftfinStoredValues
 
 // TODO: also have matching properties on `UserState` that get/set values
 // TODO: cleanup/organize
 
 // MARK: keys
 
+@MainActor
 extension StoredValues.Keys {
 
     /// Construct a key where `ownerID` is the id of the user in the
     /// current user session, or always returns the default if there
     /// isn't a current session user.
     @MainActor
-    static func CurrentUserKey<Value: Codable>(
+    static func CurrentUserKey<Value: Storable>(
         _ name: String? = nil,
         field: String,
         default defaultValue: Value,
@@ -41,7 +43,7 @@ extension StoredValues.Keys {
         )
     }
 
-    static func UserKey<Value: Codable>(
+    static func UserKey<Value: Storable>(
         _ name: String? = nil,
         ownerID: String,
         field: String,
@@ -55,7 +57,7 @@ extension StoredValues.Keys {
         )
     }
 
-    static func UserKey<Value: Codable>(always: Value) -> Key<Value> {
+    static func UserKey<Value: Storable>(always: Value) -> Key<Value> {
         Key(always: always)
     }
 }
@@ -64,16 +66,12 @@ extension StoredValues.Keys {
 
 extension LocalUserAccessPolicy: Storable {}
 extension UserDto: @retroactive Defaults.Serializable {}
-extension UserDto: Storable {}
-extension UserState: Defaults.Serializable {}
-extension UserState: Storable {}
-extension Array: Storable where Element: Storable {}
-extension Bool: Storable {}
-extension Int: Storable {}
-extension String: Storable {}
+extension UserDto: @retroactive Storable {}
 
+@MainActor
 extension StoredValues.Keys {
 
+    @MainActor
     enum User {
 
         static var users: Key<[UserState]> {

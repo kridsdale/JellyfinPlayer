@@ -6,23 +6,16 @@
 // Copyright (c) 2026 Jellyfin & Jellyfin Contributors
 //
 
-import CoreStore
 import FactoryKit
 import Foundation
 import JellyfinAPI
 import KeychainSwift
 import Pulse
+import SwiftfinStorage
+import SwiftfinStoredValues
 import UIKit
 
-extension SwiftfinStore.State {
-
-    struct User: Hashable, Identifiable, Codable {
-        let id: String
-        let serverID: String
-        let username: String
-    }
-}
-
+@MainActor
 extension UserState {
 
     typealias Key = StoredValues.Key
@@ -83,6 +76,7 @@ extension UserState {
     }
 }
 
+@MainActor
 extension UserState {
 
     /// Deletes the model that this state represents and
@@ -115,7 +109,7 @@ extension UserState {
 
     /// Deletes user settings from `UserDefaults` and `StoredValues`
     func deleteSettings() throws {
-        try AnyStoredData.deleteAll(ownerID: id)
+        try SwiftfinDatabase.shared.deleteAll(ownerID: id)
         UserDefaults.userSuite(id: id).removeAll()
     }
 

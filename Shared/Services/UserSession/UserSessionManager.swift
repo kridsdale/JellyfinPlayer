@@ -14,6 +14,7 @@ import JellyfinAPI
 import KeychainSwift
 import Logging
 import SwiftfinLocalization
+import SwiftfinStoredValues
 
 extension Container {
 

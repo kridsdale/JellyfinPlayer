@@ -6,38 +6,29 @@
 // Copyright (c) 2026 Jellyfin & Jellyfin Contributors
 //
 
-import CoreStore
 import FactoryKit
 import Foundation
 import JellyfinAPI
 import Pulse
 import SwiftfinLocalization
+import SwiftfinStorage
+import SwiftfinStoredValues
 
-extension SwiftfinStore.State {
-
-    struct Server: Hashable, Identifiable, Codable {
-
-        @available(*, message: "Use connections instead")
-        let urls: Set<URL>
-        @available(*, message: "Use connections instead")
-        let currentURL: URL
-        let name: String
-        let id: String
-        let userIDs: [String]
-
-        /// - Note: Since this is created from a server, it does not
-        ///         have a user access token.
-        @MainActor
-        var client: JellyfinClient {
-            JellyfinClient(
-                configuration: .swiftfinConfiguration(url: effectiveServerURL),
-                sessionConfiguration: .swiftfin,
-                sessionDelegate: URLSessionProxyDelegate(logger: NetworkLogger.swiftfin())
-            )
-        }
+@MainActor
+extension ServerState {
+    /// - Note: Since this is created from a server, it does not
+    ///         have a user access token.
+    @MainActor
+    var client: JellyfinClient {
+        JellyfinClient(
+            configuration: .swiftfinConfiguration(url: effectiveServerURL),
+            sessionConfiguration: .swiftfin,
+            sessionDelegate: URLSessionProxyDelegate(logger: NetworkLogger.swiftfin())
+        )
     }
 }
 
+@MainActor
 extension ServerState {
 
     var activeServerConnection: ServerConnection? {
@@ -66,9 +57,9 @@ extension ServerState {
             .filter { $0.serverID == id }
 
         for user in users {
-            try AnyStoredData.deleteAll(ownerID: user.id)
+            try SwiftfinDatabase.shared.deleteAll(ownerID: user.id)
         }
-        try AnyStoredData.deleteAll(ownerID: id)
+        try SwiftfinDatabase.shared.deleteAll(ownerID: id)
         UserDefaults.userSuite(id: id).removeAll()
 
         var storedUsers = StoredValues[.User.users]

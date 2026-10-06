@@ -8,6 +8,7 @@
 
 import AVFoundation
 import SwiftfinLocalization
+import SwiftfinStoredValues
 import VideoToolbox
 
 enum PlaybackCapabilities {

@@ -7,6 +7,7 @@
 //
 
 import SwiftfinLocalization
+import SwiftfinStoredValues
 
 enum ItemViewAttribute: String, CaseIterable, Displayable, Storable {
 

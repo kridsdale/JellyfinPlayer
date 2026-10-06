@@ -10,9 +10,11 @@ import Defaults
 import FactoryKit
 import Foundation
 import JellyfinAPI
+import SwiftfinStoredValues
 
 // MARK: keys
 
+@MainActor
 extension StoredValues.Keys {
 
     static func ServerKey<Value: Storable>(
@@ -38,13 +40,13 @@ extension StoredValues.Keys {
 
 // MARK: values
 
-extension ServerState: Defaults.Serializable {}
-extension ServerState: Storable {}
 extension PublicSystemInfo: @retroactive Defaults.Serializable {}
-extension PublicSystemInfo: Storable {}
+extension PublicSystemInfo: @retroactive Storable {}
 
+@MainActor
 extension StoredValues.Keys {
 
+    @MainActor
     enum Server {
 
         static var servers: Key<[ServerState]> {

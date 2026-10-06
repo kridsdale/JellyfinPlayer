@@ -7,6 +7,7 @@
 //
 
 import SwiftfinLocalization
+import SwiftfinStoredValues
 
 enum MediaContainer: String, CaseIterable, Codable, Displayable, Storable {
 

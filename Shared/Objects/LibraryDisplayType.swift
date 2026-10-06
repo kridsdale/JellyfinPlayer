@@ -7,6 +7,7 @@
 //
 
 import SwiftfinLocalization
+import SwiftfinStoredValues
 
 enum LibraryDisplayType: String, CaseIterable, Displayable, Storable, SystemImageable {
 

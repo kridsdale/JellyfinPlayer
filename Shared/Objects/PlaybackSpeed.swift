@@ -8,6 +8,7 @@
 
 import Defaults
 import Foundation
+import SwiftfinStoredValues
 
 enum PlaybackSpeed: CaseIterable, Displayable, Hashable, RawRepresentable, Storable {
 

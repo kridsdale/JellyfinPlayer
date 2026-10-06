@@ -8,6 +8,7 @@
 
 import Foundation
 import SwiftfinLocalization
+import SwiftfinStoredValues
 
 #if os(iOS)
 private let landscapeMaxWidth: CGFloat = 300

@@ -7,6 +7,7 @@
 //
 
 import SwiftfinLocalization
+import SwiftfinStoredValues
 
 enum TrailingTimestampType: String, CaseIterable, Displayable, Storable {
 

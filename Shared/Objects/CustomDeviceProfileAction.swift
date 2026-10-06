@@ -7,6 +7,7 @@
 //
 
 import SwiftfinLocalization
+import SwiftfinStoredValues
 
 enum CustomDeviceProfileAction: String, CaseIterable, Displayable, Storable {
 

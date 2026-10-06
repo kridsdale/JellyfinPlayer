@@ -8,6 +8,7 @@
 
 import Defaults
 import SwiftfinLocalization
+import SwiftfinStoredValuesUI
 import SwiftUI
 
 private struct ItemActionButtonLabelStyle: LabelStyle {
