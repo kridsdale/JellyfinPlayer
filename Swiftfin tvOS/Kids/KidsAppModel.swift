@@ -29,6 +29,8 @@ final class KidsAppModel: ObservableObject {
     @Published
     var loading = true
     @Published
+    var catalogComplete = false
+    @Published
     var problem: String?
     @Published
     var requiresParent = false
@@ -300,6 +302,7 @@ final class KidsAppModel: ObservableObject {
         let generation = UUID()
         refreshGeneration = generation
         loading = true
+        catalogComplete = false
         catalog = [:]
         episodeCache = [:]
         problem = nil
@@ -331,22 +334,33 @@ final class KidsAppModel: ObservableObject {
                 )
             }
             #endif
-            try await api.validate(expected)
-            let load = KidsPerformance.begin(.storeLoad)
-            defer { load?.finish(Task.isCancelled ? .cancelled : .failure) }
-            let restored = try repository().load(binding: stored, legacyURL: stateURL)
-            load?.finish()
-            async let shows = api.catalog(.shows, binding: stored)
-            async let movies = api.catalog(.movies, binding: stored)
-            let result = try await (shows, movies)
+            let first = category
+            try await api.catalogs(first: first, binding: expected, prepare: {
+                let load = KidsPerformance.begin(.storeLoad)
+                defer { load?.finish(Task.isCancelled ? .cancelled : .failure) }
+                let restored = try self.repository().load(binding: stored, legacyURL: self.stateURL)
+                guard generation == self.refreshGeneration, !Task.isCancelled else { throw CancellationError() }
+                self.syncBaseline = restored
+                self.state = restored.state
+                self.requiresParent = !self.hasParentPIN
+                load?.finish()
+            }, receive: { category, items in
+                guard generation == self.refreshGeneration, !Task.isCancelled else { throw CancellationError() }
+                let firstPublication = self.catalog[category] == nil
+                self.catalog[category] = items
+                self.loading = false
+                if firstPublication {
+                    let phase: KidsPerformancePhase = category == .shows ? .firstShowsReady : .firstMoviesReady
+                    KidsPerformance.current?.mark(phase)
+                    KidsPerformance.launch?.once(phase)
+                }
+            })
             guard generation == refreshGeneration, !Task.isCancelled else { return .cancelled }
-            syncBaseline = restored
-            state = restored.state
-            catalog = [.shows: result.0, .movies: result.1]
-            KidsPerformance.current?.mark(.catalogReady, values: ["shows": Double(result.0.count), "movies": Double(result.1.count)])
+            KidsPerformance.current?.mark(.catalogReady, values: [
+                "shows": Double(catalog[.shows]?.count ?? 0), "movies": Double(catalog[.movies]?.count ?? 0)
+            ])
             KidsPerformance.launch?.once(.catalogReady)
-            requiresParent = !hasParentPIN
-            loading = false
+            catalogComplete = true
             return requiresParent ? .failure : .success
         } catch { guard generation == refreshGeneration else { return .cancelled }
             show(error)
@@ -454,7 +468,7 @@ final class KidsAppModel: ObservableObject {
     }
 
     func prefetch(around focusedID: String?, category: KidsCategory) async {
-        guard !isPreview, !loading, !requiresParent, !starting, activePlayback == nil,
+        guard !isPreview, !loading, catalogComplete, !requiresParent, !starting, activePlayback == nil,
               let focusedID, let items = catalog[category], items.contains(where: { $0.id == focusedID }) else { return }
         guard let binding else { return }
         let plan = KidsPrefetchPlan.make(focusedID: focusedID, category: category, items: items, binding: binding)

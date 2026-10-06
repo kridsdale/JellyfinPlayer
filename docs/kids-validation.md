@@ -83,3 +83,21 @@ The user added their paid Apple Developer account in Xcode. Saved Xcode team met
 The opt-in Release simulator baseline and limits are documented in [kids-performance.md](kids-performance.md), with [tracked aggregate evidence](performance/2026-10-04-baseline.json). This work adds measurements only. Fifteen starts of verified representative content produced video-output and advancing-clock evidence. Wider discovery also found one rejected show and one corrupt movie; those remain unresolved and were excluded from success timing distributions. There is no physical Apple TV or library-wide compatibility claim.
 
 The final instrumentation passed 54 native tests, eight HTTP contracts with probes enabled, five analyzer regressions, and two targeted real-playback methods in `build/validation/Kids-Performance-04.xcresult`. Both four-launch artwork sweeps passed in trials 02 and 03; the broader playback methods in those trials failed and are retained as failure evidence. The simulator-only rollback tool restored all original client-state fields and exact Shuffle bag through SwiftData; `build/validation/performance-restore-verification.json` records the comparison and unchanged legacy JSON hash. No RAID media files were modified.
+
+
+## Current signing retry (2026-10-05)
+
+The Mac now has one valid Apple Development signing identity for Kevin Ridsdale and two saved account-manager provider entries. A hardware Debug build with the interactive account still returned `No Accounts`; using the authorized App Store Connect team API key succeeded in account authentication, then failed because the team has no devices available for a tvOS development profile. No matching embedded profile or signed hardware app was produced. Only simulators are paired in `devicectl`. Physical Apple TV pairing/registration is the immediate human step; live CloudKit export/import between two signed clients, production schema deployment and TestFlight remain unverified. The configured paid team, bundle ID and CloudKit entitlement are retained.
+
+Both tvOS simulator builds and the shared-code iOS Release simulator build compile after the asynchronous audio/progressive catalog changes. These compile outcomes do not substitute for hardware signing or live cloud delivery.
+
+The user explicitly deferred physical Apple TV and live iCloud testing after the signing retry. These remain unverified acceptance gates, not current local engineering blockers to other work.
+
+
+## Progressive browse and audio lifecycle (2026-10-05, opt10)
+
+Four Release profiling methods passed eight real H264 starts and seven launches. Installed probe 10 matched SHA256 `dcdf748bc1f6ec3658da9657f90bf9145c9234cf45e643485adc33368a6908e5`. All eight native terminal shutdown/drain, audio activation and audio deactivation operations succeeded. Complete scoped state was restored through the SDK and compared equal. See the [aggregate](performance/2026-10-05-opt10.json) and [performance report](kids-performance-optimization.md); this is not broad codec or hardware proof.
+
+The first navigation attempt used the retained Release xctestrun file and is excluded from preview validation. The second used the correct Debug file: twelve tests passed and four seeded-player previews failed because the real identity watcher stopped their synthetic player. The watcher now explicitly excludes previews; production still stops playback before identity/catalog replacement. The third run, `build/validation/Kids-Prefix-Navigation-03.xcresult`, passed all **16** remote navigation tests with zero failures (152.533 s), including pending Movies loading, countdown Stop, parent movie Start over, paused seeking and reconnect Back. No real account or media changed to fix those fixture failures.
+
+Native core/HTTP and persistence: **69 + 23 = 92** tests pass. Profiling analyzer: **10** tests pass. The latest shared-code iOS Release simulator build passes. The selected paid team and simulator ad-hoc identity are kept distinct from hardware signing and CloudKit transport.

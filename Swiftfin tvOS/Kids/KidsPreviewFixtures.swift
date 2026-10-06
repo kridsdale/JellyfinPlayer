@@ -32,6 +32,7 @@ enum KidsPreviewFixtures {
         let model = KidsAppModel(preview: true)
         model.state = KidsState(binding: binding)
         model.loading = false
+        model.catalogComplete = true
         model.catalog = [
             .shows: (1 ... 12).map { KidsItem(id: "show-\($0)", name: "Friendly Show \($0)", kind: .series, libraryID: binding.showsID) },
             .movies: (1 ... 8).map { KidsItem(
@@ -43,6 +44,10 @@ enum KidsPreviewFixtures {
             ) }
         ]
         if scenario == "movies" {
+            model.category = .movies
+        }
+        if scenario == "movies-loading" {
+            model.catalog.removeValue(forKey: .movies)
             model.category = .movies
         }
         if scenario == "empty" {

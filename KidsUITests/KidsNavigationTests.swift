@@ -248,6 +248,17 @@ final class KidsNavigationTests: XCTestCase {
         capture("empty-catalog")
     }
 
+    func testPendingMoviesKeepsVerifiedShowsReachable() {
+        launch("movies-loading")
+        XCTAssertTrue(app.staticTexts["Finding your movies…"].waitForExistence(timeout: 10))
+        XCTAssertFalse(app.staticTexts["More pictures are coming!"].exists)
+        XCTAssertFalse(app.buttons["kids.card.movie-1"].exists)
+        XCTAssertTrue(app.buttons["kids.parents"].exists)
+        XCUIRemote.shared.press(.menu)
+        XCTAssertTrue(app.buttons["kids.card.show-1"].waitForExistence(timeout: 5))
+        capture("verified-shows-while-movies-pending")
+    }
+
     func testMoviesBackReturnsToShows() {
         launch("movies")
         XCTAssertTrue(app.buttons["kids.card.movie-1"].waitForExistence(timeout: 10))

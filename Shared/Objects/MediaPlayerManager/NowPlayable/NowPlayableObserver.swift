@@ -11,6 +11,7 @@ import Foundation
 import Logging
 import MediaPlayer
 import Nuke
+import SwiftVLC
 
 // TODO: ensure proper state handling
 //       - manager states
@@ -35,21 +36,23 @@ class NowPlayableObserver: ViewModel, MediaPlayerObserver {
     }
 
     private var itemImageCancellable: AnyCancellable?
+    private var audioOwner: UUID?
+    private var audioActivation: Task<Void, Error>?
     private var playbackRequestStateBeforeInterruption: MediaPlayerManager.PlaybackRequestStatus = .playing
 
     weak var manager: MediaPlayerManager? {
-        willSet {
-            guard let newValue else { return }
-            setup(with: newValue)
+        didSet {
+            guard oldValue !== manager else { return }
+            handleStopAction(draining: (oldValue?.proxy as? VLCMediaPlayerProxy)?.player)
+            guard let manager else { return }
+            setup(with: manager)
         }
     }
 
     private func setup(with manager: MediaPlayerManager) {
-        do {
-            try startSession()
-        } catch {
-            logger.critical("Unable to activate audio session: \(error.localizedDescription)")
-        }
+        let owner = UUID()
+        audioOwner = owner
+        audioActivation = PlaybackAudioSession.shared.acquire(owner)
 
         cancellables = []
 
@@ -71,19 +74,14 @@ class NowPlayableObserver: ViewModel, MediaPlayerObserver {
 
         Notifications[.avAudioSessionInterruption]
             .publisher
-            .sink { i in
-                Task { @MainActor in
-                    self.handleInterruption(type: i.0, options: i.1)
-                }
+            .sink { [weak self] i in
+                self?.handleInterruption(type: i.0, options: i.1)
             }
             .store(in: &cancellables)
 
-        Task { @MainActor in
-            configureRemoteCommands(
-                defaultRegisteredCommands,
-                commandHandler: handleCommand
-            )
-        }
+        configureRemoteCommands(defaultRegisteredCommands, commandHandler: { [weak self] command, event in
+            self?.handleCommand(command: command, event: event) ?? .commandFailed
+        })
     }
 
     private func playbackRequestStatusDidChange(_ newStatus: MediaPlayerManager.PlaybackRequestStatus) {
@@ -110,7 +108,7 @@ class NowPlayableObserver: ViewModel, MediaPlayerObserver {
     private func actionDidChange(_ newAction: MediaPlayerManager._Action) {
         switch newAction {
         case .stop, .error:
-            handleStopAction()
+            handleStopAction(draining: (manager?.proxy as? VLCMediaPlayerProxy)?.player)
         default: ()
         }
     }
@@ -127,7 +125,9 @@ class NowPlayableObserver: ViewModel, MediaPlayerObserver {
         itemImageCancellable = Task {
             let currentBaseItem = newItem.baseItem
             guard let image = await newItem.thumbnailProvider?() else { return }
-            guard manager?.item.id == currentBaseItem.id else { return }
+            guard !Task.isCancelled, audioOwner != nil,
+                  manager?.state != .stopped, manager?.state != .error,
+                  manager?.item.id == currentBaseItem.id else { return }
 
             await MainActor.run {
                 setNowPlayingMetadata(
@@ -146,52 +146,60 @@ class NowPlayableObserver: ViewModel, MediaPlayerObserver {
         )
     }
 
-    private func handleStopAction() {
-        cancellables = []
+    /// The native player awaits activation before opening audio/video output.
+    func prepareForPlayback() async throws {
+        guard let audioActivation, audioOwner != nil else { throw CancellationError() }
+        try await audioActivation.value
+        try Task.checkCancellation()
+        guard audioOwner != nil else { throw CancellationError() }
+    }
 
+    private func handleStopAction(draining player: Player?) {
+        cancellables = []
+        itemImageCancellable?.cancel()
+        itemImageCancellable = nil
+        guard let owner = audioOwner else { return }
+        audioOwner = nil
+        audioActivation = nil
         for command in defaultRegisteredCommands {
             command.removeHandler()
         }
-
-        Task(priority: .userInitiated) {
-            // TODO: figure out way to not need delay
-            // Delay to wait for io to stop
-            try? await Task.sleep(for: .seconds(0.3))
-
-            do {
-                try stopSession()
-            } catch {
-                logger.critical("Unable to stop audio session: \(error.localizedDescription)")
-            }
+        PlaybackAudioSession.shared.release(owner) {
+            guard let player else { return true }
+            // This manager is terminal. Full teardown detaches the drawable and
+            // awaits native-handle release; merely waiting for Stop left paused
+            // simulator outputs draining until the SDK's ten-second ceiling.
+            await player.shutdown()
+            return player.state == .idle
         }
     }
 
-    // TODO: complete by referencing apple code
-    //       - restart
-    @MainActor
     private func handleInterruption(
         type: AVAudioSession.InterruptionType,
         options: AVAudioSession.InterruptionOptions
     ) {
+        guard let manager, let owner = audioOwner,
+              manager.state != .stopped, manager.state != .error else { return }
         switch type {
         case .began:
-            playbackRequestStateBeforeInterruption = manager?.playbackRequestStatus ?? .playing
-            manager?.setPlaybackRequestStatus(status: .paused)
+            PlaybackAudioSession.shared.wasInterrupted()
+            playbackRequestStateBeforeInterruption = manager.playbackRequestStatus
+            manager.setPlaybackRequestStatus(status: .paused)
         case .ended:
-            do {
-                try startSession()
-
-                if playbackRequestStateBeforeInterruption == .playing {
-                    if options.contains(.shouldResume) {
-                        manager?.setPlaybackRequestStatus(status: .playing)
-                        manager?.proxy?.play()
-                    } else {
-                        manager?.setPlaybackRequestStatus(status: .paused)
-                    }
+            let shouldResume = playbackRequestStateBeforeInterruption == .playing && options.contains(.shouldResume)
+            let activation = PlaybackAudioSession.shared.acquire(owner)
+            audioActivation = activation
+            Task { [weak self, weak manager] in
+                do {
+                    try await activation.value
+                    guard let self, let manager, self.audioOwner == owner,
+                          manager.state != .stopped, manager.state != .error else { return }
+                    manager.setPlaybackRequestStatus(status: shouldResume ? .playing : .paused)
+                } catch {
+                    guard let self, self.audioOwner == owner else { return }
+                    self.logger.error("Audio session reactivation failed")
+                    await manager?.stop()
                 }
-            } catch {
-                logger.critical("Unable to reactivate audio session after interruption: \(error.localizedDescription)")
-                manager?.stop()
             }
         @unknown default: ()
         }
@@ -202,28 +210,30 @@ class NowPlayableObserver: ViewModel, MediaPlayerObserver {
         command: NowPlayableCommand,
         event: MPRemoteCommandEvent
     ) -> MPRemoteCommandHandlerStatus {
+        guard let manager, audioOwner != nil,
+              manager.state != .stopped, manager.state != .error else { return .commandFailed }
         switch command {
         case .pause:
-            manager?.setPlaybackRequestStatus(status: .paused)
+            manager.setPlaybackRequestStatus(status: .paused)
         case .play:
-            manager?.setPlaybackRequestStatus(status: .playing)
+            manager.setPlaybackRequestStatus(status: .playing)
         case .togglePausePlay:
-            manager?.togglePlayPause()
+            manager.togglePlayPause()
         case .skipBackward:
             guard let event = event as? MPSkipIntervalCommandEvent else { return .commandFailed }
-            manager?.proxy?.jumpBackward(.seconds(event.interval))
+            manager.proxy?.jumpBackward(.seconds(event.interval))
         case .skipForward:
             guard let event = event as? MPSkipIntervalCommandEvent else { return .commandFailed }
-            manager?.proxy?.jumpForward(.seconds(event.interval))
+            manager.proxy?.jumpForward(.seconds(event.interval))
         case .changePlaybackPosition:
             guard let event = event as? MPChangePlaybackPositionCommandEvent else { return .commandFailed }
-            manager?.proxy?.setSeconds(Duration.seconds(event.positionTime))
+            manager.proxy?.setSeconds(Duration.seconds(event.positionTime))
         case .nextTrack:
-            guard let nextItem = manager?.queue?.nextItem else { return .commandFailed }
-            manager?.playNewItem(provider: nextItem)
+            guard let nextItem = manager.queue?.nextItem else { return .commandFailed }
+            manager.playNewItem(provider: nextItem)
         case .previousTrack:
-            guard let previousItem = manager?.queue?.previousItem else { return .commandFailed }
-            manager?.playNewItem(provider: previousItem)
+            guard let previousItem = manager.queue?.previousItem else { return .commandFailed }
+            manager.playNewItem(provider: previousItem)
         default: ()
         }
 
@@ -279,29 +289,5 @@ class NowPlayableObserver: ViewModel, MediaPlayerObserver {
         nowPlayingInfo[MPNowPlayingInfoPropertyAvailableLanguageOptions] = metadata.availableLanguageOptionGroups
 
         nowPlayingInfoCenter.nowPlayingInfo = nowPlayingInfo
-    }
-
-    private func startSession() throws {
-
-        let audioSession = AVAudioSession.sharedInstance()
-
-        do {
-            try audioSession.setCategory(.playback, mode: .default)
-            try audioSession.setActive(true)
-            logger.trace("Started AVAudioSession")
-        } catch {
-            logger.critical("Unable to activate AVAudioSession instance: \(error.localizedDescription)")
-            throw error
-        }
-    }
-
-    private func stopSession() throws {
-        do {
-            try AVAudioSession.sharedInstance().setActive(false)
-            logger.trace("Stopped AVAudioSession")
-        } catch {
-            logger.critical("Unable to deactivate AVAudioSession instance: \(error.localizedDescription)")
-            throw error
-        }
     }
 }

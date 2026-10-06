@@ -100,6 +100,9 @@ struct KidsRootView: View {
             sessions.currentSession?.user.id,
             sessions.currentSession?.server.effectiveServerURL.absoluteString
         ]) {
+            // Synthetic previews own their seeded player. Production identity
+            // transitions still stop playback before replacing any catalog.
+            guard !model.isPreview else { return }
             path = []
             await model.stopPlayback(endSession: false)
             await model.refresh()
@@ -274,6 +277,13 @@ struct KidsBrowseView: View {
                         focused = target
                     }
                 }
+            } else if model.catalog[model.category] == nil {
+                KidsStatusView(
+                    symbol: model.category.symbol,
+                    title: model.category == .shows ?
+                        "Finding your shows…" : "Finding your movies…"
+                )
+                .accessibilityIdentifier("kids.category.loading")
             } else {
                 KidsStatusView(
                     symbol: model.category.symbol,
@@ -305,7 +315,7 @@ struct KidsBrowseView: View {
                 model.narration(item.name)
             }
         }
-        .task(id: [focused ?? "", model.category.rawValue, model.artworkRevision.uuidString]) {
+        .task(id: [focused ?? "", model.category.rawValue, model.artworkRevision.uuidString, String(model.catalogComplete)]) {
             do { try await Task.sleep(for: .milliseconds(350)) } catch { return }
             await model.prefetch(around: focused, category: model.category)
         }

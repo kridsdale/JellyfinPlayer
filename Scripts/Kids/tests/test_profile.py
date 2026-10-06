@@ -115,6 +115,34 @@ class EvidenceTests(unittest.TestCase):
         self.assertEqual(result["failures"], {"playbackReport": 1})
         self.assertNotIn("report.duration.playbackProgress", result["metrics"])
 
+    def test_first_verified_prefix_and_complete_catalog_remain_separate(self):
+        result = self.analyze([
+            event("launch", "launch", "begin", 0),
+            event("launch", "launch", "firstShowsReady", 500),
+            event("launch", "launch", "browsePresented", 530),
+            event("launch", "launch", "showsReady", 900),
+            event("launch", "launch", "moviesReady", 2800),
+            event("launch", "launch", "catalogReady", 2800),
+        ])
+        self.assertEqual(result["metrics"]["launch.firstShowsReady"]["median_ms"], 500)
+        self.assertEqual(result["metrics"]["launch.showsReady"]["median_ms"], 900)
+        self.assertEqual(result["metrics"]["launch.catalogReady"]["median_ms"], 2800)
+        self.assertEqual(result["metrics"]["launch.browsePresented"]["median_ms"], 530)
+
+    def test_native_drain_timeouts_are_not_counted_as_successful_audio_teardown(self):
+        result = self.analyze([
+            event("drain", "playerDrain", "begin", 0),
+            event("drain", "playerDrain", "end", 60, outcome="success"),
+            event("bad", "playerDrain", "begin", 0),
+            event("bad", "playerDrain", "end", 10000, outcome="failure"),
+            event("audio", "audioDeactivation", "begin", 0),
+            event("audio", "audioDeactivation", "end", 2, outcome="success"),
+        ])
+        self.assertEqual(result["metrics"]["operation.playerDrain"]["n"], 1)
+        self.assertEqual(result["metrics"]["operation.playerDrain"]["median_ms"], 60)
+        self.assertEqual(result["metrics"]["operation.audioDeactivation"]["median_ms"], 2)
+        self.assertEqual(result["failures"], {"playerDrain": 1})
+
     def test_nearest_rank_p95_is_observed_not_extrapolated(self):
         result = profile.stats([10, 20, 30, float("nan")])
         self.assertEqual(result["n"], 3)

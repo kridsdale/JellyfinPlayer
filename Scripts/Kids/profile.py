@@ -100,7 +100,7 @@ def analyze(directory):
         if 'response' in phases and 'status' in phases['response']['values']:
             response_status[operation][str(int(phases['response']['values']['status']))] += 1
         if operation == 'launch':
-            for name in ('catalogReady', 'browsePresented'):
+            for name in ('catalogReady', 'browsePresented', 'showsReady', 'moviesReady', 'firstShowsReady', 'firstMoviesReady'):
                 if name in phases:
                     metrics['launch.' + name].append(phases[name]['elapsedMS'])
         if operation == 'catalog' and 'catalogReady' in phases:
@@ -129,7 +129,7 @@ def analyze(directory):
         if end and end.get('outcome') == 'success':
             if operation == 'playbackReport' and base.get('endpoint') in ('playbackStart', 'playbackProgress', 'playbackStop'):
                 metrics['report.duration.' + base['endpoint']].append(end['elapsedMS'])
-            if operation in ('storeOpen', 'storeLoad', 'storeSave', 'metadata', 'bitrate', 'playbackInfo', 'policy', 'episodes', 'authorize', 'ancestry'):
+            if operation in ('storeOpen', 'storeLoad', 'storeSave', 'metadata', 'bitrate', 'playbackInfo', 'policy', 'episodes', 'authorize', 'ancestry', 'audioActivation', 'audioDeactivation', 'playerDrain'):
                 metrics['operation.' + operation].append(end['elapsedMS'])
             if operation == 'http':
                 http[base.get('endpoint', 'other')].append(end['elapsedMS'])

@@ -142,9 +142,10 @@ public struct KidsAPI: Sendable {
         let trace = KidsPerformance.begin(.policy)
         do {
             let result: Void = try await KidsPerformance.$current.withValue(trace) {
-                let info = try await serverInfo()
+                async let infoRequest = serverInfo()
+                async let userRequest: UserResponse = get("Users/Me")
+                let (info, user) = try await (infoRequest, userRequest)
                 guard info.id == binding.serverID else { throw KidsAPIError.libraryChanged }
-                let user: UserResponse = try await get("Users/Me")
                 guard user.id == binding.userID else { throw KidsAPIError.authentication }
                 let policy = KidsAccessPolicy(
                     administrator: user.policy.isAdministrator ?? true,
@@ -168,7 +169,28 @@ public struct KidsAPI: Sendable {
         }
     }
 
-    public func catalog(_ category: KidsCategory, binding: KidsBinding) async throws -> [KidsItem] {
+    /// Publish cumulative verified catalog prefixes, after the complete
+    /// account/library preflight. A larger category cannot delay the first one.
+    /// Failures propagate so the presentation can clear an already shown category.
+    public func catalogs(
+        first: KidsCategory = .shows,
+        binding: KidsBinding,
+        prepare: @MainActor @Sendable () throws -> Void = {},
+        receive: @escaping @MainActor @Sendable (KidsCategory, [KidsItem]) throws -> Void
+    ) async throws {
+        try await validate(binding)
+        try Task.checkCancellation()
+        try await prepare()
+        let publication = await KidsCatalogPublication(first: first, receive: receive)
+        async let shows = catalog(.shows, binding: binding, receive: { try publication.publish(.shows, $0) })
+        async let movies = catalog(.movies, binding: binding, receive: { try publication.publish(.movies, $0) })
+        _ = try await (shows, movies)
+    }
+
+    public func catalog(
+        _ category: KidsCategory, binding: KidsBinding,
+        receive: (@MainActor @Sendable ([KidsItem]) throws -> Void)? = nil
+    ) async throws -> [KidsItem] {
         let trace = KidsPerformance.begin(.catalog, variant: category == .shows ? .shows : .movies)
         do {
             let result = try await KidsPerformance.$current.withValue(trace) {
@@ -178,7 +200,10 @@ public struct KidsAPI: Sendable {
                     extra: ["IncludeItemTypes": category == .shows ? "Series" : "Movie"]
                 )
                 .filter { KidsEligibility.permits($0, binding: binding) && $0.kind == (category == .shows ? .series : .movie) }
-                return try await verified(candidates, libraryID: binding.library(for: category), binding: binding)
+                return try await verified(candidates, libraryID: binding.library(for: category), binding: binding, receive: receive)
+            }
+            if receive != nil {
+                KidsPerformance.launch?.once(category == .shows ? .showsReady : .moviesReady)
             }
             trace?.finish()
             return result
@@ -235,13 +260,19 @@ public struct KidsAPI: Sendable {
         guard ancestors.contains(where: { $0.id == libraryID }) else { throw KidsContractError.denied }
     }
 
-    private func verified(_ items: [KidsItem], libraryID: String, binding: KidsBinding) async throws -> [KidsItem] {
+    private func verified(
+        _ items: [KidsItem], libraryID: String, binding: KidsBinding,
+        receive: (@MainActor @Sendable ([KidsItem]) throws -> Void)? = nil
+    ) async throws -> [KidsItem] {
         let trace = KidsPerformance.begin(.ancestry)
         do {
             let result = try await KidsPerformance.$current.withValue(trace) {
                 try await withThrowingTaskGroup(of: (Int, Bool).self) { group in
                     var next = 0
                     var approved = Set<Int>()
+                    var resolved = Set<Int>()
+                    var prefix = 0
+                    var publishedPrefix = 0
                     func add(_ index: Int) {
                         group.addTask {
                             do { try await verifyMembership(items[index].id, libraryID: libraryID, binding: binding)
@@ -258,12 +289,33 @@ public struct KidsAPI: Sendable {
                         if allowed {
                             approved.insert(index)
                         }
+                        resolved.insert(index)
+                        while resolved.contains(prefix) {
+                            prefix += 1
+                        }
+                        // Publish only an ordered prefix whose every entry has
+                        // finished membership verification. Denied entries never
+                        // reach title/artwork consumers, even during partial loads.
+                        if let receive, prefix - publishedPrefix >= 8 {
+                            let values = items.prefix(prefix).enumerated()
+                                .compactMap { approved.contains($0.offset) ? $0.element : nil }
+                            if !values.isEmpty {
+                                try Task.checkCancellation()
+                                try await receive(values)
+                                publishedPrefix = prefix
+                            }
+                        }
                         if next < items.count {
                             add(next)
                             next += 1
                         }
                     }
-                    return items.enumerated().compactMap { approved.contains($0.offset) ? $0.element : nil }
+                    let values = items.enumerated().compactMap { approved.contains($0.offset) ? $0.element : nil }
+                    if let receive, publishedPrefix != items.count || items.isEmpty {
+                        try Task.checkCancellation()
+                        try await receive(values)
+                    }
+                    return values
                 }
             }
             trace?.finish()
@@ -396,6 +448,37 @@ public struct KidsAPI: Sendable {
             }
             trace?.finish(.failure)
             throw KidsAPIError.connection
+        }
+    }
+}
+
+/// Holds a secondary category until the selected category has a verified prefix.
+/// Thereafter every publication is a cumulative, stable prefix, not a new order.
+@MainActor
+private final class KidsCatalogPublication {
+    private let first: KidsCategory
+    private let receive: @MainActor @Sendable (KidsCategory, [KidsItem]) throws -> Void
+    private var opened = false
+    private var pending: (KidsCategory, [KidsItem])?
+
+    init(first: KidsCategory, receive: @escaping @MainActor @Sendable (KidsCategory, [KidsItem]) throws -> Void) {
+        self.first = first
+        self.receive = receive
+    }
+
+    func publish(_ category: KidsCategory, _ items: [KidsItem]) throws {
+        try Task.checkCancellation()
+        if category != first, !opened {
+            pending = (category, items)
+            return
+        }
+        try receive(category, items)
+        if !opened {
+            opened = true
+            if let pending {
+                self.pending = nil
+                try receive(pending.0, pending.1)
+            }
         }
     }
 }

@@ -105,3 +105,33 @@ The server's finite read-only observer captured 60 samples at three-second caden
 Each trial's entire simulator-local playback state was restored through the SDK and compared equal to its retained backup. The legacy JSON hash stayed unchanged. Profiling remains opt-in and the final app was relaunched normally after restoration. No media catalog expansion, full-media prefetch, RAID mutation, cache purge, file repair or conversion occurred.
 
 Remaining work includes cold title/catalog latency, the excluded numbering and MPEG4/AVI cases, the source of rejected dismissal status requests, asynchronous audio-session activation, broader codec/hardware playback validation and staged migration of inherited code to Swift 6. CI workflow publication still requires the pending explicit GitHub scope authorization; it does not block local client optimization.
+
+
+## Verified progressive browse and asynchronous audio lifecycle (opt08-opt10)
+
+The latest candidate is stamped probe revision 10, executable SHA256 `dcdf748bc1f6ec3658da9657f90bf9145c9234cf45e643485adc33368a6908e5`, based on `82ef33b4` with the source-file hashes retained in the [opt10 aggregate](performance/2026-10-05-opt10.json). The installed executable matched and the complete simulator progress state was restored through SwiftData SDK operations and compared equal to the retained snapshot.
+
+Catalog loading now validates the account before publishing any data, fetches both scoped categories concurrently, and exposes stable cumulative prefixes only after each entry's kind and ancestry are verified. The selected category publishes first; denied entries are excluded even from partial snapshots. Later failure clears the catalog. Parent help remains reachable while a category loads. Automatic episode prefetch waits for full catalog completion, avoiding competition with outstanding catalog checks; explicit title entry remains available. New HTTP tests cover selected-category ordering, wrong-library prefix exclusion, policy denial, cancellation and late failure.
+
+| Opt10 measurement | Median | n |
+|---|---:|---:|
+| Launch to first approved Shows prefix | 1.451 s | 7 |
+| Launch to first approved Movies prefix | 1.529 s | 7 |
+| Launch to first browse | 1.495 s | 7 |
+| Launch to complete Shows catalog | 2.236 s | 7 |
+| Launch to both complete catalogs | 3.676 s | 7 |
+| Grid art to presentation opportunity | 204.172 ms | 128 |
+| Ordered TV Play to observed output | 1.868 s | 3 |
+| Shuffle TV Play to observed output | 1.929 s | 1 |
+| Movie Play to observed output | 2.338 s | 4 |
+| Native terminal-player shutdown/drain | 61.274 ms | 8 |
+| Audio activation | 0.305 ms | 8 |
+| Audio deactivation | 0.037 ms | 8 |
+
+First visible browse and full completion are deliberately separate metrics. These later warm-server H264 simulator samples do not show an additional playback or artwork improvement over opt04/opt07. No physical-device, disk-seek or broad-format result is inferred. No independent server observer ran for these trials. The server logging cleanup and boot diagnostic staging overlapped the early trials, so timing changes are not attributed exclusively to client changes.
+
+The transport setter now updates immediately on the main actor rather than scheduling a state-machine request that could execute after Stop. Audio activation/deactivation uses a process-wide ordered lease coordinator; category setup and older-OS compatibility calls run off the main actor. VLC waits for activation before opening output. A terminal player's full native shutdown drains output before releasing its audio lease. Old stopped/failed/replaced players cannot resume from late transport, image or interruption callbacks. All eight opt10 activation, drain and deactivation operations succeeded; the maximum drain was 65.929 ms. The previous main-thread audio activation and rejected-dismissal warnings were absent in the opt08-opt10 runtime logs. This does not establish hardware interruption behavior.
+
+Failed experiments are preserved. [Opt08](performance/2026-10-05-opt08.json) tested a larger per-host connection pool without measured benefit; that change was removed. [Opt09](performance/2026-10-05-opt09.json) passed its UI assertions but recorded five ten-second stop-only drain failures, so it is excluded as a final acceptance candidate. Opt10 replaces that wait with terminal native-handle shutdown.
+
+Opt10 passed four Release profiling methods, eight genuine starts and seven launches. The trace contains 17,275 events, zero malformed lines and seven retained brief pre-session catalog failures; no artwork, playback, report, audio or native-drain failure was recorded. Native core/HTTP and persistence: 69 plus 23 tests pass. Analyzer: ten tests pass. New navigation, platform compatibility and broader format checks remain separately reported. No RAID file changes, media conversion, full-media prefetch or catalog expansion occurred.

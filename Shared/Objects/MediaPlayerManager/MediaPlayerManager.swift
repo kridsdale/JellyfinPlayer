@@ -59,7 +59,6 @@ final class MediaPlayerManager: ViewModel {
         case error
         case playNewItem(provider: MediaPlayerItemProvider)
         case setBitrate(bitrate: PlaybackBitrate)
-        case setPlaybackRequestStatus(status: PlaybackRequestStatus)
         case setRate(rate: Float)
         case setTrack(type: MediaStreamType, from: Int?, to: Int? = nil)
         case start
@@ -300,8 +299,10 @@ final class MediaPlayerManager: ViewModel {
         )
     }
 
-    @Function(\Action.Cases.setPlaybackRequestStatus)
-    private func set(_ status: PlaybackRequestStatus) {
+    // Transport observations are synchronous main-actor values, not queued state
+    // transitions. A queued native Play notification could otherwise execute after Stop.
+    func setPlaybackRequestStatus(status: PlaybackRequestStatus) {
+        guard state != .stopped, state != .error else { return }
         if self.playbackRequestStatus != status {
             self.playbackRequestStatus = status
 

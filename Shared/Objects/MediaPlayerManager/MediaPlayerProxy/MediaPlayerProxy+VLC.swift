@@ -300,7 +300,20 @@ extension VLCMediaPlayerProxy {
             if let playbackItem = manager.playbackItem, manager.state != .stopped {
                 VideoView(proxy.player)
                     .task(id: ObjectIdentifier(playbackItem)) {
-                        proxy.play(playbackItem, subtitleConfiguration: subtitleConfiguration)
+                        do {
+                            for observer in proxy.observers {
+                                try await (observer as? NowPlayableObserver)?.prepareForPlayback()
+                            }
+                            guard !Task.isCancelled, manager.state != .stopped, manager.state != .error,
+                                  manager.playbackItem === playbackItem else { return }
+                            proxy.play(playbackItem, subtitleConfiguration: subtitleConfiguration)
+                        } catch is CancellationError {
+                            // A dismissed or replaced player must not open native output.
+                        } catch {
+                            guard !Task.isCancelled, manager.state != .stopped,
+                                  manager.playbackItem === playbackItem else { return }
+                            await manager.error(ErrorMessage("Audio session could not start"))
+                        }
                     }
                     .onChange(of: proxy.player.currentTime) { _, newSeconds in
                         guard manager.state != .stopped, manager.state != .error,

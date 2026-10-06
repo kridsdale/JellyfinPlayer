@@ -324,3 +324,105 @@ func `episode pagination uses the authorized show endpoint and never walks the l
     #expect(libraryRequests.count == 1)
     #expect(libraryRequests.allSatisfy { query($0)["ParentId"] == "tv" && query($0)["Ids"] == "show" })
 }
+
+@Test @MainActor
+func `progressive catalogs verify policy before local preparation or publication`() async {
+    let (api, log) = fixture { request in
+        if request.url!.path.hasSuffix("Users/Me") {
+            return Reply(body: "{\"Id\":\"kid\",\"Policy\":{}}")
+        }
+        return validRoute(request) ?? Reply(status: 404, body: "{}")
+    }
+    var prepared = false
+    var published = false
+    await #expect(throws: KidsAPIError.policy) {
+        try await api.catalogs(binding: fixtureBinding, prepare: { prepared = true }, receive: { _, _ in published = true })
+    }
+    #expect(!prepared && !published)
+    #expect(!log.requests.contains { $0.url!.path.hasSuffix("Items") || $0.url!.path.hasSuffix("Views") })
+}
+
+@Test @MainActor
+func `progressive catalogs publish only verified items in the selected category order`() async throws {
+    let (api, _) = fixture { request in
+        if let reply = validRoute(request) {
+            return reply
+        }
+        return query(request)["ParentId"] == "tv" ?
+            Reply(body: #"{"Items":[{"Id":"show","Name":"Show","Type":"Series"}]}"#) :
+            Reply(body: #"{"Items":[{"Id":"movie","Name":"Movie","Type":"Movie"}]}"#)
+    }
+    for first in KidsCategory.allCases {
+        var prepared = false
+        var received: [KidsCategory] = []
+        try await api.catalogs(first: first, binding: fixtureBinding, prepare: { prepared = true }, receive: { category, items in
+            #expect(prepared)
+            #expect(items.count == 1)
+            #expect(items[0].kind == (category == .shows ? .series : .movie))
+            #expect(items[0].libraryID == fixtureBinding.library(for: category))
+            received.append(category)
+        })
+        #expect(received == [first, first == .shows ? .movies : .shows])
+    }
+}
+
+@Test @MainActor
+func `a late category failure propagates after the first verified category`() async {
+    let (api, _) = fixture { request in
+        if let reply = validRoute(request) {
+            return reply
+        }
+        return query(request)["ParentId"] == "tv" ?
+            Reply(body: #"{"Items":[{"Id":"show","Name":"Show","Type":"Series"}]}"#) :
+            Reply(status: 503, body: "{}")
+    }
+    var received: [KidsCategory] = []
+    await #expect(throws: KidsAPIError.connection) {
+        try await api.catalogs(binding: fixtureBinding, receive: { category, _ in received.append(category) })
+    }
+    #expect(received == [.shows])
+}
+
+@Test @MainActor
+func `incremental catalog prefixes retain order and never publish forged membership`() async throws {
+    let raw = (0 ..< 24).map { index in
+        ["Id": index == 3 ? "movie-private" : "show-\(index)", "Name": "Fixture \(index)", "Type": "Series"]
+    }
+    let body = try String(decoding: JSONSerialization.data(withJSONObject: ["Items": raw]), as: UTF8.self)
+    let (api, _) = fixture { request in
+        if let reply = validRoute(request) {
+            return reply
+        }
+        return query(request)["ParentId"] == "tv" ? Reply(body: body) : Reply(body: #"{"Items":[]}"#)
+    }
+    var prefixes: [[String]] = []
+    try await api.catalogs(binding: fixtureBinding, receive: { category, values in
+        guard category == .shows else { return }
+        let ids = values.map(\.id)
+        #expect(!ids.contains("movie-private"))
+        if let previous = prefixes.last {
+            #expect(Array(ids.prefix(previous.count)) == previous)
+        }
+        prefixes.append(ids)
+    })
+    #expect(prefixes.count > 1)
+    #expect(try #require(prefixes.first?.count) < prefixes.last!.count)
+    #expect(prefixes.last == (0 ..< 24).filter { $0 != 3 }.map { "show-\($0)" })
+}
+
+@Test @MainActor
+func `publication cancellation prevents later catalog prefixes`() async throws {
+    let raw = (0 ..< 24).map { ["Id": "show-\($0)", "Name": "Fixture", "Type": "Series"] }
+    let body = try String(decoding: JSONSerialization.data(withJSONObject: ["Items": raw]), as: UTF8.self)
+    let (api, _) = fixture { request in
+        validRoute(request) ?? Reply(body: query(request)["ParentId"] == "tv" ? body : #"{"Items":[]}"#)
+    }
+    var publications = 0
+    await #expect(throws: CancellationError.self) {
+        try await api.catalogs(binding: fixtureBinding, receive: { _, _ in
+            publications += 1
+            throw CancellationError()
+        })
+    }
+    #expect(publications == 1)
+}
