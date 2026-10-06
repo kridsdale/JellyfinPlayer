@@ -13,6 +13,7 @@ import JellyfinAPI
 import Logging
 import Pulse
 import SwiftfinAccountModels
+import SwiftfinConnections
 import SwiftfinConnectivity
 import SwiftfinLocalization
 
@@ -52,12 +53,7 @@ final class ServerConnectionManager: ObservableObject {
         case unreachable([ServerConnection])
     }
 
-    enum Resolution: Equatable {
-        case connected(ServerConnection)
-        case unreachable([ServerConnection])
-    }
-
-    private static let logger = Logger.swiftfin()
+    typealias Resolution = ServerConnectionResolution
 
     private weak var userSession: UserSession?
     private var observation: NetworkContextObservation?
@@ -71,29 +67,15 @@ final class ServerConnectionManager: ObservableObject {
         connection: ServerConnection,
         accessToken: String? = nil,
         matchingServerID serverID: String
-    ) async throws -> PublicSystemInfo {
-        let sessionConfiguration = URLSessionConfiguration.swiftfin.copy() as! URLSessionConfiguration
-        sessionConfiguration.timeoutIntervalForRequest = 8
-        sessionConfiguration.timeoutIntervalForResource = 12
-        sessionConfiguration.waitsForConnectivity = false
-
-        let client = JellyfinClient(
-            configuration: .swiftfinConfiguration(
-                url: connection.url,
-                accessToken: accessToken
-            ),
-            sessionConfiguration: sessionConfiguration,
-            sessionDelegate: URLSessionProxyDelegate(logger: NetworkLogger.swiftfin())
-        )
-
-        let response = try await client.send(Paths.getPublicSystemInfo)
-        let publicInfo = response.value
-
-        if publicInfo.id != serverID {
+    ) async throws {
+        do {
+            try await ServerConnectionResolver.test(
+                connection: connection, accessToken: accessToken,
+                expectedServerID: serverID, probe: JellyfinServerConnectionProbe()
+            )
+        } catch ServerConnectionProbeError.serverMismatch {
             throw ErrorMessage(L10n.connectionServerMismatch)
         }
-
-        return publicInfo
     }
 
     @MainActor
@@ -102,51 +84,22 @@ final class ServerConnectionManager: ObservableObject {
         accessToken: String?,
         context: NetworkConnectionContext
     ) async -> Resolution {
-        guard context.isSatisfied else { return .unreachable([]) }
-
-        let candidates = server.serverConnections.filter { $0.matches(context) }
-        guard candidates.isNotEmpty else { return .unreachable([]) }
-
-        guard let reachableConnection = await firstReachableConnection(
-            in: candidates,
-            accessToken: accessToken,
-            serverID: server.id
-        ) else { return .unreachable(candidates) }
-
-        if server.activeServerConnection?.id != reachableConnection.id {
-            server.activeServerConnection = reachableConnection
-        }
-
-        return .connected(reachableConnection)
-    }
-
-    private static func firstReachableConnection(
-        in connections: [ServerConnection],
-        accessToken: String?,
-        serverID: String
-    ) async -> ServerConnection? {
-        for connection in connections {
-            guard !Task.isCancelled else { return nil }
-
-            do {
-                _ = try await test(
-                    connection: connection,
-                    accessToken: accessToken,
-                    matchingServerID: serverID
-                )
-                return connection
-            } catch {
-                logger.info(
-                    "Server connection probe failed",
-                    metadata: [
-                        "url": .string(connection.url.absoluteString),
-                        "error": .string(error.localizedDescription),
-                    ]
-                )
+        // Legacy records may not yet have persisted connection IDs. Initialize
+        // them once so the post-await snapshot comparison uses stable identities.
+        let connections = server.ensureServerConnections()
+        do {
+            let resolution = try await ServerConnectionResolver.resolve(
+                connections: connections, accessToken: accessToken,
+                expectedServerID: server.id, context: context,
+                probe: JellyfinServerConnectionProbe()
+            )
+            guard !Task.isCancelled, server.serverConnections == connections else {
+                return .unreachable(server.serverConnections.filter { $0.matches(context) })
             }
+            return resolution
+        } catch {
+            return .unreachable(connections.filter { $0.matches(context) })
         }
-
-        return nil
     }
 
     @Function(\Action.Cases.start)
@@ -216,16 +169,19 @@ final class ServerConnectionManager: ObservableObject {
         }
 
         let currentConnection = userSession.server.activeServerConnection
+        let requestedContext = context
         let resolution = await Self.evaluate(
             server: userSession.server,
             accessToken: userSession.user.accessToken,
-            context: context
+            context: requestedContext
         )
-        guard !Task.isCancelled else { return }
+        guard !Task.isCancelled, isAutoSwitchEnabled,
+              self.userSession === userSession, context == requestedContext else { return }
 
         if case let .connected(reachableConnection) = resolution,
            currentConnection?.id != reachableConnection.id
         {
+            userSession.server.activeServerConnection = reachableConnection
             Notifications[.didChangeServerConnection].post(reachableConnection)
         }
 
@@ -268,6 +224,37 @@ extension ServerConnectionManager: UserSessionService {
     }
 
     func willStop(userSession: UserSession) {
+        guard self.userSession === userSession else { return }
+        self.userSession = nil
+        evaluationTask?.cancel()
         stop()
+    }
+}
+
+/// SDK transport adapter. Selection, interface policy and server-ID comparison
+/// live in SwiftfinConnections; settings/session publication stays with the host.
+@MainActor
+private struct JellyfinServerConnectionProbe: ServerConnectionProbing {
+    private static let logger = Logger.swiftfin()
+
+    func serverID(at connection: ServerConnection, accessToken: String?) async throws -> String? {
+        let sessionConfiguration = URLSessionConfiguration.swiftfin.copy() as! URLSessionConfiguration
+        sessionConfiguration.timeoutIntervalForRequest = 8
+        sessionConfiguration.timeoutIntervalForResource = 12
+        sessionConfiguration.waitsForConnectivity = false
+        let client = JellyfinClient(
+            configuration: .swiftfinConfiguration(url: connection.url, accessToken: accessToken),
+            sessionConfiguration: sessionConfiguration,
+            sessionDelegate: URLSessionProxyDelegate(logger: NetworkLogger.swiftfin())
+        )
+        do {
+            return try await client.send(Paths.getPublicSystemInfo).value.id
+        } catch {
+            Self.logger.info("Server connection probe failed", metadata: [
+                "url": .string(connection.url.absoluteString),
+                "error": .string(error.localizedDescription)
+            ])
+            throw error
+        }
     }
 }

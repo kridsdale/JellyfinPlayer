@@ -58,6 +58,18 @@ public struct ServerConnection: Hashable, Identifiable, Codable, Sendable {
         self.priority = priority
     }
 
+    /// Retains the installed connection identity normalization: lowercase scheme
+    /// and host and remove one trailing path slash; keep port, query and base path.
+    public static func normalizedURL(_ url: URL) -> URL? {
+        guard var components = URLComponents(url: url, resolvingAgainstBaseURL: false) else { return nil }
+        components.scheme = components.scheme?.lowercased()
+        components.host = components.host?.lowercased()
+        if !components.path.isEmpty, components.path.hasSuffix("/") {
+            components.path.removeLast()
+        }
+        return components.url
+    }
+
     public var displayTitle: String {
         {
             let trimmed = name.trimmingCharacters(in: .whitespacesAndNewlines)

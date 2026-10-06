@@ -11,6 +11,7 @@ import FactoryKit
 import Foundation
 import JellyfinAPI
 import SwiftfinAccountModels
+import SwiftfinAccountStore
 import SwiftfinStoredValues
 
 // MARK: keys
@@ -51,12 +52,7 @@ extension StoredValues.Keys {
     enum Server {
 
         static var servers: Key<[ServerState]> {
-            ServerKey(
-                ownerID: "swiftfinApp",
-                field: "servers",
-                storage: .sql,
-                default: []
-            )
+            AccountStorageKeys.servers()
         }
 
         static func publicInfo(id: String) -> Key<PublicSystemInfo> {
@@ -68,27 +64,15 @@ extension StoredValues.Keys {
         }
 
         static func connections(id: String) -> Key<[ServerConnection]> {
-            ServerKey(
-                ownerID: id,
-                field: "serverConnections",
-                default: []
-            )
+            AccountStorageKeys.connections(serverID: id)
         }
 
         static func activeConnectionID(id: String) -> Key<String> {
-            ServerKey(
-                ownerID: id,
-                field: "activeServerConnectionID",
-                default: .empty
-            )
+            AccountStorageKeys.activeConnectionID(serverID: id)
         }
 
         static func isAutoSwitchEnabled(id: String) -> Key<Bool> {
-            ServerKey(
-                ownerID: id,
-                field: "isAutoSwitchEnabled",
-                default: false
-            )
+            AccountStorageKeys.autoSwitchEnabled(serverID: id)
         }
     }
 }

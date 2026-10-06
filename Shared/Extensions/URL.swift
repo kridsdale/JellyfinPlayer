@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import SwiftfinAccountModels
 
 extension URL {
 
@@ -78,15 +79,6 @@ extension URL {
     }
 
     var normalizedServerConnectionURL: URL? {
-        guard var components else { return nil }
-
-        components.scheme = components.scheme?.lowercased()
-        components.host = components.host?.lowercased()
-
-        if components.path.isNotEmpty {
-            components.path = components.path.trimmingSuffix("/")
-        }
-
-        return components.url
+        ServerConnection.normalizedURL(self)
     }
 }

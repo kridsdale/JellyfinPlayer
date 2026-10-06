@@ -11,6 +11,7 @@ import FactoryKit
 import Foundation
 import JellyfinAPI
 import SwiftfinAccountModels
+import SwiftfinAccountStore
 import SwiftfinStoredValues
 
 // TODO: also have matching properties on `UserState` that get/set values
@@ -75,23 +76,13 @@ extension StoredValues.Keys {
     enum User {
 
         static var users: Key<[UserState]> {
-            Key(
-                "users",
-                ownerID: "swiftfinApp",
-                field: "users",
-                storage: .sql,
-                default: []
-            )
+            AccountStorageKeys.users()
         }
 
         // Doesn't use `CurrentUserKey` because data may be
         // retrieved and stored without a user session
         static func accessPolicy(id: String) -> Key<LocalUserAccessPolicy> {
-            UserKey(
-                ownerID: id,
-                field: "accessPolicy",
-                default: .none
-            )
+            AccountStorageKeys.accessPolicy(userID: id)
         }
 
         // Doesn't use `CurrentUserKey` because data may be
@@ -134,11 +125,7 @@ extension StoredValues.Keys {
         }
 
         static func pinHint(id: String) -> Key<String> {
-            UserKey(
-                ownerID: id,
-                field: "pinHint",
-                default: ""
-            )
+            AccountStorageKeys.pinHint(userID: id)
         }
 
         @MainActor

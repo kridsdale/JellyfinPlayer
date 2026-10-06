@@ -8,7 +8,8 @@
 
 import FactoryKit
 import SwiftfinAccountModels
-import SwiftfinCredentials
+import SwiftfinAccountStore
+import SwiftfinLocalization
 import SwiftfinStorage
 import SwiftfinStoredValues
 
@@ -19,7 +20,7 @@ typealias UserState = UserAccountRecord
 enum StorageComposition {
     static func open() async throws {
         let accounts = try await SwiftfinDatabase.shared.open { userID, token in
-            try Container.shared.keychainService().write(token, to: .accessToken(userID: userID))
+            try Container.shared.localAccountStore().storeAccessToken(token, userID: userID)
         }
         #if os(tvOS)
         if let accounts {
@@ -28,5 +29,16 @@ enum StorageComposition {
         }
         #endif
         ServerImageCacheIdentity.start()
+    }
+}
+
+// Application composition supplies the secure implementation and localized
+// display name; the library resolves neither Factory nor an active session.
+extension Container {
+    @MainActor
+    var localAccountStore: Factory<LocalAccountStore> {
+        self {
+            LocalAccountStore(credentials: self.keychainService(), currentURLName: L10n.currentURL)
+        }.singleton
     }
 }

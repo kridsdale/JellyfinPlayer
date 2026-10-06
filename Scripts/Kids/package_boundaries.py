@@ -17,6 +17,8 @@ EXTERNAL_POLICIES = {
     "SwiftfinStoredValues": ("defaults", "https://github.com/sindresorhus/Defaults", "9.0.9"),
 }
 POLICIES = {
+    "SwiftfinConnections": ({"SwiftfinAccountModels"}, {"Foundation"}),
+    "SwiftfinAccountStore": ({"SwiftfinAccountModels", "SwiftfinStorage", "SwiftfinStoredValues", "SwiftfinCredentials"}, {"Foundation"}),
     "SwiftfinCredentials": ({}, {"Foundation", "Security"}),
     "SwiftfinConnectivity": ({"SwiftfinAccountModels"}, {"Foundation", "Network", "NetworkExtension", "os"}),
     "SwiftfinAccountModels": ({"SwiftfinLocalization"}, {"Foundation"}),

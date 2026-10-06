@@ -158,11 +158,16 @@ final class ServerConnectionViewModel: ViewModel {
         if userSession?.server.id == server.id {
             await userSession?.serverConnectionManager.resolveActiveConnection()
         } else {
-            _ = await ServerConnectionManager.evaluate(
+            let resolution = await ServerConnectionManager.evaluate(
                 server: server,
                 accessToken: userSession?.user.accessToken,
                 context: NetworkConnectivity.current()
             )
+            if !Task.isCancelled, isAutoSwitchEnabled,
+               case let .connected(connection) = resolution
+            {
+                server.activeServerConnection = connection
+            }
         }
 
         reloadConnections()

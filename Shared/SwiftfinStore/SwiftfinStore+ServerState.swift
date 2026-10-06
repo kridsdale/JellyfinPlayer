@@ -11,8 +11,7 @@ import Foundation
 import JellyfinAPI
 import Pulse
 import SwiftfinAccountModels
-import SwiftfinLocalization
-import SwiftfinStorage
+import SwiftfinAccountStore
 import SwiftfinStoredValues
 
 @MainActor
@@ -33,60 +32,22 @@ extension ServerState {
 extension ServerState {
 
     var activeServerConnection: ServerConnection? {
-        get {
-            let connections = serverConnections
-            let activeConnectionID = StoredValues[.Server.activeConnectionID(id: id)]
-
-            if activeConnectionID.isNotEmpty,
-               let connection = connections.first(where: { $0.id == activeConnectionID })
-            {
-                return connection
-            }
-
-            let normalizedCurrentURL = currentURL.normalizedServerConnectionURL ?? currentURL
-            return connections.first { $0.url == normalizedCurrentURL } ?? connections.first
-        }
-        nonmutating set {
-            StoredValues[.Server.activeConnectionID(id: id)] = newValue?.id ?? .empty
-        }
+        get { Container.shared.localAccountStore().activeConnection(for: self) }
+        nonmutating set { Container.shared.localAccountStore().setActiveConnection(newValue, serverID: id) }
     }
 
     /// Deletes the model that this state represents and
     /// all settings from `StoredValues`.
     func delete() throws {
-        let users = StoredValues[.User.users]
-            .filter { $0.serverID == id }
-
-        for user in users {
-            try SwiftfinDatabase.shared.deleteAll(ownerID: user.id)
-        }
-        try SwiftfinDatabase.shared.deleteAll(ownerID: id)
-        UserDefaults.userSuite(id: id).removeAll()
-
-        var storedUsers = StoredValues[.User.users]
-        storedUsers.removeAll { $0.serverID == id }
-        StoredValues[.User.users] = storedUsers
-
-        var servers = StoredValues[.Server.servers]
-        servers.removeAll { $0.id == id }
-        StoredValues[.Server.servers] = servers
-
-        for user in users {
-            UserDefaults.userSuite(id: user.id).removeAll()
-        }
+        try Container.shared.localAccountStore().deleteServer(self)
     }
 
     var effectiveServerURL: URL {
-        activeServerConnection?.url ?? currentURL
+        Container.shared.localAccountStore().effectiveURL(for: self)
     }
 
     func ensureServerConnections() -> [ServerConnection] {
-        let connections = StoredValues[.Server.connections(id: id)]
-        guard connections.isEmpty else { return ServerConnection.ordered(connections) }
-
-        let defaultConnections = defaultServerConnections
-        serverConnections = defaultConnections
-        return defaultConnections
+        Container.shared.localAccountStore().ensureConnections(for: self)
     }
 
     @MainActor
@@ -99,17 +60,12 @@ extension ServerState {
     }
 
     func hasServerConnection(url: URL) -> Bool {
-        let normalizedURL = url.normalizedServerConnectionURL ?? url
-        return serverConnections.contains { $0.url == normalizedURL }
+        Container.shared.localAccountStore().hasConnection(url: url, server: self)
     }
 
     var isAutoSwitchEnabled: Bool {
-        get {
-            StoredValues[.Server.isAutoSwitchEnabled(id: id)]
-        }
-        nonmutating set {
-            StoredValues[.Server.isAutoSwitchEnabled(id: id)] = newValue
-        }
+        get { Container.shared.localAccountStore().autoSwitchEnabled(serverID: id) }
+        nonmutating set { Container.shared.localAccountStore().setAutoSwitchEnabled(newValue, serverID: id) }
     }
 
     @MainActor
@@ -124,41 +80,13 @@ extension ServerState {
     }
 
     var serverConnections: [ServerConnection] {
-        get {
-            let connections = StoredValues[.Server.connections(id: id)]
-
-            guard connections.isNotEmpty else {
-                return defaultServerConnections
-            }
-
-            return ServerConnection.ordered(connections)
-        }
-        nonmutating set {
-            StoredValues[.Server.connections(id: id)] = ServerConnection.ordered(newValue, preservingOrder: true)
-        }
+        get { Container.shared.localAccountStore().connections(for: self) }
+        nonmutating set { Container.shared.localAccountStore().setConnections(newValue, serverID: id) }
     }
 
     @MainActor
     var splashScreenImageSource: ImageSource {
         ImageSource(url: client.url(with: Paths.getSplashscreen()))
-    }
-
-    private var defaultServerConnections: [ServerConnection] {
-        let urls = [currentURL] + self.urls
-            .subtracting([currentURL])
-            .sorted(using: \.absoluteString)
-
-        return urls.enumerated().map { index, url in
-            let normalizedURL = url.normalizedServerConnectionURL ?? url
-
-            return ServerConnection(
-                id: UUID().uuidString,
-                name: url == currentURL ? L10n.currentURL : normalizedURL.absoluteString,
-                url: normalizedURL,
-                interface: .any,
-                priority: index
-            )
-        }
     }
 
     @MainActor
