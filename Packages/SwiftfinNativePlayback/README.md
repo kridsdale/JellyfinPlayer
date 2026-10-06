@@ -1,0 +1,9 @@
+# SwiftfinNativePlayback
+
+Owns AVPlayer item/layer/control surfaces, metadata construction, native callbacks and observation teardown, readiness-gated absolute resume, native timeline seeking, rate/aspect transport and actual EOF classification. Foundation, AVFoundation, AVKit and SwiftUI only; no SDK DTO, account, catalog, settings, persistence or application imports.
+
+The app maps an already-authorized item and current policy into immutable NativePlaybackRequest. URL and media metadata descriptions are redacted. NativePlaybackController is the main-actor owner. SDK callback tasks transfer only numeric/typed values and an exact item generation. Replaced/stopped callbacks, stale state snapshots and superseded/duplicate seek acknowledgements cannot change the current item. Pause intent survives preparation and seek completion; failed initial seeks never autoplay. Every open recreates observations, while Stop/replacement/deinit removes observations and releases the current native item. No raw AVPlayer or AVPlayerItem leaves this module; native layer/controls are returned as an explicit SwiftUI surface.
+
+Ten adjacent contracts use an internal engine port and synthetic metadata, covering readiness/resume, pause, replacement/stop, reentrant host actions, failed seek/status, live/EOF exclusions, command validity, destruction, native timeline jumps, executor transfer, metadata SDK loading and redaction. They run in native SwiftPM and the tvOS validation host. They do not open media, activate audio or prove actual native decoding. Real approved-server tests separately exercise the existing VLC kids backend. Native audio/subtitle-track selection remains unsupported in the retained app proxy; this extraction does not claim those features complete.
+
+Run `swift test --package-path Packages/SwiftfinNativePlayback`.

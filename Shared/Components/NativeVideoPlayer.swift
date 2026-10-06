@@ -6,11 +6,9 @@
 // Copyright (c) 2026 Jellyfin & Jellyfin Contributors
 //
 
-import AVKit
 import FactoryKit
-import JellyfinAPI
-import Logging
 import SwiftfinLocalization
+import SwiftfinNativePlayback
 import SwiftfinUIState
 import SwiftUI
 import Transmission
@@ -42,7 +40,7 @@ struct NativeVideoPlayer: View {
 
             switch manager.state {
             case .playback:
-                NativeVideoPlayerView(proxy: proxy)
+                proxy.native.surface(showControls: true)
             default:
                 ProgressView()
             }
@@ -70,47 +68,6 @@ struct NativeVideoPlayer: View {
         }
         .onFinalDisappear {
             manager.stop()
-        }
-    }
-}
-
-extension NativeVideoPlayer {
-
-    private struct NativeVideoPlayerView: PlatformViewControllerRepresentable {
-
-        let proxy: AVMediaPlayerProxy
-
-        func makeUIViewController(context: Context) -> UINativeVideoPlayerViewController {
-            UINativeVideoPlayerViewController(proxy: proxy)
-        }
-
-        func updateUIViewController(_ uiViewController: UINativeVideoPlayerViewController, context: Context) {}
-    }
-
-    private class UINativeVideoPlayerViewController: AVPlayerViewController {
-
-        private let proxy: AVMediaPlayerProxy
-
-        init(proxy: AVMediaPlayerProxy) {
-            self.proxy = proxy
-
-            super.init(nibName: nil, bundle: nil)
-
-            player = proxy.player
-
-            player?.allowsExternalPlayback = true
-            player?.appliesMediaSelectionCriteriaAutomatically = false
-            player?.usesExternalPlaybackWhileExternalScreenIsActive = true
-            allowsPictureInPicturePlayback = true
-
-            #if !os(tvOS)
-            updatesNowPlayingInfoCenter = false
-            #endif
-        }
-
-        @available(*, unavailable)
-        required init?(coder: NSCoder) {
-            fatalError("init(coder:) has not been implemented")
         }
     }
 }

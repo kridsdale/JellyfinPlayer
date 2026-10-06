@@ -23,6 +23,7 @@ EXTERNAL_POLICIES = {
     ],
 }
 POLICIES = {
+    "SwiftfinNativePlayback": ({}, {"Foundation", "AVFoundation", "AVKit", "SwiftUI"}),
     "SwiftfinCollections": ({}, {"Foundation"}),
     "SwiftfinPlaybackProfiles": ({"SwiftfinCollections"}, {"Foundation", "JellyfinAPI"}),
     "SwiftfinImages": ({}, {"Foundation", "Nuke", "CryptoKit", "os"}),

@@ -181,6 +181,10 @@
 		DA91C060B1758EF2E94CA0AC /* SwiftfinCollections in Frameworks */ = {isa = PBXBuildFile; productRef = DA914348CAC2FD8C55EF9C9B /* SwiftfinCollections */; };
 		DA9127F82887281B82E12D3D /* SwiftfinPlaybackProfiles in Frameworks */ = {isa = PBXBuildFile; productRef = DA91BA6C74963B3ECA08F7F0 /* SwiftfinPlaybackProfiles */; };
 		DA919B6B7369B5A8B0C2F72C /* SwiftfinPlaybackProfiles in Frameworks */ = {isa = PBXBuildFile; productRef = DA91C5F91ED01214C0446B2B /* SwiftfinPlaybackProfiles */; };
+		B160F17A4BFFE9E09BEBCA3D /* SwiftfinNativePlayback in Frameworks */ = {isa = PBXBuildFile; productRef = 5753521C1A7580999D5235E5 /* SwiftfinNativePlayback */; };
+		246CC0E409441B542A3DAB1D /* SwiftfinNativePlayback in Frameworks */ = {isa = PBXBuildFile; productRef = 544FE2F4BB5ACB5E733C92A4 /* SwiftfinNativePlayback */; };
+		2B9BE4A6AA5D252423818E2A /* SwiftfinNativePlayback in Frameworks */ = {isa = PBXBuildFile; productRef = 87F4686850832DF83F70C280 /* SwiftfinNativePlayback */; };
+		2DD8C91DE5B8384FC3A3359E /* Packages/SwiftfinNativePlayback/Tests/SwiftfinNativePlaybackTests/NativePlaybackOwnershipTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28510D4F0B186699FCA83EC2 /* Packages/SwiftfinNativePlayback/Tests/SwiftfinNativePlaybackTests/NativePlaybackOwnershipTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -256,6 +260,7 @@
 		DA7622222222222222222222 /* Packages/SwiftfinNowPlaying/Tests/SwiftfinNowPlayingTests/NowPlayingArtworkOwnershipTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Packages/SwiftfinNowPlaying/Tests/SwiftfinNowPlayingTests/NowPlayingArtworkOwnershipTests.swift; sourceTree = SOURCE_ROOT; };
 		E1B2AB9628808CDF0072B3B9 /* GoogleCast.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = GoogleCast.xcframework; path = Carthage/Build/GoogleCast.xcframework; sourceTree = "<group>"; };
 		DA848497DFE85BB5A2199134 /* KidsNativeTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; path = KidsNativeTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		28510D4F0B186699FCA83EC2 /* Packages/SwiftfinNativePlayback/Tests/SwiftfinNativePlaybackTests/NativePlaybackOwnershipTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Packages/SwiftfinNativePlayback/Tests/SwiftfinNativePlaybackTests/NativePlaybackOwnershipTests.swift; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -340,6 +345,7 @@
 				DA86981CC41136BCE11FD7C3 /* SwiftfinConnections in Frameworks */,
 				DA8534E2CBAF211E21B93A4F /* SwiftfinAccountStore in Frameworks */,
 				DA7479CE8BBE925A4CB50B23 /* SwiftfinVLC in Frameworks */,
+				B160F17A4BFFE9E09BEBCA3D /* SwiftfinNativePlayback in Frameworks */,
 				DA798F7214D8C0D8495AEF70 /* SwiftfinStoredValuesUI in Frameworks */,
 				DA78DA1079ACF7ABE9B5EDB5 /* SwiftfinStoredValues in Frameworks */,
 				DA77E3557E2CA6FA92A69B17 /* SwiftfinStorage in Frameworks */,
@@ -419,6 +425,7 @@
 				DA8638C3E9E7910989DF9E62 /* SwiftfinConnections in Frameworks */,
 				DA85C488D0639DE2D5DD0291 /* SwiftfinAccountStore in Frameworks */,
 				DA74F752D7B8ED416F8A4BAE /* SwiftfinVLC in Frameworks */,
+				246CC0E409441B542A3DAB1D /* SwiftfinNativePlayback in Frameworks */,
 				DA797A68EB50EBB774D0BF91 /* SwiftfinStoredValuesUI in Frameworks */,
 				DA78D90CAC824583C0F0CD5F /* SwiftfinStoredValues in Frameworks */,
 				DA771E6909A52D3937D9EB0D /* SwiftfinStorage in Frameworks */,
@@ -506,6 +513,7 @@
 				DA903D3D07ECEAED6519587F /* SwiftfinImages in Frameworks */,
 				DA7633333333333333333333 /* SwiftfinNowPlaying in Frameworks */,
 				DA7533333333333333333333 /* SwiftfinVLC in Frameworks */,
+				2B9BE4A6AA5D252423818E2A /* SwiftfinNativePlayback in Frameworks */,
 				DA710139CB0BFEEF09533532 /* PreferencesView in Frameworks */,
 				DA6880FAC02A0BD5812E2A00 /* KidsApplication in Frameworks */,
 				DA63E9DD1F1B37527740E702 /* KidsArtworkUI in Frameworks */,
@@ -610,6 +618,7 @@
 			children = (
 				DA7622222222222222222222 /* Packages/SwiftfinNowPlaying/Tests/SwiftfinNowPlayingTests/NowPlayingArtworkOwnershipTests.swift */,
 				DA7522222222222222222222 /* Packages/SwiftfinVLC/Tests/SwiftfinVLCTests/VLCPlaybackOwnershipTests.swift */,
+				28510D4F0B186699FCA83EC2 /* Packages/SwiftfinNativePlayback/Tests/SwiftfinNativePlaybackTests/NativePlaybackOwnershipTests.swift */,
 				DA725CFFADC4D997F5A1D0F1 /* Packages/KidsApplication/Tests/KidsApplicationTests/KidsApplicationBoundaryTests.swift */,
 				DA72CF7D0ECB5554FDC3818C /* Packages/KidsArtworkUI/Tests/KidsArtworkUITests/KidsArtworkBoundaryTests.swift */,
 				DA727F134EF398FD51F6E4CA /* PreferencesView/Tests/PreferencesViewTests/PreferencesOwnershipTests.swift */,
@@ -655,6 +664,7 @@
 				DA86E11365202B26F9C5E19D /* SwiftfinConnections */,
 				DA85215CF7803CE8718791AB /* SwiftfinAccountStore */,
 				DA7480B1A70AC52FD32A0559 /* SwiftfinVLC */,
+				5753521C1A7580999D5235E5 /* SwiftfinNativePlayback */,
 				DA7992CF4FDB749BB87DBEBE /* SwiftfinStoredValuesUI */,
 				DA785916E30A7C94594147C2 /* SwiftfinStoredValues */,
 				DA778B53706516C489981906 /* SwiftfinStorage */,
@@ -739,6 +749,7 @@
 				DA867901F5BE7134C3FC835C /* SwiftfinConnections */,
 				DA85A4CA802D048AD0D10631 /* SwiftfinAccountStore */,
 				DA742865472AB5F74FB73C53 /* SwiftfinVLC */,
+				544FE2F4BB5ACB5E733C92A4 /* SwiftfinNativePlayback */,
 				DA799C572FD26FCEB4A6296E /* SwiftfinStoredValuesUI */,
 				DA788725BA34402E78C45175 /* SwiftfinStoredValues */,
 				DA774F17A8726881B1C0CAD8 /* SwiftfinStorage */,
@@ -822,6 +833,7 @@
 				E1A7B1642B9A9F7800152546 /* PreferencesView */,
 				DA68B7480EC88B7F22D0A475 /* KidsApplication */,
 				DA90FCD363F78629E3FBA0AA /* SwiftfinImages */,
+				87F4686850832DF83F70C280 /* SwiftfinNativePlayback */,
 				DA63F5E235F06D71853317AC /* KidsArtworkUI */,
 			);
 			productName = KidsUITests;
@@ -946,6 +958,7 @@
 			);
 			mainGroup = 5377CBE8263B596A003A4E83;
 			packageReferences = (
+				61842BA512B458F6FFA2C51A /* XCLocalSwiftPackageReference "Packages/SwiftfinNativePlayback" */,
 				DA913087EF08BA7B25BDC5B7 /* XCLocalSwiftPackageReference "Packages/SwiftfinPlaybackProfiles" */,
 				DA919F11E902D2085063F443 /* XCLocalSwiftPackageReference "Packages/SwiftfinCollections" */,
 				DA90A5AED613A648BB736DC0 /* XCLocalSwiftPackageReference "Packages/SwiftfinImages" */,
@@ -1177,6 +1190,7 @@
 				DA72C8525D258A13BEEED0D5 /* Packages/KidsArtworkUI/Tests/KidsArtworkUITests/KidsArtworkBoundaryTests.swift in Sources */,
 				DA7611111111111111111111 /* Packages/SwiftfinNowPlaying/Tests/SwiftfinNowPlayingTests/NowPlayingArtworkOwnershipTests.swift in Sources */,
 				DA7511111111111111111111 /* Packages/SwiftfinVLC/Tests/SwiftfinVLCTests/VLCPlaybackOwnershipTests.swift in Sources */,
+				2DD8C91DE5B8384FC3A3359E /* Packages/SwiftfinNativePlayback/Tests/SwiftfinNativePlaybackTests/NativePlaybackOwnershipTests.swift in Sources */,
 				DA721EB2E245CF34DE0CE1D3 /* Packages/KidsApplication/Tests/KidsApplicationTests/KidsApplicationBoundaryTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1680,6 +1694,7 @@
 		DA90A5AED613A648BB736DC0 /* XCLocalSwiftPackageReference "Packages/SwiftfinImages" */ = {isa = XCLocalSwiftPackageReference; relativePath = Packages/SwiftfinImages; };
 		DA919F11E902D2085063F443 /* XCLocalSwiftPackageReference "Packages/SwiftfinCollections" */ = {isa = XCLocalSwiftPackageReference; relativePath = Packages/SwiftfinCollections; };
 		DA913087EF08BA7B25BDC5B7 /* XCLocalSwiftPackageReference "Packages/SwiftfinPlaybackProfiles" */ = {isa = XCLocalSwiftPackageReference; relativePath = Packages/SwiftfinPlaybackProfiles; };
+		61842BA512B458F6FFA2C51A /* XCLocalSwiftPackageReference "Packages/SwiftfinNativePlayback" */ = {isa = XCLocalSwiftPackageReference; relativePath = Packages/SwiftfinNativePlayback; };
 /* End XCLocalSwiftPackageReference section */
 
 /* Begin XCRemoteSwiftPackageReference section */
@@ -2440,6 +2455,9 @@
 		DA914348CAC2FD8C55EF9C9B /* SwiftfinCollections */ = {isa = XCSwiftPackageProductDependency; package = DA919F11E902D2085063F443 /* XCLocalSwiftPackageReference "Packages/SwiftfinCollections" */; productName = SwiftfinCollections; };
 		DA91BA6C74963B3ECA08F7F0 /* SwiftfinPlaybackProfiles */ = {isa = XCSwiftPackageProductDependency; package = DA913087EF08BA7B25BDC5B7 /* XCLocalSwiftPackageReference "Packages/SwiftfinPlaybackProfiles" */; productName = SwiftfinPlaybackProfiles; };
 		DA91C5F91ED01214C0446B2B /* SwiftfinPlaybackProfiles */ = {isa = XCSwiftPackageProductDependency; package = DA913087EF08BA7B25BDC5B7 /* XCLocalSwiftPackageReference "Packages/SwiftfinPlaybackProfiles" */; productName = SwiftfinPlaybackProfiles; };
+		5753521C1A7580999D5235E5 /* SwiftfinNativePlayback */ = {isa = XCSwiftPackageProductDependency; package = 61842BA512B458F6FFA2C51A /* XCLocalSwiftPackageReference "Packages/SwiftfinNativePlayback" */; productName = SwiftfinNativePlayback; };
+		544FE2F4BB5ACB5E733C92A4 /* SwiftfinNativePlayback */ = {isa = XCSwiftPackageProductDependency; package = 61842BA512B458F6FFA2C51A /* XCLocalSwiftPackageReference "Packages/SwiftfinNativePlayback" */; productName = SwiftfinNativePlayback; };
+		87F4686850832DF83F70C280 /* SwiftfinNativePlayback */ = {isa = XCSwiftPackageProductDependency; package = 61842BA512B458F6FFA2C51A /* XCLocalSwiftPackageReference "Packages/SwiftfinNativePlayback" */; productName = SwiftfinNativePlayback; };
 /* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 5377CBE9263B596A003A4E83 /* Project object */;
