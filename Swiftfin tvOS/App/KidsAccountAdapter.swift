@@ -68,7 +68,7 @@ final class SwiftfinKidsAccountHost: KidsAccountHost {
         password: String
     ) async throws -> KidsAuthenticatedAccount {
         let client = JellyfinTransport.swiftfin(url: url, policy: .systemDefault, logging: false)
-        let result = try await client.signIn(username: username, password: password)
+        let result = try await client.authenticate(username: username, password: password)
         guard let token = result.accessToken, let user = result.user, let userID = user.id else { throw KidsAPIError.authentication }
         let identity = KidsAccountIdentity(serverURL: url, serverID: serverID, serverName: serverName, userID: userID, accessToken: token)
         return KidsAuthenticatedAccount(identity: identity, credentialStorage: {

@@ -130,7 +130,7 @@ final class UserSignInViewModel: ObservableObject {
             .trimmingCharacters(in: .whitespacesAndNewlines)
             .trimmingCharacters(in: .objectReplacement)
 
-        let response = try await server.client.signIn(username: username, password: password)
+        let response = try await server.client.authenticate(username: username, password: password)
 
         guard let accessToken = response.accessToken,
               let userData = response.user,
@@ -158,7 +158,7 @@ final class UserSignInViewModel: ObservableObject {
     private func _signInQuickConnect(
         _ secret: String
     ) async throws {
-        let response = try await server.client.signIn(quickConnectSecret: secret)
+        let response = try await server.client.authenticate(quickConnectSecret: secret)
 
         guard let accessToken = response.accessToken,
               let userData = response.user,

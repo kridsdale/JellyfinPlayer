@@ -8,6 +8,7 @@
 
 import Combine
 import JellyfinAPI
+import SwiftfinImages
 import SwiftUI
 
 struct CinematicSelectionContentGroup: ContentGroup {

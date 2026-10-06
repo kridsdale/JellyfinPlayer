@@ -10,6 +10,7 @@ import Defaults
 import FactoryKit
 import JellyfinAPI
 import Nuke
+import SwiftfinImages
 import SwiftfinLocalization
 import SwiftUI
 

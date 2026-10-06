@@ -11,6 +11,7 @@ import FactoryKit
 import Foundation
 import Get
 import JellyfinAPI
+import SwiftfinImages
 import SwiftfinLocalization
 import SwiftUI
 

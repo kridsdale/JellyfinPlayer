@@ -10,21 +10,17 @@
 import Foundation
 import KidsDiagnostics
 import KidsDomain
+import os
 import Testing
 
-private final class PerformanceEvents: @unchecked Sendable {
-    private let lock = NSLock()
-    private var storage: [KidsPerformanceEvent] = []
+private final class PerformanceEvents: Sendable {
+    private let storage = OSAllocatedUnfairLock(initialState: [KidsPerformanceEvent]())
     func append(_ event: KidsPerformanceEvent) {
-        lock.lock()
-        storage.append(event)
-        lock.unlock()
+        storage.withLock { $0.append(event) }
     }
 
     var events: [KidsPerformanceEvent] {
-        lock.lock()
-        defer { lock.unlock() }
-        return storage
+        storage.withLock { $0 }
     }
 }
 
@@ -114,4 +110,26 @@ func `performance failures use fixed categories and never serialize error descri
     #expect(KidsPerformanceCodec("h264") == .h264)
     #expect(KidsPerformanceCodec("HEVC") == .hevc)
     #expect(KidsPerformanceCodec("arbitrary-server-string") == .other)
+}
+
+@Test
+func `concurrent file writers preserve complete ordered sink records within the cap`() async throws {
+    let dir = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+    defer { try? FileManager.default.removeItem(at: dir) }
+    let events = PerformanceEvents()
+    let recorder = KidsPerformanceRecorder(enabled: true, directory: dir, maxBytes: 8192, sink: events.append)
+    let span = try #require(recorder.begin(.http))
+    await withTaskGroup(of: Void.self) { group in
+        for value in 0 ..< 256 {
+            group.addTask { span.mark(.network, values: ["bytes": Double(value)]) }
+        }
+    }
+    recorder.flush()
+    let data = try Data(contentsOf: #require(recorder.fileURL))
+    #expect(data.count <= 8192 && !data.isEmpty && data.last == 10)
+    let lines = try data.split(separator: 10).map { try JSONDecoder().decode(KidsPerformanceEvent.self, from: Data($0)) }
+    #expect(lines.count == events.events.count && lines.count < 257)
+    #expect(lines.map(\.values) == events.events.map(\.values))
+    #expect(lines.map(\.phase) == events.events.map(\.phase))
+    #expect(lines.allSatisfy { $0.traceID == span.id })
 }

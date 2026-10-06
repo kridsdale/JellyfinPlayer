@@ -8,6 +8,7 @@
 
 import BlurHashKit
 import Nuke
+import SwiftfinImages
 import SwiftUI
 
 struct PosterImage<Element: Poster>: View {

@@ -9,6 +9,7 @@
 import FactoryKit
 import Foundation
 import JellyfinAPI
+import SwiftfinImages
 import UIKit
 
 extension BaseItemDto {

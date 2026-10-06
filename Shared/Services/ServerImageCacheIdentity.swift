@@ -9,11 +9,12 @@
 import Combine
 import Foundation
 import SwiftfinAccountModels
+import SwiftfinImages
 import SwiftfinStoredValues
 
 @MainActor
 enum ServerImageCacheIdentity {
-    private nonisolated static let index = ServerImageCacheIdentityIndex()
+    nonisolated static let index = ServerImageCacheIdentityIndex()
     private static var servers: StoredValueObservation<[ServerState]>?
     private static var connections: [String: StoredValueObservation<[ServerConnection]>] = [:]
     private static var serverSubscription: AnyCancellable?

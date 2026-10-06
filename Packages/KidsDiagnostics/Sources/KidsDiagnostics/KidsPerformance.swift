@@ -9,6 +9,7 @@
 // SPDX-License-Identifier: MPL-2.0
 import Foundation
 import KidsDomain
+import os
 import OSLog
 
 /// Explicit opt-in diagnostics. The event schema accepts only fixed enums and numeric
@@ -132,7 +133,7 @@ public struct KidsPerformanceEvent: Codable, Sendable {
 
 /// Writes off the main actor. The finite file cap prevents an accidentally prolonged
 /// profiling launch consuming unbounded storage. Files are retained for review, never uploaded.
-public final class KidsPerformanceRecorder: @unchecked Sendable {
+public final class KidsPerformanceRecorder: Sendable {
     public let runID = UUID().uuidString
     public let enabled: Bool
     public let fileURL: URL?
@@ -140,8 +141,12 @@ public final class KidsPerformanceRecorder: @unchecked Sendable {
     private let logger = Logger(subsystem: "com.kridsdale.JellyfinPlayer", category: "Performance")
     private let sink: (@Sendable (KidsPerformanceEvent) -> Void)?
     private let maxBytes: Int
-    private var written = 0
-    private var handle: FileHandle?
+    private struct OutputState: Sendable {
+        var written = 0
+        let handle: FileHandle?
+    }
+
+    private let output: OSAllocatedUnfairLock<OutputState>
 
     public init(
         enabled: Bool,
@@ -152,6 +157,7 @@ public final class KidsPerformanceRecorder: @unchecked Sendable {
         self.enabled = enabled
         self.maxBytes = max(0, maxBytes)
         self.sink = sink
+        var handle: FileHandle?
         if enabled, let directory {
             fileURL = directory.appendingPathComponent(runID + ".jsonl")
             try? FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
@@ -161,6 +167,7 @@ public final class KidsPerformanceRecorder: @unchecked Sendable {
         } else {
             fileURL = nil
         }
+        output = OSAllocatedUnfairLock(initialState: OutputState(handle: handle))
     }
 
     public func begin(
@@ -179,12 +186,16 @@ public final class KidsPerformanceRecorder: @unchecked Sendable {
     fileprivate func record(_ event: KidsPerformanceEvent) {
         guard enabled else { return }
         queue.async { [self] in
-            guard let data = try? JSONEncoder().encode(event), written + data.count + 1 <= maxBytes else { return }
-            written += data.count + 1
-            sink?(event)
-            if let handle {
-                try? handle.write(contentsOf: data + Data([10]))
+            guard let data = try? JSONEncoder().encode(event) else { return }
+            let accepted = output.withLock { state in
+                guard data.count + 1 <= maxBytes - state.written else { return false }
+                state.written += data.count + 1
+                try? state.handle?.write(contentsOf: data + Data([10]))
+                return true
             }
+            guard accepted else { return }
+            // External observers never execute while holding mutable output state.
+            sink?(event)
             // Unified log is searchable from simctl/xctrace without a vendor agent.
             if sink == nil, let line = String(data: data, encoding: .utf8) {
                 logger.info("\(line, privacy: .public)")
@@ -198,7 +209,7 @@ public final class KidsPerformanceRecorder: @unchecked Sendable {
     }
 }
 
-public final class KidsPerformanceSpan: @unchecked Sendable {
+public final class KidsPerformanceSpan: Sendable {
     public let id = UUID().uuidString
     private let recorder: KidsPerformanceRecorder
     private let operation: KidsPerformanceOperation
@@ -255,9 +266,12 @@ public final class KidsPerformanceSpan: @unchecked Sendable {
         "placeholder"
     ]
     private let start = DispatchTime.now().uptimeNanoseconds
-    private let lock = NSLock()
-    private var finished = false
-    private var seen = Set<KidsPerformancePhase>()
+    private struct State: Sendable {
+        var finished = false
+        var seen = Set<KidsPerformancePhase>()
+    }
+
+    private let state = OSAllocatedUnfairLock(initialState: State())
 
     fileprivate init(
         recorder: KidsPerformanceRecorder,
@@ -292,9 +306,7 @@ public final class KidsPerformanceSpan: @unchecked Sendable {
     }
 
     public func once(_ phase: KidsPerformancePhase, values: [String: Double] = [:]) {
-        lock.lock()
-        let inserted = seen.insert(phase).inserted
-        lock.unlock()
+        let inserted = state.withLock { $0.seen.insert(phase).inserted }
         if inserted {
             mark(phase, values: values)
         }
@@ -322,10 +334,11 @@ public final class KidsPerformanceSpan: @unchecked Sendable {
     }
 
     public func finish(_ outcome: KidsPerformanceOutcome = .success, values: [String: Double] = [:]) {
-        lock.lock()
-        let shouldFinish = !finished
-        finished = true
-        lock.unlock()
+        let shouldFinish = state.withLock { state in
+            guard !state.finished else { return false }
+            state.finished = true
+            return true
+        }
         if shouldFinish {
             mark(.end, outcome: outcome, values: values)
         }
@@ -488,7 +501,7 @@ public enum KidsPerformance {
 
 /// A per-task delegate observes the existing request/session; it does not add requests,
 /// caches, prefetching, retries, logging of request data or a new connection pool.
-public final class KidsPerformanceTaskDelegate: NSObject, URLSessionDataDelegate, @unchecked Sendable {
+public final class KidsPerformanceTaskDelegate: NSObject, URLSessionDataDelegate, Sendable {
     private let span: KidsPerformanceSpan
     public init(span: KidsPerformanceSpan) {
         self.span = span

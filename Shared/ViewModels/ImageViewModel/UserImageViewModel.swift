@@ -9,6 +9,7 @@
 import Foundation
 import JellyfinAPI
 import Nuke
+import SwiftfinImages
 import UIKit
 
 @MainActor

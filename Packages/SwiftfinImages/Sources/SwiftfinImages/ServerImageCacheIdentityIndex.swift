@@ -7,17 +7,18 @@
 //
 
 import Foundation
-import Synchronization
+import os
 
 /// Native image-cache callbacks read this immutable-value index on any executor.
 /// Settings and connection objects never enter those SDK callbacks.
-final class ServerImageCacheIdentityIndex: Sendable {
-    private let identities = Mutex<[URL: String]>([:])
-    func replace(_ values: [URL: String]) {
+public final class ServerImageCacheIdentityIndex: Sendable {
+    public init() {}
+    private let identities = OSAllocatedUnfairLock(initialState: [URL: String]())
+    public func replace(_ values: [URL: String]) {
         identities.withLock { $0 = values }
     }
 
-    func serverID(for url: URL) -> String? {
+    public func serverID(for url: URL) -> String? {
         guard var components = URLComponents(url: url, resolvingAgainstBaseURL: false) else { return nil }
         components.scheme = components.scheme?.lowercased()
         components.host = components.host?.lowercased()

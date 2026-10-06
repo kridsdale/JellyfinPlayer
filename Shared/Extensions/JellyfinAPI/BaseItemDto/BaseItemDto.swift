@@ -14,6 +14,7 @@ import Foundation
 import JellyfinAPI
 import MediaPlayer
 import Nuke
+import SwiftfinImages
 import SwiftfinLocalization
 import SwiftfinNowPlaying
 import SwiftUI

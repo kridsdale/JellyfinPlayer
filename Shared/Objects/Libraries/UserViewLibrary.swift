@@ -9,6 +9,7 @@
 import Defaults
 import FactoryKit
 import JellyfinAPI
+import SwiftfinImages
 import SwiftfinLocalization
 import SwiftUI
 

@@ -8,6 +8,7 @@
 
 import Foundation
 import JellyfinAPI
+import SwiftfinImages
 import SwiftfinNetworking
 
 extension ImageInfo: @retroactive Identifiable {

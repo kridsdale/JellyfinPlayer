@@ -7,8 +7,6 @@
 //
 
 import Foundation
-import JellyfinAPI
-import Pulse
 import SwiftfinNetworking
 import SwiftfinSessions
 
@@ -18,7 +16,13 @@ final class UserSession: AccountSessionLifecycle {
     let server: ServerState
     let user: UserState
 
-    lazy var client = JellyfinTransport.swiftfin(url: server.effectiveServerURL, accessToken: user.accessToken)
+    private let transports = AccountTransportCache { url, token in
+        JellyfinTransport.swiftfin(url: url, accessToken: token)
+    }
+
+    var client: JellyfinTransport {
+        transports.client(url: server.effectiveServerURL, serverID: server.id, userID: user.id, accessToken: user.accessToken)
+    }
 
     @MainActor
     lazy var serverConnectionManager = ServerConnectionManager()

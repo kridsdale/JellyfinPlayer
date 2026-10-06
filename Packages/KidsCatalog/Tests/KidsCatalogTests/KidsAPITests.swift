@@ -10,6 +10,7 @@ import Foundation
 @testable import KidsCatalog
 import KidsDiagnostics
 import KidsDomain
+import os
 import Testing
 
 // Each test gets a distinct host/session. Requests use URLSession's real HTTP decoding
@@ -19,40 +20,30 @@ private struct Reply: Sendable {
     var body: String
 }
 
-private final class RequestLog: @unchecked Sendable {
-    private let lock = NSLock()
-    private var storage: [URLRequest] = []
+private final class RequestLog: Sendable {
+    private let storage = OSAllocatedUnfairLock(initialState: [URLRequest]())
     func append(_ request: URLRequest) {
-        lock.lock()
-        defer { lock.unlock() }
-        storage.append(request)
+        storage.withLock { $0.append(request) }
     }
 
     var requests: [URLRequest] {
-        lock.lock()
-        defer { lock.unlock() }
-        return storage
+        storage.withLock { $0 }
     }
 }
 
-private final class Routes: @unchecked Sendable {
+private final class Routes: Sendable {
     typealias Handler = @Sendable (URLRequest) -> Reply
-    private let lock = NSLock()
-    private var handlers: [String: Handler] = [:]
+    private let handlers = OSAllocatedUnfairLock(initialState: [String: Handler]())
     func put(_ host: String, _ handler: @escaping Handler) {
-        lock.lock()
-        defer { lock.unlock() }
-        handlers[host] = handler
+        handlers.withLock { $0[host] = handler }
     }
 
     func get(_ host: String) -> Handler? {
-        lock.lock()
-        defer { lock.unlock() }
-        return handlers[host]
+        handlers.withLock { $0[host] }
     }
 }
 
-private final class FixtureProtocol: URLProtocol, @unchecked Sendable {
+private final class FixtureProtocol: URLProtocol {
     static let routes = Routes()
     override class func canInit(with request: URLRequest) -> Bool {
         request.url?.host?.hasSuffix(".test") == true

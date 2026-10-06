@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import SwiftfinImages
 import SwiftUI
 
 typealias ImageSourceBuilder = ArrayBuilder<ImageSource>

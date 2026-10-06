@@ -55,8 +55,9 @@ public struct TransportConfiguration: Equatable, Sendable {
     public let version: String
 }
 
-/// Owns the mutable SDK client on one executor. No raw SDK client, session or
-/// authentication mutator can escape through this API. Request/response DTOs
+/// Owns an SDK client whose credentials never change after construction.
+/// Authentication returns a result for the account owner to publish; no raw SDK
+/// client, session or authentication mutator escapes through this API. Request/response DTOs
 /// remain immutable typed SDK values for the feature owners that use them.
 @MainActor
 public final class JellyfinTransport: CustomStringConvertible {
@@ -131,17 +132,16 @@ public final class JellyfinTransport: CustomStringConvertible {
         sdk.url(path: path)
     }
 
-    public func signIn(username: String, password: String) async throws -> AuthenticationResult {
-        try Task.checkCancellation()
-        let result = try await sdk.signIn(username: username, password: password)
-        try Task.checkCancellation()
+    /// Authentication does not mutate this transport's credential binding.
+    public func authenticate(username: String, password: String) async throws -> AuthenticationResult {
+        let result = try await send(Paths.authenticateUserByName(.init(pw: password, username: username))).value
+        guard result.accessToken != nil else { throw JellyfinClient.ClientError.noAccessToken }
         return result
     }
 
-    public func signIn(quickConnectSecret: String) async throws -> AuthenticationResult {
-        try Task.checkCancellation()
-        let result = try await sdk.signIn(quickConnectSecret: quickConnectSecret)
-        try Task.checkCancellation()
+    public func authenticate(quickConnectSecret: String) async throws -> AuthenticationResult {
+        let result = try await send(Paths.authenticateWithQuickConnect(.init(secret: quickConnectSecret))).value
+        guard result.accessToken != nil else { throw JellyfinClient.ClientError.noAccessToken }
         return result
     }
 

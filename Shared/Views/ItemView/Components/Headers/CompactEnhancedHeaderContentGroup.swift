@@ -8,6 +8,7 @@
 
 import Defaults
 import JellyfinAPI
+import SwiftfinImages
 import SwiftfinStoredValuesUI
 import SwiftUI
 

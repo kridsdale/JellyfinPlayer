@@ -9,6 +9,7 @@
 import BlurHashKit
 import Nuke
 import NukeUI
+import SwiftfinImages
 import SwiftUI
 
 // TODO: currently SVGs are only supported for logos, which are only used in a few places.

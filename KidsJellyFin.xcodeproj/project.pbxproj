@@ -157,7 +157,6 @@
 		E1DC9814296DC06200982F06 /* PulseLogHandler in Frameworks */ = {isa = PBXBuildFile; productRef = E1DC9813296DC06200982F06 /* PulseLogHandler */; };
 		E1E2D7BF2E3FD936004E2E5F /* Transmission in Frameworks */ = {isa = PBXBuildFile; productRef = E1E2D7BE2E3FD936004E2E5F /* Transmission */; };
 		E1FADDF12E84B63600FB310E /* StatefulMacros in Frameworks */ = {isa = PBXBuildFile; productRef = E1FADDF02E84B63600FB310E /* StatefulMacros */; };
-		DA8011111111111111111111 /* ServerImageCacheIdentityIndex.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA8022222222222222222222 /* ServerImageCacheIdentityIndex.swift */; };
 		DA8105A7BF7A87C20DD0D955 /* SwiftfinAccountModels in Frameworks */ = {isa = PBXBuildFile; productRef = DA81816F855C5721D0AC88DA /* SwiftfinAccountModels */; };
 		DA8193B47077EE6BC62F30EC /* SwiftfinAccountModels in Frameworks */ = {isa = PBXBuildFile; productRef = DA81EFD230348A1BEF93486C /* SwiftfinAccountModels */; };
 		DA82BB2B432928C58F90769A /* SwiftfinConnectivity in Frameworks */ = {isa = PBXBuildFile; productRef = DA828E791768AF7749E5E40B /* SwiftfinConnectivity */; };
@@ -175,6 +174,9 @@
 		DA8638C3E9E7910989DF9E62 /* SwiftfinConnections in Frameworks */ = {isa = PBXBuildFile; productRef = DA867901F5BE7134C3FC835C /* SwiftfinConnections */; };
 		DA85C488D0639DE2D5DD0291 /* SwiftfinAccountStore in Frameworks */ = {isa = PBXBuildFile; productRef = DA85A4CA802D048AD0D10631 /* SwiftfinAccountStore */; };
 		DA84D45AF34706F95986A10B /* SwiftfinCredentials in Frameworks */ = {isa = PBXBuildFile; productRef = DA84693ACC5DF619C46B0145 /* SwiftfinCredentials */; };
+		DA90D27E20B8220716E5FEE7 /* SwiftfinImages in Frameworks */ = {isa = PBXBuildFile; productRef = DA90044E3C18B30795C50D3E /* SwiftfinImages */; };
+		DA902219BBC54778EB2695B2 /* SwiftfinImages in Frameworks */ = {isa = PBXBuildFile; productRef = DA90D23796148789F6F6B9D0 /* SwiftfinImages */; };
+		DA903D3D07ECEAED6519587F /* SwiftfinImages in Frameworks */ = {isa = PBXBuildFile; productRef = DA90FCD363F78629E3FBA0AA /* SwiftfinImages */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -249,7 +251,6 @@
 		DA7522222222222222222222 /* Packages/SwiftfinVLC/Tests/SwiftfinVLCTests/VLCPlaybackOwnershipTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Packages/SwiftfinVLC/Tests/SwiftfinVLCTests/VLCPlaybackOwnershipTests.swift; sourceTree = SOURCE_ROOT; };
 		DA7622222222222222222222 /* Packages/SwiftfinNowPlaying/Tests/SwiftfinNowPlayingTests/NowPlayingArtworkOwnershipTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Packages/SwiftfinNowPlaying/Tests/SwiftfinNowPlayingTests/NowPlayingArtworkOwnershipTests.swift; sourceTree = SOURCE_ROOT; };
 		E1B2AB9628808CDF0072B3B9 /* GoogleCast.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = GoogleCast.xcframework; path = Carthage/Build/GoogleCast.xcframework; sourceTree = "<group>"; };
-		DA8022222222222222222222 /* ServerImageCacheIdentityIndex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Shared/Services/ServerImageCacheIdentityIndex.swift"; sourceTree = SOURCE_ROOT; };
 		DA848497DFE85BB5A2199134 /* KidsNativeTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; path = KidsNativeTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -327,6 +328,7 @@
 				DA82BB2B432928C58F90769A /* SwiftfinConnectivity in Frameworks */,
 				DA83A74699AB81CD9DA76CC8 /* SwiftfinCredentials in Frameworks */,
 				DA89B2C4FDB5D85DBAB95C5E /* SwiftfinAsyncStreams in Frameworks */,
+				DA90D27E20B8220716E5FEE7 /* SwiftfinImages in Frameworks */,
 				DA88860A00B8D3981304EE38 /* SwiftfinNetworking in Frameworks */,
 				DA87390145249F71AA05F529 /* SwiftfinSessions in Frameworks */,
 				DA86981CC41136BCE11FD7C3 /* SwiftfinConnections in Frameworks */,
@@ -403,6 +405,7 @@
 				DA82C996AF2EF6239BDBBFBA /* SwiftfinConnectivity in Frameworks */,
 				DA836C6B328E6E38AE3A7DCC /* SwiftfinCredentials in Frameworks */,
 				DA89DF2C52283A19150EBC70 /* SwiftfinAsyncStreams in Frameworks */,
+				DA902219BBC54778EB2695B2 /* SwiftfinImages in Frameworks */,
 				DA88C0CEB703F1205D3D48C1 /* SwiftfinNetworking in Frameworks */,
 				DA87CA72F8821B88F66CE5D5 /* SwiftfinSessions in Frameworks */,
 				DA8638C3E9E7910989DF9E62 /* SwiftfinConnections in Frameworks */,
@@ -492,6 +495,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DA903D3D07ECEAED6519587F /* SwiftfinImages in Frameworks */,
 				DA7633333333333333333333 /* SwiftfinNowPlaying in Frameworks */,
 				DA7533333333333333333333 /* SwiftfinVLC in Frameworks */,
 				DA710139CB0BFEEF09533532 /* PreferencesView in Frameworks */,
@@ -596,7 +600,6 @@
 		DA720139CB0BFEEF09533532 /* Package ownership tests */ = {
 			isa = PBXGroup;
 			children = (
-				DA8022222222222222222222 /* ServerImageCacheIdentityIndex.swift */,
 				DA7622222222222222222222 /* Packages/SwiftfinNowPlaying/Tests/SwiftfinNowPlayingTests/NowPlayingArtworkOwnershipTests.swift */,
 				DA7522222222222222222222 /* Packages/SwiftfinVLC/Tests/SwiftfinVLCTests/VLCPlaybackOwnershipTests.swift */,
 				DA725CFFADC4D997F5A1D0F1 /* Packages/KidsApplication/Tests/KidsApplicationTests/KidsApplicationBoundaryTests.swift */,
@@ -636,6 +639,7 @@
 				DA828E791768AF7749E5E40B /* SwiftfinConnectivity */,
 				DA83EB6A69AFF971D56E9C58 /* SwiftfinCredentials */,
 				DA890B7187FA8EF214285BCB /* SwiftfinAsyncStreams */,
+				DA90044E3C18B30795C50D3E /* SwiftfinImages */,
 				DA880E78BE83F7FE4F7B617D /* SwiftfinNetworking */,
 				DA87F73BDB98044305753948 /* SwiftfinSessions */,
 				DA86E11365202B26F9C5E19D /* SwiftfinConnections */,
@@ -717,6 +721,7 @@
 				DA8272B7A99C25561A19544C /* SwiftfinConnectivity */,
 				DA837E1A2E28C1DF67C34A2B /* SwiftfinCredentials */,
 				DA8976B9A3E0F71C521475E0 /* SwiftfinAsyncStreams */,
+				DA90D23796148789F6F6B9D0 /* SwiftfinImages */,
 				DA8845F33CE6BD71720CF1B4 /* SwiftfinNetworking */,
 				DA878779682B6A5230A79690 /* SwiftfinSessions */,
 				DA867901F5BE7134C3FC835C /* SwiftfinConnections */,
@@ -804,6 +809,7 @@
 			packageProductDependencies = (
 				E1A7B1642B9A9F7800152546 /* PreferencesView */,
 				DA68B7480EC88B7F22D0A475 /* KidsApplication */,
+				DA90FCD363F78629E3FBA0AA /* SwiftfinImages */,
 				DA63F5E235F06D71853317AC /* KidsArtworkUI */,
 			);
 			productName = KidsUITests;
@@ -928,6 +934,7 @@
 			);
 			mainGroup = 5377CBE8263B596A003A4E83;
 			packageReferences = (
+				DA90A5AED613A648BB736DC0 /* XCLocalSwiftPackageReference "Packages/SwiftfinImages" */,
 				DA8364E2A7B817B0F5B23BDE /* XCLocalSwiftPackageReference "Packages/SwiftfinCredentials" */,
 				DA8973D15AA3CE8C53314E47 /* XCLocalSwiftPackageReference "Packages/SwiftfinAsyncStreams" */,
 				DA887E64EE1D16E868661C1A /* XCLocalSwiftPackageReference "Packages/SwiftfinNetworking" */,
@@ -1154,7 +1161,6 @@
 			files = (
 				DA724636470934D4EC40CB32 /* PreferencesView/Tests/PreferencesViewTests/PreferencesOwnershipTests.swift in Sources */,
 				DA72C8525D258A13BEEED0D5 /* Packages/KidsArtworkUI/Tests/KidsArtworkUITests/KidsArtworkBoundaryTests.swift in Sources */,
-				DA8011111111111111111111 /* ServerImageCacheIdentityIndex.swift in Sources */,
 				DA7611111111111111111111 /* Packages/SwiftfinNowPlaying/Tests/SwiftfinNowPlayingTests/NowPlayingArtworkOwnershipTests.swift in Sources */,
 				DA7511111111111111111111 /* Packages/SwiftfinVLC/Tests/SwiftfinVLCTests/VLCPlaybackOwnershipTests.swift in Sources */,
 				DA721EB2E245CF34DE0CE1D3 /* Packages/KidsApplication/Tests/KidsApplicationTests/KidsApplicationBoundaryTests.swift in Sources */,
@@ -1657,6 +1663,7 @@
 		DA87EA2E6E1125F208E61607 /* XCLocalSwiftPackageReference "Packages/SwiftfinSessions" */ = {isa = XCLocalSwiftPackageReference; relativePath = Packages/SwiftfinSessions; };
 		DA86CB275A49ED63AA07A1F8 /* XCLocalSwiftPackageReference "Packages/SwiftfinConnections" */ = {isa = XCLocalSwiftPackageReference; relativePath = Packages/SwiftfinConnections; };
 		DA8559318BE0E97308E68DB1 /* XCLocalSwiftPackageReference "Packages/SwiftfinAccountStore" */ = {isa = XCLocalSwiftPackageReference; relativePath = Packages/SwiftfinAccountStore; };
+		DA90A5AED613A648BB736DC0 /* XCLocalSwiftPackageReference "Packages/SwiftfinImages" */ = {isa = XCLocalSwiftPackageReference; relativePath = Packages/SwiftfinImages; };
 /* End XCLocalSwiftPackageReference section */
 
 /* Begin XCRemoteSwiftPackageReference section */
@@ -2410,6 +2417,9 @@
 		DA867901F5BE7134C3FC835C /* SwiftfinConnections */ = {isa = XCSwiftPackageProductDependency; package = DA86CB275A49ED63AA07A1F8 /* XCLocalSwiftPackageReference "Packages/SwiftfinConnections" */; productName = SwiftfinConnections; };
 		DA85A4CA802D048AD0D10631 /* SwiftfinAccountStore */ = {isa = XCSwiftPackageProductDependency; package = DA8559318BE0E97308E68DB1 /* XCLocalSwiftPackageReference "Packages/SwiftfinAccountStore" */; productName = SwiftfinAccountStore; };
 		DA84693ACC5DF619C46B0145 /* SwiftfinCredentials */ = {isa = XCSwiftPackageProductDependency; package = DA8364E2A7B817B0F5B23BDE /* XCLocalSwiftPackageReference "Packages/SwiftfinCredentials" */; productName = SwiftfinCredentials; };
+		DA90044E3C18B30795C50D3E /* SwiftfinImages */ = {isa = XCSwiftPackageProductDependency; package = DA90A5AED613A648BB736DC0 /* XCLocalSwiftPackageReference "Packages/SwiftfinImages" */; productName = SwiftfinImages; };
+		DA90D23796148789F6F6B9D0 /* SwiftfinImages */ = {isa = XCSwiftPackageProductDependency; package = DA90A5AED613A648BB736DC0 /* XCLocalSwiftPackageReference "Packages/SwiftfinImages" */; productName = SwiftfinImages; };
+		DA90FCD363F78629E3FBA0AA /* SwiftfinImages */ = {isa = XCSwiftPackageProductDependency; package = DA90A5AED613A648BB736DC0 /* XCLocalSwiftPackageReference "Packages/SwiftfinImages" */; productName = SwiftfinImages; };
 /* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 5377CBE9263B596A003A4E83 /* Project object */;

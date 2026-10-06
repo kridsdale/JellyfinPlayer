@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import SwiftfinImages
 import SwiftUI
 
 struct SplitLoginWindowView<Leading: View, Trailing: View>: View {

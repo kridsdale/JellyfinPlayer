@@ -12,6 +12,7 @@ import subprocess
 
 # Explicit responsibilities, not a permission derived from whatever code happens to import.
 EXTERNAL_POLICIES = {
+    "SwiftfinImages": [("nuke", "https://github.com/kean/Nuke", "13.0.6")],
     "SwiftfinVLC": [("swiftvlc", "https://github.com/harflabs/SwiftVLC", "1.0.0")],
     "SwiftfinStorage": [("corestore", "https://github.com/JohnEstropia/CoreStore.git", "9.2.0")],
     "SwiftfinStoredValues": [("defaults", "https://github.com/sindresorhus/Defaults", "9.0.9")],
@@ -21,6 +22,7 @@ EXTERNAL_POLICIES = {
     ],
 }
 POLICIES = {
+    "SwiftfinImages": ({}, {"Foundation", "Nuke", "CryptoKit", "os"}),
     "SwiftfinSessions": ({}, {"Foundation"}),
     "SwiftfinNetworking": ({}, {"Foundation", "Get", "JellyfinAPI"}),
     "SwiftfinAsyncStreams": ({}, {"Foundation", "Combine", "os"}),
@@ -39,7 +41,7 @@ POLICIES = {
     "KidsExperience": ({"KidsApplication","KidsCatalog","KidsDiagnostics","KidsDiagnosticsUI","KidsDomain","KidsPlaybackSession","SwiftfinUIState"}, {"SwiftUI", "Combine"}),
     "KidsDomain": ({}, {"Foundation"}),
     "KidsAccounts": ({"KidsDomain"}, {"Foundation", "Combine"}),
-    "KidsDiagnostics": ({"KidsDomain"}, {"Foundation", "OSLog"}),
+    "KidsDiagnostics": ({"KidsDomain"}, {"Foundation", "OSLog", "os"}),
     "KidsCatalog": ({"KidsDomain", "KidsDiagnostics"}, {"Foundation"}),
     "KidsArtwork": ({"KidsDomain", "KidsCatalog", "KidsDiagnostics"}, {"Foundation"}),
     "KidsArtworkUI": ({"KidsDomain", "KidsCatalog", "KidsDiagnostics", "KidsArtwork"}, {"UIKit", "Combine"}),

@@ -18,6 +18,7 @@ private final class StubProtocol: URLProtocol {
         var body = Data()
         var status = 200
         var requests: [URLRequest] = []
+        var requestBodies: [Data] = []
     }
 
     static let state = OSAllocatedUnfairLock(initialState: State())
@@ -31,8 +32,10 @@ private final class StubProtocol: URLProtocol {
 
     override func startLoading() {
         let capturedRequest = request
+        let body = Self.body(of: capturedRequest)
         let reply = Self.state.withLock { state in
             state.requests.append(capturedRequest)
+            state.requestBodies.append(body)
             return (state.status, state.body)
         }
         let response = HTTPURLResponse(
@@ -44,6 +47,23 @@ private final class StubProtocol: URLProtocol {
         client?.urlProtocol(self, didReceive: response, cacheStoragePolicy: .notAllowed)
         client?.urlProtocol(self, didLoad: reply.1)
         client?.urlProtocolDidFinishLoading(self)
+    }
+
+    private static func body(of request: URLRequest) -> Data {
+        if let body = request.httpBody {
+            return body
+        }
+        guard let stream = request.httpBodyStream else { return Data() }
+        stream.open()
+        defer { stream.close() }
+        var result = Data()
+        var buffer = [UInt8](repeating: 0, count: 1024)
+        while stream.hasBytesAvailable {
+            let count = stream.read(&buffer, maxLength: buffer.count)
+            guard count > 0 else { break }
+            result.append(contentsOf: buffer.prefix(count))
+        }
+        return result
     }
 
     override func stopLoading() {}
@@ -146,5 +166,89 @@ struct TransportContracts {
             Issue.record("Expected cancellation")
         } catch { #expect(error is CancellationError) }
         #expect(StubProtocol.state.withLock { $0.requests.isEmpty })
+    }
+
+    @Test
+    func `password authentication sends the SDK body without mutating existing request credentials`() async throws {
+        let client = transport(token: "initial-token", body: #"{"AccessToken":"returned-token","User":{"Id":"kid"}}"#)
+        let result = try await client.authenticate(username: "synthetic-kid", password: "synthetic-password")
+        #expect(result.accessToken == "returned-token" && result.user?.id == "kid")
+        _ = try await client.send(Paths.getPublicSystemInfo)
+        let requests = StubProtocol.state.withLock { $0.requests }
+        #expect(requests.count == 2 && requests[0].url?.path == "/base/Users/AuthenticateByName")
+        #expect(requests[0].httpMethod == "POST")
+        let body = try JSONSerialization.jsonObject(with: StubProtocol.state.withLock { $0.requestBodies[0] }) as? [String: String]
+        #expect(body == ["Username": "synthetic-kid", "Pw": "synthetic-password"])
+        #expect(requests.allSatisfy { $0.value(forHTTPHeaderField: "Authorization")?.contains("initial-token") == true })
+        let nextAuthorization = try #require(requests[1].value(forHTTPHeaderField: "Authorization"))
+        #expect(!nextAuthorization.contains("returned-token"))
+        #expect(!String(describing: client).contains("returned-token"))
+    }
+
+    @Test
+    func `Quick Connect authentication returns credentials without rebinding the anonymous transport`() async throws {
+        let client = transport(body: #"{"AccessToken":"quick-token","User":{"Id":"kid"}}"#)
+        let result = try await client.authenticate(quickConnectSecret: "synthetic-secret")
+        _ = try await client.send(Paths.getPublicSystemInfo)
+        let requests = StubProtocol.state.withLock { $0.requests }
+        #expect(result.accessToken == "quick-token")
+        let body = try JSONSerialization.jsonObject(with: StubProtocol.state.withLock { $0.requestBodies[0] }) as? [String: String]
+        #expect(body == ["Secret": "synthetic-secret"])
+        #expect(requests[0].url?.path == "/base/Users/AuthenticateWithQuickConnect")
+        #expect(requests.allSatisfy { $0.value(forHTTPHeaderField: "Authorization")?.contains("quick-token") == false })
+    }
+
+    @Test
+    func `successful HTTP authentication without a token is rejected and cannot replace credentials`() async {
+        let client = transport(token: "initial-token", body: #"{"User":{"Id":"kid"}}"#)
+        do { _ = try await client.authenticate(username: "kid", password: "synthetic")
+            Issue.record("Missing access token must fail")
+        } catch { #expect(error is JellyfinClient.ClientError) }
+        #expect(StubProtocol.state
+            .withLock { $0.requests[0].value(forHTTPHeaderField: "Authorization")?.contains("initial-token") == true })
+    }
+
+    @Test
+    func `exact account endpoint and token replacements invalidate only the cached transport`() throws {
+        var builds = 0
+        let cache = AccountTransportCache { url, token in
+            builds += 1
+            return JellyfinTransport(url: url, accessToken: token, identity: identity)
+        }
+        let url = try #require(URL(string: "https://unit.example.test/base"))
+        let original = cache.client(url: url, serverID: "server", userID: "kid", accessToken: "old-token")
+        #expect(cache.client(url: url, serverID: "server", userID: "kid", accessToken: "old-token") === original && builds == 1)
+        let changed = cache.client(url: url, serverID: "server", userID: "kid", accessToken: "new-token")
+        #expect(changed !== original && builds == 2)
+        let oldURL = try #require(original.url(with: Paths.getPublicSystemInfo, queryAPIKey: true))
+        let newURL = try #require(changed.url(with: Paths.getPublicSystemInfo, queryAPIKey: true))
+        #expect(oldURL.query?.contains("old-token") == true && newURL.query?.contains("new-token") == true)
+        let moved = try cache.client(
+            url: #require(URL(string: "https://other.example.test/base")),
+            serverID: "server",
+            userID: "kid",
+            accessToken: "new-token"
+        )
+        #expect(moved !== changed && builds == 3)
+        _ = cache.client(url: url, serverID: "other-server", userID: "kid", accessToken: "new-token")
+        _ = cache.client(url: url, serverID: "other-server", userID: "other-kid", accessToken: "new-token")
+        #expect(builds == 5)
+        cache.invalidate()
+        _ = cache.client(url: url, serverID: "other-server", userID: "other-kid", accessToken: "new-token")
+        #expect(builds == 6 && !String(describing: cache).contains("new-token"))
+    }
+
+    @Test
+    func `overlapping authentication and metadata cannot rebind an existing transport`() async throws {
+        let client = transport(token: "initial-token", body: #"{"AccessToken":"returned-token","User":{"Id":"kid"},"Id":"server"}"#)
+        async let authentication = client.authenticate(username: "kid", password: "synthetic")
+        async let metadata = client.send(Paths.getPublicSystemInfo)
+        let (result, info) = try await (authentication, metadata)
+        #expect(result.accessToken == "returned-token" && info.value.id == "server")
+        _ = try await client.send(Paths.getPublicSystemInfo)
+        let requests = StubProtocol.state.withLock { $0.requests }
+        #expect(requests.count == 3)
+        #expect(requests.allSatisfy { $0.value(forHTTPHeaderField: "Authorization")?.contains("initial-token") == true })
+        #expect(requests.allSatisfy { $0.value(forHTTPHeaderField: "Authorization")?.contains("returned-token") == false })
     }
 }

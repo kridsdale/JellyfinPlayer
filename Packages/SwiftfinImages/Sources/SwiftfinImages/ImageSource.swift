@@ -10,12 +10,12 @@ import Foundation
 
 /// Represents an image source along with a blur hash
 /// to be used as a placeholder.
-struct ImageSource: Hashable {
+public struct ImageSource: Hashable, Sendable {
 
-    let url: URL?
-    let blurHash: String?
+    public let url: URL?
+    public let blurHash: String?
 
-    init(
+    public init(
         url: URL? = nil,
         blurHash: String? = nil
     ) {

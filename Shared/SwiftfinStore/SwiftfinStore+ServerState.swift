@@ -12,6 +12,7 @@ import JellyfinAPI
 import Pulse
 import SwiftfinAccountModels
 import SwiftfinAccountStore
+import SwiftfinImages
 import SwiftfinNetworking
 import SwiftfinStoredValues
 

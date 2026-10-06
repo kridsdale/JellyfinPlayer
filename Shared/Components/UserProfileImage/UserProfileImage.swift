@@ -7,6 +7,7 @@
 //
 
 import Nuke
+import SwiftfinImages
 import SwiftUI
 
 struct UserProfileImage: View {
