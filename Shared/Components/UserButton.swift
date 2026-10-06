@@ -9,6 +9,7 @@
 import Defaults
 import JellyfinAPI
 import SwiftfinLocalization
+import SwiftfinNetworking
 import SwiftUI
 
 struct UserButton: View {
@@ -142,7 +143,7 @@ extension UserButton {
 
     init(
         user: UserDto,
-        client: JellyfinClient,
+        client: JellyfinTransport,
         action: @escaping () -> Void
     ) {
         self.init(

@@ -8,6 +8,7 @@
 
 import JellyfinAPI
 import SwiftfinLocalization
+import SwiftfinNetworking
 import SwiftUI
 
 struct QuickConnectView: View {
@@ -20,7 +21,7 @@ struct QuickConnectView: View {
     @State
     private var error: Error? = nil
 
-    let client: JellyfinClient
+    let client: JellyfinTransport
     let action: (String) async -> Void
 
     private func pollingView(code: String) -> some View {
@@ -61,7 +62,7 @@ struct QuickConnectView: View {
         .edgePadding()
         .task {
             do {
-                for try await event in client.quickConnect.connect() {
+                for try await event in client.quickConnectEvents() {
                     switch event {
                     case let .polling(code: code):
                         self.code = code

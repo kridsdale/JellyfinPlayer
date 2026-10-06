@@ -6,7 +6,7 @@
 // Copyright (c) 2026 Jellyfin & Jellyfin Contributors
 //
 
-@preconcurrency import CoreStore
+import CoreStore
 import Foundation
 
 // TODO: complete and make migration

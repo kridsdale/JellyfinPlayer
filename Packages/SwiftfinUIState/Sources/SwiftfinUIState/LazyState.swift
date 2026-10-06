@@ -10,9 +10,9 @@ import SwiftUI
 
 @MainActor
 @propertyWrapper
-struct LazyState<Value>: @preconcurrency DynamicProperty {
+public struct LazyState<Value>: @MainActor DynamicProperty {
 
-    final class Box {
+    private final class Box {
 
         private var value: Value!
         private let thunk: () -> Value
@@ -35,20 +35,20 @@ struct LazyState<Value>: @preconcurrency DynamicProperty {
     @State
     private var holder: Box
 
-    var wrappedValue: Value {
+    public var wrappedValue: Value {
         holder.wrappedValue
     }
 
-    var projectedValue: Binding<Value> {
+    public var projectedValue: Binding<Value> {
         Binding(get: { wrappedValue }, set: { _ in })
     }
 
-    func update() {
+    public func update() {
         guard !holder.didThunk else { return }
         holder.setup()
     }
 
-    init(wrappedValue thunk: @autoclosure @escaping () -> Value) {
+    public init(wrappedValue thunk: @autoclosure @escaping () -> Value) {
         _holder = State(wrappedValue: Box(wrappedValue: thunk()))
     }
 }

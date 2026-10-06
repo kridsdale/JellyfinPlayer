@@ -12,6 +12,7 @@ import JellyfinAPI
 import Pulse
 import SwiftfinAccountModels
 import SwiftfinAccountStore
+import SwiftfinNetworking
 import SwiftfinStoredValues
 
 @MainActor
@@ -19,12 +20,8 @@ extension ServerState {
     /// - Note: Since this is created from a server, it does not
     ///         have a user access token.
     @MainActor
-    var client: JellyfinClient {
-        JellyfinClient(
-            configuration: .swiftfinConfiguration(url: effectiveServerURL),
-            sessionConfiguration: .swiftfin,
-            sessionDelegate: URLSessionProxyDelegate(logger: NetworkLogger.swiftfin())
-        )
+    var client: JellyfinTransport {
+        JellyfinTransport.swiftfin(url: effectiveServerURL)
     }
 }
 

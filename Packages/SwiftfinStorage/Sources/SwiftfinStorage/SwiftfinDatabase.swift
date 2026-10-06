@@ -6,7 +6,7 @@
 // Copyright (c) 2026 Jellyfin & Jellyfin Contributors
 //
 
-@preconcurrency import CoreStore
+import CoreStore
 import Foundation
 
 /// Owns native objects on the UI actor; transactions receive encoded bytes and
@@ -45,6 +45,7 @@ public final class SwiftfinDatabase {
     private var opening = false
     public static let shared = SwiftfinDatabase()
     public init(fileURL: URL? = nil) {
+        StorageLogging.freeze()
         dataStack = DataStack(
             SwiftfinStore.V1.schema,
             SwiftfinStore.V2.schema,

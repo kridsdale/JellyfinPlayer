@@ -8,6 +8,7 @@
 
 import JellyfinAPI
 import SwiftfinAccountModels
+import SwiftfinNetworking
 import SwiftUI
 
 extension NavigationRoute {
@@ -22,7 +23,7 @@ extension NavigationRoute {
     }
 
     @MainActor
-    static func quickConnect(client: JellyfinClient, action: @escaping (String) async -> Void) -> NavigationRoute {
+    static func quickConnect(client: JellyfinTransport, action: @escaping (String) async -> Void) -> NavigationRoute {
         NavigationRoute(
             id: "quickConnectView",
             style: .sheet

@@ -9,12 +9,13 @@
 import Foundation
 import JellyfinAPI
 import SwiftfinLocalization
+import SwiftfinNetworking
 
 extension UserDto {
 
     @MainActor
     func profileImageSource(
-        client: JellyfinClient,
+        client: JellyfinTransport,
         maxWidth: CGFloat? = nil
     ) -> ImageSource {
         UserState(

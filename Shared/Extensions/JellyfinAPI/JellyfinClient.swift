@@ -7,34 +7,27 @@
 //
 
 import Foundation
-import Get
-import JellyfinAPI
+import Pulse
+import SwiftfinNetworking
 import UIKit
 
-extension JellyfinClient.Configuration {
-
+extension JellyfinTransport {
     @MainActor
-    static func swiftfinConfiguration(
+    static func swiftfin(
         url: URL,
-        accessToken: String? = nil
-    ) -> Self {
-
-        let client = "Swiftfin \(UIDevice.platform)"
-        let deviceName = UIDevice.current.name
-            .folding(options: .diacriticInsensitive, locale: .current)
-            .unicodeScalars
-            .filter { CharacterSet.urlQueryAllowed.contains($0) }
-            .description
-        let deviceID = "\(UIDevice.platform)_\(UIDevice.vendorUUIDString)"
-        let version = (Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String) ?? "0.0.1"
-
-        return .init(
-            url: url,
-            accessToken: accessToken,
-            client: client,
-            deviceName: deviceName,
-            deviceID: deviceID,
-            version: version
+        accessToken: String? = nil,
+        policy: TransportSessionPolicy = .standard,
+        logging: Bool = true
+    ) -> JellyfinTransport {
+        let identity = TransportClientIdentity(
+            platform: UIDevice.platform,
+            deviceName: UIDevice.current.name,
+            vendorID: UIDevice.vendorUUIDString,
+            version: (Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String) ?? "0.0.1"
+        )
+        return JellyfinTransport(
+            url: url, accessToken: accessToken, identity: identity, policy: policy,
+            sessionDelegate: logging ? URLSessionProxyDelegate(logger: NetworkLogger.swiftfin()) : nil
         )
     }
 }

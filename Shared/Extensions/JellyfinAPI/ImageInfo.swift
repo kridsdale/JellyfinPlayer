@@ -8,6 +8,7 @@
 
 import Foundation
 import JellyfinAPI
+import SwiftfinNetworking
 
 extension ImageInfo: @retroactive Identifiable {
 
@@ -15,7 +16,8 @@ extension ImageInfo: @retroactive Identifiable {
         hashValue
     }
 
-    func itemImageSource(itemID: String, client: JellyfinClient) -> ImageSource {
+    @MainActor
+    func itemImageSource(itemID: String, client: JellyfinTransport) -> ImageSource {
         let parameters = Paths.GetItemImageParameters(
             tag: imageTag,
             imageIndex: imageIndex

@@ -10,6 +10,7 @@ import CoreTransferable
 import Foundation
 import JellyfinAPI
 import SwiftfinLocalization
+import SwiftfinNetworking
 
 extension MediaStream {
 
@@ -17,7 +18,8 @@ extension MediaStream {
 
     static let none: MediaStream = .init(displayTitle: L10n.none, index: -1)
 
-    func url(with client: JellyfinClient) -> URL? {
+    @MainActor
+    func url(with client: JellyfinTransport) -> URL? {
         guard let deliveryURL else { return nil }
 
         let deliveryPath = deliveryURL.removingFirst(if: client.configuration.url.absoluteString.last == "/")

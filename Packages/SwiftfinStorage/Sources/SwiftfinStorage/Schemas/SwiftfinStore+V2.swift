@@ -6,13 +6,14 @@
 // Copyright (c) 2026 Jellyfin & Jellyfin Contributors
 //
 
-@preconcurrency import CoreStore
+import CoreStore
 import Foundation
 
 // TODO: complete and make migration
 
 extension SwiftfinStore.V2 {
 
+    @MainActor
     static let schema = CoreStoreSchema(
         modelVersion: "V2",
         entities: [

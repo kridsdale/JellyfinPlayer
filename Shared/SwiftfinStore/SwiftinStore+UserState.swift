@@ -12,6 +12,7 @@ import JellyfinAPI
 import Pulse
 import SwiftfinAccountModels
 import SwiftfinAccountStore
+import SwiftfinNetworking
 import SwiftfinStoredValues
 import UIKit
 
@@ -78,15 +79,11 @@ extension UserState {
         try Container.shared.localAccountStore().deleteSettings(userID: id)
     }
 
-    /// Must pass the server to create a JellyfinClient
+    /// Must pass the server to create a JellyfinTransport
     /// with an access token
     @MainActor
     func getUserData(server: ServerState) async throws -> UserDto {
-        let client = JellyfinClient(
-            configuration: .swiftfinConfiguration(url: server.effectiveServerURL, accessToken: accessToken),
-            sessionConfiguration: .swiftfin,
-            sessionDelegate: URLSessionProxyDelegate(logger: NetworkLogger.swiftfin())
-        )
+        let client = JellyfinTransport.swiftfin(url: server.effectiveServerURL, accessToken: accessToken)
 
         let request = Paths.getCurrentUser
         let response = try await client.send(request)
@@ -113,7 +110,7 @@ extension UserState {
     }
 
     func profileImageSource(
-        client: JellyfinClient
+        client: JellyfinTransport
     ) -> ImageSource {
         ImageSource(
             url: client.url(

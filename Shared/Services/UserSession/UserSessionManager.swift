@@ -14,6 +14,7 @@ import JellyfinAPI
 import Logging
 import SwiftfinCredentials
 import SwiftfinLocalization
+import SwiftfinSessions
 import SwiftfinStoredValues
 
 extension Container {
@@ -302,27 +303,19 @@ final class UserSessionManager: ObservableObject {
         observeSocketCommands()
     }
 
-    @MainActor
-    private func updateCurrentSession(with newSession: UserSession?) async {
-        let previousSession = currentSession
-
-        previousSession?.willStop()
-        await newSession?.willStart()
-
-        currentSession = newSession
+    private lazy var sessionCoordinator = ActiveSessionCoordinator<UserSession> { [weak self] session, identityChanged in
+        guard let self else { return }
+        currentSession = session
         Container.shared.currentUserSession.reset()
-
-        if previousSession?.server.id != newSession?.server.id || previousSession?.user.id != newSession?.user.id {
+        if identityChanged {
             Container.shared.mediaPlayerManager.reset()
         }
+        state = session == nil ? .signedOut : .signedIn
+    }
 
-        if newSession == nil {
-            state = .signedOut
-        } else {
-            state = .signedIn
-        }
-
-        newSession?.didStart()
+    @MainActor
+    private func updateCurrentSession(with newSession: UserSession?) async {
+        await sessionCoordinator.replace(with: newSession)
     }
 
     private func resolveStoredSession() throws -> UserSession? {

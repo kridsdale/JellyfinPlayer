@@ -16,6 +16,7 @@ import SwiftfinAccountModels
 import SwiftfinConnections
 import SwiftfinConnectivity
 import SwiftfinLocalization
+import SwiftfinNetworking
 
 @MainActor
 @Stateful
@@ -105,7 +106,7 @@ final class ServerConnectionManager: ObservableObject {
     @Function(\Action.Cases.start)
     private func _start() async {
         MainActor.preconditionIsolated()
-        guard !isStarted else { return }
+        guard !isStarted, userSession != nil else { return }
         isStarted = true
 
         let observation = NetworkContextObservation()
@@ -223,8 +224,7 @@ extension ServerConnectionManager: UserSessionService {
         start()
     }
 
-    func willStop(userSession: UserSession) {
-        guard self.userSession === userSession else { return }
+    func willStop() {
         self.userSession = nil
         evaluationTask?.cancel()
         stop()
@@ -238,15 +238,7 @@ private struct JellyfinServerConnectionProbe: ServerConnectionProbing {
     private static let logger = Logger.swiftfin()
 
     func serverID(at connection: ServerConnection, accessToken: String?) async throws -> String? {
-        let sessionConfiguration = URLSessionConfiguration.swiftfin.copy() as! URLSessionConfiguration
-        sessionConfiguration.timeoutIntervalForRequest = 8
-        sessionConfiguration.timeoutIntervalForResource = 12
-        sessionConfiguration.waitsForConnectivity = false
-        let client = JellyfinClient(
-            configuration: .swiftfinConfiguration(url: connection.url, accessToken: accessToken),
-            sessionConfiguration: sessionConfiguration,
-            sessionDelegate: URLSessionProxyDelegate(logger: NetworkLogger.swiftfin())
-        )
+        let client = JellyfinTransport.swiftfin(url: connection.url, accessToken: accessToken, policy: .connectionProbe)
         do {
             return try await client.send(Paths.getPublicSystemInfo).value.id
         } catch {

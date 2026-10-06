@@ -36,3 +36,9 @@ The build retains existing compatibility annotations for third-party SDKs. Remai
 Apple accepted the team API key, but no physical tvOS device was available for the development profile. The human explicitly deferred physical-device installation and live CloudKit transport testing. Local SwiftData tests, ad-hoc simulator signing, and selecting the paid team do not establish signed-device or cross-device iCloud success.
 
 The next goal remains the [Swift package responsibility refactor](next-goal.md), after the current engineering work finishes.
+
+## Session/transport/schema checkpoint (2026-10-06)
+
+The session lifecycle and HTTP/socket implementations now have independent owner libraries, with a separate checked Combine/async-stream subscription bridge. Explicit schema construction actors remove 23 inherited storage/fixture compatibility imports; app imports and isolated SwiftUI/Identifiable/native delegate conformances are corrected. A private startup-only SDK logger setter is the retained interoperability exception, guarded against repeated installation and writes after database construction. Existing unchecked diagnostics and SDK asynchronous authentication/client lifetime still require the final ownership audit; this checkpoint does not establish full Swift 6 completion.
+
+Debug 54, tvOS Release 07 and iOS Release 19 pass without Swift compiler/generated-macro warnings. Native sweep 16 passes 228, macros 07 pass 18, boundary/analyzer tests pass 27. Integrated acceptance 54 passes all 45 plus separate genuine EOF/next and session-cap gates; complete SDK progress restoration/export equality is true. Normal launch was visually observed on the approved Shows browser. See [current package boundaries and remaining audit](package-refactor.md) for detailed evidence and retained failures.

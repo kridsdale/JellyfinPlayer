@@ -6,11 +6,12 @@
 // Copyright (c) 2026 Jellyfin & Jellyfin Contributors
 //
 
-@preconcurrency import CoreStore
+import CoreStore
 import Foundation
 
 extension SwiftfinStore.V3 {
 
+    @MainActor
     static let schema = CoreStoreSchema(
         modelVersion: "V3",
         entities: [

@@ -11,12 +11,12 @@ protocol UserSessionService {
 
     func willStart(userSession: UserSession) async
     func didStart(userSession: UserSession)
-    func willStop(userSession: UserSession)
+    func willStop()
 }
 
 extension UserSessionService {
 
     func willStart(userSession: UserSession) async {}
     func didStart(userSession: UserSession) {}
-    func willStop(userSession: UserSession) {}
+    func willStop() {}
 }

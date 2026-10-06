@@ -14,6 +14,7 @@ import KidsAccounts
 import KidsCatalog
 import KidsDomain
 import SwiftfinCredentials
+import SwiftfinNetworking
 
 // SPDX-License-Identifier: MPL-2.0
 import SwiftfinStoredValues
@@ -66,7 +67,7 @@ final class SwiftfinKidsAccountHost: KidsAccountHost {
         username: String,
         password: String
     ) async throws -> KidsAuthenticatedAccount {
-        let client = JellyfinClient(configuration: .swiftfinConfiguration(url: url))
+        let client = JellyfinTransport.swiftfin(url: url, policy: .systemDefault, logging: false)
         let result = try await client.signIn(username: username, password: password)
         guard let token = result.accessToken, let user = result.user, let userID = user.id else { throw KidsAPIError.authentication }
         let identity = KidsAccountIdentity(serverURL: url, serverID: serverID, serverName: serverName, userID: userID, accessToken: token)

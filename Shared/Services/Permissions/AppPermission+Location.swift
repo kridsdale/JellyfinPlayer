@@ -50,7 +50,7 @@ extension AppPermission {
 }
 
 @MainActor
-private final class LocationPermissionRequest: NSObject, @preconcurrency CLLocationManagerDelegate {
+private final class LocationPermissionRequest: NSObject, CLLocationManagerDelegate {
 
     private let manager = CLLocationManager()
     private var continuation: CheckedContinuation<PermissionStatus, Error>?
@@ -63,16 +63,19 @@ private final class LocationPermissionRequest: NSObject, @preconcurrency CLLocat
         }
     }
 
-    func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
-        switch manager.authorizationStatus {
-        case .authorizedAlways, .authorizedWhenInUse:
-            finish(.authorized)
-        case .denied, .restricted:
-            finish(.denied)
-        case .notDetermined:
-            break
-        @unknown default:
-            finish(.unknown)
+    nonisolated func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
+        let status = manager.authorizationStatus.rawValue
+        Task { @MainActor [weak self] in
+            switch CLAuthorizationStatus(rawValue: status) {
+            case .authorizedAlways, .authorizedWhenInUse:
+                self?.finish(.authorized)
+            case .denied, .restricted:
+                self?.finish(.denied)
+            case .notDetermined:
+                break
+            default:
+                self?.finish(.unknown)
+            }
         }
     }
 

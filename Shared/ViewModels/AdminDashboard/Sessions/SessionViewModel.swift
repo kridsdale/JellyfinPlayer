@@ -12,7 +12,7 @@ import JellyfinAPI
 
 @MainActor
 @Stateful
-final class SessionViewModel: ViewModel, @preconcurrency Identifiable {
+final class SessionViewModel: ViewModel, @MainActor Identifiable {
 
     @CasePathable
     enum Action {

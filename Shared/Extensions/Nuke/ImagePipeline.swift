@@ -10,6 +10,7 @@ import FactoryKit
 import Foundation
 import Nuke
 import Pulse
+import SwiftfinNetworking
 import UIKit
 
 extension ImagePipeline {
@@ -67,7 +68,7 @@ extension ImagePipeline.Swiftfin {
         config.dataCache = DataCache.Swiftfin.posters
 
         let dataLoader = DataLoader(
-            configuration: .swiftfin
+            configuration: TransportSessionPolicy.standard.makeConfiguration()
         )
         dataLoader.delegate = URLSessionProxyDelegate(
             logger: NetworkLogger.swiftfin(),
@@ -82,7 +83,7 @@ extension ImagePipeline.Swiftfin {
         config.dataCache = DataCache.Swiftfin.local
 
         let dataLoader = DataLoader(
-            configuration: .swiftfin
+            configuration: TransportSessionPolicy.standard.makeConfiguration()
         )
         dataLoader.delegate = URLSessionProxyDelegate(
             logger: NetworkLogger.swiftfin(),

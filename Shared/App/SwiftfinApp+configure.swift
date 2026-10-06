@@ -6,11 +6,11 @@
 // Copyright (c) 2026 Jellyfin & Jellyfin Contributors
 //
 
-@preconcurrency import CoreStore
 import FactoryKit
 import Logging
 import Nuke
 import PulseLogHandler
+import SwiftfinStorage
 import UIKit
 
 extension SwiftfinApp {
@@ -34,7 +34,23 @@ extension SwiftfinApp {
 
         // CoreStore
 
-        CoreStoreDefaults.logger = SwiftfinCorestoreLogger()
+        let storageLogger = Logger.swiftfin()
+        StorageLogging.bootstrap { entry in
+            let level: Logger.Level = switch entry.level {
+            case .trace: .trace
+            case .debug: .debug
+            case .warning: .warning
+            case .critical: .critical
+            }
+            storageLogger.log(
+                level: level,
+                "\(entry.message)",
+                source: "Corestore",
+                file: entry.file,
+                function: entry.function,
+                line: entry.line
+            )
+        }
 
         // Nuke
         #if os(tvOS)

@@ -9,32 +9,30 @@
 import Foundation
 import JellyfinAPI
 import Pulse
+import SwiftfinNetworking
+import SwiftfinSessions
 
 @MainActor
-final class UserSession {
+final class UserSession: AccountSessionLifecycle {
 
     let server: ServerState
     let user: UserState
 
-    lazy var client: JellyfinClient = JellyfinClient(
-        configuration: .swiftfinConfiguration(
-            url: server.effectiveServerURL,
-            accessToken: user.accessToken
-        ),
-        sessionConfiguration: .swiftfin,
-        sessionDelegate: URLSessionProxyDelegate(logger: NetworkLogger.swiftfin())
-    )
+    lazy var client = JellyfinTransport.swiftfin(url: server.effectiveServerURL, accessToken: user.accessToken)
 
     @MainActor
     lazy var serverConnectionManager = ServerConnectionManager()
 
     lazy var serverSocketManager = ServerSocketManager()
 
-    @MainActor
-    private lazy var services: [any UserSessionService] = [
-        serverConnectionManager,
-        serverSocketManager,
-    ]
+    private lazy var lifecycle = SessionLifecycle(resources: [
+        BoundSessionResource(session: self, service: serverConnectionManager),
+        BoundSessionResource(session: self, service: serverSocketManager)
+    ])
+
+    var sessionIdentity: AccountSessionIdentity {
+        .init(serverID: server.id, userID: user.id)
+    }
 
     init(
         server: ServerState,
@@ -44,24 +42,41 @@ final class UserSession {
         self.user = user
     }
 
-    @MainActor
-    func willStart() async {
-        for service in services {
-            await service.willStart(userSession: self)
-        }
+    func prepare() async {
+        await lifecycle.prepare()
     }
 
-    @MainActor
-    func didStart() {
-        for service in services {
-            service.didStart(userSession: self)
-        }
+    func start() {
+        lifecycle.start()
     }
 
-    @MainActor
-    func willStop() {
-        for service in services.reversed() {
-            service.willStop(userSession: self)
-        }
+    func stop() {
+        lifecycle.stop()
+    }
+}
+
+/// App composition binds a concrete session to existing services. The lifecycle
+/// library only sees prepare/start/stop ports and never captures an app global.
+@MainActor
+private final class BoundSessionResource: SessionResource {
+    private weak var session: UserSession?
+    private let service: any UserSessionService
+    init(session: UserSession, service: any UserSessionService) {
+        self.session = session
+        self.service = service
+    }
+
+    func prepare() async {
+        guard let session else { return }
+        await service.willStart(userSession: session)
+    }
+
+    func start() {
+        guard let session else { return }
+        service.didStart(userSession: session)
+    }
+
+    func stop() {
+        service.willStop()
     }
 }

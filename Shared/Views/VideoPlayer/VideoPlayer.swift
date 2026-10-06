@@ -9,6 +9,7 @@
 import Defaults
 import FactoryKit
 import SwiftfinLocalization
+import SwiftfinUIState
 import SwiftUI
 import Transmission
 
@@ -20,7 +21,7 @@ struct VideoPlayer: View {
     @InjectedObject(\.mediaPlayerManager)
     private var manager: MediaPlayerManager
 
-    @LazyState
+    @SwiftfinUIState.LazyState
     private var proxy: any VideoMediaPlayerProxy
 
     @Router

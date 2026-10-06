@@ -16,6 +16,7 @@ import OrderedCollections
 import Pulse
 import SwiftfinAccountModels
 import SwiftfinLocalization
+import SwiftfinNetworking
 import SwiftfinStoredValues
 
 @MainActor
@@ -75,10 +76,7 @@ final class ConnectToServerViewModel: ObservableObject {
             throw ErrorMessage(L10n.invalidURL)
         }
 
-        let client = JellyfinClient(
-            configuration: .swiftfinConfiguration(url: url),
-            sessionDelegate: URLSessionProxyDelegate(logger: NetworkLogger.swiftfin())
-        )
+        let client = JellyfinTransport.swiftfin(url: url, policy: .systemDefault)
 
         let response = try await client.send(Paths.getPublicSystemInfo)
 
@@ -179,7 +177,7 @@ final class ConnectToServerViewModel: ObservableObject {
     @Function(\Action.Cases.searchForServers)
     private func _searchForServers() async {
         do {
-            for try await server in JellyfinClient.discover() {
+            for try await server in JellyfinTransport.discover() {
                 localServers.append(
                     ServerState(
                         urls: [server.url],

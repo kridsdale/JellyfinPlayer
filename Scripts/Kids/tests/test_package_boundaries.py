@@ -68,22 +68,37 @@ class PackageBoundariesTests(unittest.TestCase):
                 MODULE.inspect_package(root / "Packages/SwiftfinVLC", root)
 
 
-    def test_storage_sdks_have_separate_exact_owners(self):
+    def test_every_sdk_has_its_exact_recorded_owner_and_all_are_required(self):
         root = Path("/fixture")
-        for owner, (identity, url, version) in MODULE.EXTERNAL_POLICIES.items():
-            remote = {"sourceControl": [{"identity": identity, "location": {"remote": [{"urlString": url}]}, "requirement": {"exact": [version]}}]}
-            with self.subTest(owner=owner), patch.object(MODULE.subprocess, "check_output", return_value=json.dumps({"dependencies": [remote]})):
+        for owner, policies in MODULE.EXTERNAL_POLICIES.items():
+            remotes = [{"sourceControl": [{"identity": identity, "location": {"remote": [{"urlString": url}]}, "requirement": {"exact": [version]}}]} for identity, url, version in policies]
+            with self.subTest(owner=owner), patch.object(MODULE.subprocess, "check_output", return_value=json.dumps({"dependencies": remotes})):
                 _, dependencies = MODULE.inspect_package(root / "Packages" / owner, root)
                 self.assertEqual(dependencies, set())
-            for field, value in [("requirement", {"range": [version, "99.0.0"]}), ("identity", "another-sdk")]:
-                changed = copy.deepcopy(remote)
-                changed["sourceControl"][0][field] = value
-                with self.subTest(owner=owner, field=field), patch.object(MODULE.subprocess, "check_output", return_value=json.dumps({"dependencies": [changed]})):
-                    with self.assertRaises(ValueError):
-                        MODULE.inspect_package(root / "Packages" / owner, root)
-            with self.subTest(owner=owner, missing=True), patch.object(MODULE.subprocess, "check_output", return_value=json.dumps({"dependencies": []})):
-                with self.assertRaises(ValueError):
-                    MODULE.inspect_package(root / "Packages" / owner, root)
+            for index, (identity, url, version) in enumerate(policies):
+                for field, value in [("requirement", {"range": [version, "99.0.0"]}), ("identity", "another-sdk"), ("location", {"remote": [{"urlString": "https://unexpected.invalid/SDK"}]})]:
+                    changed = copy.deepcopy(remotes)
+                    changed[index]["sourceControl"][0][field] = value
+                    with self.subTest(owner=owner, sdk=identity, field=field), patch.object(MODULE.subprocess, "check_output", return_value=json.dumps({"dependencies": changed})):
+                        with self.assertRaises(ValueError):
+                            MODULE.inspect_package(root / "Packages" / owner, root)
+                for changed in [remotes[:index] + remotes[index + 1:], remotes + [remotes[index]]]:
+                    with self.subTest(owner=owner, missing_or_duplicate=identity), patch.object(MODULE.subprocess, "check_output", return_value=json.dumps({"dependencies": changed})):
+                        with self.assertRaises(ValueError):
+                            MODULE.inspect_package(root / "Packages" / owner, root)
+
+    def test_session_lifecycle_and_stream_delivery_have_no_network_storage_or_ui_dependencies(self):
+        for owner in ["SwiftfinSessions", "SwiftfinAsyncStreams"]:
+            edges, frameworks = MODULE.POLICIES[owner]
+            for module in ["JellyfinAPI", "Get", "Defaults", "CoreStore", "FactoryKit", "SwiftUI", "UIKit", "SwiftfinCredentials"]:
+                with self.subTest(owner=owner, module=module):
+                    self.assertTrue(MODULE.validate_source(owner, "import " + module, edges, frameworks))
+
+    def test_transport_cannot_read_credentials_from_storage_or_resolve_application_globals(self):
+        edges, frameworks = MODULE.POLICIES["SwiftfinNetworking"]
+        for module in ["SwiftfinCredentials", "Defaults", "FactoryKit", "UIKit", "SwiftUI", "Pulse", "SwiftfinStorage"]:
+            with self.subTest(module=module):
+                self.assertTrue(MODULE.validate_source("SwiftfinNetworking", "import " + module, edges, frameworks))
 
     def test_native_storage_cannot_import_presentation_or_credentials(self):
         for module in ["SwiftUI", "Defaults", "FactoryKit", "KeychainSwift", "JellyfinAPI"]:

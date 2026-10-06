@@ -10,7 +10,7 @@ import AVFoundation
 import Combine
 import Defaults
 import Foundation
-@preconcurrency import JellyfinAPI
+import JellyfinAPI
 import SwiftfinUIState
 import SwiftUI
 

@@ -12,6 +12,7 @@ import Foundation
 import Get
 import JellyfinAPI
 import Logging
+import SwiftfinNetworking
 
 @MainActor
 class ViewModel: ObservableObject {
@@ -42,7 +43,7 @@ class ViewModel: ObservableObject {
         return userSession
     }
 
-    var authenticatedClient: JellyfinClient {
+    var authenticatedClient: JellyfinTransport {
         get throws {
             try requireUserSession().client
         }

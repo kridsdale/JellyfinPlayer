@@ -11,6 +11,7 @@ import FactoryKit
 import JellyfinAPI
 import Logging
 import SwiftfinLocalization
+import SwiftfinUIState
 import SwiftUI
 import Transmission
 
@@ -24,7 +25,7 @@ struct NativeVideoPlayer: View {
     @InjectedObject(\.mediaPlayerManager)
     private var manager: MediaPlayerManager
 
-    @LazyState
+    @SwiftfinUIState.LazyState
     private var proxy: AVMediaPlayerProxy
 
     @Router
