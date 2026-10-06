@@ -6,6 +6,8 @@
 // Copyright (c) 2026 Jellyfin & Jellyfin Contributors
 //
 
+import SwiftfinLocalization
+
 #if os(iOS)
 enum PermissionStatus: Equatable {
     case authorized

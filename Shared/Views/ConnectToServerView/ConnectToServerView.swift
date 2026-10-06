@@ -8,6 +8,7 @@
 
 import Combine
 import Defaults
+import SwiftfinLocalization
 import SwiftUI
 
 struct ConnectToServerView: View {

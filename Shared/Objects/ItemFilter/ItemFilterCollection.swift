@@ -40,6 +40,7 @@ struct ItemFilterCollection: Hashable, Storable {
     ///
     /// These may be altered when used to better represent all
     /// available values within the current context.
+    @MainActor
     static let all: ItemFilterCollection = .init(
         categories: ChannelCategory.allCases,
         letter: ItemLetter.allCases,

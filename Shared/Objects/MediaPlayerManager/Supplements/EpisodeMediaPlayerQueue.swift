@@ -13,6 +13,7 @@ import Defaults
 import Foundation
 import IdentifiedCollections
 import JellyfinAPI
+import SwiftfinLocalization
 import SwiftUI
 
 @MainActor
@@ -124,7 +125,7 @@ class EpisodeMediaPlayerQueue: ViewModel, MediaPlayerQueue {
 
         if let nextItem {
             nextProvider = MediaPlayerItemProvider(item: nextItem) { [weak self] item, modifyItem in
-                let bitrate = await self?.manager?.playbackBitrate ?? Defaults[.VideoPlayer.Playback.appMaximumBitrate]
+                let bitrate = self?.manager?.playbackBitrate ?? Defaults[.VideoPlayer.Playback.appMaximumBitrate]
                 return try await MediaPlayerItem.build(for: item, requestedBitrate: bitrate) { item in
                     item.userData?.playbackPositionTicks = .zero
                     modifyItem?(&item)
@@ -134,7 +135,7 @@ class EpisodeMediaPlayerQueue: ViewModel, MediaPlayerQueue {
 
         if let previousItem {
             previousProvider = MediaPlayerItemProvider(item: previousItem) { [weak self] item, modifyItem in
-                let bitrate = await self?.manager?.playbackBitrate ?? Defaults[.VideoPlayer.Playback.appMaximumBitrate]
+                let bitrate = self?.manager?.playbackBitrate ?? Defaults[.VideoPlayer.Playback.appMaximumBitrate]
                 return try await MediaPlayerItem.build(for: item, requestedBitrate: bitrate) { item in
                     item.userData?.playbackPositionTicks = .zero
                     modifyItem?(&item)

@@ -6,6 +6,8 @@
 // Copyright (c) 2026 Jellyfin & Jellyfin Contributors
 //
 
+import SwiftfinLocalization
+
 enum AudioCodec: String, CaseIterable, Codable, Displayable, Storable {
 
     case aac

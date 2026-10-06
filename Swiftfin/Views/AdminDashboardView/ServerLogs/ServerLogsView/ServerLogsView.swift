@@ -7,6 +7,7 @@
 //
 
 import JellyfinAPI
+import SwiftfinLocalization
 import SwiftUI
 
 // TODO: download to device?

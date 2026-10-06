@@ -8,6 +8,7 @@
 
 import Foundation
 import JellyfinAPI
+import SwiftfinLocalization
 
 struct ServerActivityLibrary: PagingLibrary {
 

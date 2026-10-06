@@ -7,6 +7,7 @@
 //
 
 import JellyfinAPI
+import SwiftfinLocalization
 
 enum ItemFilterType: String, CaseIterable, Displayable, Identifiable, Storable, SystemImageable {
 

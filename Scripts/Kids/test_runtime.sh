@@ -15,7 +15,7 @@ xcrun swiftc -swift-version 6 -parse-as-library \
   -o "$RUNTIME_TEST_BUILD/poke-interval-tests"
 "$RUNTIME_TEST_BUILD/poke-interval-tests"
 xcrun swiftc -swift-version 6 -parse-as-library \
-  "$REPO_ROOT/Shared/Objects/PlaybackBitrate/PlaybackBitrateMeasurement.swift" \
+  "$REPO_ROOT/Packages/KidsPlayback/Sources/KidsPlayback/PlaybackBitrateMeasurement.swift" \
   "$REPO_ROOT/Scripts/Kids/tests/runtime/PlaybackBitrateMeasurementTests.swift" \
   -o "$RUNTIME_TEST_BUILD/bitrate-measurement-tests"
 "$RUNTIME_TEST_BUILD/bitrate-measurement-tests"

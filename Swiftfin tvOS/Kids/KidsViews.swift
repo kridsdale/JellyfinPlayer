@@ -6,11 +6,15 @@
 // Copyright (c) 2026 Jellyfin & Jellyfin Contributors
 //
 
-// SPDX-License-Identifier: MPL-2.0
 import AVFoundation
 import Combine
-import FactoryKit
-import KidsCore
+import KidsDiagnostics
+import KidsDiagnosticsUI
+import KidsDomain
+import KidsPlaybackSession
+
+// SPDX-License-Identifier: MPL-2.0
+import SwiftfinUIState
 import SwiftUI
 
 private let kidsTeal = Color(red: 0.04, green: 0.47, blue: 0.49)
@@ -19,14 +23,12 @@ private let kidsBackground = Color(red: 0.055, green: 0.10, blue: 0.14)
 struct KidsRootView: View {
     @StateObject
     private var model: KidsAppModel
-    init(model: KidsAppModel? = nil) {
-        _model = StateObject(wrappedValue: model ?? KidsAppModel())
+    init(model: @autoclosure @escaping () -> KidsAppModel) {
+        _model = StateObject(wrappedValue: model())
     }
 
     @Environment(\.scenePhase)
     private var scenePhase
-    @InjectedObject(\.userSessionManager)
-    private var sessions
     @State
     private var path: [KidsItem] = []
     private let gateTimer = Timer.publish(every: 5, on: .main, in: .common).autoconnect()
@@ -96,11 +98,7 @@ struct KidsRootView: View {
                     model.category = .shows
                 }
         }
-        .task(id: [
-            sessions.currentSession?.server.id,
-            sessions.currentSession?.user.id,
-            sessions.currentSession?.server.effectiveServerURL.absoluteString
-        ]) {
+        .task(id: model.accountIdentity) {
             // Synthetic previews own their seeded player. Production identity
             // transitions still stop playback before replacing any catalog.
             guard !model.isPreview else { return }
@@ -472,14 +470,11 @@ struct KidsPlayerView: View {
     private var control: String?
     @Environment(\.scenePhase)
     private var phase
-    @StateObject
-    private var containerState = VideoPlayerContainerState()
     var body: some View {
         ZStack {
             Color.black
             if !model.isPreview {
-                playback.proxy.videoPlayerBody
-                    .environmentObject(playback.manager).environmentObject(containerState)
+                SwiftfinKidsPlaybackSurface(session: playback)
                     .ignoresSafeArea()
             }
             if !playback.controlsVisible && !playback.recovery && !playback.showCountdown && !playback.buffering {

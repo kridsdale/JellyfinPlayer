@@ -8,6 +8,7 @@
 
 import JellyfinAPI
 import OrderedCollections
+import SwiftfinLocalization
 import SwiftUI
 
 struct DevicesView: View {

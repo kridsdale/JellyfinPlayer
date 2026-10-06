@@ -7,6 +7,8 @@
 //
 
 import Defaults
+import SwiftfinLocalization
+import SwiftfinUIState
 import SwiftUI
 
 struct IndicatorSettingsView: View {

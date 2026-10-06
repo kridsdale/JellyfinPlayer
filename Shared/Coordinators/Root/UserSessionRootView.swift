@@ -24,10 +24,18 @@ struct UserSessionRootView: View {
         if let argument = ProcessInfo.processInfo.arguments.first(where: { $0.hasPrefix("--kids-preview=") }) {
             KidsRootView(model: KidsPreviewFixtures.model(String(argument.dropFirst("--kids-preview=".count))))
         } else {
-            KidsRootView().task { await userSessionManager.start() }
+            KidsRootView(model: KidsAppModel(
+                accounts: SwiftfinKidsAccountHost(sessions: userSessionManager),
+                playbackFactory: SwiftfinKidsPlaybackFactory(sessions: userSessionManager)
+            ))
+            .task { await userSessionManager.start() }
         }
         #else
-        KidsRootView().task { await userSessionManager.start() }
+        KidsRootView(model: KidsAppModel(
+            accounts: SwiftfinKidsAccountHost(sessions: userSessionManager),
+            playbackFactory: SwiftfinKidsPlaybackFactory(sessions: userSessionManager)
+        ))
+        .task { await userSessionManager.start() }
         #endif
         #else
         ZStack {

@@ -8,6 +8,7 @@
 
 import Defaults
 import OrderedCollections
+import SwiftfinLocalization
 import SwiftUI
 
 extension SelectUserView {

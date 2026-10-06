@@ -8,13 +8,19 @@
 
 import Foundation
 
-let localizationFile = "./Translations/en.lproj/Localizable.strings"
-let directoriesToScan = ["./Shared", "./Swiftfin", "./Swiftfin tvOS"]
-let excludedFile = "./Shared/Strings/Strings.swift"
+let localizationFile = "./Packages/SwiftfinLocalization/Sources/SwiftfinLocalization/Resources/en.lproj/Localizable.strings"
+let directoriesToScan = ["./Shared", "./Swiftfin", "./Swiftfin tvOS", "./Packages"]
+let excludedFile = "./Packages/SwiftfinLocalization/Sources/SwiftfinLocalization/ProperNouns.swift"
 let keyRegex = #/^\s*"(?<key>[^"\n]+)"\s*=/#
 let usageRegex = #/L10n\.`?(?<key>[a-zA-Z0-9_]+)`?/#
 
-guard let content = try? String(contentsOfFile: localizationFile, encoding: .utf16) else {
+guard let data = try? Data(contentsOf: URL(fileURLWithPath: localizationFile)) else {
+    print("Unable to read localization file at \(localizationFile)")
+    exit(1)
+}
+
+let encoding: String.Encoding = data.starts(with: [0xFF, 0xFE]) || data.starts(with: [0xFE, 0xFF]) ? .utf16 : .utf8
+guard let content = String(data: data, encoding: encoding) else {
     print("Unable to read localization file at \(localizationFile)")
     exit(1)
 }
@@ -24,7 +30,8 @@ for directory in directoriesToScan {
     guard let files = FileManager.default.enumerator(atPath: directory) else { continue }
     for case let file as String in files where file.hasSuffix(".swift") {
         let path = "\(directory)/\(file)"
-        guard path != excludedFile,
+        guard path != excludedFile, !file.split(separator: "/").contains(".build"), !file.split(separator: "/").contains("Tools"),
+              !file.split(separator: "/").contains("Tests"),
               let source = try? String(contentsOfFile: path, encoding: .utf8) else { continue }
         usedKeys.formUnion(source.matches(of: usageRegex).map { String($0.output.key) })
     }
@@ -66,7 +73,7 @@ for entry in unused.reversed() {
 }
 
 do {
-    try lines.joined(separator: "\n").write(toFile: localizationFile, atomically: true, encoding: .utf16)
+    try lines.joined(separator: "\n").write(toFile: localizationFile, atomically: true, encoding: encoding)
     print("\nLocalization file updated. Removed \(unused.count) unused keys.")
 } catch {
     print("\nError: Failed to write updated localization file.")

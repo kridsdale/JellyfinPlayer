@@ -9,6 +9,7 @@
 import FactoryKit
 import Foundation
 import KeychainSwift
+import SwiftfinLocalization
 
 final class LocalUserSecurityViewModel: ViewModel {
 

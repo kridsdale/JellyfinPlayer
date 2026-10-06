@@ -8,6 +8,7 @@
 
 #if os(iOS)
 import CoreLocation
+import SwiftfinLocalization
 
 extension AppPermission {
 

@@ -7,6 +7,7 @@
 //
 
 import Defaults
+import SwiftfinLocalization
 import SwiftUI
 
 struct FilterTrack: View {

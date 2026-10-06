@@ -6,22 +6,31 @@
 // Copyright (c) 2026 Jellyfin & Jellyfin Contributors
 //
 
-// SPDX-License-Identifier: MPL-2.0
 import AVFoundation
 import Combine
 import CoreData
-import Defaults
-import FactoryKit
 import Foundation
-import JellyfinAPI
-import KidsCore
+import KidsAccounts
+import KidsArtwork
+import KidsArtworkUI
+import KidsCatalog
+import KidsDiagnostics
+import KidsDomain
 import KidsPersistence
-import Security
+import KidsPlayback
+import KidsPlaybackSession
 import SwiftData
+
+// SPDX-License-Identifier: MPL-2.0
+import SwiftfinUIState
 import UIKit
 
 @MainActor
-final class KidsAppModel: ObservableObject {
+final class KidsAppModel: ObservableObject, KidsPlaybackSessionDelegate {
+    private let playbackFactory: (any KidsPlaybackSessionFactory)?
+    private let accounts: (any KidsAccountHost)?
+    @Published
+    private(set) var accountIdentity: KidsAccountIdentity?
     @Published
     var category: KidsCategory = .shows
     @Published
@@ -103,7 +112,7 @@ final class KidsAppModel: ObservableObject {
     }
 
     var api: KidsAPI? {
-        guard !isPreview, let session = Container.shared.currentUserSession() else {
+        guard !isPreview, let session = accounts?.currentIdentity else {
             if retainedAPI != nil {
                 retainedAPI = nil
                 refreshGeneration = UUID()
@@ -112,8 +121,8 @@ final class KidsAppModel: ObservableObject {
             }
             return nil
         }
-        var url = session.server.effectiveServerURL
-        var token = session.user.accessToken
+        var url = session.serverURL
+        var token = session.accessToken
         #if DEBUG
         if validationScenario == "unavailable" {
             url = URL(string: "http://127.0.0.1:9")!
@@ -122,7 +131,7 @@ final class KidsAppModel: ObservableObject {
             token = "invalid-validation-token"
         }
         #endif
-        let identity = APIIdentity(url: url, serverID: session.server.id, userID: session.user.id, token: token)
+        let identity = APIIdentity(url: url, serverID: session.serverID, userID: session.userID, token: token)
         if let retainedAPI, retainedAPI.identity == identity {
             return retainedAPI.value
         }
@@ -149,7 +158,7 @@ final class KidsAppModel: ObservableObject {
     #endif
 
     var serverName: String {
-        Container.shared.currentUserSession()?.server.name ?? "Your Jellyfin server"
+        accounts?.currentIdentity?.serverName ?? "Your Jellyfin server"
     }
 
     private var skipNextBrowseRefresh = true
@@ -235,19 +244,27 @@ final class KidsAppModel: ObservableObject {
     private let bindingKey = "kids.binding.v1"
     private let recoveryBindingKey = "kids.recoveryBinding.v1"
     private let gateKey = "kids.gate.v1"
-    private let pinKey = "kids.parentPin.v1"
     var hasParentPIN: Bool {
-        isPreview || Container.shared.keychainService().get(pinKey) != nil
+        isPreview || accounts?.parentPIN != nil
     }
 
     var unlocked: Bool {
         gate.unlocked(at: .now)
     }
 
-    init(preview: Bool = false) {
+    init(accounts: (any KidsAccountHost)? = nil, playbackFactory: (any KidsPlaybackSessionFactory)? = nil, preview: Bool = false) {
+        self.playbackFactory = playbackFactory
+        self.accounts = accounts
+        self.accountIdentity = accounts?.currentIdentity
         if preview {
             isPreview = true
             return
+        }
+        if let accounts {
+            accounts.identityChanges.receive(on: DispatchQueue.main)
+                .sink { [weak self] identity in
+                    MainActor.assumeIsolated { self?.accountIdentity = identity }
+                }.store(in: &syncObservers)
         }
         observeCloudChanges()
         if let data = UserDefaults.standard.data(forKey: gateKey), let saved = try? JSONDecoder().decode(KidsGate.self, from: data) {
@@ -307,10 +324,10 @@ final class KidsAppModel: ObservableObject {
         episodeCache = [:]
         problem = nil
         needsLocalReset = false
-        guard let api, let session = Container.shared.currentUserSession(),
+        guard let api, let session = accounts?.currentIdentity,
               let data = UserDefaults.standard.data(forKey: bindingKey),
               let stored = try? JSONDecoder().decode(KidsBinding.self, from: data),
-              stored.userID == session.user.id, stored.serverID == session.server.id
+              stored.userID == session.userID, stored.serverID == session.serverID
         else {
             state = nil
             selectedShow = nil
@@ -582,8 +599,8 @@ final class KidsAppModel: ObservableObject {
         }
         guard let confirmed else { throw KidsContractError.denied }
         if !isPreview {
-            guard let api, let session = Container.shared.currentUserSession(),
-                  session.user.id == confirmed.userID, session.server.id == confirmed.serverID
+            guard let api, let session = accounts?.currentIdentity,
+                  session.userID == confirmed.userID, session.serverID == confirmed.serverID
             else { throw KidsAPIError.authentication }
             try await api.validate(confirmed)
         }
@@ -639,13 +656,14 @@ final class KidsAppModel: ObservableObject {
     func setPIN(_ pin: String) throws {
         guard !isPreview else { throw KidsContractError.denied }
         guard !hasParentPIN || unlocked, (4 ... 8).contains(pin.count), pin.allSatisfy(\.isNumber) else { throw KidsContractError.denied }
-        guard Container.shared.keychainService().set(pin, forKey: pinKey) else { throw KidsAPIError.invalidResponse }
+        guard let accounts else { throw KidsAPIError.authentication }
+        try accounts.storeParentPIN(pin)
         _ = gate.attempt(correct: true, now: .now)
         saveGate()
     }
 
     func unlock(_ pin: String) -> Bool {
-        let correct = isPreview ? pin == "4242" : Container.shared.keychainService().get(pinKey) == pin
+        let correct = isPreview ? pin == "4242" : accounts?.parentPIN == pin
         let result = gate.attempt(correct: correct, now: .now)
         saveGate()
         return result
@@ -659,9 +677,16 @@ final class KidsAppModel: ObservableObject {
               ["http", "https"].contains(url.scheme?.lowercased()), url.host != nil, url.user == nil,
               url.password == nil else { throw KidsAPIError.connection }
         let info = try await KidsAPI(serverURL: url, token: "").serverInfo()
-        let client = JellyfinClient(configuration: .swiftfinConfiguration(url: url))
-        let result = try await client.signIn(username: username, password: password)
-        guard let token = result.accessToken, let user = result.user, let userID = user.id else { throw KidsAPIError.authentication }
+        guard let accounts else { throw KidsAPIError.authentication }
+        let authenticated = try await accounts.authenticate(
+            url: url,
+            serverID: info.id,
+            serverName: info.name,
+            username: username,
+            password: password
+        )
+        let token = authenticated.identity.accessToken
+        let userID = authenticated.identity.userID
         let newAPI = KidsAPI(serverURL: url, token: token)
         let libraries = try await newAPI.libraries(userID: userID)
         guard let shows = libraries.first(where: { $0.name == "Kid TV" && $0.collectionType == "tvshows" }),
@@ -679,34 +704,21 @@ final class KidsAppModel: ObservableObject {
             restored = try repository().reset(binding: binding)
         } else {
             if hasParentPIN {
-                guard Container.shared.keychainService().get(pinKey) == parentPIN else { throw KidsContractError.denied }
+                guard accounts.parentPIN == parentPIN else { throw KidsContractError.denied }
             }
             // Refreshing credentials for the same binding retains ordered progress, bags, and session budget.
             restored = try repository().load(binding: binding, legacyURL: stateURL)
         }
         try setPIN(parentPIN)
         await stopPlayback()
-        let keychain = Container.shared.keychainService()
-        guard keychain.set(token, forKey: "\(userID)-accessToken") else { throw KidsAPIError.invalidResponse }
-        let server = ServerState(urls: [url], currentURL: url, name: info.name, id: info.id, userIDs: [userID])
-        var servers = StoredValues[.Server.servers]
-        servers.removeAll { $0.id == info.id }
-        servers.append(server)
-        StoredValues[.Server.servers] = servers
-        let saved = UserState(id: userID, serverID: info.id, username: user.name ?? username)
-        saved.data = user
-        saved.accessPolicy = .none
-        var users = StoredValues[.User.users]
-        users.removeAll { $0.id == userID }
-        users.append(saved)
-        StoredValues[.User.users] = users
+        try authenticated.prepareActivation(binding: binding)
         let encodedBinding = try JSONEncoder().encode(binding)
         UserDefaults.standard.set(encodedBinding, forKey: bindingKey)
         UserDefaults.standard.set(encodedBinding, forKey: recoveryBindingKey)
         syncBaseline = restored
         state = restored.state
         // Use the existing session lifecycle for playback SDK integration, without exposing its library UI.
-        try await Container.shared.userSessionManager().signIn(userID: userID)
+        try await authenticated.activate(binding: binding)
         await refresh()
     }
 
@@ -726,7 +738,7 @@ final class KidsAppModel: ObservableObject {
             UserDefaults.standard.set(data, forKey: recoveryBindingKey)
         }
         UserDefaults.standard.removeObject(forKey: bindingKey)
-        await Container.shared.userSessionManager().signOut(reason: .explicit)
+        await accounts?.signOut()
         lockParents()
         requiresParent = true
     }
@@ -860,14 +872,20 @@ final class KidsAppModel: ObservableObject {
                     if verified.kind == .episode {
                         guard verified.seriesID == title.id else { throw KidsContractError.denied }
                     }
-                    let controller = try await KidsPlaybackController.prepare(
+                    guard let playbackFactory = self.playbackFactory else { throw KidsAPIError.unavailable }
+                    #if DEBUG
+                    let simulateStreamFailure = self.consumeValidationStreamFailure()
+                    #else
+                    let simulateStreamFailure = false
+                    #endif
+                    let controller = try await playbackFactory.prepare(
                         item: verified,
                         title: title,
                         mode: mode,
                         position: position,
                         episodes: allEpisodes,
-                        model: self,
-                        performance: trace
+                        delegate: self,
+                        performance: trace, simulateStreamFailure: simulateStreamFailure
                     )
                     guard !Task.isCancelled, self.binding == binding, self.startGeneration == generation else { await controller.stop()
                         trace?.finish(.cancelled)
@@ -975,5 +993,33 @@ final class KidsAppModel: ObservableObject {
         guard activePlayback === controller else { return }
         activePlayback = nil
         play(controller.title, mode: controller.mode, continuing: true)
+    }
+
+    func stopPlaybackFromSession() async {
+        await stopPlayback()
+    }
+
+    func retryPlayback(_ controller: KidsPlaybackController, position: Double) {
+        guard activePlayback === controller else { return }
+        activePlayback = nil
+        play(controller.title, mode: controller.mode, retryItem: controller.item, retryPosition: position, continuing: true)
+    }
+
+    func playbackFailed(_ controller: KidsPlaybackController, error: KidsPlaybackFailure) {
+        guard activePlayback === controller else { return }
+        if error == .authentication {
+            show(KidsAPIError.authentication)
+            return
+        }
+        Task { [weak self, weak controller] in
+            guard let self, let controller, let api = self.api, let binding = self.binding else { return }
+            do { try await api.validate(binding) }
+            catch {
+                guard self.activePlayback === controller, self.binding == binding else { return }
+                if let failure = error as? KidsAPIError, [.authentication, .policy, .libraryChanged].contains(failure) {
+                    self.show(failure)
+                }
+            }
+        }
     }
 }

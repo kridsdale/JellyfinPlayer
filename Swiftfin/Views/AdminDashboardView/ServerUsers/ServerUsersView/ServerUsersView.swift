@@ -8,6 +8,7 @@
 
 import CollectionVGrid
 import JellyfinAPI
+import SwiftfinLocalization
 import SwiftUI
 
 struct ServerUsersView: View {

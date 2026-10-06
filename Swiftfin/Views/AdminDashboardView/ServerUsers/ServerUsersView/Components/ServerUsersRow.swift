@@ -9,6 +9,7 @@
 import Defaults
 import FactoryKit
 import JellyfinAPI
+import SwiftfinLocalization
 import SwiftUI
 
 extension ServerUsersView {

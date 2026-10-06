@@ -30,7 +30,7 @@ enum Notifications {
     class Key<Payload>: _AnyKey {
 
         @Injected(\.notificationCenter)
-        private var notificationCenter
+        fileprivate var notificationCenter
 
         let name: Notification.Name
         let decodeStrategy: ([AnyHashable: Any]) -> Payload?
@@ -89,6 +89,25 @@ enum Notifications {
                     }
 
                     return self.decodeStrategy(userInfo)
+                }
+                .eraseToAnyPublisher()
+        }
+    }
+
+    /// UIKit status must be read on the main actor, including notifications without userInfo.
+    private final class MainActorKey<Payload: Sendable>: Key<Payload> {
+        private let decodeOnMain: @MainActor () -> Payload?
+
+        init(_ name: Notification.Name, decode: @escaping @MainActor () -> Payload?) {
+            decodeOnMain = decode
+            super.init(name)
+        }
+
+        override var publisher: AnyPublisher<Payload, Never> {
+            notificationCenter.publisher(for: name)
+                .receive(on: DispatchQueue.main)
+                .compactMap { [decodeOnMain] _ in
+                    MainActor.assumeIsolated { decodeOnMain() }
                 }
                 .eraseToAnyPublisher()
         }
@@ -182,7 +201,7 @@ extension Notifications.Key {
     // MARK: - UIAccessibility
 
     static var darkerSystemColorsStatusDidChange: Key<Bool> {
-        Key(UIAccessibility.darkerSystemColorsStatusDidChangeNotification) { _ in
+        Notifications.MainActorKey(UIAccessibility.darkerSystemColorsStatusDidChangeNotification) {
             UIAccessibility.isDarkerSystemColorsEnabled
         }
     }

@@ -8,6 +8,7 @@
 
 import Foundation
 import JellyfinAPI
+import SwiftfinLocalization
 
 // Necessary to handle conflict with Foundation.SortOrder
 typealias ItemSortOrder = JellyfinAPI.SortOrder

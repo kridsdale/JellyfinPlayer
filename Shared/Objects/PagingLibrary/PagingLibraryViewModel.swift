@@ -15,7 +15,7 @@ let defaultPagingLibraryPageSize = 50
 
 @MainActor
 @Stateful(conformances: [WithRefresh.self])
-class PagingLibraryViewModel<Library: PagingLibrary>: ViewModel, @MainActor Identifiable {
+class PagingLibraryViewModel<Library: PagingLibrary>: ViewModel, Identifiable {
 
     typealias Background = _BackgroundActions
     typealias Element = Library.Element
@@ -87,9 +87,7 @@ class PagingLibraryViewModel<Library: PagingLibrary>: ViewModel, @MainActor Iden
     private var itemUserDataRefreshTask: AnyCancellable?
     private var lastItemUserDataRefresh = Date.distantPast
 
-    var id: String {
-        library.parent.pagingLibraryID
-    }
+    nonisolated let id: String
 
     var isSearchActive: Bool {
         normalizedSearchQuery.isNotEmpty
@@ -120,6 +118,7 @@ class PagingLibraryViewModel<Library: PagingLibrary>: ViewModel, @MainActor Iden
         self.searchElements = IdentifiedArray([], uniquingIDsWith: { existing, _ in existing })
         self.hasNextPage = library.hasNextPage
         self.hasNextSearchPage = false
+        self.id = library.parent.pagingLibraryID
         self.library = library
         self.pageSize = pageSize
 

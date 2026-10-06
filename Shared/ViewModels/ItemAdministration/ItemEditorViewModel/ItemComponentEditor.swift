@@ -17,7 +17,7 @@ struct ItemComponentEditorInput {
 }
 
 @MainActor
-protocol ItemComponentEditor: Displayable {
+protocol ItemComponentEditor: Displayable, SendableMetatype {
 
     associatedtype Element: LibraryElement & Sendable
 

@@ -9,10 +9,11 @@
 import Defaults
 import Foundation
 import JellyfinAPI
+import SwiftfinUIState
 import SwiftUI
 import SwiftVLC
 #if os(tvOS)
-import KidsCore
+import KidsDiagnostics
 #endif
 
 @MainActor

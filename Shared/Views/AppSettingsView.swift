@@ -7,6 +7,7 @@
 //
 
 import Defaults
+import SwiftfinLocalization
 import SwiftUI
 
 // TODO: move sign out-stuff into super user when implemented

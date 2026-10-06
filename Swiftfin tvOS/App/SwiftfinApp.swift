@@ -6,7 +6,7 @@
 // Copyright (c) 2026 Jellyfin & Jellyfin Contributors
 //
 
-import KidsCore
+import KidsDiagnostics
 import SwiftUI
 
 @main

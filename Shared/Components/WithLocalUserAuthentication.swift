@@ -8,6 +8,7 @@
 
 #if canImport(LocalAuthentication)
 import LocalAuthentication
+import SwiftfinLocalization
 #endif
 
 import SwiftUI

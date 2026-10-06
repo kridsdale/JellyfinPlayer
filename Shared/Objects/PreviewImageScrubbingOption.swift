@@ -7,6 +7,8 @@
 //
 
 // TODO: chapters fallback
+import SwiftfinLocalization
+
 enum PreviewImageScrubbingOption: CaseIterable, Displayable, Hashable, Storable {
 
     case trickplay(fallbackToChapters: Bool = true)

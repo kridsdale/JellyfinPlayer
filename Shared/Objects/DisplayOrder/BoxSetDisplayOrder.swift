@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import SwiftfinLocalization
 
 enum BoxSetDisplayOrder: String, CaseIterable, Identifiable {
     case dateModified = "DateModified"

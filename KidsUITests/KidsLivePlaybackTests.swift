@@ -33,6 +33,9 @@ final class KidsLivePlaybackTests: XCTestCase {
 
     private func launchRealAccount(arguments: [String] = []) {
         app.launchArguments = arguments
+        if ProcessInfo.processInfo.environment["KIDS_PROFILE_LIVE"] == "1" {
+            app.launchArguments.append("--kids-profile")
+        }
         app.launchEnvironment["DYLD_FRAMEWORK_PATH"] = ""
         app.launchEnvironment["DYLD_LIBRARY_PATH"] = ""
         app.launch()
@@ -196,10 +199,11 @@ final class KidsLivePlaybackTests: XCTestCase {
         let play = app.buttons["kids.action.play"]
         XCTAssertTrue(play.waitForExistence(timeout: 15))
         focusedSelect(play)
-        XCTAssertTrue(
-            app.buttons["kids.player.surface"].waitForExistence(timeout: 30),
-            "This AVI stream must produce decoded video and an advancing clock"
-        )
+        let decoded = app.buttons["kids.player.surface"].waitForExistence(timeout: 30)
+        if !decoded {
+            capture("real-approved-avi-startup-timeout")
+        }
+        XCTAssertTrue(decoded, "This AVI stream must produce decoded video and an advancing clock")
         revealAndVerifyTitle(itemID)
         capture("real-approved-avi-decoded-frame")
         allowPlaybackToProgress()

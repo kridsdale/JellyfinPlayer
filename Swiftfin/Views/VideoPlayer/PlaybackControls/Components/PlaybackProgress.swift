@@ -8,6 +8,8 @@
 
 import Defaults
 import JellyfinAPI
+import SwiftfinLocalization
+import SwiftfinUIState
 import SwiftUI
 
 // TODO: enabled/disabled state

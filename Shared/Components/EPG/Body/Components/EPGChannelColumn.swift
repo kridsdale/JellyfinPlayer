@@ -8,6 +8,7 @@
 
 import Defaults
 import JellyfinAPI
+import SwiftfinLocalization
 import SwiftUI
 @_spi(Advanced) import SwiftUIIntrospect
 

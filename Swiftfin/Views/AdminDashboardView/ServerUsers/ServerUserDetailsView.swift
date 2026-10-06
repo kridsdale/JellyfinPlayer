@@ -9,6 +9,7 @@
 import Defaults
 import JellyfinAPI
 import Mantis
+import SwiftfinLocalization
 import SwiftUI
 
 struct ServerUserDetailsView: View {

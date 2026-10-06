@@ -8,6 +8,7 @@
 
 import Defaults
 import FactoryKit
+import SwiftfinLocalization
 import SwiftUI
 import Transmission
 

@@ -6,6 +6,7 @@
 // Copyright (c) 2026 Jellyfin & Jellyfin Contributors
 //
 
+import SwiftfinLocalization
 import SwiftUI
 
 // TODO: present toast when authentication successfully changed

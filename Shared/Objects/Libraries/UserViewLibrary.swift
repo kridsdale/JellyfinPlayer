@@ -9,11 +9,12 @@
 import Defaults
 import FactoryKit
 import JellyfinAPI
+import SwiftfinLocalization
 import SwiftUI
 
 private let userViewLibraryListImageWidth: CGFloat = 110
 
-struct UserViewLibrary: @MainActor PagingLibrary {
+struct UserViewLibrary: PagingLibrary {
 
     let hasNextPage: Bool = false
     let parent: TitledLibraryParent = .init(
@@ -56,8 +57,7 @@ struct UserViewLibrary: @MainActor PagingLibrary {
     }
 }
 
-enum UserViewLibraryElement: @MainActor Displayable, Hashable, @MainActor Identifiable, @MainActor LibraryElement,
-@MainActor SystemImageable {
+enum UserViewLibraryElement: Displayable, Hashable, Identifiable, LibraryElement, SystemImageable {
 
     case favorites
     case userView(BaseItemDto)
@@ -66,7 +66,7 @@ enum UserViewLibraryElement: @MainActor Displayable, Hashable, @MainActor Identi
         BaseItemKind.libraryStyleOptions(for: [.userView])
     }
 
-    var displayTitle: String {
+    nonisolated var displayTitle: String {
         switch self {
         case .favorites:
             L10n.favorites
@@ -75,7 +75,7 @@ enum UserViewLibraryElement: @MainActor Displayable, Hashable, @MainActor Identi
         }
     }
 
-    var id: String {
+    nonisolated var id: String {
         switch self {
         case .favorites:
             "favorites"
@@ -84,7 +84,7 @@ enum UserViewLibraryElement: @MainActor Displayable, Hashable, @MainActor Identi
         }
     }
 
-    var systemImage: String {
+    nonisolated var systemImage: String {
         switch self {
         case .favorites:
             "heart.fill"

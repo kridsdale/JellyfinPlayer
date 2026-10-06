@@ -8,6 +8,8 @@
 
 import Combine
 import JellyfinAPI
+import SwiftfinLocalization
+import SwiftfinUIState
 import SwiftUI
 
 extension EditMetadataView {

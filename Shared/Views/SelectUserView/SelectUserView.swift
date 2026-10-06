@@ -10,6 +10,7 @@ import Defaults
 import FactoryKit
 import JellyfinAPI
 import OrderedCollections
+import SwiftfinLocalization
 import SwiftUI
 
 struct SelectUserView: View {

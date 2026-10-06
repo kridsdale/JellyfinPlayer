@@ -7,6 +7,7 @@
 //
 
 import Defaults
+import SwiftfinLocalization
 import SwiftUI
 
 // TODO: Add scrollTargetLayout and scrollTargetBehavior to the scroll views.

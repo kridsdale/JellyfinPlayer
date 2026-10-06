@@ -13,6 +13,7 @@ import UIKit
 
 extension JellyfinClient.Configuration {
 
+    @MainActor
     static func swiftfinConfiguration(
         url: URL,
         accessToken: String? = nil

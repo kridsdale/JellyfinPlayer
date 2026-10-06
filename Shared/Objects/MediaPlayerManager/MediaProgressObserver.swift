@@ -117,21 +117,25 @@ class MediaProgressObserver: ViewModel, MediaPlayerObserver {
         guard Defaults[.sendProgressReports] else { return }
         #endif
 
-        Task {
-            var info = PlaybackStateInfo()
-            info.audioStreamIndex = item.selectedAudioStreamIndex
-            info.itemID = item.baseItem.id
-            info.liveStreamID = item.mediaSource.liveStreamID
-            info.mediaSourceID = item.mediaSource.id
-            info.playSessionID = item.playSessionID
-            info.positionTicks = seconds?.ticks
-            info.sessionID = item.playSessionID
-            info.subtitleStreamIndex = item.selectedSubtitleStreamIndex
+        Task<Void, Never> {
+            do {
+                var info = PlaybackStateInfo()
+                info.audioStreamIndex = item.selectedAudioStreamIndex
+                info.itemID = item.baseItem.id
+                info.liveStreamID = item.mediaSource.liveStreamID
+                info.mediaSourceID = item.mediaSource.id
+                info.playSessionID = item.playSessionID
+                info.positionTicks = seconds?.ticks
+                info.sessionID = item.playSessionID
+                info.subtitleStreamIndex = item.selectedSubtitleStreamIndex
 
-            let request = Paths.reportPlaybackStart(info)
-            try await send(request)
+                let request = Paths.reportPlaybackStart(info)
+                try await send(request)
 
-            self.hasSentStart = true
+                self.hasSentStart = true
+            } catch {
+                logger.warning("Playback start report failed")
+            }
         }
     }
 
@@ -141,17 +145,21 @@ class MediaProgressObserver: ViewModel, MediaPlayerObserver {
         guard Defaults[.sendProgressReports] else { return }
         #endif
 
-        Task {
-            var info = PlaybackStopInfo()
-            info.itemID = item.baseItem.id
-            info.liveStreamID = item.mediaSource.liveStreamID
-            info.mediaSourceID = item.mediaSource.id
-            info.playSessionID = item.playSessionID
-            info.positionTicks = seconds?.ticks
-            info.sessionID = item.playSessionID
+        Task<Void, Never> {
+            do {
+                var info = PlaybackStopInfo()
+                info.itemID = item.baseItem.id
+                info.liveStreamID = item.mediaSource.liveStreamID
+                info.mediaSourceID = item.mediaSource.id
+                info.playSessionID = item.playSessionID
+                info.positionTicks = seconds?.ticks
+                info.sessionID = item.playSessionID
 
-            let request = Paths.reportPlaybackStopped(info)
-            try await send(request)
+                let request = Paths.reportPlaybackStopped(info)
+                try await send(request)
+            } catch {
+                logger.warning("Playback report failed")
+            }
         }
     }
 
@@ -161,20 +169,24 @@ class MediaProgressObserver: ViewModel, MediaPlayerObserver {
         guard Defaults[.sendProgressReports] else { return }
         #endif
 
-        Task {
-            var info = PlaybackStateInfo()
-            info.audioStreamIndex = item.selectedAudioStreamIndex
-            info.isPaused = isPaused
-            info.itemID = item.baseItem.id
-            info.liveStreamID = item.mediaSource.liveStreamID
-            info.mediaSourceID = item.mediaSource.id
-            info.playSessionID = item.playSessionID
-            info.positionTicks = seconds?.ticks
-            info.sessionID = item.playSessionID
-            info.subtitleStreamIndex = item.selectedSubtitleStreamIndex
+        Task<Void, Never> {
+            do {
+                var info = PlaybackStateInfo()
+                info.audioStreamIndex = item.selectedAudioStreamIndex
+                info.isPaused = isPaused
+                info.itemID = item.baseItem.id
+                info.liveStreamID = item.mediaSource.liveStreamID
+                info.mediaSourceID = item.mediaSource.id
+                info.playSessionID = item.playSessionID
+                info.positionTicks = seconds?.ticks
+                info.sessionID = item.playSessionID
+                info.subtitleStreamIndex = item.selectedSubtitleStreamIndex
 
-            let request = Paths.reportPlaybackProgress(info)
-            try await send(request)
+                let request = Paths.reportPlaybackProgress(info)
+                try await send(request)
+            } catch {
+                logger.warning("Playback report failed")
+            }
         }
     }
 }

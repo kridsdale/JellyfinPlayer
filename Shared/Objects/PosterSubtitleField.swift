@@ -7,6 +7,7 @@
 //
 
 import JellyfinAPI
+import SwiftfinLocalization
 
 enum PosterSubtitleField: String, CaseIterable, Displayable, Storable {
 

@@ -6,8 +6,10 @@
 // Copyright (c) 2026 Jellyfin & Jellyfin Contributors
 //
 
+import KidsCatalog
+
 // SPDX-License-Identifier: MPL-2.0
-import KidsCore
+import KidsDomain
 import SwiftUI
 
 struct KidsParentView: View {
@@ -230,24 +232,11 @@ struct KidsParentView: View {
                 "A session cap is a stopping point. Kids can begin another session. VoiceOver and Reduce Motion are available in Apple TV Accessibility settings."
             )
             .foregroundStyle(.secondary)
-            if let playback = model.activePlayback?.manager.playbackItem {
-                Picker("Audio", selection: Binding(get: { playback.selectedAudioStreamIndex ?? 0 }, set: { model.touchGate()
-                    guard model.unlocked else { return }
-                    playback.selectedAudioStreamIndex = $0
-                })) {
-                    ForEach(playback.audioStreams, id: \.index) { stream in
-                        Text(stream.displayTitle ?? stream.language ?? "Audio").tag(stream.index ?? 0)
-                    }
-                }
-                Picker("Captions", selection: Binding(get: { playback.selectedSubtitleStreamIndex ?? -1 }, set: { model.touchGate()
-                    guard model.unlocked else { return }
-                    playback.selectedSubtitleStreamIndex = $0
-                })) {
-                    Text("Off").tag(-1)
-                    ForEach(playback.subtitleStreams, id: \.index) { stream in
-                        Text(stream.displayTitle ?? stream.language ?? "Captions").tag(stream.index ?? -1)
-                    }
-                }
+            if let session = model.activePlayback {
+                SwiftfinKidsTrackControls(session: session, authorize: {
+                    model.touchGate()
+                    return model.unlocked
+                })
             }
             if let movie = model.activePlayback?.title.kind == .movie ? model.activePlayback?.title : model.selectedMovie,
                movie.kind == .movie

@@ -11,7 +11,7 @@ import Foundation
 
 @MainActor
 @Stateful
-class BaseFetchViewModel<Value: Codable>: ViewModel {
+class BaseFetchViewModel<Value: Codable & Sendable>: ViewModel {
 
     @CasePathable
     enum Action {

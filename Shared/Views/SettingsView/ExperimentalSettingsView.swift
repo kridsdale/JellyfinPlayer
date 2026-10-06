@@ -8,6 +8,7 @@
 
 import Defaults
 import FactoryKit
+import SwiftfinLocalization
 import SwiftUI
 
 /// `Note`: Used for experimental settings that may be removed or implemented officially. Keep for future settings.

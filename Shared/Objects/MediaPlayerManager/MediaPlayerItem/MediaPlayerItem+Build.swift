@@ -11,8 +11,9 @@ import FactoryKit
 import Foundation
 import JellyfinAPI
 import Logging
+import SwiftfinLocalization
 #if os(tvOS)
-import KidsCore
+import KidsDiagnostics
 #endif
 
 // TODO: build report of determined values for playback information

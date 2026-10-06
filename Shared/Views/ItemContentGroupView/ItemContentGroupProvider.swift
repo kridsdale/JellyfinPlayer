@@ -9,9 +9,10 @@
 import Defaults
 import Get
 import JellyfinAPI
+import SwiftfinLocalization
 import SwiftUI
 
-final class ItemContentGroupProvider: ViewModel, @MainActor ContentGroupProvider {
+final class ItemContentGroupProvider: ViewModel, ContentGroupProvider {
 
     @Published
     private(set) var item: BaseItemDto
@@ -25,7 +26,7 @@ final class ItemContentGroupProvider: ViewModel, @MainActor ContentGroupProvider
     @Published
     var isPresentingDeleteConfirmation = false
 
-    let id: String
+    nonisolated let id: String
 
     var displayTitle: String {
         item.displayTitle

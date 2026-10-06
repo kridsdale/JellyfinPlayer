@@ -6,6 +6,7 @@
 // Copyright (c) 2026 Jellyfin & Jellyfin Contributors
 //
 
+import SwiftfinUIState
 import SwiftUI
 
 extension NavigationCoordinator {
@@ -29,8 +30,9 @@ extension NavigationCoordinator {
     }
 }
 
+@MainActor
 @propertyWrapper
-struct Router: DynamicProperty {
+struct Router: @MainActor DynamicProperty {
 
     @MainActor
     struct Wrapper {

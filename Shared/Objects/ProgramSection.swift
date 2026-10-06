@@ -6,6 +6,8 @@
 // Copyright (c) 2026 Jellyfin & Jellyfin Contributors
 //
 
+import SwiftfinLocalization
+
 enum ProgramSection: String, CaseIterable, Displayable {
 
     case kids

@@ -6,6 +6,7 @@
 // Copyright (c) 2026 Jellyfin & Jellyfin Contributors
 //
 
+import Synchronization
 import UIKit
 
 private let nowLineKind = "EPGNowLine"
@@ -119,7 +120,12 @@ final class EPGGridLayout: UICollectionViewLayout {
 
 private final class EPGNowLineAttributes: UICollectionViewLayoutAttributes {
 
-    var color: UIColor = .clear
+    // NSObject equality is nonisolated. Keep its immutable UIColor snapshots behind a lock.
+    private nonisolated let colorStorage = Mutex<UIColor>(.clear)
+    var color: UIColor {
+        get { colorStorage.withLock { $0 } }
+        set { colorStorage.withLock { $0 = newValue } }
+    }
 
     override func copy(with zone: NSZone? = nil) -> Any {
         let copy = super.copy(with: zone) as! EPGNowLineAttributes
@@ -129,7 +135,10 @@ private final class EPGNowLineAttributes: UICollectionViewLayoutAttributes {
 
     override func isEqual(_ object: Any?) -> Bool {
         guard let object = object as? EPGNowLineAttributes else { return false }
-        return super.isEqual(object) && object.color == color
+        let ownColor = colorStorage.withLock { $0 }
+        let otherColor = object.colorStorage.withLock { $0 }
+        let colorsMatch = otherColor == ownColor
+        return super.isEqual(object) && colorsMatch
     }
 }
 

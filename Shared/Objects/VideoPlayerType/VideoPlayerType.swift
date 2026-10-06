@@ -8,6 +8,7 @@
 
 import Defaults
 import JellyfinAPI
+import SwiftfinLocalization
 
 enum VideoPlayerType: String, CaseIterable, Displayable, SupportedCaseIterable, Storable {
 

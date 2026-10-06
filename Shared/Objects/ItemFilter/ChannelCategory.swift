@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import SwiftfinLocalization
 
 enum ChannelCategory: String, CaseIterable, Codable, Displayable, Hashable, ItemFilter {
 

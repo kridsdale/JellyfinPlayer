@@ -7,6 +7,8 @@
 //
 
 import JellyfinAPI
+import SwiftfinLocalization
+import SwiftfinUIState
 import SwiftUI
 
 struct CreateServerBackupView: View {

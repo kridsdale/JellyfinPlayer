@@ -9,6 +9,7 @@
 import Defaults
 import FactoryKit
 @preconcurrency import Foundation
+import SwiftfinLocalization
 import SwiftUI
 import UIKit
 
@@ -25,7 +26,9 @@ extension UserDefaults {
     // MARK: App
 
     /// Settings that should apply to the app
-    static let appSuite = UserDefaults(suiteName: "swiftfinApp")!
+    static var appSuite: UserDefaults {
+        UserDefaults(suiteName: "swiftfinApp")!
+    }
 
     // MARK: User
 
@@ -434,7 +437,9 @@ extension Defaults.Keys {
 
 extension UserDefaults {
 
-    static let debugSuite = UserDefaults(suiteName: "swiftfinstore-debug-defaults")!
+    static var debugSuite: UserDefaults {
+        UserDefaults(suiteName: "swiftfinstore-debug-defaults")!
+    }
 }
 
 extension Defaults.Keys {

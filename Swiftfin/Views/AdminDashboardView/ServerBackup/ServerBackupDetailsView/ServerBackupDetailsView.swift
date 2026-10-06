@@ -9,6 +9,7 @@
 import Engine
 import FactoryKit
 import JellyfinAPI
+import SwiftfinLocalization
 import SwiftUI
 
 struct ServerBackupDetailsView: View {

@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import SwiftfinLocalization
 import SwiftUI
 
 enum ServerLogType: String, CaseIterable, Displayable, SystemImageable {

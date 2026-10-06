@@ -10,6 +10,7 @@ import AVKit
 import FactoryKit
 import JellyfinAPI
 import Logging
+import SwiftfinLocalization
 import SwiftUI
 import Transmission
 

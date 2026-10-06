@@ -8,6 +8,8 @@
 
 // TODO: move to SDK
 
+import SwiftfinLocalization
+
 enum SeriesStatus: String, CaseIterable {
 
     case continuing = "Continuing"

@@ -14,6 +14,7 @@ import Foundation
 import JellyfinAPI
 import MediaPlayer
 import Nuke
+import SwiftfinLocalization
 import SwiftUI
 
 // TODO: clean up

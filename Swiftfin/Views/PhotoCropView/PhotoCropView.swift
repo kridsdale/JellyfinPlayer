@@ -8,6 +8,7 @@
 
 import Defaults
 import Mantis
+import SwiftfinLocalization
 import SwiftUI
 
 struct PhotoCropView: View {
@@ -109,7 +110,8 @@ struct PhotoCropView: View {
 
 private struct _PhotoCropView: PlatformViewControllerRepresentable {
 
-    class Coordinator: ObservableObject, CropViewControllerDelegate {
+    @MainActor
+    class Coordinator: ObservableObject, @MainActor CropViewControllerDelegate {
 
         weak var cropViewController: CropViewController?
 

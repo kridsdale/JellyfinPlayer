@@ -6,6 +6,7 @@
 // Copyright (c) 2026 Jellyfin & Jellyfin Contributors
 //
 
+import SwiftfinLocalization
 import SwiftUI
 
 #if os(tvOS)
@@ -188,7 +189,8 @@ private struct _HourMinutePickerView: PlatformViewRepresentable {
         )
     }
 
-    class Coordinator: TVOSPickerViewDelegate {
+    @MainActor
+    class Coordinator: @MainActor TVOSPickerViewDelegate {
         var callback: ((TimeInterval) -> Void)?
 
         private var selectedHour: TimeInterval = 0

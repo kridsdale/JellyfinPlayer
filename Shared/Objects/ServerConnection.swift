@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import SwiftfinLocalization
 
 struct ServerConnection: Displayable, Hashable, Identifiable, Storable {
 

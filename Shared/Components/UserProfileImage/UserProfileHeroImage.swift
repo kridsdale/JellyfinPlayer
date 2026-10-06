@@ -10,6 +10,7 @@ import Defaults
 import FactoryKit
 import JellyfinAPI
 import Nuke
+import SwiftfinLocalization
 import SwiftUI
 
 struct UserProfileHeroImage: View {

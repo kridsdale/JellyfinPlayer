@@ -7,6 +7,7 @@
 //
 
 import OrderedCollections
+import SwiftfinLocalization
 import SwiftUI
 
 struct AppPermissionsView: View {

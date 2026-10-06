@@ -10,7 +10,7 @@ import AVFAudio
 import Foundation
 import Logging
 #if os(tvOS)
-import KidsCore
+import KidsDiagnostics
 #endif
 
 /// Serializes the process-wide audio session. An old player's release cannot

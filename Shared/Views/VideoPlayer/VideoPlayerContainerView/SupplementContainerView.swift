@@ -7,6 +7,7 @@
 //
 
 import IdentifiedCollections
+import SwiftfinLocalization
 import SwiftUI
 
 extension VideoPlayer.UIVideoPlayerContainerViewController {

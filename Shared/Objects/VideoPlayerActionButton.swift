@@ -8,6 +8,8 @@
 
 // TODO: add audio/subtitle offset
 
+import SwiftfinLocalization
+
 enum VideoPlayerActionButton: String, CaseIterable, Displayable, Equatable, Identifiable, Storable, SystemImageable {
 
     case aspectFill

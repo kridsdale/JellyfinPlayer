@@ -7,6 +7,7 @@
 //
 
 import Defaults
+import SwiftfinUIState
 import SwiftUI
 
 extension VideoPlayer.PlaybackControls {

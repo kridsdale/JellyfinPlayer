@@ -28,6 +28,7 @@ struct NavigationBarDrawerView<Content: View, Drawer: View>: PlatformViewControl
     func updateUIViewController(_ uiViewController: UINavigationBarDrawerHostingController<Content, Drawer>, context: Context) {}
 }
 
+@MainActor
 class UINavigationBarDrawerHostingController<Content: View, Drawer: View>: UIViewController {
 
     private let drawer: Drawer
@@ -42,15 +43,15 @@ class UINavigationBarDrawerHostingController<Content: View, Drawer: View>: UIVie
         return blurView
     }()
 
-    private lazy var contentView: UIHostingController<Content> = {
-        let contentView = UIHostingController(rootView: content)
+    private lazy var contentView: UIHostingController<AnyView> = {
+        let contentView = UIHostingController(rootView: AnyView(content))
         contentView.view.translatesAutoresizingMaskIntoConstraints = false
         contentView.view.backgroundColor = nil
         return contentView
     }()
 
-    private lazy var drawerButtonsView: UIHostingController<Drawer> = {
-        let drawerButtonsView = UIHostingController(rootView: drawer)
+    private lazy var drawerButtonsView: UIHostingController<AnyView> = {
+        let drawerButtonsView = UIHostingController(rootView: AnyView(drawer))
         drawerButtonsView.view.translatesAutoresizingMaskIntoConstraints = false
         drawerButtonsView.view.backgroundColor = nil
         return drawerButtonsView

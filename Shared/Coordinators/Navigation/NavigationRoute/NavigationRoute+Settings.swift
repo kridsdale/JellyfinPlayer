@@ -8,6 +8,7 @@
 
 import JellyfinAPI
 import PulseUI
+import SwiftfinLocalization
 import SwiftUI
 
 extension NavigationRoute {

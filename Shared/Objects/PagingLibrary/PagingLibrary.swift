@@ -16,7 +16,7 @@ struct LibraryPageState {
 }
 
 @MainActor
-protocol PagingLibrary<Element> {
+protocol PagingLibrary<Element>: SendableMetatype {
 
     associatedtype Element: Identifiable
     associatedtype Environment: WithDefaultValue = Empty

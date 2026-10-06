@@ -9,6 +9,7 @@
 import Combine
 import Defaults
 import Foundation
+import SwiftfinLocalization
 import SwiftUI
 
 extension View {

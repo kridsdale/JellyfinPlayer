@@ -10,6 +10,7 @@ import FactoryKit
 import Foundation
 import KeychainSwift
 import OrderedCollections
+import SwiftfinLocalization
 
 @MainActor
 @Stateful

@@ -9,6 +9,7 @@
 import Defaults
 import FactoryKit
 import JellyfinAPI
+import SwiftfinLocalization
 import SwiftUI
 
 // TODO: fix weird tvOS icon rendering

@@ -6,7 +6,9 @@
 // Copyright (c) 2026 Jellyfin & Jellyfin Contributors
 //
 
-import KidsCore
+import KidsCatalog
+import KidsDomain
+import KidsPlaybackSession
 import SwiftUI
 
 #if DEBUG
@@ -77,9 +79,12 @@ enum KidsPreviewFixtures {
         if ["paused", "controls", "reconnecting", "countdown", "hidden-player", "movie-paused"]
             .contains(scenario)
         {
+            let movie = scenario == "movie-paused"
+            let title = model.catalog[movie ? .movies : .shows]![0]
+            let episodes = movie ? [] : Self.episodes(showID: title.id)
             model.activePlayback = KidsPlaybackController.preview(
-                model: model,
-                scenario: scenario
+                item: movie ? title : episodes[0], title: title, mode: movie ? .movie : .ordered,
+                episodes: episodes, delegate: model, scenario: scenario
             )
         }
         if scenario == "denied" {

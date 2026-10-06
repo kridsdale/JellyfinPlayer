@@ -8,6 +8,21 @@
 
 import SwiftUI
 
+/// Geometry callbacks capture a value rather than SwiftUI's non-Sendable AnyHashable space.
+enum FrameCoordinateSpace: Sendable {
+    case global
+    case local
+    case named(String)
+
+    var swiftUISpace: CoordinateSpace {
+        switch self {
+        case .global: .global
+        case .local: .local
+        case let .named(name): .named(name)
+        }
+    }
+}
+
 private struct EmptyCGRectPreferenceKey: PreferenceKey {
 
     static let defaultValue: FrameAndSafeAreaInsets = .zero
@@ -27,12 +42,12 @@ struct TrackingFrameModifier<Key: PreferenceKey>: ViewModifier where Key.Value =
     @State
     private var safeAreaInsets: EdgeInsets = .zero
 
-    private let containerCoordinateSpace: CoordinateSpace
+    private let containerCoordinateSpace: FrameCoordinateSpace
     private let coordinateSpace: CoordinateSpace
     private let key: Key.Type?
 
     init(
-        containerCoordinateSpace: CoordinateSpace = .global,
+        containerCoordinateSpace: FrameCoordinateSpace = .global,
         coordinateSpace: CoordinateSpace,
         key: Key.Type? = nil
     ) {
@@ -79,13 +94,13 @@ extension View {
 
     @ViewBuilder
     func trackingFrame(
-        in containerCoordinateSpace: CoordinateSpace = .global,
+        in containerCoordinateSpace: FrameCoordinateSpace = .global,
         _ frameBinding: Binding<CGRect>,
         _ safeAreaInsetsBinding: Binding<EdgeInsets> = .constant(.zero)
     ) -> some View {
         onGeometryChange(for: FrameAndSafeAreaInsets.self) { proxy in
             .init(
-                frame: proxy.frame(in: containerCoordinateSpace),
+                frame: proxy.frame(in: containerCoordinateSpace.swiftUISpace),
                 safeAreaInsets: proxy.safeAreaInsets
             )
         } action: { newValue in
@@ -96,7 +111,7 @@ extension View {
 
     @ViewBuilder
     func trackingFrame(
-        in containerCoordinateSpace: CoordinateSpace = .global,
+        in containerCoordinateSpace: FrameCoordinateSpace = .global,
         for coordinateSpace: CoordinateSpace
     ) -> some View {
         modifier(
@@ -110,7 +125,7 @@ extension View {
 
     @ViewBuilder
     func trackingFrame<K: PreferenceKey>(
-        in containerCoordinateSpace: CoordinateSpace = .global,
+        in containerCoordinateSpace: FrameCoordinateSpace = .global,
         for coordinateSpace: CoordinateSpace,
         key: K.Type
     ) -> some View where K.Value == FrameAndSafeAreaInsets {

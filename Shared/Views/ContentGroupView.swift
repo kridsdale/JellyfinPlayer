@@ -10,6 +10,7 @@ import Defaults
 import FactoryKit
 import Foundation
 import JellyfinAPI
+import SwiftfinLocalization
 import SwiftUI
 
 struct ContentGroupView<Provider: ContentGroupProvider>: View {

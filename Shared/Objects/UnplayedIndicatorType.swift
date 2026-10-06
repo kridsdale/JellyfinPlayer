@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import SwiftfinLocalization
 
 enum UnplayedIndicatorType: String, CaseIterable, Displayable, Hashable, Storable {
 

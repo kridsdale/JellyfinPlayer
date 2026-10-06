@@ -9,6 +9,7 @@
 import Foundation
 import JellyfinAPI
 import OrderedCollections
+import SwiftfinLocalization
 
 @MainActor
 @Stateful

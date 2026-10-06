@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-struct ItemLetter: CaseIterable, Codable, ExpressibleByStringLiteral, Hashable, ItemFilter {
+struct ItemLetter: @MainActor CaseIterable, Codable, ExpressibleByStringLiteral, Hashable, ItemFilter {
 
     let value: String
 
@@ -25,6 +25,7 @@ struct ItemLetter: CaseIterable, Codable, ExpressibleByStringLiteral, Hashable, 
         self.value = anyFilter.value
     }
 
+    @MainActor
     static var allCases: [ItemLetter] {
         UILocalizedIndexedCollation
             .current()

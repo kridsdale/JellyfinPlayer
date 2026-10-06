@@ -1,19 +1,25 @@
 // swift-tools-version: 6.0
 import PackageDescription
 
+// Development-only state tool and cross-package integration checks.
 let package = Package(
-    name: "KidsCore",
+    name: "KidsValidationTools",
     platforms: [.macOS(.v14), .tvOS(.v17)],
-    products: [
-        .library(name: "KidsCore", targets: ["KidsCore"]),
-        .library(name: "KidsPersistence", targets: ["KidsPersistence"]),
-        .executable(name: "KidsStateTool", targets: ["KidsStateTool"])
+    products: [.executable(name: "KidsStateTool", targets: ["KidsStateTool"])],
+    dependencies: [
+        .package(path: "../Packages/KidsDomain"),
+        .package(path: "../Packages/KidsPersistence"),
+        .package(path: "../Packages/KidsPlayback")
     ],
     targets: [
-        .target(name: "KidsCore"),
-        .target(name: "KidsPersistence", dependencies: ["KidsCore"]),
-        .executableTarget(name: "KidsStateTool", dependencies: ["KidsCore", "KidsPersistence"]),
-        .testTarget(name: "KidsCoreTests", dependencies: ["KidsCore"]),
-        .testTarget(name: "KidsPersistenceTests", dependencies: ["KidsPersistence", "KidsCore"])
+        .executableTarget(name: "KidsStateTool", dependencies: [
+            .product(name: "KidsDomain", package: "KidsDomain"),
+            .product(name: "KidsPersistence", package: "KidsPersistence")
+        ]),
+        .testTarget(name: "KidsIntegrationTests", dependencies: [
+            .product(name: "KidsDomain", package: "KidsDomain"),
+            .product(name: "KidsPersistence", package: "KidsPersistence"),
+            .product(name: "KidsPlayback", package: "KidsPlayback")
+        ])
     ]
 )

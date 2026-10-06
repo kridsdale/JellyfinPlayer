@@ -6,6 +6,8 @@
 // Copyright (c) 2026 Jellyfin & Jellyfin Contributors
 //
 
+import SwiftfinLocalization
+
 enum SelectUserSortOrder: String, CaseIterable, Displayable, Storable, SystemImageable {
 
     case name

@@ -8,6 +8,7 @@
 
 import Defaults
 import JellyfinAPI
+import SwiftfinLocalization
 
 enum PlaybackCompatibility: String, CaseIterable, Defaults.Serializable, Displayable {
 

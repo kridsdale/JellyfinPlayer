@@ -9,6 +9,7 @@
 import CoreTransferable
 import Foundation
 import JellyfinAPI
+import SwiftfinLocalization
 
 extension MediaStream {
 

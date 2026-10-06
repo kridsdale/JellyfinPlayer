@@ -10,6 +10,7 @@ import CollectionVGrid
 import Defaults
 import FactoryKit
 import JellyfinAPI
+import SwiftfinLocalization
 import SwiftUI
 
 struct UserSignInView: View {

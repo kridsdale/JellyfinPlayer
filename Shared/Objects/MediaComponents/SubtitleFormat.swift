@@ -6,6 +6,7 @@
 // Copyright (c) 2026 Jellyfin & Jellyfin Contributors
 //
 
+import SwiftfinLocalization
 import UniformTypeIdentifiers
 
 enum SubtitleFormat: String, CaseIterable, Codable, Displayable, Storable {

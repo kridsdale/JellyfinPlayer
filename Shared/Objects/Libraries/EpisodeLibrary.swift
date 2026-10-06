@@ -8,6 +8,7 @@
 
 import Defaults
 import JellyfinAPI
+import SwiftfinLocalization
 
 struct EpisodeLibrary: BaseItemKindLibrary {
 

@@ -7,6 +7,7 @@
 //
 
 #if os(iOS)
+import SwiftfinUIState
 import SwiftUI
 import Transmission
 

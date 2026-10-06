@@ -13,6 +13,7 @@ import Foundation
 import JellyfinAPI
 import KeychainSwift
 import Logging
+import SwiftfinLocalization
 
 extension Container {
 

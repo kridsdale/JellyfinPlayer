@@ -8,6 +8,7 @@
 
 import FactoryKit
 import JellyfinAPI
+import SwiftfinLocalization
 import SwiftUI
 
 // TODO: static width for tvOS

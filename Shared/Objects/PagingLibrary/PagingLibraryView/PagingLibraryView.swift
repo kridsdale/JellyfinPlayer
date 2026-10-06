@@ -8,6 +8,7 @@
 
 import CollectionVGrid
 import Defaults
+import SwiftfinLocalization
 import SwiftUI
 @_spi(Advanced) import SwiftUIIntrospect
 

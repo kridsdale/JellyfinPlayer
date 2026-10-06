@@ -149,7 +149,6 @@ final class KidsNavigationTests: XCTestCase {
         let fieldFocus = XCTNSPredicateExpectation(predicate: NSPredicate(format: "hasFocus == true"), object: pin)
         XCTAssertEqual(XCTWaiter.wait(for: [fieldFocus], timeout: 5), .completed)
         capture("parent-pin-entered")
-        let unlock = app.buttons["kids.parent.unlock"]
         XCUIRemote.shared.press(.down)
         // tvOS Form focus belongs to the containing row; the accessibility button is its child.
         let unlockRow = app.cells.containing(.button, identifier: "kids.parent.unlock").firstMatch

@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import SwiftfinLocalization
 import SwiftUI
 
 struct PosterAccessibility {

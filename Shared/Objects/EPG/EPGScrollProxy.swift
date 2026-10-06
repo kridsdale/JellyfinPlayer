@@ -15,6 +15,7 @@ final class EPGScrollProxy: ObservableObject {
 
     private var didCenter = false
     private var isConnected = true
+    private var observationGeneration = UUID()
     private var isSyncingHorizontally = false
     private var isSyncingVertically = false
 
@@ -53,8 +54,20 @@ final class EPGScrollProxy: ObservableObject {
 
         guard isConnected, horizontalObservations.object(forKey: scrollView) == nil else { return }
 
-        let observation = scrollView.observe(\.contentOffset) { [weak self] scrollView, _ in
-            self?.horizontalOffsetDidChange(scrollView)
+        let generation = observationGeneration
+        let receive: @MainActor @Sendable () -> Void = { [weak self, weak scrollView] in
+            guard let self, let scrollView, self.isConnected,
+                  self.observationGeneration == generation,
+                  self.horizontalObservations.object(forKey: scrollView) != nil else { return }
+            self.horizontalOffsetDidChange(scrollView)
+        }
+        let observation = scrollView.observe(\.contentOffset) { _, _ in
+            if Thread.isMainThread {
+                // Preserve synchronous recursion guards for normal UIKit scroll delivery.
+                MainActor.assumeIsolated { receive() }
+            } else {
+                Task { @MainActor in receive() }
+            }
         }
 
         horizontalObservations.setObject(observation, forKey: scrollView)
@@ -65,8 +78,20 @@ final class EPGScrollProxy: ObservableObject {
 
         guard isConnected, verticalObservations.object(forKey: scrollView) == nil else { return }
 
-        let observation = scrollView.observe(\.contentOffset) { [weak self] scrollView, _ in
-            self?.verticalOffsetDidChange(scrollView)
+        let generation = observationGeneration
+        let receive: @MainActor @Sendable () -> Void = { [weak self, weak scrollView] in
+            guard let self, let scrollView, self.isConnected,
+                  self.observationGeneration == generation,
+                  self.verticalObservations.object(forKey: scrollView) != nil else { return }
+            self.verticalOffsetDidChange(scrollView)
+        }
+        let observation = scrollView.observe(\.contentOffset) { _, _ in
+            if Thread.isMainThread {
+                // Preserve synchronous recursion guards for normal UIKit scroll delivery.
+                MainActor.assumeIsolated { receive() }
+            } else {
+                Task { @MainActor in receive() }
+            }
         }
 
         verticalObservations.setObject(observation, forKey: scrollView)
@@ -92,6 +117,7 @@ final class EPGScrollProxy: ObservableObject {
 
     func disconnect() {
         isConnected = false
+        observationGeneration = UUID()
 
         invalidateObservations(in: horizontalObservations)
         invalidateObservations(in: verticalObservations)

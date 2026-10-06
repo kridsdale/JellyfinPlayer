@@ -14,6 +14,7 @@ struct ExternalTrailerURL {
     let source: Source
     let deepLink: URL
 
+    @MainActor
     var canBeOpened: Bool {
         UIApplication.shared.canOpenURL(deepLink)
     }

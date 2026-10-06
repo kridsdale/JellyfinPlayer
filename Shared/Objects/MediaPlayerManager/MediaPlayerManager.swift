@@ -11,8 +11,10 @@ import Defaults
 import FactoryKit
 import Foundation
 import JellyfinAPI
+import KidsPlayback
+import SwiftfinUIState
 #if os(tvOS)
-import KidsCore
+import KidsDiagnostics
 #endif
 
 // TODO: proper error catching

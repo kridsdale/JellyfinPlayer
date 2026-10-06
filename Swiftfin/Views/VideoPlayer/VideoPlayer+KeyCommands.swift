@@ -8,6 +8,7 @@
 
 import Defaults
 import PreferencesView
+import SwiftfinLocalization
 import SwiftUI
 
 // TODO: protect against holding down

@@ -8,6 +8,8 @@
 
 import Engine
 import JellyfinAPI
+import SwiftfinLocalization
+import SwiftfinUIState
 import SwiftUI
 
 struct ServerTaskTriggerView: View {

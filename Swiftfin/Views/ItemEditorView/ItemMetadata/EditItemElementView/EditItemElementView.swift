@@ -8,6 +8,7 @@
 
 import Combine
 import JellyfinAPI
+import SwiftfinLocalization
 import SwiftUI
 
 // TODO: Only have people have .plain style, grouped for normal text

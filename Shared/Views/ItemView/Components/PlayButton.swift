@@ -9,6 +9,7 @@
 import Defaults
 import JellyfinAPI
 import Logging
+import SwiftfinLocalization
 import SwiftUI
 
 struct PlayButton: View {

@@ -9,6 +9,7 @@
 import Defaults
 import Foundation
 import JellyfinAPI
+import SwiftfinLocalization
 
 struct NextUpLibrary: BaseItemKindLibrary {
 

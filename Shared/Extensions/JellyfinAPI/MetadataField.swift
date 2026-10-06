@@ -8,6 +8,7 @@
 
 import Foundation
 import JellyfinAPI
+import SwiftfinLocalization
 
 extension JellyfinAPI.MetadataField: Displayable {
     var displayTitle: String {

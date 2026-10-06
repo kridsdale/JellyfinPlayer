@@ -8,6 +8,7 @@
 
 import Foundation
 import JellyfinAPI
+import SwiftfinLocalization
 
 // This is only kept as reference until more strongly-typed errors are implemented.
 

@@ -8,6 +8,7 @@
 
 import Defaults
 import Engine
+import SwiftfinLocalization
 import SwiftUI
 
 extension CustomizeSettingsView {

@@ -11,6 +11,7 @@ import FactoryKit
 import Foundation
 import JellyfinAPI
 import Pulse
+import SwiftfinLocalization
 
 extension SwiftfinStore.State {
 
@@ -26,6 +27,7 @@ extension SwiftfinStore.State {
 
         /// - Note: Since this is created from a server, it does not
         ///         have a user access token.
+        @MainActor
         var client: JellyfinClient {
             JellyfinClient(
                 configuration: .swiftfinConfiguration(url: effectiveServerURL),
@@ -95,6 +97,7 @@ extension ServerState {
         return defaultConnections
     }
 
+    @MainActor
     func getPublicSystemInfo() async throws -> PublicSystemInfo {
 
         let request = Paths.getPublicSystemInfo
@@ -117,6 +120,7 @@ extension ServerState {
         }
     }
 
+    @MainActor
     var isVersionCompatible: Bool {
         let publicInfo = StoredValues[.Server.publicInfo(id: self.id)]
 
@@ -142,6 +146,7 @@ extension ServerState {
         }
     }
 
+    @MainActor
     var splashScreenImageSource: ImageSource {
         ImageSource(url: client.url(with: Paths.getSplashscreen()))
     }

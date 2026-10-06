@@ -9,6 +9,7 @@
 import Defaults
 import Foundation
 import JellyfinAPI
+import SwiftfinLocalization
 import SwiftUI
 
 struct QuickConnectAuthorizeView: View {

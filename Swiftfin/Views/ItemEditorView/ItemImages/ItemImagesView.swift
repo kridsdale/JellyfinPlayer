@@ -9,6 +9,7 @@
 import CollectionHStack
 import Defaults
 import JellyfinAPI
+import SwiftfinLocalization
 import SwiftUI
 
 struct ItemImagesView: View {

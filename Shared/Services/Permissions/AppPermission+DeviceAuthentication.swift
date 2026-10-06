@@ -8,6 +8,7 @@
 
 #if os(iOS)
 import LocalAuthentication
+import SwiftfinLocalization
 
 extension AppPermission {
 

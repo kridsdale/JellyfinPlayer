@@ -8,6 +8,7 @@
 
 import Defaults
 import Foundation
+import SwiftfinLocalization
 
 enum TimestampType: String, CaseIterable, Defaults.Serializable, Displayable {
 

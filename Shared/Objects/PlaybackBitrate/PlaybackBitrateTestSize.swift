@@ -9,6 +9,7 @@
 import Defaults
 import Foundation
 import JellyfinAPI
+import SwiftfinLocalization
 
 enum PlaybackBitrateTestSize: Int, CaseIterable, Defaults.Serializable, Displayable {
     case largest = 10_000_000

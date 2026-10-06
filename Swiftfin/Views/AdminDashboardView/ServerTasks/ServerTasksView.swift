@@ -8,6 +8,7 @@
 
 import Engine
 import JellyfinAPI
+import SwiftfinLocalization
 import SwiftUI
 
 // TODO: do something for errors from restart/shutdown

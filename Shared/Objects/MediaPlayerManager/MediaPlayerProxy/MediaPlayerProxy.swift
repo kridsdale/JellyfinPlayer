@@ -8,6 +8,7 @@
 
 import Foundation
 import JellyfinAPI
+import SwiftfinUIState
 import SwiftUI
 
 // TODO: feature implementations

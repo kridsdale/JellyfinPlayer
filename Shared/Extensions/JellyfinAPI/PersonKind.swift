@@ -8,6 +8,7 @@
 
 import Foundation
 import JellyfinAPI
+import SwiftfinLocalization
 
 extension PersonKind: Displayable, SupportedCaseIterable {
     var displayTitle: String {

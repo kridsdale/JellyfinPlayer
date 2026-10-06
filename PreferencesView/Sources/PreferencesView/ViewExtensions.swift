@@ -9,8 +9,15 @@
 import SwiftfinMacros
 import SwiftUI
 
-extension UIInterfaceOrientationMask: @retroactive CustomDebugStringConvertible {
-    public var debugDescription: String {
+#if os(tvOS)
+// tvOS uses the local compatibility type declared below.
+extension UIInterfaceOrientationMask: CustomDebugStringConvertible {}
+#else
+extension UIInterfaceOrientationMask: @retroactive CustomDebugStringConvertible {}
+#endif
+
+public extension UIInterfaceOrientationMask {
+    var debugDescription: String {
         switch self {
         case .all: "All Orientations"
         case .allButUpsideDown: "All But Upside Down"

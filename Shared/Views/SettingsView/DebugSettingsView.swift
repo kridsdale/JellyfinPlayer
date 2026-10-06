@@ -8,6 +8,7 @@
 
 import Defaults
 import JellyfinAPI
+import SwiftfinLocalization
 import SwiftUI
 
 // NOTE: All settings *MUST* be surrounded by DEBUG compiler conditional as usage site

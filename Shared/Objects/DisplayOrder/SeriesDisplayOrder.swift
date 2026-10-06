@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import SwiftfinLocalization
 
 enum SeriesDisplayOrder: String, CaseIterable, Identifiable {
     case aired = "Aired"

@@ -6,6 +6,8 @@
 // Copyright (c) 2026 Jellyfin & Jellyfin Contributors
 //
 
+import SwiftfinLocalization
+import SwiftfinUIState
 import SwiftUI
 
 struct OrderedSectionSelectorView<Element: Displayable & Hashable>: View {

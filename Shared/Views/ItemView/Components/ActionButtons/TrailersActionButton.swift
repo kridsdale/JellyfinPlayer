@@ -8,6 +8,7 @@
 
 import JellyfinAPI
 import Logging
+import SwiftfinLocalization
 import SwiftUI
 
 extension ItemActionButtons {

@@ -8,6 +8,7 @@
 
 import Foundation
 import JellyfinAPI
+import SwiftfinLocalization
 
 @MainActor
 struct SearchContentGroupProvider: ContentGroupProvider {

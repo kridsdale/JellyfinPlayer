@@ -10,6 +10,7 @@ import CollectionHStack
 import CollectionVGrid
 import Defaults
 import JellyfinAPI
+import SwiftfinLocalization
 import SwiftUI
 
 // TODO: sometimes safe area for CollectionHStack doesn't trigger

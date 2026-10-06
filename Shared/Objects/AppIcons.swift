@@ -6,6 +6,8 @@
 // Copyright (c) 2026 Jellyfin & Jellyfin Contributors
 //
 
+import SwiftfinLocalization
+
 enum AppIcon: String, CaseIterable, Displayable, Identifiable {
 
     case jellyfin

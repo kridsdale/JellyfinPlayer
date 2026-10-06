@@ -11,6 +11,7 @@ import FactoryKit
 import Foundation
 import Get
 import JellyfinAPI
+import SwiftfinLocalization
 import SwiftUI
 
 extension BaseItemDto: Poster {

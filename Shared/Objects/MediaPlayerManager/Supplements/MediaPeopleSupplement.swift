@@ -9,6 +9,7 @@
 import CollectionHStack
 import CollectionVGrid
 import JellyfinAPI
+import SwiftfinLocalization
 import SwiftUI
 
 class MediaPeopleSupplement: ObservableObject, MediaPlayerSupplement {

@@ -8,6 +8,7 @@
 
 import Foundation
 import JellyfinAPI
+import SwiftfinLocalization
 
 extension SessionInfoDto: @retroactive Comparable {
 

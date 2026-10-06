@@ -9,7 +9,7 @@
 // SPDX-License-Identifier: MPL-2.0
 // Internal simulator tooling: never contacts Jellyfin, CloudKit, or media volumes.
 import Foundation
-import KidsCore
+import KidsDomain
 import KidsPersistence
 import SwiftData
 

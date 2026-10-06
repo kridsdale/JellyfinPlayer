@@ -7,7 +7,9 @@
 //
 
 @MainActor
-protocol ContentGroupProvider: Displayable, Identifiable {
+protocol ContentGroupProvider: Identifiable, SendableMetatype {
+
+    var displayTitle: String { get }
 
     associatedtype Environment = Empty
 

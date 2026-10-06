@@ -9,6 +9,7 @@
 import Combine
 import Foundation
 import JellyfinAPI
+import SwiftfinLocalization
 
 @MainActor
 @Stateful

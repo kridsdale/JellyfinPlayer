@@ -13,6 +13,7 @@ import JellyfinAPI
 import Logging
 import Network
 import Pulse
+import SwiftfinLocalization
 
 @MainActor
 @Stateful

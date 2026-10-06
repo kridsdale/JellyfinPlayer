@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import SwiftfinLocalization
 
 enum LoginFailurePolicy: Int, Displayable, CaseIterable {
 

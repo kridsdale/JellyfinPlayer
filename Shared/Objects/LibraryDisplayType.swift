@@ -6,6 +6,8 @@
 // Copyright (c) 2026 Jellyfin & Jellyfin Contributors
 //
 
+import SwiftfinLocalization
+
 enum LibraryDisplayType: String, CaseIterable, Displayable, Storable, SystemImageable {
 
     case grid

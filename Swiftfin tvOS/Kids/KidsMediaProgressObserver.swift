@@ -11,7 +11,8 @@ import Combine
 import Defaults
 import Foundation
 import JellyfinAPI
-import KidsCore
+import KidsDiagnostics
+import KidsPlayback
 
 /// Reports only after the kids controller proves decoded video and an advancing
 /// clock. The transport captures its client once; a queued report can never be

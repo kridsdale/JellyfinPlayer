@@ -6,6 +6,8 @@
 // Copyright (c) 2026 Jellyfin & Jellyfin Contributors
 //
 
+import SwiftfinLocalization
+
 enum CustomDeviceProfileAction: String, CaseIterable, Displayable, Storable {
 
     case add

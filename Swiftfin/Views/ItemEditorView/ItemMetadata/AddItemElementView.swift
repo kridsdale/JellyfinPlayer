@@ -8,6 +8,7 @@
 
 import Combine
 import JellyfinAPI
+import SwiftfinLocalization
 import SwiftUI
 
 struct AddItemElementView<Editor: ItemComponentEditor>: View {

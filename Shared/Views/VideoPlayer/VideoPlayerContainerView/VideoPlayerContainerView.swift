@@ -79,6 +79,7 @@ extension VideoPlayer {
 
     // MARK: - UIVideoPlayerContainerViewController
 
+    @MainActor
     class UIVideoPlayerContainerViewController: UIViewController {
 
         // MARK: - Views
@@ -221,12 +222,12 @@ extension VideoPlayer {
         }()
 
         private lazy var playerViewController: HostingController<AnyView> = {
-            let controller = HostingController(
-                content: PlayerContainerView(player: player)
+            let content = AnyView(
+                PlayerContainerView(player: player)
                     .environmentObject(containerState)
                     .environmentObject(manager)
-                    .eraseToAnyView()
             )
+            let controller = HostingController(content: content)
             controller.disableSafeArea = true
             controller.automaticallyAllowUIKitAnimationsForNextUpdate = true
             controller.view.translatesAutoresizingMaskIntoConstraints = false
@@ -234,12 +235,12 @@ extension VideoPlayer {
         }()
 
         private lazy var playbackControlsViewController: HostingController<AnyView> = {
-            let controller = HostingController(
-                content: PlaybackControlsContainerView(playbackControls: playbackControls)
+            let content = AnyView(
+                PlaybackControlsContainerView(playbackControls: playbackControls)
                     .environmentObject(containerState)
                     .environmentObject(manager)
-                    .eraseToAnyView()
             )
+            let controller = HostingController(content: content)
             controller.disableSafeArea = true
             controller.automaticallyAllowUIKitAnimationsForNextUpdate = true
             controller.view.translatesAutoresizingMaskIntoConstraints = false
@@ -247,10 +248,11 @@ extension VideoPlayer {
         }()
 
         private lazy var supplementContainerViewController: HostingController<AnyView> = {
-            let content = SupplementContainerView()
-                .environmentObject(containerState)
-                .environmentObject(manager)
-                .eraseToAnyView()
+            let content = AnyView(
+                SupplementContainerView()
+                    .environmentObject(containerState)
+                    .environmentObject(manager)
+            )
             let controller = HostingController(content: content)
             controller.disableSafeArea = true
             controller.automaticallyAllowUIKitAnimationsForNextUpdate = true

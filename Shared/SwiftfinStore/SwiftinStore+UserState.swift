@@ -121,6 +121,7 @@ extension UserState {
 
     /// Must pass the server to create a JellyfinClient
     /// with an access token
+    @MainActor
     func getUserData(server: ServerState) async throws -> UserDto {
         let client = JellyfinClient(
             configuration: .swiftfinConfiguration(url: server.effectiveServerURL, accessToken: accessToken),

@@ -6,6 +6,8 @@
 // Copyright (c) 2026 Jellyfin & Jellyfin Contributors
 //
 
+import SwiftfinLocalization
+import SwiftfinUIState
 import SwiftUI
 
 // TODO: Generic StorablePicker?

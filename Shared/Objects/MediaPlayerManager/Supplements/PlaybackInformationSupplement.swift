@@ -10,6 +10,7 @@ import Combine
 import Defaults
 import FactoryKit
 import JellyfinAPI
+import SwiftfinLocalization
 import SwiftUI
 
 // TODO: have proxies be a `PlaybackInformationProvider`

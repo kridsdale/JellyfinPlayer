@@ -39,8 +39,21 @@
 		62666E3E27E503FA00EC0ECD /* MediaAccessibility.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5362E4BE267D40E4000E2F71 /* MediaAccessibility.framework */; };
 		62666E3F27E5040300EC0ECD /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5362E4C6267D40F4000E2F71 /* SystemConfiguration.framework */; };
 		BD88CB422D77E6A0006BB5E3 /* TVOSPicker in Frameworks */ = {isa = PBXBuildFile; productRef = BD88CB412D77E6A0006BB5E3 /* TVOSPicker */; };
-		CAFE00000000000000000001 /* KidsCore in Frameworks */ = {isa = PBXBuildFile; productRef = CAFE00000000000000000002 /* KidsCore */; };
+		CAFE00000000000000000001 /* KidsDomain in Frameworks */ = {isa = PBXBuildFile; productRef = CAFE00000000000000000002 /* KidsDomain */; };
 		CAFE00000000000000000004 /* KidsPersistence in Frameworks */ = {isa = PBXBuildFile; productRef = CAFE00000000000000000005 /* KidsPersistence */; };
+		DA610EFC0C429C6A7C95B209 /* KidsDiagnostics in Frameworks */ = {isa = PBXBuildFile; productRef = DA61A5476E30615076D64517 /* KidsDiagnostics */; };
+		DA61157137EC594240609FCB /* KidsPlayback in Frameworks */ = {isa = PBXBuildFile; productRef = DA6140CE110BA599AB38414F /* KidsPlayback */; };
+		DA61D32823ED3FD7010B26D0 /* KidsArtwork in Frameworks */ = {isa = PBXBuildFile; productRef = DA61611843EA846EAC7E1E7A /* KidsArtwork */; };
+		DA61EDA5DBE7411799C5740D /* KidsCatalog in Frameworks */ = {isa = PBXBuildFile; productRef = DA614DCDA45E5F666E9559A3 /* KidsCatalog */; };
+		DA61F644015C08DE61879290 /* KidsPlayback in Frameworks */ = {isa = PBXBuildFile; productRef = DA6127383C7091FD9708B228 /* KidsPlayback */; };
+		DA62E92D3936EF5F8F5910F2 /* KidsAccounts in Frameworks */ = {isa = PBXBuildFile; productRef = DA6209324C985908B5E7FCC8 /* KidsAccounts */; };
+		DA63A32D0509885D8E4B2CCC /* KidsArtworkUI in Frameworks */ = {isa = PBXBuildFile; productRef = DA6367CDA2462A8DE56B5EE0 /* KidsArtworkUI */; };
+		DA63E9DD1F1B37527740E702 /* KidsArtworkUI in Frameworks */ = {isa = PBXBuildFile; productRef = DA63F5E235F06D71853317AC /* KidsArtworkUI */; };
+		DA64DAD0E89E1FE03987F8F9 /* SwiftfinUIState in Frameworks */ = {isa = PBXBuildFile; productRef = DA6421CD9055AF14BD69436D /* SwiftfinUIState */; };
+		DA64F8BBDA280386BEDFEEED /* SwiftfinUIState in Frameworks */ = {isa = PBXBuildFile; productRef = DA64F063C8FE093CBAA78DEC /* SwiftfinUIState */; };
+		DA655E1BBD154F7495E486D5 /* KidsDiagnosticsUI in Frameworks */ = {isa = PBXBuildFile; productRef = DA651E4E64C24912EDEB7F8B /* KidsDiagnosticsUI */; };
+		DA660139CB0BFEEF09533532 /* SwiftfinLocalization in Frameworks */ = {isa = PBXBuildFile; productRef = DA66CCCF709AAE10A9839985 /* SwiftfinLocalization */; };
+		DA6654D89D08321B58A96DB2 /* SwiftfinLocalization in Frameworks */ = {isa = PBXBuildFile; productRef = DA6680FF6A330F990583586D /* SwiftfinLocalization */; };
 		E1002B682793CFBA00E47059 /* Algorithms in Frameworks */ = {isa = PBXBuildFile; productRef = E1002B672793CFBA00E47059 /* Algorithms */; };
 		E1002B6B2793E36600E47059 /* Algorithms in Frameworks */ = {isa = PBXBuildFile; productRef = E1002B6A2793E36600E47059 /* Algorithms */; };
 		E10706102942F57D00646DAF /* Pulse in Frameworks */ = {isa = PBXBuildFile; productRef = E107060F2942F57D00646DAF /* Pulse */; };
@@ -124,6 +137,7 @@
 		E1DC9814296DC06200982F06 /* PulseLogHandler in Frameworks */ = {isa = PBXBuildFile; productRef = E1DC9813296DC06200982F06 /* PulseLogHandler */; };
 		E1E2D7BF2E3FD936004E2E5F /* Transmission in Frameworks */ = {isa = PBXBuildFile; productRef = E1E2D7BE2E3FD936004E2E5F /* Transmission */; };
 		E1FADDF12E84B63600FB310E /* StatefulMacros in Frameworks */ = {isa = PBXBuildFile; productRef = E1FADDF02E84B63600FB310E /* StatefulMacros */; };
+		DA6780754AF91BFB6D107358 /* KidsPlaybackSession in Frameworks */ = {isa = PBXBuildFile; productRef = DA6738A007151ABE87CC01A5 /* KidsPlaybackSession */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -240,7 +254,7 @@
 		E14563272DFCAE6E008FF700 /* Shared */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (E14565D92DFCAE6E008FF700 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = Shared; sourceTree = "<group>"; };
 		E14565DD2DFCAE78008FF700 /* Scripts */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Scripts; sourceTree = "<group>"; };
 		E145669F2DFCAEFD008FF700 /* Swiftfin tvOS */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (E14567272DFCAEFD008FF700 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = "Swiftfin tvOS"; sourceTree = "<group>"; };
-		E1456FC82DFCB323008FF700 /* Translations */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Translations; sourceTree = "<group>"; };
+		E1456FC82DFCB323008FF700 /* Packages/SwiftfinLocalization/Sources/SwiftfinLocalization/Resources */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Packages/SwiftfinLocalization/Sources/SwiftfinLocalization/Resources; sourceTree = "<group>"; };
 		E150B7D12DFF2E7C00DC7CF4 /* XcodeConfig */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (E1BE3EDA2FE9DAE800327990 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, E1BE3EDB2FE9DAE800327990 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = XcodeConfig; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
@@ -249,6 +263,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DA6780754AF91BFB6D107358 /* KidsPlaybackSession in Frameworks */,
+				DA660139CB0BFEEF09533532 /* SwiftfinLocalization in Frameworks */,
+				DA655E1BBD154F7495E486D5 /* KidsDiagnosticsUI in Frameworks */,
+				DA64F8BBDA280386BEDFEEED /* SwiftfinUIState in Frameworks */,
+				DA63A32D0509885D8E4B2CCC /* KidsArtworkUI in Frameworks */,
+				DA62E92D3936EF5F8F5910F2 /* KidsAccounts in Frameworks */,
 				E144DBFA30464F3A009B85B5 /* SwiftVLC in Frameworks */,
 				E19005010000000000000002 /* MPVUI in Frameworks */,
 				E19005020000000000000002 /* MediaAccessibilityKit in Frameworks */,
@@ -284,7 +304,11 @@
 				E13DD3CD27164CA7009D4DAF /* CoreStore in Frameworks */,
 				E1A7B1652B9A9F7800152546 /* PreferencesView in Frameworks */,
 				E19009260000000000000002 /* SwiftfinMacros in Frameworks */,
-				CAFE00000000000000000001 /* KidsCore in Frameworks */,
+				CAFE00000000000000000001 /* KidsDomain in Frameworks */,
+				DA61F644015C08DE61879290 /* KidsPlayback in Frameworks */,
+				DA61D32823ED3FD7010B26D0 /* KidsArtwork in Frameworks */,
+				DA61EDA5DBE7411799C5740D /* KidsCatalog in Frameworks */,
+				DA610EFC0C429C6A7C95B209 /* KidsDiagnostics in Frameworks */,
 				CAFE00000000000000000004 /* KidsPersistence in Frameworks */,
 				E12CDBC12FFB593800828742 /* CollectionVGrid in Frameworks */,
 				E1153DD22BBB649C00424D36 /* SVGKit in Frameworks */,
@@ -301,6 +325,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DA6654D89D08321B58A96DB2 /* SwiftfinLocalization in Frameworks */,
+				DA64DAD0E89E1FE03987F8F9 /* SwiftfinUIState in Frameworks */,
 				E12B93072947CD0F00CE0BD9 /* Pulse in Frameworks */,
 				E12CDBBF2FFB592A00828742 /* CollectionVGrid in Frameworks */,
 				62666E3E27E503FA00EC0ECD /* MediaAccessibility.framework in Frameworks */,
@@ -368,6 +394,7 @@
 				62666E0D27E501AA00EC0ECD /* QuartzCore.framework in Frameworks */,
 				E15D4F052B1B0C3C00442DB8 /* PreferencesView in Frameworks */,
 				E19009260000000000000001 /* SwiftfinMacros in Frameworks */,
+				DA61157137EC594240609FCB /* KidsPlayback in Frameworks */,
 				E19E6E0728A0B958005C10C8 /* NukeUI in Frameworks */,
 				E134DD2C2E7F4DC300AED027 /* StatefulMacros in Frameworks */,
 				E1A76F1A2E8369A500A5F2C1 /* StatefulMacros in Frameworks */,
@@ -380,6 +407,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DA63E9DD1F1B37527740E702 /* KidsArtworkUI in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -393,7 +421,7 @@
 				E14560852DFCAE51008FF700 /* Swiftfin */,
 				E145669F2DFCAEFD008FF700 /* Swiftfin tvOS */,
 				E14563272DFCAE6E008FF700 /* Shared */,
-				E1456FC82DFCB323008FF700 /* Translations */,
+				E1456FC82DFCB323008FF700 /* Packages/SwiftfinLocalization/Sources/SwiftfinLocalization/Resources */,
 				5377CBF2263B596A003A4E83 /* Products */,
 				53D5E3DB264B47EE00BADDC8 /* Frameworks */,
 				E14565DD2DFCAE78008FF700 /* Scripts */,
@@ -474,7 +502,6 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 535870712669D21700D05A09 /* Build configuration list for PBXNativeTarget "KidsJellyFin tvOS" */;
 			buildPhases = (
-				6286F0A3271C0ABA00C40ED5 /* Generate Strings */,
 				BD83D7852B55EEB600652C24 /* Run SwiftFormat */,
 				E1A1B5C42F00000000000002 /* Run SwiftLint */,
 				5358705C2669D21600D05A09 /* Sources */,
@@ -489,11 +516,16 @@
 			fileSystemSynchronizedGroups = (
 				E14563272DFCAE6E008FF700 /* Shared */,
 				E145669F2DFCAEFD008FF700 /* Swiftfin tvOS */,
-				E1456FC82DFCB323008FF700 /* Translations */,
 				E150B7D12DFF2E7C00DC7CF4 /* XcodeConfig */,
 			);
 			name = "KidsJellyFin tvOS";
 			packageProductDependencies = (
+				DA66CCCF709AAE10A9839985 /* SwiftfinLocalization */,
+				DA6738A007151ABE87CC01A5 /* KidsPlaybackSession */,
+				DA651E4E64C24912EDEB7F8B /* KidsDiagnosticsUI */,
+				DA64F063C8FE093CBAA78DEC /* SwiftfinUIState */,
+				DA6367CDA2462A8DE56B5EE0 /* KidsArtworkUI */,
+				DA6209324C985908B5E7FCC8 /* KidsAccounts */,
 				E13DD3CC27164CA7009D4DAF /* CoreStore */,
 				E12186DD2718F1C50010884C /* Defaults */,
 				E1002B6A2793E36600E47059 /* Algorithms */,
@@ -508,7 +540,11 @@
 				E1B5F7AC29577BDD004B26CF /* OrderedCollections */,
 				E1A7B1642B9A9F7800152546 /* PreferencesView */,
 				E19009260000000000000004 /* SwiftfinMacros */,
-				CAFE00000000000000000002 /* KidsCore */,
+				CAFE00000000000000000002 /* KidsDomain */,
+				DA6127383C7091FD9708B228 /* KidsPlayback */,
+				DA61611843EA846EAC7E1E7A /* KidsArtwork */,
+				DA614DCDA45E5F666E9559A3 /* KidsCatalog */,
+				DA61A5476E30615076D64517 /* KidsDiagnostics */,
 				CAFE00000000000000000005 /* KidsPersistence */,
 				E1392FEC2BA218A80034110D /* SwiftUIIntrospect */,
 				E1153DD12BBB649C00424D36 /* SVGKit */,
@@ -533,7 +569,6 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 5377CC1B263B596B003A4E83 /* Build configuration list for PBXNativeTarget "KidsJellyFin iOS" */;
 			buildPhases = (
-				6286F09E271C093000C40ED5 /* Generate Strings */,
 				BD0BA2282AD64BB200306A8D /* Run SwiftFormat */,
 				E1A1B5C42F00000000000001 /* Run SwiftLint */,
 				5377CBED263B596A003A4E83 /* Sources */,
@@ -548,11 +583,12 @@
 			fileSystemSynchronizedGroups = (
 				E14560852DFCAE51008FF700 /* Swiftfin */,
 				E14563272DFCAE6E008FF700 /* Shared */,
-				E1456FC82DFCB323008FF700 /* Translations */,
 				E150B7D12DFF2E7C00DC7CF4 /* XcodeConfig */,
 			);
 			name = "KidsJellyFin iOS";
 			packageProductDependencies = (
+				DA6680FF6A330F990583586D /* SwiftfinLocalization */,
+				DA6421CD9055AF14BD69436D /* SwiftfinUIState */,
 				E13DD3C52716499E009D4DAF /* CoreStore */,
 				E13DD3D227168E65009D4DAF /* Defaults */,
 				E1002B672793CFBA00E47059 /* Algorithms */,
@@ -569,6 +605,7 @@
 				E114DB322B1944FA00B75FB3 /* CollectionVGrid */,
 				E15D4F042B1B0C3C00442DB8 /* PreferencesView */,
 				E19009260000000000000003 /* SwiftfinMacros */,
+				DA6140CE110BA599AB38414F /* KidsPlayback */,
 				E113A2A62B5A178D009CAAAA /* CollectionHStack */,
 				E113A2A92B5A179A009CAAAA /* CollectionVGrid */,
 				E15EFA832BA167350080E926 /* CollectionHStack */,
@@ -627,6 +664,9 @@
 				CAFE00000000000000000112 /* KidsUITests */,
 			);
 			name = KidsUITests;
+			packageProductDependencies = (
+				DA63F5E235F06D71853317AC /* KidsArtworkUI */,
+			);
 			productName = KidsUITests;
 			productReference = CAFE00000000000000000111 /* KidsUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
@@ -736,7 +776,18 @@
 			);
 			mainGroup = 5377CBE8263B596A003A4E83;
 			packageReferences = (
-				CAFE00000000000000000003 /* XCLocalSwiftPackageReference "KidsCore" */,
+				DA6769449F994D55805535B9 /* XCLocalSwiftPackageReference "Packages/KidsPlaybackSession" */,
+				DA6669449F994D55805535B9 /* XCLocalSwiftPackageReference "Packages/SwiftfinLocalization" */,
+				DA65F4391F4770B990A1AF08 /* XCLocalSwiftPackageReference "Packages/KidsDiagnosticsUI" */,
+				DA64193E4BB3125832D7AAD3 /* XCLocalSwiftPackageReference "Packages/SwiftfinUIState" */,
+				DA63DFBE18056DCC3E7665FF /* XCLocalSwiftPackageReference "Packages/KidsArtworkUI" */,
+				DA62D49467C44CB81E9807B1 /* XCLocalSwiftPackageReference "Packages/KidsAccounts" */,
+				CAFE00000000000000000003 /* XCLocalSwiftPackageReference "Packages/KidsDomain" */,
+				DA612C953805436E100A6E9B /* XCLocalSwiftPackageReference "Packages/KidsPersistence" */,
+				DA61FEC4316EA5F4A48DF1C8 /* XCLocalSwiftPackageReference "Packages/KidsPlayback" */,
+				DA61CCC5A91AAAA5E00D08A2 /* XCLocalSwiftPackageReference "Packages/KidsArtwork" */,
+				DA619DFC86F35C246837BED2 /* XCLocalSwiftPackageReference "Packages/KidsCatalog" */,
+				DA61470AA2F1A4E2036F81A0 /* XCLocalSwiftPackageReference "Packages/KidsDiagnostics" */,
 				5335256F265EA0A0006CCA86 /* XCRemoteSwiftPackageReference "SwiftUI-Introspect" */,
 				E13DD3C42716499E009D4DAF /* XCRemoteSwiftPackageReference "CoreStore" */,
 				E13DD3D127168E65009D4DAF /* XCRemoteSwiftPackageReference "Defaults" */,
@@ -801,48 +852,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		6286F09E271C093000C40ED5 /* Generate Strings */ = {
-			isa = PBXShellScriptBuildPhase;
-			alwaysOutOfDate = 1;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"$(SRCROOT)/Translations/en.lproj/Localizable.strings",
-				"$(SRCROOT)/Scripts/Translations/GenerateStrings.swift",
-			);
-			name = "Generate Strings";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "set -eu\ncd \"${SRCROOT}\"\nxcrun --sdk macosx swift \"${SRCROOT}/Scripts/Translations/GenerateStrings.swift\"\n";
-		};
-		6286F0A3271C0ABA00C40ED5 /* Generate Strings */ = {
-			isa = PBXShellScriptBuildPhase;
-			alwaysOutOfDate = 1;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"$(SRCROOT)/Translations/en.lproj/Localizable.strings",
-				"$(SRCROOT)/Scripts/Translations/GenerateStrings.swift",
-			);
-			name = "Generate Strings";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "set -eu\ncd \"${SRCROOT}\"\nxcrun --sdk macosx swift \"${SRCROOT}/Scripts/Translations/GenerateStrings.swift\"\n";
-		};
 		BD0BA2282AD64BB200306A8D /* Run SwiftFormat */ = {
 			isa = PBXShellScriptBuildPhase;
 			alwaysOutOfDate = 1;
@@ -1341,9 +1350,49 @@
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
-		CAFE00000000000000000003 /* XCLocalSwiftPackageReference "KidsCore" */ = {
+		CAFE00000000000000000003 /* XCLocalSwiftPackageReference "Packages/KidsDomain" */ = {
 			isa = XCLocalSwiftPackageReference;
-			relativePath = KidsCore;
+			relativePath = Packages/KidsDomain;
+		};
+		DA612C953805436E100A6E9B /* XCLocalSwiftPackageReference "Packages/KidsPersistence" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Packages/KidsPersistence;
+		};
+		DA61470AA2F1A4E2036F81A0 /* XCLocalSwiftPackageReference "Packages/KidsDiagnostics" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Packages/KidsDiagnostics;
+		};
+		DA619DFC86F35C246837BED2 /* XCLocalSwiftPackageReference "Packages/KidsCatalog" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Packages/KidsCatalog;
+		};
+		DA61CCC5A91AAAA5E00D08A2 /* XCLocalSwiftPackageReference "Packages/KidsArtwork" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Packages/KidsArtwork;
+		};
+		DA61FEC4316EA5F4A48DF1C8 /* XCLocalSwiftPackageReference "Packages/KidsPlayback" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Packages/KidsPlayback;
+		};
+		DA62D49467C44CB81E9807B1 /* XCLocalSwiftPackageReference "Packages/KidsAccounts" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Packages/KidsAccounts;
+		};
+		DA63DFBE18056DCC3E7665FF /* XCLocalSwiftPackageReference "Packages/KidsArtworkUI" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Packages/KidsArtworkUI;
+		};
+		DA64193E4BB3125832D7AAD3 /* XCLocalSwiftPackageReference "Packages/SwiftfinUIState" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Packages/SwiftfinUIState;
+		};
+		DA65F4391F4770B990A1AF08 /* XCLocalSwiftPackageReference "Packages/KidsDiagnosticsUI" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Packages/KidsDiagnosticsUI;
+		};
+		DA6669449F994D55805535B9 /* XCLocalSwiftPackageReference "Packages/SwiftfinLocalization" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Packages/SwiftfinLocalization;
 		};
 		E15D4F032B1B0C3C00442DB8 /* XCLocalSwiftPackageReference "PreferencesView" */ = {
 			isa = XCLocalSwiftPackageReference;
@@ -1352,6 +1401,10 @@
 		E19009260000000000000005 /* XCLocalSwiftPackageReference "SwiftfinMacros" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = SwiftfinMacros;
+		};
+		DA6769449F994D55805535B9 /* XCLocalSwiftPackageReference "Packages/KidsPlaybackSession" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Packages/KidsPlaybackSession;
 		};
 /* End XCLocalSwiftPackageReference section */
 
@@ -1572,15 +1625,80 @@
 			package = BD88CB402D77E6A0006BB5E3 /* XCRemoteSwiftPackageReference "TVOSPicker" */;
 			productName = TVOSPicker;
 		};
-		CAFE00000000000000000002 /* KidsCore */ = {
+		CAFE00000000000000000002 /* KidsDomain */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = CAFE00000000000000000003 /* XCLocalSwiftPackageReference "KidsCore" */;
-			productName = KidsCore;
+			package = CAFE00000000000000000003 /* XCLocalSwiftPackageReference "Packages/KidsDomain" */;
+			productName = KidsDomain;
 		};
 		CAFE00000000000000000005 /* KidsPersistence */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = CAFE00000000000000000003 /* XCLocalSwiftPackageReference "KidsCore" */;
+			package = DA612C953805436E100A6E9B /* XCLocalSwiftPackageReference "Packages/KidsPersistence" */;
 			productName = KidsPersistence;
+		};
+		DA6127383C7091FD9708B228 /* KidsPlayback */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = DA61FEC4316EA5F4A48DF1C8 /* XCLocalSwiftPackageReference "Packages/KidsPlayback" */;
+			productName = KidsPlayback;
+		};
+		DA6140CE110BA599AB38414F /* KidsPlayback */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = DA61FEC4316EA5F4A48DF1C8 /* XCLocalSwiftPackageReference "Packages/KidsPlayback" */;
+			productName = KidsPlayback;
+		};
+		DA614DCDA45E5F666E9559A3 /* KidsCatalog */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = DA619DFC86F35C246837BED2 /* XCLocalSwiftPackageReference "Packages/KidsCatalog" */;
+			productName = KidsCatalog;
+		};
+		DA61611843EA846EAC7E1E7A /* KidsArtwork */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = DA61CCC5A91AAAA5E00D08A2 /* XCLocalSwiftPackageReference "Packages/KidsArtwork" */;
+			productName = KidsArtwork;
+		};
+		DA61A5476E30615076D64517 /* KidsDiagnostics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = DA61470AA2F1A4E2036F81A0 /* XCLocalSwiftPackageReference "Packages/KidsDiagnostics" */;
+			productName = KidsDiagnostics;
+		};
+		DA6209324C985908B5E7FCC8 /* KidsAccounts */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = DA62D49467C44CB81E9807B1 /* XCLocalSwiftPackageReference "Packages/KidsAccounts" */;
+			productName = KidsAccounts;
+		};
+		DA6367CDA2462A8DE56B5EE0 /* KidsArtworkUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = DA63DFBE18056DCC3E7665FF /* XCLocalSwiftPackageReference "Packages/KidsArtworkUI" */;
+			productName = KidsArtworkUI;
+		};
+		DA63F5E235F06D71853317AC /* KidsArtworkUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = DA63DFBE18056DCC3E7665FF /* XCLocalSwiftPackageReference "Packages/KidsArtworkUI" */;
+			productName = KidsArtworkUI;
+		};
+		DA6421CD9055AF14BD69436D /* SwiftfinUIState */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = DA64193E4BB3125832D7AAD3 /* XCLocalSwiftPackageReference "Packages/SwiftfinUIState" */;
+			productName = SwiftfinUIState;
+		};
+		DA64F063C8FE093CBAA78DEC /* SwiftfinUIState */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = DA64193E4BB3125832D7AAD3 /* XCLocalSwiftPackageReference "Packages/SwiftfinUIState" */;
+			productName = SwiftfinUIState;
+		};
+		DA651E4E64C24912EDEB7F8B /* KidsDiagnosticsUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = DA65F4391F4770B990A1AF08 /* XCLocalSwiftPackageReference "Packages/KidsDiagnosticsUI" */;
+			productName = KidsDiagnosticsUI;
+		};
+		DA6680FF6A330F990583586D /* SwiftfinLocalization */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = DA6669449F994D55805535B9 /* XCLocalSwiftPackageReference "Packages/SwiftfinLocalization" */;
+			productName = SwiftfinLocalization;
+		};
+		DA66CCCF709AAE10A9839985 /* SwiftfinLocalization */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = DA6669449F994D55805535B9 /* XCLocalSwiftPackageReference "Packages/SwiftfinLocalization" */;
+			productName = SwiftfinLocalization;
 		};
 		E1002B672793CFBA00E47059 /* Algorithms */ = {
 			isa = XCSwiftPackageProductDependency;
@@ -1971,6 +2089,11 @@
 		E1FADDF02E84B63600FB310E /* StatefulMacros */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = StatefulMacros;
+		};
+		DA6738A007151ABE87CC01A5 /* KidsPlaybackSession */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = DA6769449F994D55805535B9 /* XCLocalSwiftPackageReference "Packages/KidsPlaybackSession" */;
+			productName = KidsPlaybackSession;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

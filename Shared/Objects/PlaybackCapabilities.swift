@@ -7,6 +7,7 @@
 //
 
 import AVFoundation
+import SwiftfinLocalization
 import VideoToolbox
 
 enum PlaybackCapabilities {

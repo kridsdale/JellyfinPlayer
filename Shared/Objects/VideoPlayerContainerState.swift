@@ -8,6 +8,7 @@
 
 import Combine
 import Foundation
+import SwiftfinUIState
 import SwiftUI
 
 // TODO: turned into spaghetti to get out, clean up with a better state system
