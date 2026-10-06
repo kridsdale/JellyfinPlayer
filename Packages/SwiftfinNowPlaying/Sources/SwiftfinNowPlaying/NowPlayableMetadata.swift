@@ -9,19 +9,20 @@
 import Foundation
 import MediaPlayer
 
-struct NowPlayableStaticMetadata {
+@MainActor
+public struct NowPlayableStaticMetadata {
 
-    let mediaType: MPNowPlayingInfoMediaType
-    let isLiveStream: Bool
+    public let mediaType: MPNowPlayingInfoMediaType
+    public let isLiveStream: Bool
 
-    let title: String
-    let artist: String?
-    let artwork: MPMediaItemArtwork?
+    public let title: String
+    public let artist: String?
+    public let artwork: MPMediaItemArtwork?
 
-    let albumArtist: String?
-    let albumTitle: String?
+    public let albumArtist: String?
+    public let albumTitle: String?
 
-    init(
+    public init(
         mediaType: MPNowPlayingInfoMediaType,
         isLiveStream: Bool = false,
         title: String,
@@ -40,16 +41,17 @@ struct NowPlayableStaticMetadata {
     }
 }
 
-struct NowPlayableDynamicMetadata {
+@MainActor
+public struct NowPlayableDynamicMetadata {
 
-    let rate: Float
-    let position: Duration
-    let duration: Duration
+    public let rate: Float
+    public let position: Duration
+    public let duration: Duration
 
-    let currentLanguageOptions: [MPNowPlayingInfoLanguageOption]
-    let availableLanguageOptionGroups: [MPNowPlayingInfoLanguageOptionGroup]
+    public let currentLanguageOptions: [MPNowPlayingInfoLanguageOption]
+    public let availableLanguageOptionGroups: [MPNowPlayingInfoLanguageOptionGroup]
 
-    init(
+    public init(
         rate: Float = 1,
         position: Duration,
         duration: Duration,

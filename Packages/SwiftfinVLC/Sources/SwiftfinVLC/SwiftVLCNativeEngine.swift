@@ -1,0 +1,197 @@
+//
+// Swiftfin is subject to the terms of the Mozilla Public
+// License, v2.0. If a copy of the MPL was not distributed with this
+// file, you can obtain one at https://mozilla.org/MPL/2.0/.
+//
+// Copyright (c) 2026 Jellyfin & Jellyfin Contributors
+//
+
+import Foundation
+import KidsDiagnostics
+import SwiftUI
+import SwiftVLC
+
+@MainActor
+final class SwiftVLCNativeEngine: VLCNativeEngine {
+    private let player = Player()
+    private var updateTask: Task<Void, Never>?
+    var frame: VLCPlaybackFrame {
+        var result = VLCPlaybackFrame()
+        switch player.state {
+        case .idle: result.state = .idle
+        case .opening: result.state = .opening
+        case .buffering: result.state = .buffering
+        case .playing: result.state = .playing
+        case .paused: result.state = .paused
+        case .stopped: result.state = .stopped
+        case .stopping: result.state = .stopping
+        case .error: result.state = .error
+        }
+        result.time = player.currentTime
+        result.seekable = player.isSeekable
+        result.reachedEnd = player.didReachEnd
+        result.bufferFill = player.bufferFill
+        result.videoSize = player.videoSize ?? .zero
+        if let stats = player.statistics {
+            result.readBytes = stats.readBytes
+            result.decodedVideo = stats.decodedVideo
+            result.displayedPictures = stats.displayedPictures
+            result.lostPictures = stats.lostPictures
+            result.corruptedPictures = stats.demuxCorrupted
+        }
+        return result
+    }
+
+    var subtitleTracks: [VLCSubtitleTrack] {
+        player.subtitleTracks.enumerated().map { .init(index: $0.offset, id: $0.element.id) }
+    }
+
+    func surface(controller: VLCPlaybackController, generation: UUID) -> AnyView {
+        AnyView(NativeSurface(player: player, controller: controller, generation: generation))
+    }
+
+    func observeUpdates(_ update: @escaping @MainActor () -> Void) {
+        updateTask?.cancel()
+        let events = player.events(policy: .newest(64), filter: { event in
+            switch event {
+            case .stateChanged, .timeChanged, .voutChanged, .bufferingProgress: true
+            default: false
+            }
+        })
+        updateTask = Task {
+            for await _ in events {
+                guard !Task.isCancelled else { return }
+                await Task.yield()
+                guard !Task.isCancelled else { return }
+                update()
+            }
+        }
+    }
+
+    func cancelUpdates() {
+        updateTask?.cancel()
+        updateTask = nil
+    }
+
+    func open(_ request: VLCPlaybackRequest) throws {
+        let media = try Media(url: request.url)
+        for url in request.subtitleURLs {
+            try media.addSlave(from: url, type: .subtitle)
+        }
+        media.addOption(":freetype-font=\(request.subtitleStyle.fontName)")
+        if let color = request.subtitleStyle.colorRGB {
+            media.addOption(":freetype-color=\(color)")
+        }
+        try player.play(media)
+    }
+
+    func play() throws {
+        if player.state == .paused {
+            player.resume()
+        } else {
+            try player.play()
+        }
+    }
+
+    func pause() {
+        player.pause()
+    }
+
+    func stop() {
+        player.stop()
+    }
+
+    func seek(_ time: Duration) throws {
+        try player.seek(to: time)
+    }
+
+    func jump(_ offset: Duration) {
+        player.jump(by: offset)
+    }
+
+    func rate(_ value: Float) throws {
+        try player.setPlaybackRate(PlaybackRate(value))
+    }
+
+    func audioTrack(_ index: Int?) {
+        guard let index, player.audioTracks.indices.contains(index) else { player.selectedAudioTrack = nil
+            return
+        }
+        let track = player.audioTracks[index]
+        if player.selectedAudioTrack != track {
+            player.selectedAudioTrack = track
+        }
+    }
+
+    func subtitleTrack(_ index: Int?) {
+        guard let index, player.subtitleTracks.indices.contains(index) else { player.selectedSubtitleTrack = nil
+            return
+        }
+        let track = player.subtitleTracks[index]
+        if player.selectedSubtitleTrack != track {
+            player.selectedSubtitleTrack = track
+        }
+    }
+
+    func aspectFill(_ value: Bool) {
+        player.aspectRatio = value ? .fill : .default
+    }
+
+    func audioDelay(_ value: Duration) throws {
+        try player.setAudioDelay(value)
+    }
+
+    func subtitleDelay(_ value: Duration) throws {
+        try player.setSubtitleDelay(value)
+    }
+
+    func subtitleStyle(_ value: VLCSubtitleStyle) {
+        player.setSubtitleScale(.init(approximatePoints: value.approximatePoints))
+    }
+
+    func shutdown() async -> Bool {
+        await player.shutdown()
+        return player.state == .idle
+    }
+
+    static func observeDiagnostics(_ performance: KidsPerformanceSpan?) -> Task<Void, Never>? {
+        guard let performance else { return nil }
+        let logs = VLCInstance.shared.logStream(minimumLevel: .warning)
+        return Task {
+            var seen = Set<Int>()
+            for await entry in logs {
+                guard !Task.isCancelled else { return }
+                let reason = KidsNativeDiagnostic(message: entry.message).rawValue
+                let module = KidsNativeModule(entry.module).rawValue
+                let context = KidsNativeContext(message: entry.message).rawValue
+                let key = (reason << 16) | (module << 12) | (context << 4) | Int(entry.level.rawValue)
+                guard seen.insert(key).inserted else { continue }
+                performance.mark(
+                    .nativeDiagnostic,
+                    values: [
+                        "native_reason": Double(reason),
+                        "native_severity": Double(entry.level.rawValue),
+                        "native_module": Double(module),
+                        "native_context": Double(context)
+                    ]
+                )
+            }
+        }
+    }
+
+    private struct NativeSurface: View {
+        let player: Player
+        let controller: VLCPlaybackController
+        let generation: UUID
+        var body: some View {
+            VideoView(player)
+                .onChange(of: player.currentTime) { controller.observed(.clock, generation: generation) }
+                .onChange(of: player.state) { controller.observed(.state, generation: generation) }
+                .onChange(of: player.bufferFill) { controller.observed(.buffer, generation: generation) }
+                .onChange(of: player.isSeekable) { controller.observed(.seekable, generation: generation) }
+                .onChange(of: player.didReachEnd) { controller.observed(.end, generation: generation) }
+                .onChange(of: player.audioTracks) { controller.observed(.audioTracks, generation: generation) }
+                .onChange(of: player.subtitleTracks) { controller.observed(.subtitleTracks, generation: generation) }
+        }
+    }
+}

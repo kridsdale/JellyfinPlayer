@@ -8,20 +8,20 @@
 
 import UIKit
 
-public struct KeyCommandAction {
+public struct KeyCommandAction: Sendable {
 
     let title: String
     let subtitle: String?
     let input: String
     let modifierFlags: UIKeyModifierFlags
-    let action: () -> Void
+    let action: @MainActor @Sendable () -> Void
 
     public init(
         title: String,
         subtitle: String? = nil,
         input: String,
         modifierFlags: UIKeyModifierFlags = [],
-        action: @escaping () -> Void
+        action: @escaping @MainActor @Sendable () -> Void
     ) {
         self.title = title
         self.subtitle = subtitle

@@ -11,10 +11,20 @@ let package = Package(
         .package(path: "../KidsDiagnostics"),
         .package(path: "../KidsArtwork")
     ],
-    targets: [.target(name: "KidsArtworkUI", dependencies: [
-        .product(name: "KidsDomain", package: "KidsDomain"),
-        .product(name: "KidsCatalog", package: "KidsCatalog"),
-        .product(name: "KidsDiagnostics", package: "KidsDiagnostics"),
-        .product(name: "KidsArtwork", package: "KidsArtwork")
-    ])]
+    targets: [
+        .target(name: "KidsArtworkUI", dependencies: [
+            .product(name: "KidsDomain", package: "KidsDomain"),
+            .product(name: "KidsCatalog", package: "KidsCatalog"),
+            .product(name: "KidsDiagnostics", package: "KidsDiagnostics"),
+            .product(name: "KidsArtwork", package: "KidsArtwork")
+        ]),
+        .testTarget(
+            name: "KidsArtworkUITests",
+            dependencies: [
+                "KidsArtworkUI",
+                .product(name: "KidsArtwork", package: "KidsArtwork"),
+                .product(name: "KidsDomain", package: "KidsDomain")
+            ]
+        )
+    ]
 )

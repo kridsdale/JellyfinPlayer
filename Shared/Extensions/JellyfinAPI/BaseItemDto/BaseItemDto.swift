@@ -15,6 +15,7 @@ import JellyfinAPI
 import MediaPlayer
 import Nuke
 import SwiftfinLocalization
+import SwiftfinNowPlaying
 import SwiftUI
 
 // TODO: clean up
@@ -70,6 +71,7 @@ extension BaseItemDto {
             }
     }
 
+    @MainActor
     func nowPlayableStaticMetadata(_ image: UIImage? = nil) -> NowPlayableStaticMetadata {
 
         let mediaType: MPNowPlayingInfoMediaType = {
@@ -113,7 +115,7 @@ extension BaseItemDto {
             isLiveStream: isLiveStream,
             title: title,
             artist: subtitle,
-            artwork: image.map { image in MPMediaItemArtwork(boundsSize: image.size) { _ in image }},
+            artwork: image.map(NowPlayingArtwork.make),
             albumArtist: albumArtist,
             albumTitle: albumTitle
         )

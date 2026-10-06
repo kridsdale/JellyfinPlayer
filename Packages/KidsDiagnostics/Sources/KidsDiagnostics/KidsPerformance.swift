@@ -106,6 +106,7 @@ public enum KidsPerformancePhase: String, Codable, Sendable {
     case playerSurfacePresented
     case playerError
     case observationTimeout
+    case nativeDiagnostic
 }
 
 public enum KidsPerformanceOutcome: String, Codable, Sendable {
@@ -237,6 +238,10 @@ public final class KidsPerformanceSpan: @unchecked Sendable {
         "resume_pending",
         "seconds",
         "failure_code",
+        "native_reason",
+        "native_severity",
+        "native_module",
+        "native_context",
         "video_codec",
         "bit_depth",
         "video_fps",
@@ -324,6 +329,111 @@ public final class KidsPerformanceSpan: @unchecked Sendable {
         if shouldFinish {
             mark(.end, outcome: outcome, values: values)
         }
+    }
+}
+
+/// Native strings are classified in memory. Only this fixed numeric reason is recorded.
+/// Unknown messages, URLs, stream names and credentials are never serialized.
+public enum KidsNativeDiagnostic: Int, Sendable {
+    case other = 0
+    case hardwareProbeRejected
+    case converterRejected
+    case missingDrawable
+    case windowProviderRejected
+    case decoderUnavailable
+    case bufferDeadlockPrevented
+    case videoOutputRejected
+    case decoderRejected
+    public init(message: String) {
+        if message.hasPrefix("'") && message.hasSuffix("' is not supported") {
+            self = .hardwareProbeRejected
+        } else if message == "Failed to create video converter" {
+            self = .converterRejected
+        } else if message == "provided view container is nil" {
+            self = .missingDrawable
+        } else if message == "Creating UIView window provider failed" {
+            self = .windowProviderRejected
+        } else if message.hasPrefix("Codec '") && message.hasSuffix(" is not supported.") {
+            self = .decoderUnavailable
+        } else if message.hasPrefix("no suitable decoder") {
+            self = .decoderUnavailable
+        } else if message == "buffer deadlock prevented" {
+            self = .bufferDeadlockPrevented
+        } else if message == "video output creation failed" || message == "failed to create video output" {
+            self = .videoOutputRejected
+        } else if message.hasPrefix("cannot start codec") || message.hasPrefix("cannot open codec") {
+            self = .decoderRejected
+        } else {
+            self = .other
+        }
+    }
+}
+
+/// Fixed native module names; arbitrary SDK module strings are never retained.
+public enum KidsNativeModule: Int, Sendable {
+    case other = 0
+    case avcodec
+    case videotoolbox
+    case decoder
+    case videoOutput
+    case window
+    case demux
+    case avi
+    case http
+    case audioOutput
+    case clock
+    public init(_ name: String?) {
+        switch name?.lowercased() {
+        case "avcodec": self = .avcodec
+        case "videotoolbox": self = .videotoolbox
+        case "decoder": self = .decoder
+        case "vout", "vout_display", "samplebufferdisplay", "ios", "opengl": self = .videoOutput
+        case "window", "uiview", "macosx": self = .window
+        case "demux": self = .demux
+        case "avi": self = .avi
+        case "http", "access", "access_http": self = .http
+        case "aout", "auhal", "audiounit_ios": self = .audioOutput
+        case "clock": self = .clock
+        default: self = .other
+        }
+    }
+}
+
+/// Coarse keyword flags help distinguish unknown failures without storing prose.
+public struct KidsNativeContext: OptionSet, Sendable {
+    public let rawValue: Int
+    public init(rawValue: Int) {
+        self.rawValue = rawValue
+    }
+
+    public static let hardware = Self(rawValue: 1 << 0)
+    public static let codec = Self(rawValue: 1 << 1)
+    public static let output = Self(rawValue: 1 << 2)
+    public static let allocation = Self(rawValue: 1 << 3)
+    public static let format = Self(rawValue: 1 << 4)
+    public static let timestamp = Self(rawValue: 1 << 5)
+    public init(message: String) {
+        let text = message.lowercased()
+        var flags: Self = []
+        if ["videotoolbox", "hardware", "vtdecompression"].contains(where: text.contains) {
+            flags.insert(.hardware)
+        }
+        if ["decoder", "codec"].contains(where: text.contains) {
+            flags.insert(.codec)
+        }
+        if ["output", "renderer", "surface", "drawable", "view container"].contains(where: text.contains) {
+            flags.insert(.output)
+        }
+        if ["allocat", "memory"].contains(where: text.contains) {
+            flags.insert(.allocation)
+        }
+        if ["pixel", "chroma", "fourcc", "format"].contains(where: text.contains) {
+            flags.insert(.format)
+        }
+        if ["timestamp", "clock", "pts", "dts"].contains(where: text.contains) {
+            flags.insert(.timestamp)
+        }
+        self = flags
     }
 }
 

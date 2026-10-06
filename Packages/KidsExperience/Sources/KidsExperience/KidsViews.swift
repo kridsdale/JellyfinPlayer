@@ -6,8 +6,8 @@
 // Copyright (c) 2026 Jellyfin & Jellyfin Contributors
 //
 
-import AVFoundation
 import Combine
+import KidsApplication
 import KidsDiagnostics
 import KidsDiagnosticsUI
 import KidsDomain
@@ -20,19 +20,28 @@ import SwiftUI
 private let kidsTeal = Color(red: 0.04, green: 0.47, blue: 0.49)
 private let kidsBackground = Color(red: 0.055, green: 0.10, blue: 0.14)
 
-struct KidsRootView: View {
+public struct KidsRootView: View {
+    private let playbackPresentation: any KidsPlaybackPresentation
     @StateObject
     private var model: KidsAppModel
-    init(model: @autoclosure @escaping () -> KidsAppModel) {
+    public init(model: @autoclosure @escaping () -> KidsAppModel, playbackPresentation: any KidsPlaybackPresentation) {
+        self.playbackPresentation = playbackPresentation
         _model = StateObject(wrappedValue: model())
     }
+
+    #if DEBUG
+    public init(previewScenario: String) {
+        _model = StateObject(wrappedValue: KidsAppModel.preview(previewScenario))
+        playbackPresentation = KidsPreviewPlaybackPresentation()
+    }
+    #endif
 
     @Environment(\.scenePhase)
     private var scenePhase
     @State
     private var path: [KidsItem] = []
     private let gateTimer = Timer.publish(every: 5, on: .main, in: .common).autoconnect()
-    var body: some View {
+    public var body: some View {
         NavigationStack(path: $path) {
             Group {
                 if model.loading {
@@ -79,8 +88,15 @@ struct KidsRootView: View {
         .sheet(
             isPresented: Binding(get: { model.parentPresented && model.activePlayback == nil }, set: { model.parentPresented = $0 }),
             onDismiss: { model.lockParents() }
-        ) { KidsParentView(model: model) }
-        .fullScreenCover(item: $model.activePlayback) { playback in KidsPlayerView(model: model, playback: playback) }
+        ) { KidsParentView(model: model, playbackPresentation: playbackPresentation) }
+        .fullScreenCover(item: Binding(get: { model.activePlayback }, set: { newValue in
+            guard newValue == nil, let presented = model.activePlayback else { return }
+            Task { await model.dismissPlayback(presented) }
+        })) { playback in KidsPlayerView(
+            model: model,
+            playback: playback,
+            playbackPresentation: playbackPresentation
+        ) }
         .sheet(isPresented: $model.sessionFinished) {
             VStack(spacing: 35) {
                 if let title = model.sessionEndItem {
@@ -98,7 +114,7 @@ struct KidsRootView: View {
                     model.category = .shows
                 }
         }
-        .task(id: model.accountIdentity) {
+        .task(id: model.accountRevision) {
             // Synthetic previews own their seeded player. Production identity
             // transitions still stop playback before replacing any catalog.
             guard !model.isPreview else { return }
@@ -466,6 +482,7 @@ struct KidsPlayerView: View {
     var model: KidsAppModel
     @ObservedObject
     var playback: KidsPlaybackController
+    let playbackPresentation: any KidsPlaybackPresentation
     @FocusState
     private var control: String?
     @Environment(\.scenePhase)
@@ -474,7 +491,7 @@ struct KidsPlayerView: View {
         ZStack {
             Color.black
             if !model.isPreview {
-                SwiftfinKidsPlaybackSurface(session: playback)
+                playbackPresentation.surface(for: playback)
                     .ignoresSafeArea()
             }
             if !playback.controlsVisible && !playback.recovery && !playback.showCountdown && !playback.buffering {
@@ -568,7 +585,10 @@ struct KidsPlayerView: View {
                 playback.pauseOnBackground()
             }
         }
-        .sheet(isPresented: $model.parentPresented, onDismiss: { model.lockParents() }) { KidsParentView(model: model) }
+        .sheet(isPresented: $model.parentPresented, onDismiss: { model.lockParents() }) { KidsParentView(
+            model: model,
+            playbackPresentation: playbackPresentation
+        ) }
     }
 
     private func time(_ value: Double) -> String {

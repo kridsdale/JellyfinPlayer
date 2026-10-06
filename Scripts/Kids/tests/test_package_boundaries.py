@@ -1,6 +1,9 @@
 import importlib.util
 from pathlib import Path
 import unittest
+from unittest.mock import patch
+import copy
+import json
 
 SPEC = importlib.util.spec_from_file_location("package_boundaries", Path(__file__).parents[1] / "package_boundaries.py")
 MODULE = importlib.util.module_from_spec(SPEC)
@@ -44,6 +47,25 @@ class PackageBoundariesTests(unittest.TestCase):
 
     def test_direct_value_and_framework_imports_are_allowed(self):
         self.assertEqual(MODULE.validate_source("UI", "import Domain\nimport UIKit", {"Domain"}, {"UIKit"}), [])
+
+    def test_native_sdk_must_have_its_exact_owner_source_and_version(self):
+        root = Path("/fixture")
+        remote = {"sourceControl": [{"identity": "swiftvlc", "location": {"remote": [{"urlString": "https://github.com/harflabs/SwiftVLC"}]}, "requirement": {"exact": ["1.0.0"]}}]}
+        manifest = {"dependencies": [remote]}
+        with patch.object(MODULE.subprocess, "check_output", return_value=json.dumps(manifest)):
+            _, local = MODULE.inspect_package(root / "Packages/SwiftfinVLC", root)
+            self.assertEqual(local, set())
+            with self.assertRaises(ValueError):
+                MODULE.inspect_package(root / "Packages/SwiftfinAudioSession", root)
+        for field, value in [("requirement", {"range": ["1.0.0", "2.0.0"]}), ("location", {"remote": [{"urlString": "https://unexpected.invalid/SwiftVLC"}]}), ("identity", "another-sdk")]:
+            changed = copy.deepcopy(remote)
+            changed["sourceControl"][0][field] = value
+            with self.subTest(field=field), patch.object(MODULE.subprocess, "check_output", return_value=json.dumps({"dependencies": [changed]})):
+                with self.assertRaises(ValueError):
+                    MODULE.inspect_package(root / "Packages/SwiftfinVLC", root)
+        with patch.object(MODULE.subprocess, "check_output", return_value=json.dumps({"dependencies": []})):
+            with self.assertRaises(ValueError):
+                MODULE.inspect_package(root / "Packages/SwiftfinVLC", root)
 
 
 if __name__ == "__main__":

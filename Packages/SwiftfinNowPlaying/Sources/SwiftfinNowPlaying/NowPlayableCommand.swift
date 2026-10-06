@@ -9,7 +9,7 @@
 import Foundation
 import MediaPlayer
 
-enum NowPlayableCommand: CaseIterable, Sendable {
+public enum NowPlayableCommand: CaseIterable, Sendable {
 
     // Play/Pause
     case pause
@@ -91,21 +91,31 @@ enum NowPlayableCommand: CaseIterable, Sendable {
         }
     }
 
-    @MainActor
-    func removeHandler() {
-        remoteCommand.removeTarget(nil)
-    }
-
     /// Only immutable values cross the SDK callback's unspecified executor.
-    struct Event: Sendable {
-        let interval: Double?
-        let positionTime: Double?
+    public struct Event: Sendable {
+        public let interval: Double?
+        public let positionTime: Double?
+        public init(interval: Double? = nil, positionTime: Double? = nil) {
+            self.interval = interval
+            self.positionTime = positionTime
+        }
+
+        /// Validating immutable values never transfers an SDK event between executors.
+        public func isValid(for command: NowPlayableCommand) -> Bool {
+            switch command {
+            case .skipBackward, .skipForward:
+                guard let interval else { return false }
+                return interval.isFinite && interval >= 0
+            case .changePlaybackPosition:
+                guard let positionTime else { return false }
+                return positionTime.isFinite && positionTime >= 0
+            default: return true
+            }
+        }
     }
 
     @MainActor
-    func addHandler(_ handler: @escaping @MainActor @Sendable (NowPlayableCommand, Event) -> MPRemoteCommandHandlerStatus) {
-
-        remoteCommand.removeTarget(nil)
+    func addHandler(_ handler: @escaping @MainActor @Sendable (NowPlayableCommand, Event) -> MPRemoteCommandHandlerStatus) -> Any {
 
         switch self {
         case .skipBackward:
@@ -115,18 +125,12 @@ enum NowPlayableCommand: CaseIterable, Sendable {
         default: ()
         }
 
-        remoteCommand.addTarget { @Sendable event in
+        return remoteCommand.addTarget { @Sendable event in
             let values = Event(
                 interval: (event as? MPSkipIntervalCommandEvent)?.interval,
                 positionTime: (event as? MPChangePlaybackPositionCommandEvent)?.positionTime
             )
-            switch self {
-            case .skipBackward, .skipForward:
-                guard let interval = values.interval, interval.isFinite, interval >= 0 else { return .commandFailed }
-            case .changePlaybackPosition:
-                guard let position = values.positionTime, position.isFinite, position >= 0 else { return .commandFailed }
-            default: break
-            }
+            guard values.isValid(for: self) else { return .commandFailed }
             // Success acknowledges a valid queued command. Its lease is checked
             // again on the actor before it can affect playback.
             Task { @MainActor in _ = handler(self, values) }

@@ -14,16 +14,12 @@ import XCTest
 @MainActor
 final class KidsPerformanceTests: XCTestCase {
     private let app = XCUIApplication()
+    private var registeredCleanup = false
     override func setUpWithError() throws {
         continueAfterFailure = false
         guard ProcessInfo.processInfo.environment["KIDS_RUN_PROFILE"] == "1" else {
             throw XCTSkip("Opt in with KIDS_RUN_PROFILE=1 after configuring the real restricted simulator account.")
         }
-    }
-
-    override func tearDown() {
-        app.terminate()
-        super.tearDown()
     }
 
     private var firstCard: XCUIElement {
@@ -43,6 +39,11 @@ final class KidsPerformanceTests: XCTestCase {
     }
 
     private func launch() {
+        if !registeredCleanup {
+            let cleanup = SimulatorApplicationCleanup(app)
+            addTeardownBlock { await cleanup.stop() }
+            registeredCleanup = true
+        }
         app.launchArguments = ["--kids-profile"]
         app.launchEnvironment["DYLD_FRAMEWORK_PATH"] = ""
         app.launchEnvironment["DYLD_LIBRARY_PATH"] = ""

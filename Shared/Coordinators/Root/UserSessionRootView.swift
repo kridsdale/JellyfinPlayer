@@ -9,6 +9,10 @@
 import Defaults
 import FactoryKit
 import SwiftUI
+#if os(tvOS)
+import KidsApplication
+import KidsExperience
+#endif
 
 struct UserSessionRootView: View {
 
@@ -22,20 +26,20 @@ struct UserSessionRootView: View {
         #if os(tvOS)
         #if DEBUG
         if let argument = ProcessInfo.processInfo.arguments.first(where: { $0.hasPrefix("--kids-preview=") }) {
-            KidsRootView(model: KidsPreviewFixtures.model(String(argument.dropFirst("--kids-preview=".count))))
+            KidsRootView(previewScenario: String(argument.dropFirst("--kids-preview=".count)))
         } else {
             KidsRootView(model: KidsAppModel(
                 accounts: SwiftfinKidsAccountHost(sessions: userSessionManager),
                 playbackFactory: SwiftfinKidsPlaybackFactory(sessions: userSessionManager)
-            ))
-            .task { await userSessionManager.start() }
+            ), playbackPresentation: SwiftfinKidsPlaybackPresentation())
+                .task { await userSessionManager.start() }
         }
         #else
         KidsRootView(model: KidsAppModel(
             accounts: SwiftfinKidsAccountHost(sessions: userSessionManager),
             playbackFactory: SwiftfinKidsPlaybackFactory(sessions: userSessionManager)
-        ))
-        .task { await userSessionManager.start() }
+        ), playbackPresentation: SwiftfinKidsPlaybackPresentation())
+            .task { await userSessionManager.start() }
         #endif
         #else
         ZStack {

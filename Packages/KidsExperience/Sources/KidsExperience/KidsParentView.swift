@@ -6,6 +6,7 @@
 // Copyright (c) 2026 Jellyfin & Jellyfin Contributors
 //
 
+import KidsApplication
 import KidsCatalog
 
 // SPDX-License-Identifier: MPL-2.0
@@ -15,6 +16,7 @@ import SwiftUI
 struct KidsParentView: View {
     @ObservedObject
     var model: KidsAppModel
+    var playbackPresentation: any KidsPlaybackPresentation = KidsPreviewPlaybackPresentation()
     @Environment(\.dismiss)
     private var dismiss
     @State
@@ -233,7 +235,7 @@ struct KidsParentView: View {
             )
             .foregroundStyle(.secondary)
             if let session = model.activePlayback {
-                SwiftfinKidsTrackControls(session: session, authorize: {
+                playbackPresentation.tracks(for: session, authorize: {
                     model.touchGate()
                     return model.unlocked
                 })

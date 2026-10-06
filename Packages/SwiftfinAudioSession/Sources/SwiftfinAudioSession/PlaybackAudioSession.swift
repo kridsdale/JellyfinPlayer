@@ -6,9 +6,11 @@
 // Copyright (c) 2026 Jellyfin & Jellyfin Contributors
 //
 
+#if os(iOS) || os(tvOS)
 import AVFAudio
+#endif
 import Foundation
-import Logging
+import OSLog
 #if os(tvOS)
 import KidsDiagnostics
 #endif
@@ -16,28 +18,48 @@ import KidsDiagnostics
 /// Serializes the process-wide audio session. An old player's release cannot
 /// deactivate a newer player's lease, including while activation is suspended.
 @MainActor
-final class PlaybackAudioSession {
-    static let shared = PlaybackAudioSession()
+public final class PlaybackAudioSession {
+    #if os(iOS) || os(tvOS)
+    public static let shared = PlaybackAudioSession()
+    public convenience init() {
+        self.init(activate: Self.activate, deactivate: Self.deactivate)
+    }
+    #endif
+    private let activateSession: @Sendable () async throws -> Void
+    private let deactivateSession: @Sendable () async throws -> Void
+    public init(
+        activate: @escaping @Sendable () async throws -> Void,
+        deactivate: @escaping @Sendable () async throws -> Void
+    ) {
+        activateSession = activate
+        deactivateSession = deactivate
+    }
+
+    // A synchronization point for internal contract tests; it does not alter leases.
+    func finishPendingOperations() async throws {
+        try await operation?.value
+    }
+
     private var owners = Set<UUID>()
     private var operation: Task<Void, Error>?
     private var active = false
-    private let logger = Logger(label: "PlaybackAudioSession")
+    private let logger = Logger(subsystem: "org.jellyfin.swiftfin", category: "PlaybackAudioSession")
 
-    func acquire(_ owner: UUID) -> Task<Void, Error> {
+    public func acquire(_ owner: UUID) -> Task<Void, Error> {
         owners.insert(owner)
         let previous = operation
         let task = Task {
             _ = try? await previous?.value
             guard owners.contains(owner) else { throw CancellationError() }
             guard !active else { return }
-            try await Self.activate()
+            try await activateSession()
             active = true
         }
         operation = task
         return task
     }
 
-    func release(_ owner: UUID, after drain: @escaping @MainActor () async -> Bool = { true }) {
+    public func release(_ owner: UUID, after drain: @escaping @MainActor () async -> Bool = { true }) {
         guard owners.remove(owner) != nil else { return }
         let previous = operation
         operation = Task {
@@ -55,7 +77,7 @@ final class PlaybackAudioSession {
             }
             guard owners.isEmpty, active else { return }
             do {
-                try await Self.deactivate()
+                try await deactivateSession()
                 active = false
             } catch {
                 // Keep the known active state; later leases may still use the
@@ -65,10 +87,11 @@ final class PlaybackAudioSession {
         }
     }
 
-    func wasInterrupted() {
+    public func wasInterrupted() {
         active = false
     }
 
+    #if os(iOS) || os(tvOS)
     private nonisolated static func activate() async throws {
         #if os(tvOS)
         let trace = KidsPerformance.begin(.audioActivation)
@@ -111,4 +134,5 @@ final class PlaybackAudioSession {
         trace?.finish()
         #endif
     }
+    #endif
 }

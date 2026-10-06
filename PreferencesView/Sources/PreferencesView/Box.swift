@@ -6,7 +6,8 @@
 // Copyright (c) 2026 Jellyfin & Jellyfin Contributors
 //
 
-class Box {
+@MainActor
+final class Box {
 
     weak var value: UIPreferencesHostingController?
 

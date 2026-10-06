@@ -9,7 +9,6 @@
 import KidsCatalog
 import KidsDomain
 import KidsPlaybackSession
-import SwiftUI
 
 #if DEBUG
 /// Synthetic catalog for SwiftUI Previews and simulator layout/remote tests.
@@ -106,27 +105,4 @@ enum KidsPreviewFixtures {
     }
 }
 
-#Preview("Shows - missing art and focus") { KidsRootView(model: KidsPreviewFixtures.model("shows")) }
-#Preview("Movies - posters") { KidsRootView(model: KidsPreviewFixtures.model("movies")) }
-#Preview("Authorization denied - prior catalog hidden") { KidsRootView(model: KidsPreviewFixtures.model("denied")) }
-#Preview("Offline catalog - protected help") { KidsRootView(model: KidsPreviewFixtures.model("offline")) }
-#Preview("Neutral loading") { KidsRootView(model: KidsPreviewFixtures.model("loading")) }
-#Preview("Empty catalog") { KidsRootView(model: KidsPreviewFixtures.model("empty")) }
-#Preview("Ordered series finished") { KidsTitleView(
-    model: KidsPreviewFixtures.model("again"),
-    item: KidsPreviewFixtures.model("again").catalog[.shows]![0]
-) }
-#Preview("Movie resume") { KidsTitleView(
-    model: KidsPreviewFixtures.model("resume"),
-    item: KidsPreviewFixtures.model("resume").catalog[.movies]![0]
-) }
-#Preview("One episode show") { KidsRootView(model: KidsPreviewFixtures.model("one-episode")) }
-#Preview("Movie completed") { KidsRootView(model: KidsPreviewFixtures.model("movie-complete")) }
-#Preview("Movie paused - parent restart") { KidsRootView(model: KidsPreviewFixtures.model("movie-paused")) }
-#Preview("Player paused timeline") { KidsRootView(model: KidsPreviewFixtures.model("paused")) }
-#Preview("Player hidden controls") { KidsRootView(model: KidsPreviewFixtures.model("hidden-player")) }
-#Preview("Next episode countdown") { KidsRootView(model: KidsPreviewFixtures.model("countdown")) }
-#Preview("Player reconnecting") { KidsRootView(model: KidsPreviewFixtures.model("reconnecting")) }
-#Preview("Session end with artwork") { KidsRootView(model: KidsPreviewFixtures.model("session-end")) }
-#Preview("Parent gate") { KidsParentView(model: KidsPreviewFixtures.model("shows")) }
 #endif

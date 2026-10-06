@@ -11,7 +11,9 @@ import Foundation
 import Logging
 import MediaPlayer
 import Nuke
-import SwiftVLC
+import SwiftfinAudioSession
+import SwiftfinNowPlaying
+import SwiftfinVLC
 
 // TODO: ensure proper state handling
 //       - manager states
@@ -35,6 +37,7 @@ class NowPlayableObserver: ViewModel, MediaPlayerObserver {
         ]
     }
 
+    private let nowPlaying = NowPlayingController()
     private var itemImageCancellable: AnyCancellable?
     private var audioOwner: UUID?
     private var audioActivation: Task<Void, Error>?
@@ -43,7 +46,7 @@ class NowPlayableObserver: ViewModel, MediaPlayerObserver {
     weak var manager: MediaPlayerManager? {
         didSet {
             guard oldValue !== manager else { return }
-            handleStopAction(draining: (oldValue?.proxy as? VLCMediaPlayerProxy)?.player)
+            handleStopAction(draining: (oldValue?.proxy as? VLCMediaPlayerProxy)?.native)
             guard let manager else { return }
             setup(with: manager)
         }
@@ -53,6 +56,11 @@ class NowPlayableObserver: ViewModel, MediaPlayerObserver {
         let owner = UUID()
         audioOwner = owner
         audioActivation = PlaybackAudioSession.shared.acquire(owner)
+
+        nowPlaying.configure(defaultRegisteredCommands, handler: { [weak self] command, event in
+            guard let self, self.audioOwner == owner else { return .commandFailed }
+            return self.handleCommand(command: command, event: event)
+        })
 
         cancellables = []
 
@@ -79,15 +87,10 @@ class NowPlayableObserver: ViewModel, MediaPlayerObserver {
                 self?.handleInterruption(type: i.0, options: i.1)
             }
             .store(in: &cancellables)
-
-        configureRemoteCommands(defaultRegisteredCommands, commandHandler: { [weak self] command, event in
-            guard let self, self.audioOwner == owner else { return .commandFailed }
-            return self.handleCommand(command: command, event: event)
-        })
     }
 
     private func playbackRequestStatusDidChange(_ newStatus: MediaPlayerManager.PlaybackRequestStatus) {
-        handleNowPlayablePlaybackChange(
+        nowPlaying.updatePlayback(
             playing: newStatus == .playing,
             metadata: .init(
                 position: manager?.seconds ?? .zero,
@@ -98,7 +101,7 @@ class NowPlayableObserver: ViewModel, MediaPlayerObserver {
 
     private func secondsDidChange(_ newSeconds: Duration) {
         // Seeking while paused changes time without changing transport state.
-        handleNowPlayablePlaybackChange(
+        nowPlaying.updatePlayback(
             playing: manager?.playbackRequestStatus == .playing,
             metadata: .init(
                 position: newSeconds,
@@ -110,7 +113,7 @@ class NowPlayableObserver: ViewModel, MediaPlayerObserver {
     private func actionDidChange(_ newAction: MediaPlayerManager._Action) {
         switch newAction {
         case .stop, .error:
-            handleStopAction(draining: (manager?.proxy as? VLCMediaPlayerProxy)?.player)
+            handleStopAction(draining: (manager?.proxy as? VLCMediaPlayerProxy)?.native)
         default: ()
         }
     }
@@ -122,7 +125,7 @@ class NowPlayableObserver: ViewModel, MediaPlayerObserver {
         itemImageCancellable = nil
         guard let newItem else { return }
 
-        setNowPlayingMetadata(newItem.baseItem.nowPlayableStaticMetadata())
+        nowPlaying.setMetadata(newItem.baseItem.nowPlayableStaticMetadata())
 
         itemImageCancellable = Task {
             let currentBaseItem = newItem.baseItem
@@ -132,14 +135,14 @@ class NowPlayableObserver: ViewModel, MediaPlayerObserver {
                   manager?.item.id == currentBaseItem.id else { return }
 
             await MainActor.run {
-                setNowPlayingMetadata(
+                nowPlaying.setMetadata(
                     currentBaseItem.nowPlayableStaticMetadata(image)
                 )
             }
         }
         .asAnyCancellable()
 
-        handleNowPlayablePlaybackChange(
+        nowPlaying.updatePlayback(
             playing: true,
             metadata: .init(
                 position: manager?.seconds ?? .zero,
@@ -156,23 +159,20 @@ class NowPlayableObserver: ViewModel, MediaPlayerObserver {
         guard audioOwner != nil else { throw CancellationError() }
     }
 
-    private func handleStopAction(draining player: Player?) {
+    private func handleStopAction(draining player: VLCPlaybackController?) {
         cancellables = []
         itemImageCancellable?.cancel()
         itemImageCancellable = nil
         guard let owner = audioOwner else { return }
         audioOwner = nil
         audioActivation = nil
-        for command in defaultRegisteredCommands {
-            command.removeHandler()
-        }
+        nowPlaying.clearCommands()
         PlaybackAudioSession.shared.release(owner) {
             guard let player else { return true }
             // This manager is terminal. Full teardown detaches the drawable and
             // awaits native-handle release; merely waiting for Stop left paused
             // simulator outputs draining until the SDK's ten-second ceiling.
-            await player.shutdown()
-            return player.state == .idle
+            return await player.shutdown()
         }
     }
 
@@ -240,56 +240,5 @@ class NowPlayableObserver: ViewModel, MediaPlayerObserver {
         }
 
         return .success
-    }
-
-    private func handleNowPlayablePlaybackChange(
-        playing: Bool,
-        metadata: NowPlayableDynamicMetadata
-    ) {
-        setNowPlayingPlaybackInfo(metadata, playing: playing)
-        MPNowPlayingInfoCenter.default().playbackState = playing ? .playing : .paused
-    }
-
-    private func configureRemoteCommands(
-        _ commands: [NowPlayableCommand],
-        commandHandler: @escaping @MainActor @Sendable (NowPlayableCommand, NowPlayableCommand.Event) -> MPRemoteCommandHandlerStatus
-    ) {
-        guard commands.isNotEmpty else { return }
-
-        for command in commands {
-            command.addHandler(commandHandler)
-            command.isEnabled(true)
-        }
-    }
-
-    private func setNowPlayingMetadata(_ metadata: NowPlayableStaticMetadata) {
-
-        let nowPlayingInfoCenter = MPNowPlayingInfoCenter.default()
-        var nowPlayingInfo: [String: Any] = [:]
-
-        nowPlayingInfo[MPNowPlayingInfoPropertyMediaType] = metadata.mediaType.rawValue
-        nowPlayingInfo[MPNowPlayingInfoPropertyIsLiveStream] = metadata.isLiveStream
-        nowPlayingInfo[MPMediaItemPropertyTitle] = metadata.title
-        nowPlayingInfo[MPMediaItemPropertyArtist] = metadata.artist
-        nowPlayingInfo[MPMediaItemPropertyArtwork] = metadata.artwork
-        nowPlayingInfo[MPMediaItemPropertyAlbumArtist] = metadata.albumArtist
-        nowPlayingInfo[MPMediaItemPropertyAlbumTitle] = metadata.albumTitle
-
-        nowPlayingInfoCenter.nowPlayingInfo = nowPlayingInfo
-    }
-
-    private func setNowPlayingPlaybackInfo(_ metadata: NowPlayableDynamicMetadata, playing: Bool) {
-
-        let nowPlayingInfoCenter = MPNowPlayingInfoCenter.default()
-        var nowPlayingInfo: [String: Any] = nowPlayingInfoCenter.nowPlayingInfo ?? [:]
-
-        nowPlayingInfo[MPMediaItemPropertyPlaybackDuration] = Float(metadata.duration.seconds)
-        nowPlayingInfo[MPNowPlayingInfoPropertyElapsedPlaybackTime] = Float(metadata.position.seconds)
-        nowPlayingInfo[MPNowPlayingInfoPropertyPlaybackRate] = playing ? metadata.rate : 0
-        nowPlayingInfo[MPNowPlayingInfoPropertyDefaultPlaybackRate] = 1.0
-        nowPlayingInfo[MPNowPlayingInfoPropertyCurrentLanguageOptions] = metadata.currentLanguageOptions
-        nowPlayingInfo[MPNowPlayingInfoPropertyAvailableLanguageOptions] = metadata.availableLanguageOptionGroups
-
-        nowPlayingInfoCenter.nowPlayingInfo = nowPlayingInfo
     }
 }

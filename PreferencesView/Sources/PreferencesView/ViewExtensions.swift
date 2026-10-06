@@ -57,7 +57,7 @@ public extension View {
 
 #if os(tvOS)
 @OptionSet<Int>
-public struct UIInterfaceOrientationMask {
+public struct UIInterfaceOrientationMask: Sendable {
 
     private enum Options: Int {
         case portrait = 1

@@ -24,13 +24,6 @@ final class KidsLivePlaybackTests: XCTestCase {
         }
     }
 
-    override func tearDown() {
-        if didLaunch {
-            app.terminate()
-        }
-        super.tearDown()
-    }
-
     private func launchRealAccount(arguments: [String] = []) {
         app.launchArguments = arguments
         if ProcessInfo.processInfo.environment["KIDS_PROFILE_LIVE"] == "1" {
@@ -38,6 +31,10 @@ final class KidsLivePlaybackTests: XCTestCase {
         }
         app.launchEnvironment["DYLD_FRAMEWORK_PATH"] = ""
         app.launchEnvironment["DYLD_LIBRARY_PATH"] = ""
+        if !didLaunch {
+            let cleanup = SimulatorApplicationCleanup(app)
+            addTeardownBlock { await cleanup.stop() }
+        }
         app.launch()
         didLaunch = true
         XCTAssertTrue(

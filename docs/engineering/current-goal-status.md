@@ -1,5 +1,7 @@
 # Current engineering goal disposition
 
+The table below records the candidate checkpoint from 2026-10-05. The active goal on 2026-10-06 is full-client package extraction and Swift 6 completion; see [current package evidence](package-refactor.md). It remains active.
+
 Status at the final simulator verification on 2026-10-05. The goal is to finish the identified work or make the remaining external gates explicit. Physical-device and live iCloud testing were explicitly deferred by the human; they are not blockers to the following package refactor.
 
 | Workstream | Disposition and evidence |

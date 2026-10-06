@@ -13,6 +13,7 @@ import JellyfinAPI
 import KidsCatalog
 import KidsDiagnostics
 import KidsDomain
+import KidsExperience
 import KidsPlaybackSession
 import SwiftUI
 
@@ -119,7 +120,6 @@ final class SwiftfinKidsPlaybackDriver: KidsPlaybackDriver {
     let proxy = VLCMediaPlayerProxy()
     private let subject = PassthroughSubject<KidsPlaybackDriverEvent, Never>()
     private var observations = Set<AnyCancellable>()
-    private var eventTask: Task<Void, Never>?
     private var stopped = false
 
     init(manager: MediaPlayerManager, performance: KidsPerformanceSpan?) {
@@ -149,9 +149,10 @@ final class SwiftfinKidsPlaybackDriver: KidsPlaybackDriver {
     }
 
     var frame: KidsPlaybackFrame {
-        let state = proxy.player.state
+        let native = proxy.native.frame
+        let state = native.state
         var value = KidsPlaybackFrame()
-        value.seconds = proxy.player.currentTime.seconds
+        value.seconds = native.time.seconds
         value.paused = state == .paused
         value.playing = state == .playing
         value.buffering = proxy.isBuffering.value
@@ -159,27 +160,17 @@ final class SwiftfinKidsPlaybackDriver: KidsPlaybackDriver {
         value.applyingStartPosition = proxy.isApplyingStartPosition
         value.failed = manager.state == .error
         value.terminal = state == .stopped || state == .idle || state == .stopping
-        value.reachedEnd = proxy.player.didReachEnd
-        value.displayedPictures = Int(clamping: proxy.player.statistics?.displayedPictures ?? 0)
-        value.seekable = proxy.player.isSeekable
+        value.reachedEnd = native.reachedEnd
+        value.displayedPictures = Int(clamping: native.displayedPictures)
+        value.seekable = native.seekable
         return value
     }
 
     func start() {
-        let events = proxy.player.events(policy: .newest(64), filter: { event in
-            switch event {
-            case .stateChanged, .timeChanged, .voutChanged, .bufferingProgress: true
-            default: false
-            }
-        })
-        eventTask = Task { [weak self] in
-            for await _ in events {
-                guard !Task.isCancelled else { return }
-                await Task.yield() // Let SwiftVLC's main-actor mirror update first.
-                guard let self, !self.stopped else { return }
-                self.subject.send(.updated)
-            }
-        }
+        proxy.native.updates.sink { [weak self] in
+            guard let self, !self.stopped else { return }
+            self.subject.send(.updated)
+        }.store(in: &observations)
         manager.start()
     }
 
@@ -204,15 +195,11 @@ final class SwiftfinKidsPlaybackDriver: KidsPlaybackDriver {
     func stop() async {
         guard !stopped else { return }
         stopped = true
-        eventTask?.cancel()
-        eventTask = nil
         proxy.pause()
         await manager.stop()
         proxy.manager = nil
         observations.removeAll()
     }
-
-    deinit { eventTask?.cancel() }
 }
 
 /// The host owns native view state; the session library has no SwiftUI or SDK dependency.
@@ -252,5 +239,16 @@ struct SwiftfinKidsTrackControls: View {
                 }
             }
         }
+    }
+}
+
+@MainActor
+final class SwiftfinKidsPlaybackPresentation: KidsPlaybackPresentation {
+    func surface(for session: KidsPlaybackController) -> AnyView {
+        AnyView(SwiftfinKidsPlaybackSurface(session: session))
+    }
+
+    func tracks(for session: KidsPlaybackController, authorize: @escaping @MainActor () -> Bool) -> AnyView {
+        AnyView(SwiftfinKidsTrackControls(session: session, authorize: authorize))
     }
 }

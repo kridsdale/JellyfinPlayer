@@ -9,16 +9,16 @@
 import Foundation
 import SwiftUI
 
-public struct PressCommandAction {
+public struct PressCommandAction: Sendable {
 
     let title: String
     let press: UIPress.PressType
-    let action: () -> Void
+    let action: @MainActor @Sendable () -> Void
 
     public init(
         title: String,
         press: UIPress.PressType,
-        action: @escaping () -> Void
+        action: @escaping @MainActor @Sendable () -> Void
     ) {
         self.title = title
         self.press = press

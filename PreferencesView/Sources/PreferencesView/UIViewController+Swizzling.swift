@@ -12,7 +12,7 @@ extension UIViewController {
 
     // MARK: Swizzle
 
-    static var swizzle: Void = {
+    static let swizzle: Void = {
         #if os(iOS)
         _swizzle(
             #selector(getter: supportedInterfaceOrientations),

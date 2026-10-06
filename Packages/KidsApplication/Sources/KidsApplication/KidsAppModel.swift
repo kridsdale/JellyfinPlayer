@@ -17,68 +17,68 @@ import KidsCatalog
 import KidsDiagnostics
 import KidsDomain
 import KidsPersistence
-import KidsPlayback
 import KidsPlaybackSession
 import SwiftData
 
 // SPDX-License-Identifier: MPL-2.0
-import SwiftfinUIState
 import UIKit
 
 @MainActor
-final class KidsAppModel: ObservableObject, KidsPlaybackSessionDelegate {
+public final class KidsAppModel: ObservableObject, KidsPlaybackSessionDelegate {
+    @Published
+    public private(set) var accountRevision = UUID()
     private let playbackFactory: (any KidsPlaybackSessionFactory)?
     private let accounts: (any KidsAccountHost)?
     @Published
     private(set) var accountIdentity: KidsAccountIdentity?
     @Published
-    var category: KidsCategory = .shows
+    public var category: KidsCategory = .shows
     @Published
-    var catalog: [KidsCategory: [KidsItem]] = [:]
+    public internal(set) var catalog: [KidsCategory: [KidsItem]] = [:]
     @Published
-    var loading = true
+    public internal(set) var loading = true
     @Published
-    var catalogComplete = false
+    public internal(set) var catalogComplete = false
     @Published
-    var problem: String?
+    public internal(set) var problem: String?
     @Published
-    var requiresParent = false
+    public internal(set) var requiresParent = false
     @Published
-    var needsLocalReset = false
+    public internal(set) var needsLocalReset = false
     @Published
-    var selectedShow: KidsItem?
+    public var selectedShow: KidsItem?
     @Published
-    var selectedMovie: KidsItem?
+    public var selectedMovie: KidsItem?
     @Published
-    var starting = false
-    var isPreview = false
+    public internal(set) var starting = false
+    public internal(set) var isPreview = false
     @Published
-    var activePlayback: KidsPlaybackController?
+    public internal(set) var activePlayback: KidsPlaybackController?
     @Published
-    var sessionFinished = false
+    public var sessionFinished = false
     @Published
-    var sessionEndItem: KidsItem?
+    public internal(set) var sessionEndItem: KidsItem?
     @Published
-    var missingItemReplacement: KidsItem?
+    public internal(set) var missingItemReplacement: KidsItem?
     @Published
-    var parentPresented = false
+    public var parentPresented = false
     @Published
-    var gate = KidsGate()
+    public internal(set) var gate = KidsGate()
     @Published
-    var state: KidsState?
+    public internal(set) var state: KidsState?
     @Published
-    var lastPlayback: Date?
+    public internal(set) var lastPlayback: Date?
     @Published
-    var cloudSyncStatus = "Playback is saved on this Apple TV."
-    var catalogPerformance: KidsPerformanceSpan?
-    var titlePerformance: KidsPerformanceSpan?
+    public internal(set) var cloudSyncStatus = "Playback is saved on this Apple TV."
+    public internal(set) var catalogPerformance: KidsPerformanceSpan?
+    public var titlePerformance: KidsPerformanceSpan?
     private var persistence: KidsStateRepository?
     private var cloudActive = false
     private var syncBaseline: KidsSyncSnapshot?
     private var syncObservers = Set<AnyCancellable>()
-    var lastFocus: [KidsCategory: String] = [:]
-    var episodeCache: [String: [KidsItem]] = [:]
-    var binding: KidsBinding? {
+    public var lastFocus: [KidsCategory: String] = [:]
+    public internal(set) var episodeCache: [String: [KidsItem]] = [:]
+    public var binding: KidsBinding? {
         state?.binding
     }
 
@@ -90,7 +90,7 @@ final class KidsAppModel: ObservableObject, KidsPlaybackSessionDelegate {
     }
 
     @Published
-    private(set) var artworkRevision = UUID()
+    public private(set) var artworkRevision = UUID()
     private var artworkStore: (binding: KidsBinding, value: KidsArtworkStore)?
     private var retainedAPI: (identity: APIIdentity, value: KidsAPI)?
     private var verifiedEpisodes: (binding: KidsBinding, value: KidsEpisodeCache)?
@@ -157,7 +157,7 @@ final class KidsAppModel: ObservableObject, KidsPlaybackSessionDelegate {
     }
     #endif
 
-    var serverName: String {
+    public var serverName: String {
         accounts?.currentIdentity?.serverName ?? "Your Jellyfin server"
     }
 
@@ -244,13 +244,24 @@ final class KidsAppModel: ObservableObject, KidsPlaybackSessionDelegate {
     private let bindingKey = "kids.binding.v1"
     private let recoveryBindingKey = "kids.recoveryBinding.v1"
     private let gateKey = "kids.gate.v1"
-    var hasParentPIN: Bool {
+    public var hasParentPIN: Bool {
         isPreview || accounts?.parentPIN != nil
     }
 
-    var unlocked: Bool {
+    public var unlocked: Bool {
         gate.unlocked(at: .now)
     }
+
+    public convenience init(accounts: any KidsAccountHost, playbackFactory: any KidsPlaybackSessionFactory) {
+        self.init(accounts: accounts, playbackFactory: playbackFactory, preview: false)
+    }
+
+    #if DEBUG
+    /// Synthetic preview state cannot activate accounts, perform media IO or persist progress.
+    public static func preview(_ scenario: String) -> KidsAppModel {
+        KidsPreviewFixtures.model(scenario)
+    }
+    #endif
 
     init(accounts: (any KidsAccountHost)? = nil, playbackFactory: (any KidsPlaybackSessionFactory)? = nil, preview: Bool = false) {
         self.playbackFactory = playbackFactory
@@ -263,7 +274,11 @@ final class KidsAppModel: ObservableObject, KidsPlaybackSessionDelegate {
         if let accounts {
             accounts.identityChanges.receive(on: DispatchQueue.main)
                 .sink { [weak self] identity in
-                    MainActor.assumeIsolated { self?.accountIdentity = identity }
+                    MainActor.assumeIsolated {
+                        guard let self, self.accountIdentity != identity else { return }
+                        self.accountIdentity = identity
+                        self.accountRevision = UUID()
+                    }
                 }.store(in: &syncObservers)
         }
         observeCloudChanges()
@@ -273,7 +288,7 @@ final class KidsAppModel: ObservableObject, KidsPlaybackSessionDelegate {
         }
     }
 
-    func enterBrowse() {
+    public func enterBrowse() {
         guard !isPreview, !loading, !requiresParent, activePlayback == nil else { return }
         if skipNextBrowseRefresh {
             skipNextBrowseRefresh = false
@@ -282,7 +297,7 @@ final class KidsAppModel: ObservableObject, KidsPlaybackSessionDelegate {
         Task { await refresh() }
     }
 
-    func refresh(forceMetadata: Bool = false) async {
+    public func refresh(forceMetadata: Bool = false) async {
         guard !isPreview else { return }
         if forceMetadata {
             refreshFlight?.task.cancel()
@@ -416,7 +431,7 @@ final class KidsAppModel: ObservableObject, KidsPlaybackSessionDelegate {
         }
     }
 
-    func episodes(for show: KidsItem, prefetch: Bool = false) async throws -> [KidsItem] {
+    public func episodes(for show: KidsItem, prefetch: Bool = false) async throws -> [KidsItem] {
         #if DEBUG
         if isPreview {
             return KidsPreviewFixtures.episodes(showID: show.id)
@@ -454,7 +469,7 @@ final class KidsAppModel: ObservableObject, KidsPlaybackSessionDelegate {
         }
     }
 
-    func artworkImage(for item: KidsItem) async throws -> UIImage {
+    public func artworkImage(for item: KidsItem) async throws -> UIImage {
         guard let api, let binding, !loading, !requiresParent,
               KidsEligibility.permits(item, binding: binding) else { throw KidsContractError.denied }
         // Only objects from this verified catalog or a verified episode list may
@@ -492,7 +507,7 @@ final class KidsAppModel: ObservableObject, KidsPlaybackSessionDelegate {
         } catch { return false }
     }
 
-    func prefetch(around focusedID: String?, category: KidsCategory) async {
+    public func prefetch(around focusedID: String?, category: KidsCategory) async {
         guard !isPreview, !loading, catalogComplete, !requiresParent, !starting, activePlayback == nil,
               let focusedID, let items = catalog[category], items.contains(where: { $0.id == focusedID }) else { return }
         guard let binding else { return }
@@ -556,7 +571,7 @@ final class KidsAppModel: ObservableObject, KidsPlaybackSessionDelegate {
         } catch { problem = "Playback progress could not be saved. A grown-up can check storage." }
     }
 
-    func savePreferences(limit: Int? = nil, spoken: Bool? = nil) {
+    public func savePreferences(limit: Int? = nil, spoken: Bool? = nil) {
         guard unlocked else { return }
         touchGate()
         if let limit, [0, 1, 2].contains(limit) {
@@ -568,7 +583,7 @@ final class KidsAppModel: ObservableObject, KidsPlaybackSessionDelegate {
         persist()
     }
 
-    func chooseNext(_ item: KidsItem) {
+    public func chooseNext(_ item: KidsItem) {
         guard unlocked else { return }
         touchGate()
         do { try state?.setNext(item)
@@ -576,7 +591,7 @@ final class KidsAppModel: ObservableObject, KidsPlaybackSessionDelegate {
         } catch { show(error) }
     }
 
-    func resetProgress(showID: String) {
+    public func resetProgress(showID: String) {
         guard unlocked else { return }
         touchGate()
         state?.ordered.removeValue(forKey: showID)
@@ -584,14 +599,14 @@ final class KidsAppModel: ObservableObject, KidsPlaybackSessionDelegate {
         persist()
     }
 
-    func resetMovie(_ item: KidsItem) {
+    public func resetMovie(_ item: KidsItem) {
         guard unlocked else { return }
         touchGate()
         state?.movies.removeValue(forKey: item.id)
         persist()
     }
 
-    func resetLocalState() async throws {
+    public func resetLocalState() async throws {
         guard unlocked else { throw KidsContractError.denied }
         var confirmed = binding
         if confirmed == nil, let data = UserDefaults.standard.data(forKey: bindingKey) {
@@ -617,7 +632,7 @@ final class KidsAppModel: ObservableObject, KidsPlaybackSessionDelegate {
         await refresh()
     }
 
-    func narration(_ text: String, preview: Bool = false) {
+    public func narration(_ text: String, preview: Bool = false) {
         speechTask?.cancel()
         speaker.stopSpeaking(at: .immediate)
         guard preview || state?.preferences.spokenNavigation == true, !UIAccessibility.isVoiceOverRunning else { return }
@@ -630,19 +645,19 @@ final class KidsAppModel: ObservableObject, KidsPlaybackSessionDelegate {
         }
     }
 
-    func lockParents() {
+    public func lockParents() {
         gate.lock()
         saveGate()
         speechTask?.cancel()
         speaker.stopSpeaking(at: .immediate)
     }
 
-    func touchGate() {
+    public func touchGate() {
         gate.touch(at: .now)
         saveGate()
     }
 
-    func checkGate() {
+    public func checkGate() {
         if !unlocked && parentPresented && hasParentPIN {
             gate.lock()
         }
@@ -653,7 +668,7 @@ final class KidsAppModel: ObservableObject, KidsPlaybackSessionDelegate {
         UserDefaults.standard.set(try? JSONEncoder().encode(gate), forKey: gateKey)
     }
 
-    func setPIN(_ pin: String) throws {
+    public func setPIN(_ pin: String) throws {
         guard !isPreview else { throw KidsContractError.denied }
         guard !hasParentPIN || unlocked, (4 ... 8).contains(pin.count), pin.allSatisfy(\.isNumber) else { throw KidsContractError.denied }
         guard let accounts else { throw KidsAPIError.authentication }
@@ -662,14 +677,15 @@ final class KidsAppModel: ObservableObject, KidsPlaybackSessionDelegate {
         saveGate()
     }
 
-    func unlock(_ pin: String) -> Bool {
+    public func unlock(_ pin: String) -> Bool {
         let correct = isPreview ? pin == "4242" : accounts?.parentPIN == pin
         let result = gate.attempt(correct: correct, now: .now)
         saveGate()
         return result
     }
 
-    func signIn(urlText: String, username: String, password: String, parentPIN: String, recovering: Bool = false) async throws {
+    public func signIn(urlText: String, username: String, password: String, parentPIN: String, recovering: Bool = false) async throws {
+        guard !isPreview else { throw KidsContractError.denied }
         guard !hasParentPIN || unlocked || recovering else { throw KidsContractError.denied }
         guard (4 ... 8).contains(parentPIN.count), parentPIN.allSatisfy(\.isNumber),
               parentPIN != password else { throw KidsContractError.denied }
@@ -722,8 +738,8 @@ final class KidsAppModel: ObservableObject, KidsPlaybackSessionDelegate {
         await refresh()
     }
 
-    func signOut() async {
-        guard unlocked else { return }
+    public func signOut() async {
+        guard !isPreview, unlocked else { return }
         refreshFlight?.task.cancel()
         refreshFlight = nil
         refreshGeneration = UUID()
@@ -743,7 +759,7 @@ final class KidsAppModel: ObservableObject, KidsPlaybackSessionDelegate {
         requiresParent = true
     }
 
-    func play(
+    public func play(
         _ title: KidsItem,
         mode: KidsPlaybackMode,
         explicitEpisode: KidsItem? = nil,
@@ -762,7 +778,7 @@ final class KidsAppModel: ObservableObject, KidsPlaybackSessionDelegate {
         )
     }
 
-    func playOnce(show: KidsItem, episode: KidsItem) {
+    public func playOnce(show: KidsItem, episode: KidsItem) {
         guard unlocked, let approvedBinding = binding, show.kind == .series,
               KidsEligibility.permits(show, binding: approvedBinding),
               KidsEligibility.permits(episode, binding: approvedBinding), episode.seriesID == show.id
@@ -776,7 +792,7 @@ final class KidsAppModel: ObservableObject, KidsPlaybackSessionDelegate {
         }
     }
 
-    func startMovieOver(_ movie: KidsItem) {
+    public func startMovieOver(_ movie: KidsItem) {
         guard unlocked, let approvedBinding = binding, movie.kind == .movie,
               KidsEligibility.permits(movie, binding: approvedBinding) else { return }
         touchGate()
@@ -915,7 +931,13 @@ final class KidsAppModel: ObservableObject, KidsPlaybackSessionDelegate {
         }
     }
 
-    func stopPlayback(endSession: Bool = true) async {
+    /// A dismissed presentation can only stop the session it actually displayed.
+    public func dismissPlayback(_ presented: KidsPlaybackController) async {
+        guard activePlayback === presented else { return }
+        await stopPlayback()
+    }
+
+    public func stopPlayback(endSession: Bool = true) async {
         startGeneration = UUID()
         startTask?.cancel()
         startTask = nil
@@ -930,20 +952,20 @@ final class KidsAppModel: ObservableObject, KidsPlaybackSessionDelegate {
         persist(intent: .playback)
     }
 
-    func cancelPendingStart() {
+    public func cancelPendingStart() {
         startGeneration = UUID()
         startTask?.cancel()
         startTask = nil
         starting = false
     }
 
-    func background() {
+    public func background() {
         cancelPendingStart()
         lockParents()
         activePlayback?.pauseOnBackground()
     }
 
-    func playbackBegan(_ controller: KidsPlaybackController) {
+    public func playbackBegan(_ controller: KidsPlaybackController) {
         guard activePlayback === controller else { return }
         do { try state?.began(item: controller.item, mode: controller.mode, showID: controller.title.id)
             lastPlayback = .now
@@ -953,13 +975,13 @@ final class KidsAppModel: ObservableObject, KidsPlaybackSessionDelegate {
         }
     }
 
-    func playbackCheckpoint(_ controller: KidsPlaybackController, seconds: Double) {
+    public func playbackCheckpoint(_ controller: KidsPlaybackController, seconds: Double) {
         guard activePlayback === controller, controller.allowsCheckpoints else { return }
         state?.checkpoint(item: controller.item, mode: controller.mode, seconds: seconds)
         persist(intent: .playback)
     }
 
-    func completed(_ controller: KidsPlaybackController) async {
+    public func completed(_ controller: KidsPlaybackController) async {
         guard activePlayback === controller, controller.allowsCheckpoints else { return }
         do {
             let more = try state?.finished(item: controller.item, mode: controller.mode, episodes: controller.episodes) ?? false
@@ -989,23 +1011,23 @@ final class KidsAppModel: ObservableObject, KidsPlaybackSessionDelegate {
         }
     }
 
-    func continuePlayback(_ controller: KidsPlaybackController) async {
+    public func continuePlayback(_ controller: KidsPlaybackController) async {
         guard activePlayback === controller else { return }
         activePlayback = nil
         play(controller.title, mode: controller.mode, continuing: true)
     }
 
-    func stopPlaybackFromSession() async {
+    public func stopPlaybackFromSession() async {
         await stopPlayback()
     }
 
-    func retryPlayback(_ controller: KidsPlaybackController, position: Double) {
+    public func retryPlayback(_ controller: KidsPlaybackController, position: Double) {
         guard activePlayback === controller else { return }
         activePlayback = nil
         play(controller.title, mode: controller.mode, retryItem: controller.item, retryPosition: position, continuing: true)
     }
 
-    func playbackFailed(_ controller: KidsPlaybackController, error: KidsPlaybackFailure) {
+    public func playbackFailed(_ controller: KidsPlaybackController, error: KidsPlaybackFailure) {
         guard activePlayback === controller else { return }
         if error == .authentication {
             show(KidsAPIError.authentication)
