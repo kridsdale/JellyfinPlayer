@@ -11,6 +11,7 @@ import Combine
 import FactoryKit
 import Foundation
 import JellyfinAPI
+import SwiftfinAccountModels
 import UIKit
 
 extension Container {

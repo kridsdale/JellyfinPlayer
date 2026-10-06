@@ -6,6 +6,7 @@ let package = Package(
     platforms: [.macOS(.v14), .iOS(.v17), .tvOS(.v17)],
     products: [.library(name: "SwiftfinStoredValues", targets: ["SwiftfinStoredValues"])],
     dependencies: [
+        .package(path: "../SwiftfinAccountModels"),
         .package(path: "../SwiftfinStorage"),
         .package(url: "https://github.com/sindresorhus/Defaults", exact: "9.0.9")
     ],
@@ -13,6 +14,7 @@ let package = Package(
         .target(
             name: "SwiftfinStoredValues",
             dependencies: [
+                .product(name: "SwiftfinAccountModels", package: "SwiftfinAccountModels"),
                 .product(name: "SwiftfinStorage", package: "SwiftfinStorage"),
                 .product(name: "Defaults", package: "Defaults")
             ]
@@ -21,6 +23,7 @@ let package = Package(
             name: "SwiftfinStoredValuesTests",
             dependencies: [
                 "SwiftfinStoredValues",
+                .product(name: "SwiftfinAccountModels", package: "SwiftfinAccountModels"),
                 .product(name: "SwiftfinStorage", package: "SwiftfinStorage"),
                 .product(name: "Defaults", package: "Defaults")
             ]

@@ -8,6 +8,7 @@
 
 #if canImport(LocalAuthentication)
 import LocalAuthentication
+import SwiftfinAccountModels
 import SwiftfinLocalization
 #endif
 

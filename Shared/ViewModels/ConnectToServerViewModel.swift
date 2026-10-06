@@ -14,6 +14,7 @@ import JellyfinAPI
 import Logging
 import OrderedCollections
 import Pulse
+import SwiftfinAccountModels
 import SwiftfinLocalization
 import SwiftfinStoredValues
 

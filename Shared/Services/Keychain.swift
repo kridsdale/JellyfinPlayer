@@ -7,13 +7,11 @@
 //
 
 import FactoryKit
-import Foundation
-import KeychainSwift
+import SwiftfinCredentials
 
 extension Container {
-
-    // TODO: take a look at all security options
-    var keychainService: Factory<KeychainSwift> {
-        self { KeychainSwift() }.singleton
+    @MainActor
+    var keychainService: Factory<any CredentialStore> {
+        self { KeychainCredentialStore() as any CredentialStore }.singleton
     }
 }

@@ -11,9 +11,9 @@ import FactoryKit
 import Foundation
 import Get
 import JellyfinAPI
-import KeychainSwift
 import Logging
 import OrderedCollections
+import SwiftfinAccountModels
 import SwiftfinLocalization
 import SwiftfinStoredValues
 import SwiftUI
@@ -206,6 +206,10 @@ final class UserSignInViewModel: ObservableObject {
         let userState = user.state.state
 
         let savedUserState = userState
+        try savedUserState.storeAccessToken(user.state.accessToken)
+        if let evaluatedPinPolicy = evaluatedPolicy as? PinEvaluatedUserAccessPolicy {
+            try savedUserState.storePIN(evaluatedPinPolicy.pin)
+        }
         var users = StoredValues[.User.users]
         users.removeAll { $0.id == savedUserState.id }
         users.append(savedUserState)
@@ -228,15 +232,12 @@ final class UserSignInViewModel: ObservableObject {
         }
 
         savedUserState.accessPolicy = accessPolicy
-        savedUserState.accessToken = user.state.accessToken
         savedUserState.data = user.data
 
         if let evaluatedPinPolicy = evaluatedPolicy as? PinEvaluatedUserAccessPolicy {
             if let pinHint = evaluatedPinPolicy.pinHint {
                 savedUserState.pinHint = pinHint
             }
-
-            savedUserState.pin = evaluatedPinPolicy.pin
         }
 
         events.send(.saved(savedUserState))
@@ -266,7 +267,7 @@ final class UserSignInViewModel: ObservableObject {
         }
 
         if replaceForAccessToken {
-            user.state.state.accessToken = user.state.accessToken
+            try user.state.state.storeAccessToken(user.state.accessToken)
         }
 
         events.send(.saved(user.state.state))

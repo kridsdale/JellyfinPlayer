@@ -7,38 +7,17 @@
 //
 
 import Foundation
+import SwiftfinAccountModels
 
 /// Codable records carried by the inherited database migration, without account services.
 public enum SwiftfinStore {
     enum V1 {}
     enum V2 {}
     enum V3 {}
+    /// Legacy source names for the unchanged encoded account record shapes.
     public enum State {
-        public struct Server: Hashable, Identifiable, Codable, Sendable {
-            public let urls: Set<URL>
-            public let currentURL: URL
-            public let name: String
-            public let id: String
-            public let userIDs: [String]
-            public init(urls: Set<URL>, currentURL: URL, name: String, id: String, userIDs: [String]) {
-                self.urls = urls
-                self.currentURL = currentURL
-                self.name = name
-                self.id = id
-                self.userIDs = userIDs
-            }
-        }
-
-        public struct User: Hashable, Identifiable, Codable, Sendable {
-            public let id: String
-            public let serverID: String
-            public let username: String
-            public init(id: String, serverID: String, username: String) {
-                self.id = id
-                self.serverID = serverID
-                self.username = username
-            }
-        }
+        public typealias Server = ServerAccountRecord
+        public typealias User = UserAccountRecord
     }
 }
 

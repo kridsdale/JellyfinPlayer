@@ -111,7 +111,6 @@
 		E13DD3C62716499E009D4DAF /* CoreStore in Frameworks */ = {isa = PBXBuildFile; productRef = E13DD3C52716499E009D4DAF /* CoreStore */; };
 		E13DD3CD27164CA7009D4DAF /* CoreStore in Frameworks */ = {isa = PBXBuildFile; productRef = E13DD3CC27164CA7009D4DAF /* CoreStore */; };
 		E13DD3D327168E65009D4DAF /* Defaults in Frameworks */ = {isa = PBXBuildFile; productRef = E13DD3D227168E65009D4DAF /* Defaults */; };
-		E145EB4B2BE16849003BF6F3 /* KeychainSwift in Frameworks */ = {isa = PBXBuildFile; productRef = E145EB4A2BE16849003BF6F3 /* KeychainSwift */; };
 		E14EA1652BF70A8E00DE757A /* Mantis in Frameworks */ = {isa = PBXBuildFile; productRef = E14EA1642BF70A8E00DE757A /* Mantis */; };
 		E15210562946DF1B00375CC2 /* PulseLogHandler in Frameworks */ = {isa = PBXBuildFile; productRef = E15210552946DF1B00375CC2 /* PulseLogHandler */; };
 		E15210582946DF1B00375CC2 /* PulseUI in Frameworks */ = {isa = PBXBuildFile; productRef = E15210572946DF1B00375CC2 /* PulseUI */; };
@@ -137,7 +136,6 @@
 		E19009260000000000000001 /* SwiftfinMacros in Frameworks */ = {isa = PBXBuildFile; productRef = E19009260000000000000003 /* SwiftfinMacros */; };
 		E19009260000000000000002 /* SwiftfinMacros in Frameworks */ = {isa = PBXBuildFile; productRef = E19009260000000000000004 /* SwiftfinMacros */; };
 		E19138CA2E7E7FA20061E464 /* StatefulMacros in Frameworks */ = {isa = PBXBuildFile; productRef = E19138C92E7E7FA20061E464 /* StatefulMacros */; };
-		E19D41B22BF2BFA50082B8B2 /* KeychainSwift in Frameworks */ = {isa = PBXBuildFile; productRef = E19D41B12BF2BFA50082B8B2 /* KeychainSwift */; };
 		E19DDEC72948EF9900954E10 /* OrderedCollections in Frameworks */ = {isa = PBXBuildFile; productRef = E19DDEC62948EF9900954E10 /* OrderedCollections */; };
 		E19E6E0528A0B958005C10C8 /* Nuke in Frameworks */ = {isa = PBXBuildFile; productRef = E19E6E0428A0B958005C10C8 /* Nuke */; };
 		E19E6E0728A0B958005C10C8 /* NukeUI in Frameworks */ = {isa = PBXBuildFile; productRef = E19E6E0628A0B958005C10C8 /* NukeUI */; };
@@ -160,7 +158,28 @@
 		E1E2D7BF2E3FD936004E2E5F /* Transmission in Frameworks */ = {isa = PBXBuildFile; productRef = E1E2D7BE2E3FD936004E2E5F /* Transmission */; };
 		E1FADDF12E84B63600FB310E /* StatefulMacros in Frameworks */ = {isa = PBXBuildFile; productRef = E1FADDF02E84B63600FB310E /* StatefulMacros */; };
 		DA8011111111111111111111 /* ServerImageCacheIdentityIndex.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA8022222222222222222222 /* ServerImageCacheIdentityIndex.swift */; };
+		DA8105A7BF7A87C20DD0D955 /* SwiftfinAccountModels in Frameworks */ = {isa = PBXBuildFile; productRef = DA81816F855C5721D0AC88DA /* SwiftfinAccountModels */; };
+		DA8193B47077EE6BC62F30EC /* SwiftfinAccountModels in Frameworks */ = {isa = PBXBuildFile; productRef = DA81EFD230348A1BEF93486C /* SwiftfinAccountModels */; };
+		DA82BB2B432928C58F90769A /* SwiftfinConnectivity in Frameworks */ = {isa = PBXBuildFile; productRef = DA828E791768AF7749E5E40B /* SwiftfinConnectivity */; };
+		DA82C996AF2EF6239BDBBFBA /* SwiftfinConnectivity in Frameworks */ = {isa = PBXBuildFile; productRef = DA8272B7A99C25561A19544C /* SwiftfinConnectivity */; };
+		DA83A74699AB81CD9DA76CC8 /* SwiftfinCredentials in Frameworks */ = {isa = PBXBuildFile; productRef = DA83EB6A69AFF971D56E9C58 /* SwiftfinCredentials */; };
+		DA836C6B328E6E38AE3A7DCC /* SwiftfinCredentials in Frameworks */ = {isa = PBXBuildFile; productRef = DA837E1A2E28C1DF67C34A2B /* SwiftfinCredentials */; };
+		DA84D45AF34706F95986A10B /* SwiftfinCredentials in Frameworks */ = {isa = PBXBuildFile; productRef = DA84693ACC5DF619C46B0145 /* SwiftfinCredentials */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		DA845050A16EE61439D88511 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5377CBE9263B596A003A4E83 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 5358705F2669D21600D05A09;
+			remoteInfo = "KidsJellyFin tvOS";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXTargetDependency section */
+		DA846B92BAE31E830843BAE2 /* PBXTargetDependency */ = {isa = PBXTargetDependency; target = 5358705F2669D21600D05A09 /* KidsJellyFin tvOS */; targetProxy = DA845050A16EE61439D88511 /* PBXContainerItemProxy */; };
+/* End PBXTargetDependency section */
 
 /* Begin PBXFileReference section */
 		535870602669D21600D05A09 /* KidsJellyFin.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = KidsJellyFin.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -221,6 +240,7 @@
 		DA7622222222222222222222 /* Packages/SwiftfinNowPlaying/Tests/SwiftfinNowPlayingTests/NowPlayingArtworkOwnershipTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Packages/SwiftfinNowPlaying/Tests/SwiftfinNowPlayingTests/NowPlayingArtworkOwnershipTests.swift; sourceTree = SOURCE_ROOT; };
 		E1B2AB9628808CDF0072B3B9 /* GoogleCast.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = GoogleCast.xcframework; path = Carthage/Build/GoogleCast.xcframework; sourceTree = "<group>"; };
 		DA8022222222222222222222 /* ServerImageCacheIdentityIndex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Shared/Services/ServerImageCacheIdentityIndex.swift"; sourceTree = SOURCE_ROOT; };
+		DA848497DFE85BB5A2199134 /* KidsNativeTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; path = KidsNativeTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -284,6 +304,7 @@
 		E145669F2DFCAEFD008FF700 /* Swiftfin tvOS */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (E14567272DFCAEFD008FF700 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = "Swiftfin tvOS"; sourceTree = "<group>"; };
 		E1456FC82DFCB323008FF700 /* Packages/SwiftfinLocalization/Sources/SwiftfinLocalization/Resources */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Packages/SwiftfinLocalization/Sources/SwiftfinLocalization/Resources; sourceTree = "<group>"; };
 		E150B7D12DFF2E7C00DC7CF4 /* XcodeConfig */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (E1BE3EDA2FE9DAE800327990 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, E1BE3EDB2FE9DAE800327990 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = XcodeConfig; sourceTree = "<group>"; };
+		DA84B7BC48E747D776DF2E92 /* KidsNativeTests */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = KidsNativeTests; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -292,6 +313,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				DA7379CE8BBE925A4CB50B23 /* SwiftfinNowPlaying in Frameworks */,
+				DA8105A7BF7A87C20DD0D955 /* SwiftfinAccountModels in Frameworks */,
+				DA82BB2B432928C58F90769A /* SwiftfinConnectivity in Frameworks */,
+				DA83A74699AB81CD9DA76CC8 /* SwiftfinCredentials in Frameworks */,
 				DA7479CE8BBE925A4CB50B23 /* SwiftfinVLC in Frameworks */,
 				DA798F7214D8C0D8495AEF70 /* SwiftfinStoredValuesUI in Frameworks */,
 				DA78DA1079ACF7ABE9B5EDB5 /* SwiftfinStoredValues in Frameworks */,
@@ -330,7 +354,6 @@
 				62666E1927E501D000EC0ECD /* CoreFoundation.framework in Frameworks */,
 				E1BD95B42FBE8E50001CDA57 /* JellyfinAPI in Frameworks */,
 				E1BE3EBE2FE8DEAA00327990 /* FactoryKit in Frameworks */,
-				E19D41B22BF2BFA50082B8B2 /* KeychainSwift in Frameworks */,
 				E1155ACB2D0584A90021557A /* IdentifiedCollections in Frameworks */,
 				62666E2E27E5021400EC0ECD /* Security.framework in Frameworks */,
 				E1B5F7AD29577BDD004B26CF /* OrderedCollections in Frameworks */,
@@ -361,6 +384,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				DA73F752D7B8ED416F8A4BAE /* SwiftfinNowPlaying in Frameworks */,
+				DA8193B47077EE6BC62F30EC /* SwiftfinAccountModels in Frameworks */,
+				DA82C996AF2EF6239BDBBFBA /* SwiftfinConnectivity in Frameworks */,
+				DA836C6B328E6E38AE3A7DCC /* SwiftfinCredentials in Frameworks */,
 				DA74F752D7B8ED416F8A4BAE /* SwiftfinVLC in Frameworks */,
 				DA797A68EB50EBB774D0BF91 /* SwiftfinStoredValuesUI in Frameworks */,
 				DA78D90CAC824583C0F0CD5F /* SwiftfinStoredValues in Frameworks */,
@@ -392,7 +418,6 @@
 				E113A2A72B5A178D009CAAAA /* CollectionHStack in Frameworks */,
 				E19138CA2E7E7FA20061E464 /* StatefulMacros in Frameworks */,
 				E1523F822B132C350062821A /* CollectionHStack in Frameworks */,
-				E145EB4B2BE16849003BF6F3 /* KeychainSwift in Frameworks */,
 				E10706142942F57D00646DAF /* PulseUI in Frameworks */,
 				E13CCE4C2E6C08710070965F /* LNPopupUI-Static in Frameworks */,
 				62666E0227E5016D00EC0ECD /* CoreGraphics.framework in Frameworks */,
@@ -455,6 +480,12 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		DA84F36FA634D8FA03E1C59A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (DA84D45AF34706F95986A10B /* SwiftfinCredentials in Frameworks */, );
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -462,6 +493,7 @@
 			isa = PBXGroup;
 			children = (
 				DA720139CB0BFEEF09533532 /* Package ownership tests */,
+				DA84B7BC48E747D776DF2E92 /* KidsNativeTests */,
 				CAFE00000000000000000112 /* KidsUITests */,
 				E14560852DFCAE51008FF700 /* Swiftfin */,
 				E145669F2DFCAEFD008FF700 /* Swiftfin tvOS */,
@@ -477,6 +509,7 @@
 		5377CBF2263B596A003A4E83 /* Products */ = {
 			isa = PBXGroup;
 			children = (
+				DA848497DFE85BB5A2199134 /* KidsNativeTests.xctest */,
 				CAFE00000000000000000111 /* KidsUITests.xctest */,
 				5377CBF1263B596A003A4E83 /* KidsJellyFin.app */,
 				535870602669D21600D05A09 /* KidsJellyFin.app */,
@@ -579,6 +612,9 @@
 			name = "KidsJellyFin tvOS";
 			packageProductDependencies = (
 				DA7380B1A70AC52FD32A0559 /* SwiftfinNowPlaying */,
+				DA81816F855C5721D0AC88DA /* SwiftfinAccountModels */,
+				DA828E791768AF7749E5E40B /* SwiftfinConnectivity */,
+				DA83EB6A69AFF971D56E9C58 /* SwiftfinCredentials */,
 				DA7480B1A70AC52FD32A0559 /* SwiftfinVLC */,
 				DA7992CF4FDB749BB87DBEBE /* SwiftfinStoredValuesUI */,
 				DA785916E30A7C94594147C2 /* SwiftfinStoredValues */,
@@ -614,7 +650,6 @@
 				CAFE00000000000000000005 /* KidsPersistence */,
 				E1392FEC2BA218A80034110D /* SwiftUIIntrospect */,
 				E1153DD12BBB649C00424D36 /* SVGKit */,
-				E19D41B12BF2BFA50082B8B2 /* KeychainSwift */,
 				E1155ACA2D0584A90021557A /* IdentifiedCollections */,
 				BD88CB412D77E6A0006BB5E3 /* TVOSPicker */,
 				E19005010000000000000004 /* MPVUI */,
@@ -653,6 +688,9 @@
 			name = "KidsJellyFin iOS";
 			packageProductDependencies = (
 				DA732865472AB5F74FB73C53 /* SwiftfinNowPlaying */,
+				DA81EFD230348A1BEF93486C /* SwiftfinAccountModels */,
+				DA8272B7A99C25561A19544C /* SwiftfinConnectivity */,
+				DA837E1A2E28C1DF67C34A2B /* SwiftfinCredentials */,
 				DA742865472AB5F74FB73C53 /* SwiftfinVLC */,
 				DA799C572FD26FCEB4A6296E /* SwiftfinStoredValuesUI */,
 				DA788725BA34402E78C45175 /* SwiftfinStoredValues */,
@@ -686,7 +724,6 @@
 				E1153DAB2BBA6AD200424D36 /* CollectionHStack */,
 				E1153DCF2BBB634F00424D36 /* SVGKit */,
 				E132D3C72BD200C10058A2DF /* CollectionVGrid */,
-				E145EB4A2BE16849003BF6F3 /* KeychainSwift */,
 				E14EA1642BF70A8E00DE757A /* Mantis */,
 				E176EBDD2D050067009F4CF1 /* IdentifiedCollections */,
 				E176EBDF2D0502A6009F4CF1 /* CollectionHStack */,
@@ -742,6 +779,19 @@
 			productName = KidsUITests;
 			productReference = CAFE00000000000000000111 /* KidsUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+		DA848982777C1D50BB62AE06 /* KidsNativeTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = DA84A97DE7D00C9DBAD04AF1 /* Build configuration list for KidsNativeTests */;
+			buildPhases = (DA84ADB10621A3352C4B4AE1 /* Sources */, DA84F36FA634D8FA03E1C59A /* Frameworks */, DA846CEDB9CB6E3DA32D9054 /* Resources */, );
+			buildRules = ();
+			dependencies = (DA846B92BAE31E830843BAE2 /* PBXTargetDependency */, );
+			fileSystemSynchronizedGroups = (DA84B7BC48E747D776DF2E92 /* KidsNativeTests */, );
+			name = KidsNativeTests;
+			packageProductDependencies = (DA84693ACC5DF619C46B0145 /* SwiftfinCredentials */, );
+			productName = KidsNativeTests;
+			productReference = DA848497DFE85BB5A2199134 /* KidsNativeTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
 
@@ -848,6 +898,9 @@
 			);
 			mainGroup = 5377CBE8263B596A003A4E83;
 			packageReferences = (
+				DA8364E2A7B817B0F5B23BDE /* XCLocalSwiftPackageReference "Packages/SwiftfinCredentials" */,
+				DA82B27125556FF6ACC9E077 /* XCLocalSwiftPackageReference "Packages/SwiftfinConnectivity" */,
+				DA810ADBE0863004E4368A26 /* XCLocalSwiftPackageReference "Packages/SwiftfinAccountModels" */,
 				DA7922263C196C6B81245DF4 /* XCLocalSwiftPackageReference "Packages/SwiftfinStoredValuesUI" */,
 				DA7815307961855D362B92E6 /* XCLocalSwiftPackageReference "Packages/SwiftfinStoredValues" */,
 				DA775715BE32B00143A00E7C /* XCLocalSwiftPackageReference "Packages/SwiftfinStorage" */,
@@ -882,7 +935,6 @@
 				E15D4F032B1B0C3C00442DB8 /* XCLocalSwiftPackageReference "PreferencesView" */,
 				E19009260000000000000005 /* XCLocalSwiftPackageReference "SwiftfinMacros" */,
 				E1153DCE2BBB634F00424D36 /* XCRemoteSwiftPackageReference "SVGKit" */,
-				E145EB492BE16849003BF6F3 /* XCRemoteSwiftPackageReference "keychain-swift" */,
 				E14EA1632BF70A8E00DE757A /* XCRemoteSwiftPackageReference "Mantis" */,
 				E176EBDC2D050067009F4CF1 /* XCRemoteSwiftPackageReference "swift-identified-collections" */,
 				BD88CB402D77E6A0006BB5E3 /* XCRemoteSwiftPackageReference "TVOSPicker" */,
@@ -900,6 +952,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
+				DA848982777C1D50BB62AE06 /* KidsNativeTests */,
 				CAFE00000000000000000110 /* KidsUITests */,
 				5377CBF0263B596A003A4E83 /* KidsJellyFin iOS */,
 				5358705F2669D21600D05A09 /* KidsJellyFin tvOS */,
@@ -929,6 +982,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		DA846CEDB9CB6E3DA32D9054 /* Resources */ = {isa = PBXResourcesBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
@@ -1072,6 +1126,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		DA84ADB10621A3352C4B4AE1 /* Sources */ = {isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
@@ -1394,6 +1449,40 @@
 			};
 			name = Release;
 		};
+		DA842E4A623B8ABAC5EAB93F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEBUG_INFORMATION_FORMAT = "";
+				GENERATE_INFOPLIST_FILE = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.kridsdale.JellyfinPlayer.KidsNativeTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = appletvos;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = 3;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/KidsJellyFin.app/KidsJellyFin";
+				TVOS_DEPLOYMENT_TARGET = 26.1;
+			};
+			name = Debug;
+		};
+		DA84E383F699DF79F2B20A1F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEBUG_INFORMATION_FORMAT = "";
+				GENERATE_INFOPLIST_FILE = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.kridsdale.JellyfinPlayer.KidsNativeTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = appletvos;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = 3;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/KidsJellyFin.app/KidsJellyFin";
+				TVOS_DEPLOYMENT_TARGET = 26.1;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -1433,6 +1522,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
+		DA84A97DE7D00C9DBAD04AF1 /* Build configuration list for KidsNativeTests */ = {isa = XCConfigurationList; buildConfigurations = (DA842E4A623B8ABAC5EAB93F /* Debug */, DA84E383F699DF79F2B20A1F /* Release */, ); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release; };
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
@@ -1524,6 +1614,9 @@
 			isa = XCLocalSwiftPackageReference;
 			relativePath = SwiftfinMacros;
 		};
+		DA810ADBE0863004E4368A26 /* XCLocalSwiftPackageReference "Packages/SwiftfinAccountModels" */ = {isa = XCLocalSwiftPackageReference; relativePath = Packages/SwiftfinAccountModels; };
+		DA82B27125556FF6ACC9E077 /* XCLocalSwiftPackageReference "Packages/SwiftfinConnectivity" */ = {isa = XCLocalSwiftPackageReference; relativePath = Packages/SwiftfinConnectivity; };
+		DA8364E2A7B817B0F5B23BDE /* XCLocalSwiftPackageReference "Packages/SwiftfinCredentials" */ = {isa = XCLocalSwiftPackageReference; relativePath = Packages/SwiftfinCredentials; };
 /* End XCLocalSwiftPackageReference section */
 
 /* Begin XCRemoteSwiftPackageReference section */
@@ -1613,14 +1706,6 @@
 			requirement = {
 				kind = exactVersion;
 				version = 1.0.0;
-			};
-		};
-		E145EB492BE16849003BF6F3 /* XCRemoteSwiftPackageReference "keychain-swift" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/evgenyneu/keychain-swift";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 24.0.0;
 			};
 		};
 		E14EA1632BF70A8E00DE757A /* XCRemoteSwiftPackageReference "Mantis" */ = {
@@ -2047,11 +2132,6 @@
 			package = E13DD3D127168E65009D4DAF /* XCRemoteSwiftPackageReference "Defaults" */;
 			productName = Defaults;
 		};
-		E145EB4A2BE16849003BF6F3 /* KeychainSwift */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = E145EB492BE16849003BF6F3 /* XCRemoteSwiftPackageReference "keychain-swift" */;
-			productName = KeychainSwift;
-		};
 		E14EA1642BF70A8E00DE757A /* Mantis */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = E14EA1632BF70A8E00DE757A /* XCRemoteSwiftPackageReference "Mantis" */;
@@ -2174,11 +2254,6 @@
 			isa = XCSwiftPackageProductDependency;
 			productName = StatefulMacros;
 		};
-		E19D41B12BF2BFA50082B8B2 /* KeychainSwift */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = E145EB492BE16849003BF6F3 /* XCRemoteSwiftPackageReference "keychain-swift" */;
-			productName = KeychainSwift;
-		};
 		E19DDEC62948EF9900954E10 /* OrderedCollections */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = E19DDEC52948EF9900954E10 /* XCRemoteSwiftPackageReference "swift-collections" */;
@@ -2278,6 +2353,13 @@
 			isa = XCSwiftPackageProductDependency;
 			productName = StatefulMacros;
 		};
+		DA81816F855C5721D0AC88DA /* SwiftfinAccountModels */ = {isa = XCSwiftPackageProductDependency; package = DA810ADBE0863004E4368A26 /* XCLocalSwiftPackageReference "Packages/SwiftfinAccountModels" */; productName = SwiftfinAccountModels; };
+		DA81EFD230348A1BEF93486C /* SwiftfinAccountModels */ = {isa = XCSwiftPackageProductDependency; package = DA810ADBE0863004E4368A26 /* XCLocalSwiftPackageReference "Packages/SwiftfinAccountModels" */; productName = SwiftfinAccountModels; };
+		DA828E791768AF7749E5E40B /* SwiftfinConnectivity */ = {isa = XCSwiftPackageProductDependency; package = DA82B27125556FF6ACC9E077 /* XCLocalSwiftPackageReference "Packages/SwiftfinConnectivity" */; productName = SwiftfinConnectivity; };
+		DA8272B7A99C25561A19544C /* SwiftfinConnectivity */ = {isa = XCSwiftPackageProductDependency; package = DA82B27125556FF6ACC9E077 /* XCLocalSwiftPackageReference "Packages/SwiftfinConnectivity" */; productName = SwiftfinConnectivity; };
+		DA83EB6A69AFF971D56E9C58 /* SwiftfinCredentials */ = {isa = XCSwiftPackageProductDependency; package = DA8364E2A7B817B0F5B23BDE /* XCLocalSwiftPackageReference "Packages/SwiftfinCredentials" */; productName = SwiftfinCredentials; };
+		DA837E1A2E28C1DF67C34A2B /* SwiftfinCredentials */ = {isa = XCSwiftPackageProductDependency; package = DA8364E2A7B817B0F5B23BDE /* XCLocalSwiftPackageReference "Packages/SwiftfinCredentials" */; productName = SwiftfinCredentials; };
+		DA84693ACC5DF619C46B0145 /* SwiftfinCredentials */ = {isa = XCSwiftPackageProductDependency; package = DA8364E2A7B817B0F5B23BDE /* XCLocalSwiftPackageReference "Packages/SwiftfinCredentials" */; productName = SwiftfinCredentials; };
 /* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 5377CBE9263B596A003A4E83 /* Project object */;

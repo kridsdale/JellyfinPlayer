@@ -10,6 +10,8 @@ import Combine
 import Defaults
 import FactoryKit
 import Foundation
+import SwiftfinAccountModels
+import SwiftfinConnectivity
 
 @MainActor
 final class ServerConnectionViewModel: ViewModel {
@@ -159,7 +161,7 @@ final class ServerConnectionViewModel: ViewModel {
             _ = await ServerConnectionManager.evaluate(
                 server: server,
                 accessToken: userSession?.user.accessToken,
-                context: NetworkConnectionContext.current()
+                context: NetworkConnectivity.current()
             )
         }
 

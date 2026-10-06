@@ -9,6 +9,7 @@
 import Defaults
 import FactoryKit
 @preconcurrency import Foundation
+import SwiftfinAccountModels
 import SwiftfinLocalization
 import SwiftfinStoredValues
 import SwiftfinStoredValuesUI

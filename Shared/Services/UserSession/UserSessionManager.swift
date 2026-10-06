@@ -11,8 +11,8 @@ import Defaults
 import FactoryKit
 import Foundation
 import JellyfinAPI
-import KeychainSwift
 import Logging
+import SwiftfinCredentials
 import SwiftfinLocalization
 import SwiftfinStoredValues
 
@@ -50,7 +50,7 @@ final class UserSessionManager: ObservableObject {
     }
 
     @Injected(\.keychainService)
-    private var keychain: KeychainSwift
+    private var keychain: any CredentialStore
 
     @Published
     private(set) var state: State = .initial
@@ -243,10 +243,8 @@ final class UserSessionManager: ObservableObject {
 
         guard let pinPolicy = evaluatedPolicy as? PinEvaluatedUserAccessPolicy else { return }
 
-        if let storedPin = keychain.get("\(user.id)-pin") {
-            guard pinPolicy.pin == storedPin else {
-                throw ErrorMessage(L10n.incorrectPinForUser(user.username))
-            }
+        guard let storedPin = try keychain.read(.userPIN(userID: user.id)), pinPolicy.pin == storedPin else {
+            throw ErrorMessage(L10n.incorrectPinForUser(user.username))
         }
     }
 

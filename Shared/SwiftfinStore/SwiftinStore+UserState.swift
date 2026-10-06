@@ -9,8 +9,9 @@
 import FactoryKit
 import Foundation
 import JellyfinAPI
-import KeychainSwift
 import Pulse
+import SwiftfinAccountModels
+import SwiftfinCredentials
 import SwiftfinStorage
 import SwiftfinStoredValues
 import UIKit
@@ -21,17 +22,15 @@ extension UserState {
     typealias Key = StoredValues.Key
 
     var accessToken: String {
-        get {
-            guard let accessToken = Container.shared.keychainService().get("\(id)-accessToken") else {
-                assertionFailure("access token missing in keychain")
-                return ""
-            }
+        guard let token = try? Container.shared.keychainService().read(.accessToken(userID: id)) else {
+            assertionFailure("access token missing in keychain")
+            return ""
+        }
+        return token
+    }
 
-            return accessToken
-        }
-        nonmutating set {
-            Container.shared.keychainService().set(newValue, forKey: "\(id)-accessToken")
-        }
+    func storeAccessToken(_ token: String) throws {
+        try Container.shared.keychainService().write(token, to: .accessToken(userID: id))
     }
 
     var data: UserDto {
@@ -44,17 +43,15 @@ extension UserState {
     }
 
     var pin: String {
-        get {
-            guard let pin = Container.shared.keychainService().get("\(id)-pin") else {
-                assertionFailure("pin missing in keychain")
-                return ""
-            }
+        guard let pin = try? Container.shared.keychainService().read(.userPIN(userID: id)) else {
+            assertionFailure("pin missing in keychain")
+            return ""
+        }
+        return pin
+    }
 
-            return pin
-        }
-        nonmutating set {
-            Container.shared.keychainService().set(newValue, forKey: "\(id)-pin")
-        }
+    func storePIN(_ pin: String) throws {
+        try Container.shared.keychainService().write(pin, to: .userPIN(userID: id))
     }
 
     var pinHint: String {
@@ -104,7 +101,7 @@ extension UserState {
         }
 
         let keychain = Container.shared.keychainService()
-        keychain.delete("\(id)-pin")
+        try keychain.remove(.userPIN(userID: id))
     }
 
     /// Deletes user settings from `UserDefaults` and `StoredValues`

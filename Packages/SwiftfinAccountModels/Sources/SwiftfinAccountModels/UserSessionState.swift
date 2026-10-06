@@ -6,12 +6,12 @@
 // Copyright (c) 2026 Jellyfin & Jellyfin Contributors
 //
 
-enum UserSessionState: RawRepresentable, Storable {
+public enum UserSessionState: RawRepresentable, Codable, Equatable, Sendable {
 
     case signedOut
     case signedIn(userID: String)
 
-    var rawValue: String {
+    public var rawValue: String {
         switch self {
         case .signedOut:
             ""
@@ -20,7 +20,7 @@ enum UserSessionState: RawRepresentable, Storable {
         }
     }
 
-    init?(rawValue: String) {
+    public init?(rawValue: String) {
         if rawValue.isEmpty {
             self = .signedOut
         } else {
@@ -28,5 +28,3 @@ enum UserSessionState: RawRepresentable, Storable {
         }
     }
 }
-
-import SwiftfinStoredValues

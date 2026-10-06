@@ -7,7 +7,7 @@
 //
 
 import Defaults
-import SwiftfinStorage
+import SwiftfinAccountModels
 
 public protocol Storable: Codable, Defaults.Serializable {}
 extension Array: Storable where Element: Storable {}
@@ -15,5 +15,10 @@ extension Bool: Storable {}
 extension Int: Storable {}
 extension String: Storable {}
 
-extension SwiftfinStore.State.Server: @retroactive Defaults.Serializable, Storable {}
-extension SwiftfinStore.State.User: @retroactive Defaults.Serializable, Storable {}
+extension ServerAccountRecord: @retroactive Defaults.Serializable, Storable {}
+extension UserAccountRecord: @retroactive Defaults.Serializable, Storable {}
+
+extension LocalUserAccessPolicy: @retroactive Defaults.Serializable, Storable {}
+extension ServerConnection: @retroactive Defaults.Serializable, Storable {}
+extension ServerConnection.Interface: @retroactive Defaults.Serializable, Storable {}
+extension UserSessionState: @retroactive Defaults.Serializable, Storable {}

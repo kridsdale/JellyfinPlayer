@@ -7,6 +7,7 @@
 //
 
 import Defaults
+import SwiftfinAccountModels
 import SwiftfinLocalization
 import SwiftUI
 

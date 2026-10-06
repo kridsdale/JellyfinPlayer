@@ -8,7 +8,8 @@
 
 import FactoryKit
 import Foundation
-import KeychainSwift
+import SwiftfinAccountModels
+import SwiftfinCredentials
 import SwiftfinLocalization
 
 final class LocalUserSecurityViewModel: ViewModel {
@@ -19,7 +20,7 @@ final class LocalUserSecurityViewModel: ViewModel {
     func check(oldPin: String) throws {
         let user = try authenticatedUser
 
-        if let storedPin = keychain.get("\(user.id)-pin") {
+        if let storedPin = try keychain.read(.userPIN(userID: user.id)) {
             if oldPin != storedPin {
                 throw ErrorMessage(L10n.incorrectPinForUser(user.username))
             }
@@ -30,9 +31,9 @@ final class LocalUserSecurityViewModel: ViewModel {
         let user = try authenticatedUser
 
         if newPolicy == .requirePin {
-            keychain.set(newPin, forKey: "\(user.id)-pin")
+            try keychain.write(newPin, to: .userPIN(userID: user.id))
         } else {
-            keychain.delete("\(user.id)-pin")
+            try keychain.remove(.userPIN(userID: user.id))
         }
 
         user.accessPolicy = newPolicy

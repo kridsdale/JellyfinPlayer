@@ -8,6 +8,7 @@
 
 import Combine
 import Foundation
+import SwiftfinAccountModels
 import SwiftfinStoredValues
 
 @MainActor

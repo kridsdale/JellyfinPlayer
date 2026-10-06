@@ -6,6 +6,8 @@
 // Copyright (c) 2026 Jellyfin & Jellyfin Contributors
 //
 
+import SwiftfinAccountModels
+import SwiftfinConnectivity
 import SwiftfinLocalization
 import SwiftUI
 #if os(iOS)
@@ -161,7 +163,7 @@ struct EditServerConnectionView: View {
     private func populateCurrentWifiSSID(keepSpecificOnFailure: Bool) {
         #if os(iOS)
         Task { @MainActor in
-            guard let ssid = await NetworkConnectionContext.currentWifiSSID() else {
+            guard let ssid = await NetworkConnectivity.currentWifiSSID() else {
                 draft.useWifiName = keepSpecificOnFailure
                 return
             }

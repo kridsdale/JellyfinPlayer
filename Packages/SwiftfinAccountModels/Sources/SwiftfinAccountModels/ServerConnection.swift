@@ -8,16 +8,15 @@
 
 import Foundation
 import SwiftfinLocalization
-import SwiftfinStoredValues
 
-struct ServerConnection: Displayable, Hashable, Identifiable, Storable {
+public struct ServerConnection: Hashable, Identifiable, Codable, Sendable {
 
-    enum Interface: String, CaseIterable, Displayable, Storable {
+    public enum Interface: String, CaseIterable, Codable, Sendable {
         case any
         case wifi
         case cellular
 
-        var displayTitle: String {
+        public var displayTitle: String {
             switch self {
             case .any:
                 L10n.any
@@ -29,21 +28,21 @@ struct ServerConnection: Displayable, Hashable, Identifiable, Storable {
         }
     }
 
-    enum TestState {
+    public enum TestState: Sendable {
         case idle
         case testing
         case success
         case failure(String)
     }
 
-    let id: String
-    var name: String
-    private(set) var url: URL
-    private(set) var interface: Interface
-    private(set) var wifiSSIDs: [String]
-    var priority: Int
+    public let id: String
+    public var name: String
+    public private(set) var url: URL
+    public private(set) var interface: Interface
+    public private(set) var wifiSSIDs: [String]
+    public var priority: Int
 
-    init(
+    public init(
         id: String,
         name: String,
         url: URL,
@@ -59,19 +58,22 @@ struct ServerConnection: Displayable, Hashable, Identifiable, Storable {
         self.priority = priority
     }
 
-    var displayTitle: String {
-        name.nilIfBlank ?? url.absoluteString
+    public var displayTitle: String {
+        {
+            let trimmed = name.trimmingCharacters(in: .whitespacesAndNewlines)
+            return trimmed.isEmpty ? url.absoluteString : trimmed
+        }()
     }
 
-    func matches(_ context: NetworkConnectionContext) -> Bool {
+    public func matches(_ context: NetworkConnectionContext) -> Bool {
         switch interface {
         case .any:
             return context.isSatisfied
         case .wifi:
             guard context.interface == .wifi else { return false }
-            guard wifiSSIDs.isNotEmpty else { return true }
+            guard !wifiSSIDs.isEmpty else { return true }
             return wifiSSIDs.contains {
-                $0.caseInsensitiveCompare(context.wifiSSID ?? .empty) == .orderedSame
+                $0.caseInsensitiveCompare(context.wifiSSID ?? "") == .orderedSame
             }
         case .cellular:
             return context.interface == .cellular
@@ -82,7 +84,7 @@ struct ServerConnection: Displayable, Hashable, Identifiable, Storable {
         Set(wifiSSIDs.map(\.localizedLowercase))
     }
 
-    static func isDuplicate(_ connection: ServerConnection, in connections: [ServerConnection]) -> Bool {
+    public static func isDuplicate(_ connection: ServerConnection, in connections: [ServerConnection]) -> Bool {
         connections.contains { existingConnection in
             existingConnection.id != connection.id &&
                 existingConnection.url == connection.url &&
@@ -91,8 +93,8 @@ struct ServerConnection: Displayable, Hashable, Identifiable, Storable {
         }
     }
 
-    static func ordered(_ connections: [ServerConnection], preservingOrder: Bool = false) -> [ServerConnection] {
-        let connections = preservingOrder ? connections : connections.sorted(using: \.priority)
+    public static func ordered(_ connections: [ServerConnection], preservingOrder: Bool = false) -> [ServerConnection] {
+        let connections = preservingOrder ? connections : connections.sorted { $0.priority < $1.priority }
 
         return connections
             .enumerated()
@@ -101,7 +103,7 @@ struct ServerConnection: Displayable, Hashable, Identifiable, Storable {
             }
     }
 
-    func with(priority: Int) -> ServerConnection {
+    public func with(priority: Int) -> ServerConnection {
         ServerConnection(
             id: id,
             name: name,

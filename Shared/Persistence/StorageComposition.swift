@@ -7,19 +7,19 @@
 //
 
 import FactoryKit
+import SwiftfinAccountModels
+import SwiftfinCredentials
 import SwiftfinStorage
 import SwiftfinStoredValues
 
-typealias ServerState = SwiftfinStore.State.Server
-typealias UserState = SwiftfinStore.State.User
+typealias ServerState = ServerAccountRecord
+typealias UserState = UserAccountRecord
 
 @MainActor
 enum StorageComposition {
     static func open() async throws {
         let accounts = try await SwiftfinDatabase.shared.open { userID, token in
-            guard Container.shared.keychainService().set(token, forKey: "\(userID)-accessToken") else {
-                throw ErrorMessage("Unable to preserve a migrated account credential")
-            }
+            try Container.shared.keychainService().write(token, to: .accessToken(userID: userID))
         }
         #if os(tvOS)
         if let accounts {

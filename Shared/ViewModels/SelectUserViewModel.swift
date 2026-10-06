@@ -8,8 +8,8 @@
 
 import FactoryKit
 import Foundation
-import KeychainSwift
 import OrderedCollections
+import SwiftfinCredentials
 import SwiftfinLocalization
 import SwiftfinStoredValues
 
@@ -85,8 +85,8 @@ final class SelectUserViewModel: ViewModel {
     @Function(\Action.Cases.signIn)
     private func _signIn(_ user: UserState, _ pin: String) async throws {
         MainActor.preconditionIsolated()
-        if user.accessPolicy == .requirePin, let storedPin = keychain.get("\(user.id)-pin") {
-            guard pin == storedPin else {
+        if user.accessPolicy == .requirePin {
+            guard let storedPin = try keychain.read(.userPIN(userID: user.id)), pin == storedPin else {
                 throw ErrorMessage(L10n.incorrectPinForUser(user.username))
             }
         }

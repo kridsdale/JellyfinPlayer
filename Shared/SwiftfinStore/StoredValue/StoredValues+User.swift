@@ -10,6 +10,7 @@ import Defaults
 import FactoryKit
 import Foundation
 import JellyfinAPI
+import SwiftfinAccountModels
 import SwiftfinStoredValues
 
 // TODO: also have matching properties on `UserState` that get/set values
@@ -64,7 +65,6 @@ extension StoredValues.Keys {
 
 // MARK: values
 
-extension LocalUserAccessPolicy: Storable {}
 extension UserDto: @retroactive Defaults.Serializable {}
 extension UserDto: @retroactive Storable {}
 

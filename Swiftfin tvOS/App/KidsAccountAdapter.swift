@@ -13,6 +13,7 @@ import JellyfinAPI
 import KidsAccounts
 import KidsCatalog
 import KidsDomain
+import SwiftfinCredentials
 
 // SPDX-License-Identifier: MPL-2.0
 import SwiftfinStoredValues
@@ -22,7 +23,6 @@ import SwiftfinStoredValues
 @MainActor
 final class SwiftfinKidsAccountHost: KidsAccountHost {
     private let sessions: UserSessionManager
-    private let pinKey = "kids.parentPin.v1"
 
     init(sessions: UserSessionManager) {
         self.sessions = sessions
@@ -52,11 +52,11 @@ final class SwiftfinKidsAccountHost: KidsAccountHost {
     }
 
     var parentPIN: String? {
-        Container.shared.keychainService().get(pinKey)
+        try? Container.shared.keychainService().read(.parentPIN)
     }
 
     func storeParentPIN(_ pin: String) throws {
-        guard Container.shared.keychainService().set(pin, forKey: pinKey) else { throw KidsAPIError.invalidResponse }
+        try Container.shared.keychainService().write(pin, to: .parentPIN)
     }
 
     func authenticate(
@@ -72,7 +72,7 @@ final class SwiftfinKidsAccountHost: KidsAccountHost {
         let identity = KidsAccountIdentity(serverURL: url, serverID: serverID, serverName: serverName, userID: userID, accessToken: token)
         return KidsAuthenticatedAccount(identity: identity, credentialStorage: {
             let keychain = Container.shared.keychainService()
-            guard keychain.set(token, forKey: "\(userID)-accessToken") else { throw KidsAPIError.invalidResponse }
+            try keychain.write(token, to: .accessToken(userID: userID))
             let server = ServerState(urls: [url], currentURL: url, name: serverName, id: serverID, userIDs: [userID])
             var servers = StoredValues[.Server.servers]
             servers.removeAll { $0.id == serverID }

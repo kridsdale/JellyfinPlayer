@@ -8,44 +8,6 @@
 
 import SwiftfinLocalization
 
-enum LocalUserAccessPolicy: String, CaseIterable, Codable, Displayable {
-
-    case none
-    case requireDeviceAuthentication
-    case requirePin
-
-    var displayTitle: String {
-        switch self {
-        case .none:
-            L10n.none
-        case .requireDeviceAuthentication:
-            L10n.deviceAuth
-        case .requirePin:
-            L10n.pin
-        }
-    }
-
-    func createReason(user: UserState) -> String? {
-        switch self {
-        case .none: nil
-        case .requireDeviceAuthentication:
-            L10n.requireDeviceAuthForUser(user.username)
-        case .requirePin:
-            L10n.createPinForUser(user.username)
-        }
-    }
-
-    func authenticateReason(user: UserState) -> String? {
-        switch self {
-        case .none: nil
-        case .requireDeviceAuthentication:
-            L10n.requireDeviceAuthForUser(user.username)
-        case .requirePin:
-            L10n.enterPinForUser(user.username)
-        }
-    }
-}
-
 protocol EvaluatedLocalUserAccessPolicy: Sendable {}
 
 struct PinEvaluatedUserAccessPolicy: EvaluatedLocalUserAccessPolicy {

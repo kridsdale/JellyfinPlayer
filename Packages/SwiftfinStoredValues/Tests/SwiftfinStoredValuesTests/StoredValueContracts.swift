@@ -9,12 +9,48 @@
 import Combine
 import Defaults
 import Foundation
+import SwiftfinAccountModels
 import SwiftfinStorage
 @testable import SwiftfinStoredValues
 import Testing
 
 @Suite(.serialized) @MainActor
 struct StoredValueContracts {
+    @Test
+    func `legacy account settings remain readable across module move`() throws {
+        let ownerID = "storage-test-" + UUID().uuidString
+        let suite = try #require(UserDefaults(suiteName: ownerID))
+        defer { suite.removePersistentDomain(forName: ownerID) }
+        // Original Codable/Defaults bridges store these JSON strings. Seed them
+        // directly so this checks an existing installation, not just round trips.
+        suite.set("\"requirePin\"", forKey: "policy")
+        suite.set("\"wifi\"", forKey: "interface")
+        suite.set("\"kid-id\"", forKey: "session")
+        let connectionJSON = #"{"id":"local","name":"Home","url":"http://192.0.2.1:8096","interface":"wifi","wifiSSIDs":["Home"],"priority":4}"#
+        suite.set([connectionJSON], forKey: "connections")
+        let policy = StoredValues.Key("policy", ownerID: ownerID, field: nil, storage: .defaults, default: LocalUserAccessPolicy.none)
+        let interface = StoredValues.Key(
+            "interface",
+            ownerID: ownerID,
+            field: nil,
+            storage: .defaults,
+            default: ServerConnection.Interface.any
+        )
+        let session = StoredValues.Key("session", ownerID: ownerID, field: nil, storage: .defaults, default: UserSessionState.signedOut)
+        let connections = StoredValues.Key("connections", ownerID: ownerID, field: nil, storage: .defaults, default: [ServerConnection]())
+        #expect(StoredValues[policy] == .requirePin)
+        #expect(StoredValues[interface] == .wifi)
+        #expect(StoredValues[session] == .signedIn(userID: "kid-id"))
+        let connection = try #require(StoredValues[connections].first)
+        #expect(connection.id == "local" && connection.priority == 4)
+        #expect(connection.wifiSSIDs == ["Home"])
+        StoredValues[session] = .signedOut
+        #expect(suite.string(forKey: "session") == "\"\"")
+        StoredValues[connections] = [connection.with(priority: 2)]
+        let written = try #require(suite.stringArray(forKey: "connections")?.first)
+        #expect(try JSONDecoder().decode(ServerConnection.self, from: Data(written.utf8)).priority == 2)
+    }
+
     @Test
     func `exact legacy defaults suite and key names are preserved`() throws {
         let owner = "storage-test-" + UUID().uuidString

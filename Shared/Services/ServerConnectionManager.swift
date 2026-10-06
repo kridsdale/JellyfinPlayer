@@ -11,8 +11,9 @@ import Defaults
 import Foundation
 import JellyfinAPI
 import Logging
-import Network
 import Pulse
+import SwiftfinAccountModels
+import SwiftfinConnectivity
 import SwiftfinLocalization
 
 @MainActor
@@ -58,10 +59,9 @@ final class ServerConnectionManager: ObservableObject {
 
     private static let logger = Logger.swiftfin()
 
-    private let queue = DispatchQueue(label: "Swiftfin.ServerConnectionMonitor")
-
     private weak var userSession: UserSession?
-    private var monitor: NWPathMonitor?
+    private var observation: NetworkContextObservation?
+    private var observationTask: Task<Void, Never>?
     private var isStarted = false
     private var context: NetworkConnectionContext = .unavailable
     private var evaluationTask: Task<Void, Never>?
@@ -155,16 +155,15 @@ final class ServerConnectionManager: ObservableObject {
         guard !isStarted else { return }
         isStarted = true
 
-        let monitor = NWPathMonitor()
-        self.monitor = monitor
-
-        monitor.pathUpdateHandler = { [weak self] path in
-            Task { [weak self] in
-                let newContext = await NetworkConnectionContext(path: path)
-                await self?.contextDidUpdate(newContext)
+        let observation = NetworkContextObservation()
+        self.observation = observation
+        let values = observation.values
+        observationTask = Task { [weak self] in
+            for await newContext in values {
+                guard !Task.isCancelled else { return }
+                self?.contextDidUpdate(newContext)
             }
         }
-        monitor.start(queue: queue)
 
         // TODO: determine if should be part of connection resolution
         //       - probably a bit too greedy
@@ -187,8 +186,10 @@ final class ServerConnectionManager: ObservableObject {
         evaluationTask?.cancel()
         evaluationTask = nil
         cancellables.removeAll()
-        monitor?.cancel()
-        monitor = nil
+        observationTask?.cancel()
+        observationTask = nil
+        observation?.cancel()
+        observation = nil
         context = .unavailable
     }
 
@@ -210,7 +211,8 @@ final class ServerConnectionManager: ObservableObject {
         guard !Task.isCancelled, isAutoSwitchEnabled, let userSession else { return }
 
         if context == .unavailable {
-            context = await NetworkConnectionContext.current()
+            context = await NetworkConnectivity.current()
+            guard !Task.isCancelled else { return }
         }
 
         let currentConnection = userSession.server.activeServerConnection

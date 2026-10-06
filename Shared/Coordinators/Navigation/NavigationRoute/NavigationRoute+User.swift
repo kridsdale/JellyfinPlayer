@@ -7,6 +7,7 @@
 //
 
 import JellyfinAPI
+import SwiftfinAccountModels
 import SwiftUI
 
 extension NavigationRoute {

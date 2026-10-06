@@ -10,6 +10,7 @@ import FactoryKit
 import Foundation
 import JellyfinAPI
 import Pulse
+import SwiftfinAccountModels
 import SwiftfinLocalization
 import SwiftfinStorage
 import SwiftfinStoredValues

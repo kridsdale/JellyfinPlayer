@@ -10,6 +10,7 @@ import Defaults
 import FactoryKit
 import Foundation
 import JellyfinAPI
+import SwiftfinAccountModels
 import SwiftfinStoredValues
 
 // MARK: keys

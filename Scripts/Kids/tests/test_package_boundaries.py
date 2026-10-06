@@ -91,6 +91,20 @@ class PackageBoundariesTests(unittest.TestCase):
                 edges, frameworks = MODULE.POLICIES["SwiftfinStorage"]
                 self.assertTrue(MODULE.validate_source("SwiftfinStorage", "import " + module, edges, frameworks))
 
+    def test_account_models_have_no_native_storage_network_or_credentials(self):
+        edges, frameworks = MODULE.POLICIES["SwiftfinAccountModels"]
+        for module in ["Network", "Security", "CoreStore", "Defaults", "SwiftUI", "FactoryKit", "JellyfinAPI"]:
+            with self.subTest(module=module):
+                self.assertTrue(MODULE.validate_source("SwiftfinAccountModels", "import " + module, edges, frameworks))
+        self.assertNotIn("SwiftfinAccountModels", MODULE.EXTERNAL_POLICIES)
+
+    def test_native_connectivity_and_credentials_cannot_resolve_application_globals(self):
+        for owner in ["SwiftfinConnectivity", "SwiftfinCredentials"]:
+            edges, frameworks = MODULE.POLICIES[owner]
+            for module in ["Defaults", "SwiftUI", "FactoryKit", "JellyfinAPI", "CoreStore", "KeychainSwift"]:
+                with self.subTest(owner=owner, module=module):
+                    self.assertTrue(MODULE.validate_source(owner, "import " + module, edges, frameworks))
+
 
 if __name__ == "__main__":
     unittest.main()

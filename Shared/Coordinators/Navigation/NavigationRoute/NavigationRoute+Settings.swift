@@ -8,6 +8,7 @@
 
 import JellyfinAPI
 import PulseUI
+import SwiftfinAccountModels
 import SwiftfinLocalization
 import SwiftUI
 
