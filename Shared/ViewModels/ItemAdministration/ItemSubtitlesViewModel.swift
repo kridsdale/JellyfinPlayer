@@ -9,7 +9,9 @@
 import Combine
 import Foundation
 import JellyfinAPI
+import SwiftfinCollections
 import SwiftfinLocalization
+import SwiftfinPlaybackProfiles
 
 @MainActor
 @Stateful

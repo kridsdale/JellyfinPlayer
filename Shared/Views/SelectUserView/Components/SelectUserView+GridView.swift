@@ -7,6 +7,7 @@
 //
 
 import Defaults
+import SwiftfinCollections
 import SwiftUI
 
 // TODO: remember last focused user for tvOS focus

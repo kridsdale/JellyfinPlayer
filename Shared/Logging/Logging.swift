@@ -8,6 +8,7 @@
 
 import FactoryKit
 import Logging
+import SwiftfinCollections
 
 extension Logger {
 

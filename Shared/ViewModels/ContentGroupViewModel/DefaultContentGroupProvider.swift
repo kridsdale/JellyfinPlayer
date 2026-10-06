@@ -10,6 +10,7 @@ import Defaults
 import FactoryKit
 import Foundation
 import JellyfinAPI
+import SwiftfinCollections
 import SwiftfinLocalization
 
 struct DefaultContentGroupProvider: ContentGroupProvider {

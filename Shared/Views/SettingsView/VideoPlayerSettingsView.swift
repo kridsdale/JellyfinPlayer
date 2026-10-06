@@ -10,6 +10,7 @@ import Defaults
 import FactoryKit
 import JellyfinAPI
 import SwiftfinLocalization
+import SwiftfinPlaybackProfiles
 import SwiftfinStoredValuesUI
 import SwiftUI
 

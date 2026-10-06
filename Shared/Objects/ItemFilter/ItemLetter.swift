@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import SwiftfinCollections
 import UIKit
 
 struct ItemLetter: @MainActor CaseIterable, Codable, ExpressibleByStringLiteral, Hashable, ItemFilter {

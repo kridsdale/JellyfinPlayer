@@ -9,6 +9,7 @@
 import BlurHashKit
 import Nuke
 import NukeUI
+import SwiftfinCollections
 import SwiftfinImages
 import SwiftUI
 

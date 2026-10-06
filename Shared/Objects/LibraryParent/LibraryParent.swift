@@ -7,6 +7,7 @@
 //
 
 import JellyfinAPI
+import SwiftfinCollections
 
 protocol LibraryParent: Displayable, Hashable, Identifiable<String?> {
 

@@ -177,6 +177,10 @@
 		DA90D27E20B8220716E5FEE7 /* SwiftfinImages in Frameworks */ = {isa = PBXBuildFile; productRef = DA90044E3C18B30795C50D3E /* SwiftfinImages */; };
 		DA902219BBC54778EB2695B2 /* SwiftfinImages in Frameworks */ = {isa = PBXBuildFile; productRef = DA90D23796148789F6F6B9D0 /* SwiftfinImages */; };
 		DA903D3D07ECEAED6519587F /* SwiftfinImages in Frameworks */ = {isa = PBXBuildFile; productRef = DA90FCD363F78629E3FBA0AA /* SwiftfinImages */; };
+		DA919492312EF046B5564244 /* SwiftfinCollections in Frameworks */ = {isa = PBXBuildFile; productRef = DA91216BC5A0A6A6A27C0F30 /* SwiftfinCollections */; };
+		DA91C060B1758EF2E94CA0AC /* SwiftfinCollections in Frameworks */ = {isa = PBXBuildFile; productRef = DA914348CAC2FD8C55EF9C9B /* SwiftfinCollections */; };
+		DA9127F82887281B82E12D3D /* SwiftfinPlaybackProfiles in Frameworks */ = {isa = PBXBuildFile; productRef = DA91BA6C74963B3ECA08F7F0 /* SwiftfinPlaybackProfiles */; };
+		DA919B6B7369B5A8B0C2F72C /* SwiftfinPlaybackProfiles in Frameworks */ = {isa = PBXBuildFile; productRef = DA91C5F91ED01214C0446B2B /* SwiftfinPlaybackProfiles */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -328,6 +332,8 @@
 				DA82BB2B432928C58F90769A /* SwiftfinConnectivity in Frameworks */,
 				DA83A74699AB81CD9DA76CC8 /* SwiftfinCredentials in Frameworks */,
 				DA89B2C4FDB5D85DBAB95C5E /* SwiftfinAsyncStreams in Frameworks */,
+				DA919492312EF046B5564244 /* SwiftfinCollections in Frameworks */,
+				DA9127F82887281B82E12D3D /* SwiftfinPlaybackProfiles in Frameworks */,
 				DA90D27E20B8220716E5FEE7 /* SwiftfinImages in Frameworks */,
 				DA88860A00B8D3981304EE38 /* SwiftfinNetworking in Frameworks */,
 				DA87390145249F71AA05F529 /* SwiftfinSessions in Frameworks */,
@@ -405,6 +411,8 @@
 				DA82C996AF2EF6239BDBBFBA /* SwiftfinConnectivity in Frameworks */,
 				DA836C6B328E6E38AE3A7DCC /* SwiftfinCredentials in Frameworks */,
 				DA89DF2C52283A19150EBC70 /* SwiftfinAsyncStreams in Frameworks */,
+				DA91C060B1758EF2E94CA0AC /* SwiftfinCollections in Frameworks */,
+				DA919B6B7369B5A8B0C2F72C /* SwiftfinPlaybackProfiles in Frameworks */,
 				DA902219BBC54778EB2695B2 /* SwiftfinImages in Frameworks */,
 				DA88C0CEB703F1205D3D48C1 /* SwiftfinNetworking in Frameworks */,
 				DA87CA72F8821B88F66CE5D5 /* SwiftfinSessions in Frameworks */,
@@ -639,6 +647,8 @@
 				DA828E791768AF7749E5E40B /* SwiftfinConnectivity */,
 				DA83EB6A69AFF971D56E9C58 /* SwiftfinCredentials */,
 				DA890B7187FA8EF214285BCB /* SwiftfinAsyncStreams */,
+				DA91216BC5A0A6A6A27C0F30 /* SwiftfinCollections */,
+				DA91BA6C74963B3ECA08F7F0 /* SwiftfinPlaybackProfiles */,
 				DA90044E3C18B30795C50D3E /* SwiftfinImages */,
 				DA880E78BE83F7FE4F7B617D /* SwiftfinNetworking */,
 				DA87F73BDB98044305753948 /* SwiftfinSessions */,
@@ -721,6 +731,8 @@
 				DA8272B7A99C25561A19544C /* SwiftfinConnectivity */,
 				DA837E1A2E28C1DF67C34A2B /* SwiftfinCredentials */,
 				DA8976B9A3E0F71C521475E0 /* SwiftfinAsyncStreams */,
+				DA914348CAC2FD8C55EF9C9B /* SwiftfinCollections */,
+				DA91C5F91ED01214C0446B2B /* SwiftfinPlaybackProfiles */,
 				DA90D23796148789F6F6B9D0 /* SwiftfinImages */,
 				DA8845F33CE6BD71720CF1B4 /* SwiftfinNetworking */,
 				DA878779682B6A5230A79690 /* SwiftfinSessions */,
@@ -934,6 +946,8 @@
 			);
 			mainGroup = 5377CBE8263B596A003A4E83;
 			packageReferences = (
+				DA913087EF08BA7B25BDC5B7 /* XCLocalSwiftPackageReference "Packages/SwiftfinPlaybackProfiles" */,
+				DA919F11E902D2085063F443 /* XCLocalSwiftPackageReference "Packages/SwiftfinCollections" */,
 				DA90A5AED613A648BB736DC0 /* XCLocalSwiftPackageReference "Packages/SwiftfinImages" */,
 				DA8364E2A7B817B0F5B23BDE /* XCLocalSwiftPackageReference "Packages/SwiftfinCredentials" */,
 				DA8973D15AA3CE8C53314E47 /* XCLocalSwiftPackageReference "Packages/SwiftfinAsyncStreams" */,
@@ -1664,6 +1678,8 @@
 		DA86CB275A49ED63AA07A1F8 /* XCLocalSwiftPackageReference "Packages/SwiftfinConnections" */ = {isa = XCLocalSwiftPackageReference; relativePath = Packages/SwiftfinConnections; };
 		DA8559318BE0E97308E68DB1 /* XCLocalSwiftPackageReference "Packages/SwiftfinAccountStore" */ = {isa = XCLocalSwiftPackageReference; relativePath = Packages/SwiftfinAccountStore; };
 		DA90A5AED613A648BB736DC0 /* XCLocalSwiftPackageReference "Packages/SwiftfinImages" */ = {isa = XCLocalSwiftPackageReference; relativePath = Packages/SwiftfinImages; };
+		DA919F11E902D2085063F443 /* XCLocalSwiftPackageReference "Packages/SwiftfinCollections" */ = {isa = XCLocalSwiftPackageReference; relativePath = Packages/SwiftfinCollections; };
+		DA913087EF08BA7B25BDC5B7 /* XCLocalSwiftPackageReference "Packages/SwiftfinPlaybackProfiles" */ = {isa = XCLocalSwiftPackageReference; relativePath = Packages/SwiftfinPlaybackProfiles; };
 /* End XCLocalSwiftPackageReference section */
 
 /* Begin XCRemoteSwiftPackageReference section */
@@ -2420,6 +2436,10 @@
 		DA90044E3C18B30795C50D3E /* SwiftfinImages */ = {isa = XCSwiftPackageProductDependency; package = DA90A5AED613A648BB736DC0 /* XCLocalSwiftPackageReference "Packages/SwiftfinImages" */; productName = SwiftfinImages; };
 		DA90D23796148789F6F6B9D0 /* SwiftfinImages */ = {isa = XCSwiftPackageProductDependency; package = DA90A5AED613A648BB736DC0 /* XCLocalSwiftPackageReference "Packages/SwiftfinImages" */; productName = SwiftfinImages; };
 		DA90FCD363F78629E3FBA0AA /* SwiftfinImages */ = {isa = XCSwiftPackageProductDependency; package = DA90A5AED613A648BB736DC0 /* XCLocalSwiftPackageReference "Packages/SwiftfinImages" */; productName = SwiftfinImages; };
+		DA91216BC5A0A6A6A27C0F30 /* SwiftfinCollections */ = {isa = XCSwiftPackageProductDependency; package = DA919F11E902D2085063F443 /* XCLocalSwiftPackageReference "Packages/SwiftfinCollections" */; productName = SwiftfinCollections; };
+		DA914348CAC2FD8C55EF9C9B /* SwiftfinCollections */ = {isa = XCSwiftPackageProductDependency; package = DA919F11E902D2085063F443 /* XCLocalSwiftPackageReference "Packages/SwiftfinCollections" */; productName = SwiftfinCollections; };
+		DA91BA6C74963B3ECA08F7F0 /* SwiftfinPlaybackProfiles */ = {isa = XCSwiftPackageProductDependency; package = DA913087EF08BA7B25BDC5B7 /* XCLocalSwiftPackageReference "Packages/SwiftfinPlaybackProfiles" */; productName = SwiftfinPlaybackProfiles; };
+		DA91C5F91ED01214C0446B2B /* SwiftfinPlaybackProfiles */ = {isa = XCSwiftPackageProductDependency; package = DA913087EF08BA7B25BDC5B7 /* XCLocalSwiftPackageReference "Packages/SwiftfinPlaybackProfiles" */; productName = SwiftfinPlaybackProfiles; };
 /* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 5377CBE9263B596A003A4E83 /* Project object */;

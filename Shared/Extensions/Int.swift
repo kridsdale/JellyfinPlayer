@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import SwiftfinCollections
 
 // TODO: replace all with formatters or use Duration
 

@@ -7,6 +7,7 @@
 //
 
 import JellyfinAPI
+import SwiftfinCollections
 import SwiftUI
 
 // TODO: when used for single seasons, have title as just "Episodes" or

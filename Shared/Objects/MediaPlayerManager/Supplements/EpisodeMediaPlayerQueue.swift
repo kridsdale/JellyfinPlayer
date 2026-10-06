@@ -13,6 +13,7 @@ import Defaults
 import Foundation
 import IdentifiedCollections
 import JellyfinAPI
+import SwiftfinCollections
 import SwiftfinImages
 import SwiftfinLocalization
 import SwiftUI

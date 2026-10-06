@@ -10,6 +10,7 @@ import Combine
 import Defaults
 import Foundation
 import JellyfinAPI
+import SwiftfinCollections
 import UIKit
 
 extension UserSessionManager {

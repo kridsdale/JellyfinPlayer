@@ -9,6 +9,7 @@
 import FactoryKit
 import Get
 import JellyfinAPI
+import SwiftfinCollections
 import UIKit
 
 // TODO: preload chapter images

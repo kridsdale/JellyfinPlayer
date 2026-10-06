@@ -8,7 +8,9 @@
 
 import Defaults
 import JellyfinAPI
+import SwiftfinCollections
 import SwiftfinLocalization
+import SwiftfinPlaybackProfiles
 import SwiftfinStoredValuesUI
 import SwiftUI
 

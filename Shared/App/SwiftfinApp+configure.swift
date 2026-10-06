@@ -10,6 +10,7 @@ import FactoryKit
 import Logging
 import Nuke
 import PulseLogHandler
+import SwiftfinCollections
 import SwiftfinStorage
 import UIKit
 

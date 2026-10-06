@@ -8,9 +8,10 @@
 
 import Foundation
 import JellyfinAPI
+import SwiftfinCollections
 import SwiftfinLocalization
 
-extension PersonKind: Displayable, SupportedCaseIterable {
+extension PersonKind: Displayable, @retroactive SupportedCaseIterable {
     var displayTitle: String {
         switch self {
         case .unknown:
@@ -68,7 +69,7 @@ extension PersonKind: Displayable, SupportedCaseIterable {
         }
     }
 
-    static var supportedCases: [PersonKind] {
+    public static var supportedCases: [PersonKind] {
         [.actor, .director, .writer, .producer]
     }
 }

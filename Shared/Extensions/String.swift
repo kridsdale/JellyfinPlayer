@@ -9,6 +9,7 @@
 import Algorithms
 import CryptoKit
 import Foundation
+import SwiftfinCollections
 import SwiftUI
 
 extension String: Displayable {

@@ -12,6 +12,7 @@ import subprocess
 
 # Explicit responsibilities, not a permission derived from whatever code happens to import.
 EXTERNAL_POLICIES = {
+    "SwiftfinPlaybackProfiles": [("jellyfin-sdk-swift", "https://github.com/jellyfin/jellyfin-sdk-swift.git", "3.2.0")],
     "SwiftfinImages": [("nuke", "https://github.com/kean/Nuke", "13.0.6")],
     "SwiftfinVLC": [("swiftvlc", "https://github.com/harflabs/SwiftVLC", "1.0.0")],
     "SwiftfinStorage": [("corestore", "https://github.com/JohnEstropia/CoreStore.git", "9.2.0")],
@@ -22,6 +23,8 @@ EXTERNAL_POLICIES = {
     ],
 }
 POLICIES = {
+    "SwiftfinCollections": ({}, {"Foundation"}),
+    "SwiftfinPlaybackProfiles": ({"SwiftfinCollections"}, {"Foundation", "JellyfinAPI"}),
     "SwiftfinImages": ({}, {"Foundation", "Nuke", "CryptoKit", "os"}),
     "SwiftfinSessions": ({}, {"Foundation"}),
     "SwiftfinNetworking": ({}, {"Foundation", "Get", "JellyfinAPI"}),
@@ -32,7 +35,7 @@ POLICIES = {
     "SwiftfinConnectivity": ({"SwiftfinAccountModels"}, {"Foundation", "Network", "NetworkExtension", "os"}),
     "SwiftfinAccountModels": ({"SwiftfinLocalization"}, {"Foundation"}),
     "SwiftfinStorage": ({"SwiftfinAccountModels"}, {"CoreStore", "Foundation"}),
-    "SwiftfinStoredValues": ({"SwiftfinStorage", "SwiftfinAccountModels"}, {"Defaults", "Foundation", "Combine"}),
+    "SwiftfinStoredValues": ({"SwiftfinStorage", "SwiftfinAccountModels", "SwiftfinPlaybackProfiles"}, {"Defaults", "Foundation", "Combine"}),
     "SwiftfinStoredValuesUI": ({"SwiftfinStoredValues"}, {"SwiftUI"}),
     "SwiftfinVLC": ({"KidsDiagnostics"}, {"Foundation", "Combine", "SwiftUI", "SwiftVLC"}),
     "SwiftfinNowPlaying": ({}, {"Foundation", "MediaPlayer", "UIKit"}),

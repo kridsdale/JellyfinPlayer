@@ -8,15 +8,12 @@
 
 import Defaults
 import JellyfinAPI
+import SwiftfinCollections
 import SwiftfinLocalization
+import SwiftfinPlaybackProfiles
 import SwiftfinStoredValues
 
-enum VideoPlayerType: String, CaseIterable, Displayable, SupportedCaseIterable, Storable {
-
-    case native
-    case vlc
-    case mpv
-
+extension VideoPlayerType: Displayable {
     var displayTitle: String {
         switch self {
         case .native:
@@ -27,41 +24,27 @@ enum VideoPlayerType: String, CaseIterable, Displayable, SupportedCaseIterable, 
             L10n.mpv
         }
     }
+}
 
-    var directPlayProfiles: [DirectPlayProfile] {
-        switch self {
-        case .native:
-            Self._nativeDirectPlayProfiles
-        case .vlc, .mpv:
-            Self._vlcDirectPlayProfiles
-        }
-    }
-
-    var transcodingProfiles: [TranscodingProfile] {
-        switch self {
-        case .native:
-            Self._nativeTranscodingProfiles
-        case .vlc, .mpv:
-            Self._vlcTranscodingProfiles
-        }
-    }
-
-    var subtitleProfiles: [SubtitleProfile] {
-        switch self {
-        case .native:
-            Self._nativeSubtitleProfiles
-        case .vlc, .mpv:
-            Self._vlcSubtitleProfiles
-        }
-    }
-
+extension VideoPlayerType: @retroactive SupportedCaseIterable {
     @ArrayBuilder<VideoPlayerType>
-    static var supportedCases: [VideoPlayerType] {
+    public static var supportedCases: [VideoPlayerType] {
         VideoPlayerType.native
         VideoPlayerType.vlc
-
         if Defaults[.Experimental.mpvPlayer] {
             VideoPlayerType.mpv
         }
+    }
+}
+
+extension VideoPlayerType {
+    @MainActor
+    var directPlayProfiles: [DirectPlayProfile] {
+        directPlayProfiles(capabilities: PlaybackCapabilities.snapshot)
+    }
+
+    @MainActor
+    var transcodingProfiles: [TranscodingProfile] {
+        transcodingProfiles(capabilities: PlaybackCapabilities.snapshot)
     }
 }

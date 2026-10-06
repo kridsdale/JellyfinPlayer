@@ -9,6 +9,7 @@
 import Combine
 import Defaults
 import Foundation
+import SwiftfinCollections
 import SwiftfinLocalization
 import SwiftUI
 

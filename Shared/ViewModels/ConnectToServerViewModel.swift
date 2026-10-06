@@ -15,6 +15,7 @@ import Logging
 import OrderedCollections
 import Pulse
 import SwiftfinAccountModels
+import SwiftfinCollections
 import SwiftfinLocalization
 import SwiftfinNetworking
 import SwiftfinStoredValues

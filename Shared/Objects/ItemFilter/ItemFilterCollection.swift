@@ -7,6 +7,7 @@
 //
 
 import JellyfinAPI
+import SwiftfinCollections
 import SwiftfinStoredValues
 
 struct ItemFilterCollection: Hashable, Storable {

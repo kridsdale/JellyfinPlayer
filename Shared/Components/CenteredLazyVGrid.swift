@@ -6,6 +6,7 @@
 // Copyright (c) 2026 Jellyfin & Jellyfin Contributors
 //
 
+import SwiftfinCollections
 import SwiftUI
 
 /// A LazyVGrid that centers its elements, most notably on the last row.

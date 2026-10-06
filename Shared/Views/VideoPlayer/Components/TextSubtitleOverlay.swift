@@ -8,6 +8,7 @@
 
 import MediaAccessibilityKit
 import MPVUI
+import SwiftfinCollections
 import SwiftUI
 
 struct TextSubtitleOverlay: View {

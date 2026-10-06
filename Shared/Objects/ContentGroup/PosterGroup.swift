@@ -6,6 +6,7 @@
 // Copyright (c) 2026 Jellyfin & Jellyfin Contributors
 //
 
+import SwiftfinCollections
 import SwiftUI
 
 struct PosterGroup<Library: PagingLibrary>: ContentGroup where Library.Element: LibraryElement, Library.Element: Poster {

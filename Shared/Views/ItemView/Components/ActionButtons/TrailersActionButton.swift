@@ -8,6 +8,7 @@
 
 import JellyfinAPI
 import Logging
+import SwiftfinCollections
 import SwiftfinLocalization
 import SwiftfinStoredValuesUI
 import SwiftUI

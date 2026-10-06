@@ -9,6 +9,7 @@
 import FactoryKit
 import Foundation
 import JellyfinAPI
+import SwiftfinCollections
 import SwiftfinImages
 import UIKit
 

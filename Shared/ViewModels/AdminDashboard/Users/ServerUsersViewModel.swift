@@ -10,6 +10,7 @@ import Combine
 import Foundation
 import IdentifiedCollections
 import JellyfinAPI
+import SwiftfinCollections
 import SwiftUI
 
 @MainActor

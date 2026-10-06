@@ -7,6 +7,7 @@
 //
 
 import Defaults
+import SwiftfinCollections
 import SwiftfinLocalization
 import SwiftfinStoredValuesUI
 import SwiftUI

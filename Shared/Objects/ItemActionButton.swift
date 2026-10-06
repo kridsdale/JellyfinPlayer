@@ -6,6 +6,7 @@
 // Copyright (c) 2026 Jellyfin & Jellyfin Contributors
 //
 
+import SwiftfinCollections
 import SwiftfinLocalization
 import SwiftfinStoredValues
 import SwiftUI

@@ -6,6 +6,7 @@
 // Copyright (c) 2026 Jellyfin & Jellyfin Contributors
 //
 
+import SwiftfinCollections
 import SwiftUI
 
 /// A custom layout that arranges views in a flow pattern, automatically wrapping items to new rows

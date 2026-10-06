@@ -8,6 +8,7 @@
 
 import AVFoundation
 import SwiftfinLocalization
+import SwiftfinPlaybackProfiles
 import SwiftfinStoredValues
 import VideoToolbox
 
@@ -88,5 +89,20 @@ enum PlaybackCapabilities {
     @MainActor
     static var supportsDolbyVision: Bool {
         VTIsHardwareDecodeSupported(kCMVideoCodecType_DolbyVisionHEVC) && dvEnabled
+    }
+}
+
+extension PlaybackCapabilities {
+    @MainActor
+    static var snapshot: PlaybackCapabilitySnapshot {
+        PlaybackCapabilitySnapshot(
+            supportsAV1: supportsAV1,
+            supportsHEVC: supportsHEVC,
+            supportsVP9: supportsVP9,
+            supportsHLG: supportsHLG,
+            supportsHDR10: supportsHDR10,
+            supportsDolbyVision: supportsDolbyVision,
+            hdrEnabled: hdrEnabled
+        )
     }
 }

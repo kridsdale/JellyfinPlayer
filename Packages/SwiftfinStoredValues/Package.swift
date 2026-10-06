@@ -8,6 +8,7 @@ let package = Package(
     dependencies: [
         .package(path: "../SwiftfinAccountModels"),
         .package(path: "../SwiftfinStorage"),
+        .package(path: "../SwiftfinPlaybackProfiles"),
         .package(url: "https://github.com/sindresorhus/Defaults", exact: "9.0.9")
     ],
     targets: [
@@ -16,6 +17,7 @@ let package = Package(
             dependencies: [
                 .product(name: "SwiftfinAccountModels", package: "SwiftfinAccountModels"),
                 .product(name: "SwiftfinStorage", package: "SwiftfinStorage"),
+                .product(name: "SwiftfinPlaybackProfiles", package: "SwiftfinPlaybackProfiles"),
                 .product(name: "Defaults", package: "Defaults")
             ]
         ),
@@ -25,6 +27,7 @@ let package = Package(
                 "SwiftfinStoredValues",
                 .product(name: "SwiftfinAccountModels", package: "SwiftfinAccountModels"),
                 .product(name: "SwiftfinStorage", package: "SwiftfinStorage"),
+                .product(name: "SwiftfinPlaybackProfiles", package: "SwiftfinPlaybackProfiles"),
                 .product(name: "Defaults", package: "Defaults")
             ]
         )

@@ -8,6 +8,7 @@
 
 import Foundation
 import JellyfinAPI
+import SwiftfinCollections
 import SwiftfinLocalization
 
 /// Aliased so the name `ItemFilter` can be repurposed.
@@ -43,9 +44,9 @@ extension ItemTrait: Displayable {
     }
 }
 
-extension ItemTrait: SupportedCaseIterable {
+extension ItemTrait: @retroactive SupportedCaseIterable {
 
-    static var supportedCases: [ItemTrait] {
+    public static var supportedCases: [JellyfinAPI.ItemFilter] {
         [
             .isUnplayed,
             .isPlayed,

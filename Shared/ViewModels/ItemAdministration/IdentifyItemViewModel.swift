@@ -11,6 +11,7 @@ import Foundation
 import Get
 import JellyfinAPI
 import OrderedCollections
+import SwiftfinCollections
 
 @MainActor
 @Stateful

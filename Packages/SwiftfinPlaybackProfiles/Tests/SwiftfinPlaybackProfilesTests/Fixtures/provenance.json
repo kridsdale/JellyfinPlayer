@@ -1,0 +1,40 @@
+{
+  "sourceCommit": "05bb0d31af8c9742b175177b6ee5630136f30465",
+  "capturedProfiles": 97,
+  "source": "Original production profile/model/builder copies compiled before extraction",
+  "substitutions": "Only hardware/defaults accesses replaced with deterministic TaskLocal inputs",
+  "mediaAccess": false,
+  "installedDefaultsAccess": false,
+  "originalSourceSHA256": {
+    "Shared/Extensions/Collection.swift": "1909d211dcff0bd08be3cc611af666a61db72fc5d53aeb12ded45b2b3f1d1796",
+    "Shared/Extensions/JellyfinAPI/CodecProfile.swift": "135d92f54eea8896dc7edaaa4db41618e995bbd1bbf6f20895fe03494ff5d37c",
+    "Shared/Extensions/JellyfinAPI/DeviceProfile.swift": "606036495183e0701d2e79dd437be2b76dd63cf0cef8cca4299b225266a8f5d2",
+    "Shared/Extensions/JellyfinAPI/DirectPlayProfile.swift": "c0354af3dafca3861c92645325a9a702adc563bf27a5b0bddd9ff516003d46be",
+    "Shared/Extensions/JellyfinAPI/ProfileCondition.swift": "91ac9be5b58239316323031c18dea8fe95d588f05c26b72a02edd6990efffcee",
+    "Shared/Extensions/JellyfinAPI/SubtitleProfile.swift": "bd3c06af8891b1c9007f63129845cd4d821e434f854acddc8aecddb9d224e963",
+    "Shared/Extensions/JellyfinAPI/TranscodingProfile.swift": "3f270e7de06a8a4e9adaf26dab92a1d3b76fe254ce3562d5caca7fa20a366846",
+    "Shared/Extensions/Sequence.swift": "f574d165290b3d94a7c35bbe0f5c9559824ecc4c96a53be8de0b507427747209",
+    "Shared/Objects/ArrayBuilder.swift": "67dc19e254aa9f59d07e1d2d3a7a33c315ee31d823ccef99ee43503c2e066631",
+    "Shared/Objects/CustomDeviceProfileAction.swift": "5a3da118b224720b7aefefeaaed8a3308a0d8b3a130283a9772b5f7224c117e1",
+    "Shared/Objects/Displayable.swift": "99fc18fae81d349f8863a0158f8fe3bf98b85ccc1a5b931262217b2c28ef7779",
+    "Shared/Objects/MediaComponents/AudoCodec.swift": "48a6183909be17fc7ff1420810fe49cfaf5c2aff4c5906b87a5992aed5cfbb74",
+    "Shared/Objects/MediaComponents/MediaContainer.swift": "d2c34d646fd5c29bbb6e21cb26aa75eff1d8eacfc2577dc741d48a5ddfdd29c6",
+    "Shared/Objects/MediaComponents/SubtitleFormat.swift": "1706a79832299251ec96e7dc2bad9408bd38a5fe20c9609c5892e738a77c3f69",
+    "Shared/Objects/MediaComponents/VideoCodec.swift": "e6da1dd2eebafe2a3123185eb43139f11cdd05537d13cd9bd51f6cbbad84c903",
+    "Shared/Objects/MediaComponents/VideoProfiles/H264Profile.swift": "be15fa4f1739a798b82e08803a6533cff436a1cc4def3253f40058b8f26ff606",
+    "Shared/Objects/MediaComponents/VideoProfiles/HEVCProfile.swift": "ee95204caf5ff690c28e4f47d7c335cfafdc6fcfe0389687f83dd37364d3336a",
+    "Shared/Objects/PlaybackCompatibility/PlaybackCompatibility+Video.swift": "c08ff584f8e9f4d3703650ae1a9bcd18668687bdabd6297573bd6b3034417c25",
+    "Shared/Objects/PlaybackCompatibility/PlaybackCompatibility.swift": "d40226cf0783c9ad671b0e97a03b5332c2d1773d56e52a94287391bd7b664827",
+    "Shared/Objects/PlaybackDeviceProfile.swift": "019ba650a392fb43c09ba57ae18a6e1009ffc3a093edc4d1fbe156372cf47773",
+    "Shared/Objects/PlaybackResolution.swift": "41513c850d2e5c62a070558c8ac2cc337785c01636d4118ba6d15c50201e13dc",
+    "Shared/Objects/SupportedCaseIterable.swift": "c482bcdf58705d90a5dc62577499a5a92c92a9f5c2b53a2f6b7664f620bbdb1f",
+    "Shared/Objects/VideoPlayerType/VideoPlayerType+Native.swift": "0a1a675337d6d573aa6e9739691e8f4370c13bee9c1d3301ab67033229772c10",
+    "Shared/Objects/VideoPlayerType/VideoPlayerType+Shared.swift": "e0ef0be8f41dbdd3d919aff194f72e4798525dc4612cd4b90795d61f719e0571",
+    "Shared/Objects/VideoPlayerType/VideoPlayerType+VLC.swift": "06f9749721d1e642dbedccc1546e680b8fce5e691489cf3bb6133901485de3ec",
+    "Shared/Objects/VideoPlayerType/VideoPlayerType.swift": "34669461024f8c5382b44d45550e41582abbf22992cfb701ed22e63fff6337fc"
+  },
+  "fixtureSHA256": {
+    "legacy-profiles.json": "eabaab9bb52d8b1b5f7d550485990760e3a36d12ea7d3da464aa773d6742feea",
+    "legacy-defaults.json": "6d5cf89bbad859b7a93e9efb33a475c56da656638e02d23602296c6d3cb5d6db"
+  }
+}

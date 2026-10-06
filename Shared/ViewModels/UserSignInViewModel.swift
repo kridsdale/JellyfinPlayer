@@ -14,6 +14,7 @@ import JellyfinAPI
 import Logging
 import OrderedCollections
 import SwiftfinAccountModels
+import SwiftfinCollections
 import SwiftfinLocalization
 import SwiftfinStoredValues
 import SwiftUI

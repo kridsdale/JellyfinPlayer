@@ -7,6 +7,7 @@
 //
 
 import JellyfinAPI
+import SwiftfinCollections
 import SwiftUI
 
 // TODO: This only shows `None` when the device is offline or there is no server connection.

@@ -9,6 +9,7 @@
 import Defaults
 import JellyfinAPI
 import SwiftfinLocalization
+import SwiftfinPlaybackProfiles
 import SwiftUI
 import UniformTypeIdentifiers
 

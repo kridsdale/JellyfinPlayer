@@ -8,6 +8,7 @@
 
 import CoreTransferable
 import Foundation
+import SwiftfinCollections
 import SwiftUI
 import UniformTypeIdentifiers
 

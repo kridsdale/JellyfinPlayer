@@ -8,6 +8,7 @@
 
 import CoreTransferable
 import JellyfinAPI
+import SwiftfinCollections
 import SwiftfinLocalization
 
 extension MediaSourceInfo: Displayable {

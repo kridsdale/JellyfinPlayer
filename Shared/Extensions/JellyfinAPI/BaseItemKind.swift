@@ -7,9 +7,10 @@
 //
 
 import JellyfinAPI
+import SwiftfinCollections
 import SwiftfinLocalization
 
-extension BaseItemKind: SupportedCaseIterable {
+extension BaseItemKind: @retroactive SupportedCaseIterable {
 
     /// The base supported cases for media navigation.
     /// This differs from media viewing, which may include
@@ -18,7 +19,7 @@ extension BaseItemKind: SupportedCaseIterable {
     /// These is the *base* supported cases and other objects
     /// like `LibararyParent` may have additional supported
     /// cases for querying a library.
-    static var supportedCases: [BaseItemKind] {
+    public static var supportedCases: [BaseItemKind] {
         [
             .boxSet,
             .movie,

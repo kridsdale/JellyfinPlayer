@@ -9,7 +9,9 @@
 import JellyfinAPI
 import PulseUI
 import SwiftfinAccountModels
+import SwiftfinCollections
 import SwiftfinLocalization
+import SwiftfinPlaybackProfiles
 import SwiftUI
 
 extension NavigationRoute {

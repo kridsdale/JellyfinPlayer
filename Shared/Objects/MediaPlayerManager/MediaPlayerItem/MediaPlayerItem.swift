@@ -8,6 +8,7 @@
 
 import Defaults
 import JellyfinAPI
+import SwiftfinPlaybackProfiles
 import SwiftUI
 
 // TODO: get preview image for current manager seconds?

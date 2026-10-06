@@ -9,6 +9,7 @@
 import Defaults
 import JellyfinAPI
 import MPVUI
+import SwiftfinCollections
 import SwiftfinUIState
 import SwiftUI
 

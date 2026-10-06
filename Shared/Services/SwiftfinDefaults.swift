@@ -11,6 +11,7 @@ import FactoryKit
 import Foundation
 import SwiftfinAccountModels
 import SwiftfinLocalization
+import SwiftfinPlaybackProfiles
 import SwiftfinStoredValues
 import SwiftfinStoredValuesUI
 import SwiftUI

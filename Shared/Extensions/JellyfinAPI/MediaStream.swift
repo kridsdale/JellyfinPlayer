@@ -9,6 +9,7 @@
 import CoreTransferable
 import Foundation
 import JellyfinAPI
+import SwiftfinCollections
 import SwiftfinLocalization
 import SwiftfinNetworking
 

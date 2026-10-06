@@ -8,10 +8,11 @@
 
 import Foundation
 import JellyfinAPI
+import SwiftfinCollections
 
-extension CollectionType: SupportedCaseIterable {
+extension CollectionType: @retroactive SupportedCaseIterable {
 
-    static var supportedCases: [CollectionType] {
+    public static var supportedCases: [CollectionType] {
         [
             .boxsets,
             .folders,

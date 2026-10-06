@@ -9,6 +9,7 @@
 import FactoryKit
 import Foundation
 import OrderedCollections
+import SwiftfinCollections
 import SwiftfinCredentials
 import SwiftfinLocalization
 import SwiftfinStoredValues

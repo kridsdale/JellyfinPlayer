@@ -8,9 +8,10 @@
 
 import Foundation
 import JellyfinAPI
+import SwiftfinCollections
 import SwiftfinLocalization
 
-extension ItemSortBy: Displayable, SupportedCaseIterable {
+extension ItemSortBy: Displayable, @retroactive SupportedCaseIterable {
 
     var displayTitle: String {
         switch self {
@@ -79,7 +80,7 @@ extension ItemSortBy: Displayable, SupportedCaseIterable {
 
     /// All `ItemSortBy` cases supported in Swiftfin
     /// - This is the order displayed in `FilterView`s so order matters!
-    static var supportedCases: [ItemSortBy] {
+    public static var supportedCases: [ItemSortBy] {
         [
             // Generic
             .name,

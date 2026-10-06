@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import SwiftfinCollections
 import SwiftfinImages
 import SwiftUI
 

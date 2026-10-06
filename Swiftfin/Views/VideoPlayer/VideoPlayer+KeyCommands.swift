@@ -8,6 +8,7 @@
 
 import Defaults
 import PreferencesView
+import SwiftfinCollections
 import SwiftfinLocalization
 import SwiftUI
 

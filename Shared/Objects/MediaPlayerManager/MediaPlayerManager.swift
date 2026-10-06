@@ -12,6 +12,7 @@ import FactoryKit
 import Foundation
 import JellyfinAPI
 import KidsPlayback
+import SwiftfinCollections
 import SwiftfinUIState
 #if os(tvOS)
 import KidsDiagnostics

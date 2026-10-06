@@ -11,6 +11,7 @@ import FactoryKit
 import Foundation
 import JellyfinAPI
 import OrderedCollections
+import SwiftfinCollections
 import SwiftUI
 
 // TODO: do something for errors from restart/shutdown

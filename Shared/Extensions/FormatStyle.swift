@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import SwiftfinCollections
 import SwiftfinLocalization
 
 // TODO: break into separate files

@@ -12,6 +12,7 @@ import Foundation
 import JellyfinAPI
 import SwiftfinAccountModels
 import SwiftfinAccountStore
+import SwiftfinPlaybackProfiles
 import SwiftfinStoredValues
 
 // TODO: also have matching properties on `UserState` that get/set values

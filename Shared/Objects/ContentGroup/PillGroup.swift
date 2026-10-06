@@ -7,6 +7,7 @@
 //
 
 import JellyfinAPI
+import SwiftfinCollections
 import SwiftUI
 
 struct PillGroup<Element: Displayable>: ContentGroup {
