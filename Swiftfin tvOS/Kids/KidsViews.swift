@@ -41,16 +41,16 @@ struct KidsRootView: View {
                         title: "A grown-up can help.",
                         detail: model.problem,
                         actionTitle: "Parents",
-                        actionSymbol: "lock.fill"
-                    ) {
-                        model.parentPresented = true
-                    }
+                        actionSymbol: "lock.fill",
+                        action: { model.parentPresented = true }
+                    )
                 } else if model.problem != nil && model.catalog.isEmpty {
                     KidsStatusView(
                         symbol: "wifi.slash",
                         title: "Your shows are taking a break.",
-                        parentAction: { model.parentPresented = true }
-                    ) { Task { await model.refresh() } }
+                        parentAction: { model.parentPresented = true },
+                        action: { Task { await model.refresh() } }
+                    )
                 } else {
                     KidsBrowseView(model: model, path: $path)
                 }
@@ -66,8 +66,9 @@ struct KidsRootView: View {
                         symbol: "lock.fill",
                         title: "A grown-up can help.",
                         actionTitle: "Parents",
-                        actionSymbol: "lock.fill"
-                    ) { model.parentPresented = true }
+                        actionSymbol: "lock.fill",
+                        action: { model.parentPresented = true }
+                    )
                 }
             }
             .toolbar(.hidden, for: .navigationBar)
@@ -141,12 +142,14 @@ struct KidsStatusView: View {
             }
             if let action {
                 Button(actionTitle, systemImage: actionSymbol, action: action).buttonStyle(.borderedProminent)
+                    .accessibilityIdentifier("kids.status.action")
             } else {
                 ProgressView().scaleEffect(1.5)
             }
             if let parentAction {
                 Button("Parents", systemImage: "lock.fill", action: parentAction)
-                    .buttonStyle(.bordered).accessibilityIdentifier("kids.parents").font(.headline)
+                    .buttonStyle(.bordered).accessibilityIdentifier("kids.parents")
+                    .font(.headline)
             }
         }.frame(maxWidth: .infinity, maxHeight: .infinity).background(kidsBackground)
     }
@@ -288,10 +291,9 @@ struct KidsBrowseView: View {
                 KidsStatusView(
                     symbol: model.category.symbol,
                     title: "More pictures are coming!",
-                    actionTitle: "\(model.category == .shows ? "Movies" : "Shows")"
-                ) {
-                    model.category = model.category == .shows ? .movies : .shows
-                }
+                    actionTitle: "\(model.category == .shows ? "Movies" : "Shows")",
+                    action: { model.category = model.category == .shows ? .movies : .shows }
+                )
             }
         }
         .padding(.horizontal, 70).padding(.top, 45).background(kidsBackground)
@@ -507,7 +509,11 @@ struct KidsPlayerView: View {
                     .onAppear { control = "stop" }
             } else if playback.recovery {
                 VStack {
-                    KidsStatusView(symbol: "wifi.slash", title: "Let's try that again.") { Task { await playback.retry() } }
+                    KidsStatusView(
+                        symbol: "wifi.slash",
+                        title: "Let's try that again.",
+                        action: { Task { await playback.retry() } }
+                    )
                     Button("Back", systemImage: "arrow.backward") { Task { await model.stopPlayback() } }.padding(.bottom, 70)
                 }
             } else if playback.buffering {

@@ -12,6 +12,7 @@ import JellyfinAPI
 import Logging
 import os
 
+@MainActor
 final class ServerSocketManager {
 
     private struct Claim {
@@ -50,7 +51,7 @@ final class ServerSocketManager {
         (wakeStream, wake) = AsyncStream<Void>.makeStream()
     }
 
-    deinit {
+    isolated deinit {
         stop()
         wake.finish()
     }
@@ -114,7 +115,8 @@ final class ServerSocketManager {
         while !Task.isCancelled {
             guard let userSession else { break }
 
-            let session = userSession.client.socket(
+            let client = userSession.client
+            let session = client.socket(
                 supportsMediaControl: true,
                 supportedCommands: [
                     .displayContent,

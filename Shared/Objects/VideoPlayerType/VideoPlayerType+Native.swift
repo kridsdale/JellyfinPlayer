@@ -149,6 +149,7 @@ extension VideoPlayerType {
     // MARK: - Codec Profiles
 
     @ArrayBuilder<CodecProfile>
+    @MainActor
     static var _nativeCodecProfiles: [CodecProfile] {
 
         CodecProfile(
@@ -230,6 +231,7 @@ extension VideoPlayerType {
     }
 
     @ArrayBuilder<VideoRangeType>
+    @MainActor
     private static var nativeHDRProfiles: [VideoRangeType] {
 
         VideoRangeType.sdr

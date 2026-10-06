@@ -149,7 +149,8 @@ final class ServerConnectionManager: ObservableObject {
     }
 
     @Function(\Action.Cases.start)
-    private func _start() {
+    private func _start() async {
+        MainActor.preconditionIsolated()
         guard !isStarted else { return }
         isStarted = true
 
@@ -177,7 +178,8 @@ final class ServerConnectionManager: ObservableObject {
     }
 
     @Function(\Action.Cases.stop)
-    private func _stop() {
+    private func _stop() async {
+        MainActor.preconditionIsolated()
         guard isStarted else { return }
 
         isStarted = false
@@ -190,7 +192,8 @@ final class ServerConnectionManager: ObservableObject {
     }
 
     @Function(\Action.Cases.scheduleConnectionResolution)
-    private func _scheduleConnectionResolution() {
+    private func _scheduleConnectionResolution() async {
+        MainActor.preconditionIsolated()
         guard isAutoSwitchEnabled else { return }
 
         evaluationTask?.cancel()
@@ -227,7 +230,8 @@ final class ServerConnectionManager: ObservableObject {
     }
 
     @Function(\Action.Cases._resolutionDidUpdate)
-    private func __resolutionDidUpdate(_ resolution: Resolution) {
+    private func __resolutionDidUpdate(_ resolution: Resolution) async {
+        MainActor.preconditionIsolated()
         // no-op, just for state transition
     }
 

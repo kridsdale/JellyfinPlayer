@@ -29,6 +29,7 @@ struct GestureView: PlatformViewRepresentable {
         Coordinator()
     }
 
+    @MainActor
     class Coordinator {
 
         lazy var panGesture: DirectionalPanGestureRecognizer! = {

@@ -81,7 +81,8 @@ final class SelectUserViewModel: ViewModel {
     }
 
     @Function(\Action.Cases.signIn)
-    private func _signIn(_ user: UserState, _ pin: String) throws {
+    private func _signIn(_ user: UserState, _ pin: String) async throws {
+        MainActor.preconditionIsolated()
         if user.accessPolicy == .requirePin, let storedPin = keychain.get("\(user.id)-pin") {
             guard pin == storedPin else {
                 throw ErrorMessage(L10n.incorrectPinForUser(user.username))

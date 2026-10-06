@@ -12,7 +12,7 @@ import SwiftUI
 // TODO: when used for single seasons, have title as just "Episodes" or
 //       have functionality in PosterGroup
 
-struct SeriesEpisodeContentGroup: ContentGroup, Identifiable {
+struct SeriesEpisodeContentGroup: @MainActor ContentGroup, Identifiable {
 
     let id: String
     let playButtonItem: BaseItemDto?

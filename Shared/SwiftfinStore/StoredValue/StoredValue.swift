@@ -19,8 +19,9 @@ import SwiftUI
 //         that automatically namespace
 
 /// A property wrapper for a stored `AnyData` object.
+@MainActor
 @propertyWrapper
-struct StoredValue<Value: Storable>: DynamicProperty {
+struct StoredValue<Value: Storable>: @MainActor DynamicProperty {
 
     @ObservedObject
     private var observable: _GenericStoredValueObservation<Value>

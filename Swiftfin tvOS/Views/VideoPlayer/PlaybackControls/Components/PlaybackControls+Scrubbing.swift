@@ -20,12 +20,14 @@ extension VideoPlayer.PlaybackControls {
     func startSpeedBoost() {
         guard !isSpeedBoosting else { return }
 
-        speedBoostTimer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false) { [self] _ in
+        speedBoostTask = Task { @MainActor [self] in
+            try? await Task.sleep(for: .milliseconds(500))
+            guard !Task.isCancelled else { return }
             isSpeedBoosting = true
             containerState.originalPlaybackRate = manager.rate
 
             let multiplier = Defaults[.VideoPlayer.Gesture.longPressSpeedMultiplier]
-            manager.setRate(rate: multiplier.rawValue)
+            await manager.setRate(rate: multiplier.rawValue)
 
             toaster.present(
                 Text(multiplier.displayTitle),
@@ -35,8 +37,8 @@ extension VideoPlayer.PlaybackControls {
     }
 
     func stopSpeedBoost(performJump: Bool = false) {
-        speedBoostTimer?.invalidate()
-        speedBoostTimer = nil
+        speedBoostTask?.cancel()
+        speedBoostTask = nil
 
         if isSpeedBoosting {
             if let originalRate = containerState.originalPlaybackRate {
@@ -83,14 +85,16 @@ extension VideoPlayer.PlaybackControls {
     }
 
     func scheduleJump(direction: JumpDirection) {
-        pendingJumpWork?.cancel()
+        pendingJumpTask?.cancel()
 
         let jumpCount = containerState.jumpProgressObserver.jumps
         let interval = direction == .forward
             ? jumpForwardInterval.rawValue
             : jumpBackwardInterval.rawValue
 
-        let work = DispatchWorkItem { [weak manager, weak containerState] in
+        let work = Task { @MainActor [weak manager, weak containerState] in
+            try? await Task.sleep(for: .milliseconds(250))
+            guard !Task.isCancelled else { return }
             let totalDuration = interval * jumpCount
 
             switch direction {
@@ -102,7 +106,6 @@ extension VideoPlayer.PlaybackControls {
             containerState?.jumpProgressObserver.reset()
         }
 
-        pendingJumpWork = work
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.25, execute: work)
+        pendingJumpTask = work
     }
 }

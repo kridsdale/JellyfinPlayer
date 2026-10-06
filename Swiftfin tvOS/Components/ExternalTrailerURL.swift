@@ -47,18 +47,18 @@ struct ExternalTrailerURL {
 
 extension ExternalTrailerURL {
 
-    struct Source {
+    struct Source: Sendable {
 
         let displayTitle: String
         let hostPatterns: [String]
         let requiredPathComponents: [String]?
-        let buildDeepLink: (URL) -> URL?
+        let buildDeepLink: @Sendable (URL) -> URL?
 
         fileprivate init(
             displayTitle: String,
             hostPatterns: [String],
             requiredPathComponents: [String]? = nil,
-            buildDeepLink: @escaping (URL) -> URL?
+            buildDeepLink: @escaping @Sendable (URL) -> URL?
         ) {
             self.displayTitle = displayTitle
             self.hostPatterns = hostPatterns
@@ -97,7 +97,7 @@ extension ExternalTrailerURL.Source {
         URL(string: "youtube://\(url.absoluteString)")
     }
 
-    static var allCases: [Self] = [
+    static let allCases: [Self] = [
         .appleTV,
         .vimeo,
         .youtube,

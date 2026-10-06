@@ -16,6 +16,7 @@ extension FocusedValues {
 
 // MARK: - Form Overloads
 
+@MainActor
 func Form(
     systemImage: String,
     @ViewBuilder content: @escaping () -> some View
@@ -28,6 +29,7 @@ func Form(
     }
 }
 
+@MainActor
 func Form(
     image: ImageResource,
     @ViewBuilder content: @escaping () -> some View
@@ -40,6 +42,7 @@ func Form(
     }
 }
 
+@MainActor
 func Form(
     @ViewBuilder content: @escaping () -> some View,
     @ViewBuilder image: @escaping () -> some View

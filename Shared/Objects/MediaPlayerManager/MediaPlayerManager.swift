@@ -31,6 +31,7 @@ extension Container {
             .singleton
     }
 
+    @MainActor
     var mediaPlayerManager: Factory<MediaPlayerManager> {
         self { @MainActor in
             .init(
@@ -316,7 +317,9 @@ final class MediaPlayerManager: ViewModel {
     }
 
     @Function(\Action.Cases.setRate)
-    private func set(_ rate: Float) {
+    private func set(_ rate: Float) async {
+        MainActor.preconditionIsolated()
+        guard !Task.isCancelled, state != .stopped, state != .error else { return }
         if self.rate != rate {
             self.rate = rate
         }
@@ -385,7 +388,8 @@ final class MediaPlayerManager: ViewModel {
     }
 
     @Function(\Action.Cases.togglePlayPause)
-    private func _togglePlayPause() {
+    private func _togglePlayPause() async {
+        MainActor.preconditionIsolated()
         switch playbackRequestStatus {
         case .playing:
             setPlaybackRequestStatus(status: .paused)
@@ -445,7 +449,7 @@ final class MediaPlayerManager: ViewModel {
         self.seconds = currentSeconds
     }
 
-    nonisolated static func getMaxBitrate(
+    static func getMaxBitrate(
         for requestedBitrate: PlaybackBitrate,
         testSize: PlaybackBitrateTestSize = Defaults[.VideoPlayer.appMaximumBitrateTest]
     ) async throws -> Int {
@@ -456,26 +460,22 @@ final class MediaPlayerManager: ViewModel {
             throw UserSessionError.missingCurrentSession
         }
 
-        let testStartTime = Date()
+        let testStartTime = ContinuousClock.now
         #if os(tvOS)
         let transfer = KidsPerformance.begin(.http, endpoint: .bitrate, values: ["bytes": Double(testSize.rawValue)])
         defer { transfer?.finish(Task.isCancelled ? .cancelled : .failure) }
-        let _ = try await userSession.client.send(
+        let response = try await userSession.client.send(
             Paths.getBitrateTestBytes(size: testSize.rawValue),
             delegate: transfer.map(KidsPerformanceTaskDelegate.init(span:))
         )
-        transfer?.finish()
+        transfer?.finish(values: ["bytes": Double(response.value.count)])
         #else
-        let _ = try await userSession.client.send(Paths.getBitrateTestBytes(size: testSize.rawValue))
+        let response = try await userSession.client.send(Paths.getBitrateTestBytes(size: testSize.rawValue))
         #endif
-        let testDuration = Date().timeIntervalSince(testStartTime)
-        let testSizeBits = Double(testSize.rawValue * 8)
-        let testBitrate = testSizeBits / testDuration
-
-        return clamp(
-            Int(testBitrate),
-            min: PlaybackBitrate.kbps420.rawValue,
-            max: Int(Int32.max)
+        try Task.checkCancellation()
+        return try PlaybackBitrateMeasurement.estimate(
+            bytes: response.value.count,
+            elapsed: testStartTime.duration(to: .now)
         )
     }
 }

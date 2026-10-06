@@ -467,6 +467,14 @@ final class KidsAppModel: ObservableObject {
         }
     }
 
+    private func prefetchArtwork(_ item: KidsItem) async -> Bool {
+        guard !Task.isCancelled else { return false }
+        do {
+            _ = try await artworkImage(for: item)
+            return true
+        } catch { return false }
+    }
+
     func prefetch(around focusedID: String?, category: KidsCategory) async {
         guard !isPreview, !loading, catalogComplete, !requiresParent, !starting, activePlayback == nil,
               let focusedID, let items = catalog[category], items.contains(where: { $0.id == focusedID }) else { return }
@@ -475,18 +483,16 @@ final class KidsAppModel: ObservableObject {
         let trace = KidsPerformance.begin(.prefetch, variant: category == .shows ? .shows : .movies)
         let result = await KidsPerformance.$current.withValue(trace) {
             await withTaskGroup(of: Bool.self, returning: (Int, Int).self) { group in
+                let model = self
                 for item in plan.artwork {
-                    group.addTask { @MainActor in
-                        guard !Task.isCancelled else { return false }
-                        do { _ = try await self.artworkImage(for: item)
-                            return true
-                        } catch { return false }
+                    group.addTask { [model, item] in
+                        await model.prefetchArtwork(item)
                     }
                 }
                 if let show = plan.show {
-                    group.addTask { @MainActor in
+                    group.addTask { [model, show] in
                         guard !Task.isCancelled else { return false }
-                        do { return try await !self.episodes(for: show, prefetch: true).isEmpty
+                        do { return try await !model.episodes(for: show, prefetch: true).isEmpty
                         } catch { return false }
                     }
                 }

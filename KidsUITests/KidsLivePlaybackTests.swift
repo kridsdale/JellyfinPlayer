@@ -159,6 +159,59 @@ final class KidsLivePlaybackTests: XCTestCase {
         XCTAssertTrue(play.label.contains("Resume"))
     }
 
+    /// This specific movie is already in the approved Plex-derived Kid Movies
+    /// catalog. Exercise its AVI/MPEG4-ASP path through the real remote UI.
+    func testRealApprovedLegacyMoviePlayback() {
+        launchRealAccount()
+        let initial = firstCard.identifier
+        XCUIRemote.shared.press(.up)
+        XCUIRemote.shared.press(.right)
+        focusedSelect(app.buttons["kids.category.movies"])
+        let movies = XCTNSPredicateExpectation(predicate: NSPredicate { _, _ in
+            self.firstCard.exists && self.firstCard.identifier != initial
+        }, object: nil)
+        XCTAssertEqual(XCTWaiter.wait(for: [movies], timeout: 20), .completed)
+        XCUIRemote.shared.press(.down)
+        let itemID = "fc853b01e9832404f1a5ee8299edcf63"
+        let target = app.buttons["kids.card.\(itemID)"]
+        for _ in 0 ..< 24 {
+            if target.exists && target.isHittable {
+                break
+            }
+            XCUIRemote.shared.press(.down)
+            let settle = expectation(description: "Allow grid to expose the next approved row")
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) { settle.fulfill() }
+            wait(for: [settle], timeout: 2)
+        }
+        XCTAssertTrue(target.exists && target.isHittable, "The exact approved movie must be reachable in the movie grid")
+        for _ in 0 ..< 4 {
+            if target.hasFocus {
+                break
+            }
+            let focused = app.buttons.matching(NSPredicate(format: "hasFocus == true")).firstMatch
+            XCTAssertTrue(focused.exists && focused.identifier.hasPrefix("kids.card."))
+            XCUIRemote.shared.press(target.frame.midX < focused.frame.midX ? .left : .right)
+        }
+        focusedSelect(target)
+        let play = app.buttons["kids.action.play"]
+        XCTAssertTrue(play.waitForExistence(timeout: 15))
+        focusedSelect(play)
+        XCTAssertTrue(
+            app.buttons["kids.player.surface"].waitForExistence(timeout: 30),
+            "This AVI stream must produce decoded video and an advancing clock"
+        )
+        revealAndVerifyTitle(itemID)
+        capture("real-approved-avi-decoded-frame")
+        allowPlaybackToProgress()
+        let before = pauseAndReadPosition()
+        XCTAssertGreaterThan(before, 1)
+        XCUIRemote.shared.press(.playPause)
+        allowPlaybackToProgress()
+        let after = pauseAndReadPosition()
+        XCTAssertGreaterThan(after, before + 1)
+        capture("real-approved-avi-advancing-frame")
+    }
+
     private func naturalIDs() throws -> (String, String) {
         let environment = ProcessInfo.processInfo.environment
         guard environment["KIDS_RUN_NATURAL"] == "1" else {

@@ -46,6 +46,7 @@ struct SupplementTabView<Item: Identifiable, Content: View>: PlatformViewControl
         Coordinator()
     }
 
+    @MainActor
     final class Coordinator {
 
         weak var container: UIViewController?

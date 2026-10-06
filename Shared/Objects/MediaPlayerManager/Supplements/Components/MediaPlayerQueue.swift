@@ -34,7 +34,7 @@ extension MediaPlayerQueue {
     }
 }
 
-class AnyMediaPlayerQueue: MediaPlayerQueue {
+class AnyMediaPlayerQueue: @MainActor MediaPlayerQueue {
 
     @Published
     var hasNextItem: Bool

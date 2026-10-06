@@ -35,7 +35,9 @@ extension EnvironmentValues {
     var posterDisplayType: PosterDisplayType = .portrait
 
     @Entry
-    var safeAreaInsets: EdgeInsets = UIApplication.shared.keyWindow?.safeAreaInsets.asEdgeInsets ?? .zero
+    // The presenting media route injects its measured safe area. An environment
+    // default must not reach into main-actor UIKit from arbitrary readers.
+    var safeAreaInsets: EdgeInsets = .zero
 
     @Entry
     var subtitleOffset: Binding<Duration> = .constant(.zero)

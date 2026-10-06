@@ -6,7 +6,7 @@
 // Copyright (c) 2026 Jellyfin & Jellyfin Contributors
 //
 
-import CoreStore
+@preconcurrency import CoreStore
 import Foundation
 
 extension SwiftfinStore.V1 {

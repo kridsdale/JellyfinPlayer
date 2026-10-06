@@ -101,3 +101,23 @@ Four Release profiling methods passed eight real H264 starts and seven launches.
 The first navigation attempt used the retained Release xctestrun file and is excluded from preview validation. The second used the correct Debug file: twelve tests passed and four seeded-player previews failed because the real identity watcher stopped their synthetic player. The watcher now explicitly excludes previews; production still stops playback before identity/catalog replacement. The third run, `build/validation/Kids-Prefix-Navigation-03.xcresult`, passed all **16** remote navigation tests with zero failures (152.533 s), including pending Movies loading, countdown Stop, parent movie Start over, paused seeking and reconnect Back. No real account or media changed to fix those fixture failures.
 
 Native core/HTTP and persistence: **69 + 23 = 92** tests pass. Profiling analyzer: **10** tests pass. The latest shared-code iOS Release simulator build passes. The selected paid team and simulator ad-hoc identity are kept distinct from hardware signing and CloudKit transport.
+
+
+## Swift 6 runtime acceptance (2026-10-05)
+
+The app targets now select Swift 6 with explicit main-actor ownership. Dependencies retain their declared modes. Initial acceptance crashed during pause/play because StatefulMacro erased the executor of synchronous handlers; all nine app handlers now cross an explicit async method boundary. System remote-command payloads and native-player observations also hop to the actor, with stale ownership guards.
+
+`Kids-Swift6-Acceptance-05.xcresult` passed all 16 remote navigation checks and five real-account methods (AVI/MPEG4+AC3, H264 episode/relaunch, H264 movie, denied-account recovery, Shuffle). Its sixth live method reproduced a failed-open Retry losing the initial checkpoint. The controller now initializes recovery time to the durable requested position; `Kids-Swift6-Recovery-06.xcresult` passed exact-item and original 113-second checkpoint restoration.
+
+`Kids-Swift6-Natural-07.xcresult` passed genuine VLC EOF, focused countdown Stop and exact next episode playback. `Kids-Swift6-Session-Cap-08.xcresult` passed genuine second EOF, persisted two-episode budget, no further autoplay, and return to Shows. Temporary near-end positions touched only simulator-local SwiftData. The complete SDK export after restoring `swift6-original-state.json` equals the original. The combined failure and the earlier actor crashes remain retained. Separate replacements do not make the failed combined run all-green.
+
+Native production utility tests cover 6,400 concurrent override updates and timer replacement, cancellation, actor delivery and owner release. The approved AVI test is one exact existing Kid Movies item, not library-wide codec proof. Apple TV and live iCloud transport remain explicitly deferred by the user.
+
+
+## Current Swift 6 and final Release acceptance (2026-10-05)
+
+See [the modernization report](engineering/swift6-modernization.md) for the actor-boundary failures and fixes. All 16 navigation checks passed in the combined `Kids-Swift6-Acceptance-05.xcresult`, which retained one failed checkpoint Retry. The repair passed separately in `Kids-Swift6-Recovery-06.xcresult`; genuine EOF/countdown/next and the persisted two-episode cap passed separately in `Kids-Swift6-Natural-07.xcresult` and `Kids-Swift6-Session-Cap-08.xcresult`. They are separate results, not a single all-green combined rerun.
+
+Final probe 12's tvOS Release build-for-testing and iOS Release compile passed. `Kids-Swift6-Final-12.xcresult` passed all three selected methods: seven real H264 timing starts plus one exact approved AVI/MPEG4+AC3 movie with pause/resume and an advancing clock. Compiled and installed executable hashes matched `dc0f409591c55d0c17cbe690f6d0d08fee60cb64be0217e72ac9abb98710fb02`; ad-hoc signature verified; Release Debug hooks are absent. Full simulator state restored through SwiftData SDK calls and compared equal to the original snapshot. Native core/HTTP 69 plus persistence 23 tests, three production runtime utility suites, ten analyzer tests and six App Store metadata tests passed. [Final timing aggregate](performance/2026-10-05-swift6-final-12.json).
+
+An independent earlier finite server capture recorded 239 samples with zero errors, approved DirectPlay and same-session present-empty transitions after playback. It corroborates cleanup, not rendered frames, EOF causality or this final timing run. RAID write denial was checked at both ends. No unattended reboot acceptance is claimed. The human explicitly deferred physical-device installation and live iCloud transport testing. The [next queued goal](engineering/next-goal.md) is the minimal-responsibility Swift package refactor.

@@ -10,7 +10,7 @@ import SwiftUI
 
 /// Tracking `safeAreaBar` application necessary for `CollectionVGrid`
 struct IsSafeAreaBarApplied: PreferenceKey {
-    static var defaultValue: Bool = false
+    static let defaultValue: Bool = false
 
     static func reduce(value: inout Bool, nextValue: () -> Bool) {
         value = nextValue()

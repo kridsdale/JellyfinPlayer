@@ -14,6 +14,7 @@ extension VideoPlayerType {
     // MARK: - Codec Profiles
 
     @ArrayBuilder<CodecProfile>
+    @MainActor
     var codecProfiles: [CodecProfile] {
         switch self {
         case .native:

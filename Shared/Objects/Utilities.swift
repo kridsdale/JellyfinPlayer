@@ -10,6 +10,10 @@ import Foundation
 
 @_exported import CasePaths
 @_exported import Engine
+
+// StatefulMacro erases closure executor annotations in its worker registry.
+// Keep app @Function handlers async: the generated await crosses to the
+// explicitly main-actor-isolated method before it touches UI or session state.
 @_exported import StatefulMacros
 @_exported import SwiftfinMacros
 

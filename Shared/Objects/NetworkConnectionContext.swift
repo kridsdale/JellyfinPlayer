@@ -86,7 +86,8 @@ struct NetworkConnectionContext: Equatable {
         #endif
     }
 
-    private final class ContinuationResumeState {
+    // All mutable state is protected by the lock, including cross-queue callbacks.
+    private final class ContinuationResumeState: @unchecked Sendable {
 
         private let lock = NSLock()
         private var didResume = false

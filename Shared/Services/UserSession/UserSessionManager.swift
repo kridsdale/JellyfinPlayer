@@ -16,17 +16,20 @@ import Logging
 
 extension Container {
 
+    @MainActor
     var userSessionManager: Factory<UserSessionManager> {
         self { UserSessionManager() }
             .singleton
     }
 
+    @MainActor
     var currentUserSession: Factory<UserSession?> {
         self { self.userSessionManager().currentSession }
             .cached
     }
 }
 
+@MainActor
 final class UserSessionManager: ObservableObject {
 
     enum State: Equatable {

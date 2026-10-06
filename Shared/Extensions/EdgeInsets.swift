@@ -22,6 +22,7 @@ extension EdgeInsets {
     // TODO: finalize tvOS
     /// The padding for Views against contextual edges,
     /// typically the edges of the View's scene
+    @MainActor
     static let edgePadding: CGFloat = {
         #if os(tvOS)
         60
@@ -34,6 +35,7 @@ extension EdgeInsets {
         #endif
     }()
 
+    @MainActor
     static let edgeInsets: EdgeInsets = .init(edgePadding)
 
     /// The gap between collection items

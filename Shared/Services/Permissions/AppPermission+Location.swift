@@ -48,7 +48,8 @@ extension AppPermission {
     }
 }
 
-private final class LocationPermissionRequest: NSObject, CLLocationManagerDelegate {
+@MainActor
+private final class LocationPermissionRequest: NSObject, @preconcurrency CLLocationManagerDelegate {
 
     private let manager = CLLocationManager()
     private var continuation: CheckedContinuation<PermissionStatus, Error>?

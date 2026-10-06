@@ -15,6 +15,7 @@ struct EPGLayout: Equatable {
     let rulerHeight: CGFloat
     let pointsPerMinute: CGFloat
 
+    @MainActor
     init(
         channelColumnWidth: CGFloat = UIDevice.isTV ? 130 : UIDevice.isPad ? 110 : 84,
         rowHeight: CGFloat? = nil,

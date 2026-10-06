@@ -59,6 +59,7 @@ struct FadeContentTransitionView<Item: Hashable, Content: View>: PlatformViewRep
         Coordinator()
     }
 
+    @MainActor
     final class Coordinator {
 
         private var currentContentID: AnyHashable?

@@ -8,6 +8,7 @@
 
 import UIKit
 
+@MainActor
 final class EPGScrollProxy: ObservableObject {
 
     private weak var contentScrollView: UIScrollView?

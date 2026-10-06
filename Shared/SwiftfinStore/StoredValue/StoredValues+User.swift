@@ -21,6 +21,7 @@ extension StoredValues.Keys {
     /// Construct a key where `ownerID` is the id of the user in the
     /// current user session, or always returns the default if there
     /// isn't a current session user.
+    @MainActor
     static func CurrentUserKey<Value: Codable>(
         _ name: String? = nil,
         field: String,
@@ -105,6 +106,7 @@ extension StoredValues.Keys {
             )
         }
 
+        @MainActor
         static var accessPolicy: Key<LocalUserAccessPolicy> {
             CurrentUserKey(
                 field: "currentUserAccessPolicy",
@@ -112,6 +114,7 @@ extension StoredValues.Keys {
             )
         }
 
+        @MainActor
         static func libraryStyle(id: String?) -> Key<LibraryStyle> {
             CurrentUserKey(
                 id,
@@ -123,6 +126,7 @@ extension StoredValues.Keys {
         // TODO: for now, only used for `sortBy` and `sortOrder`. Need to come up with
         //       rules for how stored filters work with libraries that should init
         //       with non-default filters (atow ex: favorites)
+        @MainActor
         static func libraryFilters(parentID: String?) -> Key<ItemFilterCollection> {
             CurrentUserKey(
                 parentID,
@@ -139,6 +143,7 @@ extension StoredValues.Keys {
             )
         }
 
+        @MainActor
         static var customDeviceProfiles: Key<[CustomDeviceProfile]> {
             CurrentUserKey(
                 field: "customDeviceProfiles",
@@ -146,6 +151,7 @@ extension StoredValues.Keys {
             )
         }
 
+        @MainActor
         static var enabledTrailers: Key<TrailerSelection> {
             CurrentUserKey(
                 field: "enabledTrailers",
@@ -153,6 +159,7 @@ extension StoredValues.Keys {
             )
         }
 
+        @MainActor
         static var itemViewAttributes: Key<[ItemViewAttribute]> {
             CurrentUserKey(
                 field: "itemViewAttributes",
@@ -160,6 +167,7 @@ extension StoredValues.Keys {
             )
         }
 
+        @MainActor
         static var previewImageScrubbing: Key<PreviewImageScrubbingOption> {
             CurrentUserKey(
                 field: "previewImageScrubbing",
@@ -167,6 +175,7 @@ extension StoredValues.Keys {
             )
         }
 
+        @MainActor
         static var forceDVTranscode: Key<Bool> {
             CurrentUserKey(
                 field: "forceDVTranscode",
@@ -174,6 +183,7 @@ extension StoredValues.Keys {
             )
         }
 
+        @MainActor
         static var forceHDRTranscode: Key<Bool> {
             CurrentUserKey(
                 field: "forceHDRTranscode",
@@ -181,6 +191,7 @@ extension StoredValues.Keys {
             )
         }
 
+        @MainActor
         static var forceSubtitleBurnIn: Key<Bool> {
             CurrentUserKey(
                 field: "forceSubtitleBurnIn",

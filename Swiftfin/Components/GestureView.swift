@@ -40,6 +40,7 @@ struct GestureView: PlatformViewRepresentable {
         Coordinator()
     }
 
+    @MainActor
     class Coordinator {
 
         lazy var doubleTouchGesture: UITapGestureRecognizer! = {

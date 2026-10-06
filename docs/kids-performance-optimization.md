@@ -135,3 +135,34 @@ The transport setter now updates immediately on the main actor rather than sched
 Failed experiments are preserved. [Opt08](performance/2026-10-05-opt08.json) tested a larger per-host connection pool without measured benefit; that change was removed. [Opt09](performance/2026-10-05-opt09.json) passed its UI assertions but recorded five ten-second stop-only drain failures, so it is excluded as a final acceptance candidate. Opt10 replaces that wait with terminal native-handle shutdown.
 
 Opt10 passed four Release profiling methods, eight genuine starts and seven launches. The trace contains 17,275 events, zero malformed lines and seven retained brief pre-session catalog failures; no artwork, playback, report, audio or native-drain failure was recorded. Native core/HTTP and persistence: 69 plus 23 tests pass. Analyzer: ten tests pass. New navigation, platform compatibility and broader format checks remain separately reported. No RAID file changes, media conversion, full-media prefetch or catalog expansion occurred.
+
+
+## Swift 6 verification and final measurement correction (probe 11–12)
+
+The app targets now compile in Swift 6 with explicit UI/session ownership. Main-actor handler crashes observed during real pause/play were repaired at the app's asynchronous method boundaries; no dependency checkout was patched. Failed trials and the exact checkpoint Retry repair are retained in [the modernization report](engineering/swift6-modernization.md). A separately approved AVI/MPEG4+AC3 movie now has actual frame, pause/resume and advancing-clock evidence; the representative timing samples below remain H264.
+
+The final Release simulator executable is SHA256 `dc0f409591c55d0c17cbe690f6d0d08fee60cb64be0217e72ac9abb98710fb02`, probe 12. Its installed hash matched; ad-hoc signature verification passed and Debug preview/fault arguments are absent. Both tvOS Release build-for-testing and the latest iOS Release compile passed. Native core/HTTP and persistence: 69 plus 23 tests pass. Three production utility suites, ten analyzer tests and six App Store metadata tests also pass. Hardware provisioning and live iCloud delivery are explicitly deferred by the user.
+
+| Median measurement | Swift 6 baseline 11 | Final probe 12 | n each |
+|---|---:|---:|---:|
+| Launch to first approved Shows prefix | 1.323 s | 1.068 s | 2 |
+| Launch to first browse | 1.366 s | 1.107 s | 2 |
+| Launch to complete catalog | 3.374 s | 3.185 s | 2 |
+| Grid artwork presentation | 110.620 ms | 123.572 ms | 29 |
+| Ordered Play to observed output | 0.966 s | 1.103 s | 2 |
+| Shuffle Play to observed output | 0.876 s | 0.816 s | 1 |
+| Movie Play to observed output | 1.115 s | 1.444 s | 4 |
+| Bandwidth probe operation | 43.956 ms | 44.747 ms | 7 |
+| Native player shutdown/drain | 60.592 ms | 64.858 ms | 7 |
+
+These paired small trials do not establish a speedup. Final movie output was slower; artwork and ordered output were also slower. First output uses native displayed-picture counters sampled every 50 ms; a surface marker is a run-loop presentation opportunity, not a GPU fence. None of these values isolates the RAID's mechanical seek time, and no OS/server/drive cache was purged.
+
+The actual response `Data.count` and URLSession network byte count were both 8,388,608 bytes for all seven final bandwidth samples, despite a requested 5,000,000 bytes. The estimator now uses the actual received payload and `ContinuousClock` duration, rejects empty/invalid measurements and bounds the conversion. This is a measurement-correctness fix, not an established latency optimization. It adds no request. All seven starts retained six instrumented catalog/bitrate HTTP requests plus separately instrumented SDK metadata/PlaybackInfo requests and fresh selected-item authorization.
+
+The earlier opt10 bandwidth cost was about half a second; baseline 11 and final 12 instead measured about 44–45 ms. Environment/workload variation prevents attributing that difference to Swift 6. A native-tested, identity-bound cache prototype remains an unshipped experiment: eliminating a current 45 ms probe would save only a small part of startup while retaining an older estimate. It was not integrated. The old larger-connection-pool experiment also lacked benefit and remains removed.
+
+One baseline show entry waited 2.652 s for an already running verified episode fetch; that fetch took 5.674 s overall. Final episode prefetch took 2.520 s and completed before title entry, which then took 21.943 ms. This is a warmup/timing difference, not removal of the cold work. The remaining cold wait is full scoped episode validation and per-item ancestry, including network queue/first-byte latency. The current decision is to retain those boundaries and the bounded metadata warmup rather than remove checks or add another scheduling/cache layer without a repeatable benefit. Physical-device measurements should guide the next latency change.
+
+`Kids-Swift6-Final-12.xcresult` passed three selected methods: two profiling methods (seven validated H264 starts) plus the separate exact approved AVI test, 124.178 s total. The final trace has 3,944 events, zero malformed lines, two retained pre-session catalog failures, and no artwork/playback/audio/drain failure. Complete original simulator progress was restored via SwiftData and compared equal, and the app was launched normally without profiling. [Baseline 11 aggregate](performance/2026-10-05-swift6-baseline-11.json) and [final 12 aggregate](performance/2026-10-05-swift6-final-12.json) retain source/build identity and sanitized distributions; raw traces remain private.
+
+The independent server observer for the earlier EOF/cap run corroborated same-session NowPlaying clearance, approved DirectPlay and maximum sampled concurrency one, with RAID write denial at start/end. It did not overlap probe 11 or 12 and is not used to infer their stream codecs, hardware decoding or server latency. No server tuning, media mutation, catalog expansion or full-video prefetch was performed for these trials.

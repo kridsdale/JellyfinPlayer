@@ -33,7 +33,9 @@ struct MenuContentGroup: Identifiable, Equatable {
 
 struct MenuContentKey: PreferenceKey {
 
-    static var defaultValue: [MenuContentGroup] = []
+    static var defaultValue: [MenuContentGroup] {
+        []
+    }
 
     static func reduce(value: inout [MenuContentGroup], nextValue: () -> [MenuContentGroup]) {
         value.append(contentsOf: nextValue())

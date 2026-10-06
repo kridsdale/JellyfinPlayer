@@ -34,7 +34,7 @@ Passwords and PINs stay in the GUI. Do not paste them into build commands or tes
 
 ## Automated and real-client evidence
 
-`swift test --package-path KidsCore` runs the original 26 core/HTTP tests plus 23 native SwiftData persistence tests. The latter cover full JSON migration and its immutable backup, durable reopen, stale independent edits, deterministic same-item conflicts, offline convergence, clock rollback, concurrent Shuffle consumption/new cycles, reset generations/tombstones, same-episode Set Next, movie Start over, binding isolation, corruption/receipt repair, delayed cloud imports, independent preferences, and the generated schema's default/uniqueness requirements.
+`swift test --package-path KidsCore` now runs 69 core/HTTP tests (including the original 26) plus 23 native SwiftData persistence tests. Both suites passed in the final Swift 6 rerun on 2026-10-05. The latter cover full JSON migration and its immutable backup, durable reopen, stale independent edits, deterministic same-item conflicts, offline convergence, clock rollback, concurrent Shuffle consumption/new cycles, reset generations/tombstones, same-episode Set Next, movie Start over, binding isolation, corruption/receipt repair, delayed cloud imports, independent preferences, and the generated schema's default/uniqueness requirements.
 
 The two-store tests transfer records through independent actual SwiftData containers with CloudKit transport disabled. They prove storage and application-level merge behavior, not Apple's external service. Simulator result bundles and the current verification status are recorded in [kids-validation.md](kids-validation.md).
 

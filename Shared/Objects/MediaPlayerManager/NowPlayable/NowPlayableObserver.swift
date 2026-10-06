@@ -74,13 +74,15 @@ class NowPlayableObserver: ViewModel, MediaPlayerObserver {
 
         Notifications[.avAudioSessionInterruption]
             .publisher
+            .receive(on: DispatchQueue.main)
             .sink { [weak self] i in
                 self?.handleInterruption(type: i.0, options: i.1)
             }
             .store(in: &cancellables)
 
         configureRemoteCommands(defaultRegisteredCommands, commandHandler: { [weak self] command, event in
-            self?.handleCommand(command: command, event: event) ?? .commandFailed
+            guard let self, self.audioOwner == owner else { return .commandFailed }
+            return self.handleCommand(command: command, event: event)
         })
     }
 
@@ -208,7 +210,7 @@ class NowPlayableObserver: ViewModel, MediaPlayerObserver {
     @MainActor
     private func handleCommand(
         command: NowPlayableCommand,
-        event: MPRemoteCommandEvent
+        event: NowPlayableCommand.Event
     ) -> MPRemoteCommandHandlerStatus {
         guard let manager, audioOwner != nil,
               manager.state != .stopped, manager.state != .error else { return .commandFailed }
@@ -220,14 +222,14 @@ class NowPlayableObserver: ViewModel, MediaPlayerObserver {
         case .togglePausePlay:
             manager.togglePlayPause()
         case .skipBackward:
-            guard let event = event as? MPSkipIntervalCommandEvent else { return .commandFailed }
-            manager.proxy?.jumpBackward(.seconds(event.interval))
+            guard let interval = event.interval else { return .commandFailed }
+            manager.proxy?.jumpBackward(.seconds(interval))
         case .skipForward:
-            guard let event = event as? MPSkipIntervalCommandEvent else { return .commandFailed }
-            manager.proxy?.jumpForward(.seconds(event.interval))
+            guard let interval = event.interval else { return .commandFailed }
+            manager.proxy?.jumpForward(.seconds(interval))
         case .changePlaybackPosition:
-            guard let event = event as? MPChangePlaybackPositionCommandEvent else { return .commandFailed }
-            manager.proxy?.setSeconds(Duration.seconds(event.positionTime))
+            guard let position = event.positionTime else { return .commandFailed }
+            manager.proxy?.setSeconds(Duration.seconds(position))
         case .nextTrack:
             guard let nextItem = manager.queue?.nextItem else { return .commandFailed }
             manager.playNewItem(provider: nextItem)
@@ -250,7 +252,7 @@ class NowPlayableObserver: ViewModel, MediaPlayerObserver {
 
     private func configureRemoteCommands(
         _ commands: [NowPlayableCommand],
-        commandHandler: @escaping (NowPlayableCommand, MPRemoteCommandEvent) -> MPRemoteCommandHandlerStatus
+        commandHandler: @escaping @MainActor @Sendable (NowPlayableCommand, NowPlayableCommand.Event) -> MPRemoteCommandHandlerStatus
     ) {
         guard commands.isNotEmpty else { return }
 

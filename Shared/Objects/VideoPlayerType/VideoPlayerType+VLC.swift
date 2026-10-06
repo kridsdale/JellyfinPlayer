@@ -207,6 +207,7 @@ extension VideoPlayerType {
     // MARK: - Codec Profiles
 
     @ArrayBuilder<CodecProfile>
+    @MainActor
     static var _vlcCodecProfiles: [CodecProfile] {
         CodecProfile(
             codec: VideoCodec.h264.rawValue,
@@ -312,6 +313,7 @@ extension VideoPlayerType {
     }
 
     @ArrayBuilder<VideoRangeType>
+    @MainActor
     private static var vlcHDRProfiles: [VideoRangeType] {
 
         VideoRangeType.sdr

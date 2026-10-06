@@ -8,7 +8,7 @@
 
 import Defaults
 import FactoryKit
-import Foundation
+@preconcurrency import Foundation
 import SwiftUI
 import UIKit
 
@@ -66,7 +66,7 @@ extension Defaults.Keys {
     ///
     /// This is set externally whenever the app or user accent colors change,
     /// depending on the current app state.
-    static var accentColor: Key<Color> = AppKey("accentColor", default: .jellyfinPurple)
+    static let accentColor: Key<Color> = AppKey("accentColor", default: .jellyfinPurple)
 
     /// The _real_ appearance key to be used.
     ///

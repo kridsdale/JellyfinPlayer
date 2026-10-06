@@ -16,6 +16,7 @@ private let dotHStackDotSize: CGFloat = 2
 private let dotHStackPadding: CGFloat = 5
 #endif
 
+@MainActor
 func DotHStack(
     padding: CGFloat = dotHStackPadding,
     @ViewBuilder content: @escaping () -> some View

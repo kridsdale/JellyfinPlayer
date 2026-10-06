@@ -10,6 +10,7 @@ import FactoryKit
 import JellyfinAPI
 import SwiftUI
 
+@MainActor
 extension BaseItemDto {
 
     /// Indicates whether the item can be downloaded by the current user

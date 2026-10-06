@@ -37,6 +37,7 @@ class AVMediaPlayerProxy: VideoMediaPlayerProxy {
     private var statusObserver: NSKeyValueObservation!
     private var timeControlStatusObserver: NSKeyValueObservation!
     private var timeObserver: Any!
+    private var playbackGeneration: UUID?
     private var managerItemObserver: AnyCancellable?
     private var managerStateObserver: AnyCancellable?
 
@@ -48,17 +49,17 @@ class AVMediaPlayerProxy: VideoMediaPlayerProxy {
 
             if let manager {
                 managerItemObserver = manager.$playbackItem
-                    .sink { playbackItem in
+                    .sink { [weak self] playbackItem in
                         if let playbackItem {
-                            self.playNew(item: playbackItem)
+                            self?.playNew(item: playbackItem)
                         }
                     }
 
                 managerStateObserver = manager.$state
-                    .sink { state in
+                    .sink { [weak self] state in
                         switch state {
                         case .stopped:
-                            self.playbackStopped()
+                            self?.playbackStopped()
                         default: break
                         }
                     }
@@ -80,14 +81,21 @@ class AVMediaPlayerProxy: VideoMediaPlayerProxy {
         timeObserver = player.addPeriodicTimeObserver(
             forInterval: CMTime(seconds: 1, preferredTimescale: 1000),
             queue: .main
-        ) { newTime in
+        ) { @Sendable [weak self] newTime in
             let newSeconds = Duration.seconds(newTime.seconds)
-
-            if !self.isScrubbing.wrappedValue {
-                self.scrubbedSeconds.wrappedValue = newSeconds
+            Task { @MainActor [weak self] in
+                guard let self, self.manager?.state != .stopped, self.manager?.state != .error else { return }
+                if !self.isScrubbing.wrappedValue {
+                    self.scrubbedSeconds.wrappedValue = newSeconds
+                }
+                self.manager?.seconds = newSeconds
             }
+        }
+    }
 
-            self.manager?.seconds = newSeconds
+    isolated deinit {
+        if let timeObserver {
+            player.removeTimeObserver(timeObserver)
         }
     }
 
@@ -138,13 +146,12 @@ class AVMediaPlayerProxy: VideoMediaPlayerProxy {
 extension AVMediaPlayerProxy {
 
     private func playbackStopped() {
+        playbackGeneration = nil
         player.pause()
 
         if let timeObserver {
-            DispatchQueue.main.async {
-                self.player.removeTimeObserver(timeObserver)
-                self.timeObserver = nil
-            }
+            player.removeTimeObserver(timeObserver)
+            self.timeObserver = nil
         }
 
         if let statusObserver {
@@ -160,6 +167,8 @@ extension AVMediaPlayerProxy {
 
     private func playNew(item: MediaPlayerItem) {
         let baseItem = item.baseItem
+        let generation = UUID()
+        playbackGeneration = generation
 
         let newAVPlayerItem = AVPlayerItem(url: item.url)
         newAVPlayerItem.externalMetadata = item.baseItem.avMetadata
@@ -173,47 +182,42 @@ extension AVMediaPlayerProxy {
 //            }
 //        }
 
-        timeControlStatusObserver = player.observe(\.timeControlStatus, options: [.new, .initial]) { player, _ in
-            let timeControlStatus = player.timeControlStatus
-
-            DispatchQueue.main.async {
-                switch timeControlStatus {
-                case .paused:
-                    self.manager?.setPlaybackRequestStatus(status: .paused)
-                case .waitingToPlayAtSpecifiedRate: ()
-                // TODO: buffering
-                case .playing:
-                    self.manager?.setPlaybackRequestStatus(status: .playing)
-                @unknown default: ()
+        timeControlStatusObserver = player.observe(\.timeControlStatus, options: [.new, .initial]) { @Sendable [weak self] player, _ in
+            let status = player.timeControlStatus
+            Task { @MainActor [weak self] in
+                guard let self, self.playbackGeneration == generation else { return }
+                switch status {
+                case .paused: self.manager?.setPlaybackRequestStatus(status: .paused)
+                case .waitingToPlayAtSpecifiedRate: break
+                case .playing: self.manager?.setPlaybackRequestStatus(status: .playing)
+                @unknown default: break
                 }
             }
         }
 
-        // TODO: proper handling of none/unknown states
-        statusObserver = player.observe(\.currentItem?.status, options: [.new, .initial]) { _, value in
-            guard let newValue = value.newValue else { return }
-            switch newValue {
-            case .failed:
-                if let error = self.player.error {
-                    DispatchQueue.main.async {
+        statusObserver = player.observe(\.currentItem?.status, options: [.new, .initial]) { @Sendable [weak self] _, value in
+            guard let status = value.newValue else { return }
+            Task { @MainActor [weak self] in
+                guard let self, self.playbackGeneration == generation else { return }
+                switch status {
+                case .failed:
+                    if let error = self.player.error {
                         self.manager?.error(ErrorMessage("AVPlayer error: \(error.localizedDescription)"))
                     }
-                }
-            case .none, .readyToPlay, .unknown:
-                let startSeconds = max(.zero, (baseItem.startSeconds ?? .zero) - Duration.seconds(Defaults[.VideoPlayer.resumeOffset]))
-
-                self.player.seek(
-                    to: CMTimeMake(
-                        value: startSeconds.components.seconds,
-                        timescale: 1
-                    ),
-                    toleranceBefore: .zero,
-                    toleranceAfter: .zero,
-                    completionHandler: { _ in
-                        self.play()
+                case .none, .readyToPlay, .unknown:
+                    let startSeconds = max(.zero, (baseItem.startSeconds ?? .zero) - Duration.seconds(Defaults[.VideoPlayer.resumeOffset]))
+                    self.player.seek(
+                        to: CMTimeMake(value: startSeconds.components.seconds, timescale: 1),
+                        toleranceBefore: .zero,
+                        toleranceAfter: .zero
+                    ) { @Sendable [weak self] finished in
+                        Task { @MainActor [weak self] in
+                            guard let self, finished, self.playbackGeneration == generation else { return }
+                            self.play()
+                        }
                     }
-                )
-            @unknown default: ()
+                @unknown default: break
+                }
             }
         }
     }

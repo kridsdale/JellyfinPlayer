@@ -9,7 +9,7 @@
 import Defaults
 import JellyfinAPI
 
-struct SeasonViewModelLibrary: PagingLibrary {
+struct SeasonViewModelLibrary: @MainActor PagingLibrary {
 
     let hasNextPage = false
     let parent: BaseItemDto

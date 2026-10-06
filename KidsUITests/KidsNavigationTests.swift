@@ -277,7 +277,10 @@ final class KidsNavigationTests: XCTestCase {
 
     func testReconnectingPlayerCanReturnWithoutAdvancing() {
         launch("reconnecting")
-        XCTAssertTrue(app.buttons["Try again"].waitForExistence(timeout: 10))
+        let retry = app.buttons["kids.status.action"]
+        XCTAssertTrue(retry.waitForExistence(timeout: 10))
+        XCTAssertEqual(retry.label, "Try again")
+        XCTAssertTrue(retry.isHittable, "The status action must be usable in the visible recovery screen")
         XCTAssertTrue(app.buttons["Back"].exists)
         capture("reconnecting-player-recovery")
         XCUIRemote.shared.press(.menu)

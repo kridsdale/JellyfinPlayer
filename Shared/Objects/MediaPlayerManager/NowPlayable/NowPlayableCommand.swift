@@ -9,7 +9,7 @@
 import Foundation
 import MediaPlayer
 
-enum NowPlayableCommand: CaseIterable {
+enum NowPlayableCommand: CaseIterable, Sendable {
 
     // Play/Pause
     case pause
@@ -43,6 +43,7 @@ enum NowPlayableCommand: CaseIterable {
     case enableLanguageOption
     case disableLanguageOption
 
+    @MainActor
     var remoteCommand: MPRemoteCommand {
         let remoteCommandCenter = MPRemoteCommandCenter.shared()
 
@@ -90,11 +91,19 @@ enum NowPlayableCommand: CaseIterable {
         }
     }
 
+    @MainActor
     func removeHandler() {
         remoteCommand.removeTarget(nil)
     }
 
-    func addHandler(_ handler: @escaping (NowPlayableCommand, MPRemoteCommandEvent) -> MPRemoteCommandHandlerStatus) {
+    /// Only immutable values cross the SDK callback's unspecified executor.
+    struct Event: Sendable {
+        let interval: Double?
+        let positionTime: Double?
+    }
+
+    @MainActor
+    func addHandler(_ handler: @escaping @MainActor @Sendable (NowPlayableCommand, Event) -> MPRemoteCommandHandlerStatus) {
 
         remoteCommand.removeTarget(nil)
 
@@ -106,9 +115,26 @@ enum NowPlayableCommand: CaseIterable {
         default: ()
         }
 
-        remoteCommand.addTarget { handler(self, $0) }
+        remoteCommand.addTarget { @Sendable event in
+            let values = Event(
+                interval: (event as? MPSkipIntervalCommandEvent)?.interval,
+                positionTime: (event as? MPChangePlaybackPositionCommandEvent)?.positionTime
+            )
+            switch self {
+            case .skipBackward, .skipForward:
+                guard let interval = values.interval, interval.isFinite, interval >= 0 else { return .commandFailed }
+            case .changePlaybackPosition:
+                guard let position = values.positionTime, position.isFinite, position >= 0 else { return .commandFailed }
+            default: break
+            }
+            // Success acknowledges a valid queued command. Its lease is checked
+            // again on the actor before it can affect playback.
+            Task { @MainActor in _ = handler(self, values) }
+            return .success
+        }
     }
 
+    @MainActor
     func isEnabled(_ isEnabled: Bool) {
         remoteCommand.isEnabled = isEnabled
     }

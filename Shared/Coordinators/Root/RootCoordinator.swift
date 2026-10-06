@@ -51,7 +51,7 @@ final class RootCoordinator: ObservableObject {
     @Injected(\.userSessionManager)
     private var userSessionManager: UserSessionManager
 
-    deinit {
+    isolated deinit {
         accentColorCancellable?.cancel()
         appearanceCancellable?.cancel()
         currentSessionCancellable?.cancel()

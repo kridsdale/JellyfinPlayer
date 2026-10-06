@@ -12,7 +12,7 @@ import SwiftUI
 // TODO: scroll if description too long
 // TODO: move currentProgram tracking to a MediaPlayerObserver
 
-struct MediaInfoSupplement: MediaPlayerSupplement {
+struct MediaInfoSupplement: @MainActor MediaPlayerSupplement {
 
     let displayTitle: String = L10n.info
     let item: BaseItemDto

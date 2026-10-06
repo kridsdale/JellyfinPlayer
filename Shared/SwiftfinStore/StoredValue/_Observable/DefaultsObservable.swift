@@ -38,7 +38,8 @@ final class DefaultsObservable<Value: Storable>: ObservableObject, _StoredValueO
     func observe() {
         task?.cancel()
 
-        task = .detached(priority: .userInitiated) { @MainActor [weak self, key] in
+        task = Task(priority: .userInitiated) { [weak self] in
+            guard let key = self?.key else { return }
             for await _ in Defaults.updates(key._defaultKey) {
                 guard let self else { return }
 

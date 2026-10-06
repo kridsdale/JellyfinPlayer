@@ -201,6 +201,9 @@ final class KidsPlaybackController: ObservableObject, Identifiable {
         }
         let manager = MediaPlayerManager(provider: provider, queue: nil)
         let controller = KidsPlaybackController(item: item, title: title, mode: mode, episodes: episodes, manager: manager, model: model)
+        // Until native output proves an advancing clock, preserve the durable
+        // requested position for failed-open Retry and its recovery timeline.
+        controller.seconds = start
         controller.requestedStartPosition = start
         controller.performance = performance
         controller.proxy.performance = performance
@@ -373,7 +376,7 @@ final class KidsPlaybackController: ObservableObject, Identifiable {
 
     func retry() async {
         guard let model else { return }
-        let saved = seconds
+        let saved = began ? seconds : requestedStartPosition
         model.playbackCheckpoint(self, seconds: saved)
         await stop()
         model.activePlayback = nil

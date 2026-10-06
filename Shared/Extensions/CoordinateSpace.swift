@@ -10,6 +10,8 @@ import SwiftUI
 
 extension CoordinateSpace {
 
+    @MainActor
     static let navigationStack = CoordinateSpace.named("navigationStack")
+    @MainActor
     static let scrollView = CoordinateSpace.named("scrollView")
 }

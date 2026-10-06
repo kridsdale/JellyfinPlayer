@@ -13,7 +13,7 @@ import SwiftUI
 
 private let userViewLibraryListImageWidth: CGFloat = 110
 
-struct UserViewLibrary: PagingLibrary {
+struct UserViewLibrary: @MainActor PagingLibrary {
 
     let hasNextPage: Bool = false
     let parent: TitledLibraryParent = .init(
@@ -56,7 +56,8 @@ struct UserViewLibrary: PagingLibrary {
     }
 }
 
-enum UserViewLibraryElement: Displayable, Hashable, Identifiable, LibraryElement, SystemImageable {
+enum UserViewLibraryElement: @MainActor Displayable, Hashable, @MainActor Identifiable, @MainActor LibraryElement,
+@MainActor SystemImageable {
 
     case favorites
     case userView(BaseItemDto)

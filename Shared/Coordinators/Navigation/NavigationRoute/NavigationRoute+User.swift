@@ -20,6 +20,7 @@ extension NavigationRoute {
         }
     }
 
+    @MainActor
     static func quickConnect(client: JellyfinClient, action: @escaping (String) async -> Void) -> NavigationRoute {
         NavigationRoute(
             id: "quickConnectView",

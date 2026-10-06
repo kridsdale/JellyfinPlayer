@@ -12,9 +12,10 @@ import LocalAuthentication
 
 import SwiftUI
 
+@MainActor
 struct LocalUserAuthenticationAction {
 
-    let action: (LocalUserAccessPolicy, String?) async throws -> EvaluatedLocalUserAccessPolicy
+    let action: @MainActor @Sendable (LocalUserAccessPolicy, String?) async throws -> EvaluatedLocalUserAccessPolicy
 
     func callAsFunction(
         policy: LocalUserAccessPolicy,

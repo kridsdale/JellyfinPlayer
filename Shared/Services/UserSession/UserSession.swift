@@ -10,6 +10,7 @@ import Foundation
 import JellyfinAPI
 import Pulse
 
+@MainActor
 final class UserSession {
 
     let server: ServerState

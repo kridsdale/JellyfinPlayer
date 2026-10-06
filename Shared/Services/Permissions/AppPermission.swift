@@ -9,14 +9,15 @@
 #if os(iOS)
 import Foundation
 
-struct AppPermission: CaseIterable, Displayable, Identifiable, Hashable {
+@MainActor
+struct AppPermission: @MainActor CaseIterable, Displayable, Identifiable, Hashable {
 
     let id: String
     let displayTitle: String
     let privacyDescription: String
 
     private let canRequestProvider: () -> Bool
-    private let requestAction: (String?) async throws -> PermissionStatus
+    private let requestAction: @MainActor @Sendable (String?) async throws -> PermissionStatus
     private let statusProvider: () -> PermissionStatus
 
     var status: PermissionStatus {
@@ -37,7 +38,7 @@ struct AppPermission: CaseIterable, Displayable, Identifiable, Hashable {
         displayTitle: String,
         privacyDescriptionKey: String,
         canRequest: @escaping () -> Bool,
-        request: @escaping (String?) async throws -> PermissionStatus,
+        request: @escaping @MainActor @Sendable (String?) async throws -> PermissionStatus,
         status: @escaping () -> PermissionStatus
     ) {
         self.id = id
@@ -52,11 +53,11 @@ struct AppPermission: CaseIterable, Displayable, Identifiable, Hashable {
         try await requestAction(reason)
     }
 
-    static func == (lhs: AppPermission, rhs: AppPermission) -> Bool {
+    nonisolated static func == (lhs: AppPermission, rhs: AppPermission) -> Bool {
         lhs.id == rhs.id
     }
 
-    func hash(into hasher: inout Hasher) {
+    nonisolated func hash(into hasher: inout Hasher) {
         hasher.combine(id)
     }
 }

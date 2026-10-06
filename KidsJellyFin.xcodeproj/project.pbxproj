@@ -673,7 +673,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 5377CBEC263B596A003A4E83 /* Build configuration list for PBXProject "Swiftfin" */;
+			buildConfigurationList = 5377CBEC263B596A003A4E83 /* Build configuration list for PBXProject "KidsJellyFin" */;
 			compatibilityVersion = "Xcode 9.3";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -1004,12 +1004,13 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_NAME = KidsJellyFin;
 				PRODUCT_MODULE_NAME = Swiftfin;
+				PRODUCT_NAME = KidsJellyFin;
 				SDKROOT = appletvos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = "$(KIDS_SWIFT_DEFAULT_ACTOR_ISOLATION)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = "$(KIDS_SWIFT_LANGUAGE_VERSION)";
 				TARGETED_DEVICE_FAMILY = 3;
 				TVOS_DEPLOYMENT_TARGET = 26.1;
 			};
@@ -1039,11 +1040,12 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_NAME = KidsJellyFin;
 				PRODUCT_MODULE_NAME = Swiftfin;
+				PRODUCT_NAME = KidsJellyFin;
 				SDKROOT = appletvos;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = "$(KIDS_SWIFT_DEFAULT_ACTOR_ISOLATION)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = "$(KIDS_SWIFT_LANGUAGE_VERSION)";
 				TARGETED_DEVICE_FAMILY = 3;
 				TVOS_DEPLOYMENT_TARGET = 26.1;
 			};
@@ -1210,14 +1212,15 @@
 				);
 				MARKETING_VERSION = 1.0;
 				OTHER_CFLAGS = "";
-				PRODUCT_NAME = KidsJellyFin;
 				PRODUCT_MODULE_NAME = Swiftfin;
+				PRODUCT_NAME = KidsJellyFin;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = "$(KIDS_SWIFT_DEFAULT_ACTOR_ISOLATION)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = "$(KIDS_SWIFT_LANGUAGE_VERSION)";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -1251,14 +1254,15 @@
 				);
 				MARKETING_VERSION = 1.0;
 				OTHER_CFLAGS = "";
-				PRODUCT_BUNDLE_IDENTIFIER = org.jellyfin.swiftfin;
-				PRODUCT_NAME = KidsJellyFin;
+				PRODUCT_BUNDLE_IDENTIFIER = com.kridsdale.JellyfinPlayer;
 				PRODUCT_MODULE_NAME = Swiftfin;
+				PRODUCT_NAME = KidsJellyFin;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = "$(KIDS_SWIFT_DEFAULT_ACTOR_ISOLATION)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = "$(KIDS_SWIFT_LANGUAGE_VERSION)";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
@@ -1307,7 +1311,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		5377CBEC263B596A003A4E83 /* Build configuration list for PBXProject "Swiftfin" */ = {
+		5377CBEC263B596A003A4E83 /* Build configuration list for PBXProject "KidsJellyFin" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				5377CC19263B596B003A4E83 /* Debug */,

@@ -9,6 +9,7 @@
 import Combine
 import UIKit
 
+@MainActor
 protocol PreviewImageProvider: ObservableObject {
     func image(for seconds: Duration) async -> UIImage?
     func imageIndex(for seconds: Duration) -> Int?

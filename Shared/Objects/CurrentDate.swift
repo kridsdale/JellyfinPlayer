@@ -11,8 +11,9 @@ import SwiftUI
 
 /// A property wrapper that publishes the current
 /// date at periodic intervals
+@MainActor
 @propertyWrapper
-struct CurrentDate: DynamicProperty {
+struct CurrentDate: @MainActor DynamicProperty {
 
     @ObservedObject
     private var observable: CurrentDataObserver

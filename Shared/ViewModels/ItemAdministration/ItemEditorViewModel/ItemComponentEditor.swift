@@ -19,7 +19,7 @@ struct ItemComponentEditorInput {
 @MainActor
 protocol ItemComponentEditor: Displayable {
 
-    associatedtype Element: LibraryElement
+    associatedtype Element: LibraryElement & Sendable
 
     var description: String { get }
 

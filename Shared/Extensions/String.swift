@@ -239,7 +239,7 @@ extension String? {
 extension CharacterSet {
 
     // Character that appears on tvOS with voice input
-    static var objectReplacement: CharacterSet = .init(charactersIn: "\u{fffc}")
+    static let objectReplacement: CharacterSet = .init(charactersIn: "\u{fffc}")
 }
 
 extension StringProtocol {

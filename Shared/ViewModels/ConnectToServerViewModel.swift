@@ -144,7 +144,8 @@ final class ConnectToServerViewModel: ObservableObject {
 
     // server has same id, but (possible) new connection URL
     @Function(\Action.Cases.addConnection)
-    private func _addConnection(_ server: ServerState) throws {
+    private func _addConnection(_ server: ServerState) async throws {
+        MainActor.preconditionIsolated()
         guard let existingServer = StoredValues[.Server.servers].first(where: { $0.id == server.id }) else {
             logger.critical("Could not find server to add new url")
             throw ErrorMessage("An internal error has occurred")

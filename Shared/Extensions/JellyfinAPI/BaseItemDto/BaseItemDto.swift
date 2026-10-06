@@ -278,6 +278,7 @@ extension BaseItemDto {
         }
     }
 
+    @MainActor
     func getChannel(
         for program: BaseItemDto,
         userSession: UserSession
@@ -473,6 +474,7 @@ extension BaseItemDto {
 
     // MARK: Chapter Images
 
+    @MainActor
     var fullChapterInfo: [ChapterInfo.FullInfo]? {
 
         guard let chapters = chapters?
@@ -519,6 +521,7 @@ extension BaseItemDto {
     }
 
     /// Can this `BaseItemDto` be played
+    @MainActor
     var presentPlayButton: Bool {
         guard Container.shared.currentUserSession()?.user.data.policy?.enableMediaPlayback == true else { return false }
 
@@ -555,6 +558,7 @@ extension BaseItemDto {
     }
 
     /// Can this `BaseItemDto` be recorded
+    @MainActor
     var canBeRecorded: Bool {
         guard Container.shared.currentUserSession()?.user.data.policy?.enableLiveTvManagement == true else { return false }
 
@@ -568,6 +572,7 @@ extension BaseItemDto {
         }
     }
 
+    @MainActor
     var playButtonLabel: String {
 
         if isUnaired {
@@ -639,6 +644,7 @@ extension BaseItemDto {
         }
     }
 
+    @MainActor
     func getFullItem(
         userSession: UserSession,
         sendNotification: Bool = false,

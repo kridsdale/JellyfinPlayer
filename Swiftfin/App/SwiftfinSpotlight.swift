@@ -10,15 +10,16 @@ import CoreSpotlight
 import Foundation
 
 struct SwiftfinSpotlight {
-    private let mainIndex = CSSearchableIndex(name: "SwiftfinAppIndex")
 
     func addSwiftfinToSpotlight() {
         Task.detached {
+            // The index and its mutable items belong only to this task.
+            let mainIndex = CSSearchableIndex(name: "KidsJellyFinAppIndex")
             let attributeSet = CSSearchableItemAttributeSet(contentType: UTType.application)
-            attributeSet.title = L10n.jellyfin
+            attributeSet.title = Bundle.main.object(forInfoDictionaryKey: "CFBundleDisplayName") as? String ?? "KidsJellyFin"
 
             let searchableItem = CSSearchableItem(
-                uniqueIdentifier: "org.jellyfin.swiftfin",
+                uniqueIdentifier: Bundle.main.bundleIdentifier ?? "com.kridsdale.JellyfinPlayer",
                 domainIdentifier: nil,
                 attributeSet: attributeSet
             )

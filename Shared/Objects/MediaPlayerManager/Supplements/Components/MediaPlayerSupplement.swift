@@ -35,7 +35,7 @@ extension MediaPlayerSupplement {
     }
 }
 
-struct AnyMediaPlayerSupplement: MediaPlayerSupplement, Equatable {
+struct AnyMediaPlayerSupplement: @MainActor MediaPlayerSupplement, @MainActor Equatable {
 
     let supplement: any MediaPlayerSupplement
 

@@ -99,6 +99,7 @@ extension View {
 
     @ViewBuilder
     @inlinable
+    @MainActor
     func eraseToAnyView() -> AnyView {
         AnyView(self)
     }

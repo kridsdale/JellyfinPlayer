@@ -7,34 +7,50 @@
 //
 
 import Foundation
+import Synchronization
 
 enum SwizzleDefaults {
 
-    private static var overrides: [String: Any] = [:]
-    private static let overridesQueue = DispatchQueue(label: "SwizzleDefaults.overrides", attributes: .concurrent)
+    private enum Override: Sendable {
+        case bool(Bool)
+        case string(String)
+        case integer(Int)
+        case double(Double)
 
-    private static func set(_ override: Any?, for key: String) {
-        _ = swizzle
-
-        overridesQueue.sync(flags: .barrier) {
-            overrides[key] = override
+        var object: Any {
+            switch self {
+            case let .bool(value): NSNumber(value: value)
+            case let .string(value): value as NSString
+            case let .integer(value): NSNumber(value: value)
+            case let .double(value): NSNumber(value: value)
+            }
         }
     }
 
+    // Store immutable Swift values under a checked mutex. Bridge to a new
+    // Foundation object after leaving the lock, never share an arbitrary Any.
+    private static let overrides = Mutex<[String: Override]>([:])
+
+    private static func set(_ override: Override?, for key: String) {
+        _ = swizzle
+
+        overrides.withLock { $0[key] = override }
+    }
+
     static func set(_ value: Bool, for key: String) {
-        set(NSNumber(value: value), for: key)
+        set(.bool(value), for: key)
     }
 
     static func set(_ value: String, for key: String) {
-        set(value as NSString, for: key)
+        set(.string(value), for: key)
     }
 
     static func set(_ value: Int, for key: String) {
-        set(NSNumber(value: value), for: key)
+        set(.integer(value), for: key)
     }
 
     static func set(_ value: Double, for key: String) {
-        set(NSNumber(value: value), for: key)
+        set(.double(value), for: key)
     }
 
     static func remove(_ key: String) {
@@ -42,9 +58,7 @@ enum SwizzleDefaults {
     }
 
     fileprivate static func resolve(_ key: String) -> Any? {
-        overridesQueue.sync {
-            overrides[key]
-        }
+        overrides.withLock { $0[key] }?.object
     }
 
     private static let swizzle: Void = {

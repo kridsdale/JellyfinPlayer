@@ -2,3 +2,6 @@
 # Enable the diff driver in each checkout with:
 # git config --local diff.strings.textconv 'iconv -f UTF-16 -t UTF-8'
 *.strings -text diff=strings
+
+# Preserve PDF bytes; xref whitespace is part of the format.
+*.pdf binary

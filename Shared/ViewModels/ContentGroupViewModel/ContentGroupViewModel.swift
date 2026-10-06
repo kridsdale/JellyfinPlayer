@@ -104,17 +104,13 @@ final class ContentGroupViewModel<Provider: ContentGroupProvider>: ViewModel {
         let viewModels = groups.map { getViewModel(for: $0) }
             .uniqued { ObjectIdentifier($0 as AnyObject) }
 
+        let batch = ContentGroupRefreshBatch(viewModels)
         try await withThrowingTaskGroup(of: Void.self) { group in
-            for viewModel in viewModels {
-                group.addTask {
-                    if inBackground {
-                        await viewModel.background.refresh()
-                    } else {
-                        await viewModel.refresh()
-                    }
+            for index in viewModels.indices {
+                group.addTask { [batch] in
+                    await batch.refresh(at: index, inBackground: inBackground)
                 }
             }
-
             try await group.waitForAll()
         }
     }
@@ -142,5 +138,25 @@ final class ContentGroupViewModel<Provider: ContentGroupProvider>: ViewModel {
 
         candidateGroups = newGroups
         resolveGroups()
+    }
+}
+
+/// Keep non-Sendable, actor-isolated library conformances on their owner actor.
+/// Child tasks carry only the Sendable batch reference and an immutable index.
+@MainActor
+private final class ContentGroupRefreshBatch {
+    private let viewModels: [any WithRefresh]
+
+    init(_ viewModels: [any WithRefresh]) {
+        self.viewModels = viewModels
+    }
+
+    func refresh(at index: Int, inBackground: Bool) async {
+        let viewModel = viewModels[index]
+        if inBackground {
+            await viewModel.background.refresh()
+        } else {
+            await viewModel.refresh()
+        }
     }
 }

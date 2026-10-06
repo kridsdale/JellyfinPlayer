@@ -11,7 +11,7 @@ import Get
 import JellyfinAPI
 import SwiftUI
 
-final class ItemContentGroupProvider: ViewModel, ContentGroupProvider {
+final class ItemContentGroupProvider: ViewModel, @MainActor ContentGroupProvider {
 
     @Published
     private(set) var item: BaseItemDto

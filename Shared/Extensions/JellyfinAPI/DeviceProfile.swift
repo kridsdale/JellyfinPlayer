@@ -11,6 +11,7 @@ import JellyfinAPI
 
 extension DeviceProfile {
 
+    @MainActor
     static func build(
         for videoPlayer: VideoPlayerType,
         compatibilityMode: PlaybackCompatibility,

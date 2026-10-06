@@ -9,7 +9,7 @@
 import Defaults
 import JellyfinAPI
 
-typealias MediaPlayerItemProviderResolver = @Sendable (BaseItemDto, (@Sendable (inout BaseItemDto) -> Void)?) async throws
+typealias MediaPlayerItemProviderResolver = @MainActor @Sendable (BaseItemDto, (@Sendable (inout BaseItemDto) -> Void)?) async throws
     -> MediaPlayerItem
 
 struct MediaPlayerItemProvider {

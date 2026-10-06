@@ -30,8 +30,9 @@ final class UserSignInViewModel: ObservableObject {
     typealias AccessPolicyPair = (policy: LocalUserAccessPolicy, evaluated: any EvaluatedLocalUserAccessPolicy)
     typealias UserStateDataPair = (state: (state: UserState, accessToken: String), data: UserDto)
 
+    @MainActor
     struct EvaluatedPolicyMap {
-        let action: (any EvaluatedLocalUserAccessPolicy) -> any EvaluatedLocalUserAccessPolicy
+        let action: @MainActor @Sendable (any EvaluatedLocalUserAccessPolicy) -> any EvaluatedLocalUserAccessPolicy
 
         func callAsFunction(evaluatedPolicy: any EvaluatedLocalUserAccessPolicy) -> any EvaluatedLocalUserAccessPolicy {
             action(evaluatedPolicy)

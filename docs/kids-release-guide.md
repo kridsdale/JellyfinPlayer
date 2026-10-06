@@ -6,7 +6,7 @@ RC1 is ready for simulator evaluation. See [the evidence record](kids-validation
 
 ## Build and test
 
-Use Xcode 27, the `KidsJellyFin tvOS` scheme, and a tvOS simulator. Debug and Release default to Kevin Ridsdale's paid team (`Z3LBQE3J8T`) with automatic signing; `XcodeConfig/DevelopmentTeam.xcconfig` remains an ignored optional override. The current project deployment target is tvOS 26.1. Choose a device UUID with `xcrun simctl list devices available`.
+Use Xcode 27, the `KidsJellyFin tvOS` scheme, and a tvOS simulator. App targets now compile in Swift 6 with explicit main-actor ownership; dependencies retain their declared language modes. Run `sh Scripts/Kids/test_runtime.sh` alongside package tests to exercise the actual settings, timer and bitrate utilities. Debug and Release default to Kevin Ridsdale's paid team (`Z3LBQE3J8T`) with automatic signing; `XcodeConfig/DevelopmentTeam.xcconfig` remains an ignored optional override. The current project deployment target is tvOS 26.1. Choose a device UUID with `xcrun simctl list devices available`.
 
 ```sh
 swift test --package-path KidsCore
@@ -27,7 +27,7 @@ The `KidsCore` package exercises authorization, HTTP pagination and ancestry, or
 
 ## Opt-in real playback tests
 
-The default suite skips all seven `KidsLivePlaybackTests`; those skips are not evidence of working streams. After the actual restricted account is configured in the simulator, enable the basic episode/movie/Shuffle checks using Xcode's runner environment prefix:
+Live playback methods require explicit opt-in; skipped methods are not evidence of working streams. The exact approved AVI movie check is `testRealApprovedLegacyMoviePlayback`; it uses an existing verified Kid Movies item and exercises actual rendered output, pause/resume and clock progress. After the actual restricted account is configured in the simulator, enable the basic episode/movie/Shuffle checks using Xcode's runner environment prefix:
 
 ```sh
 TEST_RUNNER_KIDS_RUN_LIVE=1 xcodebuild -project KidsJellyFin.xcodeproj \

@@ -9,17 +9,24 @@
 import Combine
 import Foundation
 
-class PokeIntervalTimer: ObservableObject, Publisher {
+/// A one-shot UI timer. Poking replaces the pending deadline; cancellation and
+/// delivery stay on the same actor, and the pending task never retains its owner.
+@MainActor
+final class PokeIntervalTimer: ObservableObject, @MainActor Publisher {
 
     typealias Output = Void
     typealias Failure = Never
 
     private let defaultInterval: TimeInterval
-    private var delaySubject: PassthroughSubject<Void, Never> = .init()
-    private var delayedWorkItem: DispatchWorkItem?
+    private let delaySubject = PassthroughSubject<Void, Never>()
+    private var pendingTask: Task<Void, Never>?
 
     init(defaultInterval: TimeInterval = 5) {
-        self.defaultInterval = defaultInterval
+        self.defaultInterval = defaultInterval.isFinite ? Swift.max(0, defaultInterval) : 5
+    }
+
+    isolated deinit {
+        pendingTask?.cancel()
     }
 
     func receive<S: Subscriber>(subscriber: S) where S.Failure == Never, S.Input == Void {
@@ -27,21 +34,22 @@ class PokeIntervalTimer: ObservableObject, Publisher {
     }
 
     func poke(interval: TimeInterval? = nil) {
-
-        let interval = interval ?? defaultInterval
-
-        delayedWorkItem?.cancel()
-
-        let newPollItem = DispatchWorkItem {
+        stop()
+        let requested = interval ?? defaultInterval
+        let delay = requested.isFinite ? Swift.max(0, requested) : defaultInterval
+        pendingTask = Task { @MainActor [weak self] in
+            do {
+                try await Task.sleep(for: .seconds(delay))
+                try Task.checkCancellation()
+            } catch { return }
+            guard let self else { return }
+            self.pendingTask = nil
             self.delaySubject.send(())
         }
-
-        delayedWorkItem = newPollItem
-
-        DispatchQueue.main.asyncAfter(deadline: .now() + interval, execute: newPollItem)
     }
 
     func stop() {
-        delayedWorkItem?.cancel()
+        pendingTask?.cancel()
+        pendingTask = nil
     }
 }

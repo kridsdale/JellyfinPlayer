@@ -30,11 +30,11 @@ extension VideoPlayer {
         private var isPlaybackProgressFocused: Bool
 
         @State
-        var speedBoostTimer: Timer?
+        var speedBoostTask: Task<Void, Never>?
         @State
         var isSpeedBoosting: Bool = false
         @State
-        var pendingJumpWork: DispatchWorkItem?
+        var pendingJumpTask: Task<Void, Never>?
 
         var body: some View {
             VStack(spacing: 30) {
@@ -72,6 +72,11 @@ extension VideoPlayer {
             }
             .onChange(of: containerState.isPresentingOverlay) {
                 isPlaybackProgressFocused = true
+            }
+            .onDisappear {
+                stopSpeedBoost()
+                pendingJumpTask?.cancel()
+                pendingJumpTask = nil
             }
             .onChange(of: manager.playbackRequestStatus) {
                 if manager.playbackRequestStatus == .paused, !containerState.isPresentingOverlay {

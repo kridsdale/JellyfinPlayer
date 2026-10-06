@@ -74,7 +74,8 @@ final class FilterViewModel: ViewModel {
     }
 
     @Function(\Action.Cases.reset)
-    private func resetCurrentFilters(_ type: ItemFilterType?) {
+    private func resetCurrentFilters(_ type: ItemFilterType?) async {
+        MainActor.preconditionIsolated()
 
         guard let type else {
             currentFilters = .default

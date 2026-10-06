@@ -16,7 +16,7 @@ import SwiftUI
 //       - be labeled pair information
 // TODO: tvOS: use material background
 
-class PlaybackInformationSupplement: ObservableObject, MediaPlayerSupplement {
+class PlaybackInformationSupplement: ObservableObject, @MainActor MediaPlayerSupplement {
 
     let displayTitle: String = L10n.session
     let itemID: String
