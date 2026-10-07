@@ -12,6 +12,7 @@ import Engine
 import JellyfinAPI
 import Mantis
 import SwiftfinLocalization
+import SwiftfinUIState
 import SwiftUI
 
 struct ServerUserDetailsView: View {

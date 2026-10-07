@@ -1,6 +1,6 @@
 # Actor and SDK interoperability review
 
-This review covers the remaining explicit interoperability exceptions in the owned production sources at the permission-extraction checkpoint. The source inventory is a review aid; it is not proof that the complete retained-source/public-API review or current GUI/playback acceptance has finished. Live simulator and server activity remain held by the human.
+This review covers the remaining explicit interoperability exceptions in the owned production sources at the date/program checkpoint. The source inventory is a review aid; it is not proof that the complete retained-source/public-API review or current GUI/playback acceptance has finished. Live simulator and server activity remain held by the human.
 
 ## Explicit executor bridges
 
@@ -8,6 +8,7 @@ This review covers the remaining explicit interoperability exceptions in the own
 | --- | --- | --- |
 | KidsApplication/KidsAppModel.swift, identity subscription | The model and account host are main-actor owners. `receive(on: DispatchQueue.main)` precedes the synchronous `assumeIsolated` update. Immutable account identities are compared before changing the revision, so duplicate identity emissions do not invalidate work. | Source review and Swift 6 compilation. Current GUI identity-switch acceptance is held. |
 | KidsArtworkUI/KidsArtworkStore.swift, memory warning | Main-queue delivery precedes the synchronous main-actor trim. The closure captures the store weakly. Invalidation removes the subscription, cancels image flights, clears pixels, and invalidates the byte owner. Memory pressure changes the retention generation rather than triggering a visible grid reload. | Source review and compilation. Current UIKit memory-warning delivery remains unexecuted. |
+| SwiftfinUIState/CurrentDate.swift, periodic clock | The private scheduler uses Timer.publish on the main/common run loop and asserts the UI actor before invoking its typed main-actor callback. The observer captures itself weakly and cancels its subscription in isolated deinit. The public wrapper retains the original writable Binding behavior; invalid intervals fall back to one second. | Six fake-scheduler contracts and compilation. Actual native run-loop delivery remains unexecuted under the hold. |
 | SwiftfinScrolling/EPGScrollProxy.swift, horizontal and vertical KVO | Main-thread delivery stays synchronous to preserve the reentrancy guard around mirrored content offsets. Foreign-thread callbacks enqueue a main-actor task. Weak scroll/owner captures, connection generation and active-observation membership reject callbacks after disconnect/replacement. Disconnect invalidates both token maps. | Source review and compilation; native geometry contracts do not establish actual UIKit KVO delivery. |
 | Shared/Services/Notifications.swift, accessibility notification | `MainActorKey` moves notification delivery to the main queue before querying UIKit through its actor-isolated decode closure. It supports notifications without userInfo; ordinary payload keys keep their existing decode behavior. | Source review and compilation. This remains a platform notification-key composition adapter. |
 | Swiftfin tvOS/App/KidsAccountAdapter.swift, identity projection | The adapter owns the main-actor session manager. Main-queue delivery precedes reading session state and constructing a checked-Sendable identity; raw SDK user/session/Keychain types do not cross the KidsAccountHost identity port. | Source review and compilation; current account-switch GUI acceptance is held. |
@@ -38,5 +39,5 @@ The platform App initializers call Shared/App/SwiftfinApp+configure.swift. UserS
 
 - Classify every retained application source by UI, composition or behavior; do not infer completion from file counts or a clean import search.
 - Review the full public API and consumer graph, not only the native-handle names above.
-- Remaining concrete candidates include the reusable CurrentDate observation and EPG program-span grouping; inspect their dependencies and behavior before choosing an existing library owner.
+- CurrentDate observation and EPG grouping now have existing library owners. The [retained-source review](retained-source-review.md) identifies mixed item metadata/permission rules, person-role parsing and generic notification/adaptor review still requiring work.
 - Final navigation, decoder/render/output teardown and restricted-account playback/recovery remain held. Compilation and fake-driver tests cannot satisfy those gates.

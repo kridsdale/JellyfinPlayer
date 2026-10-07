@@ -9,6 +9,7 @@
 import CasePaths
 import JellyfinAPI
 import SwiftfinLocalization
+import SwiftfinUIState
 import SwiftUI
 
 struct DeviceDetailsView: View {

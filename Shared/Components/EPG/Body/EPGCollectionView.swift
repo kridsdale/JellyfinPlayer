@@ -11,6 +11,7 @@ import Combine
 import Defaults
 import JellyfinAPI
 import SwiftfinAsyncStreams
+import SwiftfinMediaCatalog
 import SwiftfinScrolling
 import SwiftfinTime
 import SwiftUI

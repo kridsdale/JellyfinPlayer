@@ -1,0 +1,1466 @@
+{
+  "cases" : [
+    {
+      "end" : 3600,
+      "expected" : [
+
+      ],
+      "name" : "empty",
+      "samples" : [
+
+      ],
+      "start" : 0
+    },
+    {
+      "end" : 3600,
+      "expected" : [
+
+      ],
+      "name" : "missing-invalid-outside",
+      "samples" : [
+        {
+          "channel" : "channel",
+          "end" : 100,
+          "id" : "missing-start",
+          "name" : "Synthetic missing-start"
+        },
+        {
+          "channel" : "channel",
+          "id" : "missing-end",
+          "name" : "Synthetic missing-end",
+          "start" : 100
+        },
+        {
+          "channel" : "channel",
+          "end" : 10,
+          "id" : "reversed",
+          "name" : "Synthetic reversed",
+          "start" : 100
+        },
+        {
+          "channel" : "channel",
+          "end" : 20,
+          "id" : "zero",
+          "name" : "Synthetic zero",
+          "start" : 20
+        },
+        {
+          "channel" : "channel",
+          "end" : -1,
+          "id" : "before",
+          "name" : "Synthetic before",
+          "start" : -500
+        },
+        {
+          "channel" : "channel",
+          "end" : 3700,
+          "id" : "after",
+          "name" : "Synthetic after",
+          "start" : 3600
+        }
+      ],
+      "start" : 0
+    },
+    {
+      "end" : 3600,
+      "expected" : [
+        {
+          "airing" : [
+            {
+              "date" : -100,
+              "value" : false
+            },
+            {
+              "date" : -1,
+              "value" : false
+            },
+            {
+              "date" : 0,
+              "value" : true
+            },
+            {
+              "date" : 10,
+              "value" : true
+            },
+            {
+              "date" : 99.5,
+              "value" : true
+            },
+            {
+              "date" : 100,
+              "value" : true
+            },
+            {
+              "date" : 100.25,
+              "value" : true
+            },
+            {
+              "date" : 300,
+              "value" : true
+            },
+            {
+              "date" : 700,
+              "value" : false
+            },
+            {
+              "date" : 899,
+              "value" : false
+            },
+            {
+              "date" : 900,
+              "value" : false
+            },
+            {
+              "date" : 1000,
+              "value" : false
+            },
+            {
+              "date" : 3599,
+              "value" : false
+            },
+            {
+              "date" : 3600,
+              "value" : false
+            },
+            {
+              "date" : 9999,
+              "value" : false
+            }
+          ],
+          "channel" : "channel",
+          "end" : 700,
+          "grouped" : true,
+          "ids" : [
+            "a",
+            "b",
+            "c",
+            "d"
+          ],
+          "samples" : [
+            {
+              "channel" : "channel",
+              "end" : 400,
+              "id" : "a",
+              "name" : "Synthetic a",
+              "start" : 0
+            },
+            {
+              "channel" : "channel",
+              "end" : 200,
+              "id" : "b",
+              "name" : "Synthetic b",
+              "start" : 100
+            },
+            {
+              "channel" : "channel",
+              "end" : 600,
+              "id" : "c",
+              "name" : "Synthetic c",
+              "start" : 300
+            },
+            {
+              "channel" : "channel",
+              "end" : 700,
+              "id" : "d",
+              "name" : "Synthetic d",
+              "start" : 600
+            }
+          ],
+          "start" : 0
+        }
+      ],
+      "name" : "overlap-touch-chain",
+      "samples" : [
+        {
+          "channel" : "channel",
+          "end" : 600,
+          "id" : "c",
+          "name" : "Synthetic c",
+          "start" : 300
+        },
+        {
+          "channel" : "channel",
+          "end" : 400,
+          "id" : "a",
+          "name" : "Synthetic a",
+          "start" : 0
+        },
+        {
+          "channel" : "channel",
+          "end" : 200,
+          "id" : "b",
+          "name" : "Synthetic b",
+          "start" : 100
+        },
+        {
+          "channel" : "channel",
+          "end" : 700,
+          "id" : "d",
+          "name" : "Synthetic d",
+          "start" : 600
+        }
+      ],
+      "start" : 0
+    },
+    {
+      "end" : 3600,
+      "expected" : [
+        {
+          "airing" : [
+            {
+              "date" : -100,
+              "value" : false
+            },
+            {
+              "date" : -1,
+              "value" : false
+            },
+            {
+              "date" : 0,
+              "value" : true
+            },
+            {
+              "date" : 10,
+              "value" : true
+            },
+            {
+              "date" : 99.5,
+              "value" : true
+            },
+            {
+              "date" : 100,
+              "value" : true
+            },
+            {
+              "date" : 100.25,
+              "value" : true
+            },
+            {
+              "date" : 300,
+              "value" : false
+            },
+            {
+              "date" : 700,
+              "value" : false
+            },
+            {
+              "date" : 899,
+              "value" : false
+            },
+            {
+              "date" : 900,
+              "value" : false
+            },
+            {
+              "date" : 1000,
+              "value" : false
+            },
+            {
+              "date" : 3599,
+              "value" : false
+            },
+            {
+              "date" : 3600,
+              "value" : false
+            },
+            {
+              "date" : 9999,
+              "value" : false
+            }
+          ],
+          "channel" : "channel",
+          "end" : 300,
+          "grouped" : false,
+          "ids" : [
+            "a"
+          ],
+          "samples" : [
+            {
+              "channel" : "channel",
+              "end" : 300,
+              "id" : "a",
+              "name" : "Synthetic a",
+              "start" : 0
+            }
+          ],
+          "start" : 0
+        },
+        {
+          "airing" : [
+            {
+              "date" : -100,
+              "value" : false
+            },
+            {
+              "date" : -1,
+              "value" : false
+            },
+            {
+              "date" : 0,
+              "value" : false
+            },
+            {
+              "date" : 10,
+              "value" : false
+            },
+            {
+              "date" : 99.5,
+              "value" : false
+            },
+            {
+              "date" : 100,
+              "value" : false
+            },
+            {
+              "date" : 100.25,
+              "value" : false
+            },
+            {
+              "date" : 300,
+              "value" : false
+            },
+            {
+              "date" : 700,
+              "value" : false
+            },
+            {
+              "date" : 899,
+              "value" : false
+            },
+            {
+              "date" : 900,
+              "value" : false
+            },
+            {
+              "date" : 1000,
+              "value" : false
+            },
+            {
+              "date" : 3599,
+              "value" : false
+            },
+            {
+              "date" : 3600,
+              "value" : false
+            },
+            {
+              "date" : 9999,
+              "value" : false
+            }
+          ],
+          "channel" : "channel",
+          "end" : 400,
+          "grouped" : false,
+          "ids" : [
+            "b"
+          ],
+          "samples" : [
+            {
+              "channel" : "channel",
+              "end" : 400,
+              "id" : "b",
+              "name" : "Synthetic b",
+              "start" : 301
+            }
+          ],
+          "start" : 301
+        }
+      ],
+      "name" : "gap",
+      "samples" : [
+        {
+          "channel" : "channel",
+          "end" : 300,
+          "id" : "a",
+          "name" : "Synthetic a",
+          "start" : 0
+        },
+        {
+          "channel" : "channel",
+          "end" : 400,
+          "id" : "b",
+          "name" : "Synthetic b",
+          "start" : 301
+        }
+      ],
+      "start" : 0
+    },
+    {
+      "end" : 3600,
+      "expected" : [
+        {
+          "airing" : [
+            {
+              "date" : -100,
+              "value" : false
+            },
+            {
+              "date" : -1,
+              "value" : false
+            },
+            {
+              "date" : 0,
+              "value" : true
+            },
+            {
+              "date" : 10,
+              "value" : true
+            },
+            {
+              "date" : 99.5,
+              "value" : true
+            },
+            {
+              "date" : 100,
+              "value" : false
+            },
+            {
+              "date" : 100.25,
+              "value" : false
+            },
+            {
+              "date" : 300,
+              "value" : false
+            },
+            {
+              "date" : 700,
+              "value" : false
+            },
+            {
+              "date" : 899,
+              "value" : false
+            },
+            {
+              "date" : 900,
+              "value" : false
+            },
+            {
+              "date" : 1000,
+              "value" : false
+            },
+            {
+              "date" : 3599,
+              "value" : false
+            },
+            {
+              "date" : 3600,
+              "value" : false
+            },
+            {
+              "date" : 9999,
+              "value" : false
+            }
+          ],
+          "channel" : "channel",
+          "end" : 100,
+          "grouped" : false,
+          "ids" : [
+            "a"
+          ],
+          "samples" : [
+            {
+              "channel" : "channel",
+              "end" : 100,
+              "id" : "a",
+              "name" : "Synthetic a",
+              "start" : 0
+            }
+          ],
+          "start" : 0
+        },
+        {
+          "airing" : [
+            {
+              "date" : -100,
+              "value" : false
+            },
+            {
+              "date" : -1,
+              "value" : false
+            },
+            {
+              "date" : 0,
+              "value" : false
+            },
+            {
+              "date" : 10,
+              "value" : false
+            },
+            {
+              "date" : 99.5,
+              "value" : false
+            },
+            {
+              "date" : 100,
+              "value" : true
+            },
+            {
+              "date" : 100.25,
+              "value" : true
+            },
+            {
+              "date" : 300,
+              "value" : true
+            },
+            {
+              "date" : 700,
+              "value" : true
+            },
+            {
+              "date" : 899,
+              "value" : true
+            },
+            {
+              "date" : 900,
+              "value" : true
+            },
+            {
+              "date" : 1000,
+              "value" : false
+            },
+            {
+              "date" : 3599,
+              "value" : false
+            },
+            {
+              "date" : 3600,
+              "value" : false
+            },
+            {
+              "date" : 9999,
+              "value" : false
+            }
+          ],
+          "channel" : "channel",
+          "end" : 1000,
+          "grouped" : false,
+          "ids" : [
+            "long"
+          ],
+          "samples" : [
+            {
+              "channel" : "channel",
+              "end" : 1000,
+              "id" : "long",
+              "name" : "Synthetic long",
+              "start" : 100
+            }
+          ],
+          "start" : 100
+        },
+        {
+          "airing" : [
+            {
+              "date" : -100,
+              "value" : false
+            },
+            {
+              "date" : -1,
+              "value" : false
+            },
+            {
+              "date" : 0,
+              "value" : false
+            },
+            {
+              "date" : 10,
+              "value" : false
+            },
+            {
+              "date" : 99.5,
+              "value" : false
+            },
+            {
+              "date" : 100,
+              "value" : false
+            },
+            {
+              "date" : 100.25,
+              "value" : false
+            },
+            {
+              "date" : 300,
+              "value" : false
+            },
+            {
+              "date" : 700,
+              "value" : false
+            },
+            {
+              "date" : 899,
+              "value" : false
+            },
+            {
+              "date" : 900,
+              "value" : false
+            },
+            {
+              "date" : 1000,
+              "value" : true
+            },
+            {
+              "date" : 3599,
+              "value" : false
+            },
+            {
+              "date" : 3600,
+              "value" : false
+            },
+            {
+              "date" : 9999,
+              "value" : false
+            }
+          ],
+          "channel" : "channel",
+          "end" : 1100,
+          "grouped" : false,
+          "ids" : [
+            "b"
+          ],
+          "samples" : [
+            {
+              "channel" : "channel",
+              "end" : 1100,
+              "id" : "b",
+              "name" : "Synthetic b",
+              "start" : 1000
+            }
+          ],
+          "start" : 1000
+        }
+      ],
+      "name" : "exact-long-threshold",
+      "samples" : [
+        {
+          "channel" : "channel",
+          "end" : 100,
+          "id" : "a",
+          "name" : "Synthetic a",
+          "start" : 0
+        },
+        {
+          "channel" : "channel",
+          "end" : 1000,
+          "id" : "long",
+          "name" : "Synthetic long",
+          "start" : 100
+        },
+        {
+          "channel" : "channel",
+          "end" : 1100,
+          "id" : "b",
+          "name" : "Synthetic b",
+          "start" : 1000
+        }
+      ],
+      "start" : 0
+    },
+    {
+      "end" : 3600,
+      "expected" : [
+        {
+          "airing" : [
+            {
+              "date" : -100,
+              "value" : true
+            },
+            {
+              "date" : -1,
+              "value" : true
+            },
+            {
+              "date" : 0,
+              "value" : true
+            },
+            {
+              "date" : 10,
+              "value" : true
+            },
+            {
+              "date" : 99.5,
+              "value" : true
+            },
+            {
+              "date" : 100,
+              "value" : true
+            },
+            {
+              "date" : 100.25,
+              "value" : true
+            },
+            {
+              "date" : 300,
+              "value" : false
+            },
+            {
+              "date" : 700,
+              "value" : false
+            },
+            {
+              "date" : 899,
+              "value" : false
+            },
+            {
+              "date" : 900,
+              "value" : false
+            },
+            {
+              "date" : 1000,
+              "value" : false
+            },
+            {
+              "date" : 3599,
+              "value" : false
+            },
+            {
+              "date" : 3600,
+              "value" : false
+            },
+            {
+              "date" : 9999,
+              "value" : false
+            }
+          ],
+          "channel" : "channel",
+          "end" : 200,
+          "grouped" : true,
+          "ids" : [
+            "long",
+            "short"
+          ],
+          "samples" : [
+            {
+              "channel" : "channel",
+              "end" : 100,
+              "id" : "long",
+              "name" : "Synthetic long",
+              "start" : -1000
+            },
+            {
+              "channel" : "channel",
+              "end" : 200,
+              "id" : "short",
+              "name" : "Synthetic short",
+              "start" : 100
+            }
+          ],
+          "start" : 0
+        },
+        {
+          "airing" : [
+            {
+              "date" : -100,
+              "value" : false
+            },
+            {
+              "date" : -1,
+              "value" : false
+            },
+            {
+              "date" : 0,
+              "value" : false
+            },
+            {
+              "date" : 10,
+              "value" : false
+            },
+            {
+              "date" : 99.5,
+              "value" : false
+            },
+            {
+              "date" : 100,
+              "value" : false
+            },
+            {
+              "date" : 100.25,
+              "value" : false
+            },
+            {
+              "date" : 300,
+              "value" : false
+            },
+            {
+              "date" : 700,
+              "value" : false
+            },
+            {
+              "date" : 899,
+              "value" : false
+            },
+            {
+              "date" : 900,
+              "value" : false
+            },
+            {
+              "date" : 1000,
+              "value" : false
+            },
+            {
+              "date" : 3599,
+              "value" : true
+            },
+            {
+              "date" : 3600,
+              "value" : true
+            },
+            {
+              "date" : 9999,
+              "value" : true
+            }
+          ],
+          "channel" : "channel",
+          "end" : 3600,
+          "grouped" : false,
+          "ids" : [
+            "right"
+          ],
+          "samples" : [
+            {
+              "channel" : "channel",
+              "end" : 10000,
+              "id" : "right",
+              "name" : "Synthetic right",
+              "start" : 3500
+            }
+          ],
+          "start" : 3500
+        }
+      ],
+      "name" : "clipped-original-long",
+      "samples" : [
+        {
+          "channel" : "channel",
+          "end" : 100,
+          "id" : "long",
+          "name" : "Synthetic long",
+          "start" : -1000
+        },
+        {
+          "channel" : "channel",
+          "end" : 200,
+          "id" : "short",
+          "name" : "Synthetic short",
+          "start" : 100
+        },
+        {
+          "channel" : "channel",
+          "end" : 10000,
+          "id" : "right",
+          "name" : "Synthetic right",
+          "start" : 3500
+        }
+      ],
+      "start" : 0
+    },
+    {
+      "end" : 3600,
+      "expected" : [
+        {
+          "airing" : [
+            {
+              "date" : -100,
+              "value" : false
+            },
+            {
+              "date" : -1,
+              "value" : false
+            },
+            {
+              "date" : 0,
+              "value" : true
+            },
+            {
+              "date" : 10,
+              "value" : true
+            },
+            {
+              "date" : 99.5,
+              "value" : true
+            },
+            {
+              "date" : 100,
+              "value" : true
+            },
+            {
+              "date" : 100.25,
+              "value" : true
+            },
+            {
+              "date" : 300,
+              "value" : true
+            },
+            {
+              "date" : 700,
+              "value" : true
+            },
+            {
+              "date" : 899,
+              "value" : true
+            },
+            {
+              "date" : 900,
+              "value" : true
+            },
+            {
+              "date" : 1000,
+              "value" : false
+            },
+            {
+              "date" : 3599,
+              "value" : false
+            },
+            {
+              "date" : 3600,
+              "value" : false
+            },
+            {
+              "date" : 9999,
+              "value" : false
+            }
+          ],
+          "channel" : "channel",
+          "end" : 1000,
+          "grouped" : false,
+          "ids" : [
+            "long"
+          ],
+          "samples" : [
+            {
+              "channel" : "channel",
+              "end" : 1000,
+              "id" : "long",
+              "name" : "Synthetic long",
+              "start" : 0
+            }
+          ],
+          "start" : 0
+        },
+        {
+          "airing" : [
+            {
+              "date" : -100,
+              "value" : false
+            },
+            {
+              "date" : -1,
+              "value" : false
+            },
+            {
+              "date" : 0,
+              "value" : false
+            },
+            {
+              "date" : 10,
+              "value" : false
+            },
+            {
+              "date" : 99.5,
+              "value" : false
+            },
+            {
+              "date" : 100,
+              "value" : true
+            },
+            {
+              "date" : 100.25,
+              "value" : true
+            },
+            {
+              "date" : 300,
+              "value" : true
+            },
+            {
+              "date" : 700,
+              "value" : false
+            },
+            {
+              "date" : 899,
+              "value" : false
+            },
+            {
+              "date" : 900,
+              "value" : false
+            },
+            {
+              "date" : 1000,
+              "value" : false
+            },
+            {
+              "date" : 3599,
+              "value" : false
+            },
+            {
+              "date" : 3600,
+              "value" : false
+            },
+            {
+              "date" : 9999,
+              "value" : false
+            }
+          ],
+          "channel" : "channel",
+          "end" : 400,
+          "grouped" : true,
+          "ids" : [
+            "short",
+            "short2"
+          ],
+          "samples" : [
+            {
+              "channel" : "channel",
+              "end" : 300,
+              "id" : "short",
+              "name" : "Synthetic short",
+              "start" : 100
+            },
+            {
+              "channel" : "channel",
+              "end" : 400,
+              "id" : "short2",
+              "name" : "Synthetic short2",
+              "start" : 200
+            }
+          ],
+          "start" : 100
+        },
+        {
+          "airing" : [
+            {
+              "date" : -100,
+              "value" : false
+            },
+            {
+              "date" : -1,
+              "value" : false
+            },
+            {
+              "date" : 0,
+              "value" : false
+            },
+            {
+              "date" : 10,
+              "value" : false
+            },
+            {
+              "date" : 99.5,
+              "value" : false
+            },
+            {
+              "date" : 100,
+              "value" : false
+            },
+            {
+              "date" : 100.25,
+              "value" : false
+            },
+            {
+              "date" : 300,
+              "value" : true
+            },
+            {
+              "date" : 700,
+              "value" : true
+            },
+            {
+              "date" : 899,
+              "value" : true
+            },
+            {
+              "date" : 900,
+              "value" : true
+            },
+            {
+              "date" : 1000,
+              "value" : true
+            },
+            {
+              "date" : 3599,
+              "value" : false
+            },
+            {
+              "date" : 3600,
+              "value" : false
+            },
+            {
+              "date" : 9999,
+              "value" : false
+            }
+          ],
+          "channel" : "channel",
+          "end" : 2000,
+          "grouped" : false,
+          "ids" : [
+            "long2"
+          ],
+          "samples" : [
+            {
+              "channel" : "channel",
+              "end" : 2000,
+              "id" : "long2",
+              "name" : "Synthetic long2",
+              "start" : 250
+            }
+          ],
+          "start" : 250
+        }
+      ],
+      "name" : "long-short-overlap",
+      "samples" : [
+        {
+          "channel" : "channel",
+          "end" : 300,
+          "id" : "short",
+          "name" : "Synthetic short",
+          "start" : 100
+        },
+        {
+          "channel" : "channel",
+          "end" : 1000,
+          "id" : "long",
+          "name" : "Synthetic long",
+          "start" : 0
+        },
+        {
+          "channel" : "channel",
+          "end" : 400,
+          "id" : "short2",
+          "name" : "Synthetic short2",
+          "start" : 200
+        },
+        {
+          "channel" : "channel",
+          "end" : 2000,
+          "id" : "long2",
+          "name" : "Synthetic long2",
+          "start" : 250
+        }
+      ],
+      "start" : 0
+    },
+    {
+      "end" : 3600,
+      "expected" : [
+        {
+          "airing" : [
+            {
+              "date" : -100,
+              "value" : false
+            },
+            {
+              "date" : -1,
+              "value" : false
+            },
+            {
+              "date" : 0,
+              "value" : false
+            },
+            {
+              "date" : 10,
+              "value" : true
+            },
+            {
+              "date" : 99.5,
+              "value" : false
+            },
+            {
+              "date" : 100,
+              "value" : false
+            },
+            {
+              "date" : 100.25,
+              "value" : false
+            },
+            {
+              "date" : 300,
+              "value" : false
+            },
+            {
+              "date" : 700,
+              "value" : false
+            },
+            {
+              "date" : 899,
+              "value" : false
+            },
+            {
+              "date" : 900,
+              "value" : false
+            },
+            {
+              "date" : 1000,
+              "value" : false
+            },
+            {
+              "date" : 3599,
+              "value" : false
+            },
+            {
+              "date" : 3600,
+              "value" : false
+            },
+            {
+              "date" : 9999,
+              "value" : false
+            }
+          ],
+          "end" : 30,
+          "grouped" : true,
+          "ids" : [
+            null,
+            "duplicate",
+            "duplicate"
+          ],
+          "samples" : [
+            {
+              "end" : 20,
+              "name" : "Synthetic nil",
+              "start" : 10
+            },
+            {
+              "channel" : "other",
+              "end" : 30,
+              "id" : "duplicate",
+              "name" : "Synthetic duplicate",
+              "start" : 10
+            },
+            {
+              "channel" : "channel",
+              "end" : 25,
+              "id" : "duplicate",
+              "name" : "Synthetic duplicate",
+              "start" : 10
+            }
+          ],
+          "start" : 10
+        }
+      ],
+      "name" : "equal-start-identities",
+      "samples" : [
+        {
+          "end" : 20,
+          "name" : "Synthetic nil",
+          "start" : 10
+        },
+        {
+          "channel" : "other",
+          "end" : 30,
+          "id" : "duplicate",
+          "name" : "Synthetic duplicate",
+          "start" : 10
+        },
+        {
+          "channel" : "channel",
+          "end" : 25,
+          "id" : "duplicate",
+          "name" : "Synthetic duplicate",
+          "start" : 10
+        }
+      ],
+      "start" : 0
+    },
+    {
+      "end" : 300.25,
+      "expected" : [
+        {
+          "airing" : [
+            {
+              "date" : -100,
+              "value" : false
+            },
+            {
+              "date" : -1,
+              "value" : true
+            },
+            {
+              "date" : 0,
+              "value" : true
+            },
+            {
+              "date" : 10,
+              "value" : true
+            },
+            {
+              "date" : 99.5,
+              "value" : true
+            },
+            {
+              "date" : 100,
+              "value" : true
+            },
+            {
+              "date" : 100.25,
+              "value" : true
+            },
+            {
+              "date" : 300,
+              "value" : false
+            },
+            {
+              "date" : 700,
+              "value" : false
+            },
+            {
+              "date" : 899,
+              "value" : false
+            },
+            {
+              "date" : 900,
+              "value" : false
+            },
+            {
+              "date" : 1000,
+              "value" : false
+            },
+            {
+              "date" : 3599,
+              "value" : false
+            },
+            {
+              "date" : 3600,
+              "value" : false
+            },
+            {
+              "date" : 9999,
+              "value" : false
+            }
+          ],
+          "channel" : "channel",
+          "end" : 200.5,
+          "grouped" : true,
+          "ids" : [
+            "a",
+            "b"
+          ],
+          "samples" : [
+            {
+              "channel" : "channel",
+              "end" : 100.25,
+              "id" : "a",
+              "name" : "Synthetic a",
+              "start" : -10
+            },
+            {
+              "channel" : "channel",
+              "end" : 200.5,
+              "id" : "b",
+              "name" : "Synthetic b",
+              "start" : 100.25
+            }
+          ],
+          "start" : 0.5
+        },
+        {
+          "airing" : [
+            {
+              "date" : -100,
+              "value" : false
+            },
+            {
+              "date" : -1,
+              "value" : false
+            },
+            {
+              "date" : 0,
+              "value" : false
+            },
+            {
+              "date" : 10,
+              "value" : false
+            },
+            {
+              "date" : 99.5,
+              "value" : false
+            },
+            {
+              "date" : 100,
+              "value" : false
+            },
+            {
+              "date" : 100.25,
+              "value" : false
+            },
+            {
+              "date" : 300,
+              "value" : true
+            },
+            {
+              "date" : 700,
+              "value" : false
+            },
+            {
+              "date" : 899,
+              "value" : false
+            },
+            {
+              "date" : 900,
+              "value" : false
+            },
+            {
+              "date" : 1000,
+              "value" : false
+            },
+            {
+              "date" : 3599,
+              "value" : false
+            },
+            {
+              "date" : 3600,
+              "value" : false
+            },
+            {
+              "date" : 9999,
+              "value" : false
+            }
+          ],
+          "channel" : "channel",
+          "end" : 300.25,
+          "grouped" : false,
+          "ids" : [
+            "c"
+          ],
+          "samples" : [
+            {
+              "channel" : "channel",
+              "end" : 300.5,
+              "id" : "c",
+              "name" : "Synthetic c",
+              "start" : 200.75
+            }
+          ],
+          "start" : 200.75
+        }
+      ],
+      "name" : "fractional-window",
+      "samples" : [
+        {
+          "channel" : "channel",
+          "end" : 100.25,
+          "id" : "a",
+          "name" : "Synthetic a",
+          "start" : -10
+        },
+        {
+          "channel" : "channel",
+          "end" : 200.5,
+          "id" : "b",
+          "name" : "Synthetic b",
+          "start" : 100.25
+        },
+        {
+          "channel" : "channel",
+          "end" : 300.5,
+          "id" : "c",
+          "name" : "Synthetic c",
+          "start" : 200.75
+        }
+      ],
+      "start" : 0.5
+    }
+  ],
+  "originalCommit" : "3c44f2e5f3f29031af11261bee1b56f253995647",
+  "sourceHashes" : {
+    "Shared\/Objects\/EPG\/Programming\/ClampedProgram.swift" : "3c1814268437b5445743ab7bdb332df4c0e04a92938b00db8b4a908cd974bf09",
+    "Shared\/Objects\/EPG\/Programming\/ProgramBlock.swift" : "68ae00ac85c08811792bad66cd86e2292f4ed3170f4604b52e8699cf7e360efb"
+  }
+}

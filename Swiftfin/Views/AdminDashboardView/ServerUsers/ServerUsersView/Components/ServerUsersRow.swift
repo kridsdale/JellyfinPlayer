@@ -11,6 +11,7 @@ import FactoryKit
 import JellyfinAPI
 import SwiftfinFormatting
 import SwiftfinLocalization
+import SwiftfinUIState
 import SwiftUI
 
 extension ServerUsersView {

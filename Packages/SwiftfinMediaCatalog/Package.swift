@@ -26,7 +26,8 @@ let package = Package(
                 "SwiftfinMediaCatalog",
                 .product(name: "JellyfinAPI", package: "jellyfin-sdk-swift"),
                 .product(name: "Get", package: "Get")
-            ]
+            ],
+            resources: [.process("Fixtures")]
         )
     ]
 )
