@@ -7,6 +7,7 @@
 //
 
 import JellyfinAPI
+import SwiftfinItemMetadata
 import SwiftfinLocalization
 
 struct StudioComponentEditor: ItemComponentEditor {
@@ -31,33 +32,18 @@ struct StudioComponentEditor: ItemComponentEditor {
     }
 
     func adding(_ studios: [NameIDPair], to item: BaseItemDto) -> BaseItemDto {
-        var item = item
-        if item.studios == nil {
-            item.studios = []
-        }
-        item.studios?.append(contentsOf: studios)
-        return item
+        ItemMetadataPolicy.studios(.append(studios), in: item)
     }
 
     func removing(_ studios: [NameIDPair], from item: BaseItemDto) -> BaseItemDto {
-        var item = item
-        item.studios?.removeAll { studios.contains($0) }
-        return item
+        ItemMetadataPolicy.studios(.remove(studios), in: item)
     }
 
     func reordering(_ studios: [NameIDPair], in item: BaseItemDto) -> BaseItemDto {
-        var item = item
-        item.studios = studios
-        return item
+        ItemMetadataPolicy.studios(.replace(studios), in: item)
     }
 
-    func search(_ searchTerm: String, userSession: UserSession) async throws -> [NameIDPair] {
-        let parameters = Paths.GetStudiosParameters(searchTerm: searchTerm.isEmpty ? nil : searchTerm)
-        let request = Paths.getStudios(parameters: parameters)
-        let response = try await userSession.client.send(request)
-
-        return response.value.items?.map { studio in
-            NameIDPair(id: studio.id, name: studio.name)
-        } ?? []
+    func search(_ searchTerm: String, metadata: ItemMetadataClient) async throws -> [NameIDPair] {
+        try await metadata.studioMatches(query: searchTerm)
     }
 }

@@ -7,6 +7,7 @@
 //
 
 import JellyfinAPI
+import SwiftfinItemMetadata
 import SwiftfinLocalization
 
 struct PeopleComponentEditor: ItemComponentEditor {
@@ -27,46 +28,22 @@ struct PeopleComponentEditor: ItemComponentEditor {
     }
 
     func makeElement(input: ItemComponentEditorInput) -> BaseItemPerson {
-        let role = input.personRole.isEmpty ?
-            (input.personKind == .unknown ? nil : input.personKind.rawValue) :
-            input.personRole
-
-        return BaseItemPerson(
-            id: input.id,
-            name: input.name,
-            role: role,
-            type: input.personKind
-        )
+        ItemMetadataPolicy.person(id: input.id, name: input.name, kind: input.personKind, role: input.personRole)
     }
 
     func adding(_ people: [BaseItemPerson], to item: BaseItemDto) -> BaseItemDto {
-        var item = item
-        if item.people == nil {
-            item.people = []
-        }
-        item.people?.append(contentsOf: people)
-        return item
+        ItemMetadataPolicy.people(.append(people), in: item)
     }
 
     func removing(_ people: [BaseItemPerson], from item: BaseItemDto) -> BaseItemDto {
-        var item = item
-        item.people?.removeAll { people.contains($0) }
-        return item
+        ItemMetadataPolicy.people(.remove(people), in: item)
     }
 
     func reordering(_ people: [BaseItemPerson], in item: BaseItemDto) -> BaseItemDto {
-        var item = item
-        item.people = people
-        return item
+        ItemMetadataPolicy.people(.replace(people), in: item)
     }
 
-    func search(_ searchTerm: String, userSession: UserSession) async throws -> [BaseItemPerson] {
-        let parameters = Paths.GetPersonsParameters(searchTerm: searchTerm.isEmpty ? nil : searchTerm)
-        let request = Paths.getPersons(parameters: parameters)
-        let response = try await userSession.client.send(request)
-
-        return response.value.items?.map { person in
-            BaseItemPerson(id: person.id, name: person.name)
-        } ?? []
+    func search(_ searchTerm: String, metadata: ItemMetadataClient) async throws -> [BaseItemPerson] {
+        try await metadata.peopleMatches(query: searchTerm)
     }
 }

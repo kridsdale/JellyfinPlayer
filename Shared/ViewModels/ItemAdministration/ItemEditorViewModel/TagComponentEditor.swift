@@ -8,14 +8,16 @@
 
 import JellyfinAPI
 import SwiftfinCollections
+import SwiftfinItemMetadata
 import SwiftfinLocalization
 
+@MainActor
 struct TagComponentEditor: ItemComponentEditor {
 
     let description: String = L10n.tagsDescription
     let displayTitle: String = L10n.tags
 
-    private let trie: Trie<String, String> = .init()
+    private let tags = MetadataTagSearchStore()
 
     func elements(in item: BaseItemDto) -> [String] {
         item.tags ?? []
@@ -30,38 +32,22 @@ struct TagComponentEditor: ItemComponentEditor {
     }
 
     func adding(_ tags: [String], to item: BaseItemDto) -> BaseItemDto {
-        var item = item
-        if item.tags == nil {
-            item.tags = []
-        }
-        item.tags?.append(contentsOf: tags)
-        return item
+        ItemMetadataPolicy.tags(.append(tags), in: item)
     }
 
     func removing(_ tags: [String], from item: BaseItemDto) -> BaseItemDto {
-        var item = item
-        item.tags?.removeAll { tags.contains($0) }
-        return item
+        ItemMetadataPolicy.tags(.remove(tags), in: item)
     }
 
     func reordering(_ tags: [String], in item: BaseItemDto) -> BaseItemDto {
-        var item = item
-        item.tags = tags
-        return item
+        ItemMetadataPolicy.tags(.replace(tags), in: item)
     }
 
-    func didAdd(_ tags: [String]) {
-        trie.insert(contentsOf: tags.keyed(using: \.localizedLowercase))
+    func didAdd(_ tags: [String], metadata: ItemMetadataClient) {
+        try? self.tags.add(tags, client: metadata)
     }
 
-    func search(_ searchTerm: String, userSession: UserSession) async throws -> [String] {
-        if trie.isEmpty {
-            let parameters = Paths.GetQueryFiltersLegacyParameters(userID: userSession.user.id)
-            let request = Paths.getQueryFiltersLegacy(parameters: parameters)
-            let response = try await userSession.client.send(request)
-            trie.insert(contentsOf: (response.value.tags ?? []).keyed(using: \.localizedLowercase))
-        }
-
-        return trie.search(prefix: searchTerm.localizedLowercase)
+    func search(_ searchTerm: String, metadata: ItemMetadataClient) async throws -> [String] {
+        try await tags.search(prefix: searchTerm, client: metadata)
     }
 }

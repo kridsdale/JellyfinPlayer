@@ -7,6 +7,7 @@
 //
 
 import JellyfinAPI
+import SwiftfinItemMetadata
 import SwiftfinLocalization
 
 struct GenreComponentEditor: ItemComponentEditor {
@@ -27,31 +28,18 @@ struct GenreComponentEditor: ItemComponentEditor {
     }
 
     func adding(_ genres: [String], to item: BaseItemDto) -> BaseItemDto {
-        var item = item
-        if item.genres == nil {
-            item.genres = []
-        }
-        item.genres?.append(contentsOf: genres)
-        return item
+        ItemMetadataPolicy.genres(.append(genres), in: item)
     }
 
     func removing(_ genres: [String], from item: BaseItemDto) -> BaseItemDto {
-        var item = item
-        item.genres?.removeAll { genres.contains($0) }
-        return item
+        ItemMetadataPolicy.genres(.remove(genres), in: item)
     }
 
     func reordering(_ genres: [String], in item: BaseItemDto) -> BaseItemDto {
-        var item = item
-        item.genres = genres
-        return item
+        ItemMetadataPolicy.genres(.replace(genres), in: item)
     }
 
-    func search(_ searchTerm: String, userSession: UserSession) async throws -> [String] {
-        let parameters = Paths.GetGenresParameters(searchTerm: searchTerm.isEmpty ? nil : searchTerm)
-        let request = Paths.getGenres(parameters: parameters)
-        let response = try await userSession.client.send(request)
-
-        return response.value.items?.compactMap(\.name) ?? []
+    func search(_ searchTerm: String, metadata: ItemMetadataClient) async throws -> [String] {
+        try await metadata.genreMatches(query: searchTerm)
     }
 }

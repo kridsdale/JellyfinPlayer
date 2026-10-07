@@ -7,6 +7,7 @@
 //
 
 import JellyfinAPI
+import SwiftfinItemMetadata
 
 struct CountryLibrary: PagingLibrary {
 
@@ -17,9 +18,7 @@ struct CountryLibrary: PagingLibrary {
         environment: Empty,
         pageState: LibraryPageState
     ) async throws -> [CountryInfo] {
-        let request = Paths.getCountries
-        let response = try await pageState.client.send(request)
-
-        return response.value
+        guard pageState.pageOffset == 0 else { return [] }
+        return try await pageState.itemMetadata.countries()
     }
 }

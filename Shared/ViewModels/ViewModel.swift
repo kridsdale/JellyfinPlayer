@@ -12,6 +12,7 @@ import Foundation
 import Get
 import JellyfinAPI
 import Logging
+import SwiftfinItemMetadata
 import SwiftfinNetworking
 import SwiftfinServerOperations
 import SwiftfinUserAdministration
@@ -90,5 +91,11 @@ extension ViewModel {
     func requireUserAdministration() throws -> UserAdministrationClient {
         let session = try requireUserSession()
         return UserAdministrationClient(executor: administrationExecutor(for: session), currentUserID: session.user.id)
+    }
+}
+
+extension ViewModel {
+    func requireItemMetadata() throws -> ItemMetadataClient {
+        try requireUserSession().itemMetadata
     }
 }

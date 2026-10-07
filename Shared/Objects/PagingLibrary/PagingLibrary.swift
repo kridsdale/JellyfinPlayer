@@ -7,6 +7,7 @@
 //
 
 import JellyfinAPI
+import SwiftfinItemMetadata
 import SwiftfinMediaCatalog
 import SwiftfinNetworking
 import SwiftfinPaging
@@ -34,6 +35,14 @@ struct LibraryPageState {
 
     var userAdministration: UserAdministrationClient {
         UserAdministrationClient(executor: .init(sender: client), currentUserID: userID)
+    }
+
+    var itemMetadata: ItemMetadataClient {
+        ItemMetadataClient(
+            executor: .init(sender: client),
+            userID: userID,
+            bindingID: .init(transport: ObjectIdentifier(client), userID: userID)
+        )
     }
 
     var mediaCatalog: MediaCatalogClient {

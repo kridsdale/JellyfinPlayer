@@ -10,6 +10,7 @@ import Combine
 import Foundation
 import JellyfinAPI
 import SwiftfinCollections
+import SwiftfinItemMetadata
 
 @MainActor
 @Stateful
@@ -87,13 +88,13 @@ class ItemComponentEditorViewModel<Editor: ItemComponentEditor>: ViewModel {
 
     @Function(\Action.Cases.actuallySearch)
     private func _actuallySearch(_ searchTerm: String) async throws {
-        matches = try await editor.search(searchTerm, userSession: requireUserSession())
+        matches = try await editor.search(searchTerm, metadata: requireItemMetadata())
     }
 
     @Function(\Action.Cases.add)
     private func _add(_ elements: [Element]) async throws {
-        try await updateItem(editor.adding(elements, to: item))
-        editor.didAdd(elements)
+        let metadata = try await updateItem(editor.adding(elements, to: item))
+        editor.didAdd(elements, metadata: metadata)
     }
 
     @Function(\Action.Cases.remove)
@@ -106,16 +107,16 @@ class ItemComponentEditorViewModel<Editor: ItemComponentEditor>: ViewModel {
         try await updateItem(editor.reordering(elements, in: item))
     }
 
-    private func updateItem(_ newItem: BaseItemDto) async throws {
-        guard let itemID = item.id else { return }
-
-        var updateItem = newItem
-        updateItem.trickplay = nil
-
-        let request = Paths.updateItem(itemID: itemID, updateItem)
-        _ = try await send(request)
-
-        item = try await item.getFullItem(userSession: requireUserSession(), sendNotification: true)
+    @discardableResult
+    private func updateItem(_ newItem: BaseItemDto) async throws -> ItemMetadataClient {
+        guard let itemID = item.id else { throw ErrorMessage("Item ID is missing") }
+        let metadata = try requireItemMetadata()
+        try await metadata.update(itemID: itemID, item: newItem)
+        let updated = try await metadata.item(id: itemID)
+        guard item.id == itemID else { throw CancellationError() }
+        item = updated
+        Notifications[.itemMetadataDidChange].post(updated)
         events.send(.updated)
+        return metadata
     }
 }

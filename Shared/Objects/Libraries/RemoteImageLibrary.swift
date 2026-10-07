@@ -7,6 +7,7 @@
 //
 
 import JellyfinAPI
+import SwiftfinItemMetadata
 
 struct RemoteImageLibrary: PagingLibrary {
 
@@ -32,17 +33,13 @@ struct RemoteImageLibrary: PagingLibrary {
         pageState: LibraryPageState
     ) async throws -> [RemoteImageInfo] {
         guard let itemID = parent.id else { return [] }
-
-        var parameters = Paths.GetRemoteImagesParameters()
-        parameters.isIncludeAllLanguages = environment.includeAllLanguages
-        parameters.limit = pageState.pageSize
-        parameters.providerName = environment.provider
-        parameters.startIndex = pageState.pageOffset
-        parameters.type = imageType
-
-        let request = Paths.getRemoteImages(itemID: itemID, parameters: parameters)
-        let response = try await pageState.client.send(request)
-
-        return response.value.images ?? []
+        return try await pageState.itemMetadata.remoteImages(
+            itemID: itemID,
+            type: imageType,
+            includeAllLanguages: environment.includeAllLanguages,
+            provider: environment.provider,
+            offset: pageState.pageOffset,
+            limit: pageState.pageSize
+        )
     }
 }

@@ -10,6 +10,7 @@ import Combine
 import Foundation
 import JellyfinAPI
 import OrderedCollections
+import SwiftfinItemMetadata
 
 @MainActor
 @Stateful
@@ -70,10 +71,7 @@ class ItemEditorViewModel: ViewModel {
     @Function(\Action.Cases.delete)
     private func _delete() async throws {
         guard let itemID = item.id else { return }
-
-        let request = Paths.deleteItem(itemID: itemID)
-        _ = try await send(request)
-
+        try await requireItemMetadata().deleteItem(id: itemID)
         Notifications[.didDeleteItem].post(itemID)
         events.send(.deleted)
     }
@@ -86,29 +84,27 @@ class ItemEditorViewModel: ViewModel {
         _ replaceImages: Bool,
         _ regenerateTrickplay: Bool
     ) async throws {
-        guard let itemId = item.id else { return }
-
-        var parameters = Paths.RefreshItemParameters()
-        parameters.metadataRefreshMode = metadataRefreshMode
-        parameters.imageRefreshMode = imageRefreshMode
-        parameters.isReplaceAllMetadata = replaceMetadata
-        parameters.isReplaceAllImages = replaceImages
-        parameters.isRegenerateTrickplay = regenerateTrickplay
-
-        let request = Paths.refreshItem(
-            itemID: itemId,
-            parameters: parameters
+        guard let itemID = item.id else { return }
+        let metadata = try requireItemMetadata()
+        try await metadata.refresh(
+            itemID: itemID,
+            options: .init(
+                metadataMode: metadataRefreshMode,
+                imageMode: imageRefreshMode,
+                replaceMetadata: replaceMetadata,
+                replaceImages: replaceImages,
+                regenerateTrickplay: regenerateTrickplay
+            )
         )
-        _ = try await send(request)
-
         events.send(.metadataRefreshStarted)
-
-        // TODO: Remove this call when we have a WebSocket
-        // - Both lines below this can be replaced by the WebSocket
-        // - Centralized, WebSocket gets the new information and updates when new
-        // - Currently, waits 5 seconds before a manual refresh
         try await Task.sleep(for: .seconds(5))
-        await refreshItem(sendNotification: true)
+        try metadata.checkBinding()
+        guard item.id == itemID else { throw CancellationError() }
+        let updated = try await metadata.item(id: itemID)
+        guard item.id == itemID else { throw CancellationError() }
+        item = updated
+        Notifications[.itemMetadataDidChange].post(updated)
+        events.send(.updated)
     }
 
     @Function(\Action.Cases.update)
@@ -118,7 +114,13 @@ class ItemEditorViewModel: ViewModel {
 
     @Function(\Action.Cases.refreshItem)
     private func _refreshItem(_ isRefresh: Bool) async throws {
-        self.item = try await item.getFullItem(userSession: requireUserSession(), sendNotification: isRefresh)
+        guard let itemID = item.id else { throw ErrorMessage("Item ID is missing") }
+        let updated = try await requireItemMetadata().item(id: itemID)
+        guard item.id == itemID else { throw CancellationError() }
+        item = updated
+        if isRefresh {
+            Notifications[.itemMetadataDidChange].post(updated)
+        }
         events.send(.updated)
     }
 
@@ -127,14 +129,13 @@ class ItemEditorViewModel: ViewModel {
     // TODO: call update(_:) instead
 
     func updateItem(_ newItem: BaseItemDto) async throws {
-        guard let itemId = item.id else { return }
-
-        var updateItem = newItem
-        updateItem.trickplay = nil
-
-        let request = Paths.updateItem(itemID: itemId, updateItem)
-        _ = try await send(request)
-
-        await refreshItem(sendNotification: true)
+        guard let itemID = item.id else { return }
+        let metadata = try requireItemMetadata()
+        try await metadata.update(itemID: itemID, item: newItem)
+        let updated = try await metadata.item(id: itemID)
+        guard item.id == itemID else { throw CancellationError() }
+        item = updated
+        Notifications[.itemMetadataDidChange].post(updated)
+        events.send(.updated)
     }
 }

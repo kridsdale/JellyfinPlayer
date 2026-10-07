@@ -7,6 +7,7 @@
 //
 
 import JellyfinAPI
+import SwiftfinItemMetadata
 
 struct ParentalRatingLibrary: PagingLibrary {
 
@@ -17,9 +18,7 @@ struct ParentalRatingLibrary: PagingLibrary {
         environment: Empty,
         pageState: LibraryPageState
     ) async throws -> [ParentalRating] {
-        let request = Paths.getParentalRatings
-        let response = try await pageState.client.send(request)
-
-        return response.value
+        guard pageState.pageOffset == 0 else { return [] }
+        return try await pageState.itemMetadata.parentalRatings()
     }
 }

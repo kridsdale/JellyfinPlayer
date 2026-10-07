@@ -7,6 +7,7 @@
 //
 
 import JellyfinAPI
+import SwiftfinItemMetadata
 
 struct CultureLibrary: PagingLibrary {
 
@@ -17,9 +18,7 @@ struct CultureLibrary: PagingLibrary {
         environment: Empty,
         pageState: LibraryPageState
     ) async throws -> [CultureDto] {
-        let request = Paths.getCultures
-        let response = try await pageState.client.send(request)
-
-        return response.value
+        guard pageState.pageOffset == 0 else { return [] }
+        return try await pageState.itemMetadata.cultures()
     }
 }

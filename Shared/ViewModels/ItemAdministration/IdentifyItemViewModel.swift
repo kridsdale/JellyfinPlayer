@@ -12,24 +12,13 @@ import Get
 import JellyfinAPI
 import OrderedCollections
 import SwiftfinCollections
+import SwiftfinItemMetadata
 
 @MainActor
 @Stateful
 final class IdentifyItemViewModel: ViewModel {
 
-    struct SearchQuery: Equatable {
-        var name: String?
-        var originalTitle: String?
-        var year: Int?
-
-        var isEmpty: Bool {
-            name?.isEmpty != false && originalTitle?.isEmpty != false && year == nil
-        }
-
-        var isNotEmpty: Bool {
-            !isEmpty
-        }
-    }
+    typealias SearchQuery = MetadataSearchQuery
 
     @CasePathable
     enum Action {
@@ -89,92 +78,19 @@ final class IdentifyItemViewModel: ViewModel {
 
     @Function(\Action.Cases._actuallySearch)
     private func __actuallySearch(_ query: SearchQuery) async throws {
-
-        guard query.isNotEmpty else {
-            searchResults = []
+        guard let itemID = item.id, let itemType = item.type else { searchResults = []
             return
         }
-
-        let name = query.name
-        let originalTitle = query.originalTitle
-        let year = query.year
-
-        guard let itemID = item.id, let itemType = item.type else {
-            searchResults = []
-            return
-        }
-
-        switch itemType {
-        case .boxSet:
-            let parameters = BoxSetInfoRemoteSearchQuery(
-                itemID: itemID,
-                searchInfo: .init(
-                    name: name,
-                    originalTitle: originalTitle,
-                    year: year
-                )
-            )
-            let request = Paths.getBoxSetRemoteSearchResults(parameters)
-            let response = try await send(request)
-
-            searchResults = response.value
-
-        case .movie:
-            let parameters = MovieInfoRemoteSearchQuery(
-                itemID: itemID,
-                searchInfo: .init(
-                    name: name,
-                    originalTitle: originalTitle,
-                    year: year
-                )
-            )
-            let request = Paths.getMovieRemoteSearchResults(parameters)
-            let response = try await send(request)
-
-            searchResults = response.value
-
-        case .person:
-            let parameters = PersonLookupInfoRemoteSearchQuery(
-                itemID: itemID,
-                searchInfo: .init(
-                    name: name,
-                    originalTitle: originalTitle,
-                    year: year
-                )
-            )
-            let request = Paths.getPersonRemoteSearchResults(parameters)
-            let response = try await send(request)
-
-            searchResults = response.value
-
-        case .series:
-            let parameters = SeriesInfoRemoteSearchQuery(
-                itemID: itemID,
-                searchInfo: .init(
-                    name: name,
-                    originalTitle: originalTitle,
-                    year: year
-                )
-            )
-            let request = Paths.getSeriesRemoteSearchResults(parameters)
-            let response = try await send(request)
-
-            searchResults = response.value
-
-        default:
-            searchResults = []
-        }
+        searchResults = try await requireItemMetadata().identityResults(itemID: itemID, itemType: itemType, query: query)
     }
 
     @Function(\Action.Cases.update)
     private func _update(_ searchResult: RemoteSearchResult) async throws {
         guard let itemID = item.id else { return }
-
-        let request = Paths.applySearchCriteria(itemID: itemID, searchResult)
-        _ = try await send(request)
-
-        _ = try await item.getFullItem(userSession: requireUserSession(), sendNotification: true)
-
+        let metadata = try requireItemMetadata()
+        try await metadata.applyIdentity(itemID: itemID, result: searchResult)
+        let updated = try await metadata.item(id: itemID)
+        Notifications[.itemMetadataDidChange].post(updated)
         events.send(.updated)
     }
 }

@@ -7,6 +7,7 @@
 //
 
 import JellyfinAPI
+import SwiftfinItemMetadata
 
 struct ItemComponentEditorInput {
 
@@ -33,28 +34,22 @@ protocol ItemComponentEditor: Displayable, SendableMetatype {
     func removing(_ elements: [Element], from item: BaseItemDto) -> BaseItemDto
     func reordering(_ elements: [Element], in item: BaseItemDto) -> BaseItemDto
 
-    func didAdd(_ elements: [Element])
-    func search(_ searchTerm: String, userSession: UserSession) async throws -> [Element]
+    func didAdd(_ elements: [Element], metadata: ItemMetadataClient)
+    func search(_ searchTerm: String, metadata: ItemMetadataClient) async throws -> [Element]
 }
 
 extension ItemComponentEditor {
-
     func containsElement(named name: String, in item: BaseItemDto) -> Bool {
-        elements(in: item)
-            .contains { element in
-                self.name(for: element).caseInsensitiveCompare(name) == .orderedSame
-            }
+        ItemMetadataPolicy.nameMatches(name, names: elements(in: item).map { self.name(for: $0) })
     }
 
     func matchExists(named name: String, in matches: [Element]) -> Bool {
-        matches.contains { element in
-            self.name(for: element).caseInsensitiveCompare(name) == .orderedSame
-        }
+        ItemMetadataPolicy.nameMatches(name, names: matches.map { self.name(for: $0) })
     }
 
     func id(for element: Element) -> String? {
         nil
     }
 
-    func didAdd(_ elements: [Element]) {}
+    func didAdd(_ elements: [Element], metadata: ItemMetadataClient) {}
 }

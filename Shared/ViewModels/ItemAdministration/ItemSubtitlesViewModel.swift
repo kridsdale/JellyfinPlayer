@@ -10,6 +10,7 @@ import Combine
 import Foundation
 import JellyfinAPI
 import SwiftfinCollections
+import SwiftfinItemMetadata
 import SwiftfinLocalization
 import SwiftfinPlaybackProfiles
 
@@ -72,12 +73,9 @@ final class ItemSubtitlesViewModel: ViewModel {
     init(item: BaseItemDto) {
         self.item = item
 
-        let subtitles = (item.mediaSources ?? [])
-            .compactMap(\.subtitleStreams)
-            .flattened()
-
-        self.internalSubtitles = subtitles.filter { $0.isExternal == false }
-        self.externalSubtitles = subtitles.filter { $0.isExternal == true }
+        let subtitles = ItemMetadataPolicy.subtitles(item)
+        internalSubtitles = subtitles.internalStreams
+        externalSubtitles = subtitles.externalStreams
 
         super.init()
 
@@ -96,16 +94,16 @@ final class ItemSubtitlesViewModel: ViewModel {
         try await refreshItem(sendNotification: false)
     }
 
-    private func refreshItem(sendNotification: Bool = false) async throws {
-        let item = try await item.getFullItem(userSession: requireUserSession(), sendNotification: sendNotification)
-
-        let subtitles = (item.mediaSources ?? [])
-            .compactMap(\.subtitleStreams)
-            .flattened()
-            .grouped(by: \.isExternal)
-
-        internalSubtitles = subtitles[false] ?? []
-        externalSubtitles = subtitles[true] ?? []
+    private func refreshItem(sendNotification: Bool = false, metadata: ItemMetadataClient? = nil) async throws {
+        guard let itemID = item.id else { throw ErrorMessage(L10n.unknownError) }
+        let reader = try metadata ?? requireItemMetadata()
+        let updated = try await reader.item(id: itemID)
+        let subtitles = ItemMetadataPolicy.subtitles(updated)
+        internalSubtitles = subtitles.internalStreams
+        externalSubtitles = subtitles.externalStreams
+        if sendNotification {
+            Notifications[.itemMetadataDidChange].post(updated)
+        }
     }
 
     @Function(\Action.Cases.search)
@@ -117,97 +115,50 @@ final class ItemSubtitlesViewModel: ViewModel {
 
     @Function(\Action.Cases._actuallySearch)
     private func __actuallySearch(_ isPerfectMatch: Bool) async throws {
-        guard let itemID = item.id else {
-            throw ErrorMessage(L10n.unknownError)
-        }
-
-        // Avoids errors when `None` is selected
-        guard let language, language.isNotEmpty else {
-            results = []
+        guard let itemID = item.id else { throw ErrorMessage(L10n.unknownError) }
+        guard let language, language.isNotEmpty else { results = []
             return
         }
-
-        let request = Paths.searchRemoteSubtitles(
-            itemID: itemID,
-            language: language,
-            isPerfectMatch: isPerfectMatch
-        )
-        let results = try await send(request)
-
-        self.results = results.value
+        results = try await requireItemMetadata().searchSubtitles(itemID: itemID, language: language, perfectMatch: isPerfectMatch)
     }
 
     @Function(\Action.Cases.set)
     private func _set(_ subtitles: Set<String>) async throws {
-        guard let itemID = item.id else {
-            throw ErrorMessage(L10n.unknownError)
-        }
-
-        try await withThrowingTaskGroup(of: Void.self) { group in
-            for subtitleID in subtitles {
-                group.addTask {
-                    let request = Paths.downloadRemoteSubtitles(itemID: itemID, subtitleID: subtitleID)
-                    _ = try await self.send(request)
-                }
-            }
-
-            try await group.waitForAll()
-        }
-
-        try await refreshItem(sendNotification: true)
-
+        guard let itemID = item.id else { throw ErrorMessage(L10n.unknownError) }
+        let metadata = try requireItemMetadata()
+        try await metadata.downloadSubtitles(itemID: itemID, subtitleIDs: subtitles)
+        try await refreshItem(sendNotification: true, metadata: metadata)
         events.send(.uploaded)
     }
 
     @Function(\Action.Cases.upload)
     private func _upload(_ file: URL, _ isForced: Bool, _ isHearingImpaired: Bool) async throws {
-
-        guard let itemID = item.id, let language, language.isNotEmpty else {
-            throw ErrorMessage(L10n.unknownError)
-        }
-
-        guard file.isFileURL, let format = SubtitleFormat(url: file) else {
-            throw ErrorMessage(L10n.invalidFormat)
-        }
-
+        guard let itemID = item.id, let language, language.isNotEmpty else { throw ErrorMessage(L10n.unknownError) }
+        guard file.isFileURL, let format = SubtitleFormat(url: file) else { throw ErrorMessage(L10n.invalidFormat) }
+        let metadata = try requireItemMetadata()
         let data = try Data(contentsOf: file)
-
-        let subtitle = UploadSubtitleDto(
-            data: data.base64EncodedString(),
+        try await metadata.uploadSubtitle(
+            itemID: itemID,
+            data: data,
             format: format.fileExtension,
-            isForced: isForced,
-            isHearingImpaired: isHearingImpaired,
-            language: language
+            language: language,
+            forced: isForced,
+            hearingImpaired: isHearingImpaired
         )
-
-        let request = Paths.uploadSubtitle(itemID: itemID, subtitle)
-        _ = try await send(request)
-
-        try await refreshItem(sendNotification: true)
-
+        try await refreshItem(sendNotification: true, metadata: metadata)
         events.send(.uploaded)
     }
 
     @Function(\Action.Cases.delete)
     private func _delete(_ mediaStreams: Set<MediaStream>) async throws {
-        guard let itemID = item.id else {
-            throw ErrorMessage(L10n.unknownError)
-        }
-
-        let indices = mediaStreams.compactMap(\.index)
-            .sorted(by: >)
-
-        for index in indices {
-            let request = Paths.deleteSubtitle(itemID: itemID, index: index)
-            do {
-                _ = try await send(request)
-            } catch {
-                throw ErrorMessage(L10n.failedDeletionAtIndexError(index, error))
-            }
-        }
-
-        try await refreshItem(sendNotification: true)
-
+        guard let itemID = item.id else { throw ErrorMessage(L10n.unknownError) }
+        let metadata = try requireItemMetadata()
+        do { try await metadata.deleteSubtitles(itemID: itemID, indices: Set(mediaStreams.compactMap(\.index))) }
+        catch let error as MetadataSubtitleDeletionFailure { throw ErrorMessage(L10n.failedDeletionAtIndexError(
+            error.index,
+            error.underlying
+        )) }
+        try await refreshItem(sendNotification: true, metadata: metadata)
         events.send(.deleted)
     }
 }
