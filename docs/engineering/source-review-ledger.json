@@ -4993,8 +4993,8 @@
         "SwiftfinStoredValues"
       ],
       "path": "Swiftfin tvOS/App/KidsAccountAdapter.swift",
-      "reason": "Complete body and KidsAccountHost/KidsAuthenticatedAccount plus the application signIn consumer read: actor-owned identity projection schedules before assumeIsolated, and bound authentication/basic storage delegate appropriately. Still mixed/unapproved: parentPIN collapses credential read failure into absence, while that optional drives parental setup/authority; deferred credential-storage/cache/policy/activation closures also require end-to-end admission-intent and inter-await ownership validation. KidsAuthenticatedAccount checks binding at preparation/activation, but the application signIn body spans several awaits and writes without an inspected intent gate. No credential access or runtime sign-in occurred; no definite live failure is claimed.",
-      "sha256": "ddc490e2b87d52ac4c031dcef5455b6c9ea923efcff2019baa070e6a5e8f203c",
+      "reason": "Complete host adapter body and parent consumers reviewed: identity projection and captured authentication/storage delegate to existing owners. The PIN read now throws instead of collapsing credential failure into absence; KidsAccounts owns fail-closed setup/matching/replacement with eight new fake-host contracts. Still mixed: deferred authenticated-account credential/cache/policy/activation closures require end-to-end admission-intent and inter-await ownership validation. The coordinator still spans asynchronous authentication/catalog/player/session stages. No household credential, server or simulator was accessed; no full activation/runtime approval is claimed.",
+      "sha256": "c2ad0f376e3583a6899f114c5abe74b32aa154912b784943d12319ce354af7f4",
       "status": "source-reviewed-mixed"
     },
     {
@@ -5680,6 +5680,24 @@
         "updateAndReload(itemID:item:validate:)"
       ],
       "sha256": "5fc94886d6d7fe04560c81b4b2640b740963ca12bfe1b3b848d3aa46acc2fa62"
+    },
+    {
+      "path": "Packages/KidsAccounts/Sources/KidsAccounts/ParentPINAuthorization.swift",
+      "reason": "Complete parent-PIN policy body and throwing host read reviewed with its coordinator setup/unlock/signIn and parent-screen error branches. Missing, configured and failed reads remain distinct; unavailable storage routes to existing-PIN presentation and throws a credential-free availability error for actions, even for unlocked/recovery callers. Replacement validates numeric length and propagates write failure before coordinator authority is granted. Eight synthetic native contracts pass; two added UIKit coordinator regressions are compile-only under the human runtime hold. Same-account/library verification remains a caller requirement for recovery, and asynchronous admission/activation ownership remains unapproved.",
+      "reviewedConsumers": [
+        "Packages/KidsApplication/Sources/KidsApplication/KidsAppModel.swift",
+        "Packages/KidsExperience/Sources/KidsExperience/KidsParentView.swift",
+        "Swiftfin tvOS/App/KidsAccountAdapter.swift"
+      ],
+      "reviewedInterfaces": [
+        "KidsParentPINError",
+        "KidsAccountHost.parentPIN get throws",
+        "hasParentPIN",
+        "authorizeParentSetup(unlocked:recovering:)",
+        "matchesParentPIN(_:)",
+        "replaceParentPIN(_:unlocked:)"
+      ],
+      "sha256": "bf14e672ed470e4ca456489992c525a6e614cff630a89192f226d3abdfc86412"
     }
   ],
   "limits": "This ledger records bodies explicitly reviewed, with exact current hashes; earlier prose or lexical inventory is not automatically promoted. Pending and mixed entries prevent whole-source completion. Retained UI algorithms have specific presentation reasons, not folder/import-based blanket approval. API entries do not classify the rest of the public graph. Source review and offline tests do not satisfy held runtime acceptance.",
@@ -5692,7 +5710,7 @@
       "source-reviewed-mixed": 14,
       "source-reviewed-retained": 396
     },
-    "currentAPIReviews": 33,
+    "currentAPIReviews": 34,
     "runtimeAcceptance": "held by human; no simulator/server testing"
   }
 }

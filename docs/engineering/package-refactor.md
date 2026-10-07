@@ -49,14 +49,14 @@ Before extraction the app compiled 614 Shared Swift files, 32 tvOS Swift files a
 | SwiftfinStoredValues | Typed settings keys, exact defaults/SQL addressing, JSON codec, playback value serialization and observable values; no presentation or credential access | SwiftfinAccountModels, SwiftfinStorage, SwiftfinPlaybackProfiles, pinned Defaults 9.0.9, Combine |
 | SwiftfinStoredValuesUI | SwiftUI dynamic property and Binding adapters for typed settings | SwiftfinStoredValues, SwiftUI |
 | KidsApplication | Main-actor curated application coordination; verified state publication, authorized account/parent actions and progress/session orchestration | KidsAccounts, KidsArtwork, KidsArtworkUI, KidsCatalog, KidsDiagnostics, KidsDomain, KidsPersistence, KidsPlaybackSession |
-| KidsExperience | tvOS child/parent screens, focus/navigation and playback presentation port | KidsApplication, KidsCatalog, KidsDiagnostics, KidsDiagnosticsUI, KidsDomain, KidsPlaybackSession, SwiftfinUIState |
+| KidsExperience | tvOS child/parent screens, focus/navigation and playback presentation port | KidsAccounts, KidsApplication, KidsCatalog, KidsDiagnostics, KidsDiagnosticsUI, KidsDomain, KidsPlaybackSession, SwiftfinUIState |
 | SwiftfinNowPlaying | Exclusive system media commands and metadata publication; typed command values and nonisolated immutable artwork provider | Foundation, MediaPlayer, UIKit |
 | SwiftfinVLC | Native stream/track/renderer lifecycle, absolute resume, numeric output probes and awaited teardown | KidsDiagnostics, pinned SwiftVLC 1.0.0 |
 | SwiftfinAudioSession | Serialized process audio leases and Apple audio activation adapter | KidsDiagnostics, Foundation, OSLog, AVFAudio |
 | SwiftfinLocalization | Typed localized display strings, all 54 language resources, deterministic read-only build-tool generation | Foundation |
 | SwiftfinUIState | Main-actor observable value boxes, binding adapters, periodic date observation, final-view lifetime callbacks, direction-aware jump aggregation, transient UI events and cancellable one-shot deadlines | SwiftUI, Combine, Foundation |
 | KidsDiagnosticsUI | Presentation-frame trace probe | KidsDiagnostics, SwiftUI, UIKit |
-| KidsAccounts | Secure account host port, redacted full network identity, staged credential storage and exact binding activation | KidsDomain, Foundation, Combine |
+| KidsAccounts | account host, immutable identity, prepared activation and parent-PIN authorization | KidsDomain, Foundation, Combine |
 | KidsArtworkUI | Prepared UIKit pixels, single-flight decode and bounded ephemeral pixel retention | KidsDomain, KidsCatalog, KidsDiagnostics, KidsArtwork, UIKit |
 | KidsDomain | Immutable identity/content contracts, eligibility, user-visible failure contracts, ordered/Shuffle/session rules and parent-gate timing | Foundation |
 | KidsDiagnostics | Compiler-checked concurrent bounded numeric traces and network timing delegate | KidsDomain, Foundation, OSLog, os |

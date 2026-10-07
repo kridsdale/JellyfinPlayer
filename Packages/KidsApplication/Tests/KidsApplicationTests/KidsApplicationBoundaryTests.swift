@@ -29,13 +29,24 @@ final class KidsApplicationBoundaryTests: XCTestCase {
             changes.eraseToAnyPublisher()
         }
 
-        var parentPIN: String?
+        struct StorageFailure: Error {}
+        var savedPIN: String?
+        var pinReadFails = false
+        var parentPIN: String? {
+            get throws {
+                if pinReadFails {
+                    throw StorageFailure()
+                }
+                return savedPIN
+            }
+        }
+
         var writes = 0
         var authentications = 0
         var signOuts = 0
         func storeParentPIN(_ pin: String) throws {
             writes += 1
-            parentPIN = pin
+            savedPIN = pin
         }
 
         func authenticate(
@@ -197,5 +208,44 @@ final class KidsApplicationBoundaryTests: XCTestCase {
         XCTAssertTrue(model.activePlayback === replacement)
         await model.dismissPlayback(replacement)
         XCTAssertNil(model.activePlayback)
+    }
+
+    func testUnavailablePINLocksParentsWithoutCountingWrongPINOrWriting() {
+        let accounts = Accounts(), factory = PlaybackFactory()
+        accounts.savedPIN = "1234"
+        accounts.pinReadFails = true
+        let model = KidsAppModel(accounts: accounts, playbackFactory: factory)
+        XCTAssertTrue(model.hasParentPIN)
+        XCTAssertTrue(model.gate.attempt(correct: true, now: .now))
+        XCTAssertFalse(model.unlock("1234"))
+        XCTAssertFalse(model.unlocked)
+        XCTAssertNotNil(model.parentPINProblem)
+        XCTAssertEqual(model.gate.failures, 0)
+        XCTAssertThrowsError(try model.setPIN("5678")) {
+            XCTAssertEqual($0 as? KidsParentPINError, .unavailable)
+        }
+        XCTAssertEqual(accounts.writes, 0)
+        XCTAssertEqual(accounts.savedPIN, "1234")
+    }
+
+    func testUnreadablePINBlocksSignInBeforeURLParsingOrHostAuthentication() async {
+        let accounts = Accounts(), factory = PlaybackFactory()
+        accounts.pinReadFails = true
+        let model = KidsAppModel(accounts: accounts, playbackFactory: factory)
+        for recovering in [false, true] {
+            do {
+                try await model.signIn(
+                    urlText: "invalid URL",
+                    username: "fixture",
+                    password: "fixture",
+                    parentPIN: "1234",
+                    recovering: recovering
+                )
+                XCTFail("Unreadable credentials permitted sign-in")
+            } catch { XCTAssertEqual(error as? KidsParentPINError, .unavailable) }
+        }
+        XCTAssertEqual(accounts.writes, 0)
+        XCTAssertEqual(accounts.authentications, 0)
+        XCTAssertEqual(factory.preparations, 0)
     }
 }

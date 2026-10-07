@@ -6,6 +6,7 @@
 // Copyright (c) 2026 Jellyfin & Jellyfin Contributors
 //
 
+import KidsAccounts
 import KidsApplication
 import KidsCatalog
 
@@ -67,7 +68,9 @@ struct KidsParentView: View {
                                 pin = ""
                                 message = nil
                             } else {
-                                message = model.gate.mayAttempt(at: .now) ? "That PIN did not match." : "Please wait before trying again."
+                                message = model
+                                    .parentPINProblem ??
+                                    (model.gate.mayAttempt(at: .now) ? "That PIN did not match." : "Please wait before trying again.")
                                 pin = ""
                             }
                         }.disabled(!model.gate.mayAttempt(at: .now))
@@ -104,7 +107,7 @@ struct KidsParentView: View {
                             newPIN = ""
                             confirmPIN = ""
                             message = "Parent PIN changed."
-                            } catch { message = "Choose a PIN with 4 to 8 digits." }
+                            } catch { message = (error as? KidsParentPINError)?.localizedDescription ?? "Choose a PIN with 4 to 8 digits." }
                         }.disabled(newPIN.isEmpty)
                     }
                     Section("Recovery") {
@@ -207,7 +210,8 @@ struct KidsParentView: View {
                         }
                     } catch { busy = false
                         password = ""
-                        message = (error as? KidsAPIError)?.localizedDescription ?? "Check the account, server address, and parent PIN."
+                        message = (error as? KidsParentPINError)?.localizedDescription ?? (error as? KidsAPIError)?.localizedDescription ??
+                            "Check the account, server address, and parent PIN."
                     }
                 }
             }.disabled(busy || password.isEmpty || newPIN.isEmpty)

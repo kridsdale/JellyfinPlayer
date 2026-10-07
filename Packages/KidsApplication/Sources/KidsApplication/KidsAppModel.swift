@@ -245,8 +245,11 @@ public final class KidsAppModel: ObservableObject, KidsPlaybackSessionDelegate {
     private let recoveryBindingKey = "kids.recoveryBinding.v1"
     private let gateKey = "kids.gate.v1"
     public var hasParentPIN: Bool {
-        isPreview || accounts?.parentPIN != nil
+        isPreview || accounts?.hasParentPIN != false
     }
+
+    @Published
+    public private(set) var parentPINProblem: String?
 
     public var unlocked: Bool {
         gate.unlocked(at: .now)
@@ -669,31 +672,43 @@ public final class KidsAppModel: ObservableObject, KidsPlaybackSessionDelegate {
     }
 
     public func setPIN(_ pin: String) throws {
+        try replacePIN(pin, verifiedRecovery: false)
+    }
+
+    private func replacePIN(_ pin: String, verifiedRecovery: Bool) throws {
         guard !isPreview else { throw KidsContractError.denied }
-        guard !hasParentPIN || unlocked, (4 ... 8).contains(pin.count), pin.allSatisfy(\.isNumber) else { throw KidsContractError.denied }
         guard let accounts else { throw KidsAPIError.authentication }
-        try accounts.storeParentPIN(pin)
+        try accounts.replaceParentPIN(pin, unlocked: unlocked || verifiedRecovery)
+        parentPINProblem = nil
         _ = gate.attempt(correct: true, now: .now)
         saveGate()
     }
 
     public func unlock(_ pin: String) -> Bool {
-        let correct = isPreview ? pin == "4242" : accounts?.parentPIN == pin
-        let result = gate.attempt(correct: correct, now: .now)
-        saveGate()
-        return result
+        parentPINProblem = nil
+        do {
+            let correct = isPreview ? pin == "4242" : try accounts?.matchesParentPIN(pin) ?? false
+            let result = gate.attempt(correct: correct, now: .now)
+            saveGate()
+            return result
+        } catch {
+            gate.lock()
+            saveGate()
+            parentPINProblem = KidsParentPINError.unavailable.localizedDescription
+            return false
+        }
     }
 
     public func signIn(urlText: String, username: String, password: String, parentPIN: String, recovering: Bool = false) async throws {
         guard !isPreview else { throw KidsContractError.denied }
-        guard !hasParentPIN || unlocked || recovering else { throw KidsContractError.denied }
+        guard let accounts else { throw KidsAPIError.authentication }
+        try accounts.authorizeParentSetup(unlocked: unlocked, recovering: recovering)
         guard (4 ... 8).contains(parentPIN.count), parentPIN.allSatisfy(\.isNumber),
               parentPIN != password else { throw KidsContractError.denied }
         guard let url = URL(string: urlText.trimmingCharacters(in: .whitespacesAndNewlines)),
               ["http", "https"].contains(url.scheme?.lowercased()), url.host != nil, url.user == nil,
               url.password == nil else { throw KidsAPIError.connection }
         let info = try await KidsAPI(serverURL: url, token: "").serverInfo()
-        guard let accounts else { throw KidsAPIError.authentication }
         let authenticated = try await accounts.authenticate(
             url: url,
             serverID: info.id,
@@ -710,22 +725,25 @@ public final class KidsAppModel: ObservableObject, KidsPlaybackSessionDelegate {
         else { throw KidsAPIError.libraryChanged }
         let binding = KidsBinding(serverID: info.id, userID: userID, showsID: shows.id, moviesID: movies.id)
         try await newAPI.validate(binding)
+        try accounts.authorizeParentSetup(unlocked: unlocked, recovering: recovering)
         let restored: KidsSyncSnapshot
         if recovering {
             guard let data = UserDefaults.standard.data(forKey: bindingKey) ?? UserDefaults.standard.data(forKey: recoveryBindingKey),
                   let previous = try? JSONDecoder().decode(KidsBinding.self, from: data), previous == binding
             else { throw KidsContractError.denied }
             // Verify the same restricted account and both library identities before resetting the gate.
-            guard gate.attempt(correct: true, now: .now) else { throw KidsContractError.denied }
+            guard gate.mayAttempt(at: .now) else { throw KidsContractError.denied }
             restored = try repository().reset(binding: binding)
         } else {
-            if hasParentPIN {
-                guard accounts.parentPIN == parentPIN else { throw KidsContractError.denied }
+            if accounts.hasParentPIN {
+                guard try accounts.matchesParentPIN(parentPIN) else { throw KidsContractError.denied }
             }
             // Refreshing credentials for the same binding retains ordered progress, bags, and session budget.
             restored = try repository().load(binding: binding, legacyURL: stateURL)
         }
-        try setPIN(parentPIN)
+        // Only the same-account/library recovery above may replace a locked PIN.
+        // Parent access is granted after secure storage succeeds.
+        try replacePIN(parentPIN, verifiedRecovery: recovering)
         await stopPlayback()
         try authenticated.prepareActivation(binding: binding)
         let encodedBinding = try JSONEncoder().encode(binding)

@@ -78,7 +78,7 @@ POLICIES = {
     "SwiftfinNowPlaying": ({}, {"Foundation", "MediaPlayer", "UIKit"}),
     "SwiftfinAudioSession": ({"KidsDiagnostics"}, {"Foundation", "OSLog", "AVFAudio"}),
     "KidsApplication": ({"KidsAccounts","KidsArtwork","KidsArtworkUI","KidsCatalog","KidsDiagnostics","KidsDomain","KidsPersistence","KidsPlaybackSession"}, {"Foundation", "Combine", "CoreData", "SwiftData", "UIKit", "AVFoundation"}),
-    "KidsExperience": ({"KidsApplication","KidsCatalog","KidsDiagnostics","KidsDiagnosticsUI","KidsDomain","KidsPlaybackSession","SwiftfinUIState"}, {"SwiftUI", "Combine"}),
+    "KidsExperience": ({"KidsAccounts","KidsApplication","KidsCatalog","KidsDiagnostics","KidsDiagnosticsUI","KidsDomain","KidsPlaybackSession","SwiftfinUIState"}, {"SwiftUI", "Combine"}),
     "KidsDomain": ({}, {"Foundation"}),
     "KidsAccounts": ({"KidsDomain"}, {"Foundation", "Combine"}),
     "KidsDiagnostics": ({"KidsDomain"}, {"Foundation", "OSLog", "os"}),

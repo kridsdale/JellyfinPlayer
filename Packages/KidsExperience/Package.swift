@@ -6,6 +6,7 @@ let package = Package(
     platforms: [.tvOS("26.1")],
     products: [.library(name: "KidsExperience", targets: ["KidsExperience"])],
     dependencies: [
+        .package(path: "../KidsAccounts"),
         .package(path: "../KidsApplication"),
         .package(path: "../KidsCatalog"),
         .package(path: "../KidsDiagnostics"),
@@ -15,6 +16,7 @@ let package = Package(
         .package(path: "../SwiftfinUIState")
     ],
     targets: [.target(name: "KidsExperience", dependencies: [
+        .product(name: "KidsAccounts", package: "KidsAccounts"),
         .product(name: "KidsApplication", package: "KidsApplication"),
         .product(name: "KidsCatalog", package: "KidsCatalog"),
         .product(name: "KidsDiagnostics", package: "KidsDiagnostics"),

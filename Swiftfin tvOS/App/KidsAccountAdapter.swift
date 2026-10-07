@@ -56,7 +56,7 @@ final class SwiftfinKidsAccountHost: KidsAccountHost {
     }
 
     var parentPIN: String? {
-        try? Container.shared.keychainService().read(.parentPIN)
+        get throws { try Container.shared.keychainService().read(.parentPIN) }
     }
 
     func storeParentPIN(_ pin: String) throws {

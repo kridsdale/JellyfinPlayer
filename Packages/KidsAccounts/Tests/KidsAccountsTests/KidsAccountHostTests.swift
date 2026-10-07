@@ -6,6 +6,7 @@
 // Copyright (c) 2026 Jellyfin & Jellyfin Contributors
 //
 
+import Combine
 import Foundation
 @testable import KidsAccounts
 import KidsDomain
@@ -116,5 +117,162 @@ extension KidsAccountHostTests {
             XCTFail("Failed credential storage activated the account")
         } catch { XCTAssertEqual(error as? KidsContractError, .denied) }
         XCTAssertFalse(activated)
+    }
+}
+
+@MainActor
+private final class ParentPINHost: KidsAccountHost {
+    struct StorageFailure: Error {}
+    var savedPIN: String?
+    var readFails = false
+    var writeFails = false
+    var writes = 0
+    var currentIdentity: KidsAccountIdentity? {
+        nil
+    }
+
+    var identityChanges: AnyPublisher<KidsAccountIdentity?, Never> {
+        Just(nil).eraseToAnyPublisher()
+    }
+
+    var parentPIN: String? {
+        get throws {
+            if readFails {
+                throw StorageFailure()
+            }
+            return savedPIN
+        }
+    }
+
+    func storeParentPIN(_ pin: String) throws {
+        writes += 1
+        if writeFails {
+            throw StorageFailure()
+        }
+        savedPIN = pin
+    }
+
+    func authenticate(
+        url: URL,
+        serverID: String,
+        serverName: String,
+        username: String,
+        password: String
+    ) async throws -> KidsAuthenticatedAccount {
+        throw KidsContractError.denied
+    }
+
+    func signOut() async {}
+}
+
+extension KidsAccountHostTests {
+    @MainActor
+    func testUnreadablePINUsesExistingPINRouteAndPreservesHostError() {
+        let host = ParentPINHost()
+        XCTAssertFalse(host.hasParentPIN)
+        host.savedPIN = "1234"
+        XCTAssertTrue(host.hasParentPIN)
+        host.readFails = true
+        XCTAssertTrue(host.hasParentPIN)
+        XCTAssertThrowsError(try host.parentPIN) { XCTAssertTrue($0 is ParentPINHost.StorageFailure) }
+        XCTAssertEqual(host.writes, 0)
+    }
+
+    @MainActor
+    func testParentPINComparisonRequiresAStoredPIN() throws {
+        let host = ParentPINHost()
+        XCTAssertFalse(try host.matchesParentPIN(""))
+        XCTAssertFalse(try host.matchesParentPIN("1234"))
+        host.savedPIN = "1234"
+        XCTAssertFalse(try host.matchesParentPIN("4321"))
+        XCTAssertTrue(try host.matchesParentPIN("1234"))
+        XCTAssertEqual(host.writes, 0)
+    }
+
+    @MainActor
+    func testFirstParentPINRequiresSuccessfulStorage() throws {
+        let host = ParentPINHost()
+        try host.authorizeParentSetup(unlocked: false)
+        try host.replaceParentPIN("1234", unlocked: false)
+        XCTAssertEqual(host.savedPIN, "1234")
+        XCTAssertEqual(host.writes, 1)
+    }
+
+    @MainActor
+    func testReplacementRequiresCurrentParentAuthority() throws {
+        let host = ParentPINHost()
+        host.savedPIN = "1234"
+        XCTAssertThrowsError(try host.replaceParentPIN("5678", unlocked: false)) {
+            XCTAssertEqual($0 as? KidsContractError, .denied)
+        }
+        XCTAssertEqual(host.savedPIN, "1234")
+        XCTAssertEqual(host.writes, 0)
+        try host.replaceParentPIN("5678", unlocked: true)
+        XCTAssertEqual(host.savedPIN, "5678")
+        XCTAssertEqual(host.writes, 1)
+    }
+
+    @MainActor
+    func testInvalidPINCannotReachCredentialWriter() throws {
+        let host = ParentPINHost()
+        for pin in ["", "123", "123456789", "12ab", "12 4", "12\n4"] {
+            XCTAssertThrowsError(try host.replaceParentPIN(pin, unlocked: false)) {
+                XCTAssertEqual($0 as? KidsContractError, .denied)
+            }
+        }
+        XCTAssertNil(host.savedPIN)
+        XCTAssertEqual(host.writes, 0)
+        try host.replaceParentPIN("12345678", unlocked: false)
+        XCTAssertEqual(host.savedPIN, "12345678")
+    }
+
+    @MainActor
+    func testReadFailureDeniesSetupMatchingAndReplacementIncludingRecovery() {
+        let host = ParentPINHost()
+        host.savedPIN = "1234"
+        host.readFails = true
+        for unlocked in [false, true] {
+            for recovering in [false, true] {
+                XCTAssertThrowsError(try host.authorizeParentSetup(unlocked: unlocked, recovering: recovering)) {
+                    XCTAssertEqual($0 as? KidsParentPINError, .unavailable)
+                }
+            }
+            XCTAssertThrowsError(try host.replaceParentPIN("5678", unlocked: unlocked)) {
+                XCTAssertEqual($0 as? KidsParentPINError, .unavailable)
+            }
+        }
+        XCTAssertThrowsError(try host.matchesParentPIN("1234")) {
+            XCTAssertEqual($0 as? KidsParentPINError, .unavailable)
+        }
+        XCTAssertEqual(host.savedPIN, "1234")
+        XCTAssertEqual(host.writes, 0)
+    }
+
+    @MainActor
+    func testWriteFailureCannotReportSuccessfulSetupOrReplacement() {
+        let host = ParentPINHost()
+        host.writeFails = true
+        XCTAssertThrowsError(try host.replaceParentPIN("1234", unlocked: false)) {
+            XCTAssertEqual($0 as? KidsParentPINError, .unavailable)
+        }
+        XCTAssertNil(host.savedPIN)
+        host.savedPIN = "1234"
+        XCTAssertThrowsError(try host.replaceParentPIN("5678", unlocked: true)) {
+            XCTAssertEqual($0 as? KidsParentPINError, .unavailable)
+        }
+        XCTAssertEqual(host.savedPIN, "1234")
+        XCTAssertEqual(host.writes, 2)
+    }
+
+    @MainActor
+    func testRecoveryAdmissionDoesNotAuthorizePINReplacement() throws {
+        let host = ParentPINHost()
+        host.savedPIN = "1234"
+        try host.authorizeParentSetup(unlocked: false, recovering: true)
+        XCTAssertThrowsError(try host.replaceParentPIN("5678", unlocked: false)) {
+            XCTAssertEqual($0 as? KidsContractError, .denied)
+        }
+        XCTAssertEqual(host.savedPIN, "1234")
+        XCTAssertEqual(host.writes, 0)
     }
 }

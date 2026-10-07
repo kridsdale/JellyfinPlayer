@@ -92,7 +92,7 @@ public final class KidsAuthenticatedAccount {
 public protocol KidsAccountHost: AnyObject {
     var currentIdentity: KidsAccountIdentity? { get }
     var identityChanges: AnyPublisher<KidsAccountIdentity?, Never> { get }
-    var parentPIN: String? { get }
+    var parentPIN: String? { get throws }
     func storeParentPIN(_ pin: String) throws
     func authenticate(
         url: URL,
