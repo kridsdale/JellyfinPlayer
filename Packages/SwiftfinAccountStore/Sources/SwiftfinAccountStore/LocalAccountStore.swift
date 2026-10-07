@@ -202,6 +202,26 @@ public final class LocalAccountStore {
         try credentials.write(pin, to: .userPIN(userID: userID))
     }
 
+    /// Exact installed String comparison. Missing PINs fail admission by default;
+    /// the security editor explicitly permits absence when checking an old PIN.
+    /// Credential read failures propagate and no settings or credentials are changed.
+    public func matchesPIN(_ candidate: String, userID: String, allowMissing: Bool = false) throws -> Bool {
+        guard let stored = try pin(userID: userID) else { return allowMissing }
+        return candidate == stored
+    }
+
+    /// Preserves credential-first ordering and the installed nontransactional
+    /// settings writes. A credential failure leaves both policy and hint unchanged.
+    public func setLocalSecurity(userID: String, policy: LocalUserAccessPolicy, pin: String, hint: String) throws {
+        if policy == .requirePin {
+            try storePIN(pin, userID: userID)
+        } else {
+            try credentials.remove(.userPIN(userID: userID))
+        }
+        setAccessPolicy(policy, userID: userID)
+        setPINHint(hint, userID: userID)
+    }
+
     public func deleteSettings(userID: String) throws {
         try database.deleteAll(ownerID: userID)
         clearDefaults(ownerID: userID)

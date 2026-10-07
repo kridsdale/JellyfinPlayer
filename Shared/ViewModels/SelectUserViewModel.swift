@@ -11,8 +11,8 @@ import FactoryKit
 import Foundation
 import OrderedCollections
 import StatefulMacros
+import SwiftfinAccountStore
 import SwiftfinCollections
-import SwiftfinCredentials
 import SwiftfinLocalization
 import SwiftfinStoredValues
 
@@ -55,9 +55,6 @@ final class SelectUserViewModel: ViewModel {
         case content
     }
 
-    @Injected(\.keychainService)
-    private var keychain
-
     @Published
     private(set) var servers: OrderedDictionary<ServerState, [UserState]> = [:]
 
@@ -89,7 +86,7 @@ final class SelectUserViewModel: ViewModel {
     private func _signIn(_ user: UserState, _ pin: String) async throws {
         MainActor.preconditionIsolated()
         if user.accessPolicy == .requirePin {
-            guard let storedPin = try keychain.read(.userPIN(userID: user.id)), pin == storedPin else {
+            guard try Container.shared.localAccountStore().matchesPIN(pin, userID: user.id) else {
                 throw ErrorMessage(L10n.incorrectPinForUser(user.username))
             }
         }

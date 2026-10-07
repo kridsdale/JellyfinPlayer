@@ -9,34 +9,27 @@
 import FactoryKit
 import Foundation
 import SwiftfinAccountModels
-import SwiftfinCredentials
+import SwiftfinAccountStore
 import SwiftfinLocalization
 
 final class LocalUserSecurityViewModel: ViewModel {
 
-    @Injected(\.keychainService)
-    var keychain
-
     func check(oldPin: String) throws {
         let user = try authenticatedUser
 
-        if let storedPin = try keychain.read(.userPIN(userID: user.id)) {
-            if oldPin != storedPin {
-                throw ErrorMessage(L10n.incorrectPinForUser(user.username))
-            }
+        guard try Container.shared.localAccountStore().matchesPIN(oldPin, userID: user.id, allowMissing: true) else {
+            throw ErrorMessage(L10n.incorrectPinForUser(user.username))
         }
     }
 
     func set(newPolicy: LocalUserAccessPolicy, newPin: String, newPinHint: String) throws {
         let user = try authenticatedUser
 
-        if newPolicy == .requirePin {
-            try keychain.write(newPin, to: .userPIN(userID: user.id))
-        } else {
-            try keychain.remove(.userPIN(userID: user.id))
-        }
-
-        user.accessPolicy = newPolicy
-        user.pinHint = newPinHint
+        try Container.shared.localAccountStore().setLocalSecurity(
+            userID: user.id,
+            policy: newPolicy,
+            pin: newPin,
+            hint: newPinHint
+        )
     }
 }

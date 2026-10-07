@@ -13,8 +13,8 @@ import Foundation
 import JellyfinAPI
 import Logging
 import SwiftfinAccountAccess
+import SwiftfinAccountStore
 import SwiftfinAsyncStreams
-import SwiftfinCredentials
 import SwiftfinLocalization
 import SwiftfinPlaybackPreparation
 import SwiftfinSessions
@@ -54,9 +54,6 @@ final class UserSessionManager: ObservableObject {
     enum AuthenticationError: Error {
         case missingAuthenticationAction
     }
-
-    @Injected(\.keychainService)
-    private var keychain: any CredentialStore
 
     @Published
     private(set) var state: State = .initial
@@ -273,7 +270,7 @@ final class UserSessionManager: ObservableObject {
 
         guard let pinPolicy = evaluatedPolicy as? PinEvaluatedUserAccessPolicy else { return }
 
-        guard let storedPin = try keychain.read(.userPIN(userID: user.id)), pinPolicy.pin == storedPin else {
+        guard try Container.shared.localAccountStore().matchesPIN(pinPolicy.pin, userID: user.id) else {
             throw ErrorMessage(L10n.incorrectPinForUser(user.username))
         }
     }

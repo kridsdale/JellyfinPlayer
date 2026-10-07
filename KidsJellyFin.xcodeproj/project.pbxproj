@@ -296,6 +296,7 @@
 		751C2100B67F5179EFB22230 /* SwiftfinAccountStore in Frameworks */ = {isa = PBXBuildFile; productRef = 9FB1D70736E18D99CC796DC9 /* SwiftfinAccountStore */; };
 		BA7E4868E9665A343AADFE7A /* Packages/SwiftfinSessions/Tests/SwiftfinSessionsTests/SessionMetadataRefreshContracts.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECA6EBB61C613049B02C41DB /* Packages/SwiftfinSessions/Tests/SwiftfinSessionsTests/SessionMetadataRefreshContracts.swift */; };
 		78175867F93C7EFE667B43E3 /* SwiftfinSessions in Frameworks */ = {isa = PBXBuildFile; productRef = E232BDED1C5CD65386196349 /* SwiftfinSessions */; };
+		197A4218C78A1B590187E518 /* Packages/SwiftfinAccountStore/Tests/SwiftfinAccountStoreTests/LocalSecurityContracts.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD0ECD56FBEBAC8B1929F1A9 /* Packages/SwiftfinAccountStore/Tests/SwiftfinAccountStoreTests/LocalSecurityContracts.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -418,6 +419,7 @@
 		774065EDAE7C8A4A5294FC5B /* Packages/SwiftfinUIState/Tests/SwiftfinUIStateTests/UIObjectSelectionContracts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Packages/SwiftfinUIState/Tests/SwiftfinUIStateTests/UIObjectSelectionContracts.swift; sourceTree = SOURCE_ROOT; };
 		B18A3CF523D844894F026A8A /* Packages/SwiftfinAccountStore/Tests/SwiftfinAccountStoreTests/AccountMetadataContracts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Packages/SwiftfinAccountStore/Tests/SwiftfinAccountStoreTests/AccountMetadataContracts.swift; sourceTree = SOURCE_ROOT; };
 		ECA6EBB61C613049B02C41DB /* Packages/SwiftfinSessions/Tests/SwiftfinSessionsTests/SessionMetadataRefreshContracts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Packages/SwiftfinSessions/Tests/SwiftfinSessionsTests/SessionMetadataRefreshContracts.swift; sourceTree = SOURCE_ROOT; };
+		DD0ECD56FBEBAC8B1929F1A9 /* Packages/SwiftfinAccountStore/Tests/SwiftfinAccountStoreTests/LocalSecurityContracts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Packages/SwiftfinAccountStore/Tests/SwiftfinAccountStoreTests/LocalSecurityContracts.swift; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -770,6 +772,7 @@
 				0D398FB4A311E02B078B7F6C /* Packages/SwiftfinNativePlayback/Tests/SwiftfinNativePlaybackTests/HardwareReaderContracts.swift */,
 				E48C3FE91DA20460FB967687 /* Packages/SwiftfinImageProcessing/Tests/SwiftfinImageProcessingTests/SVGRenderStateContracts.swift */,
 				ECA6EBB61C613049B02C41DB /* Packages/SwiftfinSessions/Tests/SwiftfinSessionsTests/SessionMetadataRefreshContracts.swift */,
+				DD0ECD56FBEBAC8B1929F1A9 /* Packages/SwiftfinAccountStore/Tests/SwiftfinAccountStoreTests/LocalSecurityContracts.swift */,
 				B18A3CF523D844894F026A8A /* Packages/SwiftfinAccountStore/Tests/SwiftfinAccountStoreTests/AccountMetadataContracts.swift */,
 				774065EDAE7C8A4A5294FC5B /* Packages/SwiftfinUIState/Tests/SwiftfinUIStateTests/UIObjectSelectionContracts.swift */,
 				7011DDA1E828C2914C565701 /* Packages/SwiftfinNetworking/Tests/SwiftfinNetworkingTests/RequestBodyRedactionContracts.swift */,
@@ -1556,6 +1559,7 @@
 				F592A228D472773A384D26B6 /* Packages/SwiftfinNativePlayback/Tests/SwiftfinNativePlaybackTests/HardwareReaderContracts.swift in Sources */,
 				95F5CDA646C98074444086D4 /* Packages/SwiftfinImageProcessing/Tests/SwiftfinImageProcessingTests/SVGRenderStateContracts.swift in Sources */,
 				BA7E4868E9665A343AADFE7A /* Packages/SwiftfinSessions/Tests/SwiftfinSessionsTests/SessionMetadataRefreshContracts.swift in Sources */,
+				197A4218C78A1B590187E518 /* Packages/SwiftfinAccountStore/Tests/SwiftfinAccountStoreTests/LocalSecurityContracts.swift in Sources */,
 				31298D52DB921D1210C6441B /* Packages/SwiftfinAccountStore/Tests/SwiftfinAccountStoreTests/AccountMetadataContracts.swift in Sources */,
 				3302B766D8710E604EED1315 /* Packages/SwiftfinUIState/Tests/SwiftfinUIStateTests/UIObjectSelectionContracts.swift in Sources */,
 				87BAD62D16FCCFB5BA93CB45 /* Packages/SwiftfinNetworking/Tests/SwiftfinNetworkingTests/RequestBodyRedactionContracts.swift in Sources */,
