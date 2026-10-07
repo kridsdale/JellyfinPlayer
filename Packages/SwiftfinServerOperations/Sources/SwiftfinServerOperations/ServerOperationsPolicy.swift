@@ -55,6 +55,17 @@ public enum ServerOperationsPolicy {
         }.sorted { sessionPrecedes($0, $1, now: now) }
     }
 
+    /// Preserve stream order: prefer this device's matching item, otherwise its
+    /// first session. A missing device ID matches only another missing ID.
+    public static func playbackSession(
+        in values: [SessionInfoDto],
+        deviceID: String?,
+        itemID: String
+    ) -> SessionInfoDto? {
+        let deviceSessions = values.filter { $0.deviceID == deviceID }
+        return deviceSessions.first(where: { $0.nowPlayingItem?.id == itemID }) ?? deviceSessions.first
+    }
+
     public static func removedTaskIDs(
         existing: [String],
         incoming: [TaskInfo]

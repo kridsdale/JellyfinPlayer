@@ -15,6 +15,8 @@ import SwiftfinCollections
 import SwiftfinFormatting
 import SwiftfinLocalization
 import SwiftfinMediaTracks
+import SwiftfinNetworking
+import SwiftfinServerOperations
 import SwiftfinText
 import SwiftUI
 
@@ -145,8 +147,10 @@ extension PlaybackInformationSupplement {
                     LabeledContent(L10n.hardwareAcceleration, value: hwAccel.rawValue)
                 }
 
-                if let completion = transcodingInfo.completionPercentage {
-                    LabeledContent(L10n.transcodeProgress, value: "\(Int(completion))%")
+                if let rawCompletion = transcodingInfo.completionPercentage,
+                   let completion = Int(exactly: rawCompletion.rounded(.towardZero))
+                {
+                    LabeledContent(L10n.transcodeProgress, value: "\(completion)%")
                 }
             }
         }
@@ -278,32 +282,59 @@ extension PlaybackInformationSupplement {
     }
 }
 
+/// App-only composition receipt: no session/client globals enter the policy library.
+private struct PlaybackSessionSnapshot: Sendable {
+    let sessions: [SessionInfoDto]
+    let binding: UserSession?
+    let transport: JellyfinTransport?
+    let deviceID: String?
+
+    @MainActor
+    func isCurrent(in manager: UserSessionManager) -> Bool {
+        guard let binding, let transport else { return manager.currentSession == nil }
+        return manager.currentSession === binding && binding.client === transport
+    }
+}
+
 class PlaybackInformationProvider: ViewModel, MediaPlayerObserver {
 
     @Published
     var currentSession: SessionInfoDto? = nil
 
     weak var manager: MediaPlayerManager?
+    private let sessionRequests = LatestRequest<SessionInfoDto?>()
 
     init(itemID: String) {
         super.init()
-
-        Container.shared.userSessionManager()
-            .$currentSession
-            .map { session -> AnyPublisher<[SessionInfoDto], Never> in
-                session?.serverSocketManager.sessions() ?? Combine.Empty<[SessionInfoDto], Never>().eraseToAnyPublisher()
+        let sessionManager = Container.shared.userSessionManager()
+        Publishers.Merge(
+            sessionManager.$currentSession.map { _ in () },
+            Notifications[.didChangeServerConnection].publisher.map { _ in () }
+        )
+        .map { [weak sessionManager] _ -> AnyPublisher<PlaybackSessionSnapshot, Never> in
+            guard let session = sessionManager?.currentSession else {
+                return Just(PlaybackSessionSnapshot(sessions: [], binding: nil, transport: nil, deviceID: nil))
+                    .eraseToAnyPublisher()
             }
-            .switchToLatest()
-            .sink { [weak self] sessions in
-                Task { @MainActor in
-                    guard let self else { return }
-
-                    let deviceID = self.userSession?.client.configuration.deviceID
-                    let deviceSessions = sessions.filter { $0.deviceID == deviceID }
-
-                    self.currentSession = deviceSessions.first(where: { $0.nowPlayingItem?.id == itemID }) ?? deviceSessions.first
-                }
-            }
-            .store(in: &cancellables)
+            let transport = session.client
+            let deviceID = transport.configuration.deviceID
+            return session.serverSocketManager.sessions()
+                .map { PlaybackSessionSnapshot(sessions: $0, binding: session, transport: transport, deviceID: deviceID) }
+                .prepend(PlaybackSessionSnapshot(sessions: [], binding: session, transport: transport, deviceID: deviceID))
+                .eraseToAnyPublisher()
+        }
+        .switchToLatest()
+        .receive(on: DispatchQueue.main)
+        .sink { [weak self, weak sessionManager] snapshot in
+            guard let self else { return }
+            self.sessionRequests.replace(operation: { [weak sessionManager] in
+                guard let sessionManager, snapshot.isCurrent(in: sessionManager) else { throw CancellationError() }
+                return ServerOperationsPolicy.playbackSession(in: snapshot.sessions, deviceID: snapshot.deviceID, itemID: itemID)
+            }, receive: { [weak self, weak sessionManager] session in
+                guard let sessionManager, snapshot.isCurrent(in: sessionManager) else { return }
+                self?.currentSession = session
+            })
+        }
+        .store(in: &cancellables)
     }
 }

@@ -9,6 +9,7 @@
 import CasePaths
 import JellyfinAPI
 import SwiftfinLocalization
+import SwiftfinTime
 import SwiftUI
 
 struct EPGSupplement: MediaPlayerSupplement {
@@ -40,7 +41,7 @@ extension EPGSupplement {
         @StateObject
         private var viewModel = EPGViewModel()
 
-        private let refreshInterval: TimeInterval = 3 * 60
+        private let refreshInterval: Duration = .seconds(3 * 60)
 
         @ViewBuilder
         private var content: some View {
@@ -69,7 +70,7 @@ extension EPGSupplement {
                       !viewModel.background.is(.gettingNextPage)
                 else { return }
 
-                let hasRecentGuide = Date.now.timeIntervalSince(lastSuccessfulRefresh) < refreshInterval
+                let hasRecentGuide = lastSuccessfulRefresh.isRecent(with: refreshInterval)
                 let hasError = viewModel.state == .error
 
                 guard hasError || !hasRecentGuide else { return }

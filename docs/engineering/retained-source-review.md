@@ -80,8 +80,17 @@ EpisodeMediaPlayerQueue's remaining head composes seasonal paging models, a weak
 
 Further source inspection identified specific remaining behavior to review/extract or repair:
 
-- MediaInfoSupplement.updateCurrentProgram swallows Task.sleep cancellation and continues to a catalog refresh. Its delay and cancellation/publication policy require an explicit owner/binding review.
-- PlaybackInformationProvider embeds device/item session preference and queues untracked main-actor publication from a session stream. Session/account generation and selection ownership require review.
-- EPGSupplement embeds a wall-clock refresh-age decision in presentation. Its view state guards/selected channel/playback-provider composition remain UI concerns; the reusable age policy is a concrete ownership candidate.
+- MediaInfoSupplement.updateCurrentProgram now delegates the captured delay and bound item read to ItemMetadata. Cancellation propagates before IO; app publication requires the same account/item/program. Its remaining body is presentation/composition.
+- PlaybackInformationProvider now delegates selection to ServerOperations and task/generation/release to LatestRequest. Private account/transport snapshots, account/connection switching, explicit main delivery and weak binding-checked UI publication remain composition.
+- EPGSupplement now delegates strict recency to Time. Its view-state guards, selected channel, refresh forwarding and playback-provider selection remain UI/presentation composition.
 
 These candidates and the complete 668-file/public-interface consumer classification remain open. Search/import counts, generated inventories and passing synthetic tests do not close the whole-client review or held runtime acceptance.
+
+
+## Explicit file-body and current interface review
+
+The [hashed ledger](source-review-ledger.json) covers every current app Swift path and keeps unreviewed files pending. This pass reviews all 28 Shared/Objects/Libraries bodies plus five chapter/episode/guide/info/session overlays. Twenty-five library adapters retain display/selected-setting/parent/first-page/view-model/query-port composition and UI. Three remain mixed: NextUp notification membership/minimum-interval selection, Resume played/progress membership and media-kind mapping, and UserView artwork/query classification. These are open ownership decisions, with exact current source hashes and per-file reasons. Thirty retained files are recorded; 635 further files are pending. Earlier prose reviews are not silently counted as current full-body classification.
+
+The current three interface reviews record exact source hashes, symbols, consumers and policy limits for Time recency, bound delayed ItemMetadata reads and ServerOperations session preference. They do not classify the remaining public graph. Program/date/session originals were independently executed with fixed capture-only clocks; all valid original outputs match. Invalid deadlines now throw a typed error instead of trapping Duration conversion. The item read retains plugin-compatible ID behavior and exact account/transport cancellation gates. App guards retain current item/program before publication.
+
+Playback-session composition captures one account/transport/device snapshot per stream binding. Account and connection notifications rebuild it. Switch-to-latest and empty initial receipts clear old streams; explicit main scheduling precedes LatestRequest selection and weak current-binding publication. The native async-stream relay source was reviewed: its task/subject delivery is on the main actor, and socket-driver generation guards precede payload emission. This source evidence does not prove current GUI/native callback behavior, which remains held.

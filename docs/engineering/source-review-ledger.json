@@ -1,0 +1,4798 @@
+{
+  "applicationSources": [
+    {
+      "owners": [],
+      "path": "Shared/App/SwiftfinApp+configure.swift",
+      "reason": "",
+      "sha256": "a85a16342dbdf2265f1ef8b6a63c930060a5334a6a4c65b538f5563731ad8433",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Components/AlternateLayoutView.swift",
+      "reason": "",
+      "sha256": "26b0e2cd894af753d5e51b1c1cf1bcd8de66d35455ae7c325007756993c1d974",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Components/AssertionFailureView.swift",
+      "reason": "",
+      "sha256": "aa81cb832836c31fdbc23d44d72e496c3320e6a3db81aab0556cf8b1656d83c9",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Components/BaseItemDtoPosterLabel.swift",
+      "reason": "",
+      "sha256": "b11c54e3b415b4b5f9565c133ad0257f73df6e4ea547d7318cf9919da4b347c6",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Components/BlurView.swift",
+      "reason": "",
+      "sha256": "44b603a4ade43deede06048a850427ce8b14ed0b6862f2d157b88a4a7abaf270",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Components/BulletedList.swift",
+      "reason": "",
+      "sha256": "788ef6240ebc10446c915e23835ca8cfee3979d777fe258eee41264e121f340e",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Components/ButtonStyles/BackportGlassButtonStyles.swift",
+      "reason": "",
+      "sha256": "7c45e3dcf911314515814574e59ecd01dca9770546713743980e9a12ec775342",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Components/ButtonStyles/CapsuleButtonStyle.swift",
+      "reason": "",
+      "sha256": "6255f6420b96af64a0c15d7306a17af8b0f87ebab97fd2853dbeb299a7fbfbb7",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Components/ButtonStyles/EPGButtonStyle.swift",
+      "reason": "",
+      "sha256": "cb8a9754e0257b4e0363115d2464c433a63026a392fd91052ad885e1e6c04d4c",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Components/ButtonStyles/SupplementActionButtonStyle.swift",
+      "reason": "",
+      "sha256": "b49aafcd001488df1b27aacde875b6f5ee6266086ff658100f8a6a31bc6b27e4",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Components/CenteredLazyVGrid.swift",
+      "reason": "",
+      "sha256": "d414bbbaf26b54f9d5b6a2f9c21c9ad324152d62e4b968bca917bcf5a2b394a9",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Components/ChevronButton.swift",
+      "reason": "",
+      "sha256": "37b9908a97c427122007171c2e629c43684806a150e5dffe57526b9c0ac6aa37",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Components/CompactOrRegularView.swift",
+      "reason": "",
+      "sha256": "7231edaf10ea49fda48a0d190b65963b1f419902cbcf2404da61c27eff91e124",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Components/ComplexSecondaryShapeStyle.swift",
+      "reason": "",
+      "sha256": "e69ce1d797d4e7aea48d5c1c5cf243491579ba5385ef8a2c06c5a42750856c23",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Components/ConditionalMenu.swift",
+      "reason": "",
+      "sha256": "eb3553d44cdbfbf2a93054312c9adc02551a9d185e8a34883b84da43f0bd4cd6",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Components/ContentGroupSection.swift",
+      "reason": "",
+      "sha256": "76040d273066ccd59c8f40ca0c9a145d1691820739821ea3947a087c8720fc99",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Components/ContentGroupVStack.swift",
+      "reason": "",
+      "sha256": "862c797e104643ef3831d389530b137def931aa81f38c642f9ab39ddd61dc244",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Components/DotHStack.swift",
+      "reason": "",
+      "sha256": "d58bc94799800187b388a9ae7eab7a943689279f4e82ac5bd4e349225be20352",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Components/EPG/Body/Components/EPGChannelButton.swift",
+      "reason": "",
+      "sha256": "7a83810f9ca81f8a50e8d446aa0bfb62a22f97d13d3a3a3f8c4b9c340180d95b",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Components/EPG/Body/Components/EPGChannelColumn.swift",
+      "reason": "",
+      "sha256": "b7d4aa0e32b867f43369fb65c07a39283b8861608fb9d2bd060fed7f0e9a8b37",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Components/EPG/Body/Components/EPGProgramCell.swift",
+      "reason": "",
+      "sha256": "2edf2048d155c48f6912b737a0b4fc9b873bb85dd6118ff0d8ca2b4e3d37fa60",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Components/EPG/Body/Components/EPGScrollState.swift",
+      "reason": "",
+      "sha256": "4633bf9aa3bf8510fd3d909ab133ae7d4984cd8720ea7cb0b94593182c175d16",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Components/EPG/Body/EPGCollectionView.swift",
+      "reason": "",
+      "sha256": "6214187a7447301c3263081876cf1d1352618ed98d5dc48f82986b7626ea2921",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Components/EPG/Body/EPGGridLayout.swift",
+      "reason": "",
+      "sha256": "93c504b27b61688f5c3a1771fb6cd9c017fe40085e255a8dfac40f6548d823d6",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Components/EPG/Body/EPGTimeRuler.swift",
+      "reason": "",
+      "sha256": "80ea6dda23686a4ac190cf15e4e71bceb7af8247612f1e7c271d37b03e74e125",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Components/EPG/Toolbar/EPGDateMenu.swift",
+      "reason": "",
+      "sha256": "3538453444e0209b61663f27f73b999c66310d18dba6fdca75743a0bc7f12296",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Components/EasedGradient.swift",
+      "reason": "",
+      "sha256": "3697da9d86e071ea49f14930c551327488532006cac280a520a814d5abfce4bc",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Components/EmptyHitTestView.swift",
+      "reason": "",
+      "sha256": "d1e810fc5c82b0384c9b90dcf46a3875550f3d46d3e1cfb3d664d0f12e45bf62",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Components/EmptyLabel.swift",
+      "reason": "",
+      "sha256": "4a3b33216646672d6bf74c51a09f53d8e98b396ca2f28c50a53a0576e4daf71a",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Components/EqualWidthVStack.swift",
+      "reason": "",
+      "sha256": "fa198663cc46c863fb32a2ae30c49dfdd1c7bf863134306be6f2f0e5e41fd957",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Components/ErrorView.swift",
+      "reason": "",
+      "sha256": "ea210910734c322edce000a3fe4299f257b3d79b483c7e0b42b5f53f827e6412",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Components/FadeContentTransitionView.swift",
+      "reason": "",
+      "sha256": "24876c0da9d29df880d4a7202446651b01097193fc28332bd4371787edc93cf4",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Components/FastSVGView.swift",
+      "reason": "",
+      "sha256": "adc8565bd6bd29fadcfe4563f0e02dbc316c0a5eeaae31e22acf0d957c4e534f",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Components/FilterTrack.swift",
+      "reason": "",
+      "sha256": "b0bbee628baa2352bdcec76524722f11cbfe5aa1eca7955642bb47c756b11139",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Components/FocusedPosterCinematicBackgroundView.swift",
+      "reason": "",
+      "sha256": "8cd2897424d335f21bf995149ab8ec0321fb9100d005c691d61050b048fd8457",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Components/FormItemSection.swift",
+      "reason": "",
+      "sha256": "aaa75676281191f78469c89f0d880cd45302554106afa405dd8de86469f76561",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Components/HourMinutePicker.swift",
+      "reason": "",
+      "sha256": "e261c3ca11227bce52f295fadd36eb19d2546da383b2990c7e5eff58bd6d4087",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Components/ImageView.swift",
+      "reason": "",
+      "sha256": "c6cd68b9f7a1b125848ddd844d714e82fa7c151a2bd01608cd084cee712aa5e6",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Components/Layouts/FlowLayout.swift",
+      "reason": "",
+      "sha256": "ce387545b567e94ee2fb43921bbe16e80ce8dedac0e33bafab8223a8bea05336",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Components/Layouts/ImageContentColumnsLayout.swift",
+      "reason": "",
+      "sha256": "a01d7817bd3b0bb081ebd9cf188dcc59f363ab03fcb4c9abe606f914855282af",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Components/LetterPickerBar/Components/LetterPickerButton.swift",
+      "reason": "",
+      "sha256": "1355f5eec56ec28d538d57b144152f8b5e498185957dbb34dcd35f957409f875",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Components/LetterPickerBar/Components/LetterPickerCallout.swift",
+      "reason": "",
+      "sha256": "f4bcf47ce4fd8ec42c4f7b36bcb5205ae27e66ddd633a0d81f00cf1d209c0189",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Components/LetterPickerBar/LetterPickerBar.swift",
+      "reason": "",
+      "sha256": "f43d100bc3aa312891f85cae5dd7ab2c337e72ecab07ca3374b76e9438812e1f",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Components/LetterPickerOrientation.swift",
+      "reason": "",
+      "sha256": "883891cd6c2f0404cfb944730fc31fc315f209594de5976e13aa44de6ecc76ed",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Components/LibraryElement.swift",
+      "reason": "",
+      "sha256": "e1b5182d1db3a1657ca0e5dbb834322b97027f5f1bfe6145697f1a0c2cbe6794",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Components/ListRow.swift",
+      "reason": "",
+      "sha256": "ce73ea18997addf4c791ac015619c869fc11850a77e4019a45e77da531fa3c02",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Components/ListRowCheckbox.swift",
+      "reason": "",
+      "sha256": "0f3de28ddbbdfa5ec5302681ac322b64c88db0d09ccab64dada05609fb35204e",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Components/Localization/CountryPicker.swift",
+      "reason": "",
+      "sha256": "b913ab327a79f6989d5551ce8cd5338699062218485198ceade54e6561cc3434",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Components/Localization/CulturePicker.swift",
+      "reason": "",
+      "sha256": "c91cec64b0b6e16c6b1ad3fcf2b8f324c475c6f95e9443f010261da4eb0b72cd",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Components/Localization/ParentalRatingPicker.swift",
+      "reason": "",
+      "sha256": "406b49e99f154759b058eb0805b593f0d97509898939c9361ea31d9081c50470",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Components/MarkedList.swift",
+      "reason": "",
+      "sha256": "d3f60c5f15df5274982370b79ec1b0b36015aff18fcd61a6ef8bf51cd33d5284",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Components/Marquee.swift",
+      "reason": "",
+      "sha256": "8d0ea5713364c5c50c21b100af6d277f5a4de081c18c8c99b8e39941b0cc4c0d",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Components/MediaPlayer/PreviewImageView.swift",
+      "reason": "",
+      "sha256": "ed7d9c3499907f1e8b6608f7fe681b9330fb84bf167fb7adf128902edd96ecb0",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Components/MirrorExtensionView.swift",
+      "reason": "",
+      "sha256": "588bbd368b77103ea70843632b71c8a402e25d206be5d2bf4d8c9eb441fa7c9d",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Components/NativeVideoPlayer.swift",
+      "reason": "",
+      "sha256": "c89b3d99598ec9432435ee8d7fffaf8fe23775847c34b4af7be62e665976833e",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Components/OrderedSectionSelectorView.swift",
+      "reason": "",
+      "sha256": "2da26b59689646e959e373c3e15f882aabf42b982f0664039e4fdadb7c5c5eb5",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Components/OverlayToastView.swift",
+      "reason": "",
+      "sha256": "ed25e47258d7d38509d05bb005d820840b62d15e5482b3f069f979cf079d6f29",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Components/Pickers/JumpIntervalPicker.swift",
+      "reason": "",
+      "sha256": "79e4b95e937d42dabd4d928ced12f02a5091f97df379455c59ad3625519b1081",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Components/Pickers/PlaybackSpeedPicker.swift",
+      "reason": "",
+      "sha256": "05c47e830686e9d6cdd1d0834aa511f9d7f56b0f6b91fabf619f51d05407bb98",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Components/PinEntry.swift",
+      "reason": "",
+      "sha256": "50701f623c06be4713d1651522d6acb65db0b6bddb91386d860e53f1f331c301",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Components/PosterButton.swift",
+      "reason": "",
+      "sha256": "9be3c9cf9f1561545c308904561837cffa2e9e38e28369166c8c4fba9fdb812b",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Components/PosterHStack.swift",
+      "reason": "",
+      "sha256": "7ff85009527a57cd2e1423c49088bdcbbd0e46289a68e49d0b8d75d6254b513f",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Components/PosterHStackLibrarySection.swift",
+      "reason": "",
+      "sha256": "66e4a1ffac8921902fd69608f8605c4b65f91a87444b516227303529f91de086",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Components/PosterImage.swift",
+      "reason": "",
+      "sha256": "3d317ce14bea1e9f2374a962878f84a64104412bdea79af6f77735bc212387ab",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Components/PosterIndicators/PosterIndicatorsOverlay.swift",
+      "reason": "",
+      "sha256": "e9eac9a554dbf3e21ca920949d7c99729dde7cfd37343214daaf8ccadc171960",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Components/PosterIndicators/ProgressIndicator.swift",
+      "reason": "",
+      "sha256": "ec1907b63d3c0db283997ea920a92274608fcb79f0b99f10f4520dbc4f1dda54",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Components/PosterIndicators/UnplayedIndicator.swift",
+      "reason": "",
+      "sha256": "5446a6af14dc21703b3ffca5f3edef8bec852183d5eac9f5bad1030f80f00f21",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Components/Quadrant.swift",
+      "reason": "",
+      "sha256": "820d47c5f2ff7edc4ee14f244777cfbabe36360a2d481655f05f6c78bc8a425a",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Components/RedrawOnNotificationView.swift",
+      "reason": "",
+      "sha256": "7950070219bd25ffc47361a026b3ccc0f36ba8a8d810201bc5e1fcc0aea6e3b4",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Components/RowDivider.swift",
+      "reason": "",
+      "sha256": "18590daf77fe6b301743a9b00c3243e77bbf1db9cd1a0245d6e2bd5eec3e972d",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Components/SeeMoreText.swift",
+      "reason": "",
+      "sha256": "0f55cda92a995786e4b02ca18eca2d6f14002fd331a4fc58400736380f603d44",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Components/SelectionTrack.swift",
+      "reason": "",
+      "sha256": "414c6aeafdde4a498310c898a74dc1d2a4fa97f0c15bdac231257b60abbb3fa0",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Components/SelectorView.swift",
+      "reason": "",
+      "sha256": "e95818d471dcb202b2e6bd1309a9834895d3b2dade55cc9ee2ea4522181bad64",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Components/SeparatorHStack.swift",
+      "reason": "",
+      "sha256": "72f8571f216b0e9b388b394cd57647dae03c307e12358503a5b9b76c72f1b9f8",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Components/SeparatorVStack.swift",
+      "reason": "",
+      "sha256": "30c986aabd6fb84d5c9d3ac7ede65f0f04f2c85b8ee98f6d49943a4cedea8aff",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Components/SliderContainer/ColorGradientSlider.swift",
+      "reason": "",
+      "sha256": "5cec7aafc205aa687b1d20a0d0dd28d64951e38488d892f8951bc21a6bfbd3df",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Components/SliderContainer/SliderContainer.swift",
+      "reason": "",
+      "sha256": "8e502dc696f064d45422335fd0523f8b972aa3526abf3afb6eb626042d86d062",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Components/SliderContainer/SliderContainerStyle.swift",
+      "reason": "",
+      "sha256": "aaf3ddc653d6dedc438a198f542b4570ce13fa404e82b949e29be51e7f80ad41",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Components/SliderContainer/Styles/CapsuleSliderStyle.swift",
+      "reason": "",
+      "sha256": "28d3bdd13bc30ef7415b61e807cf76226b65ce4b628b5cb3e504cafd99cb0201",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Components/SliderContainer/Styles/ColorGradientSliderStyle.swift",
+      "reason": "",
+      "sha256": "7fbbcf9dd59c218a1da6bd43218953ad97a876eb5828fa15a1732604bff61a5d",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Components/SystemImageContentView.swift",
+      "reason": "",
+      "sha256": "4fb3d8144853c587d44d1dae7ac78044faf59a8da3d500bf85ffa89e5670d223",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Components/UserButton.swift",
+      "reason": "",
+      "sha256": "fd9c93a51426f44560fb821594423b1f3c6e7182d8e57c63acd8efbd3dcfca05",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Components/UserProfileImage/UserProfileHeroImage.swift",
+      "reason": "",
+      "sha256": "b074c337630f2e5b9daf03c3f2f80950d290ab55c8efeb418811006b323ffacd",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Components/UserProfileImage/UserProfileImage.swift",
+      "reason": "",
+      "sha256": "62a3044fd77157974d5475f0912d60e4a5391f4cdd28a0cbdfd8423cb67869de",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Components/UserProfileRow.swift",
+      "reason": "",
+      "sha256": "b46a57ebe132946b443e0bed30bfbcefdf785a4ca58bddc0351a8bba0227933a",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Components/WithBlurNavigationBar.swift",
+      "reason": "",
+      "sha256": "1058a7fea1acff0529b8afd870295d56b13b4d7e14b6ae75a45e1d2688d996e3",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Components/WithLocalUserAuthentication.swift",
+      "reason": "",
+      "sha256": "9a30991a56eda420aa23113645022c99d5f491b22e2d71277cc64041ee445eeb",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Coordinators/Navigation/NavigationCoordinator.swift",
+      "reason": "",
+      "sha256": "649aeb6810008dbbca98f08791ffe0494679905b8f1b700f87cf2428cc800c9a",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Coordinators/Navigation/NavigationInjectionView.swift",
+      "reason": "",
+      "sha256": "03ae6c6b5fcc7d8fba1e7e77ec1e7395f35e8b8ac83765b4ed309e491f928c1c",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Coordinators/Navigation/NavigationRoute/NavigationRoute+Admin.swift",
+      "reason": "",
+      "sha256": "1d65bcac5605e561d83f75af8bcb66fa5462af9019cb130e79cad1ebdd114651",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Coordinators/Navigation/NavigationRoute/NavigationRoute+App.swift",
+      "reason": "",
+      "sha256": "de80f6efd56500c9ea3c57b90e6815a3b318adf3c3ccf04eacf97f68ee20eb20",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Coordinators/Navigation/NavigationRoute/NavigationRoute+Item.swift",
+      "reason": "",
+      "sha256": "03bb605cebafe6c16ece9236c7e48ebf911f7f1615d98c215b5ba300a33f67e7",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Coordinators/Navigation/NavigationRoute/NavigationRoute+Library.swift",
+      "reason": "",
+      "sha256": "de114ef311400eddbed4052413b30c63a97f17f081756357ca87051a3a336393",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Coordinators/Navigation/NavigationRoute/NavigationRoute+Media.swift",
+      "reason": "",
+      "sha256": "03e5dcbd80e89890cd5b6fd98550d93bfbf5944945ba4b82a31f1c6809f00b08",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Coordinators/Navigation/NavigationRoute/NavigationRoute+Settings.swift",
+      "reason": "",
+      "sha256": "2f42bf7e8a3493ae286faf4919b9a88f00880e1684780392c7a62d7751660d8c",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Coordinators/Navigation/NavigationRoute/NavigationRoute+User.swift",
+      "reason": "",
+      "sha256": "3e944afe4c49b87d132e0997cf67ab70cdeee328d357ac242f88a0e0ad9aab09",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Coordinators/Navigation/NavigationRoute/NavigationRoute.swift",
+      "reason": "",
+      "sha256": "405bafb7295d2f7f1df438ffca4c506d2d4275d988a9ec2d79950233a2446213",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Coordinators/Navigation/Router.swift",
+      "reason": "",
+      "sha256": "4013e768fcceae70c6446b26046e3880956a25d4e9475e2fa2a376dc0062f1be",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Coordinators/Navigation/WithTransitionReaderPublisher.swift",
+      "reason": "",
+      "sha256": "8268c69fb44240e1cd58b97c0d951efedcf66fbbd61cfcf93c761afc02def067",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Coordinators/Root/RootCoordinator.swift",
+      "reason": "",
+      "sha256": "6563bf235e0d18fa874685d90d39b0793e33571c70494a7f5c976bf5365f60af",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Coordinators/Root/RootView.swift",
+      "reason": "",
+      "sha256": "9efcd236a536dcf7bd11be7553d257c3fd79033fdb37339322b822bd53b894ed",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Coordinators/Root/UserSessionRootView.swift",
+      "reason": "",
+      "sha256": "d65cd72cd45b331773def5d87a3d1e2c3abf5ab88a10c3efcb80be1ebb7b2a01",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Coordinators/Tabs/MainTabView.swift",
+      "reason": "",
+      "sha256": "64c39285fc3a2da4697c02e5bd516e4777519274baf8ff34bde0f769b782ac51",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Coordinators/Tabs/TabCoordinator.swift",
+      "reason": "",
+      "sha256": "6e48beb7daf67225eee9c8395557a87d63a99f610e8924a05e98201a17ce6e79",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Coordinators/Tabs/TabItem.swift",
+      "reason": "",
+      "sha256": "3c44e427f6c7163463f7b1a783402e71f39ce3e44e832502994fe2b25e7f6a80",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Coordinators/Tabs/TabItemSelectedPublisher.swift",
+      "reason": "",
+      "sha256": "246af686360bd2c86eb0bfd8a9532d6f887417e1ee67a0c2fee66a1f8d409552",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Errors/ErrorMessage.swift",
+      "reason": "",
+      "sha256": "c7ff48729797fabd47ee7079388b3ff5365d33ec4e9b4800d3b43cc622586e36",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Extensions/ButtonStyle/BasicHoverButtonStyle.swift",
+      "reason": "",
+      "sha256": "7ca422d12938c8f8faef24751d454e852f68139d075208a35f6ae868e596d6df",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Extensions/CGSize.swift",
+      "reason": "",
+      "sha256": "9443125d509a8071a2753768c0be7e3d621766d6539fdbed2b7fbde88763747b",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Extensions/Color.swift",
+      "reason": "",
+      "sha256": "ae086a9f3be43d65525e2f785ce246a07323a1af5414a1e81d84ddb7dc57c8a8",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Extensions/CoordinateSpace.swift",
+      "reason": "",
+      "sha256": "5362d08bd04b755c14444192f4dca13f8477f596a8c1c47e28d11ab0da55ed88",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Extensions/Edge.swift",
+      "reason": "",
+      "sha256": "d065b9887cc2b490ccab209ef27342f508bd4df7e98eca259f70a623457a5bd0",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Extensions/EdgeInsets.swift",
+      "reason": "",
+      "sha256": "8a4f52705c5b9a1c70d38f319840ad4163c0e1d0eb62d68b6334c77f18e021cc",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Extensions/EnvironmentValues.swift",
+      "reason": "",
+      "sha256": "ce2a1a66ca817ce29c9effd9cc5f3fc6e1ac6f951c4c5da1ee2470f07f6c5e6d",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Extensions/FocusedValues.swift",
+      "reason": "",
+      "sha256": "c0ce249ae4ca2dd55bbb0ee97e953b4b48e8d3cd68877893863d0ca61a32278f",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Extensions/Font.swift",
+      "reason": "",
+      "sha256": "4c0ccf90b2192b80bbba4187135835e9c73337f46acf7e4d85e81948e9f45b18",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Extensions/Form.swift",
+      "reason": "",
+      "sha256": "b2305cc011df66857c8372c0ccfb223bb054abf918cb70da0aae0c872ecc1b01",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Extensions/FormatStyle.swift",
+      "reason": "",
+      "sha256": "ede3a5f470458b617568f0e138d734ee5bc6ef0d4803625174b204b905e0be1f",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Extensions/Int.swift",
+      "reason": "",
+      "sha256": "dd6e4e28355e11e87814e3994a1e31aaf7bbc4f3508abd6197442745e3bd0977",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Extensions/JellyfinAPI/ActiveSessionsPolicy.swift",
+      "reason": "",
+      "sha256": "3d7e1acae6240ef58218932b1239114ea9915555289c1c6769c442fbe2e4bdd8",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Extensions/JellyfinAPI/AnyView.swift",
+      "reason": "",
+      "sha256": "e9a0420d84463aeda61327bb574d4ccca13c20f9a668785b07acbf398c1f4c71",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Extensions/JellyfinAPI/AuthenticationInfo.swift",
+      "reason": "",
+      "sha256": "cc1602f741a2ba332759e7a89fd4616c6e2762eac4a53ad7499d7e352aee2df9",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Extensions/JellyfinAPI/BaseItemDto/BaseItemDto+Images.swift",
+      "reason": "",
+      "sha256": "317231e51b6f81ace70e7ab4f0ab0ae5a6773b90fcb369d89a67e52474eb8e39",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Extensions/JellyfinAPI/BaseItemDto/BaseItemDto+LibraryParent.swift",
+      "reason": "",
+      "sha256": "71b7b107ebecc8e0511dd3c1b84efda6db064dddcf1ba9c56b80614d2c79b2c6",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Extensions/JellyfinAPI/BaseItemDto/BaseItemDto+Permissions.swift",
+      "reason": "",
+      "sha256": "471ef828d04ea2e63d61f4438bb164d64e3277e2297f746caf5d49dadde5c175",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Extensions/JellyfinAPI/BaseItemDto/BaseItemDto+Poster.swift",
+      "reason": "",
+      "sha256": "2e3669f0282f2b7f9ff2bd5c15e37284cdf84e9e3002f431085a4f88c35e9c0f",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Extensions/JellyfinAPI/BaseItemDto/BaseItemDto+PosterAccessibility.swift",
+      "reason": "",
+      "sha256": "96a1eef5f61d459efb8f7513b988879d4337b044db3d38100269ff262f259099",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Extensions/JellyfinAPI/BaseItemDto/BaseItemDto+PosterSubtitle.swift",
+      "reason": "",
+      "sha256": "fb9c6837a1ac7318de33a93c8ea3dbef08cb46b2183b37dc6cde63d6e7e585c5",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Extensions/JellyfinAPI/BaseItemDto/BaseItemDto.swift",
+      "reason": "",
+      "sha256": "1afbb69d1d81926e26ff2805b7918dc44a22e34f2f19310afaf70c375098d2dd",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Extensions/JellyfinAPI/BaseItemDto+LibraryElement.swift",
+      "reason": "",
+      "sha256": "3b85cb5af985307b90cfa928c3d18fbc918e85c3b9670d1e2ce05877531a1345",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Extensions/JellyfinAPI/BaseItemKind.swift",
+      "reason": "",
+      "sha256": "988aab7bd04d805d09909206e40fdd08dcb6a0d8eee2a48b87eaf197460b585e",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Extensions/JellyfinAPI/BaseItemPerson/BaseItemPerson+Poster.swift",
+      "reason": "",
+      "sha256": "385a5792e7ba182de4f6b03b4c1660179dfb9efb29010172adb33ba42591c8bd",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Extensions/JellyfinAPI/BaseItemPerson/BaseItemPerson.swift",
+      "reason": "",
+      "sha256": "3f252082d8af6f9de17d5140a0f06f8f2be720518aa16c4c440af28f08c50507",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Extensions/JellyfinAPI/BaseItemPerson+LibraryElement.swift",
+      "reason": "",
+      "sha256": "42a8a40e2cab061a4a9cbe4bca557dc4b7567b25bb4906252eae54edb9a71528",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Extensions/JellyfinAPI/ChapterInfo.swift",
+      "reason": "",
+      "sha256": "4d0380126ebbdefd57bf0d9dec4d5cf4723ca6342266de828619d2e3974912a4",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Extensions/JellyfinAPI/CollectionType.swift",
+      "reason": "",
+      "sha256": "67e1c302a070c40fa75c9cdc565a2ed1c3a5c607c6464279f3d81524a36a544e",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Extensions/JellyfinAPI/CountryInfo.swift",
+      "reason": "",
+      "sha256": "cd0778739790b00beea52c246060e0c181284d0850e1ec2e258a6980c48f26be",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Extensions/JellyfinAPI/CultureDto.swift",
+      "reason": "",
+      "sha256": "6a800141c94ef75e67791a0eb9de1f7fb1de4919169ba4d797cb207f6bed068b",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Extensions/JellyfinAPI/DayOfWeek.swift",
+      "reason": "",
+      "sha256": "a0af192b91d200b9d17d076476875163a0fabaa502b0775fd0522edbae33dfb3",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Extensions/JellyfinAPI/DeviceInfoDto.swift",
+      "reason": "",
+      "sha256": "c419f35b7849f743fd024f8ee35f7e747e82534e534f737c37ed2173a06e24d0",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Extensions/JellyfinAPI/DeviceProfile.swift",
+      "reason": "",
+      "sha256": "1a264eea8ecfe9df6a7004cd5e4a0791cd9ea4e90e8d58db472a20f8e1c284e5",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Extensions/JellyfinAPI/DeviceType.swift",
+      "reason": "",
+      "sha256": "250df23894f17136b3c3b82314be79ebc3aa38a7d63579f19bd6b3bab94cafbf",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Extensions/JellyfinAPI/DynamicDayOfWeek.swift",
+      "reason": "",
+      "sha256": "29e171a9b9f6312775fc6125ffa7eb36e9762d030ea81de5354529cdcca7d3eb",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Extensions/JellyfinAPI/GeneralCommandType.swift",
+      "reason": "",
+      "sha256": "e9253796388bf1d8575f00047feff88d90f897d886af7c97b07448a6a6ec3cc1",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Extensions/JellyfinAPI/ImageBlurHashes.swift",
+      "reason": "",
+      "sha256": "23f8cdf5ace540a22cfd622997d78509aaa81f801b44d5e2280a64bb7057ef0d",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Extensions/JellyfinAPI/ImageInfo.swift",
+      "reason": "",
+      "sha256": "f05635fc3a9a2807c0226b16f55dddb4537c29744af8807aafd735b92ce18774",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Extensions/JellyfinAPI/ImageProviderInfo.swift",
+      "reason": "",
+      "sha256": "26ee786817625d42a99a2b20975010c250007bb5c62abe4673ca3789f26ebc98",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Extensions/JellyfinAPI/ImageType.swift",
+      "reason": "",
+      "sha256": "11e71ff3196a068231b8e112fa398ea332de025e47abe319ad21d80415e6ec82",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Extensions/JellyfinAPI/ItemFilter+ItemTrait.swift",
+      "reason": "",
+      "sha256": "bb5a50cb84de94be31788bf2de30124e6e0de05ee4b9f6402dcf398e0221e529",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Extensions/JellyfinAPI/JellyfinClient.swift",
+      "reason": "",
+      "sha256": "dfc0ab9afed327aaca9839e55d1d7a152767867649124ba36a6b3404ab624e3b",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Extensions/JellyfinAPI/LogFile.swift",
+      "reason": "",
+      "sha256": "a8bc574d3249d7d71863886e407bbde47686a365917e72c7d2572e072ae2090d",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Extensions/JellyfinAPI/LogLevel.swift",
+      "reason": "",
+      "sha256": "b6116a80f8a26ba2e6a1da58fd7e0fe7a3a168dc7719f5df4d88cc88532d99ef",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Extensions/JellyfinAPI/LoginFailurePolicy.swift",
+      "reason": "",
+      "sha256": "343b5f012a00e497c10e8b35846d24a638335f0dd996ea7c088e7ab75459f6d7",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Extensions/JellyfinAPI/MaxBitratePolicy.swift",
+      "reason": "",
+      "sha256": "aa099a0d7baa39440f3627533466c5332c0a8f4d6a6ac2208c10b2baddb51932",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Extensions/JellyfinAPI/MediaSourceInfo.swift",
+      "reason": "",
+      "sha256": "6addf7344153ceda7e23551112e4f01868cc91146d134ed3c59aea34105c22d8",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Extensions/JellyfinAPI/MediaStream.swift",
+      "reason": "",
+      "sha256": "105a926dc544949ce9b97660f7b5d710d882d23de213b545b2718f1355405a75",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Extensions/JellyfinAPI/MediaStreamType.swift",
+      "reason": "",
+      "sha256": "54228b11c91636453dd15c4e959fadb187a57a0b291f45457029cc31d675d698",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Extensions/JellyfinAPI/MetadataField.swift",
+      "reason": "",
+      "sha256": "4ff1e4ba6433783fa380a967edd9157df2bc0ca8c368225079db9e8a09d2e4c8",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Extensions/JellyfinAPI/NameGuidPair.swift",
+      "reason": "",
+      "sha256": "684e8d379fd6293b61751580833fd95ec9a9e802fc18cba80e78dd643a04b3f4",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Extensions/JellyfinAPI/ParentalRating.swift",
+      "reason": "",
+      "sha256": "f710f2c0ce151f514ff3171e59f3a856a79f8eb4be75a26087195abeb8d6c01b",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Extensions/JellyfinAPI/PersonKind.swift",
+      "reason": "",
+      "sha256": "5a0ca7cde00f2b9d314f4ed2ab3bc2875bd8a84d6d6e9b5e20ed7fbf8e8a975a",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Extensions/JellyfinAPI/PlayMethod.swift",
+      "reason": "",
+      "sha256": "3acc02c26d5a2f1e45fe040d1bcc100d53a79fc07a0b23a1a9aaf37abaff055c",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Extensions/JellyfinAPI/PlayerStateInfo.swift",
+      "reason": "",
+      "sha256": "64da9cc6dfcb38b788f7947ea1ecd3cba62caa7ee28533f3457000531e412ae7",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Extensions/JellyfinAPI/PlaystateCommand.swift",
+      "reason": "",
+      "sha256": "61f527af54298d7a66a47a394696d409dfdc8bc0b418769029aa11ab50a9b6fb",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Extensions/JellyfinAPI/RemoteImageInfo.swift",
+      "reason": "",
+      "sha256": "560e4bb03af2236a612c5bc4c89933e2d7e7520624ac27eaa102dc0f287304c7",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Extensions/JellyfinAPI/RemoteSearchResult.swift",
+      "reason": "",
+      "sha256": "1537e6d271888dad4f41aac346671e557a7d89ed9669fc37205c25fa9cf26f15",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Extensions/JellyfinAPI/SessionInfoDto.swift",
+      "reason": "",
+      "sha256": "0df7c921cc2294f78d5a9ba2f988f525dd7f6c5933ceadaea90db8eace6882e9",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Extensions/JellyfinAPI/SortOrder+ItemSortOrder.swift",
+      "reason": "",
+      "sha256": "198fa63491f194779ad55a1a050af2db7cb4fcc08b1b6ab27da70f996e2a22cf",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Extensions/JellyfinAPI/SpecialFeatureType.swift",
+      "reason": "",
+      "sha256": "0276c3de3dc10a1229957947426b7224cb04d8dd399ab47f5eb96321018821ee",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Extensions/JellyfinAPI/SubtitlePlaybackMode.swift",
+      "reason": "",
+      "sha256": "0cae05f75a11be52052806fa9842200f51e10156eed14ec52ae6065eac06ed33",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Extensions/JellyfinAPI/SyncPlayUserAccessType.swift",
+      "reason": "",
+      "sha256": "ace328d8d1d042b7d5aba5c9fe19f01173ef91a9e5644fd1014bbd83fd41b580",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Extensions/JellyfinAPI/TaskCompletionStatus.swift",
+      "reason": "",
+      "sha256": "5fe7d5a70d93222e728297fda54d3e39c8e61d512c3b6ab5cc7f3dc405a09c5d",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Extensions/JellyfinAPI/TaskState.swift",
+      "reason": "",
+      "sha256": "daf8a9a75549dc27a3e41b6643e1e347f28e9f4111b1d02fdde85b652e55553c",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Extensions/JellyfinAPI/TaskTriggerInfo.swift",
+      "reason": "",
+      "sha256": "2f061958daadd8c3420d712b8a39d1b147addbb94d5a1f35606ffffcd82f8740",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Extensions/JellyfinAPI/TaskTriggerInfoType.swift",
+      "reason": "",
+      "sha256": "2718785e1fcaab9b7a1fc2fec8f75ac48e0108a2b5c6fd59a08f104e1e8f4298",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Extensions/JellyfinAPI/TimerInfoDto.swift",
+      "reason": "",
+      "sha256": "80192cf2afecd05304867e215fe7deab58abd179dbfebc78d9b3447f7e8eff64",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Extensions/JellyfinAPI/TranscodeReason.swift",
+      "reason": "",
+      "sha256": "66c2ecef4af334877402763f61b8b43ea4c431059f09abbd44c1870cea8dc011",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Extensions/JellyfinAPI/UserDto.swift",
+      "reason": "",
+      "sha256": "6e267dc8bb4f91c6500c6510c7d9153765f0e2d77de9b6633c64eadbee9edffd",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Extensions/JellyfinAPI/Video3DFormat.swift",
+      "reason": "",
+      "sha256": "e252ca313b4ae80a2dd4672b4fb9e53e462b835d407a2784166a4529f8e940af",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Extensions/JellyfinAPI/VideoRangeType.swift",
+      "reason": "",
+      "sha256": "e841ba30f47a03a6cc5267c9cc3d7b335ef7363951a38134b24afc9e3b09cb66",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Extensions/LabelStyle/AttributeBadgeLabelStyle.swift",
+      "reason": "",
+      "sha256": "78e2734378144a79ef216ba9b020c66011d8c07e9c54e328d0ded5f1513c62b1",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Extensions/LabelStyle/HorizontalLabelStyle.swift",
+      "reason": "",
+      "sha256": "648bdda8e9319d83d81128a20c7ca7b062af917a86493da5f920bfe5a2565d11",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Extensions/LabelStyle/SectionFooterWithImageLabelStyle.swift",
+      "reason": "",
+      "sha256": "1af328c555554e29c59ec4217cbcceb5b948d8d639a00de69bf32a8932634b72",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Extensions/LabeledContentStyle.swift",
+      "reason": "",
+      "sha256": "229925c0f213d8d557c6cc6eddf9c4e3d294a604fac0bd6550c076fa7d9a293d",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Extensions/Nuke/ImagePipeline.swift",
+      "reason": "",
+      "sha256": "43cf906887e31499598940d477683dd440217f54a8e78369de451d226934fb1a",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Extensions/Picker.swift",
+      "reason": "",
+      "sha256": "c9bd792c6fc90a8068983c369bf28bbb00f812667e16c330de3174b52fe7087f",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Extensions/ProgressViewStyle/CapsuleProgressViewStyle.swift",
+      "reason": "",
+      "sha256": "81261c05ada085c8dfab84746bf03a8b7fb4a2066a1618ba899ca7cb8f94c46f",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Extensions/ProgressViewStyle/GaugeProgressViewStyle.swift",
+      "reason": "",
+      "sha256": "7b79558ab91b50db4a325b3d65a0bb4b8bc16929adf0159dddde9e6c55d093a7",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Extensions/ProgressViewStyle/ProgressViewStyle.swift",
+      "reason": "",
+      "sha256": "dfd35a6eb582180847ead30a719db5d82ae8e48a8a07c7b08e2e18b00dc963dc",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Extensions/RatingType.swift",
+      "reason": "",
+      "sha256": "81fd51a7d95914b8787d06fc52f86f57d37546106471263911bed6572ee8e832",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Extensions/Section.swift",
+      "reason": "",
+      "sha256": "a3e61b5d79597db0ed13c9a34119b80e92da153026f47eedae2d33c0a5131b4a",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Extensions/SecureField.swift",
+      "reason": "",
+      "sha256": "c6d985f9457de330eb437ffda6960bb6de3321d55ba6a12877e538c9ce837dbb",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Extensions/String.swift",
+      "reason": "",
+      "sha256": "9060e515c6689dae27ac598086c8bd4b579bb96cb657004e772da6295b1f6fc5",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Extensions/UIApplication.swift",
+      "reason": "",
+      "sha256": "38a0316adcab359888f27d99ac25bf2150c2de7f1218a794d9d2e207f4fdc9f6",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Extensions/UIColor.swift",
+      "reason": "",
+      "sha256": "a30927c0a27265f6030134ac7ffafd833310836e136ac44012619ecf9959990f",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Extensions/UIDevice.swift",
+      "reason": "",
+      "sha256": "5f8b20afa41b28de25b6026cc309f82a22cec66b6770bc9845780ec6c001fd46",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Extensions/UIGestureRecognizer.swift",
+      "reason": "",
+      "sha256": "dbe27dcb948469021400d33586be6544ca24eb5d3c6b0558665574c7157d4278",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Extensions/UIImage+InterestingColor.swift",
+      "reason": "",
+      "sha256": "b0824065793021992ba408e42a7af127fc85eb8e4541cbd8224d87e026281381",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Extensions/UIImage.swift",
+      "reason": "",
+      "sha256": "5b2ae5c2d8496abe9e3e1182be6903c070120cd5881f0748c38244015aa7f676",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Extensions/URL.swift",
+      "reason": "",
+      "sha256": "8c460c6a5a81079bbd2ffe24feb80abdc79ec6f9cdab42e31722432a054d4284",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Extensions/UnitPoint.swift",
+      "reason": "",
+      "sha256": "5b5dc15d33de0f6766289851486e7a84c9b3fac19b3c30e92731a1eeacf89b95",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Extensions/ViewExtensions/Backport/Backport.swift",
+      "reason": "",
+      "sha256": "6ece61d568fd65fa091cb9950c50c99554f1b767e81ada0d0388ba06e6ff0adc",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Extensions/ViewExtensions/Backport/BackportButtonStyle.swift",
+      "reason": "",
+      "sha256": "ac7f31dd203a8cbc69c8a7d11bf71b90baa3382fa6114d3c342afbd8efa72036",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Extensions/ViewExtensions/Backport/GlassEffect.swift",
+      "reason": "",
+      "sha256": "b135d8546976f27bc4fca7c650743ad42f4faeaf40babd49f38060f06cb716bc",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Extensions/ViewExtensions/Backport/NavigationTransition.swift",
+      "reason": "",
+      "sha256": "17f747a3ace45d0b47eae37feff68cc61fc5263686aa89f578f078952a6aaeca",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Extensions/ViewExtensions/Backport/ScrollEdgeEffectStyle.swift",
+      "reason": "",
+      "sha256": "987bba252704584862a1322d985c0f2e7044f9cacd2b06d94e3134bdd7f9c3d4",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Extensions/ViewExtensions/Modifiers/BackgroundParallaxHeaderModifier.swift",
+      "reason": "",
+      "sha256": "9f7343d6e4167dbc4105dd7a1b69d7ac044b07c04037f0e7e85b510a6d5f0f5f",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Extensions/ViewExtensions/Modifiers/BottomEdgeGradientModifier.swift",
+      "reason": "",
+      "sha256": "d4ac53dd6f066afba5ae673195ac1b310a2a6a5828300a0c72c88cc4056be95d",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Extensions/ViewExtensions/Modifiers/ExtendedBackgroundModifier.swift",
+      "reason": "",
+      "sha256": "706c378d77ea35d02a6a4f0848fd5edc102135279a7a04e4aa568e5313151558",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Extensions/ViewExtensions/Modifiers/LetterPickerBarModifier.swift",
+      "reason": "",
+      "sha256": "f4c477f012fff9351b04e923ef6ec197ed77bcde2e2338ac3733c56e7f2651ad",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Extensions/ViewExtensions/Modifiers/MaskGradientModifier.swift",
+      "reason": "",
+      "sha256": "b53a7ecf2ede6e0d8ad74dfffd949031d503a093d3e403f02eb941e071348431",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Extensions/ViewExtensions/Modifiers/OnFinalDisappearModifier.swift",
+      "reason": "",
+      "sha256": "89d66fd2e9da78930f59346546b9012c139689db1e69c12566382a7095b21527",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Extensions/ViewExtensions/Modifiers/OnFirstAppearModifier.swift",
+      "reason": "",
+      "sha256": "e5623149d2504f6d88a841ce41f12d67e0c5058d95bd6ac791826c165e3f4724",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Extensions/ViewExtensions/Modifiers/OnReceiveNotificationModifier.swift",
+      "reason": "",
+      "sha256": "49c9b8d05cf6f65a03361e28620d0ce25bfc404aae09c2ac8697ce4450cbcddf",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Extensions/ViewExtensions/Modifiers/OnScenePhaseChangedModifier.swift",
+      "reason": "",
+      "sha256": "808066029f835ab99bad884959c0ced6291d5baa017df297b881f45006079f33",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Extensions/ViewExtensions/Modifiers/OnSizeChangedModifier.swift",
+      "reason": "",
+      "sha256": "1f273cfc0a7f6a1b8b5299a46ea5488c529480b55e9e1dbb0e49d93d49c1333c",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Extensions/ViewExtensions/Modifiers/ScrollIfLargerThanContainerModifier.swift",
+      "reason": "",
+      "sha256": "ee1ffed508ce1d8703f293fbf0aa8e381e8a345da030d111def1e26bd00f4d27",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Extensions/ViewExtensions/Modifiers/ScrollViewOffsetModifier.swift",
+      "reason": "",
+      "sha256": "2b396713c7f36f186ec5f2c3ff8832db24bad5f2011d4641866f8eacce3fb425",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Extensions/ViewExtensions/Modifiers/SinceLastDisappearModifier.swift",
+      "reason": "",
+      "sha256": "8138a7eadcf7fa687ebebf4dbf6226180f5bb5c67c00fcb7c0d52896b83df74b",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Extensions/ViewExtensions/Modifiers/TrackingFrameModifier.swift",
+      "reason": "",
+      "sha256": "19656430e5b92e2b4a63bb114420511e985fb0d44df077054c79dd36220395d5",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Extensions/ViewExtensions/ViewExtensions.swift",
+      "reason": "",
+      "sha256": "fab331ccce9baa1683df3ae3c8a9d14118a4862fbd67a9b74bde56980f17684b",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Logging/Logging.swift",
+      "reason": "",
+      "sha256": "0a5baf2fa53a6cd982ad777fa35af5eedccce6ebfa8535b7ee468701343d2644",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Logging/NetworkLogger.swift",
+      "reason": "",
+      "sha256": "039e10991963989462f6375e002f7f5baf9fa993dad7218048a6d8467af25741",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Objects/AccountModelAdapters.swift",
+      "reason": "",
+      "sha256": "e75bdf70195b0b5198f70e46fcaedee3d0b67de8f572065af8354e9f2b3296cc",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Objects/ActiveSessionFilter.swift",
+      "reason": "",
+      "sha256": "a3f663487389a18be68968007194abadba645f2bbe9e44f1f6c782b3c8f7dfe9",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Objects/AppAppearance.swift",
+      "reason": "",
+      "sha256": "92ca8c05859fcaf05a87c0a6cb55bc412128932c3a1c7f5349da8a6f6366e75f",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Objects/AppIcons.swift",
+      "reason": "",
+      "sha256": "9caf2b6f28e04129c5de311f5af2e25af98632a6250506866d0adbcc80c0f265",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Objects/ContentGroup/ContentGroup.swift",
+      "reason": "",
+      "sha256": "af8ad8aa1426b561cf34711ee9972182e0682a9dbe17e6faa60028d69e9a80fc",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Objects/ContentGroup/ContentGroupCustomization.swift",
+      "reason": "",
+      "sha256": "78a0b5fe2e962abfe3f8490b69428d64d6148e66acf50b9289a0e8e5a826e822",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Objects/ContentGroup/ContentGroupProvider.swift",
+      "reason": "",
+      "sha256": "a51b448447e69ca215d5519de6b4464ed41c8b2d1a23d223f9dc1236f3ad8317",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Objects/ContentGroup/PillGroup.swift",
+      "reason": "",
+      "sha256": "8e8afdc73c962aac7e6149f9da9cac05e60fe4a91e632b3a67e2b0f2c9bebf94",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Objects/ContentGroup/PosterGroup.swift",
+      "reason": "",
+      "sha256": "96184e75aa608cd0c08be095dd2de3831e9601e5e9ea3de027f9fa7368c36f3f",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Objects/ContentGroup/SeriesEpisodeContentGroup/SeriesEpisodeContentGroup+EpisodeCard.swift",
+      "reason": "",
+      "sha256": "0a11568181bd438e9e24e078da0d6d74449e165ba1fd4b30e4e51bf102345e2b",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Objects/ContentGroup/SeriesEpisodeContentGroup/SeriesEpisodeContentGroup+EpisodeCollection.swift",
+      "reason": "",
+      "sha256": "70221e729311d3b8fc24c871e1d028b5416f8f0f6bb56e726a7571c27351284c",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Objects/ContentGroup/SeriesEpisodeContentGroup/SeriesEpisodeContentGroup+SeasonSelector.swift",
+      "reason": "",
+      "sha256": "773516d21284246276e92e7a31df6a6963d68f4ef193e792d5760ca074aa048b",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Objects/ContentGroup/SeriesEpisodeContentGroup/SeriesEpisodeContentGroup.swift",
+      "reason": "",
+      "sha256": "e9fffde40f1fc8f9b90d2c3e8d84ea02e6865d62bf32f39e975dd14899c457fa",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Objects/Direction.swift",
+      "reason": "",
+      "sha256": "50350643b89e25b044641992bd5d61b1f29eed68414a969239547b5f2bb601a5",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Objects/DirectionalPanGestureRecognizer.swift",
+      "reason": "",
+      "sha256": "71d51e3bcd79d802ebdbdfda0aee77d116f2faf16048628bd1b1d1f57dfdb0d1",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Objects/DisplayOrder/BoxSetDisplayOrder.swift",
+      "reason": "",
+      "sha256": "1b1c20876cca4bceb499e30d27c7f37b1430838977890cbececd37ffe4711cbd",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Objects/DisplayOrder/SeriesDisplayOrder.swift",
+      "reason": "",
+      "sha256": "c820aad1d966bc77f7941e14c292d62b9011f278b1c10f8ece2c12a5a2dd3235",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Objects/Displayable.swift",
+      "reason": "",
+      "sha256": "99fc18fae81d349f8863a0158f8fe3bf98b85ccc1a5b931262217b2c28ef7779",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Objects/EPG/EPGLayout.swift",
+      "reason": "",
+      "sha256": "4d44af4ecc52e5026ed9d56742301a6f9191b010cfa625e7ba4e3966817a492f",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Objects/Empty.swift",
+      "reason": "",
+      "sha256": "dfe3ebddc0cf634bd1370552b39981e4e9868a0bc5bcb2eb49b7276500218daf",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Objects/EventPublisher.swift",
+      "reason": "",
+      "sha256": "9f1d405501afe1f51c12ce60590774cf03d7ff4b00f3d817ffd965c0e47797ef",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Objects/FocusCoordinator.swift",
+      "reason": "",
+      "sha256": "3d7d9c12446782dd646a38f022ea3f401e7e173d1eb6627a3c3181c4b6c8a64c",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Objects/FrameAndSafeAreaInsets.swift",
+      "reason": "",
+      "sha256": "645442a8cc8606f5c96b06240b152e09eb93b42e1103c515333dbe82596ce4f4",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Objects/GestureAction/DoubleTouchGestureAction.swift",
+      "reason": "",
+      "sha256": "24ee1f95424073ef9675d8cff26faef2b6b6837977f0d23e6cd02124c69aceef",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Objects/GestureAction/GestureAction.swift",
+      "reason": "",
+      "sha256": "4bf963471056317d01a50e680ea4f465d1e8f5eced64949c257e4efc8cd456b2",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Objects/GestureAction/LongPressGestureAction.swift",
+      "reason": "",
+      "sha256": "b503b4eeb1676821075a173d1b11ea2554c69dc9fd9ff92670b9f8e0f637cbaa",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Objects/GestureAction/MultiTapGestureAction.swift",
+      "reason": "",
+      "sha256": "57c9cdfaa69f4a00bc6aca63de1ecd8c6dfd297f17fa52248fdd782d5620d5ac",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Objects/GestureAction/PanGestureAction.swift",
+      "reason": "",
+      "sha256": "a73e302dc62ed8516cb52851334d5299eb246f600014110f146af88bb359453a",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Objects/GestureAction/PinchGestureAction.swift",
+      "reason": "",
+      "sha256": "e4bc44c5f3377fde322af342d1865dd6095a61276311d9f83b10c6b3b14270a4",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Objects/GestureAction/SwipeGestureAction.swift",
+      "reason": "",
+      "sha256": "2bddafe3db503825630b55d2250257bccbb7f241cbceed30a7bb2e1e827b7a9d",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Objects/IsSafeAreaBarApplied.swift",
+      "reason": "",
+      "sha256": "a7ffa48eacbbcaf708da51f376bb3c334a1c808e64764497d9b4c4d442f72ddc",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Objects/ItemActionButton.swift",
+      "reason": "",
+      "sha256": "6ac8bf04d1bf08b232b1e711124be333558d971331a80ca1a0e8de4e4b205fbd",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Objects/ItemFilter/AnyItemFilter.swift",
+      "reason": "",
+      "sha256": "9b3af71ea4536d8e502abbfb8e8c3c4b3885713a2f11c4b55f33a306f54220b5",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Objects/ItemFilter/ChannelCategory.swift",
+      "reason": "",
+      "sha256": "45272dc94a14080522685584ce1c66faabc755817b3ede2bb9b87ea985db0847",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Objects/ItemFilter/ItemFilter.swift",
+      "reason": "",
+      "sha256": "083e462d97bb6ff741322af3fbd942eaaf586ba2032aa826d8e64a3a590f7fea",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Objects/ItemFilter/ItemFilterCollection.swift",
+      "reason": "",
+      "sha256": "b6a1e76aac410a09f280b0a09d2ea0c9583db7c3bb109338367c48806a9ddd7a",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Objects/ItemFilter/ItemFilterType.swift",
+      "reason": "",
+      "sha256": "0df4ea7203e00e4526a39fe08578cfb62bc9bbedb300bf8f9549f7884773bbbd",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Objects/ItemFilter/ItemGenre.swift",
+      "reason": "",
+      "sha256": "c874f3c5243b9e9b47af8cfcd08d664ed73cedd28c6d535ab644c66013c50e16",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Objects/ItemFilter/ItemLanguage.swift",
+      "reason": "",
+      "sha256": "04340f1cd44a8a6a8149080359562693a2c8930e2ed31988e83dcefb41446ae3",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Objects/ItemFilter/ItemLetter.swift",
+      "reason": "",
+      "sha256": "8edc441e1c62dd9fce3c22a3e637a82b486b8b1e41549e5035c0ee62d0161b36",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Objects/ItemFilter/ItemOfficialRating.swift",
+      "reason": "",
+      "sha256": "f49fdf333bc02cbbac69da49d060db9556d18f626506f5d5aa5121f289c6c6e2",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Objects/ItemFilter/ItemSortBy.swift",
+      "reason": "",
+      "sha256": "505b0e0c741d8655cef396b4cf3117186c85735555c6e6a7915c3dab66b16250",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Objects/ItemFilter/ItemTag.swift",
+      "reason": "",
+      "sha256": "79a9aab455fb0cb5c4cf4c5ef8ac0b536f9306be62b4a82431857142c527bd3d",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Objects/ItemFilter/ItemYear.swift",
+      "reason": "",
+      "sha256": "c8c05c40254c7ec4fc05c6460d81a0273cc95502a23c4bdad75c59d6f5c9f474",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Objects/ItemViewAttributes.swift",
+      "reason": "",
+      "sha256": "308d907e37bd6e8acc1f8abc6d65ed158f9d6b1d499620925e9840a126289855",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Objects/ItemViewType.swift",
+      "reason": "",
+      "sha256": "9095cfadcefa7a0e093b1391da8ff248f36a29e262d5eb36c6ffdd73820738ce",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Objects/JumpProgressObserver.swift",
+      "reason": "",
+      "sha256": "66dc7cc18b01443ad2d147e28ac4893ec51c9c33d952f14c0c5c0918f10cfcb2",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Objects/LabeledContentBuilder.swift",
+      "reason": "",
+      "sha256": "d6edee68481cbd708350bb95696b5cb7dcadab362e412dc4c44ae1e731354c25",
+      "status": "pending"
+    },
+    {
+      "owners": [
+        "SwiftfinMediaCatalog"
+      ],
+      "path": "Shared/Objects/Libraries/AdditionalPartsLibrary.swift",
+      "reason": "Localized parent/video style and one additional-parts query adapter; no request construction or read algorithm.",
+      "sha256": "8b157b28b118ef66f55a3fe7261f266766995f216f14091e91ec9760d15c5c99",
+      "status": "source-reviewed-retained"
+    },
+    {
+      "owners": [
+        "SwiftfinMediaCatalog"
+      ],
+      "path": "Shared/Objects/Libraries/ChannelScheduleLibrary.swift",
+      "reason": "Captured channel/date and display-parent composition; delegates channel-schedule paging unchanged.",
+      "sha256": "21a2a6ec33478a8dd0630ae94687ac7747eee2af6dba903a2ef981f035ebd69b",
+      "status": "source-reviewed-retained"
+    },
+    {
+      "owners": [
+        "SwiftfinItemMetadata"
+      ],
+      "path": "Shared/Objects/Libraries/CountryLibrary.swift",
+      "reason": "One-shot paging adapter: first-page guard and countries port; no country data transformation.",
+      "sha256": "707539546cd8b82f015dc947a7e3ea1a1ad7c80b85246a7a935a4b4d3eeb134a",
+      "status": "source-reviewed-retained"
+    },
+    {
+      "owners": [
+        "SwiftfinItemMetadata"
+      ],
+      "path": "Shared/Objects/Libraries/CultureLibrary.swift",
+      "reason": "One-shot paging adapter: first-page guard and cultures port; no culture data transformation.",
+      "sha256": "aa31b140234929b7f371a6bd4f1d4b798206dadfb27df7b957f1452fdc98e15a",
+      "status": "source-reviewed-retained"
+    },
+    {
+      "owners": [
+        "SwiftfinMediaCatalog"
+      ],
+      "path": "Shared/Objects/Libraries/EPGChannelsLibrary.swift",
+      "reason": "Localized guide parent/type and channels query adapter.",
+      "sha256": "054af31e65144efe3bd2b2a74a3dd2b400db5544ccb369f6b962e5b3b5f67e1f",
+      "status": "source-reviewed-retained"
+    },
+    {
+      "owners": [
+        "SwiftfinMediaCatalog"
+      ],
+      "path": "Shared/Objects/Libraries/EpisodeLibrary.swift",
+      "reason": "Season identity validation and selected missing-episode setting passed to the bound catalog query.",
+      "sha256": "8ab5da400ed8068fbf138aacf5bb258950a37fbf591feca61a5ea748ca2020c6",
+      "status": "source-reviewed-retained"
+    },
+    {
+      "owners": [
+        "SwiftfinMediaCatalog"
+      ],
+      "path": "Shared/Objects/Libraries/GenresLibrary.swift",
+      "reason": "Localized genre parent/type and genres query adapter.",
+      "sha256": "1f398aea07562a6790be16e6f5ad131ec0ca631cae26ba7842f4442691ed903f",
+      "status": "source-reviewed-retained"
+    },
+    {
+      "owners": [
+        "SwiftfinMediaCatalog",
+        "SwiftfinFilters",
+        "SwiftfinPaging",
+        "SwiftfinStoredValues"
+      ],
+      "path": "Shared/Objects/Libraries/ItemLibrary.swift",
+      "reason": "Parent/grouping/filter query snapshots; app-selected sort preferences, filter-view-model composition, menu/drawer/router UI and stored-value addresses. Union/query policy and paging/result ownership delegate to libraries.",
+      "sha256": "d0c8343b696937294ed7972813335d0232bedbc13ca1b605f51331123a7a5e57",
+      "status": "source-reviewed-retained"
+    },
+    {
+      "owners": [
+        "SwiftfinMediaCatalog"
+      ],
+      "path": "Shared/Objects/Libraries/LatestInLibrary.swift",
+      "reason": "Localized library title and item-style composition; latest query receives exact parent identity.",
+      "sha256": "f65683b74e234831c01ccdd9136e85a061788996374274c8f68b14db58e2d097",
+      "status": "source-reviewed-retained"
+    },
+    {
+      "owners": [
+        "SwiftfinMediaCatalog"
+      ],
+      "path": "Shared/Objects/Libraries/LocalTrailersLibrary.swift",
+      "reason": "Parent identity/empty guard and local-trailer query adapter.",
+      "sha256": "f5b4b56ec9a196815e6bd50c2be77d0bdb0449927fba4e5903dc4a93ab8c5169",
+      "status": "source-reviewed-retained"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Objects/Libraries/NextUpLibrary.swift",
+      "reason": "Membership-refresh decisions remain embedded: item identity, loaded membership, positive resume ticks and played-field presence choose minimum intervals 3 or 30. Review/extract into existing user-media/paging owners.",
+      "sha256": "34ae2e074ede1bbe68d2ac42b93e2ec7ea778aae3de3a24a91a2a75a9a86fa57",
+      "status": "source-reviewed-mixed"
+    },
+    {
+      "owners": [
+        "SwiftfinItemMetadata"
+      ],
+      "path": "Shared/Objects/Libraries/ParentalRatingLibrary.swift",
+      "reason": "One-shot paging adapter: first-page guard and rating port.",
+      "sha256": "afd3c772795fd0de77e654fb56a73ee45792f782164c329800d89abaf681405d",
+      "status": "source-reviewed-retained"
+    },
+    {
+      "owners": [
+        "SwiftfinMediaCatalog"
+      ],
+      "path": "Shared/Objects/Libraries/PeopleLibrary.swift",
+      "reason": "Selected optional search text and localized people parent passed to catalog.",
+      "sha256": "05cad7e30e212813514a7ded985d64a7b86c3627fa56897f335cbf7986fceb47",
+      "status": "source-reviewed-retained"
+    },
+    {
+      "owners": [
+        "SwiftfinMediaCatalog"
+      ],
+      "path": "Shared/Objects/Libraries/ProgramsLibrary.swift",
+      "reason": "Selected program section and localized parent label passed to catalog.",
+      "sha256": "e6a8d7d4ce72ba8807e6621190d08d7bcb9a562a08c54873fb447f3fe0f85353",
+      "status": "source-reviewed-retained"
+    },
+    {
+      "owners": [
+        "SwiftfinMediaCatalog"
+      ],
+      "path": "Shared/Objects/Libraries/RecentlyAddedLibrary.swift",
+      "reason": "Localized recent parent and movie/series styles; delegates recent page read.",
+      "sha256": "964418044dbf3ddbfeb21e8f7a138756119405357bc5722375d2e87162b79434",
+      "status": "source-reviewed-retained"
+    },
+    {
+      "owners": [
+        "SwiftfinMediaCatalog"
+      ],
+      "path": "Shared/Objects/Libraries/RecommendedProgramsLibrary.swift",
+      "reason": "Localized on-now program parent/style; delegates recommended-program page read.",
+      "sha256": "1a6fc2885e770e1c7a18d89a5cf136f4eac1b2582eeb67df8df97ef65ef8b20b",
+      "status": "source-reviewed-retained"
+    },
+    {
+      "owners": [
+        "SwiftfinMediaCatalog"
+      ],
+      "path": "Shared/Objects/Libraries/RecordingsLibrary.swift",
+      "reason": "Localized recording parent/styles and recording query adapter.",
+      "sha256": "5a3344ec1531c8f12824194781bed11e1d805dab210101d8ce73ae385663cfb4",
+      "status": "source-reviewed-retained"
+    },
+    {
+      "owners": [
+        "SwiftfinItemMetadata"
+      ],
+      "path": "Shared/Objects/Libraries/RemoteImageLibrary.swift",
+      "reason": "Selected image type/language/provider UI environment and bound item/offset/limit passed to metadata port.",
+      "sha256": "a8282acf9f04c6d7844977b7a4a246d2787f16bad16e3604a12c4f827a8e6954",
+      "status": "source-reviewed-retained"
+    },
+    {
+      "owners": [
+        "SwiftfinItemMetadata"
+      ],
+      "path": "Shared/Objects/Libraries/RemoteImageProvidersLibrary.swift",
+      "reason": "One-shot provider adapter with item identity and first-page guards.",
+      "sha256": "cbada3fbe78430e5ddf23ce31d04b0b57151c4f4187c30e4441969067d5cf9bd",
+      "status": "source-reviewed-retained"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Objects/Libraries/ResumeItemsLibrary.swift",
+      "reason": "Played/removal and positive-progress refresh decisions plus MediaType-to-library-kind mapping remain mixed with the presentation adapter. Preserve missing/zero/negative/played/loaded cases before extraction.",
+      "sha256": "2f06888401d02af6ed2d611d12a92d09a15527758b20429f7af0bffd81286c28",
+      "status": "source-reviewed-mixed"
+    },
+    {
+      "owners": [
+        "SwiftfinMediaCatalog"
+      ],
+      "path": "Shared/Objects/Libraries/ScheduledRecordingsLibrary.swift",
+      "reason": "Localized schedule parent/query; recording notification forwards presentation background-refresh action.",
+      "sha256": "9862f140c43d9fb66022ede9263eff906b4e2eec1138116b91242589d5355123",
+      "status": "source-reviewed-retained"
+    },
+    {
+      "owners": [
+        "SwiftfinMediaCatalog"
+      ],
+      "path": "Shared/Objects/Libraries/SeasonLibrary.swift",
+      "reason": "Composes episode paging view models for a season or bound season read; captures selected missing-season setting and localized missing-parent error.",
+      "sha256": "5195ccede7b937d8c4b9e67f951885d935846fc3c978165678934e398f171eea",
+      "status": "source-reviewed-retained"
+    },
+    {
+      "owners": [
+        "SwiftfinServerOperations"
+      ],
+      "path": "Shared/Objects/Libraries/ServerActivityLibrary.swift",
+      "reason": "Selected activity user/date filters and page offset/size passed to server-operations port.",
+      "sha256": "86545298d998bfbb792060a14a3db02e3aaa4c7c6064d1f94a2fc4bddbe95302",
+      "status": "source-reviewed-retained"
+    },
+    {
+      "owners": [
+        "SwiftfinUserAdministration"
+      ],
+      "path": "Shared/Objects/Libraries/ServerUsersLibrary.swift",
+      "reason": "One-shot account paging adapter, localized parent and first-page guard.",
+      "sha256": "35b6ad9738f37405cbc7553a879dadca57c7f8b2f8568c64580d10f0f11b4c86",
+      "status": "source-reviewed-retained"
+    },
+    {
+      "owners": [
+        "SwiftfinMediaCatalog"
+      ],
+      "path": "Shared/Objects/Libraries/SimilarItemsLibrary.swift",
+      "reason": "Selected item identity/type and localized recommendation parent passed to similar-items query.",
+      "sha256": "be0da4638e5014d00924f3bde722f495ac377ba39d260a958e1f966cf4dd3189",
+      "status": "source-reviewed-retained"
+    },
+    {
+      "owners": [
+        "SwiftfinMediaCatalog"
+      ],
+      "path": "Shared/Objects/Libraries/SpecialFeaturesLibrary.swift",
+      "reason": "Localized special-feature parent/video style and one catalog query adapter.",
+      "sha256": "9d7dc80c04b87d47db13fd272eb3940b798375bcc94dcf439479909d78f0b387",
+      "status": "source-reviewed-retained"
+    },
+    {
+      "owners": [
+        "SwiftfinPaging"
+      ],
+      "path": "Shared/Objects/Libraries/StaticLibrary.swift",
+      "reason": "Immutable caller-supplied presentation elements returned as one terminal page; no slicing, source discovery or IO.",
+      "sha256": "758e6310601311c8be07ed8f355b4e02d4841f04cd83b0fb729598ea63805bab",
+      "status": "source-reviewed-retained"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Objects/Libraries/UserViewLibrary.swift",
+      "reason": "Layout/router and artwork publication are presentation; live-TV/favorites artwork query classification and sample image projection/binding deserve explicit existing-owner review. Current post-await account/client/cancellation checks are retained; do not infer completion from delegated IO.",
+      "sha256": "f3b860cc41baa55cc85e2dce4b834d9e2e955ec740eee411bf6476d0e06eece9",
+      "status": "source-reviewed-mixed"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Objects/LibraryDisplayType.swift",
+      "reason": "",
+      "sha256": "74ffc6e62a4505fdfff3a04eaaee6d24f6c987fc6024ef3d74eee4198412fab6",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Objects/LibraryParent/LibraryParent.swift",
+      "reason": "",
+      "sha256": "a86ecf33a41488f156dca861fab4c9d9d5749b4778d13b215b6c56fb3eb3b569",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Objects/LibraryParent/TitledLibraryParent.swift",
+      "reason": "",
+      "sha256": "2aa2a31588c03d27e29141dcb0e6abd6ee051305b60456e7856135f2517aaa73",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Objects/LibraryStyle.swift",
+      "reason": "",
+      "sha256": "d96ead967de8c036326758bf75ef9fa268940a211ab68b19b1a2c675e29611e0",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Objects/LocalUserAccessPolicy.swift",
+      "reason": "",
+      "sha256": "538dba99c7d4d44eda2f5c2f08c282b697425b63c0aa3ca6e25776b03fc6f901",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Objects/LongPressAction.swift",
+      "reason": "",
+      "sha256": "0c6880f014f274da561922b59ffaf90fed0294807c734eb7300527e5dfacdcd0",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Objects/MediaJumpInterval.swift",
+      "reason": "",
+      "sha256": "449acd16b1d6839666403e9d37852d042b844086342105b35dee54e1094ff6a2",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Objects/MediaPlayerManager/MediaPlayerItem/MediaPlayerItem+Build.swift",
+      "reason": "",
+      "sha256": "812679173401aae232da0602566454b9c2d72f3ebdc6cb726100c8f30d3187c8",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Objects/MediaPlayerManager/MediaPlayerItem/MediaPlayerItem.swift",
+      "reason": "",
+      "sha256": "12b4a110ba6606f88bcc271145b4f310f705c8ce8a59ebb547d3215109253c9a",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Objects/MediaPlayerManager/MediaPlayerItemProvider.swift",
+      "reason": "",
+      "sha256": "b3838dca6ccfbb128a2633b0e853ac79e4b27f1e0c7569dbfd2941825fed76e3",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Objects/MediaPlayerManager/MediaPlayerManager.swift",
+      "reason": "",
+      "sha256": "d41e52b2a28afcbf5470ab2a63e1a7412014a07953c8544f42f1efd2071da028",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Objects/MediaPlayerManager/MediaPlayerObserver.swift",
+      "reason": "",
+      "sha256": "c5849708148f805732f256726cbda73330c3dd72812d58c273d8a30e0a4f7e70",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Objects/MediaPlayerManager/MediaPlayerProxy/MediaPlayerProxy+AVPlayer.swift",
+      "reason": "",
+      "sha256": "04ffea4ed6f4a755d0f87082d31374639717d0f2d62e7a61c7ece96aaa8b0635",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Objects/MediaPlayerManager/MediaPlayerProxy/MediaPlayerProxy+MPV.swift",
+      "reason": "",
+      "sha256": "356449f68ea772fd87fd1f3d90719a623e8c2d7df4cbf59ba2cb8e808f77ceb4",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Objects/MediaPlayerManager/MediaPlayerProxy/MediaPlayerProxy+VLC.swift",
+      "reason": "",
+      "sha256": "aa0393b8024460f9b8896885040281b693dee7c23b1084cf2e80f047155bb24a",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Objects/MediaPlayerManager/MediaPlayerProxy/MediaPlayerProxy.swift",
+      "reason": "",
+      "sha256": "342027ea82c8d7d61708537e093dc18817e0e98df046df0e00fffc66ffee13ae",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Objects/MediaPlayerManager/MediaProgressObserver.swift",
+      "reason": "",
+      "sha256": "8aa81de15dce04b093cbe503e8e21d564c3413253bdf62a9fc2ebc94d3ab3b12",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Objects/MediaPlayerManager/NowPlayable/NowPlayableObserver.swift",
+      "reason": "",
+      "sha256": "8b4a81bd1dd2c75f1e0353d4d13e84273d0b6c35913a9a055925b33677a7b273",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Objects/MediaPlayerManager/Supplements/Components/MediaPlayerQueue.swift",
+      "reason": "",
+      "sha256": "5b96be16a85675cb320d13dfc45080681bd5ed8c0420a404a2324f0a956657ae",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Objects/MediaPlayerManager/Supplements/Components/MediaPlayerSupplement.swift",
+      "reason": "",
+      "sha256": "a3908ab7b07e30ddd5d16fcca96bd4239ff927e2a09784e680adc974ba56aa51",
+      "status": "pending"
+    },
+    {
+      "owners": [
+        "SwiftfinTime",
+        "SwiftfinMediaCatalog"
+      ],
+      "path": "Shared/Objects/MediaPlayerManager/Supplements/EPGSupplement.swift",
+      "reason": "Guide UI, view-state/visibility guards and channel/provider/router composition retained. Strict age rule delegates to Date.isRecent. View-owned refresh forwarding remains presentation lifecycle.",
+      "sha256": "d202b52d17df6207b3d141dc7374c2cc14567547d9b8e2aa42959bef05d7cf65",
+      "status": "source-reviewed-retained"
+    },
+    {
+      "owners": [
+        "SwiftfinAsyncStreams",
+        "SwiftfinMediaCatalog"
+      ],
+      "path": "Shared/Objects/MediaPlayerManager/Supplements/EpisodeMediaPlayerQueue.swift",
+      "reason": "Season/episode UI and exact playback-provider composition retained. LatestRequest owns cancellation/generation/release, manager subscription preserves base session observers, catalog retains binding checks. Full overlay and resolver body comparisons retained.",
+      "sha256": "8e3d9a6917722040eb5b3a16d536dcadaf1577faba5074fe64ea66ef9219d01d",
+      "status": "source-reviewed-retained"
+    },
+    {
+      "owners": [
+        "SwiftfinPlaybackPreviews"
+      ],
+      "path": "Shared/Objects/MediaPlayerManager/Supplements/MediaChaptersSupplement.swift",
+      "reason": "Full chapter overlay body reviewed: layout, focus, poster/text, initial/selected IDs and seek/play actions. Prepared ordered start snapshot and thin index-to-existing-ID delegate retain all 8613 original selections.",
+      "sha256": "201f4e1d8cc5d5b3fe6ea3b3d66493aa18ffc224be945422fbed00f5f3486165",
+      "status": "source-reviewed-retained"
+    },
+    {
+      "owners": [
+        "SwiftfinItemMetadata"
+      ],
+      "path": "Shared/Objects/MediaPlayerManager/Supplements/MediaInfoSupplement.swift",
+      "reason": "Info layout, recording actions and playback controls retained. Program-delay/read policy delegates to bound metadata owner. UI task and identity/end-date publication guards are app composition; cancelled work cannot proceed to IO.",
+      "sha256": "d83ce1703eea94b53617d35b5fbc1b411a5191cfb70026edc735667b36da6e77",
+      "status": "source-reviewed-retained"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Objects/MediaPlayerManager/Supplements/MediaPeopleSupplement.swift",
+      "reason": "",
+      "sha256": "0381bc6e7fff127804f385efea40edc7d7ea46ad2c6b9d9b585f2125ff194301",
+      "status": "pending"
+    },
+    {
+      "owners": [
+        "SwiftfinAsyncStreams",
+        "SwiftfinServerOperations",
+        "SwiftfinNetworking"
+      ],
+      "path": "Shared/Objects/MediaPlayerManager/Supplements/PlaybackInformationSupplement.swift",
+      "reason": "Telemetry formatting/layout retained with checked integer conversion. Session preference delegates to ServerOperations; LatestRequest owns replaceable publication. App-only account/transport snapshots, connection/root stream switching, explicit main delivery and weak binding-checked publication are composition.",
+      "sha256": "6704e9ae8d875cc707028144c3063ac6e3d9f418fff92d49bf6c99e98624883d",
+      "status": "source-reviewed-retained"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Objects/MediaPlayerManager/Supplements/PlaybackRateMediaPlayerSupplement.swift",
+      "reason": "",
+      "sha256": "2ea863905bb50234e769da8a0c6a0947dc8e7d91bed8400f606c7a819c3f78fb",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Objects/MenuContentGroup.swift",
+      "reason": "",
+      "sha256": "a409850f05cff9e052acbc7175cecff11118b3a06109662fd93a6ffacdf2fbfc",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Objects/MetadataRefreshType.swift",
+      "reason": "",
+      "sha256": "65dc17e62b192f6de92e45fc64143f14b3743aa6abc1f5fc6d3a5c772566523e",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Objects/NoneStyle.swift",
+      "reason": "",
+      "sha256": "d57bf20fa6cb076d193ae75b2400ef7f5beddc1b3b439b9ec12807ad86de34e5",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Objects/NotificationSet.swift",
+      "reason": "",
+      "sha256": "900c86ac59036993cae9dc439aec24d61f01e7bbf7745e9846ec4ad768097187",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Objects/PagingLibrary/BaseItemKindLibrary.swift",
+      "reason": "",
+      "sha256": "aa40cd0dabe6a98471f907c192af34f7686f1eb179df6689efc85fc692599990",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Objects/PagingLibrary/PagingLibrary.swift",
+      "reason": "",
+      "sha256": "c7b3e5830ded3f13d4173e3f11a14924510abab818b34ff011b294ccfac52246",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Objects/PagingLibrary/PagingLibraryView/Components/LibraryStyleSection.swift",
+      "reason": "",
+      "sha256": "867ac45593b9b971767ff4b58a4983fe4e03009a3004401d0e26ec437b5cbe78",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Objects/PagingLibrary/PagingLibraryView/PagingLibraryView.swift",
+      "reason": "",
+      "sha256": "e7a20fb287fd8914995a1cb32ed227164ecd20e068fe9914d2c585f45ba73ae2",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Objects/PagingLibrary/PagingLibraryViewModel+WithRefresh.swift",
+      "reason": "",
+      "sha256": "0e02d149b6cbf94851675faf263ec624c0318906a5f46429ee91b511b4934633",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Objects/PagingLibrary/PagingLibraryViewModel.swift",
+      "reason": "",
+      "sha256": "46ad3b57d78d94fd80704844c6fe82ef019567da0e9efcb1ab155c20c2f40d30",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Objects/PanAction.swift",
+      "reason": "",
+      "sha256": "bc61a9606d9d4ced5a814c57acf552c5e1aab4f7f4bb4133d00b47fcc99c3028",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Objects/PinchAction.swift",
+      "reason": "",
+      "sha256": "364565ac3db0e92215c96ff6f3a741d0d5d16615fb3c798145f733fa5cb364ba",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Objects/PlatformView.swift",
+      "reason": "",
+      "sha256": "369d4f59a30731806ac1fb6e447ebcb2f2ea515b8454028d9d0ca08d2a060319",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Objects/PlaybackBitrate/PlaybackBitrate.swift",
+      "reason": "",
+      "sha256": "6f538a573f3077bb65e284efe691eb4fbe1102fa5816c6aca062e685dea4e6b2",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Objects/PlaybackBitrate/PlaybackBitrateTestSize.swift",
+      "reason": "",
+      "sha256": "58238982464340a2455975086b756c3e95a86f5b59ed653f7e882604c221a276",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Objects/PlaybackCapabilities.swift",
+      "reason": "",
+      "sha256": "aa56d0de805440f956ab7abca62a4acc90c72cb5ebf51143f1438b39ba13f6fd",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Objects/PlaybackProfileAdapters.swift",
+      "reason": "",
+      "sha256": "338faf84f96a33869c6d2f314aac4866a52858ca644525e7a1d49c8fb142e641",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Objects/PlaybackSpeed.swift",
+      "reason": "",
+      "sha256": "757fa74d0646da1efb2805087bc85e0147042184eb0db8ff18b3ff67f6e886cb",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Objects/PokeIntervalTimer.swift",
+      "reason": "",
+      "sha256": "b89295f0ec66bd0792382f79c8eea2ea3e0bf17d94e0ee82f860795a8cd1f7f1",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Objects/Poster/AnyPoster.swift",
+      "reason": "",
+      "sha256": "9ea25106811050c5aa8f167a1e212f3ae0642d60ba791632a8ba80922812e7f4",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Objects/Poster/Poster.swift",
+      "reason": "",
+      "sha256": "e25b8fc5405818b69c950f5d65e1f0226f187f8134e7799c81a199c6478347d6",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Objects/Poster/PosterAccessibility.swift",
+      "reason": "",
+      "sha256": "1a22de5ad24e98538d42cb52065fae01416e3679c6027704a968548dc99426e1",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Objects/PosterConfiguration.swift",
+      "reason": "",
+      "sha256": "ac8bf15c127e9b356451dfb59c37a9c247fd13f45d04b7472d2dc169d1a0c435",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Objects/PosterDisplayType.swift",
+      "reason": "",
+      "sha256": "f1cb6cfbaa312cb460699ab351e0ded3782922418a99798e17f54331e58b19d0",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Objects/PosterIndicator.swift",
+      "reason": "",
+      "sha256": "d106c1c4bfd94f2f70068ac138aa7abc3da9065635fc576ab4ddfc42c46bab46",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Objects/PosterSubtitleField.swift",
+      "reason": "",
+      "sha256": "e78e9fcc82197c9c4d4ca8a8668f482649bc3a4be4cbc386aefde3978ba62a97",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Objects/PreviewImageScrubbingOption.swift",
+      "reason": "",
+      "sha256": "e91f605a76f5d86063bce40b8a006e2ee8719a01661f3d3e4a6519ba533e067d",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Objects/ProgramSection.swift",
+      "reason": "",
+      "sha256": "5b4b4d18900c0896bc505c6ef68478af9ae3ac7f3b1162bdd371d94e378c5ab4",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Objects/RectangleCorner.swift",
+      "reason": "",
+      "sha256": "e45b0af10d2b42a42197a2a8fb145c92a5c2d2efe94fe8d8d658bee3e36ae912",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Objects/SelectUserServerSelection.swift",
+      "reason": "",
+      "sha256": "94f2d0bfe5bf8b987bcb037603205d0b6f8f1b0030a9651be8161cb6cd6b81c9",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Objects/SelectUserSortOrder.swift",
+      "reason": "",
+      "sha256": "8b159c8a615609308ed229c2269675806fd141e1f4db7f0a9011ae569e376fcb",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Objects/SeriesStatus.swift",
+      "reason": "",
+      "sha256": "9cfc30cf57b569c3717e6b3e5d71f60ca8ee88b7b61f9ba9f44507704ba54977",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Objects/ServerLogType.swift",
+      "reason": "",
+      "sha256": "979f43bf035d63dc00f0015cbe2258d13bad958b969135e7682e21a5ad0b063c",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Objects/SubtitleConfiguration.swift",
+      "reason": "",
+      "sha256": "5d9205b4205db6b3748d3455aae1114003d18164032d405ef04a47049e44b7ca",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Objects/SwizzleDefaults.swift",
+      "reason": "",
+      "sha256": "ad02d3be7133eac9d705c0c7ea60bce1f67c4a8fdb29a0f62fb301d1e200f81e",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Objects/SystemImageable.swift",
+      "reason": "",
+      "sha256": "3966e0af4fec28e8a02c7790af6d62ecb6ab5b200db07aa7465c3a7923c51002",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Objects/TabBarPlacement.swift",
+      "reason": "",
+      "sha256": "59d7cceed52693794b7243182a56af2fd264867e8c02847c7608ed794827c1a4",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Objects/TapGestureAction.swift",
+      "reason": "",
+      "sha256": "c8c80b9f3f479c6ac454ca4b2eeaba871e3128348e077d95ea7a6979cf2f22c2",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Objects/TextTransferable.swift",
+      "reason": "",
+      "sha256": "4380976a1f411a70915b3091a6f9784382094ff78856ad3860cd55f352687981",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Objects/TimeStampType.swift",
+      "reason": "",
+      "sha256": "3c5ac3f8ac8b4eef655cd641169e088bfd033f9c6e464bc6eb4caf2f594c63f0",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Objects/ToastProxy.swift",
+      "reason": "",
+      "sha256": "13f588fa60779b94cd15131b8e359140c72e07a69026014f5861a71e4e4d1305",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Objects/TrailerSelection.swift",
+      "reason": "",
+      "sha256": "250f29bd30dace699551ccf6b559284bb8178acffb67d46101c30c3a702e91fa",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Objects/TrailingTimestampType.swift",
+      "reason": "",
+      "sha256": "7396680b034168d08661cbc3d98c83ce24844155cd0a3f623e376a26bc574800",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Objects/UnplayedIndicatorType.swift",
+      "reason": "",
+      "sha256": "0412fd1e5c7161948c10baed0b7582979dd9143b8d0c35e1bfbcf73e0ca7ce45",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Objects/VideoPlayerActionButton.swift",
+      "reason": "",
+      "sha256": "b116c694a2e7a60670e2664f7c9a0dc19091e9dc022eb7b77257b1ae29773706",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Objects/VideoPlayerContainerState.swift",
+      "reason": "",
+      "sha256": "ccf0d6a99b24b070955445e7aaea9df982d2b0fb7d4e1e9d69d2c3bbac2ca49c",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Objects/VideoPlayerSupplement.swift",
+      "reason": "",
+      "sha256": "67c6f404bfbc8a954163f4eb291e664228bd7280d7dda2d19f49f72fc28a2423",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Objects/VideoPlayerType/VideoPlayerType.swift",
+      "reason": "",
+      "sha256": "7c6b49545b4e8c194030d2716854f1af0203e97906edc2c7e38ee46c2b7c4a1a",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Objects/WithDefaultValue.swift",
+      "reason": "",
+      "sha256": "a83ead2fd5ad0c6d6377a65d9320b168f58ad7ca6c8d3ff3fb17f32ab47b4190",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Objects/WithRefresh.swift",
+      "reason": "",
+      "sha256": "b1ad1faee028ea99a99f4450ed5e97d0c857e8f3fc2bb0103c63827e5d80cb25",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Objects/WithText.swift",
+      "reason": "",
+      "sha256": "c4c0b845affaade837588cc3d664b9b4de6da2befe25531331891a65953a7e47",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Objects/WithViewContext.swift",
+      "reason": "",
+      "sha256": "cc6ca406b8519ad949348543724003c0f96ede0537649dd979a2ec5f7abccc63",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Persistence/StorageComposition.swift",
+      "reason": "",
+      "sha256": "946f6d6f5f64279bdcd22c35d7b58cbbc868f27655b437610ae980217b83a35e",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Services/DeepLink.swift",
+      "reason": "",
+      "sha256": "7d125cc0ac02c9fdee6f575f2e5f1c0f355ee484a4e264c1944b804fbae85b1e",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Services/Keychain.swift",
+      "reason": "",
+      "sha256": "4b83540496f68b5545786012a9dc8672fddf9c15d1427a9b52a140e9716561e4",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Services/Notifications.swift",
+      "reason": "",
+      "sha256": "77d04700b473f8acb14cb6f38bf2ceed6cbd9f2e9d7e180d81ad4c1eff5463a5",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Services/Permissions/AppPermission+DeviceAuthentication.swift",
+      "reason": "",
+      "sha256": "7e23a1f13b8d8a2766b6c1e739af101290711c5787af60d6e1c5d37e08e1177b",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Services/Permissions/AppPermission+Location.swift",
+      "reason": "",
+      "sha256": "98e8580bad8d5e07e5d013ff9a16a6c52dee1a1bc132925c8534a01cf215b53c",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Services/Permissions/AppPermission.swift",
+      "reason": "",
+      "sha256": "648313e4f55d42face040fa36ea0ed3cd07681ca690f31e2ec6dd8b57f674eab",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Services/Permissions/PermissionStatus.swift",
+      "reason": "",
+      "sha256": "6624878132e6f1b0d30ffb1df9889abd812675f7380a0cd17a44cc9a06ed05f1",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Services/ServerConnectionManager.swift",
+      "reason": "",
+      "sha256": "0c1234f2c37774d90cee2f96f417cedee25c189d0e3dfda0a6acfde9b9b8a143",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Services/ServerImageCacheIdentity.swift",
+      "reason": "",
+      "sha256": "1d05ea37e190571f836c4d15675c79392b1114d6f490ce5ff539dbd34c7be7de",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Services/ServerSocketManager.swift",
+      "reason": "",
+      "sha256": "bc42a7d05bb734a8f614c9f33c56c9fca8a852179a7a6997a524aa2434815f5f",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Services/SwiftfinDefaults.swift",
+      "reason": "",
+      "sha256": "9709f9a1b4e999c6a32d2219d3ed196beb39a5b8360f7a86892f3453776385a7",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Services/UserSession/UserSession+ItemMetadata.swift",
+      "reason": "",
+      "sha256": "c90fef61cf0a11c4a7338df6714b2d6a664eefdfceacc5ccceb4c5e9d47fd57b",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Services/UserSession/UserSession.swift",
+      "reason": "",
+      "sha256": "6a909b3f3e9606a5c93e66b756464776d2afbbfbb755dfe6c0951951c0fb9b75",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Services/UserSession/UserSessionError.swift",
+      "reason": "",
+      "sha256": "db60c4da7d360e9a7cb4cf2693219524f559a634e22c26b47f5505d89a2c685b",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Services/UserSession/UserSessionManager+SocketCommands.swift",
+      "reason": "",
+      "sha256": "f29aee65a6d1154760c1b2fa520d787426b732fb12645cbfc40e2518b58eaade",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Services/UserSession/UserSessionManager.swift",
+      "reason": "",
+      "sha256": "a8f32cd0793ac76fbbbde88a351421ac3bf03c3cdc62aee220152d79e7d6ea00",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Services/UserSession/UserSessionService.swift",
+      "reason": "",
+      "sha256": "e2aeac64c333f49bc2fdcc4ba850608531d4254379f1a734de441644abad6513",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/SwiftfinStore/StoredValue/StoredValues+Server.swift",
+      "reason": "",
+      "sha256": "59f669091f691fbe8c6287e603798157780f1d1b471a76fc391e46f7f51db9e0",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/SwiftfinStore/StoredValue/StoredValues+User.swift",
+      "reason": "",
+      "sha256": "bdf14c108db412df2fa4e92d62e091bfa000d4895f1b2e77a44a3babca7046b8",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/SwiftfinStore/SwiftfinStore+ServerState.swift",
+      "reason": "",
+      "sha256": "814497ed07a64700d74f1f48fb1a2714ec82c3112ba3d1936a4a4c89d27796b6",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/SwiftfinStore/SwiftinStore+UserState.swift",
+      "reason": "",
+      "sha256": "9cb59c692c5cffd30193ecf92e51bbd8ab7a52e52671f8e0785568e4eeecb98d",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/ViewModels/AdminDashboard/APIKeysViewModel.swift",
+      "reason": "",
+      "sha256": "6e0fc6920a30fb5dfa77a0e0cd53605d213b46e77ccadd736ad799ed67d2c2e8",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/ViewModels/AdminDashboard/DevicesViewModel.swift",
+      "reason": "",
+      "sha256": "1f49f0720f65b588188d345adbfc18b7ce6ab3f657473b4c37e85f0a7414de7d",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/ViewModels/AdminDashboard/ServerActivityDetailViewModel.swift",
+      "reason": "",
+      "sha256": "fc6586676dd53a3c39962837e58d4cb5f45ae56afccb87e65f4e6a1f7c754a54",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/ViewModels/AdminDashboard/ServerBackupViewModel.swift",
+      "reason": "",
+      "sha256": "a4555cc7d15cbd068e7b040647e8496f377110fd2c7faf8c96f75e36562972e8",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/ViewModels/AdminDashboard/ServerLogs/ServerLogsViewModel.swift",
+      "reason": "",
+      "sha256": "294033cb49554af4e1a3ae0351974ecabdbfa31bdd2f0b5855ce6cb53fa2fa14",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/ViewModels/AdminDashboard/Sessions/ActiveSessionsViewModel.swift",
+      "reason": "",
+      "sha256": "9687a29c9d130ca571dca3c75feae2a71be224ff036def54456e04df1f276f47",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/ViewModels/AdminDashboard/Sessions/SessionViewModel.swift",
+      "reason": "",
+      "sha256": "0755c4c83a3f2e526b1aaeb0e2366ff61be0588353a8a947fe0d6379af97ee97",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/ViewModels/AdminDashboard/Tasks/ServerTaskViewModel.swift",
+      "reason": "",
+      "sha256": "e60e630da7ed7af9ca5da861cb172719dae25965f3148a8af79c9d503deea70b",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/ViewModels/AdminDashboard/Tasks/ServerTasksViewModel.swift",
+      "reason": "",
+      "sha256": "f6e628602a5c3852282f142444065a0e5d421fa49d20d388c255740752f45847",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/ViewModels/AdminDashboard/Users/AddServerUserViewModel.swift",
+      "reason": "",
+      "sha256": "c8e021592ac79c2f2b617b747f425fe24b8eff51b49a015c348ba1500ded4811",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/ViewModels/AdminDashboard/Users/ServerUserAdminViewModel.swift",
+      "reason": "",
+      "sha256": "2c9951d77b23c201e888e8a86bd35fd743256b273cf8ca89093e2cdeaeb24e39",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/ViewModels/AdminDashboard/Users/ServerUsersViewModel.swift",
+      "reason": "",
+      "sha256": "fa9287fd2138b64526159185e7175c7d6c75103a8ba062b4bded241f80165e0e",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/ViewModels/BaseFetchViewModel.swift",
+      "reason": "",
+      "sha256": "38c3bfae59b08b63ee7a2d2ea336f5e56350867a4c360d180138ba427c413455",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/ViewModels/ConnectToServerViewModel.swift",
+      "reason": "",
+      "sha256": "e68065bfb90264a2ac3c23c6d41e3b8fa4f0ccba132dde6e0237f4eefd6bff5c",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/ViewModels/ContentGroupViewModel/ContentGroupViewModel.swift",
+      "reason": "",
+      "sha256": "923e6dc6815943bc11e6adca6d6d73bca51c7e8bab0692e03d23d7ae5601f530",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/ViewModels/ContentGroupViewModel/DefaultContentGroupProvider.swift",
+      "reason": "",
+      "sha256": "10337cc1803b7ca708bc69c7797fe042f71c445b948a67da98036c05640973c2",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/ViewModels/ContentGroupViewModel/ItemTypeContentGroupProvider.swift",
+      "reason": "",
+      "sha256": "c4fb50e0a7a6cd55c09c96610636a94e06552dc12b184ee5ef4d5138f048c9f3",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/ViewModels/ContentGroupViewModel/LiveTVGroupProvider.swift",
+      "reason": "",
+      "sha256": "a43ff1a82d365078052bc302802618020339983dcf3a3eeeff8f52a07a0e122c",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/ViewModels/ContentGroupViewModel/SearchContentGroupProvider.swift",
+      "reason": "",
+      "sha256": "77748c8c9fda8495ac0ed50d6c1923200347817dcb121fb2d12922328cc787bb",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/ViewModels/EPGViewModel.swift",
+      "reason": "",
+      "sha256": "a23edaacfe5d205dca7b77ad3d099be1e1af70f9f76877bcdf3460f725567ead",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/ViewModels/FilterViewModel.swift",
+      "reason": "",
+      "sha256": "2609fea6056813dfd2e0b0492fd9943b6f80ebbc5ea80875193b6d1e1b8c0b74",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/ViewModels/ImageViewModel/ItemImageViewModel.swift",
+      "reason": "",
+      "sha256": "50f371d6599753b120d3a883dd31f279e943ab5481f920d4270d9f22ad2c8750",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/ViewModels/ImageViewModel/UserImageViewModel.swift",
+      "reason": "",
+      "sha256": "7cdbc9a429ee506e9fa38a31ab1764dd5ed3244ff62e125bc6bacc95c82806cf",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/ViewModels/ItemAdministration/IdentifyItemViewModel.swift",
+      "reason": "",
+      "sha256": "f20dfeb76baa3b0372d1ba127d9e4eaab723c4a949c73079bb5a6c384d789ee2",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/ViewModels/ItemAdministration/ItemEditorViewModel/GenreComponentEditor.swift",
+      "reason": "",
+      "sha256": "878f08ba703c3e17a60c4f922d1f16b3defd5c3e2fb88ffc27d52c3ba03693a8",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/ViewModels/ItemAdministration/ItemEditorViewModel/ItemComponentEditor.swift",
+      "reason": "",
+      "sha256": "6a6e2ba7efaceca69327939b70125b1818b9f6bda361d8e931f0abd347c0a9a9",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/ViewModels/ItemAdministration/ItemEditorViewModel/ItemComponentEditorViewModel.swift",
+      "reason": "",
+      "sha256": "ae86cc6b0032321d58699c4a9d69903b078be4ca0d444916292653fd07ff784b",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/ViewModels/ItemAdministration/ItemEditorViewModel/ItemEditorViewModel.swift",
+      "reason": "",
+      "sha256": "145e79dc01afc0776a15e847c354c691eec01a20f1b5752c5a87911520416cdb",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/ViewModels/ItemAdministration/ItemEditorViewModel/PeopleComponentEditor.swift",
+      "reason": "",
+      "sha256": "66ab34fcc3c0a3d388ac9523611182947401f39cfae6df78169551dc3ad9c98d",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/ViewModels/ItemAdministration/ItemEditorViewModel/StudioComponentEditor.swift",
+      "reason": "",
+      "sha256": "8547e865edce08c665275311fddd17d74a177cfa9e027ac129b2c1bcf4f94cd0",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/ViewModels/ItemAdministration/ItemEditorViewModel/TagComponentEditor.swift",
+      "reason": "",
+      "sha256": "78dc036a7bc95c4893c469ddbb96c382f62c5bf47ed530d0528745461acdfd71",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/ViewModels/ItemAdministration/ItemSubtitlesViewModel.swift",
+      "reason": "",
+      "sha256": "7c15af83946bacb92c3dd2ce970be527d9467a792d36f28e2f8fe9f87ff0d9e6",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/ViewModels/ItemAdministration/RemoteImageInfoViewModel.swift",
+      "reason": "",
+      "sha256": "8d4826ed7c14fa0a9650f1a6d88c1f2ce8d48dcdfef0a14144f8e558493ab20e",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/ViewModels/LocalUserSecurityViewModel.swift",
+      "reason": "",
+      "sha256": "72337e80dae10242fdb8da5bf34f1001d9dfe2229fcaaeeb5666a4e47d22fcbf",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/ViewModels/QuickConnectAuthorizeViewModel.swift",
+      "reason": "",
+      "sha256": "45723a693cd3c607960521664a18dfe427884ec1bc6c8b9f18fcfbf911860a95",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/ViewModels/RecordingTimerViewModel.swift",
+      "reason": "",
+      "sha256": "d6ba5be8e299d8e3d1bf5d66b24ed1dd1a2fade228e47da9e302bc56a50aa0e6",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/ViewModels/ResetUserPasswordViewModel.swift",
+      "reason": "",
+      "sha256": "353cba96e624b629e32ddd352b2f0417de6bc5974d314d74884b3b4b420ea93e",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/ViewModels/SearchViewModel.swift",
+      "reason": "",
+      "sha256": "bd8b8dd7f57553e458e486ebb2ae19602d62c6f994fe697138fb9be8e148fa17",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/ViewModels/SelectUserViewModel.swift",
+      "reason": "",
+      "sha256": "cf6bc8e80c07727dfebd780983804065ee473876e99e9ebf3f319a514f1bbf8c",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/ViewModels/ServerConnectionViewModel.swift",
+      "reason": "",
+      "sha256": "47b7e0b61a332b8b1483a03be0f469867e2773da21b630839184f7a0e30ea2b4",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/ViewModels/UserSignInViewModel.swift",
+      "reason": "",
+      "sha256": "3e1104307b0a7b71c8d74b61189a79398cc569012fbcee0ef8e11ee234c5bd92",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/ViewModels/ViewModel.swift",
+      "reason": "",
+      "sha256": "7d9f2dc30b295de8b68b175b748f6231ba1568eb5eccc49d71162f84597f7585",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Views/AboutAppView.swift",
+      "reason": "",
+      "sha256": "6c018d897eb6640199a3c6392443227ce511493433d2ca11e7f8146078f6d8de",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Views/AppIconSelectorView.swift",
+      "reason": "",
+      "sha256": "8a266d51412dcc227769fc9de3a1006ebc8c3404e270fc13efe2ee29c8b7f5a6",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Views/AppSettingsView.swift",
+      "reason": "",
+      "sha256": "e2e730c3caf284dd2d6ad7b38c189e14c399dd9b753d3192bbad0c6b980e3626",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Views/ConnectToServerView/Components/DuplicateServerConnectionView.swift",
+      "reason": "",
+      "sha256": "5674f9ffbe5b840da2148b3eddf11b8b7070e86043a11f4e6bbb1da3524cda4e",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Views/ConnectToServerView/Components/LocalServerButton.swift",
+      "reason": "",
+      "sha256": "b64854f54b09b345750c6511694f41a02943a560cd05151014c4ddc3e1cc4cd1",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Views/ConnectToServerView/ConnectToServerView.swift",
+      "reason": "",
+      "sha256": "4e6ece3e3860ec160365ad1bb4a5072e18b266c4da35c3119edc102322e73b49",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Views/ContentGroupView.swift",
+      "reason": "",
+      "sha256": "419f7f0a89b3bb6a40eef02623473521387a73e68ed9d20aa3b9cb35bb2741b5",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Views/EPGView/EPGContentView.swift",
+      "reason": "",
+      "sha256": "691ab2d9821e1a2034bed37c61762ece79cd86a4b8a31d9d5e8407ed23b58ae6",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Views/EPGView/EPGView.swift",
+      "reason": "",
+      "sha256": "d32b7dabfba4a292a87b6307c24bc9d25acb27b4e2f756127e2f6d070470e014",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Views/EditLocalServerView.swift",
+      "reason": "",
+      "sha256": "669b68c91d4c448b7445b86c4e29abdf6f58a0c5e9e9f988be11f0ae0f1f2f7a",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Views/EditRecordingView.swift",
+      "reason": "",
+      "sha256": "c1be131b1abf9506d44569748d0d3a760a4a5a5362cc763beec26536430ddae1",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Views/EditServerConnectionView.swift",
+      "reason": "",
+      "sha256": "1114643da1ec39b17371f2b6cb3df8e3c363a8196cc6f3a4a6ef712fcc343dcc",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Views/FilterView.swift",
+      "reason": "",
+      "sha256": "0a60cf21405901ba938cd21c66b96bf46fc8c66f87c012888fe7f0d2db7b4a4b",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Views/FontPickerView.swift",
+      "reason": "",
+      "sha256": "8f1cea93ec07fdee88bd74a6ad8e16ad5843ebf8dc96be5f081741c004cfc4c6",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Views/ItemContentGroupView/AboutItemGroup.swift",
+      "reason": "",
+      "sha256": "b25cb8994ea22577cfca192916546c26c7cc1f61a1cf574694b4599c78ed077b",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Views/ItemContentGroupView/ItemContentGroupProvider.swift",
+      "reason": "",
+      "sha256": "02d491560b7669e579b052fba36bf2812a4fe5bea2bab4e693f4b99316e6ac86",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Views/ItemContentGroupView/LabeledContentGroup.swift",
+      "reason": "",
+      "sha256": "d9578c5d6b1ea99bddd1460e935c6d4b428199badb84e26b1663fe21ef396839",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Views/ItemEditorView/ItemRefreshView.swift",
+      "reason": "",
+      "sha256": "b2f70a53437d7c63e61f991b4a581ce54d72d59774aca8a5ef898201738c78c5",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Views/ItemEditorView/ItemSubtitleSearchView/Components/ItemSubtitlesSearchResultRow.swift",
+      "reason": "",
+      "sha256": "6fe98fafbc21a0f4151bd8c6c1ebb7f2bd4c6e3a935d7f4f80ca57e0f78be2e7",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Views/ItemEditorView/ItemSubtitleSearchView/ItemSubtitleSearchView.swift",
+      "reason": "",
+      "sha256": "0d488cf6f1875576416be83f062bce0bb1acbb54d22cbe52229892b21754c90a",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Views/ItemView/Components/ActionButtons/DeleteActionButton.swift",
+      "reason": "",
+      "sha256": "59dc777c322e7eabc3309f505de6e1ff996b185e6b8589604ed307c0a062680a",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Views/ItemView/Components/ActionButtons/EditActionButton.swift",
+      "reason": "",
+      "sha256": "5c7d8828de4aceb8ca4641db0379f7af78a0b26d7b955bf31bc115115be5960a",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Views/ItemView/Components/ActionButtons/FavoritedActionButton.swift",
+      "reason": "",
+      "sha256": "c696de0a6b314a4bcd3689fefeda030d0584bfac46a1aa6c0151c0b38f4a701a",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Views/ItemView/Components/ActionButtons/ItemActionButtons.swift",
+      "reason": "",
+      "sha256": "b0f91b96bf57578e1c537387979b450bcda74e3e7977a255be5e60b228705e7a",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Views/ItemView/Components/ActionButtons/PlaybackActionButton.swift",
+      "reason": "",
+      "sha256": "2be17ad0e22cc3ffa07348e0045fff6cc3c295c28a305a53ff69cf9cd5d5e755",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Views/ItemView/Components/ActionButtons/PlayedActionButton.swift",
+      "reason": "",
+      "sha256": "eef77c6b5bee615cef7929505087abbf1628e7414ad127d68230a4f3671d4894",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Views/ItemView/Components/ActionButtons/RecordActionButton.swift",
+      "reason": "",
+      "sha256": "302248fe0c5213af74dd08aeab6f4a208023e5691de8a82f3ad753da5405b4d9",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Views/ItemView/Components/ActionButtons/RefreshActionButton.swift",
+      "reason": "",
+      "sha256": "bbd846b4306f5dbbafd93b5c327e28bf5c7ed4c1d59d90de3b800ac2ab1d6649",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Views/ItemView/Components/ActionButtons/SubtitlesActionButton.swift",
+      "reason": "",
+      "sha256": "5144bc3705b78fc9ecdd6f75fd85bd1a927ef72649175ce5ee7e28a33b9f3557",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Views/ItemView/Components/ActionButtons/TrailersActionButton.swift",
+      "reason": "",
+      "sha256": "5593fdce06ec9c06788b57fdd17fd7216b16ca2410ee6b425eed73d73f73017c",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Views/ItemView/Components/Headers/CompactEnhancedHeaderContentGroup.swift",
+      "reason": "",
+      "sha256": "08bf5bda0656b6a712423c5e3218bf85a256908d6099b3bd2aa2ad1851be8b0f",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Views/ItemView/Components/Headers/CompactSimpleHeaderContentGroup.swift",
+      "reason": "",
+      "sha256": "3398ac3a1cc830beacc1b12f545544aa830cc22d527bb224a402b4da727f59e5",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Views/ItemView/Components/Headers/RegularEnhancedHeaderContentGroup.swift",
+      "reason": "",
+      "sha256": "dd714c687a19667074e646edfbbdac1f4be5dbc2018e5445786b0103136bcb0a",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Views/ItemView/Components/Headers/RegularSimpleHeaderContentGroup.swift",
+      "reason": "",
+      "sha256": "172fb59a6a29ecd7486c9324f106314690db2807ca1ae4991971d63bfc54754a",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Views/ItemView/Components/ItemView+ActionBar.swift",
+      "reason": "",
+      "sha256": "abb1f7f08149bca3506cab572550d47805f38cdac9851b2d01d35a0c55403433",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Views/ItemView/Components/ItemView+AttributeHStack.swift",
+      "reason": "",
+      "sha256": "77a9b68894b609be45ddc80a38d523f19cb11ed9c7a6c81cb3fd12739da1acaf",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Views/ItemView/Components/ItemView+Description.swift",
+      "reason": "",
+      "sha256": "dd4b9b4d1e14540894d5b3ccd7ab90bb6684c545af3f18fc76765ff012ee9858",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Views/ItemView/Components/ItemView+MetadataHStack.swift",
+      "reason": "",
+      "sha256": "06f68de843a6f18e88eedd688bfe68d9825084c07b26ef12c5a328029da55ff2",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Views/ItemView/Components/ItemView+ParentButton.swift",
+      "reason": "",
+      "sha256": "790c8f0ebd916d8ad98f929cb65e5661b63a54c4d18a906895c589d6a31bcdfa",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Views/ItemView/Components/PlayButton.swift",
+      "reason": "",
+      "sha256": "4b5428e87c6c7824546368036d3f5d8a6d519f51279660ea7e2c801af9a48d5c",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Views/ItemView/Components/ScrollViews/BlurredNavigationBarScrollView.swift",
+      "reason": "",
+      "sha256": "452ad24d75fe22f3ca5570368aaf205f1f64ff030346a1ee2e89320fdcde4e78",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Views/ItemView/Components/ScrollViews/ContentGroupScrollView.swift",
+      "reason": "",
+      "sha256": "f78f658cae309ea2ae329e181aaaa417fa196546842b61a077d861214e23d162",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Views/ItemView/ItemView.swift",
+      "reason": "",
+      "sha256": "389dedfe007af4482f2b8356fe4e0ce162a81c9176dac3ec4ab3b8488ee845a6",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Views/MediaInformation/ItemOverview.swift",
+      "reason": "",
+      "sha256": "6c33c6acf91ed47af772cc2d0bc1119cf6abf1218568d149bdc54298b08bcd4c",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Views/MediaInformation/MediaSourceInfoView.swift",
+      "reason": "",
+      "sha256": "7bd7957a3b9c58fd5d9218b4f85a0681375133688a07e57c55a0ec72b6b208ef",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Views/MediaInformation/MediaStreamInfoView.swift",
+      "reason": "",
+      "sha256": "7f418d29828988160e5eff68058c3a2773a95aca62a7d53cec83f579258eb0e8",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Views/QuickConnectView.swift",
+      "reason": "",
+      "sha256": "67ee634a0c66f6b3a1277581159360d725b5d8a24d91a8e3f38c34d2aebdebfe",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Views/SearchView.swift",
+      "reason": "",
+      "sha256": "36ac49266b5b4ccdaefcf52308f05a5d53bffd114aa76818074e135459034e4d",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Views/SelectUserView/Components/ConnectToJellyfinView.swift",
+      "reason": "",
+      "sha256": "30f9d36b7ad5f429a801730f978cd0877619d0cb391261715776c3fd37423748",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Views/SelectUserView/Components/EmptyUserView.swift",
+      "reason": "",
+      "sha256": "7b8f55b8769638eac8b515a4044003526a8e35576f41b2a15ae7e7ab44bf04ed",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Views/SelectUserView/Components/SelectUserView+GridView.swift",
+      "reason": "",
+      "sha256": "746e878e9d5084f43326795c05f9ececfb90fe32caf8597b6ee2308709f3d026",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Views/SelectUserView/Components/SelectUserView+ListView.swift",
+      "reason": "",
+      "sha256": "8ca36169a3f92c48800117abc0643e4421af317422a3c3dc236fa142516b7404",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Views/SelectUserView/Components/Toolbar/Components/AddUserMenu.swift",
+      "reason": "",
+      "sha256": "6494e70877f0d9e310968f3f713249d906b25d8fccc291420295b9dca8ac6ca6",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Views/SelectUserView/Components/Toolbar/Components/AdvancedMenuContent.swift",
+      "reason": "",
+      "sha256": "ba3ba170bdcf0359e90d54508143e6d4f50f5be8b0f1ac6f1b3b8d6d9d588e8a",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Views/SelectUserView/Components/Toolbar/Components/ServerMenu.swift",
+      "reason": "",
+      "sha256": "fce74f8279dbaf50697efbcd463d0ad3697ddfd25d1decef9e53a06abb04944f",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Views/SelectUserView/Components/Toolbar/SelectUserView+Toolbar.swift",
+      "reason": "",
+      "sha256": "454f464d6813f45ebfa0cdeee020f28e7c28fa064fea15b63efca99042eeeaa3",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Views/SelectUserView/SelectUserView.swift",
+      "reason": "",
+      "sha256": "30d1003196c274129c996b758cdfe8708d11355a475ba78185a5f0929c37d473",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Views/ServerConnectionView.swift",
+      "reason": "",
+      "sha256": "142d1704502a540b866b296f2e2517980f55786c37c9c4d7e81a5dda42c845b1",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Views/SettingsView/CustomizeSettings/Components/HomeSection.swift",
+      "reason": "",
+      "sha256": "a254671d78c0729109e9c023c8501151bf09afd3435a188ceae8771bf752301e",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Views/SettingsView/CustomizeSettings/Components/ItemSection.swift",
+      "reason": "",
+      "sha256": "d663475fac867f9bd79313afda33949fae32355c647d9be47705c7507a0ac011",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Views/SettingsView/CustomizeSettings/Components/LibrarySection.swift",
+      "reason": "",
+      "sha256": "000bbc0b61ffd79ba5d4b5aa95b8dc4876a97f6f90de327b4bcefb343cb2616e",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Views/SettingsView/CustomizeSettings/Components/PosterSection.swift",
+      "reason": "",
+      "sha256": "7790294446f22e3703e8bc43ae2a73da4f15b73ef39bb51f7e3554a427bea488",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Views/SettingsView/CustomizeSettings/CustomizeSettingsView.swift",
+      "reason": "",
+      "sha256": "abd745555c6da988da2732dc0906967104896cbd0f8b2282ec0256e821227312",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Views/SettingsView/DebugSettingsView.swift",
+      "reason": "",
+      "sha256": "338ed78897e7ba92e803fc72e3e83863ed936f256e61852545b6d554441059e2",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Views/SettingsView/DeviceProfileSettings/CustomDeviceProfilesView.swift",
+      "reason": "",
+      "sha256": "eab35d36959f3b860f3d6f61805de7c42f2951f47973731a0a09d79b82b26d48",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Views/SettingsView/DeviceProfileSettings/EditDeviceProfileView.swift",
+      "reason": "",
+      "sha256": "1e86132dea7cf2f48b146051bddc9ab7e0937f1051f4106dd2e2dc6dfcdda58e",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Views/SettingsView/ExperimentalSettingsView.swift",
+      "reason": "",
+      "sha256": "d5a9707bdaf2607ca3d4e0c5828623a7e2ba0174d1042abc30fa9009a46b455d",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Views/SettingsView/IndicatorSettingsView.swift",
+      "reason": "",
+      "sha256": "395f3d1db31b1b3f0b2f4a5d8548f19e2641b467af798fca0b6bfdaf7098f684",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Views/SettingsView/LocalUserSettings/LocalUserSecurityView.swift",
+      "reason": "",
+      "sha256": "cb994f7770bd393b2ec9e1dd9efeb490bb3624d26328a2c40bfa61d44c6774c3",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Views/SettingsView/LocalUserSettings/LocalUserSettingsView.swift",
+      "reason": "",
+      "sha256": "35ef7b3d67d69c96fe2bfffd56e9132eff190794199b71edc30ad15f29e5b46a",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Views/SettingsView/PlaybackQualitySettingsView.swift",
+      "reason": "",
+      "sha256": "91359ed9b68b232683a2d753947ac4eceacc2abafcaf516b3a10abbee3a33d32",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Views/SettingsView/SettingsView.swift",
+      "reason": "",
+      "sha256": "5988f5c2b8664d32b54518e6bf2a622c66880dfbcff9b7c76ff7cfbcf727753e",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Views/SettingsView/VideoPlayerSettingsView.swift",
+      "reason": "",
+      "sha256": "1ea1a14b7ed6f35037ded0e59837539675398a867332a3788b0d9db381435ad2",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Views/UserSignInView.swift",
+      "reason": "",
+      "sha256": "bcbd6a2cf58a8db95da941d7fcaa8beeb83a19ce7de6bc95126d3c72177f1613",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Views/VideoPlayer/Components/PlaybackProgress/ChapterTrackMask.swift",
+      "reason": "",
+      "sha256": "8196895e292c4b787496dbcc18547da91bcc15feefdb6f6f30936a16bd167de3",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Views/VideoPlayer/Components/PlaybackProgress/SplitTimestamp.swift",
+      "reason": "",
+      "sha256": "2449b0020aaa3f93b1306f4e75e9b4bc6ff758b0be0f49886a422a1c1ac599f7",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Views/VideoPlayer/Components/TextSubtitleOverlay.swift",
+      "reason": "",
+      "sha256": "74a3f9de9ccf0f8deea7276b0094554afbdd8d77936ea9856a6e36f742edca0e",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Views/VideoPlayer/Components/Toolbar/ActionButtons/AspectFillActionButton.swift",
+      "reason": "",
+      "sha256": "660fdf1c02b7d9e32ff0e58c0d78528fe9cbec4f2e5a5dfdd1f47af0366bb160",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Views/VideoPlayer/Components/Toolbar/ActionButtons/AudioActionButton.swift",
+      "reason": "",
+      "sha256": "81d40462f6c96918e0ce247a38a8c9c4aa14f85f31242135ad655a2f546ac843",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Views/VideoPlayer/Components/Toolbar/ActionButtons/AutoPlayActionButton.swift",
+      "reason": "",
+      "sha256": "5165250407013344666b589bbdd479cd6ffd1bcc7e54c808130e9194ddca2a31",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Views/VideoPlayer/Components/Toolbar/ActionButtons/GestureLockActionButton.swift",
+      "reason": "",
+      "sha256": "c33209e80c5871aec7fcd9f321d61d1623d8d5b5d553035ce5089ca551f3a021",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Views/VideoPlayer/Components/Toolbar/ActionButtons/PlayNextItemActionButton.swift",
+      "reason": "",
+      "sha256": "25298472c84ac8d64d06fecdce309d2e44337e856c21d0e7c044d8d9fd6416b7",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Views/VideoPlayer/Components/Toolbar/ActionButtons/PlayPreviousItemActionButton.swift",
+      "reason": "",
+      "sha256": "aa958363c8178a0d5276cd5f5c0dd698ec4587dabd9b73905c4a9720813cb51b",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Views/VideoPlayer/Components/Toolbar/ActionButtons/PlaybackRateActionButton.swift",
+      "reason": "",
+      "sha256": "1f367ee680534da34fa2c3758d63205547f44ea7ef089002182b254c7bd40c9d",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Views/VideoPlayer/Components/Toolbar/ActionButtons/PlaybackSettingsActionButton.swift",
+      "reason": "",
+      "sha256": "b014e1d52eefbaf6019398c65708b799e0329fe599991ef79c75823e3f10019e",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Views/VideoPlayer/Components/Toolbar/ActionButtons/SubtitleActionButton.swift",
+      "reason": "",
+      "sha256": "d97bf46982a89899d7f7259ddc7a01776a5f118157e678dbaaa0fbbcb2de8aa9",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Views/VideoPlayer/Components/Toolbar/ActionButtons/VideoPlayer+ActionButtons.swift",
+      "reason": "",
+      "sha256": "8af9c66aaabc412501e6924647cdb6bcb67c873aa2cf76163d8f42d37e35742e",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Views/VideoPlayer/Components/Toolbar/OverlayButtonStyle.swift",
+      "reason": "",
+      "sha256": "79b91aaae6b987a1d500272a2aafda0c9e66449bbc51c7bea9df246592e219c9",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Views/VideoPlayer/Components/Toolbar/VideoPlayer+Toolbar.swift",
+      "reason": "",
+      "sha256": "7d4c390631354d66e5cc2054243dee3a8e3ae8dbd9bea2b7e636eae2b4f18032",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Views/VideoPlayer/VideoPlayer.swift",
+      "reason": "",
+      "sha256": "10a9769dd18492b8eb8bf43909268e6b81908771d630c59fad6759dda19ff3c2",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Views/VideoPlayer/VideoPlayerContainerView/SupplementContainerView.swift",
+      "reason": "",
+      "sha256": "0f7096e53d4a66f3212efd0c3ae5dcafb55fe45f62d850378bfc797d2a6095a2",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Shared/Views/VideoPlayer/VideoPlayerContainerView/VideoPlayerContainerView.swift",
+      "reason": "",
+      "sha256": "02c64443717d09b880a3aa6585ef325f9b9b4b0df7258c56fe7062824ca8a928",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Swiftfin/App/SwiftfinApp.swift",
+      "reason": "",
+      "sha256": "415620f3423841a2e5f479d16b42fb31f5f49bbadf661212d8e38f09a07becce",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Swiftfin/App/SwiftfinSpotlight.swift",
+      "reason": "",
+      "sha256": "565dfbc38eb3773d06eb1972a9a6d5a0a09d723dd40d1ae708484c4ad7a5bffe",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Swiftfin/Components/GestureView.swift",
+      "reason": "",
+      "sha256": "e25e530bd796b8ce13cca7eafd6469b2448a616a9f4613e2e8505af9c86989c4",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Swiftfin/Components/ItemElementSearchView.swift",
+      "reason": "",
+      "sha256": "ffb8166d0e33472cf3d334b0b2b829ac161ed4b4ff1ec1d646f1e6627b2cfad3",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Swiftfin/Components/ListTitleSection.swift",
+      "reason": "",
+      "sha256": "814dbe88fe4b16994b86552502815488aecaadf7a3748099b8ef15dbe4945a3a",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Swiftfin/Components/LocalUserAccessPolicyView.swift",
+      "reason": "",
+      "sha256": "a5db7faa018b278c42c711eec2757b6fcae5651faf7dc20b2da5da04842553fd",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Swiftfin/Components/SettingsBarButton.swift",
+      "reason": "",
+      "sha256": "6a0286daef2af3900c3daa4c31e30232bc2b6384f98401907e525b4319bdb485",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Swiftfin/Components/UnmaskSecureField.swift",
+      "reason": "",
+      "sha256": "36c058e720f9fdab171fcf3743bb83b93eebf3a43bb99e7bbc38492fb4e0b406",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Swiftfin/Extensions/ButtonStyle-iOS.swift",
+      "reason": "",
+      "sha256": "a13edcca8df40059eaef464193b677c2948c4f750a85a4d5cfefbcf4a70fba35",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Swiftfin/Extensions/Stepper.swift",
+      "reason": "",
+      "sha256": "4cc82c09addfb8ffcdf8b3a33e1e360e80e0431db0233fadd7c37d779f0282fc",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Swiftfin/Extensions/View/Modifiers/NavigationBarCloseButton.swift",
+      "reason": "",
+      "sha256": "caa644a18ca21b59b1f1b9d4d1ff9c5312f0c57cac47c3daeba5d5bacf7bbf13",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Swiftfin/Extensions/View/Modifiers/NavigationBarDrawerButtons/NavigationBarDrawerModifier.swift",
+      "reason": "",
+      "sha256": "05a7ecdc035c36a6993cc347232727fb5b4dffe36dd981294ad009273e3a7b87",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Swiftfin/Extensions/View/Modifiers/NavigationBarDrawerButtons/NavigationBarDrawerView.swift",
+      "reason": "",
+      "sha256": "28aa4df8ee3e6164af016063c9301df68d34050ff2758df168e0e3001c16723b",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Swiftfin/Extensions/View/Modifiers/NavigationBarMenuButton.swift",
+      "reason": "",
+      "sha256": "13b68ba601b85475a00aac4c45ec51ed3bc0e3cfb17487c012b916d5c2d48dbe",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Swiftfin/Extensions/View/Modifiers/PhotoPickerModifier.swift",
+      "reason": "",
+      "sha256": "cbda279c8eb9efe0bde24870bf42c26df93432d1ab0b4767d0f67d08bd079f07",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Swiftfin/Extensions/View/Modifiers/SliderInteractionModifier.swift",
+      "reason": "",
+      "sha256": "23d033fa341c128d01104e27fab757e7a91735203e33be1fb5b2ad56d37c60e6",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Swiftfin/Extensions/View/View-iOS.swift",
+      "reason": "",
+      "sha256": "03f2478d46844125576b9360e66c8c219dfe628c8f992ffd7c9e98b00f66e452",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Swiftfin/Views/AdminDashboardView/APIKeyView/APIKeysView.swift",
+      "reason": "",
+      "sha256": "cdc7c5d91c9086c0c9d965ed36243432c5fd336db5e7b5e58bfb0f850944efc1",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Swiftfin/Views/AdminDashboardView/APIKeyView/Components/APIKeysRow.swift",
+      "reason": "",
+      "sha256": "2d08dd20b0c6db937be3f9091c34d83fa164d936f292ab80c737efda7687ed5d",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Swiftfin/Views/AdminDashboardView/ActiveSessions/ActiveSessionDetailsView/ActiveSessionDetailsView.swift",
+      "reason": "",
+      "sha256": "d2ac09424a8ba63fd4e519bab66cb23cfe69fb6282a27ea530677276b878fba4",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Swiftfin/Views/AdminDashboardView/ActiveSessions/ActiveSessionsView/ActiveSessionsView.swift",
+      "reason": "",
+      "sha256": "c9a350576879e1d3bf5091382c5e80402873be260f147992fff5c7a1deb76ed9",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Swiftfin/Views/AdminDashboardView/ActiveSessions/ActiveSessionsView/Components/ActiveSessionProgressSection.swift",
+      "reason": "",
+      "sha256": "928f12040647249372e45fd9635e256e944a0544b6c774d47ad055c3e81ba71e",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Swiftfin/Views/AdminDashboardView/ActiveSessions/ActiveSessionsView/Components/ActiveSessionRow.swift",
+      "reason": "",
+      "sha256": "ca8ad244fba546ca89eaf53f2d6b3503f63bd628437e915d29859c36a6e66182",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Swiftfin/Views/AdminDashboardView/AdminDashboardView.swift",
+      "reason": "",
+      "sha256": "e1e77272521788e79f03b8003eb4a2f60533a1c08b067f462bedca853a7965a4",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Swiftfin/Views/AdminDashboardView/Components/DeviceSection.swift",
+      "reason": "",
+      "sha256": "8d91a633aec67e85f5b274a8b0bb611c3ba9ca2d3bafa94b85ef1b380c86c79a",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Swiftfin/Views/AdminDashboardView/Components/UserSection.swift",
+      "reason": "",
+      "sha256": "53e8940f70e3b13fbbc2c2d31c9f9b5581628117a2915038a63c6b6127d16231",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Swiftfin/Views/AdminDashboardView/ServerActivity/ServerActivityDetailsView/ServerActivityDetailsView.swift",
+      "reason": "",
+      "sha256": "93627a1e3e9609ae01140fa3a04feaba3ed5490c4581fb1d1f407c3080f09ae2",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Swiftfin/Views/AdminDashboardView/ServerActivity/ServerActivityFilterView/ServerActivityFilterView.swift",
+      "reason": "",
+      "sha256": "16890282eb572e1b9e1bff2617107e3f1161908d7322a93c62bc21149394c5ea",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Swiftfin/Views/AdminDashboardView/ServerActivity/ServerActivityView/Components/ServerActivityEntry.swift",
+      "reason": "",
+      "sha256": "d84d910cdbbf7af130e79bffe3670e6c86c2dea0576033813ea5f45852310f70",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Swiftfin/Views/AdminDashboardView/ServerActivity/ServerActivityView/ServerActivityView.swift",
+      "reason": "",
+      "sha256": "541d958b1f2cf03a55169ecaf9625219128642b934c41ca26453489bb4a35bd7",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Swiftfin/Views/AdminDashboardView/ServerBackup/CreateServerBackupView/CreateServerBackupView.swift",
+      "reason": "",
+      "sha256": "e41899b31eab1aa4892a9350b7d0055caac29209781bc5024e4eca09f18983ea",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Swiftfin/Views/AdminDashboardView/ServerBackup/ServerBackupDetailsView/ServerBackupDetailsView.swift",
+      "reason": "",
+      "sha256": "17a1b4740faf059103fe29e0aa1a7508b190c4bd3c7a3d79e586411feb8815d3",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Swiftfin/Views/AdminDashboardView/ServerBackup/ServerBackupView/Components/ServerBackupRow.swift",
+      "reason": "",
+      "sha256": "117bfa509f52c3f2ce0188dc9ccab3e73b0e2095a9c6f2758e1dcb9d881fc3f6",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Swiftfin/Views/AdminDashboardView/ServerBackup/ServerBackupView/ServerBackupView.swift",
+      "reason": "",
+      "sha256": "4c35c600792d2d053ff93d4100d89180def8a92a008fad3ffdf8ac23fce460e4",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Swiftfin/Views/AdminDashboardView/ServerDevices/DeviceDetailsView/Components/Sections/CompatibilitiesSection.swift",
+      "reason": "",
+      "sha256": "b5db6adf8709c90e3b867fece4c7636a473220c144ac1fa4ebfe4c38c011fec7",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Swiftfin/Views/AdminDashboardView/ServerDevices/DeviceDetailsView/DeviceDetailsView.swift",
+      "reason": "",
+      "sha256": "1021afd486157ff7497a385f3f117be921573f1f827bf24fbdccbec9d671aeb9",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Swiftfin/Views/AdminDashboardView/ServerDevices/DevicesView/Components/DeviceRow.swift",
+      "reason": "",
+      "sha256": "6554c59e989f44dd6cea99bc71e8874d0661d1bcd5c0e2b77059a9bf9efee02d",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Swiftfin/Views/AdminDashboardView/ServerDevices/DevicesView/DevicesView.swift",
+      "reason": "",
+      "sha256": "83120d811dac96dc0ec17f0b5bbdc25170b94034e3b978655c16d1d188d53559",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Swiftfin/Views/AdminDashboardView/ServerLogs/ServerLogsView/ServerLogsView.swift",
+      "reason": "",
+      "sha256": "5a3ee21abeea09685d411698ec8032002d01ade30255463f28388f02999cd0a0",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Swiftfin/Views/AdminDashboardView/ServerTasks/Components/ServerTaskRow.swift",
+      "reason": "",
+      "sha256": "6116bbf6978dd46c3198ac13cd2a9a069be6a8fa46e80ae0ed8d5b615686a86c",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Swiftfin/Views/AdminDashboardView/ServerTasks/ServerTaskDetailsView/Components/ServerTaskTriggerRow.swift",
+      "reason": "",
+      "sha256": "d9c55e4b4fe721e1db50b8aa14cc1f8da49d3c0c49836d40e09a2594732e39e1",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Swiftfin/Views/AdminDashboardView/ServerTasks/ServerTaskDetailsView/ServerTaskDetailsView.swift",
+      "reason": "",
+      "sha256": "aae9bdfbe09cb683357e60d1e4aa96d672677200cc605a295775a452e6aea38b",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Swiftfin/Views/AdminDashboardView/ServerTasks/ServerTaskTriggerView/ServerTaskTriggerView.swift",
+      "reason": "",
+      "sha256": "7621f28229f1da38657f3db1c13279db8a66fbe615623e4e7c5a2e1a970fd51d",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Swiftfin/Views/AdminDashboardView/ServerTasks/ServerTasksView.swift",
+      "reason": "",
+      "sha256": "4c0d366400a60da63b8e1933b926ac511a44c3055b2fb24fbce60083b310cd6c",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Swiftfin/Views/AdminDashboardView/ServerUsers/AddServerUserView/AddServerUserView.swift",
+      "reason": "",
+      "sha256": "8ae11293d9f601f3bcbe0452b64e2794377cb2fffa91122ee851f49563a1cc99",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Swiftfin/Views/AdminDashboardView/ServerUsers/ServerUserDetailsView.swift",
+      "reason": "",
+      "sha256": "d4c9a3e328b252aa4cfd3a7d0bee78d90039bc2a95c74ca65f84c2011287533a",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Swiftfin/Views/AdminDashboardView/ServerUsers/ServerUserSettings/ServerUserAccessSchedule/AddAccessScheduleView/AddAccessScheduleView.swift",
+      "reason": "",
+      "sha256": "bef7ed02f0434c8dc3c572d1bc295b2cdcc6ddf385bbc48299a4705262fd8d73",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Swiftfin/Views/AdminDashboardView/ServerUsers/ServerUserSettings/ServerUserAccessSchedule/EditAccessScheduleView/Components/EditAccessScheduleRow.swift",
+      "reason": "",
+      "sha256": "2af86e2151598509498a7ba54858f94261e217a29151bd27978cfc2c3eca0be9",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Swiftfin/Views/AdminDashboardView/ServerUsers/ServerUserSettings/ServerUserAccessSchedule/EditAccessScheduleView/EditAccessScheduleView.swift",
+      "reason": "",
+      "sha256": "e05464d7b68590bcbf0d26ad7b0f0f58daa17f4a38fa76eb98de6c80d79f714a",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Swiftfin/Views/AdminDashboardView/ServerUsers/ServerUserSettings/ServerUserAccessTags/AddServerUserAccessTagsView.swift",
+      "reason": "",
+      "sha256": "57d6f4976df8e512c76ab96733bc7b8f4b498557f47cb00cbe0c876a094eb7cf",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Swiftfin/Views/AdminDashboardView/ServerUsers/ServerUserSettings/ServerUserAccessTags/EditServerUserAccessTagsView/Components/EditAccessTagRow.swift",
+      "reason": "",
+      "sha256": "3c2b183df00b34b0dcb2ac8503ac5398b8a908aede45e529dc024a97bae1b897",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Swiftfin/Views/AdminDashboardView/ServerUsers/ServerUserSettings/ServerUserAccessTags/EditServerUserAccessTagsView/EditServerUserAccessTagsView.swift",
+      "reason": "",
+      "sha256": "60638c7ae11470f97c22f1a762789fa660993fce933b981022bf1aef43f328f8",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Swiftfin/Views/AdminDashboardView/ServerUsers/ServerUserSettings/ServerUserDeviceAccessView/ServerUserDeviceAccessView.swift",
+      "reason": "",
+      "sha256": "e606737fb967fd32e24672f4603f396db71101a2c87fdb9b6290fd1dfddd2fd7",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Swiftfin/Views/AdminDashboardView/ServerUsers/ServerUserSettings/ServerUserLiveTVAccessView/ServerUserLiveTVAccessView.swift",
+      "reason": "",
+      "sha256": "0b3f1fa69658288fa8b56910b7c03d63f4cdf33ff4f32d59602a1f1445c22a38",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Swiftfin/Views/AdminDashboardView/ServerUsers/ServerUserSettings/ServerUserMediaAccessView/ServerUserMediaAccessView.swift",
+      "reason": "",
+      "sha256": "295b12da393bc70b3d9737ce3de7d19d3fb1a6ab58f166a81c4c5bb23655cb08",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Swiftfin/Views/AdminDashboardView/ServerUsers/ServerUserSettings/ServerUserParentalRatingView/ServerUserParentalRatingView.swift",
+      "reason": "",
+      "sha256": "066c4f33649f19773353c2bbdd0c9cac9c514fe81cf0e2ea66ecea29f92a2bcf",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Swiftfin/Views/AdminDashboardView/ServerUsers/ServerUserSettings/ServerUserPermissionsView/Components/Sections/ExternalAccessSection.swift",
+      "reason": "",
+      "sha256": "3937b0c99c5e87095e0ef20ff2436daf1800a1122c4e9c16d8acdfbae45df4f0",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Swiftfin/Views/AdminDashboardView/ServerUsers/ServerUserSettings/ServerUserPermissionsView/Components/Sections/ManagementSection.swift",
+      "reason": "",
+      "sha256": "363012e92bec1d669d2c1b5041577054e2dc729559909ac84a711f6cefeecace",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Swiftfin/Views/AdminDashboardView/ServerUsers/ServerUserSettings/ServerUserPermissionsView/Components/Sections/MediaPlaybackSection.swift",
+      "reason": "",
+      "sha256": "f84ad81aa93269e2b53635f6a41180560ee0a560f3775513408cee8be09cee81",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Swiftfin/Views/AdminDashboardView/ServerUsers/ServerUserSettings/ServerUserPermissionsView/Components/Sections/PermissionSection.swift",
+      "reason": "",
+      "sha256": "fafb34ddd7771eff8807d36a05726aeb8ec1bfdc1f889655590637abc1223cda",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Swiftfin/Views/AdminDashboardView/ServerUsers/ServerUserSettings/ServerUserPermissionsView/Components/Sections/RemoteControlSection.swift",
+      "reason": "",
+      "sha256": "4b0c84fe20000f7cbfd2d315d77df3d2810ad040b84da3c729c293e3e441e79c",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Swiftfin/Views/AdminDashboardView/ServerUsers/ServerUserSettings/ServerUserPermissionsView/Components/Sections/SessionsSection.swift",
+      "reason": "",
+      "sha256": "6b453070fe0d3fdef74505d8d1808c9246614ac2e262059eb4fe46a050262f32",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Swiftfin/Views/AdminDashboardView/ServerUsers/ServerUserSettings/ServerUserPermissionsView/Components/Sections/StatusSection.swift",
+      "reason": "",
+      "sha256": "eb05baa8cef3e87d1e6c898e594186c7b534265f3b90ade408ea1db21fe151df",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Swiftfin/Views/AdminDashboardView/ServerUsers/ServerUserSettings/ServerUserPermissionsView/Components/Sections/SyncPlaySection.swift",
+      "reason": "",
+      "sha256": "80ab99acd2833165bc3b5a326e6e82bc5887e4decd76566fa7416cef36daf79a",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Swiftfin/Views/AdminDashboardView/ServerUsers/ServerUserSettings/ServerUserPermissionsView/ServerUserPermissionsView.swift",
+      "reason": "",
+      "sha256": "6352df1dac735ad42ebfb6a7ae9946c1aad98372feccfa61182bb5c049edf92e",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Swiftfin/Views/AdminDashboardView/ServerUsers/ServerUsersView/Components/ServerUsersRow.swift",
+      "reason": "",
+      "sha256": "d926913dac07b2f1b70d044d3225fc6830742ad23c95904870434b5af525a854",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Swiftfin/Views/AdminDashboardView/ServerUsers/ServerUsersView/ServerUsersView.swift",
+      "reason": "",
+      "sha256": "c9d1a84c3d6cd00c4a1d0ab36875a718c53511db9a017036f5fcb7fb759913aa",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Swiftfin/Views/AppPermissionsView.swift",
+      "reason": "",
+      "sha256": "f0785ef32f420261c3b6512f073861d182d131b2dc64585263410fb760682dbb",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Swiftfin/Views/GestureSettingsView.swift",
+      "reason": "",
+      "sha256": "d6f9f0e89a8455be5fdd9758db9d5cf2f8ed32646e13ae780ba9d5be7dd938d7",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Swiftfin/Views/ItemEditorView/ItemEditorView.swift",
+      "reason": "",
+      "sha256": "c1aedacf935caf82092b3fbb4bc406442837e645e3a72a808e852d7d28864f5c",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Swiftfin/Views/ItemEditorView/ItemIdentification/IdentifyItemResultView.swift",
+      "reason": "",
+      "sha256": "b98b05542f8f6ef4943ec5e2e180159babb14b11a812fe85b659f24d33dbf694",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Swiftfin/Views/ItemEditorView/ItemIdentification/IdentifyItemView/Components/IdentifyItemViewResultRow.swift",
+      "reason": "",
+      "sha256": "fb7506bcad72d0ab8a676a98ef70edb21b1790e4a66b53282cc66eb210bde2ee",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Swiftfin/Views/ItemEditorView/ItemIdentification/IdentifyItemView/IdentifyItemView.swift",
+      "reason": "",
+      "sha256": "0b5dfa3d088868ef44dd1d1d94e855147f79f134fc2f29814ab47d2e60722ac5",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Swiftfin/Views/ItemEditorView/ItemImages/ItemImageDetailView.swift",
+      "reason": "",
+      "sha256": "a38cb81b4863c147335451860d41da89643bd71e74c8d1e0d068aeba20a7a093",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Swiftfin/Views/ItemEditorView/ItemImages/ItemImagesView.swift",
+      "reason": "",
+      "sha256": "f737d1b99676a71699ed66bd8587e0de0c7747519a40ccae208ad9d082bc5ea5",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Swiftfin/Views/ItemEditorView/ItemImages/RemoteImageDetailView.swift",
+      "reason": "",
+      "sha256": "65c50afb4ec59d810241f0107224936bf4f052ce2b031b5ae7e17538d4a612c0",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Swiftfin/Views/ItemEditorView/ItemImages/RemoteImageSearchView.swift",
+      "reason": "",
+      "sha256": "5df6c8cb1042d8412f24a3043898ab550e2c8152d04e747ff1412129a5eb6748",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Swiftfin/Views/ItemEditorView/ItemMetadata/AddItemElementView.swift",
+      "reason": "",
+      "sha256": "99d057b84746082e4db2bab02b35d1dac328b25850f7754046a00f9841b70a14",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Swiftfin/Views/ItemEditorView/ItemMetadata/EditItemElementView/EditItemElementView.swift",
+      "reason": "",
+      "sha256": "d71aed2a62e507be7c4fb3069436346ba8c7a8572105e38984f82563de782005",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Swiftfin/Views/ItemEditorView/ItemMetadata/EditMetadataView/Components/Sections/DateSection.swift",
+      "reason": "",
+      "sha256": "4c2bed16959f59347cb203a66c55f0441c284144c4e1c1d7d1bc34b94979aec5",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Swiftfin/Views/ItemEditorView/ItemMetadata/EditMetadataView/Components/Sections/DisplayOrderSection.swift",
+      "reason": "",
+      "sha256": "deb80711c2d6f3bd70a715198e4b9892bd52bebd92740941db7cbee328a6d722",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Swiftfin/Views/ItemEditorView/ItemMetadata/EditMetadataView/Components/Sections/EpisodeSection.swift",
+      "reason": "",
+      "sha256": "03cf2fefc005958f43229110e86486c0233003133d92df7278421884d40be9b9",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Swiftfin/Views/ItemEditorView/ItemMetadata/EditMetadataView/Components/Sections/LocalizationSection.swift",
+      "reason": "",
+      "sha256": "5cb327c11c7d36f90d69dae82edcbedaaf872d9070961ea30a6d23495b9671ba",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Swiftfin/Views/ItemEditorView/ItemMetadata/EditMetadataView/Components/Sections/LockMetadataSection.swift",
+      "reason": "",
+      "sha256": "959983085e4ec06fb6e4810e45fd1ba8744b1a2c354f61128ebb51d2fc1a779b",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Swiftfin/Views/ItemEditorView/ItemMetadata/EditMetadataView/Components/Sections/MediaFormatSection.swift",
+      "reason": "",
+      "sha256": "ec76682604673be4448d3496a0b72f7dae59e145d5c28781d9a1a2330358afad",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Swiftfin/Views/ItemEditorView/ItemMetadata/EditMetadataView/Components/Sections/OverviewSection.swift",
+      "reason": "",
+      "sha256": "1a8134c5da253f83559dc6b9aed85fca1e1a0ddc6ffe0d4f2ecf9079292e4419",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Swiftfin/Views/ItemEditorView/ItemMetadata/EditMetadataView/Components/Sections/ParentialRatingsSection.swift",
+      "reason": "",
+      "sha256": "a85840ca3a25659344e1035b8dbe532b4a96f1039f1a3b943a2a04e7a630ecc3",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Swiftfin/Views/ItemEditorView/ItemMetadata/EditMetadataView/Components/Sections/ReviewsSection.swift",
+      "reason": "",
+      "sha256": "4d04618e9e9bcf5e55df15129df8ae55f15e83712162b36276c73cd913b9b0ce",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Swiftfin/Views/ItemEditorView/ItemMetadata/EditMetadataView/Components/Sections/SeriesSection.swift",
+      "reason": "",
+      "sha256": "24a861ebea4513660f928a068f9b43584bd3c011485da8edf5079063c96ac0f9",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Swiftfin/Views/ItemEditorView/ItemMetadata/EditMetadataView/Components/Sections/TitleSection.swift",
+      "reason": "",
+      "sha256": "527ae83c269fac483e91945c69d23b4ea4a03a32fd9fdf4513d376effb165d40",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Swiftfin/Views/ItemEditorView/ItemMetadata/EditMetadataView/EditMetadataView.swift",
+      "reason": "",
+      "sha256": "8594fdf1f701d7d22374393655b50393a3b458a0fe65bb68fb1038a44da91420",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Swiftfin/Views/ItemEditorView/ItemSubtitles/ItemSubtitleUploadView.swift",
+      "reason": "",
+      "sha256": "21ff9c28090d1600fb506f8ef7ffac9205ccc1a98cb2901e7a3b289efb79b5c5",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Swiftfin/Views/ItemEditorView/ItemSubtitles/ItemSubtitlesView/Components/ItemSubtitleButton.swift",
+      "reason": "",
+      "sha256": "8b2c8539c2c2ccee9db65d44e1710290d9c8e9ff9c82f6abb6a5c3eb04ca3989",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Swiftfin/Views/ItemEditorView/ItemSubtitles/ItemSubtitlesView/ItemSubtitlesView.swift",
+      "reason": "",
+      "sha256": "c29f6bfade89f314bd88e08f34bc7e5738526af5b5eb9b37b62888a7018c7283",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Swiftfin/Views/PhotoCropView/PhotoCropAspectRatios.swift",
+      "reason": "",
+      "sha256": "d816efae111fd617c20825d36085447a77a2494ddd13f5186dbcebdae6bae505",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Swiftfin/Views/PhotoCropView/PhotoCropView.swift",
+      "reason": "",
+      "sha256": "f334047bbf9a2b3a05b52a32cdd2f46f9b3f9dfa599300a8306fd9aaaccc968a",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Swiftfin/Views/QuickConnectAuthorizeView.swift",
+      "reason": "",
+      "sha256": "e85d3a5d920f8ee8077c9068a846a5c3af60226b5b0df09ed5b3237b8021cc03",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Swiftfin/Views/ResetUserPasswordView.swift",
+      "reason": "",
+      "sha256": "d6a5e8e1809ec634fba5b8570638c36b5b74c5d841b7dfa65a0ec9b327963e50",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Swiftfin/Views/VideoPlayer/Gestures/PanHandlingAction.swift",
+      "reason": "",
+      "sha256": "85fe0b9c3d100abc90d1fa2a010307bf3065569861524724d33ba55f041e6a40",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Swiftfin/Views/VideoPlayer/Gestures/VideoPlayerContainerView+PanGesture.swift",
+      "reason": "",
+      "sha256": "d3aeac03d4b80e5b3f8af8990c8dfeda4086e8c8c42251c3c02c131d7a363916",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Swiftfin/Views/VideoPlayer/Gestures/VideoPlayerContainerView+PinchGesture.swift",
+      "reason": "",
+      "sha256": "08a0b3d26918530a1eb8629f343a564bf58a5741c71c294fcff6c5085d729eca",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Swiftfin/Views/VideoPlayer/Gestures/VideoPlayerContainerView+TapGesture.swift",
+      "reason": "",
+      "sha256": "4554c63c9e1df090aa7d3dec9f14b376c0cbddb5191aa4d4a70b4654c85e0fa3",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Swiftfin/Views/VideoPlayer/PlaybackControls/Components/PlaybackButtons.swift",
+      "reason": "",
+      "sha256": "adc859e325383a98ad54f00c02558bdb03513318f789c99e07219f96b787ea2c",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Swiftfin/Views/VideoPlayer/PlaybackControls/Components/PlaybackProgress.swift",
+      "reason": "",
+      "sha256": "b8c69a5c75f1a038d7fdbfaf8cd4c2acee3f2a1f3aeeea6afb2a7cb252652704",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Swiftfin/Views/VideoPlayer/PlaybackControls/PlaybackControls.swift",
+      "reason": "",
+      "sha256": "a6a828c619d109a8c7344f827f3dd12762b43b59cd79591a95f772aaa5fd454a",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Swiftfin/Views/VideoPlayer/SupplementTabView.swift",
+      "reason": "",
+      "sha256": "319b3f49c8a2d60c1b7c7070d65726ecb98853e1ff4574dc14d1256fe6cc0c2e",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Swiftfin/Views/VideoPlayer/VideoPlayer+KeyCommands.swift",
+      "reason": "",
+      "sha256": "ee6481208697e8af783094c6df888e96e378e1256d7b63810b520321a3f2e1c5",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Swiftfin tvOS/App/KidsAccountAdapter.swift",
+      "reason": "",
+      "sha256": "ddc490e2b87d52ac4c031dcef5455b6c9ea923efcff2019baa070e6a5e8f203c",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Swiftfin tvOS/App/KidsPlaybackAdapter.swift",
+      "reason": "",
+      "sha256": "aae72b9acc32dd644167a599cf6311d5e46a4525c38dbf8b9048a2720b787594",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Swiftfin tvOS/App/SwiftfinApp.swift",
+      "reason": "",
+      "sha256": "2ff9055dd8a6817e6c53531a83d95e41147c59e142e5bb36aa136febf01befd4",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Swiftfin tvOS/Components/CinematicContentGroupContainer.swift",
+      "reason": "",
+      "sha256": "7e02999d2cf346c84f69247cebe48a49312f5f3f8392804af4c949af612d568a",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Swiftfin tvOS/Components/CinematicItemSelector.swift",
+      "reason": "",
+      "sha256": "6b204cae38e2c86443416461c5e394369c4ac7f2966c698a23795314e7f2cbbe",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Swiftfin tvOS/Components/ColorPicker/ColorPicker.swift",
+      "reason": "",
+      "sha256": "a446dfe8e072c3256f7c748c9f46724aafb49a92c88006a91edc88d653954b90",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Swiftfin tvOS/Components/ColorPicker/ColorPickerDefaults.swift",
+      "reason": "",
+      "sha256": "c54d326ca7860742ad77d87c95b93a716c9ff22cef37acb2f278363869dda055",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Swiftfin tvOS/Components/ColorPicker/Components/ColorPicker+Sheet.swift",
+      "reason": "",
+      "sha256": "590d2322c701ee22a194e52eb4efe01574d321387f80105cc9c4fdf601dd8a91",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Swiftfin tvOS/Components/EPGDateBar/Components/EPGDatePill.swift",
+      "reason": "",
+      "sha256": "59de1f1fe2f471f12a95ee8c9964bb4788f8d5125616f5886c352c8cc9b7c5c0",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Swiftfin tvOS/Components/EPGDateBar/EPGDateBar.swift",
+      "reason": "",
+      "sha256": "1965a52a5577361d37ad889a8efe8aaaa7d905f8d83c8316215fc64257978136",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Swiftfin tvOS/Components/ExternalTrailerURL.swift",
+      "reason": "",
+      "sha256": "ab2ab5db8e9933c4b218988be939affdc62d44c8ce76b52753f66830e24163b7",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Swiftfin tvOS/Components/GestureView.swift",
+      "reason": "",
+      "sha256": "bb3ed40d2d76ca8a4c9b9568c995e811647f48adff442f0a9a481d5b9670ccc9",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Swiftfin tvOS/Components/ListRowMenu.swift",
+      "reason": "",
+      "sha256": "bf79eefef15d086e2fa02cce92346a79c0e4688c10beb33e17574a8bdcf744f0",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Swiftfin tvOS/Components/SliderContainer/SliderInteractionModifier.swift",
+      "reason": "",
+      "sha256": "d4fa0ebae1345c522fdf98068f04c64f12ba8c59066d95217b244c5d1d6086de",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Swiftfin tvOS/Components/SliderContainer/UISliderContainer.swift",
+      "reason": "",
+      "sha256": "b79eed4f640894faedc4e9b708372745eae056eb192328c5cf0b50bb2d6035cc",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Swiftfin tvOS/Components/SplitLoginWindowView.swift",
+      "reason": "",
+      "sha256": "ff085529e2de942341c4b00feb011a02bcff5106c6e9d0fe79e4cc6d4977181b",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Swiftfin tvOS/Components/Stepper.swift",
+      "reason": "",
+      "sha256": "bfa0fd0a233b464747b515271fd014ffacb70d084598cfc9565f029664bd8032",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Swiftfin tvOS/Extensions/View/Modifiers/FilterBarModifier.swift",
+      "reason": "",
+      "sha256": "bfcf2d83cf422480694a6d0400385ecb623911a75733c686fbaff5584d6ec8c9",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Swiftfin tvOS/Extensions/View/Modifiers/SearchSafeAreaModifier.swift",
+      "reason": "",
+      "sha256": "261196e2a27ee21b787b5dbd43905c0ce5068e8c94a348c2e244e7cd2c582329",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Swiftfin tvOS/Extensions/View/View-tvOS.swift",
+      "reason": "",
+      "sha256": "7dd4ea49cfbd722a3ca005312b2375e5cacc86bfeec7253a8d589d362570081e",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Swiftfin tvOS/Kids/KidsMediaProgressObserver.swift",
+      "reason": "",
+      "sha256": "025143e7e94cdf3648da50177ab5fd23447701397e7102332169165e05a9c3bf",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Swiftfin tvOS/Objects/CinematicSelectionContentGroup.swift",
+      "reason": "",
+      "sha256": "d5f6cb13e621d93e7267c4807a031ca603ff5e8c3c2b8362b2ccdafbd468c245",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Swiftfin tvOS/Views/VideoPlayer/PlaybackControls/Components/PlaybackControls+PressHandling.swift",
+      "reason": "",
+      "sha256": "c504bde38f62a78f2d0c002e9de83ea4a87cd42846872bc86f179444680a84b2",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Swiftfin tvOS/Views/VideoPlayer/PlaybackControls/Components/PlaybackControls+Scrubbing.swift",
+      "reason": "",
+      "sha256": "cf0e0db8571dda51443333a3413eb8e7bec70c0abe7ec5c8f1db2be09d299555",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Swiftfin tvOS/Views/VideoPlayer/PlaybackControls/Components/PlaybackProgress.swift",
+      "reason": "",
+      "sha256": "45a73296904b8abdb900f4d37d60afeb2d433947b4f05e8063e905805fd98496",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Swiftfin tvOS/Views/VideoPlayer/PlaybackControls/PlaybackControls.swift",
+      "reason": "",
+      "sha256": "e987783f784ecad426d7b3ea1c9ec5897c80894b7f1649b825b652821b1825de",
+      "status": "pending"
+    },
+    {
+      "owners": [],
+      "path": "Swiftfin tvOS/Views/VideoPlayer/SupplementTabView.swift",
+      "reason": "",
+      "sha256": "0e2e0b41ddff6c9287ee2f269cde86d94444619d5db08b696df1abc6e498e2ff",
+      "status": "pending"
+    }
+  ],
+  "interfaceReviews": [
+    {
+      "path": "Packages/SwiftfinTime/Sources/SwiftfinTime/DateStaleness.swift",
+      "reason": "Explicit clock/value inputs; no scheduling, settings or app globals. Strict less-than and greater-than boundaries remain distinct.",
+      "reviewedConsumers": [
+        "Shared/Objects/MediaPlayerManager/Supplements/EPGSupplement.swift"
+      ],
+      "reviewedInterfaces": [
+        "Date.isRecent(with:comparedTo:)",
+        "Date.isStale(with:comparedTo:)"
+      ],
+      "sha256": "997f8e628aa2093eea3707a38b76b77e2b1aab33684b9f37283ed9401c8b6d4f"
+    },
+    {
+      "path": "Packages/SwiftfinItemMetadata/Sources/SwiftfinItemMetadata/ProgramMetadataRefresh.swift",
+      "reason": "Pure delay plus bound read orchestration; typed invalid-deadline error, injectable actor/Sendable wait and immutable SDK result. Caller retains view/task and UI binding publication.",
+      "reviewedConsumers": [
+        "Shared/Objects/MediaPlayerManager/Supplements/MediaInfoSupplement.swift"
+      ],
+      "reviewedInterfaces": [
+        "ProgramMetadataRefresh.delay(after:comparedTo:)",
+        "ProgramMetadataRefreshError.invalidDeadline",
+        "ItemMetadataClient.item(id:afterProgramEnd:comparedTo:wait:)"
+      ],
+      "sha256": "9e84c84e600a012d3d046828f6a2c3d6c0ba9b06871acf1cd1b2fc523089bb23"
+    },
+    {
+      "path": "Packages/SwiftfinServerOperations/Sources/SwiftfinServerOperations/ServerOperationsPolicy.swift",
+      "reason": "Immutable DTO selection with explicit device/item and preserved order/payload; no session-manager lookup or subscription construction. Other policy members source-reviewed in the same file; their full consumer audit remains open.",
+      "reviewedConsumers": [
+        "Shared/Objects/MediaPlayerManager/Supplements/PlaybackInformationSupplement.swift"
+      ],
+      "reviewedInterfaces": [
+        "ServerOperationsPolicy.playbackSession(in:deviceID:itemID:)"
+      ],
+      "sha256": "c8e99a7dcec6442a40646e3306e3b52b0f70a924d396499aa9ff36ba1ca127ff"
+    }
+  ],
+  "limits": "This hashed ledger starts with bodies explicitly reviewed in this pass; earlier prose evidence is not automatically promoted. Pending and mixed entries prevent whole-source completion. Source review is distinct from held UI/native playback acceptance. API entries do not classify the rest of the public graph.",
+  "schemaVersion": 1,
+  "scope": "All current app Swift files; explicit source-body classification and three current API/consumer reviews. No server/media/simulator data.",
+  "summary": {
+    "applicationSwiftFiles": 668,
+    "classification": {
+      "pending": 635,
+      "source-reviewed-mixed": 3,
+      "source-reviewed-retained": 30
+    },
+    "currentAPIReviews": 3,
+    "runtimeAcceptance": "held by human; no simulator/server testing"
+  }
+}

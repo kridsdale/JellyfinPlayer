@@ -6,10 +6,18 @@
 // Copyright (c) 2026 Jellyfin & Jellyfin Contributors
 //
 
+import Foundation
 import JellyfinAPI
+import SwiftfinItemMetadata
 import SwiftfinLocalization
 import SwiftfinTime
 import SwiftUI
+
+private struct ProgramInfoRefreshID: Hashable, Sendable {
+    let itemID: String?
+    let endDate: Date?
+    let connectionRevision: UUID
+}
 
 // TODO: scroll if description too long
 // TODO: move currentProgram tracking to a MediaPlayerObserver
@@ -42,6 +50,9 @@ extension MediaInfoSupplement {
 
         @State
         private var item: BaseItemDto
+
+        @State
+        private var connectionRevision = UUID()
 
         @StateObject
         private var recordingViewModel: RecordingTimerViewModel
@@ -158,7 +169,14 @@ extension MediaInfoSupplement {
             }
             .padding(.leading, safeAreaInsets.leading)
             .padding(.trailing, safeAreaInsets.trailing)
-            .task(id: item.currentProgram?.endDate) {
+            .onReceive(Notifications[.didChangeServerConnection].publisher) { _ in
+                connectionRevision = UUID()
+            }
+            .task(id: ProgramInfoRefreshID(
+                itemID: item.id,
+                endDate: item.currentProgram?.endDate,
+                connectionRevision: connectionRevision
+            )) {
                 await updateCurrentProgram()
             }
         }
@@ -275,22 +293,37 @@ extension MediaInfoSupplement {
                 .edgePadding()
                 .frame(maxWidth: .infinity, alignment: .topLeading)
                 .focusSection()
-                .task(id: item.currentProgram?.endDate) {
+                .onReceive(Notifications[.didChangeServerConnection].publisher) { _ in
+                    connectionRevision = UUID()
+                }
+                .task(id: ProgramInfoRefreshID(
+                    itemID: item.id,
+                    endDate: item.currentProgram?.endDate,
+                    connectionRevision: connectionRevision
+                )) {
                     await updateCurrentProgram()
                 }
         }
 
         private func updateCurrentProgram() async {
             guard let userSession = manager.userSession,
+                  let itemID = item.id,
                   let endDate = item.currentProgram?.endDate
             else { return }
 
-            try? await Task.sleep(for: .seconds(max(endDate.timeIntervalSinceNow + 1, 1)))
-
-            guard let newItem = try? await item.getFullItem(userSession: userSession) else { return }
-
-            item = newItem
-            await recordingViewModel.refresh()
+            let metadata = userSession.itemMetadata
+            do {
+                let newItem = try await metadata.item(id: itemID, afterProgramEnd: endDate)
+                try metadata.checkBinding()
+                guard manager.userSession === userSession,
+                      item.id == itemID,
+                      item.currentProgram?.endDate == endDate
+                else { return }
+                item = newItem
+                await recordingViewModel.refresh()
+            } catch {
+                // Cancellation and replaced account/program bindings leave presentation intact.
+            }
         }
     }
 }

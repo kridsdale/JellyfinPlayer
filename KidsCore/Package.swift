@@ -16,6 +16,7 @@ let package = Package(
         .package(path: "../Packages/SwiftfinUserMediaState"),
         .package(path: "../Packages/SwiftfinTime"),
         .package(path: "../Packages/SwiftfinAsyncStreams"),
+        .package(path: "../Packages/SwiftfinServerOperations"),
         .package(url: "https://github.com/jellyfin/jellyfin-sdk-swift.git", exact: "3.2.0")
     ],
     targets: [
@@ -33,6 +34,7 @@ let package = Package(
             .product(name: "SwiftfinUserMediaState", package: "SwiftfinUserMediaState"),
             .product(name: "SwiftfinTime", package: "SwiftfinTime"),
             .product(name: "SwiftfinAsyncStreams", package: "SwiftfinAsyncStreams"),
+            .product(name: "SwiftfinServerOperations", package: "SwiftfinServerOperations"),
             .product(name: "JellyfinAPI", package: "jellyfin-sdk-swift")
         ], resources: [.process("Fixtures")])
     ]

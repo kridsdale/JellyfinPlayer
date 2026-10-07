@@ -14,4 +14,10 @@ public extension Date {
     func isStale(with interval: Duration, comparedTo now: Date = .now) -> Bool {
         now.timeIntervalSince(self) > interval.seconds
     }
+
+    /// Strict recency retains clock rollback and future-date behavior. At exactly
+    /// the interval boundary, both this and isStale return false.
+    func isRecent(with interval: Duration, comparedTo now: Date = .now) -> Bool {
+        now.timeIntervalSince(self) < interval.seconds
+    }
 }
