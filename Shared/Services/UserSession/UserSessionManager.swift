@@ -16,6 +16,7 @@ import SwiftfinAccountAccess
 import SwiftfinAsyncStreams
 import SwiftfinCredentials
 import SwiftfinLocalization
+import SwiftfinPlaybackPreparation
 import SwiftfinSessions
 import SwiftfinStoredValues
 import SwiftfinTime
@@ -66,6 +67,16 @@ final class UserSessionManager: ObservableObject {
     private(set) var pendingDeepLink: DeepLink?
 
     let routePublisher = PassthroughSubject<NavigationRoute, Never>()
+
+    // App-owned routing results; transport/lifetime implementation stays in owners.
+    enum SocketTrailerTarget: Sendable {
+        case localItem(String)
+        case external(String)
+    }
+
+    let socketCommands = ScopedPublisher<[ObjectIdentifier], RemotePlaybackIntent>()
+    let socketItemRequest = LatestRequest<BaseItemDto>()
+    let socketTrailerRequest = LatestRequest<SocketTrailerTarget>()
 
     var cancellables = Set<AnyCancellable>()
 

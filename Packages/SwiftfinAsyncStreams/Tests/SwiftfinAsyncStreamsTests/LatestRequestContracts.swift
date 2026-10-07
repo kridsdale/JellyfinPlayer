@@ -195,4 +195,54 @@ struct LatestRequestContracts {
         try await settleLatestRequest { gate.completed[2] != nil }
         #expect(trace.values.isEmpty && gate.completed[2] == true)
     }
+
+    @Test
+    func `replacement cancellation reentry retains the newest request and never starts its obsolete competitor`() async throws {
+        let gate = LatestRequestGate(), trace = LatestRequestTrace(), owner = LatestRequest<Int>()
+        defer { owner.cancel()
+            gate.finishAll()
+        }
+        owner.replace(operation: {
+            try await withTaskCancellationHandler {
+                try await gate.load(1)
+            } onCancel: { [weak owner] in
+                MainActor.assumeIsolated {
+                    owner?.replace(operation: { try await gate.load(3) }, receive: trace.append)
+                }
+            }
+        }, receive: trace.append)
+        try await settleLatestRequest { gate.pending[1] != nil }
+        owner.replace(operation: { try await gate.load(2) }, receive: trace.append)
+        try await settleLatestRequest { gate.pending[3] != nil }
+        #expect(gate.pending[2] == nil)
+        gate.finish(3, value: 300)
+        try await settleLatestRequest { gate.completed[3] != nil }
+        #expect(trace.values == [300])
+        gate.finish(1, value: 100)
+    }
+
+    @Test
+    func `cancel cleanup reentry leaves its newly created task owned and cancellable`() async throws {
+        let gate = LatestRequestGate(), trace = LatestRequestTrace(), owner = LatestRequest<Int>()
+        defer { owner.cancel()
+            gate.finishAll()
+        }
+        owner.replace(operation: {
+            try await withTaskCancellationHandler {
+                try await gate.load(1)
+            } onCancel: { [weak owner] in
+                MainActor.assumeIsolated {
+                    owner?.replace(operation: { try await gate.load(3) }, receive: trace.append)
+                }
+            }
+        }, receive: trace.append)
+        try await settleLatestRequest { gate.pending[1] != nil }
+        owner.cancel()
+        try await settleLatestRequest { gate.pending[3] != nil }
+        owner.cancel()
+        gate.finish(3, value: 300)
+        try await settleLatestRequest { gate.completed[3] != nil }
+        #expect(gate.completed[3] == true && trace.values.isEmpty)
+        gate.finish(1, value: 100)
+    }
 }

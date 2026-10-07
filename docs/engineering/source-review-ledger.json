@@ -1,11 +1,14 @@
 {
   "applicationSources": [
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinStorage",
+        "SwiftfinImages"
+      ],
       "path": "Shared/App/SwiftfinApp+configure.swift",
-      "reason": "",
+      "reason": "Complete configuration body reviewed: chooses application persistent/debug handlers and adapts storage log levels, sets process Nuke cache budgets/decoder selection and composes its poster pipeline. Source retains process startup choices and framework configuration; library storage/image implementations remain owned. This does not approve repeated/late global startup or claim the separate private SDK bootstrap audit complete.",
       "sha256": "a85a16342dbdf2265f1ef8b6a63c930060a5334a6a4c65b538f5563731ad8433",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -1565,16 +1568,18 @@
     {
       "owners": [],
       "path": "Shared/Logging/Logging.swift",
-      "reason": "",
+      "reason": "Complete diagnostic-display body reviewed: app-specific logger label, debug console line/emoji/file-name presentation and LogHandler metadata formatting remain diagnostic presentation. It allocates no credential/network/database operation or mutable global logger bootstrap. Collection/text helpers already delegate to their owners.",
       "sha256": "0a5baf2fa53a6cd982ad777fa35af5eedccce6ebfa8535b7ee468701343d2644",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinNetworking"
+      ],
       "path": "Shared/Logging/NetworkLogger.swift",
-      "reason": "",
-      "sha256": "039e10991963989462f6375e002f7f5baf9fa993dad7218048a6d8467af25741",
-      "status": "pending"
+      "reason": "Complete updated Pulse adapter reviewed: chooses app redaction marker, disables tvOS event logging and maps immutable completed-event URL/body values to Networking typed-body redaction. DTO parsing/recoding now belongs to the library. Missing URLs/bodies and noncompleted events retain their original event; no log or server request was produced by this review.",
+      "sha256": "8f1f3afd0acd41f613050a7db897070353b3bb567718c780cb37ded2bad476f3",
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [
@@ -2806,11 +2811,15 @@
       "status": "pending"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinStorage",
+        "SwiftfinAccountStore",
+        "SwiftfinStoredValues"
+      ],
       "path": "Shared/Persistence/StorageComposition.swift",
-      "reason": "",
+      "reason": "Complete body reviewed: app aliases, localized current-URL name and credential-store injection compose database opening/account import and image-index startup. The native database, installed-key account admission/credential writes and schema belong to existing owners; tvOS field assignments are explicit application composition. No local account/database opening was performed during this source review.",
       "sha256": "946f6d6f5f64279bdcd22c35d7b58cbbc868f27655b437610ae980217b83a35e",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [
@@ -2831,11 +2840,14 @@
       "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinAsyncStreams",
+        "SwiftfinAccountModels"
+      ],
       "path": "Shared/Services/Notifications.swift",
-      "reason": "",
+      "reason": "Complete names/adapter body reviewed: app Factory center, event names, UIKit/audio notification names and SDK payload choices stay in composition. Immutable typed transport/decode and explicit main-actor status reads delegate to NotificationEvent. Raw publishers intentionally do not establish arbitrary consumer executor/lifetime safety; system/custom sinks remain subject to the actor review. No OS notification/hardware action was performed.",
       "sha256": "77d04700b473f8acb14cb6f38bf2ceed6cbd9f2e9d7e180d81ad4c1eff5463a5",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [
@@ -2872,25 +2884,36 @@
       "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinConnections",
+        "SwiftfinConnectivity",
+        "SwiftfinNetworking",
+        "SwiftfinAccountAccess"
+      ],
       "path": "Shared/Services/ServerConnectionManager.swift",
-      "reason": "",
+      "reason": "Complete body reviewed: account-specific state transitions/default selection, network observation and debounce tasks compose existing resolver/connectivity/probe owners. Explicit snapshots/current-root/context/cancellation checks precede selection publication; connection IDs initialize once through AccountStore. App settings and notifications remain local composition. This review does not execute network context/probes, approve downstream queued receipts or claim actual server resolution success.",
       "sha256": "0c1234f2c37774d90cee2f96f417cedee25c189d0e3dfda0a6acfde9b9b8a143",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinImages",
+        "SwiftfinStoredValues"
+      ],
       "path": "Shared/Services/ServerImageCacheIdentity.swift",
-      "reason": "",
+      "reason": "Complete body reviewed: process-lifetime app registry observes installed server/connection settings, preserves existing observation objects, drops removed subscriptions and replaces a native immutable URL-to-server index. Queued refreshes read current stored values. Cache identity parsing/locked lookup belong to Images; installed settings namespace and process startup selection stay in composition.",
       "sha256": "1d05ea37e190571f836c4d15675c79392b1114d6f490ce5ff539dbd34c7be7de",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinNetworking",
+        "SwiftfinAsyncStreams"
+      ],
       "path": "Shared/Services/ServerSocketManager.swift",
-      "reason": "",
+      "reason": "Complete body reviewed: weak account service composes the native socket controller, bridges its typed streams into presentation subjects, and cancels app tasks on stop/isolated teardown. Native sessions/tokens/reconnect state belong to Networking; lazy stream/Combine leases belong to AsyncStreams. Cancelling this bridge does not itself prove queued consumer receipts are scoped; the updated consumers supply their own owners. Connection-event/native transport provenance still requires its existing native owner review and held acceptance.",
       "sha256": "bc42a7d05bb734a8f614c9f33c56c9fca8a852179a7a6997a524aa2434815f5f",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -2900,18 +2923,30 @@
       "status": "pending"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinNetworking",
+        "SwiftfinItemMetadata",
+        "SwiftfinMediaCatalog",
+        "SwiftfinPlaybackPreparation",
+        "SwiftfinUserMediaState",
+        "SwiftfinAccountAccess",
+        "SwiftfinUserAdministration"
+      ],
       "path": "Shared/Services/UserSession/UserSession+ItemMetadata.swift",
-      "reason": "",
+      "reason": "Complete six-feature composition body reviewed: captures one transport/user and weak root/client/manager checks before constructing existing feature owners. Media-state client reuse requires exact transport identity. This repeated binding is application composition, not request construction, native cache/transport implementation or server policy. Currentness does not imply current GUI/account-switch acceptance.",
       "sha256": "c90fef61cf0a11c4a7338df6714b2d6a664eefdfceacc5ccceb4c5e9d47fd57b",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinSessions",
+        "SwiftfinNetworking",
+        "SwiftfinUserMediaState"
+      ],
       "path": "Shared/Services/UserSession/UserSession.swift",
-      "reason": "",
+      "reason": "Complete body reviewed: immutable app account records compose a transport cache keyed by URL/server/user/token and bind connection/socket resources through weak session adapters. Preparation/start/stop implementation belongs to SessionLifecycle; transport implementation belongs to Networking. Cached media-state client is scoped by exact transport. No application container or native SDK lifecycle is implemented in the libraries through this adapter.",
       "sha256": "6a909b3f3e9606a5c93e66b756464776d2afbbfbb755dfe6c0951951c0fb9b75",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -2921,18 +2956,27 @@
       "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinPlaybackPreparation",
+        "SwiftfinAsyncStreams",
+        "SwiftfinItemMetadata",
+        "SwiftfinMediaCatalog"
+      ],
       "path": "Shared/Services/UserSession/UserSessionManager+SocketCommands.swift",
-      "reason": "",
-      "sha256": "f29aee65a6d1154760c1b2fa520d787426b732fb12645cbfc40e2518b58eaade",
-      "status": "pending"
+      "reason": "Complete updated body reviewed: remote SDK interpretation delegates to immutable playback intent policy. App composes merged account/transport-scoped receipts, pending metadata/trailer latest requests, native control/default preference selection, provider routing and OS trailer opening. Logout/connection/root replacement and Stop cancel pending requests; receipt binding is rechecked before routing. Cancellation failures are quiet; current request errors retain logging. The tvOS observer returns before subscriptions, preserving the Kids remote-navigation prohibition. Actual routing/player execution remains held and downstream player composition remains pending.",
+      "sha256": "5e2988e23428bd2d091f8e1a05e2bede144a93be123c3258f4b87abc4d4403e3",
+      "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinSessions",
+        "SwiftfinAccountAccess",
+        "SwiftfinAsyncStreams"
+      ],
       "path": "Shared/Services/UserSession/UserSessionManager.swift",
-      "reason": "",
-      "sha256": "8d1c06c5f52ef614e8627221e49fa388781e05d274ccc5bb1b6cbe41c26fd20b",
-      "status": "pending"
+      "reason": "Complete body reviewed: session publication delegates to ActiveSessionCoordinator and socket lifetime slots now compose existing owners. App preferences, auth prompt and navigation remain composition. Mixed unresolved scope: mediaPlayerManagerPublisher queues assignment without an explicit identity/generation; its relation to delayed factory/player replacement requires full downstream player/source review. Deep-link/sign-in/foreground and shared freshness timestamp behavior need an actor/operation audit before this whole body is retained. No live authentication or player test was performed.",
+      "sha256": "46e91ce87d96bd5d6c9ff48b44a86e19783d3c5f830265ad8ab759b64c776739",
+      "status": "source-reviewed-mixed"
     },
     {
       "owners": [
@@ -2958,18 +3002,24 @@
       "status": "pending"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinAccountStore",
+        "SwiftfinAccountAccess"
+      ],
       "path": "Shared/SwiftfinStore/SwiftfinStore+ServerState.swift",
-      "reason": "",
+      "reason": "Complete body reviewed: connection/settings/read adapters mostly delegate to existing owners. Mixed unresolved scope: updateServerInfo constructs replacement account/name records and writes both account inventory and cached SDK public-info data directly to StoredValues after async reading. Move coherent metadata-cache persistence/merge ownership into AccountStore while preserving namespace, partial-failure ordering and exact captured URL checks. Native compatibility/version/image presentation remains composition.",
       "sha256": "814497ed07a64700d74f1f48fb1a2714ec82c3112ba3d1936a4a4c89d27796b6",
-      "status": "pending"
+      "status": "source-reviewed-mixed"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinAccountStore",
+        "SwiftfinAccountAccess"
+      ],
       "path": "Shared/SwiftfinStore/SwiftinStore+UserState.swift",
-      "reason": "",
+      "reason": "Complete body reviewed: credential/PIN/access-policy/delete adapters delegate to AccountStore and profile URLs to AccountAccess. Mixed unresolved scope: updateUserData rebuilds username/account records and writes inventory/cached SDK user data directly after a bound async read. Review coherent cache update ownership, account/server identity, credential binding and inter-await publication before retaining the whole body. No credential values were read or changed.",
       "sha256": "9cb59c692c5cffd30193ecf92e51bbd8ab7a52e52671f8e0785568e4eeecb98d",
-      "status": "pending"
+      "status": "source-reviewed-mixed"
     },
     {
       "owners": [
@@ -3288,11 +3338,19 @@
       "status": "pending"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinNetworking",
+        "SwiftfinServerOperations",
+        "SwiftfinUserAdministration",
+        "SwiftfinRecordingTimers",
+        "SwiftfinFilters",
+        "SwiftfinMediaCatalog",
+        "SwiftfinItemMetadata"
+      ],
       "path": "Shared/ViewModels/ViewModel.swift",
-      "reason": "",
+      "reason": "Complete base view-model body reviewed: injected current account, UI logger/cancellation bag and localized missing-session error stay in presentation. Feature-owner factories capture exact transport and weak root/client/manager checks; timer permission is supplied explicitly from current account policy. No raw SDK request/response, transport implementation, policy query or native stream lifecycle is implemented here.",
       "sha256": "7d9f2dc30b295de8b68b175b748f6231ba1568eb5eccc49d71162f84597f7585",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -5198,8 +5256,9 @@
     },
     {
       "path": "Packages/SwiftfinAsyncStreams/Sources/SwiftfinAsyncStreams/ScopedPublisher.swift",
-      "reason": "Actor-owned subscription/generation, private Combine token and weak queued receipts; source identity and currentness are supplied by app composition. No account, SDK, settings or application globals enter the owner. Raw sink creation is explicitly nonisolated; checked-Sendable values enter an explicit main-actor delivery. Retirement/factory/subscription/currentness reentry checks protect newer scopes; same identity reuses its subscription. Twelve native contracts include logout, A-B-A, weak owner/UI lifetime and real foreign-queue emission. Native scheduling is internally injectable; GUI socket acceptance remains held.",
+      "reason": "Actor-owned subscription/generation, private Combine token and weak queued receipts; source identity and currentness are supplied by app composition. No account, SDK, settings or application globals enter the owner. Raw sink creation is explicitly nonisolated; checked-Sendable values enter an explicit main-actor delivery. Retirement/factory/subscription/currentness reentry checks protect newer scopes; same identity reuses its subscription. Twelve native contracts include logout, A-B-A, weak owner/UI lifetime and real foreign-queue emission. Native scheduling is internally injectable; GUI socket acceptance remains held. The iOS remote-command adapter additionally composes merged immutable intents; tvOS command subscriptions remain disabled.",
       "reviewedConsumers": [
+        "Shared/Services/UserSession/UserSessionManager+SocketCommands.swift",
         "Shared/ViewModels/AdminDashboard/Sessions/ActiveSessionsViewModel.swift",
         "Shared/ViewModels/AdminDashboard/Tasks/ServerTasksViewModel.swift"
       ],
@@ -5222,18 +5281,58 @@
         "replaceKey(name:token:didRevoke:)"
       ],
       "sha256": "30b249c9ae8db3da0ebb615acbfdac10da137aad05092d51a37d9d5c2cc299c2"
+    },
+    {
+      "path": "Packages/SwiftfinPlaybackPreparation/Sources/SwiftfinPlaybackPreparation/RemotePlaybackCommandPolicy.swift",
+      "reason": "Immutable Equatable/Sendable SDK-command interpretation with finite intents; exact optional/default index fallback, signed ticks/numbers, case-sensitive fields and unsupported-command behavior. No account, preferences, native player, navigation or application globals enter this policy. Eight native contracts exercise every SDK kind and malformed/boundary values; actual player routing remains held.",
+      "reviewedConsumers": [
+        "Shared/Services/UserSession/UserSessionManager.swift",
+        "Shared/Services/UserSession/UserSessionManager+SocketCommands.swift"
+      ],
+      "reviewedInterfaces": [
+        "RemotePlaybackIntent cases",
+        "RemotePlaybackCommandPolicy.play/playstate/general"
+      ],
+      "sha256": "b319ec47b37733e055b15943aacbf6cc2c8520e510b1c80bd51fbc53d32a9440"
+    },
+    {
+      "path": "Packages/SwiftfinNetworking/Sources/SwiftfinNetworking/JellyfinRequestBodyRedactor.swift",
+      "reason": "Pure local DTO redaction accepts host-selected text. Exact final path match, original SDK omission/encoding, all three password-update fields and cleared reset flag are preserved. Unsupported/malformed bodies retain original bytes; no logger/transport/store is allocated. Six synthetic contracts use no real credentials and establish value behavior, not actual Pulse ingestion.",
+      "reviewedConsumers": [
+        "Shared/Logging/NetworkLogger.swift"
+      ],
+      "reviewedInterfaces": [
+        "body(at:body:replacement:)"
+      ],
+      "sha256": "dbd4eb79338a94d873fe55ac1ee7b897d34a839bbd18cc847efd65c07e73e431"
+    },
+    {
+      "path": "Packages/SwiftfinAsyncStreams/Sources/SwiftfinAsyncStreams/LatestRequest.swift",
+      "reason": "Main-actor generic owner privately retains task/generation; value/UI callbacks are Sendable and caller UI is weakly captured. Retirement clears the task slot before cancellation; replace installs its ticket before cleanup and abandons obsolete reentrant work. Two new independently failing then passing cleanup-reentry contracts complement eight existing cancellation/failure/weak-owner/receipt tests. Cancellation/failure suppress publication; host logs current request failures explicitly. No unsafe production actor escape, application/SDK/settings dependency or public task handle is introduced.",
+      "reviewedConsumers": [
+        "Shared/Services/UserSession/UserSessionManager.swift",
+        "Shared/Services/UserSession/UserSessionManager+SocketCommands.swift"
+      ],
+      "reviewedInterfaces": [
+        "init()",
+        "replace(operation:receive:)",
+        "cancel()",
+        "isolated task teardown"
+      ],
+      "sha256": "90a3b86573020168f4d358a80a8d70b937f9be28388b81e491e4bcf33be57af9"
     }
   ],
   "limits": "This ledger records bodies explicitly reviewed, with exact current hashes; earlier prose or lexical inventory is not automatically promoted. Pending and mixed entries prevent whole-source completion. Retained UI algorithms have specific presentation reasons, not folder/import-based blanket approval. API entries do not classify the rest of the public graph. Source review and offline tests do not satisfy held runtime acceptance.",
   "schemaVersion": 1,
-  "scope": "All current app Swift files; complete-body classifications and twenty-three scoped interface/internal lifecycle/consumer reviews. No server/media/simulator testing.",
+  "scope": "All current app Swift files; complete-body classifications and twenty-six scoped interface/internal lifecycle/consumer reviews. No simulator/server testing.",
   "summary": {
     "applicationSwiftFiles": 666,
     "classification": {
-      "pending": 408,
-      "source-reviewed-retained": 258
+      "pending": 393,
+      "source-reviewed-mixed": 3,
+      "source-reviewed-retained": 270
     },
-    "currentAPIReviews": 23,
+    "currentAPIReviews": 26,
     "runtimeAcceptance": "held by human; no simulator/server testing"
   }
 }

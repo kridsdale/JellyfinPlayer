@@ -11,233 +11,167 @@ import Defaults
 import Foundation
 import JellyfinAPI
 import SwiftfinAsyncStreams
-import SwiftfinCollections
-import SwiftfinText
+import SwiftfinItemMetadata
+import SwiftfinPlaybackPreparation
 import SwiftfinTime
 import UIKit
 
 extension UserSessionManager {
-
     func observeSocketCommands() {
         #if os(tvOS)
         // Kids playback must pass its local catalog boundary and session budget. Remote queue/navigation commands are disabled.
         return
         #else
         $currentSession
-            .map { session -> AnyPublisher<PlayRequest, Never> in
-                session?.serverSocketManager.playCommands ?? Combine.Empty<PlayRequest, Never>().eraseToAnyPublisher()
-            }
-            .switchToLatest()
-            .sink { [weak self] command in
-                Task { @MainActor in
-                    self?.onReceive(playCommand: command)
-                }
-            }
+            .sink { [weak self] session in self?.bindSocketCommands(to: session) }
             .store(in: &cancellables)
-
-        $currentSession
-            .map { session -> AnyPublisher<PlaystateRequest, Never> in
-                session?.serverSocketManager.playstateCommands ?? Combine.Empty<PlaystateRequest, Never>().eraseToAnyPublisher()
-            }
-            .switchToLatest()
-            .sink { [weak self] command in
-                Task { @MainActor in
-                    self?.onReceive(playstateCommand: command)
-                }
-            }
-            .store(in: &cancellables)
-
-        $currentSession
-            .map { session -> AnyPublisher<GeneralCommand, Never> in
-                session?.serverSocketManager.generalCommands ?? Combine.Empty<GeneralCommand, Never>().eraseToAnyPublisher()
-            }
-            .switchToLatest()
-            .sink { [weak self] command in
-                Task { @MainActor in
-                    self?.onReceive(generalCommand: command)
-                }
-            }
+        Notifications[.didChangeServerConnection].publisher
+            .sink { [weak self] _ in self?.bindSocketCommands(to: self?.currentSession) }
             .store(in: &cancellables)
         #endif
     }
 
-    @MainActor
-    private func onReceive(playCommand: PlayRequest) {
-        guard let currentSession else { return }
-
-        switch playCommand.playCommand {
-        case .playNow, .none:
-            let itemIDs = playCommand.itemIDs ?? []
-            guard let itemID = itemIDs[safe: playCommand.startIndex ?? 0] ?? itemIDs.first else { return }
-
-            playItem(
-                id: itemID,
-                mediaSourceID: playCommand.mediaSourceID,
-                startPositionTicks: playCommand.startPositionTicks,
-                userSession: currentSession
-            )
-        case .playNext:
-            onReceive(playstateCommand: .init(command: .nextTrack, controllingUserID: playCommand.controllingUserID))
-        case .playLast:
-            onReceive(playstateCommand: .init(command: .previousTrack, controllingUserID: playCommand.controllingUserID))
-        case .playInstantMix:
-            // TODO: Implement instant mix
+    private func bindSocketCommands(to session: UserSession?) {
+        guard let session else {
+            socketCommands.cancel()
+            socketItemRequest.cancel()
+            socketTrailerRequest.cancel()
             return
-        case .playShuffle:
-            // TODO: Implement shuffle playback
-            return
+        }
+        let client = session.client
+        let changed = socketCommands.replace(
+            scope: [ObjectIdentifier(session), ObjectIdentifier(client)],
+            makePublisher: {
+                let socket = session.serverSocketManager
+                return socket.playCommands.map(RemotePlaybackCommandPolicy.play)
+                    .merge(
+                        with: socket.playstateCommands.map(RemotePlaybackCommandPolicy.playstate),
+                        socket.generalCommands.map(RemotePlaybackCommandPolicy.general)
+                    )
+                    .eraseToAnyPublisher()
+            },
+            isCurrent: { [weak self, weak session, weak client] in
+                guard let self, let session, let client else { return false }
+                return currentSession === session && session.client === client
+            },
+            receive: { [weak self] intent in self?.onReceive(intent: intent) }
+        )
+        if changed {
+            socketItemRequest.cancel()
+            socketTrailerRequest.cancel()
         }
     }
 
-    @MainActor
-    private func onReceive(playstateCommand: PlaystateRequest) {
-        guard let mediaPlayerManager else { return }
-
-        switch playstateCommand.command {
-        case .fastForward:
-            mediaPlayerManager.proxy?.jumpForward(Defaults[.VideoPlayer.jumpForwardInterval].rawValue)
+    private func onReceive(intent: RemotePlaybackIntent) {
+        guard let currentSession else { return }
+        switch intent {
+        case let .playItem(id, source, ticks):
+            playItem(id: id, mediaSourceID: source, startPositionTicks: ticks, userSession: currentSession)
         case .nextTrack:
-            guard let nextItem = mediaPlayerManager.queue?.nextItem else { return }
-            mediaPlayerManager.playNewItem(provider: nextItem)
-        case .pause:
-            mediaPlayerManager.setPlaybackRequestStatus(status: .paused)
-        case .playPause:
-            mediaPlayerManager.togglePlayPause()
+            guard let manager = mediaPlayerManager, let next = manager.queue?.nextItem else { return }
+            cancelPendingSocketPlayback()
+            manager.playNewItem(provider: next)
         case .previousTrack:
-            guard let previousItem = mediaPlayerManager.queue?.previousItem else { return }
-            mediaPlayerManager.playNewItem(provider: previousItem)
-        case .rewind:
-            mediaPlayerManager.proxy?.jumpBackward(Defaults[.VideoPlayer.jumpBackwardInterval].rawValue)
-        case .seek:
-            guard let ticks = playstateCommand.seekPositionTicks else { return }
-            mediaPlayerManager.proxy?.setSeconds(.ticks(ticks))
+            guard let manager = mediaPlayerManager, let previous = manager.queue?.previousItem else { return }
+            cancelPendingSocketPlayback()
+            manager.playNewItem(provider: previous)
+        case .fastForward: mediaPlayerManager?.proxy?.jumpForward(Defaults[.VideoPlayer.jumpForwardInterval].rawValue)
+        case .rewind: mediaPlayerManager?.proxy?.jumpBackward(Defaults[.VideoPlayer.jumpBackwardInterval].rawValue)
+        case .pause: mediaPlayerManager?.setPlaybackRequestStatus(status: .paused)
+        case .unpause: mediaPlayerManager?.setPlaybackRequestStatus(status: .playing)
+        case .playPause: mediaPlayerManager?.togglePlayPause()
+        case let .seek(ticks): mediaPlayerManager?.proxy?.setSeconds(.ticks(ticks))
         case .stop:
-            mediaPlayerManager.stop()
-        case .unpause:
-            mediaPlayerManager.setPlaybackRequestStatus(status: .playing)
-        case .none:
-            return
+            cancelPendingSocketPlayback()
+            mediaPlayerManager?.stop()
+        case let .audioStream(index): mediaPlayerManager?.playbackItem?.selectedAudioStreamIndex = index
+        case let .subtitleStream(index): mediaPlayerManager?.playbackItem?.selectedSubtitleStreamIndex = index
+        case let .maxBitrate(bitrate): mediaPlayerManager?.setBitrate(bitrate: PlaybackBitrate(for: bitrate))
+        case let .displayItem(id): routePublisher.send(.item(id: id))
+        case let .trailers(id): playTrailers(itemID: id, userSession: currentSession)
+        case .ignore: return
         }
     }
 
-    @MainActor
-    private func onReceive(generalCommand: GeneralCommand) {
-        guard let currentSession else { return }
-
-        switch generalCommand.name {
-        case .setAudioStreamIndex:
-            guard let index = generalCommand.arguments?["Index"], let index = Int(index) else { return }
-            mediaPlayerManager?.playbackItem?.selectedAudioStreamIndex = index
-        case .setMaxStreamingBitrate:
-            guard let bitrate = generalCommand.arguments?["Bitrate"], let bitrate = Int(bitrate) else { return }
-            mediaPlayerManager?.setBitrate(bitrate: PlaybackBitrate(for: bitrate))
-        case .setSubtitleStreamIndex:
-            guard let index = generalCommand.arguments?["Index"], let index = Int(index) else { return }
-            mediaPlayerManager?.playbackItem?.selectedSubtitleStreamIndex = index
-        case .displayContent:
-            guard let itemID = generalCommand.arguments?["ItemId"] else { return }
-            routePublisher.send(.item(id: itemID))
-        case .playMediaSource:
-            guard let itemID = generalCommand.arguments?["ItemId"] else { return }
-            playItem(
-                id: itemID,
-                mediaSourceID: generalCommand.arguments?["MediaSourceId"],
-                userSession: currentSession
-            )
-        case .playTrailers:
-            guard let itemID = generalCommand.arguments?["ItemId"] else { return }
-            playTrailers(itemID: itemID, userSession: currentSession)
-        case .displayMessage:
-            // TODO: Implement via Toast
-            return
-        case .setPlaybackOrder, .setRepeatMode, .setShuffleQueue:
-            // TODO: Implement when queue shuffling exists
-            return
-        case .mute, .setVolume, .toggleMute, .unmute, .volumeDown, .volumeUp:
-            // Ignore volume commands since this would be iOS only
-            return
-        default:
-            // Ignore navigation commands
-            return
-        }
+    private func cancelPendingSocketPlayback() {
+        socketItemRequest.cancel()
+        socketTrailerRequest.cancel()
     }
 
-    @MainActor
     private func playItem(
         id: String,
         mediaSourceID: String? = nil,
         startPositionTicks: Int? = nil,
         userSession: UserSession
     ) {
-        Task { @MainActor in
+        cancelPendingSocketPlayback()
+        let metadata = userSession.itemMetadata
+        let logger = self.logger
+        socketItemRequest.replace(operation: {
             do {
-                let item = try await BaseItemDto(id: id).getFullItem(userSession: userSession)
-                let mediaSource = item.mediaSources?.first {
-                    $0.id == mediaSourceID
-                }
-
-                guard var provider = item.getPlaybackItemProvider(
-                    userSession: userSession,
-                    mediaSource: mediaSource
-                ) else { return }
-
-                if let startPositionTicks {
-                    provider = provider.modifyingItem { item in
-                        if item.userData == nil {
-                            item.userData = UserItemDataDto(key: "")
-                        }
-                        item.userData?.playbackPositionTicks = startPositionTicks
-                    }
-                }
-
-                if hasActivePlayback, let mediaPlayerManager {
-                    await mediaPlayerManager.playNewItem(provider: provider)
-                } else {
-                    routePublisher.send(.videoPlayer(provider: provider))
-                }
+                return try await metadata.item(id: id)
             } catch {
-                logger.error(
-                    "Unable to play item from socket command",
-                    metadata: ["error": .string(error.localizedDescription)]
-                )
+                if !(error is CancellationError) {
+                    logger.error("Unable to play item from socket command", metadata: ["error": .string(error.localizedDescription)])
+                }
+                throw error
             }
-        }
+        }, receive: { [weak self, weak userSession] item in
+            guard let self, let userSession else { return }
+            guard (try? metadata.checkBinding()) != nil else { return }
+            let source = item.mediaSources?.first { $0.id == mediaSourceID }
+            guard var provider = item.getPlaybackItemProvider(userSession: userSession, mediaSource: source) else { return }
+            if let startPositionTicks {
+                provider = provider.modifyingItem { item in
+                    if item.userData == nil {
+                        item.userData = UserItemDataDto(key: "")
+                    }
+                    item.userData?.playbackPositionTicks = startPositionTicks
+                }
+            }
+            if hasActivePlayback, let mediaPlayerManager {
+                mediaPlayerManager.playNewItem(provider: provider)
+            } else {
+                routePublisher.send(.videoPlayer(provider: provider))
+            }
+        })
     }
 
-    @MainActor
     private func playTrailers(itemID: String, userSession: UserSession) {
-        Task { @MainActor in
+        cancelPendingSocketPlayback()
+        let catalog = userSession.mediaCatalog
+        let metadata = userSession.itemMetadata
+        let logger = self.logger
+        socketTrailerRequest.replace(operation: {
             do {
-                let catalog = userSession.mediaCatalog
                 let trailers = try await catalog.localTrailers(itemID: itemID)
                 try catalog.checkBinding()
-                if let trailerID = trailers.first?.id {
-                    playItem(id: trailerID, userSession: userSession)
-                    return
+                if let id = trailers.first?.id {
+                    return .localItem(id)
                 }
-
-                let item = try await BaseItemDto(id: itemID).getFullItem(userSession: userSession)
-                guard let urlString = item.remoteTrailers?.first?.url else { return }
-
-                #if os(tvOS)
-                guard let externalURL = ExternalTrailerURL(string: urlString),
-                      externalURL.canBeOpened
-                else { return }
-
-                await UIApplication.shared.open(externalURL.deepLink)
-                #else
-                guard let url = URL(string: urlString),
-                      UIApplication.shared.canOpenURL(url)
-                else { return }
-
-                await UIApplication.shared.open(url)
-                #endif
+                let item = try await metadata.item(id: itemID)
+                try metadata.checkBinding()
+                guard let url = item.remoteTrailers?.first?.url else { throw CancellationError() }
+                return .external(url)
             } catch {
-                logger.error(
-                    "Unable to play trailers from socket command",
-                    metadata: ["error": .string(error.localizedDescription)]
-                )
+                if !(error is CancellationError) {
+                    logger.error("Unable to play trailers from socket command", metadata: ["error": .string(error.localizedDescription)])
+                }
+                throw error
             }
-        }
+        }, receive: { [weak self, weak userSession] target in
+            guard let self, let userSession, (try? catalog.checkBinding()) != nil else { return }
+            switch target {
+            case let .localItem(id): playItem(id: id, userSession: userSession)
+            case let .external(urlString):
+                #if os(tvOS)
+                guard let externalURL = ExternalTrailerURL(string: urlString), externalURL.canBeOpened else { return }
+                UIApplication.shared.open(externalURL.deepLink)
+                #else
+                guard let url = URL(string: urlString), UIApplication.shared.canOpenURL(url) else { return }
+                UIApplication.shared.open(url)
+                #endif
+            }
+        })
     }
 }

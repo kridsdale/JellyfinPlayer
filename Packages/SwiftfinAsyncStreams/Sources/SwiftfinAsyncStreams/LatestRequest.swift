@@ -22,9 +22,12 @@ public final class LatestRequest<Value: Sendable> {
         operation: @escaping @MainActor @Sendable () async throws -> Value,
         receive: @escaping @MainActor @Sendable (Value) -> Void
     ) {
-        cancel()
         let generation = UUID()
+        let previous = task
         self.generation = generation
+        task = nil
+        previous?.cancel()
+        guard self.generation == generation else { return }
         task = Task { [weak self] in
             do {
                 try Task.checkCancellation()
@@ -44,9 +47,10 @@ public final class LatestRequest<Value: Sendable> {
 
     /// Invalidates publication immediately, even if the operation ignores cancellation.
     public func cancel() {
+        let previous = task
         generation = nil
-        task?.cancel()
         task = nil
+        previous?.cancel()
     }
 
     isolated deinit {

@@ -289,6 +289,8 @@
 		9447B230A2ABD81051874FBF /* Packages/SwiftfinText/Tests/SwiftfinTextTests/TextExportContracts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8527B1ED35E9989F922153E3 /* Packages/SwiftfinText/Tests/SwiftfinTextTests/TextExportContracts.swift */; };
 		FF371FF7A8B4BBAC9B565E60 /* Packages/SwiftfinAsyncStreams/Tests/SwiftfinAsyncStreamsTests/ScopedPublisherContracts.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFDD976EF41FC86C7582A048 /* Packages/SwiftfinAsyncStreams/Tests/SwiftfinAsyncStreamsTests/ScopedPublisherContracts.swift */; };
 		AED2BCBFE85647626F917887 /* Packages/SwiftfinServerOperations/Tests/SwiftfinServerOperationsTests/KeyReplacementContracts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BA095921FC6C93BCB24BC70 /* Packages/SwiftfinServerOperations/Tests/SwiftfinServerOperationsTests/KeyReplacementContracts.swift */; };
+		BBE742B6A2236009587DE29E /* Packages/SwiftfinPlaybackPreparation/Tests/SwiftfinPlaybackPreparationTests/RemotePlaybackCommandContracts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91851348D9F59E2B3CFD1359 /* Packages/SwiftfinPlaybackPreparation/Tests/SwiftfinPlaybackPreparationTests/RemotePlaybackCommandContracts.swift */; };
+		87BAD62D16FCCFB5BA93CB45 /* Packages/SwiftfinNetworking/Tests/SwiftfinNetworkingTests/RequestBodyRedactionContracts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7011DDA1E828C2914C565701 /* Packages/SwiftfinNetworking/Tests/SwiftfinNetworkingTests/RequestBodyRedactionContracts.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -406,6 +408,8 @@
 		8527B1ED35E9989F922153E3 /* Packages/SwiftfinText/Tests/SwiftfinTextTests/TextExportContracts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Packages/SwiftfinText/Tests/SwiftfinTextTests/TextExportContracts.swift; sourceTree = SOURCE_ROOT; };
 		EFDD976EF41FC86C7582A048 /* Packages/SwiftfinAsyncStreams/Tests/SwiftfinAsyncStreamsTests/ScopedPublisherContracts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Packages/SwiftfinAsyncStreams/Tests/SwiftfinAsyncStreamsTests/ScopedPublisherContracts.swift; sourceTree = SOURCE_ROOT; };
 		4BA095921FC6C93BCB24BC70 /* Packages/SwiftfinServerOperations/Tests/SwiftfinServerOperationsTests/KeyReplacementContracts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Packages/SwiftfinServerOperations/Tests/SwiftfinServerOperationsTests/KeyReplacementContracts.swift; sourceTree = SOURCE_ROOT; };
+		91851348D9F59E2B3CFD1359 /* Packages/SwiftfinPlaybackPreparation/Tests/SwiftfinPlaybackPreparationTests/RemotePlaybackCommandContracts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Packages/SwiftfinPlaybackPreparation/Tests/SwiftfinPlaybackPreparationTests/RemotePlaybackCommandContracts.swift; sourceTree = SOURCE_ROOT; };
+		7011DDA1E828C2914C565701 /* Packages/SwiftfinNetworking/Tests/SwiftfinNetworkingTests/RequestBodyRedactionContracts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Packages/SwiftfinNetworking/Tests/SwiftfinNetworkingTests/RequestBodyRedactionContracts.swift; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -755,6 +759,8 @@
 				91E50DA2DBFE11433CA5B297 /* Packages/SwiftfinAccountAccess/Tests/SwiftfinAccountAccessTests/LocalAccessPolicyContracts.swift */,
 				0D398FB4A311E02B078B7F6C /* Packages/SwiftfinNativePlayback/Tests/SwiftfinNativePlaybackTests/HardwareReaderContracts.swift */,
 				E48C3FE91DA20460FB967687 /* Packages/SwiftfinImageProcessing/Tests/SwiftfinImageProcessingTests/SVGRenderStateContracts.swift */,
+				7011DDA1E828C2914C565701 /* Packages/SwiftfinNetworking/Tests/SwiftfinNetworkingTests/RequestBodyRedactionContracts.swift */,
+				91851348D9F59E2B3CFD1359 /* Packages/SwiftfinPlaybackPreparation/Tests/SwiftfinPlaybackPreparationTests/RemotePlaybackCommandContracts.swift */,
 				4BA095921FC6C93BCB24BC70 /* Packages/SwiftfinServerOperations/Tests/SwiftfinServerOperationsTests/KeyReplacementContracts.swift */,
 				EFDD976EF41FC86C7582A048 /* Packages/SwiftfinAsyncStreams/Tests/SwiftfinAsyncStreamsTests/ScopedPublisherContracts.swift */,
 				367ABB6E1673F8E9E1E43FDB /* Packages/SwiftfinItemMetadata/Tests/SwiftfinItemMetadataTests/AppMetadataOriginalContracts.swift */,
@@ -1534,6 +1540,8 @@
 				FA3FDEE8F4465249CADCA3B6 /* Packages/SwiftfinAccountAccess/Tests/SwiftfinAccountAccessTests/LocalAccessPolicyContracts.swift in Sources */,
 				F592A228D472773A384D26B6 /* Packages/SwiftfinNativePlayback/Tests/SwiftfinNativePlaybackTests/HardwareReaderContracts.swift in Sources */,
 				95F5CDA646C98074444086D4 /* Packages/SwiftfinImageProcessing/Tests/SwiftfinImageProcessingTests/SVGRenderStateContracts.swift in Sources */,
+				87BAD62D16FCCFB5BA93CB45 /* Packages/SwiftfinNetworking/Tests/SwiftfinNetworkingTests/RequestBodyRedactionContracts.swift in Sources */,
+				BBE742B6A2236009587DE29E /* Packages/SwiftfinPlaybackPreparation/Tests/SwiftfinPlaybackPreparationTests/RemotePlaybackCommandContracts.swift in Sources */,
 				AED2BCBFE85647626F917887 /* Packages/SwiftfinServerOperations/Tests/SwiftfinServerOperationsTests/KeyReplacementContracts.swift in Sources */,
 				FF371FF7A8B4BBAC9B565E60 /* Packages/SwiftfinAsyncStreams/Tests/SwiftfinAsyncStreamsTests/ScopedPublisherContracts.swift in Sources */,
 				19CC321D64C8DCFE07873E99 /* Packages/SwiftfinItemMetadata/Tests/SwiftfinItemMetadataTests/AppMetadataOriginalContracts.swift in Sources */,

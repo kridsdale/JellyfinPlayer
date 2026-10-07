@@ -7,9 +7,8 @@
 //
 
 import Foundation
-import JellyfinAPI
 import Pulse
-import SwiftfinText
+import SwiftfinNetworking
 
 private let redactedMessage = "<Redacted by Swiftfin>"
 
@@ -29,28 +28,8 @@ extension NetworkLogger {
                     return event
                 }
 
-                let pathComponents = url.pathComponents
-
-                if pathComponents.last == "AuthenticateByName",
-                   var body = try? JSONDecoder().decode(AuthenticateUserByName.self, from: requestBody)
-                {
-                    body.pw = redactedMessage
-                    task.requestBody = try? JSONEncoder().encode(body)
-
-                    return LoggerStore.Event.networkTaskCompleted(task)
-                }
-
-                if pathComponents.last == "Password",
-                   var body = try? JSONDecoder().decode(UpdateUserPassword.self, from: requestBody)
-                {
-                    body.currentPassword = redactedMessage
-                    body.currentPw = redactedMessage
-                    body.newPw = redactedMessage
-                    body.isResetPassword = nil
-                    task.requestBody = try? JSONEncoder().encode(body)
-
-                    return LoggerStore.Event.networkTaskCompleted(task)
-                }
+                task.requestBody = JellyfinRequestBodyRedactor.body(at: url, body: requestBody, replacement: redactedMessage)
+                return LoggerStore.Event.networkTaskCompleted(task)
             }
 
             return event
