@@ -10,6 +10,7 @@ import Defaults
 import JellyfinAPI
 import MPVUI
 import SwiftfinCollections
+import SwiftfinMediaTracks
 import SwiftfinUIState
 import SwiftUI
 

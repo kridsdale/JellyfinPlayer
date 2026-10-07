@@ -10,27 +10,27 @@ import CryptoKit
 import Foundation
 import JellyfinAPI
 
-struct MediaTrackIndexMap {
+public struct MediaTrackIndexMap: Sendable {
 
     private var playerIndexesByJellyfinIndex: [Int: Int]
 
-    init(_ playerIndexesByJellyfinIndex: [Int: Int] = [:]) {
+    public init(_ playerIndexesByJellyfinIndex: [Int: Int] = [:]) {
         self.playerIndexesByJellyfinIndex = playerIndexesByJellyfinIndex
     }
 
-    func playerIndex(for jellyfinIndex: Int?) -> Int? {
+    public func playerIndex(for jellyfinIndex: Int?) -> Int? {
         guard let jellyfinIndex, jellyfinIndex != -1 else { return -1 }
         return playerIndexesByJellyfinIndex[jellyfinIndex]
     }
 
-    mutating func setPlayerIndex(_ playerIndex: Int, for jellyfinIndex: Int) {
+    public mutating func setPlayerIndex(_ playerIndex: Int, for jellyfinIndex: Int) {
         playerIndexesByJellyfinIndex[jellyfinIndex] = playerIndex
     }
 
     /// Maps Jellyfin stream indexes to positions in each player track array.
     /// Embedded tracks keep their order; transcoding exposes only the selected audio track.
     /// Sidecar subtitles are resolved after loading.
-    static func build(
+    public static func build(
         from mediaStreams: [MediaStream],
         for playMethod: PlayMethod,
         selectedAudioStreamIndex: Int
@@ -62,7 +62,7 @@ struct MediaTrackIndexMap {
     }
 
     /// Maps each sidecar to its loaded subtitle track.
-    func resolvingSidecarSubtitles(
+    public func resolvingSidecarSubtitles(
         _ sidecars: [(jellyfinIndex: Int, url: URL)],
         subtitleTracks: [(playerIndex: Int, id: String)]
     ) -> MediaTrackIndexMap {

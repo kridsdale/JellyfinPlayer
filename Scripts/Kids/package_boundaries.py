@@ -12,6 +12,7 @@ import subprocess
 
 # Explicit responsibilities, not a permission derived from whatever code happens to import.
 EXTERNAL_POLICIES = {
+    "SwiftfinMediaTracks": [("jellyfin-sdk-swift", "https://github.com/jellyfin/jellyfin-sdk-swift.git", "3.2.0")],
     "SwiftfinPlaybackProfiles": [("jellyfin-sdk-swift", "https://github.com/jellyfin/jellyfin-sdk-swift.git", "3.2.0")],
     "SwiftfinImages": [("nuke", "https://github.com/kean/Nuke", "13.0.6")],
     "SwiftfinVLC": [("swiftvlc", "https://github.com/harflabs/SwiftVLC", "1.0.0")],
@@ -23,6 +24,9 @@ EXTERNAL_POLICIES = {
     ],
 }
 POLICIES = {
+    "SwiftfinScrolling": ({}, {"Foundation", "UIKit", "Combine"}),
+    "SwiftfinMediaTracks": ({"SwiftfinPlaybackProfiles"}, {"Foundation", "CryptoKit", "JellyfinAPI"}),
+    "SwiftfinPlaybackPreviews": ({}, {"Foundation", "UIKit", "Combine"}),
     "SwiftfinNativePlayback": ({}, {"Foundation", "AVFoundation", "AVKit", "SwiftUI"}),
     "SwiftfinCollections": ({}, {"Foundation"}),
     "SwiftfinPlaybackProfiles": ({"SwiftfinCollections"}, {"Foundation", "JellyfinAPI"}),

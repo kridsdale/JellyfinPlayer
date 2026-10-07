@@ -1,6 +1,6 @@
-# Next goal: libraries with minimal responsibilities
+# Active goal: libraries with minimal responsibilities
 
-Requested by the user on 2026-10-05. Start only after the active engineering goal is complete; this is a queued follow-up, not a replacement for current work.
+Requested by the user on 2026-10-05 and initially queued. It is now the active full-client/package and Swift 6 workstream. See current-goal-status.md and package-refactor.md for current evidence; the complete objective and criteria below remain required.
 
 ## Objective
 
@@ -15,4 +15,4 @@ Refactor the client into logically minimal Swift package libraries, with clear o
 - Verify simulator navigation and real restricted-account playback after each meaningful integration change. Retain signing, iCloud entitlement and performance evidence.
 - Document the package dependency graph, public interfaces, composition root and extension path.
 
-Do not begin the refactor while the preceding active goal still has required work. Apple TV/cloud and server acceptance dependencies must remain explicit rather than being declared complete to start this goal.
+Apple TV/cloud and server acceptance dependencies remain explicit and deferred or separately tracked; they are not declared complete by starting or validating this refactor.

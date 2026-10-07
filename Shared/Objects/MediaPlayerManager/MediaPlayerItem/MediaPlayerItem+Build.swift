@@ -9,9 +9,11 @@
 import Defaults
 import FactoryKit
 import Foundation
+import Get
 import JellyfinAPI
 import Logging
 import SwiftfinLocalization
+import SwiftfinPlaybackPreviews
 import SwiftfinPlaybackProfiles
 import SwiftfinStoredValues
 #if os(tvOS)
@@ -176,35 +178,46 @@ extension MediaPlayerItem {
             logger: logger
         )
 
+        // Bind every image load to the transport that prepared this item.
+        // A replacement account, URL or credential invalidates the old provider.
+        let previewClient = userSession.client
+        let previewIsCurrent: @MainActor @Sendable () -> Bool = { [weak userSession, weak previewClient] in
+            guard let userSession, let previewClient,
+                  Container.shared.userSessionManager().currentSession === userSession else { return false }
+            return userSession.client === previewClient
+        }
         let previewImageProvider: (any PreviewImageProvider)? = {
-            let previewImageScrubbingSetting = StoredValues[.User.previewImageScrubbing]
-            lazy var chapterPreviewImageProvider: ChapterPreviewImageProvider? = {
-                if let chapters = item.fullChapterInfo, chapters.contains(where: { $0.imageSource?.url != nil }) {
-                    return ChapterPreviewImageProvider(chapters: chapters)
+            let setting = StoredValues[.User.previewImageScrubbing]
+            lazy var chapters: ChapterPreviewImageProvider? = {
+                guard let source = item.fullChapterInfo,
+                      source.contains(where: { $0.imageSource?.url != nil }) else { return nil }
+                return ChapterPreviewImageProvider(
+                    chapters: source.map { PreviewChapter(start: $0.chapterInfo.startSeconds, url: $0.imageSource?.url) },
+                    isCurrent: previewIsCurrent
+                ) { url in
+                    try? await previewClient.send(Request<Data>(url: url)).value
                 }
-                return nil
             }()
-
-            if case let PreviewImageScrubbingOption.trickplay(fallbackToChapters: fallbackToChapters) = previewImageScrubbingSetting {
-                if let mediaSourceID = mediaSource.id,
-                   let trickplayInfo = item.trickplay?[mediaSourceID]?.first
+            if case let .trickplay(fallbackToChapters) = setting {
+                if let sourceID = mediaSource.id,
+                   let info = item.trickplay?[sourceID]?.first?.value,
+                   let layout = TrickplayPreviewLayout(
+                       columns: info.tileWidth ?? 0,
+                       rows: info.tileHeight ?? 0,
+                       width: info.width ?? 0,
+                       intervalMilliseconds: info.interval ?? 1000,
+                       runtime: item.runtime ?? .zero
+                   )
                 {
-                    return TrickplayPreviewImageProvider(
-                        info: trickplayInfo.value,
-                        itemID: itemID,
-                        mediaSourceID: mediaSourceID,
-                        runtime: item.runtime ?? .zero
-                    )
+                    return TrickplayPreviewImageProvider(layout: layout, isCurrent: previewIsCurrent) { index in
+                        try? await previewClient.send(Paths.getTrickplayTileImage(
+                            itemID: itemID, width: layout.width, index: index, mediaSourceID: sourceID
+                        )).value
+                    }
                 }
-
-                if fallbackToChapters {
-                    return chapterPreviewImageProvider
-                }
-            } else if previewImageScrubbingSetting == .chapters {
-                return chapterPreviewImageProvider
+                return fallbackToChapters ? chapters : nil
             }
-
-            return nil
+            return setting == .chapters ? chapters : nil
         }()
 
         return .init(
@@ -214,6 +227,7 @@ extension MediaPlayerItem {
             url: playbackURL,
             requestedBitrate: requestedBitrate,
             deviceProfile: deviceProfile,
+            compatibilityMode: compatibilityMode,
             initialAudioStreamIndex: audioStreamIndex,
             initialSubtitleStreamIndex: subtitleStreamIndex,
             previewImageProvider: previewImageProvider,

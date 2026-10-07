@@ -6,10 +6,15 @@
 // Copyright (c) 2026 Jellyfin & Jellyfin Contributors
 //
 
+#if canImport(UIKit)
+import Combine
+import Foundation
 import UIKit
 
 @MainActor
-final class EPGScrollProxy: ObservableObject {
+public final class EPGScrollProxy: ObservableObject {
+
+    public init() {}
 
     private weak var contentScrollView: UIScrollView?
 
@@ -31,7 +36,7 @@ final class EPGScrollProxy: ObservableObject {
         valueOptions: .strongMemory
     )
 
-    func registerContent(_ scrollView: UIScrollView, centeringOn target: CGFloat?) {
+    public func registerContent(_ scrollView: UIScrollView, centeringOn target: CGFloat?) {
         if contentScrollView !== scrollView {
             didCenter = false
         }
@@ -49,7 +54,7 @@ final class EPGScrollProxy: ObservableObject {
         }
     }
 
-    func registerHorizontal(_ scrollView: UIScrollView) {
+    public func registerHorizontal(_ scrollView: UIScrollView) {
         horizontalScrollViews.add(scrollView)
 
         guard isConnected, horizontalObservations.object(forKey: scrollView) == nil else { return }
@@ -73,7 +78,7 @@ final class EPGScrollProxy: ObservableObject {
         horizontalObservations.setObject(observation, forKey: scrollView)
     }
 
-    func registerVertical(_ scrollView: UIScrollView) {
+    public func registerVertical(_ scrollView: UIScrollView) {
         verticalScrollViews.add(scrollView)
 
         guard isConnected, verticalObservations.object(forKey: scrollView) == nil else { return }
@@ -97,7 +102,7 @@ final class EPGScrollProxy: ObservableObject {
         verticalObservations.setObject(observation, forKey: scrollView)
     }
 
-    func reset() {
+    public func reset() {
         didCenter = false
 
         guard let contentScrollView else { return }
@@ -108,14 +113,14 @@ final class EPGScrollProxy: ObservableObject {
         )
     }
 
-    func connect() {
+    public func connect() {
         isConnected = true
 
         horizontalScrollViews.allObjects.forEach(registerHorizontal)
         verticalScrollViews.allObjects.forEach(registerVertical)
     }
 
-    func disconnect() {
+    public func disconnect() {
         isConnected = false
         observationGeneration = UUID()
 
@@ -123,7 +128,7 @@ final class EPGScrollProxy: ObservableObject {
         invalidateObservations(in: verticalObservations)
     }
 
-    func scrollTo(centering target: CGFloat) {
+    public func scrollTo(centering target: CGFloat) {
         guard let contentScrollView, let offset = offset(centering: target) else { return }
 
         contentScrollView.setContentOffset(
@@ -135,14 +140,10 @@ final class EPGScrollProxy: ObservableObject {
     private func offset(centering target: CGFloat) -> CGFloat? {
         guard let contentScrollView else { return nil }
 
-        let viewport = contentScrollView.bounds.width
-
-        guard viewport > 0, contentScrollView.contentSize.width > viewport else { return nil }
-
-        return clamp(
-            target - viewport / 2,
-            min: 0,
-            max: contentScrollView.contentSize.width - viewport
+        return ScrollCentering.offset(
+            target: target,
+            viewport: contentScrollView.bounds.width,
+            content: contentScrollView.contentSize.width
         )
     }
 
@@ -194,3 +195,5 @@ final class EPGScrollProxy: ObservableObject {
         }
     }
 }
+
+#endif

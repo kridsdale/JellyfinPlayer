@@ -8,6 +8,8 @@
 
 import Defaults
 import JellyfinAPI
+import SwiftfinMediaTracks
+import SwiftfinPlaybackPreviews
 import SwiftfinPlaybackProfiles
 import SwiftUI
 
@@ -62,6 +64,7 @@ class MediaPlayerItem: ViewModel, MediaPlayerObserver {
     let videoStreams: [MediaStream]
 
     let requestedBitrate: PlaybackBitrate
+    private let trackPolicy: MediaTrackPolicy
 
     // MARK: init
 
@@ -72,6 +75,7 @@ class MediaPlayerItem: ViewModel, MediaPlayerObserver {
         url: URL,
         requestedBitrate: PlaybackBitrate = .max,
         deviceProfile: DeviceProfile,
+        compatibilityMode: PlaybackCompatibility = Defaults[.VideoPlayer.Playback.compatibilityMode],
         initialAudioStreamIndex: Int? = nil,
         initialSubtitleStreamIndex: Int? = nil,
         previewImageProvider: (any PreviewImageProvider)? = nil,
@@ -86,37 +90,24 @@ class MediaPlayerItem: ViewModel, MediaPlayerObserver {
         self.thumbnailProvider = thumbnailProvider
         self.url = url
 
-        let mediaStreams = mediaSource.mediaStreams
-        let isTranscoding = mediaSource.transcodingURL != nil
-
-        // TODO: Fix External Audio Tracks & Re-Enable
-        self.audioStreams = mediaStreams?.filter { $0.type == .audio && $0.isExternal != true } ?? []
-        self.subtitleStreams = mediaStreams?.filter {
-            $0.type == .subtitle
-                && $0.deliveryMethod != .drop
-                && !(Defaults[.VideoPlayer.Playback.compatibilityMode] == .directPlay
-                    && $0.isExternal == true
-                    && $0.isTextSubtitleStream != true)
-        } ?? []
-        self.videoStreams = mediaStreams?.filter { $0.type == .video } ?? []
-
-        let resolvedAudioStreamIndex: Int = initialAudioStreamIndex
-            ?? mediaSource.defaultAudioStreamIndex
-            ?? mediaSource.mediaStreams?.first(where: { $0.type == .audio })?.index ?? 0
-
-        self.indexMap = MediaTrackIndexMap.build(
-            from: mediaStreams ?? [],
-            for: isTranscoding ? .transcode : .directPlay,
-            selectedAudioStreamIndex: resolvedAudioStreamIndex
+        let trackPolicy = MediaTrackPolicy(
+            mediaSource: mediaSource,
+            deviceProfile: deviceProfile,
+            compatibility: compatibilityMode,
+            audioIndex: initialAudioStreamIndex,
+            subtitleIndex: initialSubtitleStreamIndex
         )
+        self.trackPolicy = trackPolicy
+        self.audioStreams = trackPolicy.audioStreams
+        self.subtitleStreams = trackPolicy.subtitleStreams
+        self.videoStreams = trackPolicy.videoStreams
+        self.indexMap = trackPolicy.initialIndexMap
 
         super.init()
 
-        selectedAudioStreamIndex = resolvedAudioStreamIndex
+        selectedAudioStreamIndex = trackPolicy.selectedAudioIndex
 
-        selectedSubtitleStreamIndex = initialSubtitleStreamIndex
-            ?? mediaSource.defaultSubtitleStreamIndex
-            ?? -1
+        selectedSubtitleStreamIndex = trackPolicy.selectedSubtitleIndex
 
         #if os(tvOS)
         observers.append(KidsMediaProgressObserver(item: self))
@@ -127,55 +118,7 @@ class MediaPlayerItem: ViewModel, MediaPlayerObserver {
 
     /// Decides whether a track change can be performed by the player in place, or whether the server must produce a new stream.
     func isRebuildRequired(type: MediaStreamType, from oldIndex: Int?, to newIndex: Int?) -> Bool {
-        let isTranscoding = mediaSource.transcodingURL != nil
-
-        // Disabling a track is ALWAYS a local-only operation.
-        guard let newIndex, newIndex != -1 else { return false }
-
-        switch type {
-        case .audio:
-
-            // Transcodes contain a single audio track and MUST rebuild.
-            if isTranscoding {
-                return true
-            }
-
-            guard let newStream = audioStreams.first(where: { $0.index == newIndex }) else { return true }
-
-            // TODO: When audio playback exists then get the type dynamically.
-            return !deviceProfile.canPlay(
-                type: .video,
-                audioCodec: newStream.codec,
-                container: mediaSource.container
-            )
-
-        case .subtitle:
-            // Optional (do not guard) since this could be -1 for disabled.
-            let oldStream = oldIndex.flatMap { idx in subtitleStreams.first { $0.index == idx } }
-
-            // Transitioning away from encoded subtitles always requires a rebuild so the server stops burning them into the video.
-            if oldStream?.deliveryMethod == .encode {
-                return true
-            }
-
-            // Catch if the new stream doesn't exist. If non-existent this will fallback to -1 and disable locally.
-            guard let newStream = subtitleStreams.first(where: { $0.index == newIndex }) else { return false }
-
-            if newStream.isExternal == true {
-
-                // External subtitles can only be loaded as sidecars when the profile allows external or HLS delivery for the format.
-                // E.G, This should disable external PGS for VLC since VLC cannot play them.
-                return !(deviceProfile.canPlay(subtitleFormat: newStream.codec, method: .external)
-                    || deviceProfile.canPlay(subtitleFormat: newStream.codec, method: .hls))
-            }
-
-            // Embedded subtitles are in the source container.
-            // Only reachable while direct-playing AND when the profile supports embed delivery.
-            return isTranscoding || !deviceProfile.canPlay(subtitleFormat: newStream.codec, method: .embed)
-
-        default:
-            return false
-        }
+        trackPolicy.requiresRebuild(type: type, from: oldIndex, to: newIndex)
     }
 
     /// Switches audio or subtitles without rebuilding the stream.

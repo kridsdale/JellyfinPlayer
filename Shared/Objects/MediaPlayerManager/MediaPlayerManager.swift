@@ -107,6 +107,9 @@ final class MediaPlayerManager: ViewModel {
     @Published
     var playbackItem: MediaPlayerItem? = nil {
         didSet {
+            if oldValue !== playbackItem {
+                oldValue?.previewImageProvider?.invalidate()
+            }
             if let playbackItem {
                 self.item = playbackItem.baseItem
                 seconds = playbackItem.baseItem.startSeconds ?? .zero
@@ -121,7 +124,9 @@ final class MediaPlayerManager: ViewModel {
                     ]
                 )
 
-                Task { _ = await playbackItem.previewImageProvider?.image(for: seconds) }
+                let preview = playbackItem.previewImageProvider
+                let initialSeconds = seconds
+                Task { _ = await preview?.image(for: initialSeconds) }
             }
         }
     }
@@ -383,6 +388,7 @@ final class MediaPlayerManager: ViewModel {
     //       - check that observers would respond correctly to stopping
     @Function(\Action.Cases.stop)
     private func _stop() async throws {
+        playbackItem?.previewImageProvider?.invalidate()
         await self.cancel()
 
         proxy?.stop()
@@ -414,6 +420,7 @@ final class MediaPlayerManager: ViewModel {
 
         // Capture the current playback position before stopping
         let currentSeconds = self.seconds
+        currentItem.previewImageProvider?.invalidate()
 
         logger.info(
             "Rebuilding Media Player Item",

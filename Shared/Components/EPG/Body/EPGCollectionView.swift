@@ -9,6 +9,7 @@
 import Combine
 import Defaults
 import JellyfinAPI
+import SwiftfinScrolling
 import SwiftUI
 
 struct EPGCollectionView: UIViewRepresentable {

@@ -6,7 +6,7 @@
 // Copyright (c) 2026 Jellyfin & Jellyfin Contributors
 //
 
-import Combine
+import SwiftfinPlaybackPreviews
 import SwiftfinUIState
 import SwiftUI
 
@@ -15,36 +15,17 @@ extension VideoPlayer.PlaybackControls {
     struct PreviewImageView: View {
 
         @EnvironmentObject
-        private var manager: MediaPlayerManager
-        @EnvironmentObject
         private var scrubbedSecondsBox: PublishedBox<Duration>
 
-        @State
-        private var image: (index: Int, image: UIImage)? = nil
-        @State
-        private var currentImageTask: AnyCancellable? = nil
+        @StateObject
+        private var selection: PreviewImageSelection
 
-        let previewImageProvider: any PreviewImageProvider
+        init(previewImageProvider: any PreviewImageProvider) {
+            _selection = StateObject(wrappedValue: PreviewImageSelection(provider: previewImageProvider))
+        }
 
         private var scrubbedSeconds: Duration {
             scrubbedSecondsBox.value
-        }
-
-        private func getImage(for seconds: Duration) {
-            currentImageTask?.cancel()
-            currentImageTask = nil
-
-            let initialTask = Task(priority: .userInitiated) {
-                if let image = await previewImageProvider.image(for: seconds),
-                   let index = previewImageProvider.imageIndex(for: seconds)
-                {
-                    self.image = (index: index, image: image)
-                } else {
-                    self.image = nil
-                }
-            }
-
-            currentImageTask = initialTask.asAnyCancellable()
         }
 
         var body: some View {
@@ -52,23 +33,22 @@ extension VideoPlayer.PlaybackControls {
                 Color.black
 
                 ZStack {
-                    if let image {
-                        Image(uiImage: image.image)
+                    if let image = selection.image {
+                        Image(uiImage: image)
                             .resizable()
                             .aspectRatio(contentMode: .fit)
                     }
                 }
-                .id(image?.index)
+                .id(selection.index)
             }
             .onAppear {
-                getImage(for: scrubbedSeconds)
+                selection.request(scrubbedSeconds)
+            }
+            .onDisappear {
+                selection.stop()
             }
             .onChange(of: scrubbedSeconds) {
-                let newIndex = previewImageProvider.imageIndex(for: scrubbedSeconds)
-
-                if newIndex != image?.index {
-                    getImage(for: scrubbedSeconds)
-                }
+                selection.request(scrubbedSeconds)
             }
         }
     }
