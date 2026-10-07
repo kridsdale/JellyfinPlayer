@@ -10,7 +10,7 @@ Before extraction the app compiled 614 Shared Swift files, 32 tvOS Swift files a
 
 | Package | Owns | Direct dependencies |
 | --- | --- | --- |
-| SwiftfinAccountAccess | Bound public/login/current-account queries, Quick Connect polling/retry/cancellation, immutable authentication validation, own-account commands, account image URLs and redirected endpoint policy | SwiftfinNetworking, exact Jellyfin SDK 3.2.0/Get 2.2.1 |
+| SwiftfinAccountAccess | Bound account queries/commands, Quick Connect/retry/cancellation, immutable prompt values/PIN policy, account image URLs and redirected endpoint policy | SwiftfinNetworking, exact Jellyfin SDK 3.2.0/Get 2.2.1 |
 | SwiftfinUserMediaState | Played/favorite commands, exact response identity, serial/cancellation-safe mutations, per-field completion/merge and type capability policy | SwiftfinNetworking, exact Jellyfin SDK 3.2.0/Get 2.2.1 |
 | SwiftfinPlaybackReporting | Immutable report identity/payloads, native timing delegates and original-transport terminal cleanup | SwiftfinNetworking, SwiftfinAsyncStreams, exact Jellyfin SDK 3.2.0/Get 2.2.1 |
 | SwiftfinPlaybackPreparation | Fresh playback metadata/info, source/runtime/session normalization, stream/sidecar URL preparation, bitrate/preview requests and exact captured transport/metrics binding | SwiftfinNetworking, SwiftfinMediaTracks, exact Jellyfin SDK 3.2.0/Get 2.2.1 |
@@ -25,7 +25,7 @@ Before extraction the app compiled 614 Shared Swift files, 32 tvOS Swift files a
 | SwiftfinMediaTracks | Raw stream projections, resolution/layout/range classification, immutable audio/subtitle selection and rebuild policy, player-index and text-sidecar mappings | SwiftfinPlaybackProfiles, pinned Jellyfin SDK 3.2.0, Foundation, CryptoKit |
 | SwiftfinPlaybackPreviews | Distinct chapter-list selection and thumbnail/sprite timelines, bounded image flights/LRU, UIKit crop and latest-request scrub publication | Foundation, UIKit, Combine |
 | SwiftfinMPV | Pinned mpv player/render surface, generation/operation ownership, typed transport/track/sidecar commands, committed native-state observation and semantic-caption readers | Exact MPVUI 0.1.1, Foundation, Observation, SwiftUI |
-| SwiftfinNativePlayback | Native AVPlayer observers, immutable requests, metadata, resume/transport/EOF lifecycle and native layer/control surfaces | Foundation, AVFoundation, AVKit, SwiftUI |
+| SwiftfinNativePlayback | Native AVPlayer observers/requests/metadata/lifecycle/surfaces and lazy injected hardware probing | Foundation, AVFoundation, AVKit, SwiftUI, Metal, VideoToolbox |
 | SwiftfinValues | Generic/protocol bounds, value/key-path transforms, numeric step rounding and optional integer conversion | Foundation |
 | SwiftfinTime | Duration scale/tick/subsecond arithmetic, magnitude, clock-time projections and strict wall-clock cache age/recency | Foundation |
 | SwiftfinFormatting | Integer/duration clock, rate/bitrate, optional-text/day-interval, age/last-seen and verbatim FormatStyle/ParseStrategy values | SwiftfinValues, SwiftfinLocalization, Foundation |
@@ -70,13 +70,13 @@ KidsPersistence module identity, model name, entity properties, cloud container 
 
 ## Remaining work before completion
 
-- Finish source-body classification of all retained app responsibilities: the current hashed ledger has 63 retained, two mixed and 603 pending entries. Evaluated local-access tokens and hardware probing are current mixed candidates; earlier lexical or prose inventories are not promoted without source evidence.
-- Audit every public interface and its production consumers, immutable DTO/native-handle boundaries, dependency direction and extension path. The five current interface entries cover only their named APIs, not the whole graph.
+- Finish all source-body classifications: the current hashed ledger has 83 retained, one mixed and 583 pending app files. Evaluated prompt/PIN values and hardware probing have owners; FastSVGView's native parsing/rendering is the next mixed candidate. Classifications are based on inspected bodies, not folder/import names.
+- Audit all public interfaces and production consumers, SDK/native-handle boundaries, dependency directions and extension paths. Seven current API entries cover only their named scopes, not the complete graph.
 - Complete the remaining actor/callback/bootstrap review and preserve explicit native-player ownership. The pinned mpv SDK's unawaited renderer shutdown still requires runtime acceptance.
-- Final navigation, rendered artwork, exact-account switching, decoder/output/teardown and restricted-account playback/recovery checks remain held by the human. No simulator launch/test or server-facing probe is authorized by an automatic goal continuation.
-- Preserve signing/iCloud namespace, persistent model/schema and progress, original SDK revisions, performance evidence and immutable RAID media. Complete the original criteria in next-goal.md before marking the full goal complete.
+- Final navigation, artwork/SVG rendering, exact account/connection switching, decoder/output/teardown and restricted-account playback/recovery remain held by the human. Automatic continuations do not authorize simulator launches/tests or server-facing probes.
+- Preserve household signing/iCloud namespace, persistent schema/progress, original SDK revisions, performance evidence and immutable RAID media. Meet every original criterion in next-goal.md before marking the full goal complete.
 
-Physical Apple TV and live CloudKit transport checks remain explicitly deferred by the human. Server/catalog/account/RAID changes and GitHub workflow publication are outside this goal.
+Physical Apple TV and live CloudKit transport checks remain explicitly deferred. Server/catalog/account/RAID changes and GitHub workflow publication are outside this goal.
 
 ## Verified checkpoints (2026-10-06)
 
@@ -625,3 +625,17 @@ Native sweep **47** passes **733** contracts (**704** Swift Testing plus **29** 
 The hashed source ledger now contains **63 retained**, **two mixed** and **603 pending** app files, plus **five** limited interface/consumer reviews. Thirty-two further app object bodies were reviewed; display enums, aliases, protocols, style normalization and view configuration remain presentation/composition with per-file reasons. Evaluated local-access tokens and hardware capability probing remain explicit mixed ownership candidates. No whole-source/public-graph completion claim is made.
 
 **Simulator and server-connected playback testing remain stopped by the human.** Native tests and compilation do not establish current navigation, rendered artwork, socket delivery, decoding or teardown acceptance. The full items 1/2 goal remains active; final source/API/actor audit and held runtime gates are still required. Physical-device/cloud/server/release gates remain separate.
+
+## Local prompt values and native hardware checkpoint (2026-10-07, offline)
+
+The graph remains **53 libraries**, with **667 app Swift files**. AccountAccess now owns the immutable evaluated prompt marker/PIN value and the original 4...30 extended-grapheme PIN rule. LocalUserAccessPolicy.swift was removed; all consumers import the actual owner. The marker/result does not grant account access. Existing stored-PIN comparisons, sign-in/security-policy save/hint behavior and prompt cancellation/lifecycle are unchanged beyond imports and the validation delegate. No stored credential, account, schema or preference key changed.
+
+NativePlayback now owns lazy AVPlayer HDR eligibility, Metal GPU-name and VideoToolbox decoder capability probes through a checked-Sendable reader with injected closures. Five semantic codecs retain their exact original CoreMedia constants. Default construction performs no query; each requested property remains fresh/lazy. App PlaybackCapabilities captures HDR/DV preferences and localized GPU fallback and builds the original immutable profile snapshot. Its complete body matches the original after the explicit native delegations. No new library or dependency edge was introduced. The boundary verifier now admits Metal/VideoToolbox only for that reviewed native owner.
+
+Eight adjacent native contracts cover PIN width/Unicode/raw bytes/Sendable transfer and native codec constants/lazy reader isolation/missing GPU/injected task transfer. They never call native hardware queries, permissions or real credential storage. The first hardware test fixture's unavailable macOS15 Mutex failed compilation; it was replaced with the existing deployment-compatible OSAllocatedUnfairLock before passing. The subsequent shell exit1 came from an intentional no-match app-import search after native tests passed, not a test failure.
+
+Native sweep **48** passes **741** contracts (**712** Swift Testing plus **29** XCTest), eight generator checks and three runtime helpers. Unchanged macro inputs retain the earlier **18**-contract result. All **53** boundaries and **33** analyzer tests pass. Compile-only tvOS Debug **112**, tvOS Release **42** and iOS Release **61** pass without owned Swift/generated-macro diagnostics or internal build-tool errors. All **1,198** frozen inputs, both original 40 SDK revision sets and tracked SDK sources match. Signing/persistence and cancelled acceptance79 restoration exports remain unchanged; Debug cloud transport remains NO.
+
+The hashed ledger now records **83 retained**, **one mixed** and **583 pending** app files, plus **seven** limited interface/consumer reviews. The two previous mixed candidates are resolved. Full authentication-prompt body review and nineteen further component body reviews retain platform presentation with per-file reasons; **FastSVGView** remains mixed because parsing/native view construction and force-unwrapped SVG results still live in the app. The complete source/public-consumer graph is unproven.
+
+**Simulator and server-connected testing remain stopped by the human.** Compilation/fake tests do not establish current navigation, account switching, real hardware flags, SVG rendering, decoding or native teardown. Full items1/2 remain active; held runtime acceptance and full source/API/actor review are still required. Physical-device/cloud/server/release gates remain separate.

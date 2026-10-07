@@ -6,6 +6,8 @@
 // Copyright (c) 2026 Jellyfin & Jellyfin Contributors
 //
 
+import SwiftfinAccountAccess
+
 struct Empty: Equatable {}
 
 extension Empty: WithDefaultValue {

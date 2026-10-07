@@ -60,3 +60,11 @@ LibraryMembershipChange is a checked-Sendable immutable action; the pure UserMed
 UserView captures one main-actor manager/session/transport/user pair before suspension and supplies a weak exact-binding closure to MediaCatalogClient. The existing owner checks that binding before and after each read, including error paths. Grid/list view task identity incorporates root/connection revisions, and corresponding events clear old image state. Final cancellation and exact captured account/transport checks remain beside publication. Fake noncooperating late reads prove discarded obsolete/cancelled results; source review and compile-only checks cover app integration. SwiftUI task cancellation, event/render delivery and actual network/player acceptance remain held.
 
 The expanded source ledger identifies evaluated local-access tokens and native hardware probes as remaining mixed ownership candidates. This audit does not claim all app sources, public consumers or runtime native teardown complete.
+
+## Prompt value and hardware reader transfer
+
+EvaluatedLocalUserAccessPolicy is a public Sendable marker. PinEvaluatedUserAccessPolicy holds immutable raw PIN/hint strings, without Codable/storage/credential or authentication authority. App credential owners continue to validate their stored PIN after the evaluated prompt returns. PIN width remains the exact original extended-grapheme rule. Native tests use synthetic strings only; no real credentials are accessed.
+
+NativePlaybackHardwareReader stores three private checked-Sendable closures. Default closures query platform HDR/GPU/decoder flags lazily and return only Bool/String values; no native handle or mutable SDK instance escapes. Its semantic codec enum maps privately to the original five CoreMedia constants. Injected tests exercise demand/ordering/missing GPU/checked task transfer without actual hardware probes. The app's existing preference and profile expressions remain source-identical after delegation. Hardware changes, SwiftUI prompt delivery and real playback remain runtime-held.
+
+The source/API ledger remains partial. Native SVG parsing/view construction is a newly inspected mixed responsibility and 583 app bodies await review; no complete actor/public-consumer audit is claimed.

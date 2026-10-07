@@ -6,6 +6,7 @@
 // Copyright (c) 2026 Jellyfin & Jellyfin Contributors
 //
 
+import SwiftfinAccountAccess
 import SwiftfinAccountModels
 import SwiftfinLocalization
 import SwiftfinPermissions
@@ -99,7 +100,7 @@ struct WithLocalUserAuthentication<Content: View>: View {
             return Empty()
         case .requirePin:
             let pin = try await handlePinAuthentication(reason: reason)
-            guard (4 ... 30).contains(pin.count) else {
+            guard LocalAccessPINPolicy.isValid(pin) else {
                 throw ErrorMessage(L10n.invalidPin)
             }
             return PinEvaluatedUserAccessPolicy(pin: pin, pinHint: nil)

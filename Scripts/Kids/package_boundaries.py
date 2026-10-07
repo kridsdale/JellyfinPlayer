@@ -57,7 +57,7 @@ POLICIES = {
     "SwiftfinScrolling": ({}, {"Foundation", "UIKit", "Combine"}),
     "SwiftfinMediaTracks": ({"SwiftfinPlaybackProfiles"}, {"Foundation", "CryptoKit", "JellyfinAPI"}),
     "SwiftfinPlaybackPreviews": ({}, {"Foundation", "UIKit", "Combine"}),
-    "SwiftfinNativePlayback": ({}, {"Foundation", "AVFoundation", "AVKit", "SwiftUI"}),
+    "SwiftfinNativePlayback": ({}, {"Foundation", "AVFoundation", "AVKit", "SwiftUI", "Metal", "VideoToolbox"}),
     "SwiftfinCollections": ({}, {"Foundation", "OrderedCollections"}),
     "SwiftfinPlaybackProfiles": ({"SwiftfinCollections"}, {"Foundation", "JellyfinAPI"}),
     "SwiftfinImages": ({}, {"Foundation", "Nuke", "CryptoKit", "os"}),

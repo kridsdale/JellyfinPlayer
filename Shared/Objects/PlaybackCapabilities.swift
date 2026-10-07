@@ -6,18 +6,19 @@
 // Copyright (c) 2026 Jellyfin & Jellyfin Contributors
 //
 
-import AVFoundation
 import SwiftfinLocalization
+import SwiftfinNativePlayback
 import SwiftfinPlaybackProfiles
 import SwiftfinStoredValues
-import VideoToolbox
 
 enum PlaybackCapabilities {
+
+    private static let hardware = NativePlaybackHardwareReader()
 
     /// This property is true if an HDR display is available and the device is capable of playing HDR content from an appropriate AVAsset,
     /// false otherwise.
     static var isDeviceHDRCapable: Bool {
-        AVPlayer.eligibleForHDRPlayback
+        hardware.isHDRCapable
     }
 
     /// Should Swiftfin handle Dolby Vision content (false) or should it be tone mapped by the server (true)?
@@ -33,7 +34,7 @@ enum PlaybackCapabilities {
     }
 
     static var gpuName: String {
-        MTLCreateSystemDefaultDevice()?.name ?? L10n.unknown
+        hardware.gpuName ?? L10n.unknown
     }
 
     // MARK: - Hardware Decode
@@ -42,12 +43,12 @@ enum PlaybackCapabilities {
 
     /// Returns true if the device supports hardware-accelerated H.264/AVC decoding.
     static var supportsH264: Bool {
-        VTIsHardwareDecodeSupported(kCMVideoCodecType_H264)
+        hardware.supports(.h264)
     }
 
     /// Returns true if the device supports hardware-accelerated H.265/HEVC decoding.
     static var supportsHEVC: Bool {
-        VTIsHardwareDecodeSupported(kCMVideoCodecType_HEVC)
+        hardware.supports(.hevc)
     }
 
     // MARK: Alliance for Open Media
@@ -55,7 +56,7 @@ enum PlaybackCapabilities {
     /// Returns true if the device supports hardware-accelerated AV1 decoding.
     /// Requires A17 Pro / M3 or newer.
     static var supportsAV1: Bool {
-        VTIsHardwareDecodeSupported(kCMVideoCodecType_AV1)
+        hardware.supports(.av1)
     }
 
     // MARK: Google
@@ -63,7 +64,7 @@ enum PlaybackCapabilities {
     /// Returns true if the device supports hardware-accelerated VP9 decoding.
     /// Note: VP9 hardware decode is not available on iOS/tvOS.
     static var supportsVP9: Bool {
-        VTIsHardwareDecodeSupported(kCMVideoCodecType_VP9)
+        hardware.supports(.vp9)
     }
 
     // MARK: - HDR
@@ -88,7 +89,7 @@ enum PlaybackCapabilities {
     /// This correctly distinguishes A10 (no DV) from A10X (DV support).
     @MainActor
     static var supportsDolbyVision: Bool {
-        VTIsHardwareDecodeSupported(kCMVideoCodecType_DolbyVisionHEVC) && dvEnabled
+        hardware.supports(.dolbyVisionHEVC) && dvEnabled
     }
 }
 

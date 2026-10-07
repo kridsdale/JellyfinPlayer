@@ -17,9 +17,9 @@
     {
       "owners": [],
       "path": "Shared/Components/AssertionFailureView.swift",
-      "reason": "",
+      "reason": "Development-only assertion placeholder with an empty body; failure reporting is scoped to app view construction. This entry does not claim its unreachable-path runtime behavior tested.",
       "sha256": "aa81cb832836c31fdbc23d44d72e496c3320e6a3db81aab0556cf8b1656d83c9",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -31,16 +31,16 @@
     {
       "owners": [],
       "path": "Shared/Components/BlurView.swift",
-      "reason": "",
+      "reason": "UIViewRepresentable makes/updates the app visual-effect view for a selected blur style; no data decoding/query or async resource ownership.",
       "sha256": "44b603a4ade43deede06048a850427ce8b14ed0b6862f2d157b88a4a7abaf270",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
       "path": "Shared/Components/BulletedList.swift",
-      "reason": "",
+      "reason": "Main-actor view composition of MarkedList with font-height capture and circle layout; no item/catalog algorithm.",
       "sha256": "788ef6240ebc10446c915e23835ca8cfee3979d777fe258eee41264e121f340e",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -87,16 +87,16 @@
     {
       "owners": [],
       "path": "Shared/Components/CompactOrRegularView.swift",
-      "reason": "",
+      "reason": "Captured child views and explicit caller/device-size predicate choose presentation in GeometryReader; no data/resource lifecycle.",
       "sha256": "7231edaf10ea49fda48a0d190b65963b1f419902cbcf2404da61c27eff91e124",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
       "path": "Shared/Components/ComplexSecondaryShapeStyle.swift",
-      "reason": "",
+      "reason": "ShapeStyle maps current app view context to material or secondary fill; only display styling.",
       "sha256": "e69ce1d797d4e7aea48d5c1c5cf243491579ba5385ef8a2c06c5a42750856c23",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -108,23 +108,23 @@
     {
       "owners": [],
       "path": "Shared/Components/ContentGroupSection.swift",
-      "reason": "",
+      "reason": "App header/content composition and device-dependent spacing; no group data fetching or grouping algorithm.",
       "sha256": "76040d273066ccd59c8f40ca0c9a145d1691820739821ea3947a087c8720fc99",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
       "path": "Shared/Components/ContentGroupVStack.swift",
-      "reason": "",
+      "reason": "Displays supplied content groups with existing identity/focus coordination and platform spacing; group/view-model internals remain separately pending.",
       "sha256": "862c797e104643ef3831d389530b137def931aa81f38c642f9ab39ddd61dc244",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
       "path": "Shared/Components/DotHStack.swift",
-      "reason": "",
+      "reason": "Main-actor circle-separator view with platform size/padding defaults; no sequence data transformation.",
       "sha256": "d58bc94799800187b388a9ae7eab7a943689279f4e82ac5bd4e349225be20352",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -192,16 +192,16 @@
     {
       "owners": [],
       "path": "Shared/Components/EmptyHitTestView.swift",
-      "reason": "",
+      "reason": "Minimal UIKit representable for app hit testing, with an empty update method; no storage/media/native engine.",
       "sha256": "d1e810fc5c82b0384c9b90dcf46a3875550f3d46d3e1cfb3d664d0f12e45bf62",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
       "path": "Shared/Components/EmptyLabel.swift",
-      "reason": "",
+      "reason": "Captures caller-provided text presentation and suppresses Label icon layout.",
       "sha256": "4a3b33216646672d6bf74c51a09f53d8e98b396ca2f28c50a53a0576e4daf71a",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -227,9 +227,9 @@
     {
       "owners": [],
       "path": "Shared/Components/FastSVGView.swift",
-      "reason": "",
+      "reason": "Full native UIView representable inspected. App currently imports SVGKit and performs parsing/native image-view construction with a force unwrap and empty update. Review installed SVG dependency/import boundary and move parsing/rendering behind the appropriate image owner with malformed/changed-data handling; UI hugging/contentMode/clipping remain presentation.",
       "sha256": "adc8565bd6bd29fadcfe4563f0e02dbc316c0a5eeaae31e22acf0d957c4e534f",
-      "status": "pending"
+      "status": "source-reviewed-mixed"
     },
     {
       "owners": [],
@@ -241,9 +241,9 @@
     {
       "owners": [],
       "path": "Shared/Components/FocusedPosterCinematicBackgroundView.swift",
-      "reason": "",
+      "reason": "tvOS focus/defaults choose backdrop view composition, transition, blur and fill. Poster source and fade-transition internals remain separate pending owners; no fetch implementation in this body.",
       "sha256": "8cd2897424d335f21bf995149ab8ec0321fb9100d005c691d61050b048fd8457",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -304,9 +304,9 @@
     {
       "owners": [],
       "path": "Shared/Components/LetterPickerOrientation.swift",
-      "reason": "",
+      "reason": "Stored app orientation selector maps localized labels and SwiftUI alignment/edge; no content-index behavior.",
       "sha256": "883891cd6c2f0404cfb944730fc31fc315f209594de5976e13aa44de6ecc76ed",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -325,9 +325,9 @@
     {
       "owners": [],
       "path": "Shared/Components/ListRowCheckbox.swift",
-      "reason": "",
+      "reason": "Selected/editing environment and accent preference drive platform-size checkmark/circle styling; no selection mutation or data ownership.",
       "sha256": "0f3de28ddbbdfa5ec5302681ac322b64c88db0d09ccab64dada05609fb35204e",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -374,9 +374,9 @@
     {
       "owners": [],
       "path": "Shared/Components/MirrorExtensionView.swift",
-      "reason": "",
+      "reason": "Pure view overlay/blur/scale geometry extends supplied content at selected edges; no pixel decode or native GPU lifecycle.",
       "sha256": "588bbd368b77103ea70843632b71c8a402e25d206be5d2bf4d8c9eb441fa7c9d",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -479,16 +479,16 @@
     {
       "owners": [],
       "path": "Shared/Components/RedrawOnNotificationView.swift",
-      "reason": "",
+      "reason": "View identity increments for caller-filtered notification redraw through existing onNotification modifier; modifier/notification delivery remain separate reviews and runtime-held. No raw center/subscription implementation in this view.",
       "sha256": "7950070219bd25ffc47361a026b3ccc0f36ba8a8d810201bc5e1fcc0aea6e3b4",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
       "path": "Shared/Components/RowDivider.swift",
-      "reason": "",
+      "reason": "One-point app fill divider and horizontal edge padding only.",
       "sha256": "18590daf77fe6b301743a9b00c3243e77bbf1db9cd1a0245d6e2bd5eec3e972d",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -500,9 +500,9 @@
     {
       "owners": [],
       "path": "Shared/Components/SelectionTrack.swift",
-      "reason": "",
+      "reason": "Supplied element labels/actions and focus binding form capsule buttons. Focus-versus-selection preference is UI highlight semantics; no playback/catalog selection behavior.",
       "sha256": "414c6aeafdde4a498310c898a74dc1d2a4fa97f0c15bdac231257b60abbb3fa0",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -591,9 +591,9 @@
     {
       "owners": [],
       "path": "Shared/Components/UserProfileRow.swift",
-      "reason": "",
+      "reason": "App current-session composition supplies exact transport to AccountAccess-backed image-source adapter; profile text/action/chevron layout stays UI. Image/native transport owners remain separate; no raw SDK read here.",
       "sha256": "b46a57ebe132946b443e0bed30bfbcefdf785a4ca58bddc0351a8bba0227933a",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -603,11 +603,14 @@
       "status": "pending"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinAccountAccess",
+        "SwiftfinPermissions"
+      ],
       "path": "Shared/Components/WithLocalUserAuthentication.swift",
-      "reason": "",
-      "sha256": "9a30991a56eda420aa23113645022c99d5f491b22e2d71277cc64041ee445eeb",
-      "status": "pending"
+      "reason": "Full SwiftUI prompt/environment/body reviewed: app owns request identity, PIN sheet lifecycle, cancellation/on-disappear continuation retirement and localized errors. PIN width/token values delegate to AccountAccess; biometric request delegates to Permissions. Prompt receipt does not grant credential access: existing stored-PIN comparisons remain at consumers. Native prompts/runtime are held.",
+      "sha256": "25b1c1e242aae5dbfc57b64c20c956bb7fcb6e222d0ce96a2ffb3fbb9f2a0818",
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -1704,7 +1707,7 @@
       "owners": [],
       "path": "Shared/Objects/Empty.swift",
       "reason": "App presentation environment sentinel and no-op refresh/default/evaluated-policy conformances; no validation/storage behavior. Evaluated access-token ownership remains a separate mixed file.",
-      "sha256": "dfe3ebddc0cf634bd1370552b39981e4e9868a0bc5bcb2eb49b7276500218daf",
+      "sha256": "c3de46d8daa715c41926607aae91518f6820f33bd49322518949da725612e405",
       "status": "source-reviewed-retained"
     },
     {
@@ -2205,13 +2208,6 @@
     },
     {
       "owners": [],
-      "path": "Shared/Objects/LocalUserAccessPolicy.swift",
-      "reason": "Sendable evaluated-policy marker and PIN/hint token are still app-defined security boundary values. Review all validation consumers and whether AccountAccess should own the token before moving; no PIN/authorization behavior is certified here.",
-      "sha256": "538dba99c7d4d44eda2f5c2f08c282b697425b63c0aa3ca6e25776b03fc6f901",
-      "status": "source-reviewed-mixed"
-    },
-    {
-      "owners": [],
       "path": "Shared/Objects/LongPressAction.swift",
       "reason": "",
       "sha256": "0c6880f014f274da561922b59ffaf90fed0294807c734eb7300527e5dfacdcd0",
@@ -2484,11 +2480,15 @@
       "status": "pending"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinNativePlayback",
+        "SwiftfinPlaybackProfiles",
+        "SwiftfinStoredValues"
+      ],
       "path": "Shared/Objects/PlaybackCapabilities.swift",
-      "reason": "Full hardware probe and selected HDR/DV settings composition reviewed. Native VideoToolbox/AVPlayer/Metal probing is still app-local alongside pure boolean combinations; isolate a platform capability reader behind the appropriate existing playback owner and inject synthetic snapshots before classifying complete.",
-      "sha256": "aa56d0de805440f956ab7abca62a4acc90c72cb5ebf51143f1438b39ba13f6fd",
-      "status": "source-reviewed-mixed"
+      "reason": "Full property/snapshot bodies reviewed. Native AVPlayer/Metal/VideoToolbox probes delegate to an injected existing native-playback owner; app captures selected HDR/DV preferences and supplies original immutable profile snapshot. All original boolean/profile expressions and localized unknown GPU fallback remain unchanged.",
+      "sha256": "2ef780911c6a8e7e5c806f6abf9e4d37499ec5209ce3456c5e8149b5bf7d41eb",
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [
@@ -2896,7 +2896,7 @@
       "owners": [],
       "path": "Shared/Services/UserSession/UserSessionManager.swift",
       "reason": "",
-      "sha256": "a8f32cd0793ac76fbbbde88a351421ac3bf03c3cdc62aee220152d79e7d6ea00",
+      "sha256": "8d1c06c5f52ef614e8627221e49fa388781e05d274ccc5bb1b6cbe41c26fd20b",
       "status": "pending"
     },
     {
@@ -3624,7 +3624,7 @@
       "owners": [],
       "path": "Shared/Views/SelectUserView/SelectUserView.swift",
       "reason": "",
-      "sha256": "30d1003196c274129c996b758cdfe8708d11355a475ba78185a5f0929c37d473",
+      "sha256": "17783d7fe0c6d4a87a83a2cefbb3342367828c3750f5d96d32a4f0313a4d3b73",
       "status": "pending"
     },
     {
@@ -3708,7 +3708,7 @@
       "owners": [],
       "path": "Shared/Views/SettingsView/LocalUserSettings/LocalUserSecurityView.swift",
       "reason": "",
-      "sha256": "cb994f7770bd393b2ec9e1dd9efeb490bb3624d26328a2c40bfa61d44c6774c3",
+      "sha256": "7513ffd99f180b7013356a21202a3ce07fca478cbb088daab9d93c33977a57a2",
       "status": "pending"
     },
     {
@@ -3743,7 +3743,7 @@
       "owners": [],
       "path": "Shared/Views/UserSignInView.swift",
       "reason": "",
-      "sha256": "bcbd6a2cf58a8db95da941d7fcaa8beeb83a19ce7de6bc95126d3c72177f1613",
+      "sha256": "3aed008260164143cc6174c402aede2f357d09070003cf6be846cc4dcbd1e2a0",
       "status": "pending"
     },
     {
@@ -4875,19 +4875,54 @@
         "MediaCatalogPolicy.artworkQuery(for:)"
       ],
       "sha256": "f6ebbfdf382c27cb362836180515d24421d8554f2f44cc97bd6b86de1ffaec92"
+    },
+    {
+      "path": "Packages/SwiftfinAccountAccess/Sources/SwiftfinAccountAccess/EvaluatedLocalUserAccessPolicy.swift",
+      "reason": "Immutable raw prompt result and Sendable marker retain existing dynamic casts/value construction. No storage/credentials/validation authority is inferred from construction. Full PIN-specific consumer bodies inspected; stored-PIN comparisons and save/hint projection are unchanged. Width uses original extended-grapheme count without numeric/trim normalization.",
+      "reviewedConsumers": [
+        "Shared/Components/WithLocalUserAuthentication.swift",
+        "Shared/Objects/Empty.swift",
+        "Shared/Services/UserSession/UserSessionManager.swift",
+        "Shared/ViewModels/UserSignInViewModel.swift",
+        "Shared/Views/UserSignInView.swift",
+        "Shared/Views/SelectUserView/SelectUserView.swift",
+        "Shared/Views/SettingsView/LocalUserSettings/LocalUserSecurityView.swift"
+      ],
+      "reviewedInterfaces": [
+        "EvaluatedLocalUserAccessPolicy",
+        "PinEvaluatedUserAccessPolicy.init(pin:pinHint:)",
+        "LocalAccessPINPolicy.isValid(_:)"
+      ],
+      "sha256": "e1fbf41c0f50a359b27521a71fb56668f2df95a8c7548b45d50c49070d720ea8"
+    },
+    {
+      "path": "Packages/SwiftfinNativePlayback/Sources/SwiftfinNativePlayback/NativePlaybackHardwareReader.swift",
+      "reason": "Private checked-Sendable readers hide AVPlayer/Metal/VideoToolbox native queries and CoreMedia constants. Default construction performs no probe; each requested field reads current hardware lazily. Injected closure readers enable native tests without actual probes. No native handle or profile/settings lookup crosses the interface; app keeps preference and immutable snapshot composition.",
+      "reviewedConsumers": [
+        "Shared/Objects/PlaybackCapabilities.swift"
+      ],
+      "reviewedInterfaces": [
+        "HardwareVideoCodec",
+        "NativePlaybackHardwareReader.init()",
+        "NativePlaybackHardwareReader.init(hdr:gpuName:codec:)",
+        "NativePlaybackHardwareReader.isHDRCapable",
+        "NativePlaybackHardwareReader.gpuName",
+        "NativePlaybackHardwareReader.supports(_:)"
+      ],
+      "sha256": "da4c12deeedd78180dfded13e7d78f492504efb669d0af1e0d81fce16816461c"
     }
   ],
   "limits": "This ledger records bodies explicitly reviewed, with exact current hashes; earlier prose or lexical inventory is not automatically promoted. Pending and mixed entries prevent whole-source completion. Retained UI algorithms have specific presentation reasons, not folder/import-based blanket approval. API entries do not classify the rest of the public graph. Source review and offline tests do not satisfy held runtime acceptance.",
   "schemaVersion": 1,
-  "scope": "All current app Swift files; explicit source-body classification and five current interface/consumer reviews. No server/media/simulator data.",
+  "scope": "All current app Swift files; explicit source-body classification and seven limited interface/consumer reviews. No server/media/simulator data.",
   "summary": {
-    "applicationSwiftFiles": 668,
+    "applicationSwiftFiles": 667,
     "classification": {
-      "pending": 603,
-      "source-reviewed-mixed": 2,
-      "source-reviewed-retained": 63
+      "pending": 583,
+      "source-reviewed-mixed": 1,
+      "source-reviewed-retained": 83
     },
-    "currentAPIReviews": 5,
+    "currentAPIReviews": 7,
     "runtimeAcceptance": "held by human; no simulator/server testing"
   }
 }

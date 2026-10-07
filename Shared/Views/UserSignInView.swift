@@ -11,6 +11,7 @@ import CollectionVGrid
 import Defaults
 import FactoryKit
 import JellyfinAPI
+import SwiftfinAccountAccess
 import SwiftfinAccountModels
 import SwiftfinLocalization
 import SwiftfinText
