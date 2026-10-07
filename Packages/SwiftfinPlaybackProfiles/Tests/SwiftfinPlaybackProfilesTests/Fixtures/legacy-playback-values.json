@@ -1,0 +1,9 @@
+{
+  "bitrate": "10000000",
+  "jump": "{\"custom\":{\"interval\":[0,7500000000000000000]}}",
+  "jumpFiveJSON": "{\"five\":{}}",
+  "provenance": "Captured from production types at 1015f885 before extraction using Defaults 9.0.9; private probe 172; no installed preference domain used.",
+  "speed": "1.375",
+  "speedQuarterJSON": "0.25",
+  "testSize": 5000000
+}

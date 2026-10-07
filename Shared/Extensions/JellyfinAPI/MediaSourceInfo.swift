@@ -10,6 +10,7 @@ import CoreTransferable
 import JellyfinAPI
 import SwiftfinCollections
 import SwiftfinLocalization
+import SwiftfinPlaybackProfiles
 
 extension MediaSourceInfo: Displayable {
 
@@ -21,19 +22,11 @@ extension MediaSourceInfo: Displayable {
 extension MediaSourceInfo {
 
     var supportedBitrates: [PlaybackBitrate] {
-        let bitrates: [PlaybackBitrate] = if videoStreams?.isNotEmpty == true {
-            PlaybackBitrate.videoBitrates
-        } else if audioStreams?.isNotEmpty == true {
-            PlaybackBitrate.audioBitrates
-        } else {
-            PlaybackBitrate.allCases
-        }
-
-        guard let bitrate else { return bitrates }
-
-        return bitrates.filter {
-            $0 == .max || $0.rawValue <= bitrate
-        }
+        PlaybackBitrate.available(
+            hasVideo: videoStreams?.isNotEmpty == true,
+            hasAudio: audioStreams?.isNotEmpty == true,
+            sourceBitrate: bitrate
+        )
     }
 
     var audioStreams: [MediaStream]? {

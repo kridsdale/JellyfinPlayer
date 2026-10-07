@@ -50,4 +50,37 @@ struct PlaybackProfileStorageTests {
         #expect(suite.string(forKey: "video") == "\"av1\"")
         #expect(suite.string(forKey: "adjacent") == "unchanged")
     }
+
+    @Test
+    func `playback preference extraction preserves JSON text and raw integer domains`() throws {
+        let name = "playback-values-" + UUID().uuidString
+        let suite = try #require(UserDefaults(suiteName: name))
+        defer { suite.removePersistentDomain(forName: name) }
+        // Captured from unmodified production types at 1015f885 / Defaults 9.0.9.
+        suite.set("1.375", forKey: "speed")
+        suite.set("10000000", forKey: "bitrate")
+        suite.set(5_000_000, forKey: "testSize")
+        suite.set(#"{"custom":{"interval":[0,7500000000000000000]}}"#, forKey: "jump")
+        suite.set("unchanged", forKey: "adjacent")
+        let speed = Defaults.Key<PlaybackSpeed>("speed", default: .one, suite: suite)
+        let bitrate = Defaults.Key<PlaybackBitrate>("bitrate", default: .auto, suite: suite)
+        let size = Defaults.Key<PlaybackBitrateTestSize>("testSize", default: .smallest, suite: suite)
+        let jump = Defaults.Key<MediaJumpInterval>("jump", default: .five, suite: suite)
+        #expect(Defaults[speed] == .custom(1.375))
+        #expect(Defaults[bitrate] == .mbps10)
+        #expect(Defaults[size] == .regular)
+        #expect(Defaults[jump] == .custom(interval: .seconds(7.5)))
+        Defaults[speed] = .half
+        Defaults[bitrate] = .kbps720
+        Defaults[size] = .larger
+        Defaults[jump] = .five
+        #expect(suite.string(forKey: "speed") == "0.5")
+        #expect(suite.string(forKey: "bitrate") == "720000")
+        #expect(suite.object(forKey: "testSize") is NSNumber)
+        #expect(suite.integer(forKey: "testSize") == 7_500_000)
+        let jumpText = try #require(suite.string(forKey: "jump"))
+        let object = try #require(JSONSerialization.jsonObject(with: Data(jumpText.utf8)) as? NSDictionary)
+        #expect(object == ["five": [:]] as NSDictionary)
+        #expect(suite.string(forKey: "adjacent") == "unchanged")
+    }
 }

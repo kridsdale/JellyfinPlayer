@@ -6,18 +6,14 @@
 // Copyright (c) 2026 Jellyfin & Jellyfin Contributors
 //
 
-import Defaults
 import Foundation
-import JellyfinAPI
 import SwiftfinLocalization
+import SwiftfinPlaybackProfiles
+import SwiftfinStoredValues
 
-enum PlaybackBitrateTestSize: Int, CaseIterable, Defaults.Serializable, Displayable {
-    case largest = 10_000_000
-    case larger = 7_500_000
-    case regular = 5_000_000
-    case smaller = 2_500_000
-    case smallest = 1_000_000
+typealias PlaybackBitrateTestSize = SwiftfinPlaybackProfiles.PlaybackBitrateTestSize
 
+extension PlaybackBitrateTestSize: Displayable {
     var displayTitle: String {
         switch self {
         case .largest:

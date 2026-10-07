@@ -6,21 +6,6 @@
 // Copyright (c) 2026 Jellyfin & Jellyfin Contributors
 //
 
-import Combine
+import SwiftfinUIState
 
-// TODO: remove
-
-struct LegacyEventPublisher<T>: Publisher {
-    typealias Output = T
-    typealias Failure = Never
-
-    private let subject = PassthroughSubject<T, Never>()
-
-    func receive<S: Subscriber>(subscriber: S) where Never == S.Failure, T == S.Input {
-        subject.receive(subscriber: subscriber)
-    }
-
-    func send(_ value: T) {
-        subject.send(value)
-    }
-}
+typealias LegacyEventPublisher<Value> = UIEventPublisher<Value>

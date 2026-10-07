@@ -6,6 +6,12 @@
 // Copyright (c) 2026 Jellyfin & Jellyfin Contributors
 //
 
-import SwiftfinUIState
+import Foundation
 
-typealias PokeIntervalTimer = SwiftfinUIState.PokeIntervalTimer
+public enum PlaybackBitrateTestSize: Int, CaseIterable, Codable, Sendable {
+    case largest = 10_000_000
+    case larger = 7_500_000
+    case regular = 5_000_000
+    case smaller = 2_500_000
+    case smallest = 1_000_000
+}

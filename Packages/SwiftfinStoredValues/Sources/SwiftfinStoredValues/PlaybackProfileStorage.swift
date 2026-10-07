@@ -22,3 +22,10 @@ extension VideoPlayerType: @retroactive Defaults.Serializable, Storable {}
 // This enum previously used raw String storage rather than Codable JSON text.
 // Adding Codable to its value model must not change installed defaults representation.
 extension PlaybackCompatibility: @retroactive Defaults.Serializable, @retroactive Defaults.PreferRawRepresentable {}
+
+// These existing preference values used JSON text before extraction.
+extension PlaybackSpeed: @retroactive Defaults.Serializable, Storable {}
+extension PlaybackBitrate: @retroactive Defaults.Serializable, Storable {}
+extension MediaJumpInterval: @retroactive Defaults.Serializable, Storable {}
+// The original test-size enum stored an Int, without a Codable bridge.
+extension PlaybackBitrateTestSize: @retroactive Defaults.Serializable, @retroactive Defaults.PreferRawRepresentable {}

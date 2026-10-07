@@ -6,50 +6,14 @@
 // Copyright (c) 2026 Jellyfin & Jellyfin Contributors
 //
 
-import Defaults
 import Foundation
+import SwiftfinLocalization
+import SwiftfinPlaybackProfiles
 import SwiftfinStoredValues
 
-enum MediaJumpInterval: CaseIterable, Displayable, Hashable, RawRepresentable, Storable, SystemImageable {
+typealias MediaJumpInterval = SwiftfinPlaybackProfiles.MediaJumpInterval
 
-    typealias RawValue = Duration
-
-    case five
-    case ten
-    case fifteen
-    case thirty
-    case custom(interval: Duration)
-
-    init(rawValue: Duration) {
-        switch rawValue {
-        case .seconds(5):
-            self = .five
-        case .seconds(10):
-            self = .ten
-        case .seconds(15):
-            self = .fifteen
-        case .seconds(30):
-            self = .thirty
-        default:
-            self = .custom(interval: rawValue)
-        }
-    }
-
-    var rawValue: Duration {
-        switch self {
-        case .five:
-            .seconds(5)
-        case .ten:
-            .seconds(10)
-        case .fifteen:
-            .seconds(15)
-        case .thirty:
-            .seconds(30)
-        case let .custom(interval):
-            interval
-        }
-    }
-
+extension MediaJumpInterval: Displayable, SystemImageable {
     var displayTitle: String {
         rawValue.formatted(.minuteSecondsNarrow)
     }
@@ -82,9 +46,5 @@ enum MediaJumpInterval: CaseIterable, Displayable, Hashable, RawRepresentable, S
         case .custom:
             "gobackward"
         }
-    }
-
-    static var allCases: [MediaJumpInterval] {
-        [.five, .ten, .fifteen, .thirty]
     }
 }

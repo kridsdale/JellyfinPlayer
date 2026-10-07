@@ -79,7 +79,7 @@ POLICIES = {
     "KidsPlayback": ({"KidsDiagnostics", "SwiftfinAsyncStreams"}, {"Foundation"}),
     "KidsPersistence": ({"KidsDomain", "KidsDiagnostics"}, {"Foundation", "SwiftData", "CryptoKit"}),
     "SwiftfinLocalization": ({}, {"Foundation"}),
-    "SwiftfinUIState": ({}, {"SwiftUI", "Combine"}),
+    "SwiftfinUIState": ({}, {"SwiftUI", "Combine", "Foundation"}),
 }
 IMPORT = re.compile(r"(?m)^\s*(?:@\w+(?:\([^\n)]*\))?\s+)*(?:(?:public|package|internal|fileprivate|private)\s+)?import\s+(?:(?:typealias|struct|class|enum|protocol|func|let|var)\s+)?(\w+)")
 

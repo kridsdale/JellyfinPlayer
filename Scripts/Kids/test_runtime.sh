@@ -10,7 +10,7 @@ xcrun swiftc -swift-version 6 -parse-as-library \
   -o "$RUNTIME_TEST_BUILD/swizzle-defaults-tests"
 "$RUNTIME_TEST_BUILD/swizzle-defaults-tests"
 xcrun swiftc -swift-version 6 -parse-as-library \
-  "$REPO_ROOT/Shared/Objects/PokeIntervalTimer.swift" \
+  "$REPO_ROOT/Packages/SwiftfinUIState/Sources/SwiftfinUIState/PokeIntervalTimer.swift" \
   "$REPO_ROOT/Scripts/Kids/tests/runtime/PokeIntervalTimerTests.swift" \
   -o "$RUNTIME_TEST_BUILD/poke-interval-tests"
 "$RUNTIME_TEST_BUILD/poke-interval-tests"
