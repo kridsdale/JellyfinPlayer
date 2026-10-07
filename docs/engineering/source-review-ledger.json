@@ -152,9 +152,9 @@
         "SwiftfinScrolling"
       ],
       "path": "Shared/Components/EPG/Body/Components/EPGScrollState.swift",
-      "reason": "Mixed: reusable mutable visible-offset publication, initial zero and strict greater-than-0.5 point suppression remain in an unisolated app class. Review its two native UI consumers and move the observation policy into existing main-actor scrolling ownership with original threshold/Combine delivery preserved; current compilation does not prove its ownership complete.",
-      "sha256": "4633bf9aa3bf8510fd3d909ab133ae7d4984cd8720ea7cb0b94593182c175d16",
-      "status": "source-reviewed-mixed"
+      "reason": "Spelling-only alias to the main-actor VisibleScrollOffsetState. Scrolling owns initial-zero/current-value publication and strict greater-than-0.5 suppression; exact original sixteen state samples and nine synchronous receipts preserve finite and nonfinite behavior. Two scoped UI consumers retain exact bodies.",
+      "sha256": "3a0c9b4ae024f1f3013b28dfc103413184a175687739bd5f9b4e57c555b3e011",
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -863,7 +863,7 @@
       "owners": [],
       "path": "Shared/Extensions/JellyfinAPI/AuthenticationInfo.swift",
       "reason": "Transferable/UI export projection chooses title and token text from a caller-supplied immutable SDK value; file creation is in the separately mixed TextTransferable body. No credentials are fetched or exported during review.",
-      "sha256": "cc1602f741a2ba332759e7a89fd4616c6e2762eac4a53ad7499d7e352aee2df9",
+      "sha256": "fdfb8cf5aba1b25826253471a5f688eb3ca8a0f1d918c2960e2cf1aa9723ddec",
       "status": "source-reviewed-retained"
     },
     {
@@ -1021,15 +1021,6 @@
       "status": "pending"
     },
     {
-      "owners": [
-        "SwiftfinItemMetadata"
-      ],
-      "path": "Shared/Extensions/JellyfinAPI/ImageBlurHashes.swift",
-      "reason": "Pure SDK image-type to blurhash-dictionary projection still lives in the app. The existing metadata/image-fact owner can own this mapping without app UI/global inputs; preserve all13 enum cases and optional dictionaries.",
-      "sha256": "23f8cdf5ace540a22cfd622997d78509aaa81f801b44d5e2280a64bb7057ef0d",
-      "status": "source-reviewed-mixed"
-    },
-    {
       "owners": [],
       "path": "Shared/Extensions/JellyfinAPI/ImageInfo.swift",
       "reason": "UI identity plus ImageSource composition delegates raw URL policy to ItemMetadata with an explicit caller-supplied transport; no image fetching or processing.",
@@ -1096,14 +1087,14 @@
       "owners": [],
       "path": "Shared/Extensions/JellyfinAPI/MediaSourceInfo.swift",
       "reason": "",
-      "sha256": "6addf7344153ceda7e23551112e4f01868cc91146d134ed3c59aea34105c22d8",
+      "sha256": "b2e947a13c4273e4627647fe18c57cfc937f968e37e0c55300670a66c51c2f05",
       "status": "pending"
     },
     {
       "owners": [],
       "path": "Shared/Extensions/JellyfinAPI/MediaStream.swift",
       "reason": "",
-      "sha256": "105a926dc544949ce9b97660f7b5d710d882d23de213b545b2718f1355405a75",
+      "sha256": "688cdea63a66d131412ac4f3cc3f4b545136ab10aee5ba60e7b296578021f546",
       "status": "pending"
     },
     {
@@ -1153,9 +1144,9 @@
         "SwiftfinTime"
       ],
       "path": "Shared/Extensions/JellyfinAPI/PlayerStateInfo.swift",
-      "reason": "Thin DTO wrapper still performs direct legacy tick-to-duration/seconds arithmetic. Preserve truncation/sign/extreme inputs while delegating the arithmetic to the existing time owner; app may retain optional SDK field composition.",
-      "sha256": "64da9cc6dfcb38b788f7947ea1ecd3cba62caa7ee28533f3457000531e412ae7",
-      "status": "source-reviewed-mixed"
+      "reason": "Only nil-preserving SDK DTO projections and the installed deprecated spelling remain; Time owns exact signed integer tick-to-Duration and whole-second truncation. Eighteen original cases include extremes and sub-tick signs. No floating conversion or SDK dependency is added to Time.",
+      "sha256": "0f2efed9f35d012951707bbaabe51b6e8515aeaeff5bd8eb895526e073d1f6e0",
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -1197,9 +1188,9 @@
         "SwiftfinMediaCatalog"
       ],
       "path": "Shared/Extensions/JellyfinAPI/SpecialFeatureType.swift",
-      "reason": "Localized extra-type titles coexist with pure themeSong-only exclusion for video eligibility. Move immutable kind eligibility into the catalog owner while retaining label presentation.",
-      "sha256": "0276c3de3dc10a1229957947426b7224cb04d8dd399ab47f5eb96321018821ee",
-      "status": "source-reviewed-mixed"
+      "reason": "Complete local title mapping remains unchanged; video eligibility delegates to the catalog owner with all twelve original extra cases captured. The app owns localization only and grants no access from this predicate.",
+      "sha256": "91bca9bfd493036b038245eead85189424f4e92cbee9a08deabcd101c9a604bc",
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -1234,9 +1225,9 @@
         "SwiftfinServerOperations"
       ],
       "path": "Shared/Extensions/JellyfinAPI/TaskTriggerInfo.swift",
-      "reason": "Daily/weekly/interval/startup default request constructors remain app behavior. Existing server-operations owner should own exact Sunday/midnight/one-hour policy; preserve SDK DTO values and keep choice UI separate.",
-      "sha256": "2f061958daadd8c3420d712b8a39d1b147addbb94d5a1f35606ffffcd82f8740",
-      "status": "source-reviewed-mixed"
+      "reason": "Compatibility constructor forwards to the existing server-policy owner. Four original encoded trigger defaults are preserved, including midnight, Sunday and one-hour tick interval. This constructor issues no command or server IO.",
+      "sha256": "1a57a31219ecf2c325beb86071309898fa660d443ea60454e1bf027d66045acb",
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -2210,9 +2201,9 @@
         "SwiftfinMediaCatalog"
       ],
       "path": "Shared/Objects/LibraryParent/LibraryParent.swift",
-      "reason": "Presentation parent protocol/ID/title composes immutable supported media-kind rules; folder-specific default kinds are still chosen in the app. Move the pure kind policy into existing Catalog ownership while retaining UI identity/display composition.",
-      "sha256": "a86ecf33a41488f156dca861fab4c9d9d5749b4778d13b215b6c56fb3eb3b569",
-      "status": "source-reviewed-mixed"
+      "reason": "App protocol retains Displayable/identity requirements and paging identity fallback; default supported kinds delegate to catalog. Thirty-eight captured generic parents preserve exact order and folder additions. DTO collection/channel overrides remain intentionally distinct and unchanged.",
+      "sha256": "b3e5f8e7eea97b818d82ea5d4f8ee0ced01f78ae2f1235343773f45ad7eef722",
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -2411,9 +2402,9 @@
         "SwiftfinItemMetadata"
       ],
       "path": "Shared/Objects/MetadataRefreshType.swift",
-      "reason": "Localized refresh choices coexist with immutable request policy for replacement/mode/selected images/trickplay. Existing metadata owner should own the scan/missing/all request semantics; preserve exact values and keep localized presentation in the app.",
-      "sha256": "65dc17e62b192f6de92e45fc64143f14b3743aa6abc1f5fc6d3a5c772566523e",
-      "status": "source-reviewed-mixed"
+      "reason": "Spelling-only alias plus unchanged localized titles; the metadata owner defines three immutable Hashable/Sendable selections and original metadata/image/element replacement choices. The app no longer implements refresh request policy.",
+      "sha256": "288db898b7c291ac504642c9a712a8a9861a3e96524633c98e7776ca4ca451a8",
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -2666,9 +2657,9 @@
         "SwiftfinServerOperations"
       ],
       "path": "Shared/Objects/ServerLogType.swift",
-      "reason": "Localized labels/symbols coexist with FFmpeg/log filename classification. Pure diagnostic classification should be owned by server operations; preserve prefix/regex precedence without querying the server.",
-      "sha256": "979f43bf035d63dc00f0015cbe2258d13bad958b969135e7682e21a5ad0b063c",
-      "status": "source-reviewed-mixed"
+      "reason": "Spelling-only alias plus unchanged localized labels/icons; ServerLogKind owns filename classification, case ordering and raw identity. Twenty-three original inputs preserve prefix precedence, anchoring, case and Unicode digit behavior; raw initializer remains filename-based.",
+      "sha256": "f753ab8cee4980dc7571dd4ad8031340bdba3eff12cde38602fad897bbc0c8ec",
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -2713,9 +2704,9 @@
         "SwiftfinText"
       ],
       "path": "Shared/Objects/TextTransferable.swift",
-      "reason": "ShareLink/native transfer presentation coexists with text file creation and export path/content IO. Export ownership, lifetime and original naming semantics require review before pure file materialization can move behind an explicit interface; no files are exported in this review.",
-      "sha256": "4380976a1f411a70915b3091a6f9784382094ff78856ad3860cd55f352687981",
-      "status": "source-reviewed-mixed"
+      "reason": "Public spelling alias and iOS ShareLink/preview presentation only. Text owns the Transferable content protocol, plain-text file representation, original temporary filename/atomic UTF-8 export and returned SentTransferredFile. App contains no export IO. Actual OS share lifecycle remains runtime-held.",
+      "sha256": "d820e257245db7b6178d16a2389e53ccea6a907e42a095026e97f78e0ce985b8",
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -2981,88 +2972,117 @@
       "status": "pending"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinServerOperations"
+      ],
       "path": "Shared/ViewModels/AdminDashboard/APIKeysViewModel.swift",
-      "reason": "",
+      "reason": "Mixed: app action sequences revoke/create/reload of a replacement API key, with intermediate UI removal after revocation. Move reusable compound command ownership into ServerOperations while preserving the observable partial-failure ordering, exact captured transport, UI receipt and cancellation/binding checks. Current simple command delegates do not establish that composition complete.",
       "sha256": "6e0fc6920a30fb5dfa77a0e0cd53605d213b46e77ccadd736ad799ed67d2c2e8",
-      "status": "pending"
+      "status": "source-reviewed-mixed"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinServerOperations"
+      ],
       "path": "Shared/ViewModels/AdminDashboard/DevicesViewModel.swift",
-      "reason": "",
+      "reason": "Main-actor UI state/action transitions forward device reads/commands to the owner and publish results. Updating custom names in existing observers and subtracting acknowledged deleted IDs are local presentation synchronization, not server deletion/query policy; bound command implementation stays outside the app.",
       "sha256": "1f49f0720f65b588188d345adbfc18b7ce6ab3f657473b4c37e85f0a7414de7d",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinServerOperations",
+        "SwiftfinUserAdministration"
+      ],
       "path": "Shared/ViewModels/AdminDashboard/ServerActivityDetailViewModel.swift",
-      "reason": "",
+      "reason": "Composes concurrent owned item/user reads for an activity detail screen, preserving missing-ID nils, cancellation and clearing the two UI fields on other errors. It constructs no SDK request/client and retains no native stream or resource policy.",
       "sha256": "fc6586676dd53a3c39962837e58d4cb5f45ae56afccb87e65f4e6a1f7c754a54",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinServerOperations"
+      ],
       "path": "Shared/ViewModels/AdminDashboard/ServerBackupViewModel.swift",
-      "reason": "",
+      "reason": "Screen action/state/event adapter forwards each backup read/create/restore to the bound server owner, prepends the returned manifest and emits presentation events. It does not implement backup transport/filesystem IO or execute any action during this review.",
       "sha256": "a4555cc7d15cbd068e7b040647e8496f377110fd2c7faf8c96f75e36562972e8",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinServerOperations"
+      ],
       "path": "Shared/ViewModels/AdminDashboard/ServerLogs/ServerLogsViewModel.swift",
-      "reason": "",
+      "reason": "Main-actor log-list presentation requests owned values, keeps ordered unique rows and filters by the currently selected display category. Filename classification now belongs to ServerLogKind; this body contains no log file read or SDK request construction.",
       "sha256": "294033cb49554af4e1a3ae0351974ecabdbfa31bdd2f0b5855ce6cb53fa2fa14",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinServerOperations",
+        "SwiftfinAsyncStreams"
+      ],
       "path": "Shared/ViewModels/AdminDashboard/Sessions/ActiveSessionsViewModel.swift",
-      "reason": "",
+      "reason": "Mixed: row observer identity and filters are presentation, but initial-session socket delivery queues a weak-self MainActor task with no explicit account/binding generation in the receipt. A native upstream lease alone does not prove queued obsolete updates are rejected. Review root replacement, subscription retirement and queued publication with synthetic account-switch/cancellation contracts before retaining this body.",
       "sha256": "9687a29c9d130ca571dca3c75feae2a71be224ff036def54456e04df1f276f47",
-      "status": "pending"
+      "status": "source-reviewed-mixed"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinServerOperations"
+      ],
       "path": "Shared/ViewModels/AdminDashboard/Sessions/SessionViewModel.swift",
-      "reason": "",
+      "reason": "Main-actor remote-session screen maps user actions and current optional session ID to owned playback/message/playstate/general commands, with UI sending/error states. SDK payload values are supplied by composition; request construction/authorization/transport live in ServerOperations. No remote action was executed.",
       "sha256": "0755c4c83a3f2e526b1aaeb0e2366ff61be0588353a8a947fe0d6379af97ee97",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinServerOperations"
+      ],
       "path": "Shared/ViewModels/AdminDashboard/Tasks/ServerTaskViewModel.swift",
-      "reason": "",
+      "reason": "Main-actor task observer maintains displayed running/cancelling state and optimistic trigger edits with local rollback after command error. Reads/start/stop/update delegate to ServerOperations, and trigger removal uses its pure policy. This entry does not claim runtime success/failure UI acceptance.",
       "sha256": "e60e630da7ed7af9ca5da861cb172719dae25965f3148a8af79c9d503deea70b",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinServerOperations",
+        "SwiftfinAsyncStreams"
+      ],
       "path": "Shared/ViewModels/AdminDashboard/Tasks/ServerTasksViewModel.swift",
-      "reason": "",
+      "reason": "Mixed: category grouping/sorting and observer reuse are UI, but session-to-stream compactMap drops nil roots instead of explicitly switching to an empty lease, and queued MainActor updates lack a captured generation. Review logout/root switching, pending receipts and subscription cancellation before classifying account-scoped stream lifetime complete.",
       "sha256": "f6e628602a5c3852282f142444065a0e5d421fa49d20d388c255740752f45847",
-      "status": "pending"
+      "status": "source-reviewed-mixed"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinUserAdministration"
+      ],
       "path": "Shared/ViewModels/AdminDashboard/Users/AddServerUserViewModel.swift",
-      "reason": "",
+      "reason": "Main-actor screen submits creation to one captured bound accounts owner, retains the existing five-second presentation delay, propagates cancellation and rechecks binding before sending the created-user event. Native request/account creation policy is outside this adapter.",
       "sha256": "c8e021592ac79c2f2b617b747f425fe24b8eff51b49a015c348ba1500ded4811",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinUserAdministration",
+        "SwiftfinAsyncStreams"
+      ],
       "path": "Shared/ViewModels/AdminDashboard/Users/ServerUserAdminViewModel.swift",
-      "reason": "",
+      "reason": "Main-actor edited-user screen delegates user/library/policy/configuration/name commands, updates its displayed DTO and current composed account after success, and posts the existing profile-change signal. Weak profile subscription is retained by the view-model cancellation bag; request/binding/server policy stay owned. Current notification/GUI acceptance remains held.",
       "sha256": "2c9951d77b23c201e888e8a86bd35fd743256b273cf8ca89093e2cdeaeb24e39",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinUserAdministration",
+        "SwiftfinAsyncStreams"
+      ],
       "path": "Shared/ViewModels/AdminDashboard/Users/ServerUsersViewModel.swift",
-      "reason": "",
+      "reason": "Main-actor screen cancellation and local row publication wrap bound user read/deletion commands; filtering/current-user protection and query sort live in UserAdministration. Supplied-row insertion and UI sorting/event spelling remain in presentation. Weak profile refresh subscription is local composition; no server operation was executed.",
       "sha256": "fa9287fd2138b64526159185e7175c7d6c75103a8ba062b4bded241f80165e0e",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -4900,14 +4920,16 @@
     },
     {
       "path": "Packages/SwiftfinServerOperations/Sources/SwiftfinServerOperations/ServerOperationsPolicy.swift",
-      "reason": "Immutable DTO selection with explicit device/item and preserved order/payload; no session-manager lookup or subscription construction. Other policy members source-reviewed in the same file; their full consumer audit remains open.",
+      "reason": "Immutable DTO selection with explicit device/item and preserved order/payload; no session-manager lookup or subscription construction. Other policy members source-reviewed in the same file; their full consumer audit remains open. Adds scoped immutable trigger construction with the same four encoded DTO defaults. One-hour ticks remain 36,000,000,000 without adding a Time dependency. Construction does not update schedules or send commands.",
       "reviewedConsumers": [
+        "Shared/Extensions/JellyfinAPI/TaskTriggerInfo.swift",
         "Shared/Objects/MediaPlayerManager/Supplements/PlaybackInformationSupplement.swift"
       ],
       "reviewedInterfaces": [
-        "ServerOperationsPolicy.playbackSession(in:deviceID:itemID:)"
+        "ServerOperationsPolicy.playbackSession(in:deviceID:itemID:)",
+        "ServerOperationsPolicy.defaultTrigger(type:)"
       ],
-      "sha256": "c8e99a7dcec6442a40646e3306e3b52b0f70a924d396499aa9ff36ba1ca127ff"
+      "sha256": "95378fd225c19d9a4d1428c252001a312f718e9387ca2864d4b944fcc3bf3ede"
     },
     {
       "path": "Packages/SwiftfinUserMediaState/Sources/SwiftfinUserMediaState/LibraryMembershipChange.swift",
@@ -4925,17 +4947,21 @@
     },
     {
       "path": "Packages/SwiftfinMediaCatalog/Sources/SwiftfinMediaCatalog/LibraryCatalogPolicy.swift",
-      "reason": "Checked Sendable query classification and ordered media-kind projection. Existing catalog read owner enforces exact user/transport binding; app captures current manager/session/client and view identity.",
+      "reason": "Checked Sendable query classification and ordered media-kind projection. Existing catalog read owner enforces exact user/transport binding; app captures current manager/session/client and view identity. Adds reviewed generic-parent and extra-kind policies over immutable DTO enum values. Generic channel parents retain default types, unlike the existing DTO collection override. No lookup/settings/authentication or SDK client escapes.",
       "reviewedConsumers": [
+        "Shared/Extensions/JellyfinAPI/SpecialFeatureType.swift",
         "Shared/Objects/Libraries/ResumeItemsLibrary.swift",
-        "Shared/Objects/Libraries/UserViewLibrary.swift"
+        "Shared/Objects/Libraries/UserViewLibrary.swift",
+        "Shared/Objects/LibraryParent/LibraryParent.swift"
       ],
       "reviewedInterfaces": [
         "LibraryArtworkScope",
         "MediaCatalogPolicy.libraryItemTypes(for:)",
-        "MediaCatalogPolicy.artworkQuery(for:)"
+        "MediaCatalogPolicy.artworkQuery(for:)",
+        "MediaCatalogPolicy.libraryParentItemTypes(for:)",
+        "MediaCatalogPolicy.isVideoExtra(_:)"
       ],
-      "sha256": "f6ebbfdf382c27cb362836180515d24421d8554f2f44cc97bd6b86de1ffaec92"
+      "sha256": "4dd8a257c3a25039f083b4d0aadffe51cab0c7a228c726a32ee6fbcf7e345572"
     },
     {
       "path": "Packages/SwiftfinAccountAccess/Sources/SwiftfinAccountAccess/EvaluatedLocalUserAccessPolicy.swift",
@@ -5085,19 +5111,103 @@
         "disconnect()"
       ],
       "sha256": "943b9d035dc9b59bc58edebfb460eced5feb651898c8bd622ea1e7ee90000c16"
+    },
+    {
+      "path": "Packages/SwiftfinTime/Sources/SwiftfinTime/DurationValues.swift",
+      "reason": "Scoped tick-scale interface review: integer-only truncation toward zero preserves all captured optional/signed/extreme SDK projections. Time imports no SDK. Unrelated duration helpers are not classified by this entry.",
+      "reviewedConsumers": [
+        "Shared/Extensions/JellyfinAPI/PlayerStateInfo.swift"
+      ],
+      "reviewedInterfaces": [
+        "Duration.ticks(_:)",
+        "Duration.wholeSeconds(ticks:)"
+      ],
+      "sha256": "3ea3a02284305a3860b95eb2501796978719b238166593bd4417d86b34373264"
+    },
+    {
+      "path": "Packages/SwiftfinItemMetadata/Sources/SwiftfinItemMetadata/ImageBlurHashes.swift",
+      "reason": "Original exhaustive thirteen-field optional dictionary projection moves unchanged into metadata ownership. The sole image-source consumer already imports metadata and remains byte-for-byte unchanged. Pure immutable dictionaries only; no client/renderer handle.",
+      "reviewedConsumers": [
+        "Shared/Extensions/JellyfinAPI/BaseItemDto/BaseItemDto+Images.swift"
+      ],
+      "reviewedInterfaces": [
+        "ImageBlurHashes subscript(imageType:)"
+      ],
+      "sha256": "6ab4a37fb6d1650575da7835182ddc37853c985f66841547680122cdb696e07e"
+    },
+    {
+      "path": "Packages/SwiftfinItemMetadata/Sources/SwiftfinItemMetadata/MetadataRefreshSelection.swift",
+      "reason": "Immutable Hashable/Sendable three-mode request policy. App keeps title composition and unchanged selection consumer. SDK refresh-mode enums are values; actual commands stay in ItemMetadataClient. All original replacement selections are captured.",
+      "reviewedConsumers": [
+        "Shared/Objects/MetadataRefreshType.swift",
+        "Shared/Views/ItemEditorView/ItemRefreshView.swift"
+      ],
+      "reviewedInterfaces": [
+        "MetadataRefreshSelection.allCases",
+        "replaceMetadata",
+        "metadataRefreshMode",
+        "replaceElements(_:)"
+      ],
+      "sha256": "e3df7d36ee10d43ff371211d2258c590798046fbc9eddbc13bf121969be6449e"
+    },
+    {
+      "path": "Packages/SwiftfinServerOperations/Sources/SwiftfinServerOperations/ServerLogKind.swift",
+      "reason": "Immutable Sendable filename classification preserves nonfailable RawRepresentable initializer semantics, including raw enum strings being classified as other. App owns icons/titles; no log file read or network operation occurs in this value.",
+      "reviewedConsumers": [
+        "Shared/Objects/ServerLogType.swift",
+        "Shared/Extensions/JellyfinAPI/LogFile.swift"
+      ],
+      "reviewedInterfaces": [
+        "ServerLogKind.allCases",
+        "rawValue",
+        "init(rawValue:)"
+      ],
+      "sha256": "4fea26b84e2c7656daf4dfaa7641ea0eec91b2e71111130704b70744a32eb879"
+    },
+    {
+      "path": "Packages/SwiftfinScrolling/Sources/SwiftfinScrolling/VisibleScrollOffsetState.swift",
+      "reason": "Main-actor owner privately retains a CurrentValueSubject and publishes immutable CGFloat values. Scoped reads, sticky-label subscription and two native coordinator updates remain unchanged; full coordinator body remains pending. Native contracts cover captured threshold/nonfinite traces, cancellation/current replay and foreign task hopping.",
+      "reviewedConsumers": [
+        "Shared/Components/EPG/Body/Components/EPGScrollState.swift",
+        "Shared/Components/EPG/Body/Components/EPGProgramCell.swift",
+        "Shared/Components/EPG/Body/EPGCollectionView.swift"
+      ],
+      "reviewedInterfaces": [
+        "init()",
+        "visibleLeadingOffset",
+        "visibleLeadingOffsetPublisher",
+        "update(visibleLeadingOffset:)"
+      ],
+      "sha256": "1a16714868e08380a4f2bd2242239661868ced0cd7f5b214e813d295fed6b52a"
+    },
+    {
+      "path": "Packages/SwiftfinText/Sources/SwiftfinText/TextTransferable.swift",
+      "reason": "Text owns plain-text CoreTransferable representation and exact title/body UTF-8 temporary export; writer is internal with an injected directory for isolated tests. App shares immutable DTO text through explicit retroactive conformances and retains ShareLink presentation. SentTransferredFile is the required framework representation value, not a public mutable file handle. Native tests use disposable synthetic text only; actual share-sheet/OS transfer cleanup remains held.",
+      "reviewedConsumers": [
+        "Shared/Objects/TextTransferable.swift",
+        "Shared/Extensions/JellyfinAPI/AuthenticationInfo.swift",
+        "Shared/Extensions/JellyfinAPI/MediaSourceInfo.swift",
+        "Shared/Extensions/JellyfinAPI/MediaStream.swift"
+      ],
+      "reviewedInterfaces": [
+        "TextTransferable transferTitle/transferBody",
+        "transferRepresentation",
+        "internal TextExportFile.write(title:body:directory:)"
+      ],
+      "sha256": "009f7b4f90134531d1945dff8c37c1317f1cf5a89e1bd249a337591d8f17c72c"
     }
   ],
   "limits": "This ledger records bodies explicitly reviewed, with exact current hashes; earlier prose or lexical inventory is not automatically promoted. Pending and mixed entries prevent whole-source completion. Retained UI algorithms have specific presentation reasons, not folder/import-based blanket approval. API entries do not classify the rest of the public graph. Source review and offline tests do not satisfy held runtime acceptance.",
   "schemaVersion": 1,
-  "scope": "All current app Swift files; source-body classification and fifteen limited interface/internal lifecycle/consumer reviews. No server/media/simulator data.",
+  "scope": "All current app Swift files; complete-body classifications and twenty-one scoped interface/internal lifecycle/consumer reviews. No server/media/simulator data.",
   "summary": {
-    "applicationSwiftFiles": 667,
+    "applicationSwiftFiles": 666,
     "classification": {
-      "pending": 420,
-      "source-reviewed-mixed": 9,
-      "source-reviewed-retained": 238
+      "pending": 408,
+      "source-reviewed-mixed": 3,
+      "source-reviewed-retained": 255
     },
-    "currentAPIReviews": 15,
+    "currentAPIReviews": 21,
     "runtimeAcceptance": "held by human; no simulator/server testing"
   }
 }

@@ -33,7 +33,7 @@ extension MediaSourceInfo {
     }
 }
 
-extension MediaSourceInfo: @retroactive Transferable, TextTransferable {
+extension MediaSourceInfo: @retroactive Transferable, @retroactive TextTransferable {
 
     typealias Property = MediaStream.Property
 

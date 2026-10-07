@@ -80,3 +80,30 @@ public enum ServerOperationsPolicy {
         values.filter { $0 != trigger }
     }
 }
+
+public extension ServerOperationsPolicy {
+    static func defaultTrigger(type: TaskTriggerInfoType) -> TaskTriggerInfo {
+        switch type {
+        case .dailyTrigger:
+            .init(
+                timeOfDayTicks: 0,
+                type: type
+            )
+        case .weeklyTrigger:
+            .init(
+                dayOfWeek: .sunday,
+                timeOfDayTicks: 0,
+                type: type
+            )
+        case .intervalTrigger:
+            .init(
+                intervalTicks: 36_000_000_000,
+                type: type
+            )
+        case .startupTrigger:
+            .init(
+                type: type
+            )
+        }
+    }
+}

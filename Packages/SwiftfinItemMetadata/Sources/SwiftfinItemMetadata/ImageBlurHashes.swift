@@ -9,7 +9,7 @@
 import Foundation
 import JellyfinAPI
 
-extension ImageBlurHashes {
+public extension ImageBlurHashes {
 
     subscript(imageType: ImageType) -> [String: String]? {
         switch imageType {

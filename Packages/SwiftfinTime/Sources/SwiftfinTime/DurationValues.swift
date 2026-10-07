@@ -15,6 +15,11 @@ public func abs(_ d: Duration) -> Duration {
 
 public extension Duration {
 
+    /// Truncate whole seconds from the installed 100-nanosecond tick scale.
+    static func wholeSeconds(ticks: Int) -> Int {
+        ticks / 10_000_000
+    }
+
     /// Represent Jellyfin ticks as a Duration
     static func ticks(_ ticks: Int) -> Duration {
         Duration.microseconds(Int64(ticks) / 10)

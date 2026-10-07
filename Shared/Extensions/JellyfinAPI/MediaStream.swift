@@ -180,7 +180,7 @@ extension MediaStream {
     }
 }
 
-extension MediaStream: @retroactive Transferable, TextTransferable {
+extension MediaStream: @retroactive Transferable, @retroactive TextTransferable {
 
     @ArrayBuilder<Property>
     private var sharedTransferProperties: [Property] {

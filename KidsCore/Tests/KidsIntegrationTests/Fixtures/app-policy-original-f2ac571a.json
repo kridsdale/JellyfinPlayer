@@ -1,0 +1,1033 @@
+{
+  "cases": {
+    "blurHashes": [
+      {
+        "entries": {
+          "tag": "primary"
+        },
+        "type": "Primary",
+        "variant": "full"
+      },
+      {
+        "entries": {
+          "tag": "art"
+        },
+        "type": "Art",
+        "variant": "full"
+      },
+      {
+        "entries": {
+          "tag": "backdrop"
+        },
+        "type": "Backdrop",
+        "variant": "full"
+      },
+      {
+        "entries": {
+          "tag": "banner"
+        },
+        "type": "Banner",
+        "variant": "full"
+      },
+      {
+        "entries": {
+          "tag": "logo"
+        },
+        "type": "Logo",
+        "variant": "full"
+      },
+      {
+        "entries": {
+          "tag": "thumb"
+        },
+        "type": "Thumb",
+        "variant": "full"
+      },
+      {
+        "entries": {
+          "tag": "disc"
+        },
+        "type": "Disc",
+        "variant": "full"
+      },
+      {
+        "entries": {
+          "tag": "box"
+        },
+        "type": "Box",
+        "variant": "full"
+      },
+      {
+        "entries": {
+          "tag": "screenshot"
+        },
+        "type": "Screenshot",
+        "variant": "full"
+      },
+      {
+        "entries": {
+          "tag": "menu"
+        },
+        "type": "Menu",
+        "variant": "full"
+      },
+      {
+        "entries": {
+          "tag": "chapter"
+        },
+        "type": "Chapter",
+        "variant": "full"
+      },
+      {
+        "entries": {
+          "tag": "boxRear"
+        },
+        "type": "BoxRear",
+        "variant": "full"
+      },
+      {
+        "entries": {
+          "tag": "profile"
+        },
+        "type": "Profile",
+        "variant": "full"
+      },
+      {
+        "entries": null,
+        "type": "Primary",
+        "variant": "missing"
+      },
+      {
+        "entries": null,
+        "type": "Art",
+        "variant": "missing"
+      },
+      {
+        "entries": null,
+        "type": "Backdrop",
+        "variant": "missing"
+      },
+      {
+        "entries": null,
+        "type": "Banner",
+        "variant": "missing"
+      },
+      {
+        "entries": null,
+        "type": "Logo",
+        "variant": "missing"
+      },
+      {
+        "entries": null,
+        "type": "Thumb",
+        "variant": "missing"
+      },
+      {
+        "entries": null,
+        "type": "Disc",
+        "variant": "missing"
+      },
+      {
+        "entries": null,
+        "type": "Box",
+        "variant": "missing"
+      },
+      {
+        "entries": null,
+        "type": "Screenshot",
+        "variant": "missing"
+      },
+      {
+        "entries": null,
+        "type": "Menu",
+        "variant": "missing"
+      },
+      {
+        "entries": null,
+        "type": "Chapter",
+        "variant": "missing"
+      },
+      {
+        "entries": null,
+        "type": "BoxRear",
+        "variant": "missing"
+      },
+      {
+        "entries": null,
+        "type": "Profile",
+        "variant": "missing"
+      },
+      {
+        "entries": {},
+        "type": "Primary",
+        "variant": "empty"
+      },
+      {
+        "entries": null,
+        "type": "Art",
+        "variant": "empty"
+      },
+      {
+        "entries": null,
+        "type": "Backdrop",
+        "variant": "empty"
+      },
+      {
+        "entries": null,
+        "type": "Banner",
+        "variant": "empty"
+      },
+      {
+        "entries": null,
+        "type": "Logo",
+        "variant": "empty"
+      },
+      {
+        "entries": null,
+        "type": "Thumb",
+        "variant": "empty"
+      },
+      {
+        "entries": null,
+        "type": "Disc",
+        "variant": "empty"
+      },
+      {
+        "entries": null,
+        "type": "Box",
+        "variant": "empty"
+      },
+      {
+        "entries": null,
+        "type": "Screenshot",
+        "variant": "empty"
+      },
+      {
+        "entries": null,
+        "type": "Menu",
+        "variant": "empty"
+      },
+      {
+        "entries": null,
+        "type": "Chapter",
+        "variant": "empty"
+      },
+      {
+        "entries": null,
+        "type": "BoxRear",
+        "variant": "empty"
+      },
+      {
+        "entries": null,
+        "type": "Profile",
+        "variant": "empty"
+      }
+    ],
+    "extras": [
+      {
+        "isVideo": true,
+        "type": "Unknown"
+      },
+      {
+        "isVideo": true,
+        "type": "Clip"
+      },
+      {
+        "isVideo": true,
+        "type": "Trailer"
+      },
+      {
+        "isVideo": true,
+        "type": "BehindTheScenes"
+      },
+      {
+        "isVideo": true,
+        "type": "DeletedScene"
+      },
+      {
+        "isVideo": true,
+        "type": "Interview"
+      },
+      {
+        "isVideo": true,
+        "type": "Scene"
+      },
+      {
+        "isVideo": true,
+        "type": "Sample"
+      },
+      {
+        "isVideo": false,
+        "type": "ThemeSong"
+      },
+      {
+        "isVideo": true,
+        "type": "ThemeVideo"
+      },
+      {
+        "isVideo": true,
+        "type": "Featurette"
+      },
+      {
+        "isVideo": true,
+        "type": "Short"
+      }
+    ],
+    "libraryKinds": [
+      {
+        "itemTypes": [
+          "BoxSet",
+          "Movie",
+          "MusicVideo",
+          "Series",
+          "Video"
+        ],
+        "kind": null
+      },
+      {
+        "itemTypes": [
+          "BoxSet",
+          "Movie",
+          "MusicVideo",
+          "Series",
+          "Video"
+        ],
+        "kind": "AggregateFolder"
+      },
+      {
+        "itemTypes": [
+          "BoxSet",
+          "Movie",
+          "MusicVideo",
+          "Series",
+          "Video"
+        ],
+        "kind": "Audio"
+      },
+      {
+        "itemTypes": [
+          "BoxSet",
+          "Movie",
+          "MusicVideo",
+          "Series",
+          "Video"
+        ],
+        "kind": "AudioBook"
+      },
+      {
+        "itemTypes": [
+          "BoxSet",
+          "Movie",
+          "MusicVideo",
+          "Series",
+          "Video"
+        ],
+        "kind": "BasePluginFolder"
+      },
+      {
+        "itemTypes": [
+          "BoxSet",
+          "Movie",
+          "MusicVideo",
+          "Series",
+          "Video"
+        ],
+        "kind": "Book"
+      },
+      {
+        "itemTypes": [
+          "BoxSet",
+          "Movie",
+          "MusicVideo",
+          "Series",
+          "Video"
+        ],
+        "kind": "BoxSet"
+      },
+      {
+        "itemTypes": [
+          "BoxSet",
+          "Movie",
+          "MusicVideo",
+          "Series",
+          "Video"
+        ],
+        "kind": "Channel"
+      },
+      {
+        "itemTypes": [
+          "BoxSet",
+          "Movie",
+          "MusicVideo",
+          "Series",
+          "Video"
+        ],
+        "kind": "ChannelFolderItem"
+      },
+      {
+        "itemTypes": [
+          "BoxSet",
+          "Movie",
+          "MusicVideo",
+          "Series",
+          "Video"
+        ],
+        "kind": "CollectionFolder"
+      },
+      {
+        "itemTypes": [
+          "BoxSet",
+          "Movie",
+          "MusicVideo",
+          "Series",
+          "Video"
+        ],
+        "kind": "Episode"
+      },
+      {
+        "itemTypes": [
+          "BoxSet",
+          "Movie",
+          "MusicVideo",
+          "Series",
+          "Video",
+          "Folder",
+          "CollectionFolder"
+        ],
+        "kind": "Folder"
+      },
+      {
+        "itemTypes": [
+          "BoxSet",
+          "Movie",
+          "MusicVideo",
+          "Series",
+          "Video"
+        ],
+        "kind": "Genre"
+      },
+      {
+        "itemTypes": [
+          "BoxSet",
+          "Movie",
+          "MusicVideo",
+          "Series",
+          "Video"
+        ],
+        "kind": "ManualPlaylistsFolder"
+      },
+      {
+        "itemTypes": [
+          "BoxSet",
+          "Movie",
+          "MusicVideo",
+          "Series",
+          "Video"
+        ],
+        "kind": "Movie"
+      },
+      {
+        "itemTypes": [
+          "BoxSet",
+          "Movie",
+          "MusicVideo",
+          "Series",
+          "Video"
+        ],
+        "kind": "LiveTvChannel"
+      },
+      {
+        "itemTypes": [
+          "BoxSet",
+          "Movie",
+          "MusicVideo",
+          "Series",
+          "Video"
+        ],
+        "kind": "LiveTvProgram"
+      },
+      {
+        "itemTypes": [
+          "BoxSet",
+          "Movie",
+          "MusicVideo",
+          "Series",
+          "Video"
+        ],
+        "kind": "MusicAlbum"
+      },
+      {
+        "itemTypes": [
+          "BoxSet",
+          "Movie",
+          "MusicVideo",
+          "Series",
+          "Video"
+        ],
+        "kind": "MusicArtist"
+      },
+      {
+        "itemTypes": [
+          "BoxSet",
+          "Movie",
+          "MusicVideo",
+          "Series",
+          "Video"
+        ],
+        "kind": "MusicGenre"
+      },
+      {
+        "itemTypes": [
+          "BoxSet",
+          "Movie",
+          "MusicVideo",
+          "Series",
+          "Video"
+        ],
+        "kind": "MusicVideo"
+      },
+      {
+        "itemTypes": [
+          "BoxSet",
+          "Movie",
+          "MusicVideo",
+          "Series",
+          "Video"
+        ],
+        "kind": "Person"
+      },
+      {
+        "itemTypes": [
+          "BoxSet",
+          "Movie",
+          "MusicVideo",
+          "Series",
+          "Video"
+        ],
+        "kind": "Photo"
+      },
+      {
+        "itemTypes": [
+          "BoxSet",
+          "Movie",
+          "MusicVideo",
+          "Series",
+          "Video"
+        ],
+        "kind": "PhotoAlbum"
+      },
+      {
+        "itemTypes": [
+          "BoxSet",
+          "Movie",
+          "MusicVideo",
+          "Series",
+          "Video"
+        ],
+        "kind": "Playlist"
+      },
+      {
+        "itemTypes": [
+          "BoxSet",
+          "Movie",
+          "MusicVideo",
+          "Series",
+          "Video"
+        ],
+        "kind": "PlaylistsFolder"
+      },
+      {
+        "itemTypes": [
+          "BoxSet",
+          "Movie",
+          "MusicVideo",
+          "Series",
+          "Video"
+        ],
+        "kind": "Program"
+      },
+      {
+        "itemTypes": [
+          "BoxSet",
+          "Movie",
+          "MusicVideo",
+          "Series",
+          "Video"
+        ],
+        "kind": "Recording"
+      },
+      {
+        "itemTypes": [
+          "BoxSet",
+          "Movie",
+          "MusicVideo",
+          "Series",
+          "Video"
+        ],
+        "kind": "Season"
+      },
+      {
+        "itemTypes": [
+          "BoxSet",
+          "Movie",
+          "MusicVideo",
+          "Series",
+          "Video"
+        ],
+        "kind": "Series"
+      },
+      {
+        "itemTypes": [
+          "BoxSet",
+          "Movie",
+          "MusicVideo",
+          "Series",
+          "Video"
+        ],
+        "kind": "Studio"
+      },
+      {
+        "itemTypes": [
+          "BoxSet",
+          "Movie",
+          "MusicVideo",
+          "Series",
+          "Video"
+        ],
+        "kind": "Trailer"
+      },
+      {
+        "itemTypes": [
+          "BoxSet",
+          "Movie",
+          "MusicVideo",
+          "Series",
+          "Video"
+        ],
+        "kind": "TvChannel"
+      },
+      {
+        "itemTypes": [
+          "BoxSet",
+          "Movie",
+          "MusicVideo",
+          "Series",
+          "Video"
+        ],
+        "kind": "TvProgram"
+      },
+      {
+        "itemTypes": [
+          "BoxSet",
+          "Movie",
+          "MusicVideo",
+          "Series",
+          "Video"
+        ],
+        "kind": "UserRootFolder"
+      },
+      {
+        "itemTypes": [
+          "BoxSet",
+          "Movie",
+          "MusicVideo",
+          "Series",
+          "Video"
+        ],
+        "kind": "UserView"
+      },
+      {
+        "itemTypes": [
+          "BoxSet",
+          "Movie",
+          "MusicVideo",
+          "Series",
+          "Video"
+        ],
+        "kind": "Video"
+      },
+      {
+        "itemTypes": [
+          "BoxSet",
+          "Movie",
+          "MusicVideo",
+          "Series",
+          "Video"
+        ],
+        "kind": "Year"
+      }
+    ],
+    "logs": [
+      {
+        "kind": "directStream",
+        "name": "FFmpeg.DirectStream-X.log"
+      },
+      {
+        "kind": "directStream",
+        "name": "FFmpeg.DirectStream-"
+      },
+      {
+        "kind": "remux",
+        "name": "FFmpeg.Remux-1.log"
+      },
+      {
+        "kind": "transcode",
+        "name": "FFmpeg.Transcode-1.log"
+      },
+      {
+        "kind": "system",
+        "name": "log_20260101.log"
+      },
+      {
+        "kind": "system",
+        "name": "log_99999999.log"
+      },
+      {
+        "kind": "system",
+        "name": "log_١٢٣٤٥٦٧٨.log"
+      },
+      {
+        "kind": "system",
+        "name": "log_２０２６０１０１.log"
+      },
+      {
+        "kind": "system",
+        "name": "log_00000000.log"
+      },
+      {
+        "kind": "other",
+        "name": "log_202610071.log"
+      },
+      {
+        "kind": "other",
+        "name": "xlog_20261007.log"
+      },
+      {
+        "kind": "other",
+        "name": "log_20261007.log\n"
+      },
+      {
+        "kind": "other",
+        "name": "Log_20261007.log"
+      },
+      {
+        "kind": "other",
+        "name": "log_20261007.LOG"
+      },
+      {
+        "kind": "other",
+        "name": "FFmpeg.directStream-X.log"
+      },
+      {
+        "kind": "other",
+        "name": " FFmpeg.Remux-X"
+      },
+      {
+        "kind": "other",
+        "name": ""
+      },
+      {
+        "kind": "other",
+        "name": "system"
+      },
+      {
+        "kind": "other",
+        "name": "directStream"
+      },
+      {
+        "kind": "other",
+        "name": "remux"
+      },
+      {
+        "kind": "other",
+        "name": "transcode"
+      },
+      {
+        "kind": "other",
+        "name": "other"
+      },
+      {
+        "kind": "transcode",
+        "name": "FFmpeg.Transcode-log_20260101.log"
+      }
+    ],
+    "offsets": {
+      "inputs": [
+        "0000000000000000",
+        "3fd0000000000000",
+        "3fe0000000000000",
+        "3fe000d1b71758e2",
+        "3fe999999999999a",
+        "3ff0000000000000",
+        "3ff000d1b71758e2",
+        "bfe0000000000000",
+        "bff0000000000000",
+        "bff80068db8bac71",
+        "7ff0000000000000",
+        "7ff0000000000000",
+        "7ff8000000000000",
+        "0000000000000000",
+        "fff0000000000000",
+        "0000000000000000"
+      ],
+      "receipts": [
+        "0000000000000000",
+        "3fe000d1b71758e2",
+        "3ff000d1b71758e2",
+        "bfe0000000000000",
+        "bff80068db8bac71",
+        "7ff0000000000000",
+        "0000000000000000",
+        "fff0000000000000",
+        "0000000000000000"
+      ],
+      "states": [
+        "0000000000000000",
+        "0000000000000000",
+        "0000000000000000",
+        "3fe000d1b71758e2",
+        "3fe000d1b71758e2",
+        "3fe000d1b71758e2",
+        "3ff000d1b71758e2",
+        "bfe0000000000000",
+        "bfe0000000000000",
+        "bff80068db8bac71",
+        "7ff0000000000000",
+        "7ff0000000000000",
+        "7ff0000000000000",
+        "0000000000000000",
+        "fff0000000000000",
+        "0000000000000000"
+      ]
+    },
+    "refresh": [
+      {
+        "case": "scan",
+        "falseSelection": false,
+        "mode": "Default",
+        "replaceMetadata": false,
+        "trueSelection": false
+      },
+      {
+        "case": "missing",
+        "falseSelection": false,
+        "mode": "FullRefresh",
+        "replaceMetadata": false,
+        "trueSelection": true
+      },
+      {
+        "case": "all",
+        "falseSelection": false,
+        "mode": "FullRefresh",
+        "replaceMetadata": true,
+        "trueSelection": true
+      }
+    ],
+    "text": [
+      {
+        "body": "line 1\nline 2",
+        "bytes": "bGluZSAxCmxpbmUgMg==",
+        "filename": "title.txt",
+        "title": "title"
+      },
+      {
+        "body": "é👨‍👩‍👧‍👦\n",
+        "bytes": "w6nwn5Go4oCN8J+RqeKAjfCfkafigI3wn5GmCg==",
+        "filename": "你好.txt",
+        "title": "你好"
+      },
+      {
+        "body": "",
+        "bytes": "",
+        "filename": "record.json.txt",
+        "title": "record.json"
+      },
+      {
+        "body": "NUL\u0000終",
+        "bytes": "TlVMAOe1gg==",
+        "filename": ".txt",
+        "title": ""
+      }
+    ],
+    "ticks": [
+      {
+        "components": null,
+        "input": null,
+        "seconds": null
+      },
+      {
+        "components": {
+          "attoseconds": -477580000000000000,
+          "seconds": -922337203685
+        },
+        "input": -9223372036854775808,
+        "seconds": -922337203685
+      },
+      {
+        "components": {
+          "attoseconds": 0,
+          "seconds": -1
+        },
+        "input": -10000001,
+        "seconds": -1
+      },
+      {
+        "components": {
+          "attoseconds": 0,
+          "seconds": -1
+        },
+        "input": -10000000,
+        "seconds": -1
+      },
+      {
+        "components": {
+          "attoseconds": -999999000000000000,
+          "seconds": 0
+        },
+        "input": -9999999,
+        "seconds": 0
+      },
+      {
+        "components": {
+          "attoseconds": -1000000000000,
+          "seconds": 0
+        },
+        "input": -11,
+        "seconds": 0
+      },
+      {
+        "components": {
+          "attoseconds": -1000000000000,
+          "seconds": 0
+        },
+        "input": -10,
+        "seconds": 0
+      },
+      {
+        "components": {
+          "attoseconds": 0,
+          "seconds": 0
+        },
+        "input": -9,
+        "seconds": 0
+      },
+      {
+        "components": {
+          "attoseconds": 0,
+          "seconds": 0
+        },
+        "input": -1,
+        "seconds": 0
+      },
+      {
+        "components": {
+          "attoseconds": 0,
+          "seconds": 0
+        },
+        "input": 0,
+        "seconds": 0
+      },
+      {
+        "components": {
+          "attoseconds": 0,
+          "seconds": 0
+        },
+        "input": 1,
+        "seconds": 0
+      },
+      {
+        "components": {
+          "attoseconds": 0,
+          "seconds": 0
+        },
+        "input": 9,
+        "seconds": 0
+      },
+      {
+        "components": {
+          "attoseconds": 1000000000000,
+          "seconds": 0
+        },
+        "input": 10,
+        "seconds": 0
+      },
+      {
+        "components": {
+          "attoseconds": 1000000000000,
+          "seconds": 0
+        },
+        "input": 11,
+        "seconds": 0
+      },
+      {
+        "components": {
+          "attoseconds": 999999000000000000,
+          "seconds": 0
+        },
+        "input": 9999999,
+        "seconds": 0
+      },
+      {
+        "components": {
+          "attoseconds": 0,
+          "seconds": 1
+        },
+        "input": 10000000,
+        "seconds": 1
+      },
+      {
+        "components": {
+          "attoseconds": 0,
+          "seconds": 1
+        },
+        "input": 10000001,
+        "seconds": 1
+      },
+      {
+        "components": {
+          "attoseconds": 477580000000000000,
+          "seconds": 922337203685
+        },
+        "input": 9223372036854775807,
+        "seconds": 922337203685
+      }
+    ],
+    "triggers": [
+      {
+        "encoded": "{\"TimeOfDayTicks\":0,\"Type\":\"DailyTrigger\"}",
+        "type": "DailyTrigger"
+      },
+      {
+        "encoded": "{\"DayOfWeek\":\"Sunday\",\"TimeOfDayTicks\":0,\"Type\":\"WeeklyTrigger\"}",
+        "type": "WeeklyTrigger"
+      },
+      {
+        "encoded": "{\"IntervalTicks\":36000000000,\"Type\":\"IntervalTrigger\"}",
+        "type": "IntervalTrigger"
+      },
+      {
+        "encoded": "{\"Type\":\"StartupTrigger\"}",
+        "type": "StartupTrigger"
+      }
+    ]
+  },
+  "original": {
+    "commit": "f2ac571a89f90a8dddfd847b13d2c122b2401848",
+    "memberHashes": {
+      "legacyCapture": "d74a4d4241f96a889de5eac7afc535cac69636665a0c67b0fc72331e426d5783"
+    },
+    "sourceHashes": {
+      "Packages/SwiftfinMediaCatalog/Sources/SwiftfinMediaCatalog/MediaCatalogPolicy.swift": "e7215c21a86322f75b846d9e03d494aec03b764bb824303754397d5a3af845b7",
+      "Packages/SwiftfinTime/Sources/SwiftfinTime/DurationValues.swift": "b9c516df680a9a4bfa043492cf4c7fb985377cbd62f3efad19f60c858b1b8b8f",
+      "Shared/Components/EPG/Body/Components/EPGScrollState.swift": "4633bf9aa3bf8510fd3d909ab133ae7d4984cd8720ea7cb0b94593182c175d16",
+      "Shared/Extensions/JellyfinAPI/ImageBlurHashes.swift": "23f8cdf5ace540a22cfd622997d78509aaa81f801b44d5e2280a64bb7057ef0d",
+      "Shared/Extensions/JellyfinAPI/PlayerStateInfo.swift": "64da9cc6dfcb38b788f7947ea1ecd3cba62caa7ee28533f3457000531e412ae7",
+      "Shared/Extensions/JellyfinAPI/SpecialFeatureType.swift": "0276c3de3dc10a1229957947426b7224cb04d8dd399ab47f5eb96321018821ee",
+      "Shared/Extensions/JellyfinAPI/TaskTriggerInfo.swift": "2f061958daadd8c3420d712b8a39d1b147addbb94d5a1f35606ffffcd82f8740",
+      "Shared/Objects/LibraryParent/LibraryParent.swift": "a86ecf33a41488f156dca861fab4c9d9d5749b4778d13b215b6c56fb3eb3b569",
+      "Shared/Objects/MetadataRefreshType.swift": "65dc17e62b192f6de92e45fc64143f14b3743aa6abc1f5fc6d3a5c772566523e",
+      "Shared/Objects/ServerLogType.swift": "979f43bf035d63dc00f0015cbe2258d13bad958b969135e7682e21a5ad0b063c",
+      "Shared/Objects/TextTransferable.swift": "4380976a1f411a70915b3091a6f9784382094ff78856ad3860cd55f352687981"
+    }
+  }
+}

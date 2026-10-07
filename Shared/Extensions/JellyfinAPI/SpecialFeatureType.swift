@@ -9,6 +9,7 @@
 import Foundation
 import JellyfinAPI
 import SwiftfinLocalization
+import SwiftfinMediaCatalog
 
 extension ExtraType: Displayable {
 
@@ -42,6 +43,6 @@ extension ExtraType: Displayable {
     }
 
     var isVideo: Bool {
-        self != .themeSong
+        MediaCatalogPolicy.isVideoExtra(self)
     }
 }

@@ -7,7 +7,7 @@
 //
 
 import JellyfinAPI
-import SwiftfinCollections
+import SwiftfinMediaCatalog
 
 protocol LibraryParent: Displayable, Hashable, Identifiable<String?> {
 
@@ -26,13 +26,7 @@ protocol LibraryParent: Displayable, Hashable, Identifiable<String?> {
 extension LibraryParent {
 
     var supportedItemTypes: [BaseItemKind] {
-        switch libraryType {
-        case .folder:
-            BaseItemKind.supportedCases
-                .appending([.folder, .collectionFolder])
-        default:
-            BaseItemKind.supportedCases
-        }
+        MediaCatalogPolicy.libraryParentItemTypes(for: libraryType)
     }
 
     var pagingLibraryID: String {

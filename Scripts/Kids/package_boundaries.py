@@ -40,7 +40,7 @@ POLICIES = {
     "SwiftfinPermissions": ({}, {"Foundation", "os", "CoreLocation", "LocalAuthentication"}),
     "SwiftfinImageProcessing": ({}, {"Foundation", "CoreGraphics", "UIKit", "SVGKit"}),
     "SwiftfinMPV": ({}, {"Foundation", "MPVUI", "Observation", "SwiftUI"}),
-    "SwiftfinText": ({}, {"Foundation", "CryptoKit"}),
+    "SwiftfinText": ({}, {"Foundation", "CryptoKit", "CoreTransferable", "UniformTypeIdentifiers"}),
     "SwiftfinValues": ({}, {"Foundation"}),
     "SwiftfinTime": ({}, {"Foundation"}),
     "SwiftfinFormatting": ({"SwiftfinValues", "SwiftfinLocalization"}, {"Foundation"}),

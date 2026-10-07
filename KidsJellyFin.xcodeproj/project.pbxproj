@@ -281,6 +281,12 @@
 		3C3BD5A9AF4585F6DF94B391 /* Packages/SwiftfinUIState/Tests/SwiftfinUIStateTests/JumpProgressContracts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 254452003EC2A17883B5328A /* Packages/SwiftfinUIState/Tests/SwiftfinUIStateTests/JumpProgressContracts.swift */; };
 		C5CF6DE263F8F5BF4866796C /* Packages/SwiftfinScrolling/Tests/SwiftfinScrollingTests/ScrollOffsetLeaseContracts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66FED9E733C1D916B22D40A4 /* Packages/SwiftfinScrolling/Tests/SwiftfinScrollingTests/ScrollOffsetLeaseContracts.swift */; };
 		1993FD7F2F8B6482E58D09CA /* Packages/SwiftfinScrolling/Tests/SwiftfinScrollingTests/ScrollOffsetUIKitContracts.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5B6005A6674C976939C0827 /* Packages/SwiftfinScrolling/Tests/SwiftfinScrollingTests/ScrollOffsetUIKitContracts.swift */; };
+		19CC321D64C8DCFE07873E99 /* Packages/SwiftfinItemMetadata/Tests/SwiftfinItemMetadataTests/AppMetadataOriginalContracts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 367ABB6E1673F8E9E1E43FDB /* Packages/SwiftfinItemMetadata/Tests/SwiftfinItemMetadataTests/AppMetadataOriginalContracts.swift */; };
+		291734E882B4F7A31133B601 /* Packages/SwiftfinServerOperations/Tests/SwiftfinServerOperationsTests/AppServerOriginalContracts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3528CAB414C545D46903BE12 /* Packages/SwiftfinServerOperations/Tests/SwiftfinServerOperationsTests/AppServerOriginalContracts.swift */; };
+		A109463E857A860E9710820A /* Packages/SwiftfinMediaCatalog/Tests/SwiftfinMediaCatalogTests/AppCatalogOriginalContracts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DD7591FAE594E9CAB6B5C14 /* Packages/SwiftfinMediaCatalog/Tests/SwiftfinMediaCatalogTests/AppCatalogOriginalContracts.swift */; };
+		731DCEA03DAB0D2B9A44380A /* Packages/SwiftfinTime/Tests/SwiftfinTimeTests/AppTickOriginalContracts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C785B43459F7389F381CACD /* Packages/SwiftfinTime/Tests/SwiftfinTimeTests/AppTickOriginalContracts.swift */; };
+		AC0ED60B0C42BC289CFAFFE1 /* Packages/SwiftfinScrolling/Tests/SwiftfinScrollingTests/VisibleScrollOffsetContracts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 437443497EB9345B9F7D99B6 /* Packages/SwiftfinScrolling/Tests/SwiftfinScrollingTests/VisibleScrollOffsetContracts.swift */; };
+		9447B230A2ABD81051874FBF /* Packages/SwiftfinText/Tests/SwiftfinTextTests/TextExportContracts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8527B1ED35E9989F922153E3 /* Packages/SwiftfinText/Tests/SwiftfinTextTests/TextExportContracts.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -390,6 +396,12 @@
 		254452003EC2A17883B5328A /* Packages/SwiftfinUIState/Tests/SwiftfinUIStateTests/JumpProgressContracts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Packages/SwiftfinUIState/Tests/SwiftfinUIStateTests/JumpProgressContracts.swift; sourceTree = SOURCE_ROOT; };
 		66FED9E733C1D916B22D40A4 /* Packages/SwiftfinScrolling/Tests/SwiftfinScrollingTests/ScrollOffsetLeaseContracts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Packages/SwiftfinScrolling/Tests/SwiftfinScrollingTests/ScrollOffsetLeaseContracts.swift; sourceTree = SOURCE_ROOT; };
 		D5B6005A6674C976939C0827 /* Packages/SwiftfinScrolling/Tests/SwiftfinScrollingTests/ScrollOffsetUIKitContracts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Packages/SwiftfinScrolling/Tests/SwiftfinScrollingTests/ScrollOffsetUIKitContracts.swift; sourceTree = SOURCE_ROOT; };
+		367ABB6E1673F8E9E1E43FDB /* Packages/SwiftfinItemMetadata/Tests/SwiftfinItemMetadataTests/AppMetadataOriginalContracts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Packages/SwiftfinItemMetadata/Tests/SwiftfinItemMetadataTests/AppMetadataOriginalContracts.swift; sourceTree = SOURCE_ROOT; };
+		3528CAB414C545D46903BE12 /* Packages/SwiftfinServerOperations/Tests/SwiftfinServerOperationsTests/AppServerOriginalContracts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Packages/SwiftfinServerOperations/Tests/SwiftfinServerOperationsTests/AppServerOriginalContracts.swift; sourceTree = SOURCE_ROOT; };
+		5DD7591FAE594E9CAB6B5C14 /* Packages/SwiftfinMediaCatalog/Tests/SwiftfinMediaCatalogTests/AppCatalogOriginalContracts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Packages/SwiftfinMediaCatalog/Tests/SwiftfinMediaCatalogTests/AppCatalogOriginalContracts.swift; sourceTree = SOURCE_ROOT; };
+		2C785B43459F7389F381CACD /* Packages/SwiftfinTime/Tests/SwiftfinTimeTests/AppTickOriginalContracts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Packages/SwiftfinTime/Tests/SwiftfinTimeTests/AppTickOriginalContracts.swift; sourceTree = SOURCE_ROOT; };
+		437443497EB9345B9F7D99B6 /* Packages/SwiftfinScrolling/Tests/SwiftfinScrollingTests/VisibleScrollOffsetContracts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Packages/SwiftfinScrolling/Tests/SwiftfinScrollingTests/VisibleScrollOffsetContracts.swift; sourceTree = SOURCE_ROOT; };
+		8527B1ED35E9989F922153E3 /* Packages/SwiftfinText/Tests/SwiftfinTextTests/TextExportContracts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Packages/SwiftfinText/Tests/SwiftfinTextTests/TextExportContracts.swift; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -739,6 +751,12 @@
 				91E50DA2DBFE11433CA5B297 /* Packages/SwiftfinAccountAccess/Tests/SwiftfinAccountAccessTests/LocalAccessPolicyContracts.swift */,
 				0D398FB4A311E02B078B7F6C /* Packages/SwiftfinNativePlayback/Tests/SwiftfinNativePlaybackTests/HardwareReaderContracts.swift */,
 				E48C3FE91DA20460FB967687 /* Packages/SwiftfinImageProcessing/Tests/SwiftfinImageProcessingTests/SVGRenderStateContracts.swift */,
+				367ABB6E1673F8E9E1E43FDB /* Packages/SwiftfinItemMetadata/Tests/SwiftfinItemMetadataTests/AppMetadataOriginalContracts.swift */,
+				3528CAB414C545D46903BE12 /* Packages/SwiftfinServerOperations/Tests/SwiftfinServerOperationsTests/AppServerOriginalContracts.swift */,
+				5DD7591FAE594E9CAB6B5C14 /* Packages/SwiftfinMediaCatalog/Tests/SwiftfinMediaCatalogTests/AppCatalogOriginalContracts.swift */,
+				2C785B43459F7389F381CACD /* Packages/SwiftfinTime/Tests/SwiftfinTimeTests/AppTickOriginalContracts.swift */,
+				437443497EB9345B9F7D99B6 /* Packages/SwiftfinScrolling/Tests/SwiftfinScrollingTests/VisibleScrollOffsetContracts.swift */,
+				8527B1ED35E9989F922153E3 /* Packages/SwiftfinText/Tests/SwiftfinTextTests/TextExportContracts.swift */,
 				D5B6005A6674C976939C0827 /* Packages/SwiftfinScrolling/Tests/SwiftfinScrollingTests/ScrollOffsetUIKitContracts.swift */,
 				66FED9E733C1D916B22D40A4 /* Packages/SwiftfinScrolling/Tests/SwiftfinScrollingTests/ScrollOffsetLeaseContracts.swift */,
 				254452003EC2A17883B5328A /* Packages/SwiftfinUIState/Tests/SwiftfinUIStateTests/JumpProgressContracts.swift */,
@@ -1510,6 +1528,12 @@
 				FA3FDEE8F4465249CADCA3B6 /* Packages/SwiftfinAccountAccess/Tests/SwiftfinAccountAccessTests/LocalAccessPolicyContracts.swift in Sources */,
 				F592A228D472773A384D26B6 /* Packages/SwiftfinNativePlayback/Tests/SwiftfinNativePlaybackTests/HardwareReaderContracts.swift in Sources */,
 				95F5CDA646C98074444086D4 /* Packages/SwiftfinImageProcessing/Tests/SwiftfinImageProcessingTests/SVGRenderStateContracts.swift in Sources */,
+				19CC321D64C8DCFE07873E99 /* Packages/SwiftfinItemMetadata/Tests/SwiftfinItemMetadataTests/AppMetadataOriginalContracts.swift in Sources */,
+				291734E882B4F7A31133B601 /* Packages/SwiftfinServerOperations/Tests/SwiftfinServerOperationsTests/AppServerOriginalContracts.swift in Sources */,
+				A109463E857A860E9710820A /* Packages/SwiftfinMediaCatalog/Tests/SwiftfinMediaCatalogTests/AppCatalogOriginalContracts.swift in Sources */,
+				731DCEA03DAB0D2B9A44380A /* Packages/SwiftfinTime/Tests/SwiftfinTimeTests/AppTickOriginalContracts.swift in Sources */,
+				AC0ED60B0C42BC289CFAFFE1 /* Packages/SwiftfinScrolling/Tests/SwiftfinScrollingTests/VisibleScrollOffsetContracts.swift in Sources */,
+				9447B230A2ABD81051874FBF /* Packages/SwiftfinText/Tests/SwiftfinTextTests/TextExportContracts.swift in Sources */,
 				1993FD7F2F8B6482E58D09CA /* Packages/SwiftfinScrolling/Tests/SwiftfinScrollingTests/ScrollOffsetUIKitContracts.swift in Sources */,
 				C5CF6DE263F8F5BF4866796C /* Packages/SwiftfinScrolling/Tests/SwiftfinScrollingTests/ScrollOffsetLeaseContracts.swift in Sources */,
 				3C3BD5A9AF4585F6DF94B391 /* Packages/SwiftfinUIState/Tests/SwiftfinUIStateTests/JumpProgressContracts.swift in Sources */,

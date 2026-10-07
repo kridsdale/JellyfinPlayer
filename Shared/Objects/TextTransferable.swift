@@ -6,29 +6,12 @@
 // Copyright (c) 2026 Jellyfin & Jellyfin Contributors
 //
 
-import CoreTransferable
-import Foundation
-import SwiftfinCollections
+import SwiftfinText
 import SwiftUI
-import UniformTypeIdentifiers
 
-public protocol TextTransferable: Transferable {
+public typealias TextTransferable = SwiftfinText.TextTransferable
 
-    var transferTitle: String { get }
-    var transferBody: String { get }
-}
-
-public extension TextTransferable {
-
-    static var transferRepresentation: some TransferRepresentation {
-        FileRepresentation(exportedContentType: .plainText) { (item: Self) in
-            let url = URL.temporaryDirectory.appending(path: item.transferTitle.appending(".txt"))
-            try item.transferBody.write(to: url, atomically: true, encoding: .utf8)
-
-            return SentTransferredFile(url)
-        }
-    }
-
+public extension SwiftfinText.TextTransferable {
     #if os(iOS)
     var shareLink: some View {
         ShareLink(

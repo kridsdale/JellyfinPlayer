@@ -6,24 +6,6 @@
 // Copyright (c) 2026 Jellyfin & Jellyfin Contributors
 //
 
-import Combine
-import SwiftfinTime
-import UIKit
+import SwiftfinScrolling
 
-final class EPGScrollState {
-
-    private let visibleLeadingOffsetSubject = CurrentValueSubject<CGFloat, Never>(0)
-
-    var visibleLeadingOffset: CGFloat {
-        visibleLeadingOffsetSubject.value
-    }
-
-    var visibleLeadingOffsetPublisher: AnyPublisher<CGFloat, Never> {
-        visibleLeadingOffsetSubject.eraseToAnyPublisher()
-    }
-
-    func update(visibleLeadingOffset: CGFloat) {
-        guard abs(self.visibleLeadingOffset - visibleLeadingOffset) > 0.5 else { return }
-        visibleLeadingOffsetSubject.send(visibleLeadingOffset)
-    }
-}
+typealias EPGScrollState = VisibleScrollOffsetState

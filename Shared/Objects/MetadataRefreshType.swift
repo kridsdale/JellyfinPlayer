@@ -6,16 +6,12 @@
 // Copyright (c) 2026 Jellyfin & Jellyfin Contributors
 //
 
-import Foundation
-import JellyfinAPI
+import SwiftfinItemMetadata
 import SwiftfinLocalization
 
-enum MetadataRefreshType: CaseIterable, Displayable {
+typealias MetadataRefreshType = MetadataRefreshSelection
 
-    case scan
-    case missing
-    case all
-
+extension MetadataRefreshSelection: Displayable {
     var displayTitle: String {
         switch self {
         case .scan:
@@ -24,37 +20,6 @@ enum MetadataRefreshType: CaseIterable, Displayable {
             L10n.searchForMissingMetadata
         case .all:
             L10n.replaceAllMetadata
-        }
-    }
-
-    var replaceMetadata: Bool {
-        switch self {
-        case .scan, .missing:
-            false
-        case .all:
-            true
-        }
-    }
-
-    /// For now, this covers both `metadataRefreshMode` and `imageRefreshMode`
-    /// - Split into 2 func if we ever need differing logic for each.
-    var metadataRefreshMode: MetadataRefreshMode {
-        switch self {
-        case .scan:
-            .default
-        case .missing, .all:
-            .fullRefresh
-        }
-    }
-
-    /// For now, this covers both `regenerateTrickplay` and `replaceImages`
-    /// - Split into 2 func if we ever need differing logic for each.
-    func replaceElements(_ selection: Bool) -> Bool {
-        switch self {
-        case .scan:
-            false
-        case .missing, .all:
-            selection
         }
     }
 }

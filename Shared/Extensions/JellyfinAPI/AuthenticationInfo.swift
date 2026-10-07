@@ -10,8 +10,9 @@ import CoreTransferable
 import Foundation
 import JellyfinAPI
 import SwiftfinLocalization
+import SwiftfinText
 
-extension AuthenticationInfo: @retroactive Transferable, TextTransferable {
+extension AuthenticationInfo: @retroactive Transferable, @retroactive TextTransferable {
 
     public var transferTitle: String {
         appName ?? L10n.unknown

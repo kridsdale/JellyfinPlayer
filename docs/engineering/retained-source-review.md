@@ -1,6 +1,6 @@
 # Retained application responsibility review
 
-The application is intended to retain composition and platform presentation. This is a source-reviewed ledger, not an automatic approval of files based on their folder, filename or import count. The full-client refactor remains active. Live simulator/server activity is held by the human. Current ledger: 238 retained, nine mixed and 420 pending among 667 app files; fifteen scoped interface reviews.
+The application is intended to retain composition and platform presentation. This is a source-reviewed ledger, not an automatic approval of files based on their folder, filename or import count. The full-client refactor remains active. Live simulator/server activity is held by the human. Current ledger: 255 retained, three mixed and 408 pending among 666 app files; twenty-one scoped interface reviews.
 
 ## Reviewed boundaries at the date/program checkpoint
 
@@ -137,3 +137,12 @@ OnFinalDisappearModifier retains only SwiftUI lifetime placement and delegates f
 Twenty additional complete bodies were read with per-file reasons in the hashed ledger. Nineteen retain app routes, Factory composition, permission labels, form bindings, button/style/typography presentation, application-only Spotlight metadata, error values or environment wrappers. This is source inspection, not promotion from folder/import patterns. EPGScrollState remains mixed: its offset subject and strict greater-than-0.5 threshold need existing scrolling ownership and actor/consumer verification. Remaining mixed files are ImageBlurHashes, PlayerStateInfo, SpecialFeatureType, TaskTriggerInfo, LibraryParent, MetadataRefreshType, ServerLogType and TextTransferable.
 
 The authoritative ledger records 238 retained, nine mixed and 420 pending, plus fifteen limited interface/consumer reviews. Native52, compile-only120/46/65 and preservation393 pass; actual UI/native callback/teardown behavior remains held. Full source/API review and runtime acceptance remain required for the original goal.
+
+
+## Nine resolved responsibilities and administrative review (2026-10-07)
+
+The prior nine mixed entries are resolved into existing owners. The app blurhash implementation is removed; its existing image-source consumer already imports metadata and remains exact. Remaining wrappers preserve optional tick projection, localized extra/log/refresh labels, generic parent identity, trigger constructor spelling, guide state spelling and native ShareLink presentation. The captured old defaults, ordering, Unicode/anchoring, rounding, offset thresholds/nonfinite behavior and UTF-8 filenames/bytes are preserved by adjacent native contracts.
+
+All twelve administrative view-model bodies were read, totaling 1,186 lines. Nine are retained main-actor screen/action/observer composition with specific reasons in the ledger. APIKeysViewModel remains mixed because replacement revoke/create/reload sequencing and intermediate partial-failure UI ordering still live in the app. ActiveSessionsViewModel queues socket receipts without an explicit account generation; ServerTasksViewModel also drops nil session roots with compactMap and queues updates without such a guard. Native upstream retirement alone does not prove queued stale receipts rejected. These three need owned sequencing/lease contracts and scoped integration before completion.
+
+The authoritative hashed ledger records 255 retained, three mixed and 408 pending among 666 app Swift files, plus twenty-one scoped interface/consumer reviews. Native53, compile-only121/47/66 and preservation402 pass; source review does not substitute for held GUI, socket/account switching, native callbacks, sharing cleanup or playback acceptance. The original goal remains active.

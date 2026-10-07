@@ -6,18 +6,12 @@
 // Copyright (c) 2026 Jellyfin & Jellyfin Contributors
 //
 
-import Foundation
 import SwiftfinLocalization
-import SwiftUI
+import SwiftfinServerOperations
 
-enum ServerLogType: String, CaseIterable, Displayable, SystemImageable {
+typealias ServerLogType = ServerLogKind
 
-    case directStream
-    case remux
-    case transcode
-    case system
-    case other
-
+extension ServerLogKind: Displayable, SystemImageable {
     var displayTitle: String {
         switch self {
         case .directStream:
@@ -45,22 +39,6 @@ enum ServerLogType: String, CaseIterable, Displayable, SystemImageable {
             "gearshape.fill"
         case .other:
             "staroflife.fill"
-        }
-    }
-
-    /// Creates a `ServerLogType` from a log file name
-    init(rawValue: String) {
-        if rawValue.hasPrefix("FFmpeg.DirectStream-") {
-            self = .directStream
-        } else if rawValue.hasPrefix("FFmpeg.Remux-") {
-            self = .remux
-        } else if rawValue.hasPrefix("FFmpeg.Transcode-") {
-            self = .transcode
-        } else if rawValue.contains(/^log_\d{8}\.log$/) {
-            // This is intentionally at the end as it's the heaviest check.
-            self = .system
-        } else {
-            self = .other
         }
     }
 }

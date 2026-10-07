@@ -14,12 +14,12 @@ extension PlayerStateInfo {
 
     var position: Duration? {
         guard let positionTicks else { return nil }
-        return Duration.microseconds(positionTicks / 10)
+        return Duration.ticks(positionTicks)
     }
 
     @available(*, deprecated, message: "Use `position` instead")
     var positionSeconds: Int? {
         guard let positionTicks else { return nil }
-        return positionTicks / 10_000_000
+        return Duration.wholeSeconds(ticks: positionTicks)
     }
 }

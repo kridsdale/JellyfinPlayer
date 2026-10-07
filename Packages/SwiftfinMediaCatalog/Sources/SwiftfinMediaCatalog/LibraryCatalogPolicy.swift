@@ -41,3 +41,17 @@ public extension MediaCatalogPolicy {
         }
     }
 }
+
+public extension MediaCatalogPolicy {
+    /// Generic parents differ from the collection-specific DTO policy for channels.
+    static func libraryParentItemTypes(for kind: BaseItemKind?) -> [BaseItemKind] {
+        switch kind {
+        case .folder: defaultItemTypes + [.folder, .collectionFolder]
+        default: defaultItemTypes
+        }
+    }
+
+    static func isVideoExtra(_ type: ExtraType) -> Bool {
+        type != .themeSong
+    }
+}
