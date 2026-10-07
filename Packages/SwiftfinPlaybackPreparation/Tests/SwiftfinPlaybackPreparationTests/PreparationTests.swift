@@ -97,12 +97,15 @@ import SwiftfinPlaybackPreparation
 
 @MainActor
 private final class URLResolver: PlaybackURLResolving {
+    var serverURL = URL(string: "http://example.invalid/base/")!
+    var onPath: (@MainActor () -> Void)?
     var paths: [String] = []
     var requests: [Request<Data>] = []
     var fail = false
     func streamURL(path: String) -> URL? {
         paths.append(path)
-        return fail ? nil : URL(string: path, relativeTo: URL(string: "http://example.invalid/base/")!)?.absoluteURL
+        onPath?()
+        return fail ? nil : URL(string: path, relativeTo: serverURL)?.absoluteURL
     }
 
     func streamURL(for request: Request<Data>) -> URL? {
@@ -368,5 +371,116 @@ struct PreparationClientTests {
         sender.responses["/Items/item"] = Data(#"{"Id":"other"}"#.utf8)
         await #expect(throws: PlaybackPreparationError.self) { try await client(sender).item(id: "item") }
         #expect(sender.calls.count == 1 && sender.calls[0].method == "GET")
+    }
+}
+
+private func sidecar(_ index: Int?, _ path: String?, text: Bool = true, method: SubtitleDeliveryMethod = .external) -> MediaStream {
+    var stream = MediaStream()
+    stream.index = index
+    stream.deliveryURL = path
+    stream.deliveryMethod = method
+    stream.isTextSubtitleStream = text
+    return stream
+}
+
+@Suite("Item-bound sidecar preparation")
+@MainActor
+struct PreparedSidecarTests {
+    private func client(_ sender: Sender, urls: any PlaybackURLResolving, binding: Binding? = nil) -> PlaybackPreparationClient {
+        .init(executor: .init(sender: sender, isCurrent: { binding?.current ?? true }), urls: urls, userID: "exact-user")
+    }
+
+    @Test
+    func `text URL resolution preserves indexed and unindexed order without HTTP`() throws {
+        let sender = Sender(), urls = URLResolver()
+        let prepared = try client(sender, urls: urls).sidecarSubtitles(from: [
+            sidecar(8, "/Videos/item/sub.srt?api_key=synthetic&start=1"),
+            sidecar(2, "/bitmap", text: false), sidecar(3, "/drop", method: .drop),
+            sidecar(nil, "relative.srt"), sidecar(4, nil), sidecar(5, "")
+        ])
+        #expect(prepared.map(\.jellyfinIndex) == [8, nil])
+        #expect(urls.paths == ["Videos/item/sub.srt?api_key=synthetic&start=1", "relative.srt"])
+        #expect(prepared.map(\.url.absoluteString) == [
+            "http://example.invalid/base/Videos/item/sub.srt?api_key=synthetic&start=1",
+            "http://example.invalid/base/relative.srt"
+        ])
+        #expect(sender.calls.isEmpty && urls.requests.isEmpty)
+    }
+
+    @Test
+    func `failed URL resolution skips sidecars without shifting surviving Jellyfin indexes`() throws {
+        let sender = Sender(), urls = URLResolver()
+        let c = client(sender, urls: urls)
+        urls.onPath = { [weak urls] in urls?.fail = urls?.paths.last == "first" }
+        let surviving = try c.sidecarSubtitles(from: [sidecar(1, "/first"), sidecar(9, "/last")])
+        #expect(surviving.map(\.jellyfinIndex) == [9])
+        #expect(surviving.first?.url.absoluteString == "http://example.invalid/base/last")
+        #expect(urls.paths == ["first", "last"] && sender.calls.isEmpty)
+        urls.onPath = nil
+        urls.paths.removeAll()
+        urls.fail = true
+        let prepared = try c.sidecarSubtitles(from: [sidecar(1, "/first"), sidecar(9, "/last")])
+        #expect(prepared.isEmpty && urls.paths == ["first", "last"] && sender.calls.isEmpty)
+    }
+
+    @Test
+    func `native SDK URL port keeps base paths queries and relative filenames with either slash style`() throws {
+        let sender = Sender()
+        for base in ["http://example.invalid/jellyfin", "http://example.invalid/jellyfin/"] {
+            let transport = try JellyfinTransport(
+                url: #require(URL(string: base)),
+                accessToken: "synthetic-secret",
+                identity: .init(platform: "tvOS", deviceName: "Tests", vendorID: "synthetic", version: "1")
+            )
+            let prepared = try client(sender, urls: transport).sidecarSubtitles(from: [
+                sidecar(1, "/Videos/item/sub.srt?api_key=synthetic&start=1"), sidecar(2, "relative.srt")
+            ])
+            #expect(prepared.map(\.url.absoluteString) == [
+                "http://example.invalid/jellyfin/Videos/item/sub.srt?api_key=synthetic&start=1",
+                "http://example.invalid/jellyfin/relative.srt"
+            ])
+        }
+        #expect(sender.calls.isEmpty)
+    }
+
+    @Test
+    func `expired or replaced binding prevents URL publication and further resolution`() {
+        let sender = Sender(), binding = Binding(), urls = URLResolver()
+        let c = client(sender, urls: urls, binding: binding)
+        binding.current = false
+        #expect(throws: CancellationError.self) { try c.sidecarSubtitles(from: [sidecar(1, "/first")]) }
+        #expect(urls.paths.isEmpty)
+        binding.current = true
+        urls.onPath = { binding.current = false }
+        #expect(throws: CancellationError.self) { try c.sidecarSubtitles(from: [sidecar(1, "/first"), sidecar(2, "/second")]) }
+        #expect(urls.paths == ["first"] && sender.calls.isEmpty)
+    }
+
+    @Test
+    func `cancelled preparation does no HTTP or URL work`() async {
+        let sender = Sender(), urls = URLResolver(), gate = Gate()
+        let c = client(sender, urls: urls)
+        let task = Task {
+            await gate.wait()
+            return try c.sidecarSubtitles(from: [sidecar(1, "/first")])
+        }
+        await settle { gate.continuation != nil }
+        task.cancel()
+        gate.finish()
+        await #expect(throws: CancellationError.self) { try await task.value }
+        #expect(sender.calls.isEmpty && urls.paths.isEmpty)
+    }
+
+    @Test
+    func `prepared values retain captured URL after account inputs change and cross executors`() async throws {
+        let sender = Sender(), urls = URLResolver()
+        var streams = [sidecar(7, "/original?api_key=synthetic")]
+        let prepared = try client(sender, urls: urls).sidecarSubtitles(from: streams)
+        streams[0].deliveryURL = "/replacement"
+        urls.serverURL = try #require(URL(string: "http://different.invalid/"))
+        let copied = await Task.detached { prepared }.value
+        #expect(copied == prepared && copied.first?.jellyfinIndex == 7)
+        #expect(copied.first?.url.absoluteString == "http://example.invalid/base/original?api_key=synthetic")
+        #expect(urls.paths == ["original?api_key=synthetic"] && sender.calls.isEmpty)
     }
 }

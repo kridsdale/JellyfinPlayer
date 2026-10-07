@@ -10,6 +10,7 @@ import Foundation
 import JellyfinAPI
 import SwiftfinFormatting
 import SwiftfinLocalization
+import SwiftfinMediaTracks
 
 extension BaseItemDto {
 

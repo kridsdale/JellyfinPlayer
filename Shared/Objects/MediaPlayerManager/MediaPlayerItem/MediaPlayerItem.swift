@@ -9,6 +9,7 @@
 import Defaults
 import JellyfinAPI
 import SwiftfinMediaTracks
+import SwiftfinPlaybackPreparation
 import SwiftfinPlaybackPreviews
 import SwiftfinPlaybackProfiles
 import SwiftUI
@@ -61,6 +62,7 @@ class MediaPlayerItem: ViewModel, MediaPlayerObserver {
 
     let audioStreams: [MediaStream]
     let subtitleStreams: [MediaStream]
+    let sidecarSubtitles: [PreparedSidecarSubtitle]
     let videoStreams: [MediaStream]
 
     let requestedBitrate: PlaybackBitrate
@@ -75,6 +77,7 @@ class MediaPlayerItem: ViewModel, MediaPlayerObserver {
         url: URL,
         requestedBitrate: PlaybackBitrate = .max,
         deviceProfile: DeviceProfile,
+        sidecarSubtitles: [PreparedSidecarSubtitle],
         compatibilityMode: PlaybackCompatibility = Defaults[.VideoPlayer.Playback.compatibilityMode],
         initialAudioStreamIndex: Int? = nil,
         initialSubtitleStreamIndex: Int? = nil,
@@ -86,6 +89,7 @@ class MediaPlayerItem: ViewModel, MediaPlayerObserver {
         self.playSessionID = playSessionID
         self.requestedBitrate = requestedBitrate
         self.deviceProfile = deviceProfile
+        self.sidecarSubtitles = sidecarSubtitles
         self.previewImageProvider = previewImageProvider
         self.thumbnailProvider = thumbnailProvider
         self.url = url
@@ -149,12 +153,9 @@ class MediaPlayerItem: ViewModel, MediaPlayerObserver {
 
     /// Refreshes sidecar mappings and reapplies the selected subtitle.
     func updateSubtitleTrackMapping(subtitleTracks: [(playerIndex: Int, id: String)]) {
-        let sidecars: [(jellyfinIndex: Int, url: URL)] = subtitleStreams.sidecarSubtitles.compactMap { subtitle in
-            guard let jellyfinIndex = subtitle.index,
-                  let client = manager?.userSession?.client,
-                  let url = subtitle.url(with: client)
-            else { return nil }
-            return (jellyfinIndex, url)
+        let sidecars: [(jellyfinIndex: Int, url: URL)] = sidecarSubtitles.compactMap { subtitle in
+            guard let jellyfinIndex = subtitle.jellyfinIndex else { return nil }
+            return (jellyfinIndex, subtitle.url)
         }
 
         indexMap = indexMap.resolvingSidecarSubtitles(sidecars, subtitleTracks: subtitleTracks)

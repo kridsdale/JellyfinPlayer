@@ -172,16 +172,14 @@ extension MPVMediaPlayerProxy {
             )
             item.setTrackIndexes(indexMap)
 
-            for stream in item.subtitleStreams.sidecarSubtitles {
-                guard let index = stream.index,
+            for subtitle in item.sidecarSubtitles {
+                guard let index = subtitle.jellyfinIndex,
                       indexMap.playerIndex(for: index) == nil,
-                      let client = manager.userSession?.client,
-                      let url = stream.url(with: client),
                       loadedSubtitleIndexes.insert(index).inserted
                 else { continue }
 
                 // Tag sidecars so a failed load cannot shift the remaining stream mappings.
-                player.command("sub-add", arguments: [url.absoluteString, "auto", "swiftfin-subtitle-\(index)"])
+                player.command("sub-add", arguments: [subtitle.url.absoluteString, "auto", "swiftfin-subtitle-\(index)"])
             }
         }
 

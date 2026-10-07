@@ -161,11 +161,7 @@ MediaPlayerOffsetConfigurable, MediaPlayerSubtitleConfigurable {
             (item.baseItem.startSeconds ?? .zero) -
                 (onNaturalEnd == nil ? Duration.seconds(Defaults[.VideoPlayer.resumeOffset]) : .zero)
         )
-        let subtitles: [URL] = if let client = manager?.userSession?.client {
-            item.subtitleStreams.sidecarSubtitles.compactMap { $0.url(with: client) }
-        } else {
-            []
-        }
+        let subtitles = item.sidecarSubtitles.map(\.url)
         openedItem = item
         native.open(.init(
             url: item.url,

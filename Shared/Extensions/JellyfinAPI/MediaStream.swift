@@ -12,37 +12,12 @@ import JellyfinAPI
 import SwiftfinCollections
 import SwiftfinFormatting
 import SwiftfinLocalization
-import SwiftfinNetworking
 
 extension MediaStream {
 
     typealias Property = (label: String, value: String)
 
     static let none: MediaStream = .init(displayTitle: L10n.none, index: -1)
-
-    @MainActor
-    func url(with client: JellyfinTransport) -> URL? {
-        guard let deliveryURL else { return nil }
-
-        let deliveryPath = deliveryURL.removingFirst(if: client.configuration.url.absoluteString.last == "/")
-        return client.url(path: deliveryPath)
-    }
-
-    var is4kVideo: Bool {
-        (width ?? 0) > 3800 && type == .video
-    }
-
-    var is51AudioChannelLayout: Bool {
-        channelLayout == "5.1"
-    }
-
-    var is71AudioChannelLayout: Bool {
-        channelLayout == "7.1"
-    }
-
-    var isHDVideo: Bool {
-        (width ?? 0) > 1900 && type == .video
-    }
 
     // MARK: Property groups
 
@@ -354,41 +329,5 @@ extension MediaStream: @retroactive Transferable, TextTransferable {
 
         return [type?.displayTitle ?? L10n.media, properties]
             .joined(separator: "\n\n")
-    }
-}
-
-extension [MediaStream] {
-
-    /// Text-based external subtitles loaded as sidecar files. Image-based subtitles are excluded because the player silently drops them.
-    var sidecarSubtitles: [MediaStream] {
-        filter { $0.deliveryMethod == .external && $0.deliveryURL != nil && $0.isTextSubtitleStream == true }
-    }
-
-    var has4KVideo: Bool {
-        contains { $0.is4kVideo }
-    }
-
-    var has51AudioChannelLayout: Bool {
-        contains { $0.is51AudioChannelLayout }
-    }
-
-    var has71AudioChannelLayout: Bool {
-        contains { $0.is71AudioChannelLayout }
-    }
-
-    var hasHDVideo: Bool {
-        contains { $0.isHDVideo }
-    }
-
-    var hasHDRVideo: Bool {
-        contains { $0.videoRangeType?.isHDR == true }
-    }
-
-    var hasDolbyVision: Bool {
-        contains { $0.videoRangeType?.isDolbyVision == true }
-    }
-
-    var hasSubtitles: Bool {
-        contains { $0.type == .subtitle }
     }
 }

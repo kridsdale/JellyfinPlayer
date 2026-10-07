@@ -8,6 +8,7 @@
 
 import JellyfinAPI
 import SwiftfinCollections
+import SwiftfinMediaTracks
 import SwiftUI
 
 extension ItemView {

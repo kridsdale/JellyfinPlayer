@@ -47,7 +47,8 @@ extension Container {
                     mediaSource: .init(),
                     playSessionID: "",
                     url: URL(string: "/")!,
-                    deviceProfile: .init()
+                    deviceProfile: .init(),
+                    sidecarSubtitles: []
                 )
             )
         }

@@ -6,6 +6,7 @@ let package = Package(
     products: [.library(name: "SwiftfinPlaybackPreparation", targets: ["SwiftfinPlaybackPreparation"])],
     dependencies: [
         .package(path: "../SwiftfinNetworking"),
+        .package(path: "../SwiftfinMediaTracks"),
         .package(url: "https://github.com/jellyfin/jellyfin-sdk-swift.git", exact: "3.2.0"),
         .package(url: "https://github.com/kean/Get", exact: "2.2.1")
     ],
@@ -14,6 +15,7 @@ let package = Package(
             name: "SwiftfinPlaybackPreparation",
             dependencies: [
                 "SwiftfinNetworking",
+                "SwiftfinMediaTracks",
                 .product(name: "JellyfinAPI", package: "jellyfin-sdk-swift"),
                 .product(name: "Get", package: "Get")
             ]

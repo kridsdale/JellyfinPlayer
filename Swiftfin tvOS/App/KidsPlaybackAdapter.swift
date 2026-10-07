@@ -84,6 +84,7 @@ final class SwiftfinKidsPlaybackFactory: KidsPlaybackSessionFactory {
                         url: URL(string: "http://127.0.0.1:9")!,
                         requestedBitrate: built.requestedBitrate,
                         deviceProfile: built.deviceProfile,
+                        sidecarSubtitles: built.sidecarSubtitles,
                         initialAudioStreamIndex: built.selectedAudioStreamIndex,
                         initialSubtitleStreamIndex: built.selectedSubtitleStreamIndex,
                         previewImageProvider: built.previewImageProvider,

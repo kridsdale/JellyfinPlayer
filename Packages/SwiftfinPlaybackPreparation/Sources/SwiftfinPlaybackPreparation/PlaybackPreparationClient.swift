@@ -9,15 +9,21 @@
 import Foundation
 import Get
 import JellyfinAPI
+import SwiftfinMediaTracks
 import SwiftfinNetworking
 
 @MainActor
 public protocol PlaybackURLResolving {
+    var serverURL: URL { get }
     func streamURL(path: String) -> URL?
     func streamURL(for request: Request<Data>) -> URL?
 }
 
 extension JellyfinTransport: PlaybackURLResolving {
+    public var serverURL: URL {
+        configuration.url
+    }
+
     public func streamURL(path: String) -> URL? {
         url(path: path)
     }
@@ -78,6 +84,30 @@ public final class PlaybackPreparationClient {
         let url = try streamURL(item: updated, source: source, sessionID: sessionID)
         try checkBinding()
         return .init(item: updated, source: source, playSessionID: sessionID, url: url)
+    }
+
+    /// Resolves approved text sidecars without loading them. The URL port belongs
+    /// to the same immutable account/connection used for this item's preparation.
+    public func sidecarSubtitles(from streams: [MediaStream]) throws -> [PreparedSidecarSubtitle] {
+        try checkBinding()
+        let serverURL = urls.serverURL
+        var result: [PreparedSidecarSubtitle] = []
+        for stream in streams.sidecarSubtitles {
+            try checkBinding()
+            guard var path = stream.deliveryURL, !path.isEmpty else { continue }
+            // Preserve base-path joining, without chopping relative paths or
+            // attempting removeFirst on an empty server-provided string.
+            if serverURL.absoluteString.hasSuffix("/"), path.hasPrefix("/") {
+                path.removeFirst()
+            }
+            let url = urls.streamURL(path: path)
+            try checkBinding()
+            if let url {
+                result.append(.init(jellyfinIndex: stream.index, url: url))
+            }
+        }
+        try checkBinding()
+        return result
     }
 
     public func bitrateBytes(size: Int, delegate: (any URLSessionDataDelegate)? = nil) async throws -> Data {

@@ -13,6 +13,7 @@ import JellyfinAPI
 import Logging
 import SwiftfinFormatting
 import SwiftfinLocalization
+import SwiftfinMediaTracks
 import SwiftfinPlaybackPreparation
 import SwiftfinPlaybackPreviews
 import SwiftfinPlaybackProfiles
@@ -173,6 +174,15 @@ extension MediaPlayerItem {
             return setting == .chapters ? chapters : nil
         }()
 
+        let trackPolicy = MediaTrackPolicy(
+            mediaSource: mediaSource,
+            deviceProfile: deviceProfile,
+            compatibility: compatibilityMode,
+            audioIndex: audioStreamIndex,
+            subtitleIndex: subtitleStreamIndex
+        )
+        let sidecars = try preparation.sidecarSubtitles(from: trackPolicy.subtitleStreams)
+
         return .init(
             baseItem: item,
             mediaSource: mediaSource,
@@ -180,6 +190,7 @@ extension MediaPlayerItem {
             url: playbackURL,
             requestedBitrate: requestedBitrate,
             deviceProfile: deviceProfile,
+            sidecarSubtitles: sidecars,
             compatibilityMode: compatibilityMode,
             initialAudioStreamIndex: audioStreamIndex,
             initialSubtitleStreamIndex: subtitleStreamIndex,

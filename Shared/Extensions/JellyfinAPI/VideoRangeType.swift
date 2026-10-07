@@ -45,24 +45,4 @@ extension VideoRangeType: Displayable {
             L10n.hdr10Plus
         }
     }
-
-    /// Returns `true` if the video format is HDR (including Dolby Vision).
-    var isHDR: Bool {
-        switch self {
-        case .sdr, .doviInvalid, .unknown:
-            false
-        default:
-            true
-        }
-    }
-
-    /// Returns `true` if the video format is Dolby Vision.
-    var isDolbyVision: Bool {
-        switch self {
-        case .dovi, .doviWithEL, .doviWithHLG, .doviWithSDR, .doviWithHDR10, .doviWithHDR10Plus, .doviWithELHDR10Plus:
-            true
-        default:
-            false
-        }
-    }
 }
