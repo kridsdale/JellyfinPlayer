@@ -14,9 +14,32 @@ import Get
 public protocol JellyfinRequestSending {
     func value<Value: Decodable & Sendable>(for request: Request<Value>) async throws -> Value
     func complete(_ request: Request<Void>) async throws
+    func value<Value: Decodable & Sendable>(for request: Request<Value>, delegate: (any URLSessionDataDelegate)?) async throws -> Value
+    func complete(_ request: Request<Void>, delegate: (any URLSessionDataDelegate)?) async throws
+}
+
+public extension JellyfinRequestSending {
+    func value<Value: Decodable & Sendable>(for request: Request<Value>, delegate: (any URLSessionDataDelegate)?) async throws -> Value {
+        try await value(for: request)
+    }
+
+    func complete(_ request: Request<Void>, delegate: (any URLSessionDataDelegate)?) async throws {
+        try await complete(request)
+    }
 }
 
 extension JellyfinTransport: JellyfinRequestSending {
+    public func value<Value: Decodable & Sendable>(
+        for request: Request<Value>,
+        delegate: (any URLSessionDataDelegate)?
+    ) async throws -> Value {
+        try await send(request, delegate: delegate).value
+    }
+
+    public func complete(_ request: Request<Void>, delegate: (any URLSessionDataDelegate)?) async throws {
+        try await send(request, delegate: delegate)
+    }
+
     public func value<Value: Decodable & Sendable>(for request: Request<Value>) async throws -> Value {
         try await send(request).value
     }
@@ -57,6 +80,32 @@ public final class AuthenticatedRequestExecutor {
         try checkBinding()
         do {
             try await sender.complete(request)
+            try checkBinding()
+        } catch {
+            try checkBinding()
+            throw error
+        }
+    }
+
+    public func value<Value: Decodable & Sendable>(
+        for request: Request<Value>,
+        delegate: (any URLSessionDataDelegate)?
+    ) async throws -> Value {
+        try checkBinding()
+        do {
+            let value = try await sender.value(for: request, delegate: delegate)
+            try checkBinding()
+            return value
+        } catch {
+            try checkBinding()
+            throw error
+        }
+    }
+
+    public func complete(_ request: Request<Void>, delegate: (any URLSessionDataDelegate)?) async throws {
+        try checkBinding()
+        do {
+            try await sender.complete(request, delegate: delegate)
             try checkBinding()
         } catch {
             try checkBinding()

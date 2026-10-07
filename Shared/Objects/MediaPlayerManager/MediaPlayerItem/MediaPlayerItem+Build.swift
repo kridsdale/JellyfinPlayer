@@ -9,10 +9,10 @@
 import Defaults
 import FactoryKit
 import Foundation
-import Get
 import JellyfinAPI
 import Logging
 import SwiftfinLocalization
+import SwiftfinPlaybackPreparation
 import SwiftfinPlaybackPreviews
 import SwiftfinPlaybackProfiles
 import SwiftfinStoredValues
@@ -50,6 +50,10 @@ extension MediaPlayerItem {
             throw ErrorMessage(L10n.unknownError)
         }
 
+        let transport = userSession.client
+        let preparation = userSession.playbackPreparation
+        try preparation.checkBinding()
+
         var item: BaseItemDto
         if let preparedItem {
             // The kids path fetched and validated this full DTO for this exact
@@ -59,13 +63,13 @@ extension MediaPlayerItem {
             #if os(tvOS)
             let metadataTrace = KidsPerformance.begin(.metadata, endpoint: .itemDetails)
             defer { metadataTrace?.finish(Task.isCancelled ? .cancelled : .failure) }
-            item = try await initialItem.getFullItem(
-                userSession: userSession,
-                taskDelegate: metadataTrace.map(KidsPerformanceTaskDelegate.init(span:))
+            item = try await preparation.item(
+                id: itemID,
+                delegate: metadataTrace.map(KidsPerformanceTaskDelegate.init(span:))
             )
             metadataTrace?.finish()
             #else
-            item = try await initialItem.getFullItem(userSession: userSession)
+            item = try await preparation.item(id: itemID)
             #endif
         }
         guard item.id == itemID else { throw ErrorMessage("Playback item identity changed") }
@@ -74,27 +78,16 @@ extension MediaPlayerItem {
             modifyItem(&item)
         }
 
-        guard let initialMediaSource = {
-            if let _initialMediaSource {
-                return _initialMediaSource
-            }
-
-            if let first = item.mediaSources?.first {
-                logger.trace("Using first media source for item \(itemID)")
-                return first
-            }
-
-            return nil
-        }() else {
-            logger.error("No media sources for item \(itemID)!")
-            throw ErrorMessage(L10n.unknownError)
-        }
+        guard item.id == itemID else { throw ErrorMessage("Playback item identity changed") }
+        let initialMediaSource: MediaSourceInfo
+        do { initialMediaSource = try PlaybackPreparationPolicy.initialSource(in: item, preferred: _initialMediaSource) }
+        catch { throw ErrorMessage(L10n.unknownError) }
 
         #if os(tvOS)
         let bitrateTrace = KidsPerformance.begin(.bitrate, endpoint: .bitrate, values: ["automatic": requestedBitrate == .auto ? 1 : 0])
         defer { bitrateTrace?.finish(Task.isCancelled ? .cancelled : .failure) }
         #endif
-        let maxBitrate = try await MediaPlayerManager.getMaxBitrate(for: requestedBitrate)
+        let maxBitrate = try await MediaPlayerManager.getMaxBitrate(for: requestedBitrate, preparation: preparation)
         #if os(tvOS)
         bitrateTrace?.finish(values: ["bits_per_second": Double(maxBitrate)])
         #endif
@@ -105,82 +98,43 @@ extension MediaPlayerItem {
             maxBitrate: maxBitrate
         )
 
-        var playbackInfo = PlaybackInfoDto()
-        playbackInfo.isAutoOpenLiveStream = true
-        playbackInfo.deviceProfile = deviceProfile
-        playbackInfo.liveStreamID = initialMediaSource.liveStreamID
-        playbackInfo.maxStreamingBitrate = maxBitrate
-        playbackInfo.userID = userSession.user.id
-        playbackInfo.audioStreamIndex = audioStreamIndex
-        playbackInfo.subtitleStreamIndex = subtitleStreamIndex
-
-        if !item.isLiveStream, initialMediaSource.type != .placeholder {
-            playbackInfo.mediaSourceID = initialMediaSource.id
-        }
-
-        let request = Paths.getPostedPlaybackInfo(
-            itemID: itemID,
-            playbackInfo
-        )
-
+        let resolved: PreparedPlayback
         #if os(tvOS)
         let infoTrace = KidsPerformance.begin(.playbackInfo, endpoint: .playbackInfo)
         defer { infoTrace?.finish(Task.isCancelled ? .cancelled : .failure) }
-        let response = try await userSession.client.send(request, delegate: infoTrace.map(KidsPerformanceTaskDelegate.init(span:)))
+        do {
+            resolved = try await preparation.prepare(
+                item: item,
+                initial: initialMediaSource,
+                profile: deviceProfile,
+                maxBitrate: maxBitrate,
+                audio: audioStreamIndex,
+                subtitle: subtitleStreamIndex,
+                delegate: infoTrace.map(KidsPerformanceTaskDelegate.init(span:))
+            )
+        } catch is PlaybackPreparationError { throw ErrorMessage(L10n.unknownError) }
         infoTrace?.finish()
         #else
-        let response = try await userSession.client.send(request)
+        do {
+            resolved = try await preparation.prepare(
+                item: item,
+                initial: initialMediaSource,
+                profile: deviceProfile,
+                maxBitrate: maxBitrate,
+                audio: audioStreamIndex,
+                subtitle: subtitleStreamIndex
+            )
+        } catch is PlaybackPreparationError { throw ErrorMessage(L10n.unknownError) }
         #endif
-
-        let mediaSource: MediaSourceInfo? = {
-
-            guard let mediaSources = response.value.mediaSources else { return nil }
-
-            if let matchingTag = mediaSources.first(where: { $0.eTag == initialMediaSource.eTag }) {
-                return matchingTag
-            }
-
-            for source in mediaSources {
-                if let openToken = source.openToken,
-                   let id = source.id,
-                   openToken.contains(id)
-                {
-                    return source
-                }
-            }
-
-            if let initialID = initialMediaSource.id,
-               let matchingMediaSource = mediaSources.first(where: { $0.id == initialID })
-            {
-                return matchingMediaSource
-            }
-
-            logger.warning("Unable to find matching media source, defaulting to first media source")
-
-            return mediaSources.first
-        }()
-
-        guard let mediaSource else {
-            throw ErrorMessage("Unable to find media source for item")
-        }
-
-        item.runTimeTicks = mediaSource.runTimeTicks ?? item.runTimeTicks
-
-        guard let playSessionID = response.value.playSessionID else {
-            throw ErrorMessage("No associated play session ID")
-        }
-
-        let playbackURL = try Self.streamURL(
-            item: item,
-            mediaSource: mediaSource,
-            playSessionID: playSessionID,
-            userSession: userSession,
-            logger: logger
-        )
+        try preparation.checkBinding()
+        item = resolved.item
+        let mediaSource = resolved.source
+        let playSessionID = resolved.playSessionID
+        let playbackURL = resolved.url
 
         // Bind every image load to the transport that prepared this item.
         // A replacement account, URL or credential invalidates the old provider.
-        let previewClient = userSession.client
+        let previewClient = transport
         let previewIsCurrent: @MainActor @Sendable () -> Bool = { [weak userSession, weak previewClient] in
             guard let userSession, let previewClient,
                   Container.shared.userSessionManager().currentSession === userSession else { return false }
@@ -195,7 +149,7 @@ extension MediaPlayerItem {
                     chapters: source.map { PreviewChapter(start: $0.chapterInfo.startSeconds, url: $0.imageSource?.url) },
                     isCurrent: previewIsCurrent
                 ) { url in
-                    try? await previewClient.send(Request<Data>(url: url)).value
+                    try? await preparation.image(url: url)
                 }
             }()
             if case let .trickplay(fallbackToChapters) = setting {
@@ -210,9 +164,7 @@ extension MediaPlayerItem {
                    )
                 {
                     return TrickplayPreviewImageProvider(layout: layout, isCurrent: previewIsCurrent) { index in
-                        try? await previewClient.send(Paths.getTrickplayTileImage(
-                            itemID: itemID, width: layout.width, index: index, mediaSourceID: sourceID
-                        )).value
+                        try? await preparation.trickplayImage(itemID: itemID, width: layout.width, index: index, sourceID: sourceID)
                     }
                 }
                 return fallbackToChapters ? chapters : nil
@@ -233,60 +185,5 @@ extension MediaPlayerItem {
             previewImageProvider: previewImageProvider,
             thumbnailProvider: item.getNowPlayingImage
         )
-    }
-
-    // TODO: audio type stream
-    private static func streamURL(
-        item: BaseItemDto,
-        mediaSource: MediaSourceInfo,
-        playSessionID: String,
-        userSession: UserSession,
-        logger: Logger
-    ) throws -> URL {
-
-        guard let itemID = item.id else {
-            throw ErrorMessage("No item ID while building online media player item!")
-        }
-
-        if let transcodingPath = mediaSource.transcodingURL {
-            logger.trace("Using transcoding URL for item \(itemID)")
-
-            guard let url = userSession.client.url(path: transcodingPath) else {
-                throw ErrorMessage("Unable to make transcoding URL")
-            }
-
-            return url
-        }
-
-        if item.mediaType == .video {
-
-            logger.trace("Making video stream URL for item \(itemID)")
-
-            let videoStreamParameters = Paths.GetVideoStreamParameters(
-                isStatic: true,
-                tag: mediaSource.eTag ?? item.etag,
-                playSessionID: playSessionID,
-                mediaSourceID: mediaSource.id ?? itemID,
-                liveStreamID: mediaSource.liveStreamID
-            )
-
-            let videoStreamRequest = Paths.getVideoStream(
-                itemID: itemID,
-                parameters: videoStreamParameters
-            )
-
-            guard let videoStreamURL = userSession.client.url(with: videoStreamRequest)
-            else { throw ErrorMessage("Unable to make video stream URL") }
-
-            return videoStreamURL
-        }
-
-        logger.trace("Using media source path for item \(itemID)")
-
-        guard let path = mediaSource.path, let streamURL = URL(
-            string: path
-        ) else { throw ErrorMessage("Unable to make stream URL") }
-
-        return streamURL
     }
 }

@@ -13,6 +13,7 @@ import Foundation
 import JellyfinAPI
 import KidsPlayback
 import SwiftfinCollections
+import SwiftfinPlaybackPreparation
 import SwiftfinUIState
 #if os(tvOS)
 import KidsDiagnostics
@@ -461,30 +462,35 @@ final class MediaPlayerManager: ViewModel {
 
     static func getMaxBitrate(
         for requestedBitrate: PlaybackBitrate,
-        testSize: PlaybackBitrateTestSize = Defaults[.VideoPlayer.appMaximumBitrateTest]
+        testSize: PlaybackBitrateTestSize = Defaults[.VideoPlayer.appMaximumBitrateTest],
+        preparation: PlaybackPreparationClient? = nil
     ) async throws -> Int {
 
         guard requestedBitrate == .auto else { return requestedBitrate.rawValue }
 
-        guard let userSession = Container.shared.currentUserSession() else {
-            throw UserSessionError.missingCurrentSession
+        let client: PlaybackPreparationClient
+        if let preparation {
+            client = preparation
+        } else {
+            guard let session = Container.shared.currentUserSession() else { throw UserSessionError.missingCurrentSession }
+            client = session.playbackPreparation
         }
-
+        try client.checkBinding()
         let testStartTime = ContinuousClock.now
         #if os(tvOS)
         let transfer = KidsPerformance.begin(.http, endpoint: .bitrate, values: ["bytes": Double(testSize.rawValue)])
         defer { transfer?.finish(Task.isCancelled ? .cancelled : .failure) }
-        let response = try await userSession.client.send(
-            Paths.getBitrateTestBytes(size: testSize.rawValue),
+        let bytes = try await client.bitrateBytes(
+            size: testSize.rawValue,
             delegate: transfer.map(KidsPerformanceTaskDelegate.init(span:))
         )
-        transfer?.finish(values: ["bytes": Double(response.value.count)])
+        transfer?.finish(values: ["bytes": Double(bytes.count)])
         #else
-        let response = try await userSession.client.send(Paths.getBitrateTestBytes(size: testSize.rawValue))
+        let bytes = try await client.bitrateBytes(size: testSize.rawValue)
         #endif
         try Task.checkCancellation()
         return try PlaybackBitrateMeasurement.estimate(
-            bytes: response.value.count,
+            bytes: bytes.count,
             elapsed: testStartTime.duration(to: .now)
         )
     }

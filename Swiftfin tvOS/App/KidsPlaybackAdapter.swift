@@ -42,10 +42,11 @@ final class SwiftfinKidsPlaybackFactory: KidsPlaybackSessionFactory {
         )
         let metadata = KidsPerformance.begin(.metadata, endpoint: .itemDetails)
         defer { metadata?.finish(Task.isCancelled ? .cancelled : .failure) }
-        let raw = try await session.client.send(
-            Paths.getItem(itemID: item.id, userID: session.user.id),
+        let preparation = session.playbackPreparation
+        let raw = try await preparation.item(
+            id: item.id,
             delegate: metadata.map(KidsPerformanceTaskDelegate.init(span:))
-        ).value
+        )
         metadata?.finish()
         guard raw.id == item.id, raw.mediaType == .video,
               (item.kind == .episode && raw.type == .episode) || (item.kind == .movie && raw.type == .movie)

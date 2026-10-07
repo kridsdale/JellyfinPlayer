@@ -12,6 +12,7 @@ import subprocess
 
 # Explicit responsibilities, not a permission derived from whatever code happens to import.
 EXTERNAL_POLICIES = {
+    "SwiftfinPlaybackPreparation": [("jellyfin-sdk-swift", "https://github.com/jellyfin/jellyfin-sdk-swift.git", "3.2.0"), ("get", "https://github.com/kean/Get", "2.2.1")],
     "SwiftfinRecordingTimers": [("jellyfin-sdk-swift", "https://github.com/jellyfin/jellyfin-sdk-swift.git", "3.2.0"), ("get", "https://github.com/kean/Get", "2.2.1")],
     "SwiftfinFilters": [("jellyfin-sdk-swift", "https://github.com/jellyfin/jellyfin-sdk-swift.git", "3.2.0"), ("get", "https://github.com/kean/Get", "2.2.1")],
     "SwiftfinItemMetadata": [("jellyfin-sdk-swift", "https://github.com/jellyfin/jellyfin-sdk-swift.git", "3.2.0"), ("get", "https://github.com/kean/Get", "2.2.1")],
@@ -30,6 +31,7 @@ EXTERNAL_POLICIES = {
     ],
 }
 POLICIES = {
+    "SwiftfinPlaybackPreparation": ({"SwiftfinNetworking"}, {"Foundation", "Get", "JellyfinAPI"}),
     "SwiftfinRecordingTimers": ({"SwiftfinNetworking", "SwiftfinMediaCatalog"}, {"Foundation", "JellyfinAPI"}),
     "SwiftfinFilters": ({"SwiftfinNetworking", "SwiftfinMediaCatalog"}, {"Foundation", "JellyfinAPI"}),
     "SwiftfinItemMetadata": ({"SwiftfinNetworking"}, {"Foundation", "Get", "JellyfinAPI"}),
