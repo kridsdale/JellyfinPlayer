@@ -6,33 +6,21 @@
 // Copyright (c) 2026 Jellyfin & Jellyfin Contributors
 //
 
+import SwiftfinImageProcessing
 import SwiftfinLocalization
 import UIKit
 
 extension UIImage {
-
+    @MainActor
     func data(maxSize: Int? = 30_000_000) throws -> (data: Data, contentType: String) {
-        let hasAlpha = cgImage.map {
-            [.alphaOnly, .first, .last, .premultipliedFirst, .premultipliedLast].contains($0.alphaInfo)
-        } == true
-
-        func validate(_ data: Data) throws {
-            guard let maxSize else { return }
-
-            if data.count > maxSize {
-                throw ErrorMessage(
-                    "Image is too large (\(data.count.formatted(.byteCount(style: .file))) / \(maxSize.formatted(.byteCount(style: .file)))"
-                )
-            }
-        }
-
-        if hasAlpha, let pngData = pngData() {
-            try validate(pngData)
-            return (pngData, "image/png")
-        } else if let jpgData = jpegData(compressionQuality: 1) {
-            try validate(jpgData)
-            return (jpgData, "image/jpeg")
-        } else {
+        do {
+            let encoded = try encodedImageData(maximumByteCount: maxSize)
+            return (encoded.data, encoded.contentType)
+        } catch let ImageEncodingError.exceedsLimit(actual, maximum) {
+            throw ErrorMessage(
+                "Image is too large (\(actual.formatted(.byteCount(style: .file))) / \(maximum.formatted(.byteCount(style: .file)))"
+            )
+        } catch {
             throw ErrorMessage(L10n.unknownError)
         }
     }

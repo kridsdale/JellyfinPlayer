@@ -1,0 +1,343 @@
+{
+  "encodings" : [
+    {
+      "alpha" : 1,
+      "contentType" : "image\/png",
+      "data" : "AQID",
+      "jpeg" : "BAU=",
+      "limit" : 4,
+      "name" : "both encoders",
+      "png" : "AQID"
+    },
+    {
+      "alpha" : 1,
+      "contentType" : "image\/jpeg",
+      "data" : "BAU=",
+      "jpeg" : "BAU=",
+      "limit" : 4,
+      "name" : "png fallback",
+      "png" : null
+    },
+    {
+      "alpha" : 1,
+      "error" : "Image is too large (3 bytes \/ 2 bytes",
+      "jpeg" : "BA==",
+      "limit" : 2,
+      "name" : "strict oversize",
+      "png" : "AQID"
+    },
+    {
+      "alpha" : 1,
+      "error" : "Unknown error",
+      "jpeg" : null,
+      "limit" : 4,
+      "name" : "missing output",
+      "png" : null
+    },
+    {
+      "alpha" : 1,
+      "contentType" : "image\/png",
+      "data" : "AQID",
+      "jpeg" : "BAU=",
+      "limit" : 3,
+      "name" : "exact limit",
+      "png" : "AQID"
+    },
+    {
+      "alpha" : 1,
+      "contentType" : "image\/png",
+      "data" : "AQID",
+      "jpeg" : "BAU=",
+      "limit" : null,
+      "name" : "unbounded",
+      "png" : "AQID"
+    },
+    {
+      "alpha" : 1,
+      "error" : "Image is too large (Zero kB \/ -1 byte",
+      "jpeg" : "",
+      "limit" : -1,
+      "name" : "negative limit",
+      "png" : ""
+    },
+    {
+      "alpha" : 5,
+      "contentType" : "image\/jpeg",
+      "data" : "BAU=",
+      "jpeg" : "BAU=",
+      "limit" : 4,
+      "name" : "both encoders",
+      "png" : "AQID"
+    },
+    {
+      "alpha" : 5,
+      "contentType" : "image\/jpeg",
+      "data" : "BAU=",
+      "jpeg" : "BAU=",
+      "limit" : 4,
+      "name" : "png fallback",
+      "png" : null
+    },
+    {
+      "alpha" : 5,
+      "contentType" : "image\/jpeg",
+      "data" : "BA==",
+      "jpeg" : "BA==",
+      "limit" : 2,
+      "name" : "strict oversize",
+      "png" : "AQID"
+    },
+    {
+      "alpha" : 5,
+      "error" : "Unknown error",
+      "jpeg" : null,
+      "limit" : 4,
+      "name" : "missing output",
+      "png" : null
+    },
+    {
+      "alpha" : 5,
+      "contentType" : "image\/jpeg",
+      "data" : "BAU=",
+      "jpeg" : "BAU=",
+      "limit" : 3,
+      "name" : "exact limit",
+      "png" : "AQID"
+    },
+    {
+      "alpha" : 5,
+      "contentType" : "image\/jpeg",
+      "data" : "BAU=",
+      "jpeg" : "BAU=",
+      "limit" : null,
+      "name" : "unbounded",
+      "png" : "AQID"
+    },
+    {
+      "alpha" : 5,
+      "error" : "Image is too large (Zero kB \/ -1 byte",
+      "jpeg" : "",
+      "limit" : -1,
+      "name" : "negative limit",
+      "png" : ""
+    },
+    {
+      "alpha" : 3,
+      "contentType" : "image\/png",
+      "data" : "AQID",
+      "jpeg" : "BAU=",
+      "limit" : 4,
+      "name" : "both encoders",
+      "png" : "AQID"
+    },
+    {
+      "alpha" : 3,
+      "contentType" : "image\/jpeg",
+      "data" : "BAU=",
+      "jpeg" : "BAU=",
+      "limit" : 4,
+      "name" : "png fallback",
+      "png" : null
+    },
+    {
+      "alpha" : 3,
+      "error" : "Image is too large (3 bytes \/ 2 bytes",
+      "jpeg" : "BA==",
+      "limit" : 2,
+      "name" : "strict oversize",
+      "png" : "AQID"
+    },
+    {
+      "alpha" : 3,
+      "error" : "Unknown error",
+      "jpeg" : null,
+      "limit" : 4,
+      "name" : "missing output",
+      "png" : null
+    },
+    {
+      "alpha" : 3,
+      "contentType" : "image\/png",
+      "data" : "AQID",
+      "jpeg" : "BAU=",
+      "limit" : 3,
+      "name" : "exact limit",
+      "png" : "AQID"
+    },
+    {
+      "alpha" : 3,
+      "contentType" : "image\/png",
+      "data" : "AQID",
+      "jpeg" : "BAU=",
+      "limit" : null,
+      "name" : "unbounded",
+      "png" : "AQID"
+    },
+    {
+      "alpha" : 3,
+      "error" : "Image is too large (Zero kB \/ -1 byte",
+      "jpeg" : "",
+      "limit" : -1,
+      "name" : "negative limit",
+      "png" : ""
+    },
+    {
+      "alpha" : 2,
+      "contentType" : "image\/png",
+      "data" : "AQID",
+      "jpeg" : "BAU=",
+      "limit" : 4,
+      "name" : "both encoders",
+      "png" : "AQID"
+    },
+    {
+      "alpha" : 2,
+      "contentType" : "image\/jpeg",
+      "data" : "BAU=",
+      "jpeg" : "BAU=",
+      "limit" : 4,
+      "name" : "png fallback",
+      "png" : null
+    },
+    {
+      "alpha" : 2,
+      "error" : "Image is too large (3 bytes \/ 2 bytes",
+      "jpeg" : "BA==",
+      "limit" : 2,
+      "name" : "strict oversize",
+      "png" : "AQID"
+    },
+    {
+      "alpha" : 2,
+      "error" : "Unknown error",
+      "jpeg" : null,
+      "limit" : 4,
+      "name" : "missing output",
+      "png" : null
+    },
+    {
+      "alpha" : 2,
+      "contentType" : "image\/png",
+      "data" : "AQID",
+      "jpeg" : "BAU=",
+      "limit" : 3,
+      "name" : "exact limit",
+      "png" : "AQID"
+    },
+    {
+      "alpha" : 2,
+      "contentType" : "image\/png",
+      "data" : "AQID",
+      "jpeg" : "BAU=",
+      "limit" : null,
+      "name" : "unbounded",
+      "png" : "AQID"
+    },
+    {
+      "alpha" : 2,
+      "error" : "Image is too large (Zero kB \/ -1 byte",
+      "jpeg" : "",
+      "limit" : -1,
+      "name" : "negative limit",
+      "png" : ""
+    }
+  ],
+  "images" : [
+    {
+      "bytes" : "\/wAA\/\/8AAP\/\/AAD\/\/wAA\/\/8AAP\/\/AAD\/\/wAA\/\/8AAP\/\/AAD\/\/wAA\/\/8AAP\/\/AAD\/\/wAA\/\/8AAP\/\/AAD\/\/wAA\/\/8AAP\/\/AAD\/\/wAA\/\/8AAP\/\/AAD\/\/wAA\/\/8AAP\/\/AAD\/\/wAA\/\/8AAP\/\/AAD\/\/wAA\/\/8AAP\/\/AAD\/\/wAA\/\/8AAP\/\/AAD\/\/wAA\/\/8AAP\/\/AAD\/\/wAA\/\/8AAP\/\/AAD\/\/wAA\/\/8AAP\/\/AAD\/\/wAA\/\/8AAP\/\/AAD\/\/wAA\/\/8AAP\/\/AAD\/\/wAA\/\/8AAP\/\/AAD\/\/wAA\/\/8AAP\/\/AAD\/\/wAA\/\/8AAP\/\/AAD\/\/wAA\/\/8AAP\/\/AAD\/\/wAA\/\/8AAP\/\/AAD\/\/wAA\/w==",
+      "expected" : [
+        1,
+        0,
+        0
+      ],
+      "height" : 8,
+      "name" : "opaque red",
+      "width" : 8
+    },
+    {
+      "bytes" : "AAAA\/wAAAP8AAAD\/AAAA\/wAAAP8AAAD\/AAAA\/wAAAP8AAAD\/AAAA\/wAAAP8AAAD\/AAAA\/wAAAP8AAAD\/AAAA\/wAAAP8AAAD\/AAAA\/wAAAP8AAAD\/AAAA\/wAAAP8AAAD\/AAAA\/wAAAP8AAAD\/AAAA\/wAAAP8AAAD\/AAAA\/wAAAP8AAAD\/AAAA\/wAAAP8AAAD\/AAAA\/wAAAP8AAAD\/AAAA\/wAAAP8AAAD\/AAAA\/wAAAP8AAAD\/AAAA\/wAAAP8AAAD\/AAAA\/wAAAP8AAAD\/AAAA\/wAAAP8AAAD\/AAAA\/wAAAP8AAAD\/AAAA\/wAAAP8AAAD\/AAAA\/wAAAP8AAAD\/AAAA\/w==",
+      "expected" : [
+        0,
+        0,
+        0
+      ],
+      "height" : 64,
+      "name" : "opaque black narrow portrait",
+      "width" : 1
+    },
+    {
+      "bytes" : "\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/w==",
+      "expected" : [
+        1,
+        1,
+        1
+      ],
+      "height" : 1,
+      "name" : "opaque white wide landscape",
+      "width" : 97
+    },
+    {
+      "bytes" : "AP8A\/w==",
+      "expected" : [
+        0,
+        1,
+        0
+      ],
+      "height" : 1,
+      "name" : "single green pixel",
+      "width" : 1
+    },
+    {
+      "bytes" : "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+      "expected" : null,
+      "height" : 16,
+      "name" : "transparent blue is ignored",
+      "width" : 16
+    },
+    {
+      "bytes" : "QBQKf0AUCn9AFAp\/QBQKf0AUCn9AFAp\/QBQKf0AUCn9AFAp\/QBQKf0AUCn9AFAp\/QBQKf0AUCn9AFAp\/QBQKf0AUCn9AFAp\/QBQKf0AUCn9AFAp\/QBQKf0AUCn9AFAp\/QBQKf0AUCn9AFAp\/QBQKf0AUCn9AFAp\/QBQKf0AUCn9AFAp\/QBQKf0AUCn9AFAp\/QBQKf0AUCn9AFAp\/QBQKf0AUCn9AFAp\/QBQKf0AUCn9AFAp\/QBQKf0AUCn9AFAp\/QBQKf0AUCn9AFAp\/QBQKf0AUCn9AFAp\/QBQKf0AUCn9AFAp\/QBQKf0AUCn9AFAp\/QBQKf0AUCn9AFAp\/QBQKf0AUCn9AFAp\/QBQKf0AUCn9AFAp\/QBQKf0AUCn9AFAp\/QBQKf0AUCn9AFAp\/QBQKf0AUCn8=",
+      "expected" : null,
+      "height" : 11,
+      "name" : "alpha 127 is excluded",
+      "width" : 7
+    },
+    {
+      "bytes" : "QBQKgEAUCoBAFAqAQBQKgEAUCoBAFAqAQBQKgEAUCoBAFAqAQBQKgEAUCoBAFAqAQBQKgEAUCoBAFAqAQBQKgEAUCoBAFAqAQBQKgEAUCoBAFAqAQBQKgEAUCoBAFAqAQBQKgEAUCoBAFAqAQBQKgEAUCoBAFAqAQBQKgEAUCoBAFAqAQBQKgEAUCoBAFAqAQBQKgEAUCoBAFAqAQBQKgEAUCoBAFAqAQBQKgEAUCoBAFAqAQBQKgEAUCoBAFAqAQBQKgEAUCoBAFAqAQBQKgEAUCoBAFAqAQBQKgEAUCoBAFAqAQBQKgEAUCoBAFAqAQBQKgEAUCoBAFAqAQBQKgEAUCoBAFAqAQBQKgEAUCoBAFAqAQBQKgEAUCoBAFAqAQBQKgEAUCoBAFAqAQBQKgEAUCoA=",
+      "expected" : [
+        0.25098039215686274,
+        0.078431372549019607,
+        0.039215686274509803
+      ],
+      "height" : 7,
+      "name" : "alpha 128 retains premultiplied values",
+      "width" : 11
+    },
+    {
+      "bytes" : "DBwr\/y205v8ttOb\/YDCg\/2AwoP9gMKD\/qloj\/6paI\/+qWiP\/qloj\/6paI\/\/rPHb\/6zx2\/+s8dv\/rPHb\/6zx2\/+s8dv\/rPHb\/6zx2\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/yNy+\/8jcvv\/I3L7\/yNy+\/8jcvv\/I3L7\/yNy+\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/DBwr\/y205v8ttOb\/YDCg\/2AwoP9gMKD\/qloj\/6paI\/+qWiP\/qloj\/6paI\/\/rPHb\/6zx2\/+s8dv\/rPHb\/6zx2\/+s8dv\/rPHb\/6zx2\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/yNy+\/8jcvv\/I3L7\/yNy+\/8jcvv\/I3L7\/yNy+\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/DBwr\/y205v8ttOb\/YDCg\/2AwoP9gMKD\/qloj\/6paI\/+qWiP\/qloj\/6paI\/\/rPHb\/6zx2\/+s8dv\/rPHb\/6zx2\/+s8dv\/rPHb\/6zx2\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/yNy+\/8jcvv\/I3L7\/yNy+\/8jcvv\/I3L7\/yNy+\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/DBwr\/y205v8ttOb\/YDCg\/2AwoP9gMKD\/qloj\/6paI\/+qWiP\/qloj\/6paI\/\/rPHb\/6zx2\/+s8dv\/rPHb\/6zx2\/+s8dv\/rPHb\/6zx2\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/yNy+\/8jcvv\/I3L7\/yNy+\/8jcvv\/I3L7\/yNy+\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/DBwr\/y205v8ttOb\/YDCg\/2AwoP9gMKD\/qloj\/6paI\/+qWiP\/qloj\/6paI\/\/rPHb\/6zx2\/+s8dv\/rPHb\/6zx2\/+s8dv\/rPHb\/6zx2\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/yNy+\/8jcvv\/I3L7\/yNy+\/8jcvv\/I3L7\/yNy+\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/DBwr\/y205v8ttOb\/YDCg\/2AwoP9gMKD\/qloj\/6paI\/+qWiP\/qloj\/6paI\/\/rPHb\/6zx2\/+s8dv\/rPHb\/6zx2\/+s8dv\/rPHb\/6zx2\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/yNy+\/8jcvv\/I3L7\/yNy+\/8jcvv\/I3L7\/yNy+\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/DBwr\/y205v8ttOb\/YDCg\/2AwoP9gMKD\/qloj\/6paI\/+qWiP\/qloj\/6paI\/\/rPHb\/6zx2\/+s8dv\/rPHb\/6zx2\/+s8dv\/rPHb\/6zx2\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/yNy+\/8jcvv\/I3L7\/yNy+\/8jcvv\/I3L7\/yNy+\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/DBwr\/y205v8ttOb\/YDCg\/2AwoP9gMKD\/qloj\/6paI\/+qWiP\/qloj\/6paI\/\/rPHb\/6zx2\/+s8dv\/rPHb\/6zx2\/+s8dv\/rPHb\/6zx2\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/yNy+\/8jcvv\/I3L7\/yNy+\/8jcvv\/I3L7\/yNy+\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/DBwr\/y205v8ttOb\/YDCg\/2AwoP9gMKD\/qloj\/6paI\/+qWiP\/qloj\/6paI\/\/rPHb\/6zx2\/+s8dv\/rPHb\/6zx2\/+s8dv\/rPHb\/6zx2\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/yNy+\/8jcvv\/I3L7\/yNy+\/8jcvv\/I3L7\/yNy+\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/DBwr\/y205v8ttOb\/YDCg\/2AwoP9gMKD\/qloj\/6paI\/+qWiP\/qloj\/6paI\/\/rPHb\/6zx2\/+s8dv\/rPHb\/6zx2\/+s8dv\/rPHb\/6zx2\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/yNy+\/8jcvv\/I3L7\/yNy+\/8jcvv\/I3L7\/yNy+\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/DBwr\/y205v8ttOb\/YDCg\/2AwoP9gMKD\/qloj\/6paI\/+qWiP\/qloj\/6paI\/\/rPHb\/6zx2\/+s8dv\/rPHb\/6zx2\/+s8dv\/rPHb\/6zx2\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/yNy+\/8jcvv\/I3L7\/yNy+\/8jcvv\/I3L7\/yNy+\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/DBwr\/y205v8ttOb\/YDCg\/2AwoP9gMKD\/qloj\/6paI\/+qWiP\/qloj\/6paI\/\/rPHb\/6zx2\/+s8dv\/rPHb\/6zx2\/+s8dv\/rPHb\/6zx2\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/yNy+\/8jcvv\/I3L7\/yNy+\/8jcvv\/I3L7\/yNy+\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/DBwr\/y205v8ttOb\/YDCg\/2AwoP9gMKD\/qloj\/6paI\/+qWiP\/qloj\/6paI\/\/rPHb\/6zx2\/+s8dv\/rPHb\/6zx2\/+s8dv\/rPHb\/6zx2\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/yNy+\/8jcvv\/I3L7\/yNy+\/8jcvv\/I3L7\/yNy+\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/DBwr\/y205v8ttOb\/YDCg\/2AwoP9gMKD\/qloj\/6paI\/+qWiP\/qloj\/6paI\/\/rPHb\/6zx2\/+s8dv\/rPHb\/6zx2\/+s8dv\/rPHb\/6zx2\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/yNy+\/8jcvv\/I3L7\/yNy+\/8jcvv\/I3L7\/yNy+\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/DBwr\/y205v8ttOb\/YDCg\/2AwoP9gMKD\/qloj\/6paI\/+qWiP\/qloj\/6paI\/\/rPHb\/6zx2\/+s8dv\/rPHb\/6zx2\/+s8dv\/rPHb\/6zx2\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/yNy+\/8jcvv\/I3L7\/yNy+\/8jcvv\/I3L7\/yNy+\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/DBwr\/y205v8ttOb\/YDCg\/2AwoP9gMKD\/qloj\/6paI\/+qWiP\/qloj\/6paI\/\/rPHb\/6zx2\/+s8dv\/rPHb\/6zx2\/+s8dv\/rPHb\/6zx2\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/yNy+\/8jcvv\/I3L7\/yNy+\/8jcvv\/I3L7\/yNy+\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/DBwr\/y205v8ttOb\/YDCg\/2AwoP9gMKD\/qloj\/6paI\/+qWiP\/qloj\/6paI\/\/rPHb\/6zx2\/+s8dv\/rPHb\/6zx2\/+s8dv\/rPHb\/6zx2\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/yNy+\/8jcvv\/I3L7\/yNy+\/8jcvv\/I3L7\/yNy+\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/DBwr\/y205v8ttOb\/YDCg\/2AwoP9gMKD\/qloj\/6paI\/+qWiP\/qloj\/6paI\/\/rPHb\/6zx2\/+s8dv\/rPHb\/6zx2\/+s8dv\/rPHb\/6zx2\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/yNy+\/8jcvv\/I3L7\/yNy+\/8jcvv\/I3L7\/yNy+\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/DBwr\/y205v8ttOb\/YDCg\/2AwoP9gMKD\/qloj\/6paI\/+qWiP\/qloj\/6paI\/\/rPHb\/6zx2\/+s8dv\/rPHb\/6zx2\/+s8dv\/rPHb\/6zx2\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/yNy+\/8jcvv\/I3L7\/yNy+\/8jcvv\/I3L7\/yNy+\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/DBwr\/y205v8ttOb\/YDCg\/2AwoP9gMKD\/qloj\/6paI\/+qWiP\/qloj\/6paI\/\/rPHb\/6zx2\/+s8dv\/rPHb\/6zx2\/+s8dv\/rPHb\/6zx2\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/yNy+\/8jcvv\/I3L7\/yNy+\/8jcvv\/I3L7\/yNy+\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/DBwr\/y205v8ttOb\/YDCg\/2AwoP9gMKD\/qloj\/6paI\/+qWiP\/qloj\/6paI\/\/rPHb\/6zx2\/+s8dv\/rPHb\/6zx2\/+s8dv\/rPHb\/6zx2\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/yNy+\/8jcvv\/I3L7\/yNy+\/8jcvv\/I3L7\/yNy+\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/DBwr\/y205v8ttOb\/YDCg\/2AwoP9gMKD\/qloj\/6paI\/+qWiP\/qloj\/6paI\/\/rPHb\/6zx2\/+s8dv\/rPHb\/6zx2\/+s8dv\/rPHb\/6zx2\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/yNy+\/8jcvv\/I3L7\/yNy+\/8jcvv\/I3L7\/yNy+\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/DBwr\/y205v8ttOb\/YDCg\/2AwoP9gMKD\/qloj\/6paI\/+qWiP\/qloj\/6paI\/\/rPHb\/6zx2\/+s8dv\/rPHb\/6zx2\/+s8dv\/rPHb\/6zx2\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/yNy+\/8jcvv\/I3L7\/yNy+\/8jcvv\/I3L7\/yNy+\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/DBwr\/y205v8ttOb\/YDCg\/2AwoP9gMKD\/qloj\/6paI\/+qWiP\/qloj\/6paI\/\/rPHb\/6zx2\/+s8dv\/rPHb\/6zx2\/+s8dv\/rPHb\/6zx2\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/yNy+\/8jcvv\/I3L7\/yNy+\/8jcvv\/I3L7\/yNy+\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/DBwr\/y205v8ttOb\/YDCg\/2AwoP9gMKD\/qloj\/6paI\/+qWiP\/qloj\/6paI\/\/rPHb\/6zx2\/+s8dv\/rPHb\/6zx2\/+s8dv\/rPHb\/6zx2\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/yNy+\/8jcvv\/I3L7\/yNy+\/8jcvv\/I3L7\/yNy+\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/DBwr\/y205v8ttOb\/YDCg\/2AwoP9gMKD\/qloj\/6paI\/+qWiP\/qloj\/6paI\/\/rPHb\/6zx2\/+s8dv\/rPHb\/6zx2\/+s8dv\/rPHb\/6zx2\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/yNy+\/8jcvv\/I3L7\/yNy+\/8jcvv\/I3L7\/yNy+\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/DBwr\/y205v8ttOb\/YDCg\/2AwoP9gMKD\/qloj\/6paI\/+qWiP\/qloj\/6paI\/\/rPHb\/6zx2\/+s8dv\/rPHb\/6zx2\/+s8dv\/rPHb\/6zx2\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/yNy+\/8jcvv\/I3L7\/yNy+\/8jcvv\/I3L7\/yNy+\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/DBwr\/y205v8ttOb\/YDCg\/2AwoP9gMKD\/qloj\/6paI\/+qWiP\/qloj\/6paI\/\/rPHb\/6zx2\/+s8dv\/rPHb\/6zx2\/+s8dv\/rPHb\/6zx2\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/yNy+\/8jcvv\/I3L7\/yNy+\/8jcvv\/I3L7\/yNy+\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/DBwr\/y205v8ttOb\/YDCg\/2AwoP9gMKD\/qloj\/6paI\/+qWiP\/qloj\/6paI\/\/rPHb\/6zx2\/+s8dv\/rPHb\/6zx2\/+s8dv\/rPHb\/6zx2\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/yNy+\/8jcvv\/I3L7\/yNy+\/8jcvv\/I3L7\/yNy+\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/DBwr\/y205v8ttOb\/YDCg\/2AwoP9gMKD\/qloj\/6paI\/+qWiP\/qloj\/6paI\/\/rPHb\/6zx2\/+s8dv\/rPHb\/6zx2\/+s8dv\/rPHb\/6zx2\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/yNy+\/8jcvv\/I3L7\/yNy+\/8jcvv\/I3L7\/yNy+\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/DBwr\/y205v8ttOb\/YDCg\/2AwoP9gMKD\/qloj\/6paI\/+qWiP\/qloj\/6paI\/\/rPHb\/6zx2\/+s8dv\/rPHb\/6zx2\/+s8dv\/rPHb\/6zx2\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/yNy+\/8jcvv\/I3L7\/yNy+\/8jcvv\/I3L7\/yNy+\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/DBwr\/y205v8ttOb\/YDCg\/2AwoP9gMKD\/qloj\/6paI\/+qWiP\/qloj\/6paI\/\/rPHb\/6zx2\/+s8dv\/rPHb\/6zx2\/+s8dv\/rPHb\/6zx2\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/yNy+\/8jcvv\/I3L7\/yNy+\/8jcvv\/I3L7\/yNy+\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/DBwr\/y205v8ttOb\/YDCg\/2AwoP9gMKD\/qloj\/6paI\/+qWiP\/qloj\/6paI\/\/rPHb\/6zx2\/+s8dv\/rPHb\/6zx2\/+s8dv\/rPHb\/6zx2\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/yNy+\/8jcvv\/I3L7\/yNy+\/8jcvv\/I3L7\/yNy+\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/DBwr\/y205v8ttOb\/YDCg\/2AwoP9gMKD\/qloj\/6paI\/+qWiP\/qloj\/6paI\/\/rPHb\/6zx2\/+s8dv\/rPHb\/6zx2\/+s8dv\/rPHb\/6zx2\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/yNy+\/8jcvv\/I3L7\/yNy+\/8jcvv\/I3L7\/yNy+\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/DBwr\/y205v8ttOb\/YDCg\/2AwoP9gMKD\/qloj\/6paI\/+qWiP\/qloj\/6paI\/\/rPHb\/6zx2\/+s8dv\/rPHb\/6zx2\/+s8dv\/rPHb\/6zx2\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/yNy+\/8jcvv\/I3L7\/yNy+\/8jcvv\/I3L7\/yNy+\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/DBwr\/y205v8ttOb\/YDCg\/2AwoP9gMKD\/qloj\/6paI\/+qWiP\/qloj\/6paI\/\/rPHb\/6zx2\/+s8dv\/rPHb\/6zx2\/+s8dv\/rPHb\/6zx2\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/yNy+\/8jcvv\/I3L7\/yNy+\/8jcvv\/I3L7\/yNy+\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/DBwr\/y205v8ttOb\/YDCg\/2AwoP9gMKD\/qloj\/6paI\/+qWiP\/qloj\/6paI\/\/rPHb\/6zx2\/+s8dv\/rPHb\/6zx2\/+s8dv\/rPHb\/6zx2\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/yNy+\/8jcvv\/I3L7\/yNy+\/8jcvv\/I3L7\/yNy+\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/DBwr\/y205v8ttOb\/YDCg\/2AwoP9gMKD\/qloj\/6paI\/+qWiP\/qloj\/6paI\/\/rPHb\/6zx2\/+s8dv\/rPHb\/6zx2\/+s8dv\/rPHb\/6zx2\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/yNy+\/8jcvv\/I3L7\/yNy+\/8jcvv\/I3L7\/yNy+\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/DBwr\/y205v8ttOb\/YDCg\/2AwoP9gMKD\/qloj\/6paI\/+qWiP\/qloj\/6paI\/\/rPHb\/6zx2\/+s8dv\/rPHb\/6zx2\/+s8dv\/rPHb\/6zx2\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/yNy+\/8jcvv\/I3L7\/yNy+\/8jcvv\/I3L7\/yNy+\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/DBwr\/y205v8ttOb\/YDCg\/2AwoP9gMKD\/qloj\/6paI\/+qWiP\/qloj\/6paI\/\/rPHb\/6zx2\/+s8dv\/rPHb\/6zx2\/+s8dv\/rPHb\/6zx2\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/yNy+\/8jcvv\/I3L7\/yNy+\/8jcvv\/I3L7\/yNy+\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/DBwr\/y205v8ttOb\/YDCg\/2AwoP9gMKD\/qloj\/6paI\/+qWiP\/qloj\/6paI\/\/rPHb\/6zx2\/+s8dv\/rPHb\/6zx2\/+s8dv\/rPHb\/6zx2\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/yNy+\/8jcvv\/I3L7\/yNy+\/8jcvv\/I3L7\/yNy+\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/DBwr\/y205v8ttOb\/YDCg\/2AwoP9gMKD\/qloj\/6paI\/+qWiP\/qloj\/6paI\/\/rPHb\/6zx2\/+s8dv\/rPHb\/6zx2\/+s8dv\/rPHb\/6zx2\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/yNy+\/8jcvv\/I3L7\/yNy+\/8jcvv\/I3L7\/yNy+\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/DBwr\/y205v8ttOb\/YDCg\/2AwoP9gMKD\/qloj\/6paI\/+qWiP\/qloj\/6paI\/\/rPHb\/6zx2\/+s8dv\/rPHb\/6zx2\/+s8dv\/rPHb\/6zx2\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/yNy+\/8jcvv\/I3L7\/yNy+\/8jcvv\/I3L7\/yNy+\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/DBwr\/y205v8ttOb\/YDCg\/2AwoP9gMKD\/qloj\/6paI\/+qWiP\/qloj\/6paI\/\/rPHb\/6zx2\/+s8dv\/rPHb\/6zx2\/+s8dv\/rPHb\/6zx2\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/yNy+\/8jcvv\/I3L7\/yNy+\/8jcvv\/I3L7\/yNy+\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/DBwr\/y205v8ttOb\/YDCg\/2AwoP9gMKD\/qloj\/6paI\/+qWiP\/qloj\/6paI\/\/rPHb\/6zx2\/+s8dv\/rPHb\/6zx2\/+s8dv\/rPHb\/6zx2\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/yNy+\/8jcvv\/I3L7\/yNy+\/8jcvv\/I3L7\/yNy+\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/DBwr\/y205v8ttOb\/YDCg\/2AwoP9gMKD\/qloj\/6paI\/+qWiP\/qloj\/6paI\/\/rPHb\/6zx2\/+s8dv\/rPHb\/6zx2\/+s8dv\/rPHb\/6zx2\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/yNy+\/8jcvv\/I3L7\/yNy+\/8jcvv\/I3L7\/yNy+\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/DBwr\/y205v8ttOb\/YDCg\/2AwoP9gMKD\/qloj\/6paI\/+qWiP\/qloj\/6paI\/\/rPHb\/6zx2\/+s8dv\/rPHb\/6zx2\/+s8dv\/rPHb\/6zx2\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/yNy+\/8jcvv\/I3L7\/yNy+\/8jcvv\/I3L7\/yNy+\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/DBwr\/y205v8ttOb\/YDCg\/2AwoP9gMKD\/qloj\/6paI\/+qWiP\/qloj\/6paI\/\/rPHb\/6zx2\/+s8dv\/rPHb\/6zx2\/+s8dv\/rPHb\/6zx2\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/yNy+\/8jcvv\/I3L7\/yNy+\/8jcvv\/I3L7\/yNy+\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/",
+      "expected" : [
+        0.82352941176470584,
+        0.28054298642533937,
+        0.33755656108597287
+      ],
+      "height" : 48,
+      "name" : "weighted eight-color median cut",
+      "width" : 48
+    },
+    {
+      "bytes" : "DBwr\/wwcK\/8MHCv\/DBwr\/wwcK\/8MHCv\/DBwr\/wwcK\/8MHCv\/DBwr\/wwcK\/8MHCv\/DBwr\/wwcK\/8MHCv\/DBwr\/wwcK\/8MHCv\/DBwr\/wwcK\/8MHCv\/DBwr\/wwcK\/8MHCv\/DBwr\/wwcK\/8MHCv\/DBwr\/wwcK\/8MHCv\/DBwr\/wwcK\/8MHCv\/DBwr\/wwcK\/8MHCv\/DBwr\/wwcK\/8MHCv\/DBwr\/wwcK\/8MHCv\/DBwr\/wwcK\/8MHCv\/DBwr\/wwcK\/8MHCv\/DBwr\/wwcK\/8MHCv\/DBwr\/wwcK\/8MHCv\/DBwr\/wwcK\/8MHCv\/DBwr\/wwcK\/8MHCv\/DBwr\/wwcK\/8MHCv\/DBwr\/wwcK\/8MHCv\/DBwr\/wwcK\/8MHCv\/DBwr\/wwcK\/8MHCv\/LbTm\/y205v8ttOb\/LbTm\/y205v8ttOb\/LbTm\/y205v8ttOb\/LbTm\/y205v8ttOb\/LbTm\/y205v8ttOb\/LbTm\/y205v8ttOb\/LbTm\/y205v8ttOb\/LbTm\/y205v8ttOb\/LbTm\/y205v8ttOb\/LbTm\/y205v8ttOb\/LbTm\/y205v8ttOb\/LbTm\/y205v8ttOb\/LbTm\/y205v8ttOb\/LbTm\/y205v8ttOb\/LbTm\/y205v8ttOb\/LbTm\/y205v8ttOb\/LbTm\/y205v8ttOb\/LbTm\/y205v8ttOb\/LbTm\/y205v8ttOb\/LbTm\/y205v8ttOb\/LbTm\/y205v8ttOb\/LbTm\/y205v8ttOb\/LbTm\/y205v8ttOb\/LbTm\/y205v8ttOb\/YDCg\/2AwoP9gMKD\/YDCg\/2AwoP9gMKD\/YDCg\/2AwoP9gMKD\/YDCg\/2AwoP9gMKD\/YDCg\/2AwoP9gMKD\/YDCg\/2AwoP9gMKD\/YDCg\/2AwoP9gMKD\/YDCg\/2AwoP9gMKD\/YDCg\/2AwoP9gMKD\/YDCg\/2AwoP9gMKD\/YDCg\/2AwoP9gMKD\/YDCg\/2AwoP9gMKD\/YDCg\/2AwoP9gMKD\/YDCg\/2AwoP9gMKD\/YDCg\/2AwoP9gMKD\/YDCg\/2AwoP9gMKD\/YDCg\/2AwoP9gMKD\/YDCg\/2AwoP9gMKD\/YDCg\/2AwoP9gMKD\/YDCg\/2AwoP9gMKD\/YDCg\/2AwoP9gMKD\/YDCg\/2AwoP9gMKD\/YDCg\/2AwoP9gMKD\/YDCg\/2AwoP9gMKD\/qloj\/6paI\/+qWiP\/qloj\/6paI\/+qWiP\/qloj\/6paI\/+qWiP\/qloj\/6paI\/+qWiP\/qloj\/6paI\/+qWiP\/qloj\/6paI\/+qWiP\/qloj\/6paI\/+qWiP\/qloj\/6paI\/+qWiP\/qloj\/6paI\/+qWiP\/qloj\/6paI\/+qWiP\/qloj\/6paI\/+qWiP\/qloj\/6paI\/+qWiP\/qloj\/6paI\/+qWiP\/qloj\/6paI\/+qWiP\/qloj\/6paI\/+qWiP\/qloj\/6paI\/+qWiP\/qloj\/6paI\/+qWiP\/qloj\/6paI\/+qWiP\/qloj\/6paI\/+qWiP\/qloj\/6paI\/+qWiP\/qloj\/6paI\/+qWiP\/qloj\/6paI\/+qWiP\/qloj\/6paI\/+qWiP\/qloj\/6paI\/+qWiP\/6zx2\/+s8dv\/rPHb\/6zx2\/+s8dv\/rPHb\/6zx2\/+s8dv\/rPHb\/6zx2\/+s8dv\/rPHb\/6zx2\/+s8dv\/rPHb\/6zx2\/+s8dv\/rPHb\/6zx2\/+s8dv\/rPHb\/6zx2\/+s8dv\/rPHb\/6zx2\/+s8dv\/rPHb\/6zx2\/+s8dv\/rPHb\/6zx2\/+s8dv\/rPHb\/6zx2\/+s8dv\/rPHb\/6zx2\/+s8dv\/rPHb\/6zx2\/+s8dv\/rPHb\/6zx2\/+s8dv\/rPHb\/6zx2\/+s8dv\/rPHb\/6zx2\/+s8dv\/rPHb\/6zx2\/+s8dv\/rPHb\/6zx2\/+s8dv\/rPHb\/6zx2\/+s8dv\/rPHb\/6zx2\/+s8dv\/rPHb\/6zx2\/+s8dv\/rPHb\/6zx2\/+s8dv\/rPHb\/6zx2\/+s8dv\/rPHb\/RJFQ\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/RJFQ\/0SRUP9EkVD\/yNy+\/8jcvv\/I3L7\/yNy+\/8jcvv\/I3L7\/yNy+\/8jcvv\/I3L7\/yNy+\/8jcvv\/I3L7\/yNy+\/8jcvv\/I3L7\/yNy+\/8jcvv\/I3L7\/yNy+\/8jcvv\/I3L7\/yNy+\/8jcvv\/I3L7\/yNy+\/8jcvv\/I3L7\/yNy+\/8jcvv\/I3L7\/yNy+\/8jcvv\/I3L7\/yNy+\/8jcvv\/I3L7\/yNy+\/8jcvv\/I3L7\/yNy+\/8jcvv\/I3L7\/yNy+\/8jcvv\/I3L7\/yNy+\/8jcvv\/I3L7\/yNy+\/8jcvv\/I3L7\/yNy+\/8jcvv\/I3L7\/yNy+\/8jcvv\/I3L7\/yNy+\/8jcvv\/I3L7\/yNy+\/8jcvv\/I3L7\/yNy+\/8jcvv\/I3L7\/yNy+\/8jcvv\/I3L7\/yNy+\/8jcvv\/I3L7\/bmRi\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/bmRi\/25kYv9uZGL\/",
+      "expected" : [
+        0.79411764705882348,
+        0.29411764705882354,
+        0.29999999999999999
+      ],
+      "height" : 48,
+      "name" : "portrait palette sampling",
+      "width" : 12
+    }
+  ],
+  "originalCommit" : "c5b3e16b40a888ded490a08b3c3b4b84c394c3e7",
+  "sourceHashes" : {
+    "Shared\/Extensions\/UIImage.swift" : "7ea196741ac25cbdfcd77f670ba35eedb1590f5c905547740b36f51019283167",
+    "Shared\/Extensions\/UIImage+InterestingColor.swift" : "d9a2b3f1e8dc1fe376afb65eadbef5a0e65f5f1fa6490298c79a459dcc6feb74"
+  }
+}

@@ -36,6 +36,7 @@ EXTERNAL_POLICIES = {
     ],
 }
 POLICIES = {
+    "SwiftfinImageProcessing": ({}, {"Foundation", "CoreGraphics", "UIKit"}),
     "SwiftfinMPV": ({}, {"Foundation", "MPVUI", "Observation", "SwiftUI"}),
     "SwiftfinText": ({}, {"Foundation", "CryptoKit"}),
     "SwiftfinValues": ({}, {"Foundation"}),

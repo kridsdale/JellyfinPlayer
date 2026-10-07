@@ -162,6 +162,14 @@ class PackageBoundariesTests(unittest.TestCase):
                 self.assertTrue(MODULE.validate_source("SwiftfinText", "import " + module, edges, frameworks))
         self.assertNotIn("SwiftfinText", MODULE.EXTERNAL_POLICIES)
 
+    def test_image_processing_has_no_cache_transport_settings_or_localization(self):
+        edges, frameworks = MODULE.POLICIES["SwiftfinImageProcessing"]
+        self.assertEqual(set(edges), set())
+        for module in ["SwiftfinImages", "Nuke", "JellyfinAPI", "FactoryKit", "Defaults", "SwiftfinNetworking", "SwiftfinLocalization", "SwiftUI"]:
+            with self.subTest(module=module):
+                self.assertTrue(MODULE.validate_source("SwiftfinImageProcessing", "import " + module, edges, frameworks))
+        self.assertNotIn("SwiftfinImageProcessing", MODULE.EXTERNAL_POLICIES)
+
     def test_mpv_owner_cannot_access_application_accounts_settings_or_catalog(self):
         edges, frameworks = MODULE.POLICIES["SwiftfinMPV"]
         self.assertEqual(set(edges), set())
