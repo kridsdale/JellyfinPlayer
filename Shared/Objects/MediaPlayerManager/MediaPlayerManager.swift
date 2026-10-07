@@ -309,7 +309,8 @@ final class MediaPlayerManager: ViewModel {
         item = provider.item
         setSupplements()
         proxy?.stop()
-        playbackItem = try await provider()
+        let prepared = try await provider()
+        try installPlaybackItem(prepared)
     }
 
     @Function(\Action.Cases.setBitrate)
@@ -395,7 +396,8 @@ final class MediaPlayerManager: ViewModel {
             return
         }
         self.initialMediaPlayerItemProvider = nil
-        playbackItem = try await initialMediaPlayerItemProvider()
+        let prepared = try await initialMediaPlayerItemProvider()
+        try installPlaybackItem(prepared)
     }
 
     // TODO: remove playback item?
@@ -432,6 +434,9 @@ final class MediaPlayerManager: ViewModel {
         requestedBitrate: PlaybackBitrate? = nil
     ) async throws {
 
+        guard let connection = currentItem.connection else { throw CancellationError() }
+        try connection.preparation.checkBinding()
+
         // Capture the current playback position before stopping
         let currentSeconds = self.seconds
         currentItem.previewImageProvider?.invalidate()
@@ -449,6 +454,7 @@ final class MediaPlayerManager: ViewModel {
 
         let newItem = try await MediaPlayerItem.build(
             for: currentItem.baseItem,
+            connection: connection,
             mediaSource: currentItem.mediaSource,
             audioStreamIndex: audioStreamIndex ?? currentItem.selectedAudioStreamIndex,
             subtitleStreamIndex: subtitleStreamIndex ?? currentItem.selectedSubtitleStreamIndex,
@@ -469,8 +475,17 @@ final class MediaPlayerManager: ViewModel {
             ]
         )
 
-        self.playbackItem = newItem
+        try installPlaybackItem(newItem)
         self.seconds = currentSeconds
+    }
+
+    /// Final synchronous publication check after any awaited provider/rebuild.
+    /// The accountless factory placeholder never enters this path.
+    private func installPlaybackItem(_ prepared: MediaPlayerItem) throws {
+        try Task.checkCancellation()
+        guard state != .stopped, state != .error, let connection = prepared.connection else { throw CancellationError() }
+        try connection.preparation.checkBinding()
+        playbackItem = prepared
     }
 
     static func getMaxBitrate(

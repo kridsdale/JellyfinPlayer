@@ -44,13 +44,16 @@ extension UserSession {
 
 extension UserSession {
     var playbackPreparation: PlaybackPreparationClient {
+        playbackConnection.preparation
+    }
+
+    var playbackConnection: PlaybackConnection {
         let client = self.client
         let manager = Container.shared.userSessionManager()
-        let executor = AuthenticatedRequestExecutor(sender: client, isCurrent: { [weak self, weak client, weak manager] in
+        return PlaybackConnection(sender: client, urls: client, userID: user.id, isCurrent: { [weak self, weak client, weak manager] in
             guard let self, let client, let manager else { return false }
             return manager.currentSession === self && self.client === client
         })
-        return PlaybackPreparationClient(executor: executor, urls: client, userID: user.id)
     }
 }
 

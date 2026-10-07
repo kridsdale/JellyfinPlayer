@@ -12,6 +12,7 @@ import SwiftfinMediaTracks
 import SwiftfinPlaybackPreparation
 import SwiftfinPlaybackPreviews
 import SwiftfinPlaybackProfiles
+import SwiftfinPlaybackReporting
 import SwiftfinText
 import SwiftUI
 
@@ -53,6 +54,7 @@ class MediaPlayerItem: ViewModel, MediaPlayerObserver {
 
     var observers: [any MediaPlayerObserver] = []
 
+    let connection: PlaybackConnection?
     let baseItem: BaseItemDto
     let deviceProfile: DeviceProfile
     let mediaSource: MediaSourceInfo
@@ -72,6 +74,7 @@ class MediaPlayerItem: ViewModel, MediaPlayerObserver {
     // MARK: init
 
     init(
+        connection: PlaybackConnection? = nil,
         baseItem: BaseItemDto,
         mediaSource: MediaSourceInfo,
         playSessionID: String,
@@ -85,6 +88,7 @@ class MediaPlayerItem: ViewModel, MediaPlayerObserver {
         previewImageProvider: (any PreviewImageProvider)? = nil,
         thumbnailProvider: ThumbnailProvider? = nil
     ) {
+        self.connection = connection
         self.baseItem = baseItem
         self.mediaSource = mediaSource
         self.playSessionID = playSessionID
@@ -114,11 +118,22 @@ class MediaPlayerItem: ViewModel, MediaPlayerObserver {
 
         selectedSubtitleStreamIndex = trackPolicy.selectedSubtitleIndex
 
-        #if os(tvOS)
-        observers.append(KidsMediaProgressObserver(item: self))
-        #else
-        observers.append(MediaProgressObserver(item: self))
-        #endif
+        if let id = baseItem.id, let connection {
+            #if os(tvOS)
+            let reportClient = connection.reportingClient(identity: .init(
+                itemID: id, mediaSourceID: mediaSource.id, liveStreamID: mediaSource.liveStreamID,
+                playSessionID: playSessionID, canSeek: !baseItem.isLiveStream,
+                playMethod: mediaSource.transcodingURL == nil ? .directPlay : .transcode
+            ))
+            observers.append(KidsMediaProgressObserver(item: self, reportClient: reportClient))
+            #else
+            let reportClient = connection.reportingClient(identity: .init(
+                itemID: id, mediaSourceID: mediaSource.id, liveStreamID: mediaSource.liveStreamID,
+                playSessionID: playSessionID, sessionID: playSessionID
+            ))
+            observers.append(MediaProgressObserver(item: self, reportClient: reportClient))
+            #endif
+        }
     }
 
     /// Decides whether a track change can be performed by the player in place, or whether the server must produce a new stream.

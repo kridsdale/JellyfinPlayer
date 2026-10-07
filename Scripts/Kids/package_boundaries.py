@@ -48,7 +48,7 @@ POLICIES = {
     "SwiftfinAccountAccess": ({"SwiftfinNetworking"}, {"Foundation", "JellyfinAPI"}),
     "SwiftfinUserMediaState": ({"SwiftfinNetworking"}, {"Foundation", "JellyfinAPI"}),
     "SwiftfinPlaybackReporting": ({"SwiftfinNetworking", "SwiftfinAsyncStreams"}, {"Foundation", "JellyfinAPI"}),
-    "SwiftfinPlaybackPreparation": ({"SwiftfinNetworking", "SwiftfinMediaTracks"}, {"Foundation", "Get", "JellyfinAPI"}),
+    "SwiftfinPlaybackPreparation": ({"SwiftfinNetworking", "SwiftfinMediaTracks", "SwiftfinPlaybackReporting"}, {"Foundation", "Get", "JellyfinAPI"}),
     "SwiftfinRecordingTimers": ({"SwiftfinNetworking", "SwiftfinMediaCatalog"}, {"Foundation", "JellyfinAPI"}),
     "SwiftfinFilters": ({"SwiftfinNetworking", "SwiftfinMediaCatalog"}, {"Foundation", "JellyfinAPI"}),
     "SwiftfinItemMetadata": ({"SwiftfinNetworking"}, {"Foundation", "Get", "JellyfinAPI"}),

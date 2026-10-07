@@ -32,6 +32,7 @@ extension MediaPlayerItem {
     static func build(
         for initialItem: BaseItemDto,
         preparedItem: BaseItemDto? = nil,
+        connection capturedConnection: PlaybackConnection? = nil,
         mediaSource _initialMediaSource: MediaSourceInfo? = nil,
         audioStreamIndex: Int? = nil,
         subtitleStreamIndex: Int? = nil,
@@ -48,13 +49,12 @@ extension MediaPlayerItem {
             throw ErrorMessage(L10n.unknownError)
         }
 
-        guard let userSession = Container.shared.currentUserSession() else {
+        guard let connection = capturedConnection ?? Container.shared.currentUserSession()?.playbackConnection else {
             logger.critical("No user session!")
             throw ErrorMessage(L10n.unknownError)
         }
 
-        let transport = userSession.client
-        let preparation = userSession.playbackPreparation
+        let preparation = connection.preparation
         try preparation.checkBinding()
 
         var item: BaseItemDto
@@ -137,11 +137,10 @@ extension MediaPlayerItem {
 
         // Bind every image load to the transport that prepared this item.
         // A replacement account, URL or credential invalidates the old provider.
-        let previewClient = transport
-        let previewIsCurrent: @MainActor @Sendable () -> Bool = { [weak userSession, weak previewClient] in
-            guard let userSession, let previewClient,
-                  Container.shared.userSessionManager().currentSession === userSession else { return false }
-            return userSession.client === previewClient
+        let previewIsCurrent: @MainActor @Sendable () -> Bool = {
+            do { try preparation.checkBinding()
+                return true
+            } catch { return false }
         }
         let previewImageProvider: (any PreviewImageProvider)? = {
             let setting = StoredValues[.User.previewImageScrubbing]
@@ -184,7 +183,9 @@ extension MediaPlayerItem {
         )
         let sidecars = try preparation.sidecarSubtitles(from: trackPolicy.subtitleStreams)
 
+        try preparation.checkBinding()
         return .init(
+            connection: connection,
             baseItem: item,
             mediaSource: mediaSource,
             playSessionID: playSessionID,

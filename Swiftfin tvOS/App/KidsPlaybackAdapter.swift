@@ -39,15 +39,10 @@ final class SwiftfinKidsPlaybackFactory: KidsPlaybackSessionFactory {
         performance: KidsPerformanceSpan?, simulateStreamFailure: Bool
     ) async throws -> KidsPlaybackController {
         guard let session = sessions.currentSession else { throw KidsAPIError.authentication }
-        let identity = (
-            server: session.server.id,
-            user: session.user.id,
-            url: session.server.effectiveServerURL,
-            token: session.user.accessToken
-        )
+        let connection = session.playbackConnection
         let metadata = KidsPerformance.begin(.metadata, endpoint: .itemDetails)
         defer { metadata?.finish(Task.isCancelled ? .cancelled : .failure) }
-        let preparation = session.playbackPreparation
+        let preparation = connection.preparation
         let raw = try await preparation.item(
             id: item.id,
             delegate: metadata.map(KidsPerformanceTaskDelegate.init(span:))
@@ -61,25 +56,29 @@ final class SwiftfinKidsPlaybackFactory: KidsPlaybackSessionFactory {
         let failStreamOnce = simulateStreamFailure
         #endif
         let provider = MediaPlayerItemProvider(item: raw) { base, _ in
-            guard let current = self.sessions.currentSession,
-                  current.server.id == identity.server, current.user.id == identity.user,
-                  current.server.effectiveServerURL == identity.url,
-                  current.user.accessToken == identity.token else { throw KidsAPIError.authentication }
-            try Task.checkCancellation()
+            try preparation.checkBinding()
             return try await KidsPerformance.$current.withValue(performance) {
                 let build = KidsPerformance.begin(.provider)
                 defer { build?.finish(Task.isCancelled ? .cancelled : .failure) }
-                let built = try await MediaPlayerItem.build(for: base, preparedItem: raw, videoPlayerType: .vlc, modifyItem: { dto in
-                    if dto.userData == nil {
-                        dto.userData = UserItemDataDto(key: "")
+                let built = try await MediaPlayerItem.build(
+                    for: base,
+                    preparedItem: raw,
+                    connection: connection,
+                    videoPlayerType: .vlc,
+                    modifyItem: { dto in
+                        if dto.userData == nil {
+                            dto.userData = UserItemDataDto(key: "")
+                        }
+                        dto.userData?.playbackPositionTicks = Int(start * 10_000_000)
                     }
-                    dto.userData?.playbackPositionTicks = Int(start * 10_000_000)
-                })
+                )
+                try preparation.checkBinding()
                 build?.finish()
                 #if DEBUG
                 // A one-shot real connection refusal exercises VLC recovery without interrupting the household server.
                 if failStreamOnce {
                     return MediaPlayerItem(
+                        connection: built.connection,
                         baseItem: built.baseItem,
                         mediaSource: built.mediaSource,
                         playSessionID: built.playSessionID,

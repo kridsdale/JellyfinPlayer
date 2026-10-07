@@ -2313,18 +2313,28 @@
       "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinPlaybackPreparation",
+        "SwiftfinPlaybackProfiles",
+        "SwiftfinPlaybackPreviews",
+        "SwiftfinMediaTracks",
+        "SwiftfinStoredValues"
+      ],
       "path": "Shared/Objects/MediaPlayerManager/MediaPlayerItem/MediaPlayerItem+Build.swift",
-      "reason": "",
-      "sha256": "812679173401aae232da0602566454b9c2d72f3ebdc6cb726100c8f30d3187c8",
-      "status": "pending"
+      "reason": "Complete builder read and exact connection wiring reviewed: injected PlaybackConnection survives metadata/info/bitrate awaits, carries the same reporting sender into the built item and checks binding before return. Preview reads and currentness use that preparation owner. Profile/source/sidecar/track decisions delegate to existing libraries; app retains installed settings and native item composition. Still mixed/unapproved: the now-playing thumbnail closure uses a DTO helper whose image-source/global-account composition has not been completed. Full downstream provider/generation/native publication audit remains separate; compile evidence alone does not approve it.",
+      "sha256": "c253d3f3de7b68c3b045f1f35f288b8fd4babb11781db9c52f45cf45033b6de0",
+      "status": "source-reviewed-mixed"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinMediaTracks",
+        "SwiftfinPlaybackPreparation",
+        "SwiftfinPlaybackReporting"
+      ],
       "path": "Shared/Objects/MediaPlayerManager/MediaPlayerItem/MediaPlayerItem.swift",
-      "reason": "",
-      "sha256": "12b4a110ba6606f88bcc271145b4f310f705c8ce8a59ebb547d3215109253c9a",
-      "status": "pending"
+      "reason": "Complete body reviewed: retains immutable item/profile/sidecar/preview values and delegates stream selection, rebuild choice and native index mapping to MediaTracks. One supplied PlaybackConnection creates platform-specific report identities from this exact item. The factory placeholder alone permits no connection and creates no reporter. Native track/observer bindings remain application composition; no transport is selected from a global inside this item. Runtime callbacks remain held.",
+      "sha256": "6ceb2dce3b4655fb31d565f9d1c1ef954734927341ad63017ba7fdfc0ea6d152",
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -2335,13 +2345,18 @@
     },
     {
       "owners": [
-        "SwiftfinUIState",
+        "KidsPlayback",
+        "SwiftfinCollections",
+        "SwiftfinFormatting",
+        "SwiftfinMediaTracks",
         "SwiftfinPlaybackPreparation",
-        "SwiftfinMediaTracks"
+        "SwiftfinText",
+        "SwiftfinTime",
+        "SwiftfinUIState"
       ],
       "path": "Shared/Objects/MediaPlayerManager/MediaPlayerManager.swift",
-      "reason": "Complete 500-line body reviewed: immutable stream/bitrate/time helpers and native proxy adapters use extracted owners; source-tagged retirement and exact-current factory reset repair obsolete-manager selection effects. Still mixed: inherited queue/provider/supplement composition and async start/playNewItem/rebuild publication need responsibility extraction and full generation/cancellation/account audit. Reading the entire body or compiling does not prove these operations safe or complete.",
-      "sha256": "f61ad664d8f932a863eb9e3964a831d045480058f96ad265db397ccb6d63503c",
+      "reason": "Complete baseline body and updated account-binding paths reviewed: asynchronous start/playNewItem/rebuild pass through a final synchronous installation check for task cancellation, stopped/error state and the exact item connection. Track rebuild retains currentItem connection and validates before stopping the proxy. Accountless factory placeholder stays inert. Still mixed/unapproved: queued operation generation, native/queue/supplement ownership and competing publication require coherent owner/caller extraction. Existing source-tagged retirement/reset protections remain; no native runtime acceptance is claimed.",
+      "sha256": "9d2e6676c0ad40370d07b85505bf470aa3e4a82af31ecdd2831f373a94a336ed",
       "status": "source-reviewed-mixed"
     },
     {
@@ -2380,11 +2395,15 @@
       "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinAsyncStreams",
+        "SwiftfinPlaybackReporting",
+        "SwiftfinTime"
+      ],
       "path": "Shared/Objects/MediaPlayerManager/MediaProgressObserver.swift",
-      "reason": "",
-      "sha256": "8aa81de15dce04b093cbe503e8e21d564c3413253bdf62a9fc2ebc94d3ab3b12",
-      "status": "pending"
+      "reason": "Complete body reviewed: main-actor subscriptions and PokeIntervalTimer sample the supplied item/manager, then feed the existing serialized report queue. A mandatory supplied report client belongs to the item connection; no current account is looked up. End/stop/error/item replacement close ingress once, while the shared queue retains terminal delivery on its original sender. Static tail is application-wide reporting composition, with ordering/coalescing implemented by AsyncStreams. Actual platform timer/callback and stream acceptance remain held.",
+      "sha256": "aadf6b8bb70097e54c80aad53bd4d3bb9cddd5bbf33c9dd7de35d2c516cda8c8",
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -3004,17 +3023,17 @@
     },
     {
       "owners": [
-        "SwiftfinNetworking",
+        "SwiftfinAccountAccess",
         "SwiftfinItemMetadata",
         "SwiftfinMediaCatalog",
+        "SwiftfinNetworking",
         "SwiftfinPlaybackPreparation",
-        "SwiftfinUserMediaState",
-        "SwiftfinAccountAccess",
-        "SwiftfinUserAdministration"
+        "SwiftfinUserAdministration",
+        "SwiftfinUserMediaState"
       ],
       "path": "Shared/Services/UserSession/UserSession+ItemMetadata.swift",
-      "reason": "Complete six-feature composition body reviewed: captures one transport/user and weak root/client/manager checks before constructing existing feature owners. Media-state client reuse requires exact transport identity. This repeated binding is application composition, not request construction, native cache/transport implementation or server policy. Currentness does not imply current GUI/account-switch acceptance.",
-      "sha256": "c90fef61cf0a11c4a7338df6714b2d6a664eefdfceacc5ccceb4c5e9d47fd57b",
+      "reason": "Complete updated feature composition body reviewed: captures one transport/user and weak root/client/manager checks before constructing existing feature owners. PlaybackConnection captures that same transport for preparation, URLs and terminal reporting; playbackPreparation projects the bound owner. Media-state reuse requires exact transport identity. This is application binding, not request/payload/transport policy. Currentness does not imply current GUI/account-switch acceptance.",
+      "sha256": "ee85c7204ae568da89c9bb47295bd62d64f0b03090f71176d2866c37d63d6dd4",
       "status": "source-reviewed-retained"
     },
     {
@@ -5011,8 +5030,8 @@
         "SwiftfinText"
       ],
       "path": "Swiftfin tvOS/App/KidsPlaybackAdapter.swift",
-      "reason": "Complete261-line factory/driver/surface/track/presentation body read: UI surfaces and parent-authorized track controls compose existing owners; VLC driver delegates native commands/readiness and awaits manager stop. Still mixed/unapproved: factory captures account before awaited metadata, embeds start-position normalization and DTO tick override, then assembles provider/controller; exact post-await/current-account checks and provider/build publication require the full manager/builder consumer audit. Existing pre-build identity checks and kind/ID guards are preserved but do not prove all later receipts current. No new native/runtime acceptance is claimed.",
-      "sha256": "aae72b9acc32dd644167a599cf6311d5e46a4525c38dbf8b9048a2720b787594",
+      "reason": "Complete factory/driver/surface/track body reviewed, with exact connection repair: one captured PlaybackConnection performs metadata and deferred provider preparation, supplies the item reporting sender and rejects replacement before/after build. Synthetic failure clone preserves the same connection. Surface/native command readiness and parent-authorized tracks compose existing owners. Still mixed/unapproved: start-position normalization/DTO tick conversion and complete provider/manager generation-publication audit remain open. No native/runtime acceptance is claimed.",
+      "sha256": "e12112bbe36be82a199cdbe2efd83aec30d96af4d46a3e7455ae544274dec455",
       "status": "source-reviewed-mixed"
     },
     {
@@ -5162,9 +5181,9 @@
         "SwiftfinTime"
       ],
       "path": "Swiftfin tvOS/Kids/KidsMediaProgressObserver.swift",
-      "reason": "Complete148-line body read: immutable report payloads/native sender/order delegate to existing owners, with weak item/manager/subscriptions and explicit ended state. Still mixed/unapproved: initial sender is resolved from current ViewModel session while identity is derived from a supplied MediaPlayerItem; exact item/account construction binding must be proved across the builder/manager flow. Static last-reporter linking, five-second sampling and terminal/manager-subscription lifetime also require coherent owner/caller review. Capturing a sender once prevents later redirection but alone does not prove its initial binding matches the item. No server report or native player operation was executed.",
-      "sha256": "025143e7e94cdf3648da50177ab5fd23447701397e7102332169165e05a9c3bf",
-      "status": "source-reviewed-mixed"
+      "reason": "Complete updated body and shared queue read: main-actor timer/native lifecycle subscriptions feed a supplied report client from the item connection; child readiness decides when beginPlayback runs. Request-status values use the emitted willSet value; finish closes ingress once and cancels subscriptions. Start/progress/terminal ordering and coalescing belong to AsyncStreams; payload and captured sender belong to Reporting. The one application tail connects successive videos without retaining observer/item chains. These are platform bindings and timing configuration, not a separate report transport or queue implementation. Actual decoded readiness, timer and native callback acceptance remain held.",
+      "sha256": "325d1e2476e4bd214acaa111d6f77c5eb6f1ebd6139a2ddfde155eef94dee1c8",
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -5746,6 +5765,25 @@
         "ActiveSessionCoordinator.stop()"
       ],
       "sha256": "764745ad0af34eb22659b87f261b54f26754708e9bf3d19e663713afa0bf36ff"
+    },
+    {
+      "path": "Packages/SwiftfinPlaybackPreparation/Sources/SwiftfinPlaybackPreparation/PlaybackConnection.swift",
+      "reason": "Complete connection capsule and updated initial/deferred build, item, report observer and rebuild consumers reviewed. One sender constructs both scoped preparation and unscoped terminal report clients. Account/connection expiry blocks preparation; terminal reports deliberately keep original sender after replacement. One new synthetic contract proves no expired preparation IO and original-sender cleanup; 27 preparation and six reporting contracts pass. App placeholder has no connection/reporter. Post-await publication guards are compile-only; this scoped contract does not approve the complete manager generation/native lifetime graph.",
+      "reviewedConsumers": [
+        "Shared/Objects/MediaPlayerManager/MediaPlayerItem/MediaPlayerItem.swift",
+        "Shared/Objects/MediaPlayerManager/MediaProgressObserver.swift",
+        "Swiftfin tvOS/Kids/KidsMediaProgressObserver.swift",
+        "Shared/Objects/MediaPlayerManager/MediaPlayerItem/MediaPlayerItem+Build.swift",
+        "Shared/Objects/MediaPlayerManager/MediaPlayerManager.swift",
+        "Swiftfin tvOS/App/KidsPlaybackAdapter.swift",
+        "Shared/Services/UserSession/UserSession+ItemMetadata.swift"
+      ],
+      "reviewedInterfaces": [
+        "PlaybackConnection.init(sender:urls:userID:isCurrent:)",
+        "preparation",
+        "reportingClient(identity:)"
+      ],
+      "sha256": "66793e814d66882d82fac37ee8c41bab359a82fce4dc75ccfc17328f6bc1c77b"
     }
   ],
   "limits": "This ledger records bodies explicitly reviewed, with exact current hashes; earlier prose or lexical inventory is not automatically promoted. Pending and mixed entries prevent whole-source completion. Retained UI algorithms have specific presentation reasons, not folder/import-based blanket approval. API entries do not classify the rest of the public graph. Source review and offline tests do not satisfy held runtime acceptance.",
@@ -5754,11 +5792,11 @@
   "summary": {
     "applicationSwiftFiles": 665,
     "classification": {
-      "pending": 255,
+      "pending": 252,
       "source-reviewed-mixed": 13,
-      "source-reviewed-retained": 397
+      "source-reviewed-retained": 400
     },
-    "currentAPIReviews": 37,
+    "currentAPIReviews": 38,
     "runtimeAcceptance": "held by human; no simulator/server testing"
   }
 }

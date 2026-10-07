@@ -27,7 +27,7 @@ final class KidsMediaProgressObserver: ViewModel, MediaPlayerObserver {
     // the next worker captures a task handle, never a previous observer/item.
     private static var lastReporter: KidsPlaybackReporter<PlaybackStateInfo>?
     private weak var item: MediaPlayerItem?
-    private var reportClient: PlaybackReportingClient?
+    private let reportClient: PlaybackReportingClient
     private var reporter: KidsPlaybackReporter<PlaybackStateInfo>?
     private var subscriptions = Set<AnyCancellable>()
     private var lastSnapshot: PlaybackStateInfo?
@@ -43,16 +43,10 @@ final class KidsMediaProgressObserver: ViewModel, MediaPlayerObserver {
         }
     }
 
-    init(item: MediaPlayerItem) {
+    init(item: MediaPlayerItem, reportClient: PlaybackReportingClient) {
         self.item = item
+        self.reportClient = reportClient
         super.init()
-        if let transport = try? authenticatedClient, let itemID = item.baseItem.id {
-            reportClient = PlaybackReportingClient(sender: transport, identity: .init(
-                itemID: itemID, mediaSourceID: item.mediaSource.id, liveStreamID: item.mediaSource.liveStreamID,
-                playSessionID: item.playSessionID, canSeek: !item.baseItem.isLiveStream,
-                playMethod: item.mediaSource.transcodingURL == nil ? .directPlay : .transcode
-            ))
-        }
     }
 
     func beginPlayback() {
@@ -60,7 +54,7 @@ final class KidsMediaProgressObserver: ViewModel, MediaPlayerObserver {
         #if DEBUG
         guard Defaults[.sendProgressReports] else { return }
         #endif
-        guard let reportClient else { return }
+        let reportClient = self.reportClient
         lastSnapshot = snapshot
         let logger = self.logger
         reporter = KidsPlaybackReporter(initial: snapshot, after: Self.lastReporter) { event in
@@ -89,7 +83,7 @@ final class KidsMediaProgressObserver: ViewModel, MediaPlayerObserver {
 
     private func snapshot() -> PlaybackStateInfo? {
         guard let item, let manager else { return nil }
-        return reportClient?.identity.snapshot(
+        return reportClient.identity.snapshot(
             positionTicks: manager.seconds.ticks,
             audio: item.selectedAudioStreamIndex,
             subtitle: item.selectedSubtitleStreamIndex,

@@ -8,7 +8,6 @@
 
 import Combine
 import Defaults
-import FactoryKit
 import Foundation
 import JellyfinAPI
 import SwiftfinAsyncStreams
@@ -21,9 +20,8 @@ import SwiftfinTime
 @MainActor
 final class MediaProgressObserver: ViewModel, MediaPlayerObserver {
     private static var lastReporter: PlaybackReportQueue<PlaybackStateInfo>?
-    private let transport: JellyfinTransport?
     private let timer = PokeIntervalTimer()
-    private var reportClient: PlaybackReportingClient?
+    private let reportClient: PlaybackReportingClient
     private var reporter: PlaybackReportQueue<PlaybackStateInfo>?
     private var lastSnapshot: PlaybackStateInfo?
     private var ended = false
@@ -43,25 +41,14 @@ final class MediaProgressObserver: ViewModel, MediaPlayerObserver {
         }
     }
 
-    init(item: MediaPlayerItem) {
+    init(item: MediaPlayerItem, reportClient: PlaybackReportingClient) {
         self.item = item
-        self.transport = Container.shared.currentUserSession()?.client
+        self.reportClient = reportClient
         super.init()
-        configureReportClient(for: item)
-    }
-
-    private func configureReportClient(for item: MediaPlayerItem?) {
-        guard let item, let id = item.baseItem.id, let transport else { reportClient = nil
-            return
-        }
-        reportClient = PlaybackReportingClient(sender: transport, identity: .init(
-            itemID: id, mediaSourceID: item.mediaSource.id, liveStreamID: item.mediaSource.liveStreamID,
-            playSessionID: item.playSessionID, sessionID: item.playSessionID
-        ))
     }
 
     private func snapshot() -> PlaybackStateInfo? {
-        guard let item, let reportClient else { return nil }
+        guard let item else { return nil }
         return reportClient.identity.snapshot(
             positionTicks: manager?.seconds.ticks,
             audio: item.selectedAudioStreamIndex,
@@ -74,7 +61,8 @@ final class MediaProgressObserver: ViewModel, MediaPlayerObserver {
         #if DEBUG
         guard Defaults[.sendProgressReports] else { return }
         #endif
-        guard !ended, let snapshot = snapshot(), let reportClient else { return }
+        guard !ended, let snapshot = snapshot() else { return }
+        let reportClient = self.reportClient
         lastSnapshot = snapshot
         if let reporter {
             reporter.update(snapshot)
