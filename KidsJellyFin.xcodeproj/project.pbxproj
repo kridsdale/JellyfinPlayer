@@ -277,6 +277,10 @@
 		1571FC7A9CB7D3847EE8E201 /* SwiftfinAccountModels in Frameworks */ = {isa = PBXBuildFile; productRef = 16411DA8FD2BF3D68C502775 /* SwiftfinAccountModels */; };
 		DB8359C939A9712C2EC8F695 /* SwiftfinStoredValues in Frameworks */ = {isa = PBXBuildFile; productRef = 6FBDD3BE53F7E65670C0A053 /* SwiftfinStoredValues */; };
 		BBE99EF31607F673A1E926A3 /* Packages/SwiftfinAccountModels/Tests/SwiftfinAccountModelsTests/Fixtures/server-selection-original-98e6c8b7.json in Resources */ = {isa = PBXBuildFile; fileRef = 48173090B85062FD758A6E65 /* Packages/SwiftfinAccountModels/Tests/SwiftfinAccountModelsTests/Fixtures/server-selection-original-98e6c8b7.json */; };
+		278A9306D211361510343C75 /* Packages/SwiftfinUIState/Tests/SwiftfinUIStateTests/ViewLifetimeContracts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 760A4A428EAFCA66CF0284A3 /* Packages/SwiftfinUIState/Tests/SwiftfinUIStateTests/ViewLifetimeContracts.swift */; };
+		3C3BD5A9AF4585F6DF94B391 /* Packages/SwiftfinUIState/Tests/SwiftfinUIStateTests/JumpProgressContracts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 254452003EC2A17883B5328A /* Packages/SwiftfinUIState/Tests/SwiftfinUIStateTests/JumpProgressContracts.swift */; };
+		C5CF6DE263F8F5BF4866796C /* Packages/SwiftfinScrolling/Tests/SwiftfinScrollingTests/ScrollOffsetLeaseContracts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66FED9E733C1D916B22D40A4 /* Packages/SwiftfinScrolling/Tests/SwiftfinScrollingTests/ScrollOffsetLeaseContracts.swift */; };
+		1993FD7F2F8B6482E58D09CA /* Packages/SwiftfinScrolling/Tests/SwiftfinScrollingTests/ScrollOffsetUIKitContracts.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5B6005A6674C976939C0827 /* Packages/SwiftfinScrolling/Tests/SwiftfinScrollingTests/ScrollOffsetUIKitContracts.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -382,6 +386,10 @@
 		38CE15981ED4F694588ECBC1 /* Packages/SwiftfinAccountModels/Tests/SwiftfinAccountModelsTests/ServerSelectionOriginalFixtures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Packages/SwiftfinAccountModels/Tests/SwiftfinAccountModelsTests/ServerSelectionOriginalFixtures.swift; sourceTree = SOURCE_ROOT; };
 		4D599EC0949B0817173F5C71 /* Packages/SwiftfinStoredValues/Tests/SwiftfinStoredValuesTests/ServerSelectionStorageContracts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Packages/SwiftfinStoredValues/Tests/SwiftfinStoredValuesTests/ServerSelectionStorageContracts.swift; sourceTree = SOURCE_ROOT; };
 		48173090B85062FD758A6E65 /* Packages/SwiftfinAccountModels/Tests/SwiftfinAccountModelsTests/Fixtures/server-selection-original-98e6c8b7.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Packages/SwiftfinAccountModels/Tests/SwiftfinAccountModelsTests/Fixtures/server-selection-original-98e6c8b7.json; sourceTree = SOURCE_ROOT; };
+		760A4A428EAFCA66CF0284A3 /* Packages/SwiftfinUIState/Tests/SwiftfinUIStateTests/ViewLifetimeContracts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Packages/SwiftfinUIState/Tests/SwiftfinUIStateTests/ViewLifetimeContracts.swift; sourceTree = SOURCE_ROOT; };
+		254452003EC2A17883B5328A /* Packages/SwiftfinUIState/Tests/SwiftfinUIStateTests/JumpProgressContracts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Packages/SwiftfinUIState/Tests/SwiftfinUIStateTests/JumpProgressContracts.swift; sourceTree = SOURCE_ROOT; };
+		66FED9E733C1D916B22D40A4 /* Packages/SwiftfinScrolling/Tests/SwiftfinScrollingTests/ScrollOffsetLeaseContracts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Packages/SwiftfinScrolling/Tests/SwiftfinScrollingTests/ScrollOffsetLeaseContracts.swift; sourceTree = SOURCE_ROOT; };
+		D5B6005A6674C976939C0827 /* Packages/SwiftfinScrolling/Tests/SwiftfinScrollingTests/ScrollOffsetUIKitContracts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Packages/SwiftfinScrolling/Tests/SwiftfinScrollingTests/ScrollOffsetUIKitContracts.swift; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -731,6 +739,10 @@
 				91E50DA2DBFE11433CA5B297 /* Packages/SwiftfinAccountAccess/Tests/SwiftfinAccountAccessTests/LocalAccessPolicyContracts.swift */,
 				0D398FB4A311E02B078B7F6C /* Packages/SwiftfinNativePlayback/Tests/SwiftfinNativePlaybackTests/HardwareReaderContracts.swift */,
 				E48C3FE91DA20460FB967687 /* Packages/SwiftfinImageProcessing/Tests/SwiftfinImageProcessingTests/SVGRenderStateContracts.swift */,
+				D5B6005A6674C976939C0827 /* Packages/SwiftfinScrolling/Tests/SwiftfinScrollingTests/ScrollOffsetUIKitContracts.swift */,
+				66FED9E733C1D916B22D40A4 /* Packages/SwiftfinScrolling/Tests/SwiftfinScrollingTests/ScrollOffsetLeaseContracts.swift */,
+				254452003EC2A17883B5328A /* Packages/SwiftfinUIState/Tests/SwiftfinUIStateTests/JumpProgressContracts.swift */,
+				760A4A428EAFCA66CF0284A3 /* Packages/SwiftfinUIState/Tests/SwiftfinUIStateTests/ViewLifetimeContracts.swift */,
 				48173090B85062FD758A6E65 /* Packages/SwiftfinAccountModels/Tests/SwiftfinAccountModelsTests/Fixtures/server-selection-original-98e6c8b7.json */,
 				4D599EC0949B0817173F5C71 /* Packages/SwiftfinStoredValues/Tests/SwiftfinStoredValuesTests/ServerSelectionStorageContracts.swift */,
 				38CE15981ED4F694588ECBC1 /* Packages/SwiftfinAccountModels/Tests/SwiftfinAccountModelsTests/ServerSelectionOriginalFixtures.swift */,
@@ -1498,6 +1510,10 @@
 				FA3FDEE8F4465249CADCA3B6 /* Packages/SwiftfinAccountAccess/Tests/SwiftfinAccountAccessTests/LocalAccessPolicyContracts.swift in Sources */,
 				F592A228D472773A384D26B6 /* Packages/SwiftfinNativePlayback/Tests/SwiftfinNativePlaybackTests/HardwareReaderContracts.swift in Sources */,
 				95F5CDA646C98074444086D4 /* Packages/SwiftfinImageProcessing/Tests/SwiftfinImageProcessingTests/SVGRenderStateContracts.swift in Sources */,
+				1993FD7F2F8B6482E58D09CA /* Packages/SwiftfinScrolling/Tests/SwiftfinScrollingTests/ScrollOffsetUIKitContracts.swift in Sources */,
+				C5CF6DE263F8F5BF4866796C /* Packages/SwiftfinScrolling/Tests/SwiftfinScrollingTests/ScrollOffsetLeaseContracts.swift in Sources */,
+				3C3BD5A9AF4585F6DF94B391 /* Packages/SwiftfinUIState/Tests/SwiftfinUIStateTests/JumpProgressContracts.swift in Sources */,
+				278A9306D211361510343C75 /* Packages/SwiftfinUIState/Tests/SwiftfinUIStateTests/ViewLifetimeContracts.swift in Sources */,
 				2B9F9BC366612EE4E5BDAE1B /* Packages/SwiftfinStoredValues/Tests/SwiftfinStoredValuesTests/ServerSelectionStorageContracts.swift in Sources */,
 				C0A74BD01D44B6F7EEB80174 /* Packages/SwiftfinAccountModels/Tests/SwiftfinAccountModelsTests/ServerSelectionOriginalFixtures.swift in Sources */,
 				644DDE8C81737303AE4C471E /* Packages/SwiftfinAccountModels/Tests/SwiftfinAccountModelsTests/ServerSelectionContracts.swift in Sources */,

@@ -273,7 +273,8 @@ extension View {
 
     /// Perform an action on the final disappearance of a `View`.
     @ViewBuilder
-    func onFinalDisappear(perform action: @escaping () -> Void) -> some View {
+    @MainActor
+    func onFinalDisappear(perform action: @escaping @MainActor () -> Void) -> some View {
         modifier(OnFinalDisappearModifier(action: action))
     }
 

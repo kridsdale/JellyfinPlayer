@@ -1,6 +1,6 @@
 # Retained application responsibility review
 
-The application is intended to retain composition and platform presentation. This is a source-reviewed ledger, not an automatic approval of files based on their folder, filename or import count. The full-client refactor remains active. Live simulator/server activity is held by the human.
+The application is intended to retain composition and platform presentation. This is a source-reviewed ledger, not an automatic approval of files based on their folder, filename or import count. The full-client refactor remains active. Live simulator/server activity is held by the human. Current ledger: 238 retained, nine mixed and 420 pending among 667 app files; fifteen scoped interface reviews.
 
 ## Reviewed boundaries at the date/program checkpoint
 
@@ -128,3 +128,12 @@ SelectUserServerSelection is a retained app alias of the AccountModels-owned che
 The review inspected all 47 selected object bodies, 42 SDK adapters and 24 platform UI/SDK composition bodies. Each of the 102 retained and 11 mixed dispositions records a concrete reason and current hash. Among the mixed bodies, OnFinalDisappearModifier calls an arbitrary callback from unisolated deinit; its native-player consumer calls main-actor manager.stop. ScrollViewOffsetModifier replaces a borrowed delegate without explicit restoration/rebinding ownership. These source findings are actionable follow-ups, not observed runtime failures or completed repairs. Reusable request/value classifications remain with their named existing-owner candidates.
 
 Current source totals are 667: 215 retained, 11 mixed, 441 pending. Eleven interface/consumer entries remain limited to their recorded scopes. The new six synthetic/native contracts and final platform compiles pass, while full UI/native teardown/streaming acceptance remains held.
+
+
+## Final-view, jump and offset review (2026-10-07)
+
+OnFinalDisappearModifier retains only SwiftUI lifetime placement and delegates final main-actor delivery to UIState. JumpProgressObserver is a spelling-only alias; original count/direction/reset/deadline behavior belongs to UIState and all five consumers remain unchanged. ScrollViewOffsetModifier retains introspection and its latest Binding; Scrolling privately owns native observation, weak target identity, revisions and retirement without replacing delegates. NativeVideoPlayer's complete unchanged body is retained composition/presentation, with its native surface and manager operations delegated.
+
+Twenty additional complete bodies were read with per-file reasons in the hashed ledger. Nineteen retain app routes, Factory composition, permission labels, form bindings, button/style/typography presentation, application-only Spotlight metadata, error values or environment wrappers. This is source inspection, not promotion from folder/import patterns. EPGScrollState remains mixed: its offset subject and strict greater-than-0.5 threshold need existing scrolling ownership and actor/consumer verification. Remaining mixed files are ImageBlurHashes, PlayerStateInfo, SpecialFeatureType, TaskTriggerInfo, LibraryParent, MetadataRefreshType, ServerLogType and TextTransferable.
+
+The authoritative ledger records 238 retained, nine mixed and 420 pending, plus fifteen limited interface/consumer reviews. Native52, compile-only120/46/65 and preservation393 pass; actual UI/native callback/teardown behavior remains held. Full source/API review and runtime acceptance remain required for the original goal.

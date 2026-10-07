@@ -1,0 +1,91 @@
+{
+  "cases": [
+    {
+      "counts": [
+        0
+      ],
+      "operations": ""
+    },
+    {
+      "counts": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "operations": "FFF"
+    },
+    {
+      "counts": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "operations": "BBB"
+    },
+    {
+      "counts": [
+        0,
+        1,
+        2,
+        1,
+        2,
+        1
+      ],
+      "operations": "FFBBF"
+    },
+    {
+      "counts": [
+        0,
+        1,
+        2,
+        1,
+        2,
+        1
+      ],
+      "operations": "BBFFB"
+    },
+    {
+      "counts": [
+        0,
+        1,
+        0,
+        1,
+        1
+      ],
+      "operations": "FRFB"
+    },
+    {
+      "counts": [
+        0,
+        1,
+        2,
+        0,
+        1,
+        1
+      ],
+      "operations": "BBRBF"
+    },
+    {
+      "counts": [
+        0,
+        1,
+        1,
+        1,
+        1
+      ],
+      "operations": "FBFB"
+    }
+  ],
+  "original": {
+    "commit": "633a0025e44cc8a52e3fccd50327cf65576d57d4",
+    "sourceHashes": {
+      "Shared/Components/NativeVideoPlayer.swift": "c89b3d99598ec9432435ee8d7fffaf8fe23775847c34b4af7be62e665976833e",
+      "Shared/Extensions/ViewExtensions/Modifiers/OnFinalDisappearModifier.swift": "89d66fd2e9da78930f59346546b9012c139689db1e69c12566382a7095b21527",
+      "Shared/Extensions/ViewExtensions/Modifiers/ScrollViewOffsetModifier.swift": "2b396713c7f36f186ec5f2c3ff8832db24bad5f2011d4641866f8eacce3fb425",
+      "Shared/Extensions/ViewExtensions/ViewExtensions.swift": "fab331ccce9baa1683df3ae3c8a9d14118a4862fbd67a9b74bde56980f17684b",
+      "Shared/Objects/JumpProgressObserver.swift": "66dc7cc18b01443ad2d147e28ac4893ec51c9c33d952f14c0c5c0918f10cfcb2"
+    }
+  }
+}

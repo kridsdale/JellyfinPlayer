@@ -6,56 +6,6 @@
 // Copyright (c) 2026 Jellyfin & Jellyfin Contributors
 //
 
-import Combine
-import Foundation
+import SwiftfinUIState
 
-@MainActor
-class JumpProgressObserver: ObservableObject {
-
-    private let interval: TimeInterval
-    let timer: PokeIntervalTimer
-    private var timerCancellable: AnyCancellable?
-
-    private(set) var jumps: Int = 0
-    private var isForward = true
-
-    init(interval: TimeInterval = 2) {
-        self.interval = interval
-
-        timer = .init(
-            defaultInterval: interval
-        )
-
-        timerCancellable = timer
-            .sink { [weak self] _ in
-                guard let self else { return }
-                self.jumps = 0
-            }
-    }
-
-    func reset() {
-        jumps = 0
-    }
-
-    func jumpForward(interval: TimeInterval? = nil) {
-        if isForward {
-            jumps += 1
-        } else {
-            jumps = 1
-            isForward = true
-        }
-
-        timer.poke(interval: interval ?? self.interval)
-    }
-
-    func jumpBackward(interval: TimeInterval? = nil) {
-        if !isForward {
-            jumps += 1
-        } else {
-            jumps = 1
-            isForward = false
-        }
-
-        timer.poke(interval: interval ?? self.interval)
-    }
-}
+typealias JumpProgressObserver = SwiftfinUIState.JumpProgressObserver

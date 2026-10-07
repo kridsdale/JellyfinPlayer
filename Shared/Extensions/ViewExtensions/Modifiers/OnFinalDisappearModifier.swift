@@ -6,15 +6,16 @@
 // Copyright (c) 2026 Jellyfin & Jellyfin Contributors
 //
 
+import SwiftfinUIState
 import SwiftUI
 
 struct OnFinalDisappearModifier: ViewModifier {
 
     @StateObject
-    private var observer: Observer
+    private var observer: ViewLifetimeObserver
 
-    init(action: @escaping () -> Void) {
-        _observer = StateObject(wrappedValue: Observer(action: action))
+    init(action: @escaping @MainActor () -> Void) {
+        _observer = StateObject(wrappedValue: ViewLifetimeObserver(onEnd: action))
     }
 
     func body(content: Content) -> some View {
@@ -22,18 +23,5 @@ struct OnFinalDisappearModifier: ViewModifier {
             .background {
                 Color.clear
             }
-    }
-
-    private class Observer: ObservableObject {
-
-        private let action: () -> Void
-
-        init(action: @escaping () -> Void) {
-            self.action = action
-        }
-
-        deinit {
-            action()
-        }
     }
 }

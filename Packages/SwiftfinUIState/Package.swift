@@ -7,6 +7,6 @@ let package = Package(
     products: [.library(name: "SwiftfinUIState", targets: ["SwiftfinUIState"])],
     targets: [
         .target(name: "SwiftfinUIState"),
-        .testTarget(name: "SwiftfinUIStateTests", dependencies: ["SwiftfinUIState"])
+        .testTarget(name: "SwiftfinUIStateTests", dependencies: ["SwiftfinUIState"], resources: [.process("Fixtures")])
     ]
 )

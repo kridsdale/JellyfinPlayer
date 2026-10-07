@@ -59,9 +59,9 @@
     {
       "owners": [],
       "path": "Shared/Components/ButtonStyles/EPGButtonStyle.swift",
-      "reason": "",
+      "reason": "Platform button presentation suppresses focus background and maps pressed state to opacity. It reads only the SwiftUI style configuration and implements no guide, focus-routing or media policy.",
       "sha256": "cb8a9754e0257b4e0363115d2464c433a63026a392fd91052ad885e1e6c04d4c",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -148,11 +148,13 @@
       "status": "pending"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinScrolling"
+      ],
       "path": "Shared/Components/EPG/Body/Components/EPGScrollState.swift",
-      "reason": "",
+      "reason": "Mixed: reusable mutable visible-offset publication, initial zero and strict greater-than-0.5 point suppression remain in an unisolated app class. Review its two native UI consumers and move the observation policy into existing main-actor scrolling ownership with original threshold/Combine delivery preserved; current compilation does not prove its ownership complete.",
       "sha256": "4633bf9aa3bf8510fd3d909ab133ae7d4984cd8720ea7cb0b94593182c175d16",
-      "status": "pending"
+      "status": "source-reviewed-mixed"
     },
     {
       "owners": [],
@@ -381,11 +383,14 @@
       "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinNativePlayback",
+        "SwiftfinUIState"
+      ],
       "path": "Shared/Components/NativeVideoPlayer.swift",
-      "reason": "",
+      "reason": "Complete unchanged body reviewed: composes the injected manager, lazy native proxy, router and platform presentation; delegates native surface and start/stop operations to existing owners. Alerts/status presentation and final-disappearance hook belong to the app. It implements no decoder, transport, persistence or capability query. Actual native playback/teardown remains runtime-held.",
       "sha256": "c89b3d99598ec9432435ee8d7fffaf8fe23775847c34b4af7be62e665976833e",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -741,18 +746,20 @@
       "status": "pending"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinUIState"
+      ],
       "path": "Shared/Coordinators/Tabs/TabItemSelectedPublisher.swift",
-      "reason": "",
+      "reason": "Tab-selection publisher spelling alias to the existing event owner plus SwiftUI Environment/DynamicProperty access and environment default. It adds no publisher implementation, mutable cross-executor callback state or subscription lifecycle.",
       "sha256": "246af686360bd2c86eb0bfd8a9532d6f887417e1ee67a0c2fee66a1f8d409552",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
       "path": "Shared/Errors/ErrorMessage.swift",
-      "reason": "",
+      "reason": "Application diagnostic/presentation error wraps a supplied message and exposes that exact LocalizedError description. It does not classify domain failures, localize or recover from them, start IO, or own any native lifecycle.",
       "sha256": "c7ff48729797fabd47ee7079388b3ff5365d33ec4e9b4800d3b43cc622586e36",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -1495,9 +1502,9 @@
         "SwiftfinUIState"
       ],
       "path": "Shared/Extensions/ViewExtensions/Modifiers/OnFinalDisappearModifier.swift",
-      "reason": "View composition stores an arbitrary callback in an unisolated ObservableObject and executes it in deinit. Final release can occur on a foreign executor; actor delivery/lifetime needs an explicit owned contract and synthetic release regression before this is classified complete. UI callback timing/consumer expectations also require review.",
-      "sha256": "89d66fd2e9da78930f59346546b9012c139689db1e69c12566382a7095b21527",
-      "status": "source-reviewed-mixed"
+      "reason": "SwiftUI retains StateObject identity and clear background composition; ViewLifetimeObserver owns final release and main-actor callback delivery. The sole NativeVideoPlayer consumer stops its composed manager; foreign final release is covered by a synthetic contract. Actual SwiftUI release timing remains runtime-held.",
+      "sha256": "8778d56009842edbb69da0d72302f76293af486db09a3fb1102c5d651ec4f465",
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -1539,9 +1546,9 @@
         "SwiftfinScrolling"
       ],
       "path": "Shared/Extensions/ViewExtensions/Modifiers/ScrollViewOffsetModifier.swift",
-      "reason": "SwiftUI introspection directly replaces a borrowed UIScrollView delegate with an object that publishes a Binding. Observer/delegate restoration, native view replacement and stale-binding lifetime are not explicit; review/move native observation ownership behind the existing scrolling owner while retaining UI composition.",
-      "sha256": "2b396713c7f36f186ec5f2c3ff8832db24bad5f2011d4641866f8eacce3fb425",
-      "status": "source-reviewed-mixed"
+      "reason": "SwiftUI introspection borrows the platform scroll view and passes its current Binding. Scrolling owns KVO registration, target replacement, latest receipt, stale-generation rejection and final retirement without replacing the native delegate. Receiver captures only the Binding; ordinary disappearance does not retire persistent observation. Actual UIKit/SwiftUI behavior remains runtime-held.",
+      "sha256": "b0c995d0f8910debd8d0a7b95677fa778b602a7c7097f232adc7601838ff4c07",
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -1561,7 +1568,7 @@
       "owners": [],
       "path": "Shared/Extensions/ViewExtensions/ViewExtensions.swift",
       "reason": "",
-      "sha256": "fab331ccce9baa1683df3ae3c8a9d14118a4862fbd67a9b74bde56980f17684b",
+      "sha256": "ca7b763520b493e542f86dd8d4aabb40f14b5a6f1e3d702549f8144d059e59f3",
       "status": "pending"
     },
     {
@@ -1919,9 +1926,9 @@
         "SwiftfinUIState"
       ],
       "path": "Shared/Objects/JumpProgressObserver.swift",
-      "reason": "Reusable main-actor direction-aware repeated-jump aggregation mixes a native UI observation wrapper with counter/reset/deadline behavior. Delegate or move aggregation to existing UI-state ownership, preserving direction switch/reset and timer semantics; consumer bindings require review.",
-      "sha256": "66dc7cc18b01443ad2d147e28ac4893ec51c9c33d952f14c0c5c0918f10cfcb2",
-      "status": "source-reviewed-mixed"
+      "reason": "Spelling-only alias to UIState direction/reset/deadline aggregation. Original eight synchronous direction/reset traces and interval/timer subscription consumers retain exact behavior. The immutable timer remains public because container state subscribes to expiry; gesture/key/scrubbing composition remains in the app.",
+      "sha256": "78439cb37f773fe730de9fa175b4aca20b9f58b08b7d4508ceda3dc76e7f623a",
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -2815,18 +2822,22 @@
       "status": "pending"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinAccountModels"
+      ],
       "path": "Shared/Services/DeepLink.swift",
-      "reason": "",
+      "reason": "Spelling-only deep-link/error aliases plus a main-actor mapping from the parsed immutable item destination to the app NavigationRoute. Parsing, validation and errors remain in AccountModels; navigation belongs to composition.",
       "sha256": "7d125cc0ac02c9fdee6f575f2e5f1c0f355ee484a4e264c1944b804fbae85b1e",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinCredentials"
+      ],
       "path": "Shared/Services/Keychain.swift",
-      "reason": "",
+      "reason": "Main-actor Factory composition supplies a singleton CredentialStore interface backed by the credentials owner. Native Keychain reads/writes/status handling remain inside KeychainCredentialStore; this body performs no operation or credential mutation.",
       "sha256": "4b83540496f68b5545786012a9dc8672fddf9c15d1427a9b52a140e9716561e4",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -2836,18 +2847,22 @@
       "status": "pending"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinPermissions"
+      ],
       "path": "Shared/Services/Permissions/AppPermission+DeviceAuthentication.swift",
-      "reason": "",
+      "reason": "iOS permission UI declaration supplies localized purpose/privacy identity and forwards canRequest/status/request to the owned authentication port. Only the unavailable-authentication result maps to the existing localized app error; native context/cancellation is outside this body.",
       "sha256": "7e23a1f13b8d8a2766b6c1e739af101290711c5787af60d6e1c5d37e08e1177b",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinPermissions"
+      ],
       "path": "Shared/Services/Permissions/AppPermission+Location.swift",
-      "reason": "",
+      "reason": "iOS permission UI declaration supplies stable identity, localized title and privacy-description key; canRequest/request/status delegate directly to the permissions owner. It retains no CLLocationManager, SDK callback or native request lifetime.",
       "sha256": "98e8580bad8d5e07e5d013ff9a16a6c52dee1a1bc132925c8534a01cf215b53c",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -2857,11 +2872,13 @@
       "status": "pending"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinPermissions"
+      ],
       "path": "Shared/Services/Permissions/PermissionStatus.swift",
-      "reason": "",
+      "reason": "Permission-status spelling alias and localized display titles only; all native status querying, immutable status values and request policy belong to the existing permissions owner.",
       "sha256": "6624878132e6f1b0d30ffb1df9889abd812675f7380a0cd17a44cc9a06ed05f1",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -2908,9 +2925,9 @@
     {
       "owners": [],
       "path": "Shared/Services/UserSession/UserSessionError.swift",
-      "reason": "",
+      "reason": "Application session-composition failure values name missing current session and invalid installed user-session identity. They contain no validation algorithm, persistence operation, native handle or callback; actual lifecycle/storage policy is in the existing owners.",
       "sha256": "db60c4da7d360e9a7cb4cf2693219524f559a634e22c26b47f5505d89a2c685b",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -2927,11 +2944,13 @@
       "status": "pending"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinSessions"
+      ],
       "path": "Shared/Services/UserSession/UserSessionService.swift",
-      "reason": "",
+      "reason": "Main-actor application lifecycle port accepts the application UserSession type and provides empty hooks. It defines no scheduling/order/resource preparation or teardown; the session owner coordinates lifecycle and app implementations adapt their own composition.",
       "sha256": "e2aeac64c333f49bc2fdcc4ba850608531d4254379f1a734de441644abad6513",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -3349,9 +3368,9 @@
     {
       "owners": [],
       "path": "Shared/Views/FontPickerView.swift",
-      "reason": "",
+      "reason": "Platform subtitle-font picker enumerates installed UIFont family names and previews a device-specific font size with a caller-provided selection Binding. It is native typography presentation, with no reusable catalog or settings-storage policy.",
       "sha256": "8f1cea93ec07fdee88bd74a6ad8e16ad5843ebf8dc96be5f081741c004cfc4c6",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -3396,18 +3415,22 @@
       "status": "pending"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinItemMetadata"
+      ],
       "path": "Shared/Views/ItemView/Components/ActionButtons/DeleteActionButton.swift",
-      "reason": "",
+      "reason": "Destructive button presentation only sets the composed provider confirmation state. It neither deletes an item nor grants delete permission; the bound metadata owner and server retain actual authorization/command behavior.",
       "sha256": "59dc777c322e7eabc3309f505de6e1ff996b185e6b8589604ed307c0a062680a",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinItemMetadata"
+      ],
       "path": "Shared/Views/ItemView/Components/ActionButtons/EditActionButton.swift",
-      "reason": "",
+      "reason": "Edit button constructs the application editor route from the currently composed provider item. It owns navigation and labels only; metadata edit/query/save implementation is delegated by the editor to the existing owner.",
       "sha256": "5c7d8828de4aceb8ca4641db0379f7af78a0b26d7b955bf31bc115115be5960a",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -3445,11 +3468,13 @@
       "status": "pending"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinItemMetadata"
+      ],
       "path": "Shared/Views/ItemView/Components/ActionButtons/RefreshActionButton.swift",
-      "reason": "",
+      "reason": "Refresh button constructs the application metadata-refresh route for the composed current item. It does not choose refresh flags or send a command; request policy remains a separately mixed MetadataRefreshType candidate.",
       "sha256": "bbd846b4306f5dbbafd93b5c327e28bf5c7ed4c1d59d90de3b800ac2ab1d6649",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -3909,9 +3934,9 @@
     {
       "owners": [],
       "path": "Swiftfin/App/SwiftfinSpotlight.swift",
-      "reason": "",
+      "reason": "Platform application discoverability indexes only this executable bundle name/identifier as an application item. Mutable CSSearchableIndex/item/attribute values are created and used inside one detached task and do not escape. It does not index media or manage playback/network/persistence resources. Live OS indexing remains untested under the runtime hold.",
       "sha256": "565dfbc38eb3773d06eb1972a9a6d5a0a09d723dd40d1ae708484c4ad7a5bffe",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -4138,11 +4163,13 @@
       "status": "pending"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinServerOperations"
+      ],
       "path": "Swiftfin/Views/AdminDashboardView/ServerDevices/DeviceDetailsView/Components/Sections/CompatibilitiesSection.swift",
-      "reason": "",
+      "reason": "Read-only device capability labels project optional DTO flags to localized yes/no text, omitting absent flags. It performs no device query, capability decision or native control operation.",
       "sha256": "b5db6adf8709c90e3b867fece4c7636a473220c144ac1fa4ebfe4c38c011fec7",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -4334,18 +4361,23 @@
       "status": "pending"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinUserAdministration"
+      ],
       "path": "Swiftfin/Views/AdminDashboardView/ServerUsers/ServerUserSettings/ServerUserPermissionsView/Components/Sections/StatusSection.swift",
-      "reason": "",
+      "reason": "Localized Active toggle inversely binds the edited DTO disabled flag, with the installed nil-to-false presentation fallback. It mutates only the form Binding; actual server policy save and protection reside in UserAdministration.",
       "sha256": "eb05baa8cef3e87d1e6c898e594186c7b534265f3b90ade408ea1db21fe151df",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinUserAdministration",
+        "SwiftfinUIState"
+      ],
       "path": "Swiftfin/Views/AdminDashboardView/ServerUsers/ServerUserSettings/ServerUserPermissionsView/Components/Sections/SyncPlaySection.swift",
-      "reason": "",
+      "reason": "Localized SyncPlay permissions picker edits the parent policy Binding using the existing nil-coalescing UI adapter. It starts no SyncPlay session, sends no mutation and implements no server permissions policy.",
       "sha256": "80ab99acd2833165bc3b5a326e6e82bc5887e4decd76566fa7416cef36daf79a",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -4502,11 +4534,13 @@
       "status": "pending"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinItemMetadata"
+      ],
       "path": "Swiftfin/Views/ItemEditorView/ItemMetadata/EditMetadataView/Components/Sections/ParentialRatingsSection.swift",
-      "reason": "",
+      "reason": "Two localized parental-rating pickers edit official/custom rating bindings in the parent form. This body sends no server request, infers no account permission and implements no rating classification or metadata save policy.",
       "sha256": "a85840ca3a25659344e1035b8dbe532b4a96f1039f1a3b943a2a04e7a630ecc3",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -4991,19 +5025,79 @@
         "ServerSelection Defaults.Serializable/Storable conformance"
       ],
       "sha256": "69697f44063de631c5d91dfede2885b0cad151576fabf2e3df136ce0abf3fd7a"
+    },
+    {
+      "path": "Packages/SwiftfinUIState/Sources/SwiftfinUIState/ViewLifetimeObserver.swift",
+      "reason": "Main-actor final-lifetime owner stores an actor-qualified callback and delivers exactly once at final release, including foreign executor release. App owns StateObject placement and manager composition; no SDK object or playback operation escapes. Synthetic native release contracts prove executor/lifetime only, not SwiftUI timing.",
+      "reviewedConsumers": [
+        "Shared/Extensions/ViewExtensions/Modifiers/OnFinalDisappearModifier.swift",
+        "Shared/Components/NativeVideoPlayer.swift"
+      ],
+      "reviewedInterfaces": [
+        "init(onEnd:)",
+        "isolated deinit"
+      ],
+      "sha256": "55cacf128a99a252cf33d66f0fbf19ad2979d248f2ba0b3d4cb0c952f4cdbd85"
+    },
+    {
+      "path": "Packages/SwiftfinUIState/Sources/SwiftfinUIState/JumpProgressObserver.swift",
+      "reason": "Main-actor mutable UI aggregation with private direction/subscription and existing PokeIntervalTimer owner. Scoped gesture/key/container/scrubbing members use count/direction/reset and public timer expiry exactly as before; their complete unrelated bodies are not classified by this API entry. Captured traces, replacement expiry, external timer retention and explicit reset have native contracts.",
+      "reviewedConsumers": [
+        "Shared/Objects/JumpProgressObserver.swift",
+        "Shared/Objects/VideoPlayerContainerState.swift",
+        "Swiftfin/Views/VideoPlayer/Gestures/VideoPlayerContainerView+TapGesture.swift",
+        "Swiftfin/Views/VideoPlayer/Gestures/VideoPlayerContainerView+PanGesture.swift",
+        "Swiftfin/Views/VideoPlayer/VideoPlayer+KeyCommands.swift",
+        "Swiftfin tvOS/Views/VideoPlayer/PlaybackControls/Components/PlaybackControls+Scrubbing.swift"
+      ],
+      "reviewedInterfaces": [
+        "init(interval:)",
+        "timer",
+        "jumps",
+        "reset()",
+        "jumpForward(interval:)",
+        "jumpBackward(interval:)"
+      ],
+      "sha256": "6360940d842b57f2fc9f88867b5028b17b4728b195734ee5fa84df588c04ec03"
+    },
+    {
+      "path": "Packages/SwiftfinScrolling/Sources/SwiftfinScrolling/ScrollOffsetLease.swift",
+      "reason": "Internal main-actor borrowed-target lease holds only weak target identity, generation and retirement/receipt closures. Same target replaces receipt without registration; replacement/disconnect/final release revoke callbacks. Native fake ports cover subscription and retirement reentry, including a fail-before/pass-after cleanup overwrite regression. No native scroll handle is exposed publicly.",
+      "reviewedConsumers": [
+        "Packages/SwiftfinScrolling/Sources/SwiftfinScrolling/ScrollOffsetObserver.swift"
+      ],
+      "reviewedInterfaces": [
+        "internal connect(_:receive:subscribe:)",
+        "internal disconnect()",
+        "isolated deinit"
+      ],
+      "sha256": "9cbe4be25f0f4717c03300e8de490594d701df6d2419f9e06f7fbe442199c9cd"
+    },
+    {
+      "path": "Packages/SwiftfinScrolling/Sources/SwiftfinScrolling/ScrollOffsetObserver.swift",
+      "reason": "Main-actor UIKit adapter borrows UIScrollView for registration but privately retains/invalidate its KVO token. A nonisolated checked-Sendable callback captures only an actor receipt and hops foreign delivery to read current geometry on the owner; it never transfers the callback SDK object. It does not change delegates. Platform contracts are compile-only while runtime activity is held.",
+      "reviewedConsumers": [
+        "Shared/Extensions/ViewExtensions/Modifiers/ScrollViewOffsetModifier.swift"
+      ],
+      "reviewedInterfaces": [
+        "init()",
+        "connect(_:onChange:)",
+        "disconnect()"
+      ],
+      "sha256": "943b9d035dc9b59bc58edebfb460eced5feb651898c8bd622ea1e7ee90000c16"
     }
   ],
   "limits": "This ledger records bodies explicitly reviewed, with exact current hashes; earlier prose or lexical inventory is not automatically promoted. Pending and mixed entries prevent whole-source completion. Retained UI algorithms have specific presentation reasons, not folder/import-based blanket approval. API entries do not classify the rest of the public graph. Source review and offline tests do not satisfy held runtime acceptance.",
   "schemaVersion": 1,
-  "scope": "All current app Swift files; source-body classification and eleven limited interface/internal lifecycle/consumer reviews. No server/media/simulator data.",
+  "scope": "All current app Swift files; source-body classification and fifteen limited interface/internal lifecycle/consumer reviews. No server/media/simulator data.",
   "summary": {
     "applicationSwiftFiles": 667,
     "classification": {
-      "pending": 441,
-      "source-reviewed-mixed": 11,
-      "source-reviewed-retained": 215
+      "pending": 420,
+      "source-reviewed-mixed": 9,
+      "source-reviewed-retained": 238
     },
-    "currentAPIReviews": 11,
+    "currentAPIReviews": 15,
     "runtimeAcceptance": "held by human; no simulator/server testing"
   }
 }
