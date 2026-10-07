@@ -1,6 +1,6 @@
 # Actor and SDK interoperability review
 
-This review records scoped interoperability exceptions, metadata refresh and local security ownership in the owned production sources. The source inventory is a review aid; it is not proof that the complete retained-source/public-API review or current GUI/playback acceptance has finished. Live simulator and server activity remain held by the human.
+This review records scoped interoperability exceptions, metadata refresh, local security and caller-owned identification checkpoints in the owned production sources. The source inventory is a review aid; it is not proof that the complete retained-source/public-API review or current GUI/playback acceptance has finished. Live simulator and server activity remain held by the human.
 
 ## Explicit executor bridges
 
@@ -161,3 +161,15 @@ The four mixed bodies remain UserSessionManager, MediaPlayerManager, BaseFetchVi
 Native sweep 58 passes 854 contracts (825 Swift Testing and 29 XCTest), eight generator checks and three runtime helpers. Unchanged macro inputs retain 18 passing contracts. All 53 library boundaries and 35 analyzer tests pass. Compile-only tvOS Debug 127, tvOS Release 52 and iOS Release 71 pass without owned Swift/generated-macro diagnostics. Preservation audit 455 verifies 1,240 frozen inputs, both original forty-revision SDK graphs and clean tracked checkouts, paid-team/signing/persistence settings, five protected local files and equal cancellation-restored progress. Debug cloud transport remains NO.
 
 Live simulator automation, installation, launches, playback and server-facing diagnostics remain held until explicit human resumption. No real credential store, OS permission prompt or server account/catalog/configuration/RAID operation was used by this change. These tests establish synthetic credential/storage behavior and compilation, not current GUI authentication or playback acceptance. The ledger records 666 app files:362 retained, four mixed and 300 pending, with 30 scoped interface/consumer reviews. The complete items 1/2 objective remains active.
+
+## Caller-owned identification intent checkpoints (2026-10-07, offline)
+
+AsyncOperationGate has one private generation, main-actor Sendable throwing callbacks and weak owner capture. Every checkpoint checks the calling task and exact intent identity. It owns neither tasks nor native/SDK/settings resources, and cannot undo effects already committed. The app captures the ticket before debounce and checks it immediately before local publication. ItemMetadataClient composes apply/reload on one captured bound executor, with checkpoints between operations and before returning.
+
+Inspection of the pinned StatefulMacro confirms that its cancellation check occurs after a registered handler returns, while its catch path may publish an error. IdentifyItemViewModel therefore catches CancellationError in its actual-search and update adapters; real failures propagate. A second binding/checkpoint pair after metadata notification rejects an obsolete final event if subscribers reenter synchronously. These changes do not claim the macro's shared background-state flags reference-count overlapping operations; actual macro/debounce/GUI lifetime acceptance remains held.
+
+The new API review is scoped to the complete gate and compound metadata method; it does not approve the rest of ItemMetadataClient's public graph. Twelve further complete model/provider bodies produced ten explicit mixed responsibility/lifecycle findings. Current ledger:365 retained, 12 mixed, 288 pending among665 app files;32 scoped API reviews.
+
+Native sweep 59 passes 870 contracts (841 Swift Testing and 29 XCTest), eight generator checks and three helper suites. The final cancellation adapter changes only app source; library/test/helper hashes are identical to that native run. Unchanged owned macro inputs retain 18 passing contracts. Boundary 53 and analyzer 35 pass. Compile-only tvOS Debug 129, tvOS Release 54 and iOS Release 73 pass without owned Swift/generated-macro diagnostics. Audit 465 verifies 1,242 frozen inputs, both original forty-revision SDK graphs and clean tracked checkouts, paid-team/signing/persistence settings, five protected local files and equal cancellation-restored progress; Debug cloud transport remains NO.
+
+Simulator automation, installation, launches, playback and server-facing diagnostics remain stopped until explicit human resumption. Cancelled acceptance 79 remains cancelled. Synthetic contracts and compilation do not establish current GUI debounce, macro background-state lifetime, authentication or playback acceptance. Full items 1/2 remain active; physical-device/live CloudKit and separately managed server/release gates remain deferred.

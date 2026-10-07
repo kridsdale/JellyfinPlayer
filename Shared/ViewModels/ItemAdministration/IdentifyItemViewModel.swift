@@ -23,9 +23,14 @@ final class IdentifyItemViewModel: ViewModel {
 
     typealias SearchQuery = MetadataSearchQuery
 
+    struct SearchRequest: Sendable {
+        let query: SearchQuery
+        let validate: AsyncOperationGate.Checkpoint
+    }
+
     @CasePathable
     enum Action {
-        case _actuallySearch(query: SearchQuery)
+        case _actuallySearch(request: SearchRequest)
         case search(query: SearchQuery)
         case update(RemoteSearchResult)
 
@@ -57,43 +62,73 @@ final class IdentifyItemViewModel: ViewModel {
     private(set) var searchResults: [RemoteSearchResult] = []
 
     let item: BaseItemDto
-    private var searchQuery = CurrentValueSubject<SearchQuery, Never>(.init())
+    private let searchRequests: AsyncOperationGate
+    private let updateRequests = AsyncOperationGate()
+    private var searchQuery: CurrentValueSubject<SearchRequest, Never>
 
     init(item: BaseItemDto) {
         self.item = item
+        let requests = AsyncOperationGate()
+        self.searchRequests = requests
+        self.searchQuery = .init(.init(query: .init(), validate: requests.begin()))
         super.init()
 
         searchQuery
             .debounce(for: 0.5, scheduler: RunLoop.main)
-            .removeDuplicates()
-            .sink { [weak self] query in
-                self?._actuallySearch(query: query)
+            .sink { [weak self] request in
+                self?._actuallySearch(request: request)
             }
             .store(in: &cancellables)
     }
 
     @Function(\Action.Cases.search)
     private func _search(_ query: SearchQuery) async throws {
-        searchQuery.send(query)
+        try Task.checkCancellation()
+        // A duplicate intent must not retire the in-flight request that debounce
+        // will keep. Changed queries carry a checkpoint through queued delivery.
+        guard query != searchQuery.value.query else { return }
+        updateRequests.cancel()
+        searchQuery.send(.init(query: query, validate: searchRequests.begin()))
 
         await cancel()
     }
 
     @Function(\Action.Cases._actuallySearch)
-    private func __actuallySearch(_ query: SearchQuery) async throws {
-        guard let itemID = item.id, let itemType = item.type else { searchResults = []
+    private func __actuallySearch(_ request: SearchRequest) async throws {
+        do {
+            try request.validate()
+            guard let itemID = item.id, let itemType = item.type else {
+                searchResults = []
+                return
+            }
+            let metadata = try requireItemMetadata()
+            let results = try await metadata.identityResults(itemID: itemID, itemType: itemType, query: request.query)
+            try metadata.checkBinding()
+            try request.validate()
+            searchResults = results
+        } catch is CancellationError {
             return
         }
-        searchResults = try await requireItemMetadata().identityResults(itemID: itemID, itemType: itemType, query: query)
     }
 
     @Function(\Action.Cases.update)
     private func _update(_ searchResult: RemoteSearchResult) async throws {
-        guard let itemID = item.id else { return }
-        let metadata = try requireItemMetadata()
-        try await metadata.applyIdentity(itemID: itemID, result: searchResult)
-        let updated = try await metadata.item(id: itemID)
-        Notifications[.itemMetadataDidChange].post(updated)
-        events.send(.updated)
+        do {
+            try Task.checkCancellation()
+            guard let itemID = item.id else { return }
+            searchRequests.cancel()
+            let validate = updateRequests.begin()
+            let metadata = try requireItemMetadata()
+            let updated = try await metadata.applyIdentityAndReload(itemID: itemID, result: searchResult, validate: validate)
+            try metadata.checkBinding()
+            try validate()
+            Notifications[.itemMetadataDidChange].post(updated)
+            // Notification subscribers can replace the operation synchronously.
+            try metadata.checkBinding()
+            try validate()
+            events.send(.updated)
+        } catch is CancellationError {
+            return
+        }
     }
 }

@@ -297,6 +297,9 @@
 		BA7E4868E9665A343AADFE7A /* Packages/SwiftfinSessions/Tests/SwiftfinSessionsTests/SessionMetadataRefreshContracts.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECA6EBB61C613049B02C41DB /* Packages/SwiftfinSessions/Tests/SwiftfinSessionsTests/SessionMetadataRefreshContracts.swift */; };
 		78175867F93C7EFE667B43E3 /* SwiftfinSessions in Frameworks */ = {isa = PBXBuildFile; productRef = E232BDED1C5CD65386196349 /* SwiftfinSessions */; };
 		197A4218C78A1B590187E518 /* Packages/SwiftfinAccountStore/Tests/SwiftfinAccountStoreTests/LocalSecurityContracts.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD0ECD56FBEBAC8B1929F1A9 /* Packages/SwiftfinAccountStore/Tests/SwiftfinAccountStoreTests/LocalSecurityContracts.swift */; };
+		D076AD5528E1AE1530A6A6B2 /* Packages/SwiftfinAsyncStreams/Tests/SwiftfinAsyncStreamsTests/AsyncOperationGateContracts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9143187C70818CD2BFE5AE54 /* Packages/SwiftfinAsyncStreams/Tests/SwiftfinAsyncStreamsTests/AsyncOperationGateContracts.swift */; };
+		07A01F3CC872FFEE70C8B338 /* Packages/SwiftfinItemMetadata/Tests/SwiftfinItemMetadataTests/IdentityApplyReloadContracts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 107BD25BB1ECA94267E2FE44 /* Packages/SwiftfinItemMetadata/Tests/SwiftfinItemMetadataTests/IdentityApplyReloadContracts.swift */; };
+		7743832B920B483BF6D4D231 /* SwiftfinAsyncStreams in Frameworks */ = {isa = PBXBuildFile; productRef = 345C6C911BDA247EC39B5AB0 /* SwiftfinAsyncStreams */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -420,6 +423,8 @@
 		B18A3CF523D844894F026A8A /* Packages/SwiftfinAccountStore/Tests/SwiftfinAccountStoreTests/AccountMetadataContracts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Packages/SwiftfinAccountStore/Tests/SwiftfinAccountStoreTests/AccountMetadataContracts.swift; sourceTree = SOURCE_ROOT; };
 		ECA6EBB61C613049B02C41DB /* Packages/SwiftfinSessions/Tests/SwiftfinSessionsTests/SessionMetadataRefreshContracts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Packages/SwiftfinSessions/Tests/SwiftfinSessionsTests/SessionMetadataRefreshContracts.swift; sourceTree = SOURCE_ROOT; };
 		DD0ECD56FBEBAC8B1929F1A9 /* Packages/SwiftfinAccountStore/Tests/SwiftfinAccountStoreTests/LocalSecurityContracts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Packages/SwiftfinAccountStore/Tests/SwiftfinAccountStoreTests/LocalSecurityContracts.swift; sourceTree = SOURCE_ROOT; };
+		9143187C70818CD2BFE5AE54 /* Packages/SwiftfinAsyncStreams/Tests/SwiftfinAsyncStreamsTests/AsyncOperationGateContracts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Packages/SwiftfinAsyncStreams/Tests/SwiftfinAsyncStreamsTests/AsyncOperationGateContracts.swift; sourceTree = SOURCE_ROOT; };
+		107BD25BB1ECA94267E2FE44 /* Packages/SwiftfinItemMetadata/Tests/SwiftfinItemMetadataTests/IdentityApplyReloadContracts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Packages/SwiftfinItemMetadata/Tests/SwiftfinItemMetadataTests/IdentityApplyReloadContracts.swift; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -711,6 +716,7 @@
 			files = (
 				A958ECBFF86DDC354534BF9C /* SwiftfinUIState in Frameworks */,
 				78175867F93C7EFE667B43E3 /* SwiftfinSessions in Frameworks */,
+				7743832B920B483BF6D4D231 /* SwiftfinAsyncStreams in Frameworks */,
 				751C2100B67F5179EFB22230 /* SwiftfinAccountStore in Frameworks */,
 				2C2A54F9A60D32DB50AEF5E1 /* SwiftfinPermissions in Frameworks */,
 				3C41CB85E45C4E2E602771A6 /* SwiftfinImageProcessing in Frameworks */,
@@ -762,9 +768,11 @@
 				5CF9B84AEAB3C95CF1DA0A11 /* Packages/SwiftfinMediaCatalog/Tests/SwiftfinMediaCatalogTests/ProgramGroupingFixtures.swift */,
 				51E7BF883F1A7F49A4F719DF /* Packages/SwiftfinMediaCatalog/Tests/SwiftfinMediaCatalogTests/GroupedItemQueryContracts.swift */,
 				23596BD7AC544B17AD419A28 /* Packages/SwiftfinPlaybackPreviews/Tests/SwiftfinPlaybackPreviewsTests/ChapterSelectionContracts.swift */,
+				9143187C70818CD2BFE5AE54 /* Packages/SwiftfinAsyncStreams/Tests/SwiftfinAsyncStreamsTests/AsyncOperationGateContracts.swift */,
 				C3BF96600B6CAC908DAD2F74 /* Packages/SwiftfinAsyncStreams/Tests/SwiftfinAsyncStreamsTests/LatestRequestContracts.swift */,
 				E74894C66001E1B378C81306 /* Packages/SwiftfinTime/Tests/SwiftfinTimeTests/DateRecencyContracts.swift */,
 				BE34A9A3B9561717ABE92899 /* Packages/SwiftfinServerOperations/Tests/SwiftfinServerOperationsTests/PlaybackSessionSelectionContracts.swift */,
+				107BD25BB1ECA94267E2FE44 /* Packages/SwiftfinItemMetadata/Tests/SwiftfinItemMetadataTests/IdentityApplyReloadContracts.swift */,
 				8E367BB07E4541C91247CFBD /* Packages/SwiftfinItemMetadata/Tests/SwiftfinItemMetadataTests/ProgramMetadataRefreshContracts.swift */,
 				34EA01031BDD9A4863ADC020 /* Packages/SwiftfinUserMediaState/Tests/SwiftfinUserMediaStateTests/LibraryMembershipContracts.swift */,
 				C3891F2F5B681B68C5F72B7D /* Packages/SwiftfinMediaCatalog/Tests/SwiftfinMediaCatalogTests/LibraryCatalogContracts.swift */,
@@ -1143,6 +1151,7 @@
 			packageProductDependencies = (
 				ACD5D2AE6007E64B13128421 /* SwiftfinUIState */,
 				E232BDED1C5CD65386196349 /* SwiftfinSessions */,
+				345C6C911BDA247EC39B5AB0 /* SwiftfinAsyncStreams */,
 				9FB1D70736E18D99CC796DC9 /* SwiftfinAccountStore */,
 				8DBD184AC84412E1AB85DFBD /* SwiftfinPermissions */,
 				2DEBB5E5F9986330C3E97B32 /* SwiftfinImageProcessing */,
@@ -1549,9 +1558,11 @@
 				55AFB9A17436E18513CFF408 /* Packages/SwiftfinMediaCatalog/Tests/SwiftfinMediaCatalogTests/ProgramGroupingFixtures.swift in Sources */,
 				D4841EA4F7E852F806B8C864 /* Packages/SwiftfinMediaCatalog/Tests/SwiftfinMediaCatalogTests/GroupedItemQueryContracts.swift in Sources */,
 				D40A181777DC71DC94AB8C34 /* Packages/SwiftfinPlaybackPreviews/Tests/SwiftfinPlaybackPreviewsTests/ChapterSelectionContracts.swift in Sources */,
+				D076AD5528E1AE1530A6A6B2 /* Packages/SwiftfinAsyncStreams/Tests/SwiftfinAsyncStreamsTests/AsyncOperationGateContracts.swift in Sources */,
 				C8667080982A9448993F0ECF /* Packages/SwiftfinAsyncStreams/Tests/SwiftfinAsyncStreamsTests/LatestRequestContracts.swift in Sources */,
 				EBE102B74A9A5D7A2BB9FAA3 /* Packages/SwiftfinTime/Tests/SwiftfinTimeTests/DateRecencyContracts.swift in Sources */,
 				09ED488E2AB927D0CE713FD2 /* Packages/SwiftfinServerOperations/Tests/SwiftfinServerOperationsTests/PlaybackSessionSelectionContracts.swift in Sources */,
+				07A01F3CC872FFEE70C8B338 /* Packages/SwiftfinItemMetadata/Tests/SwiftfinItemMetadataTests/IdentityApplyReloadContracts.swift in Sources */,
 				CE182C66CA656530BA509C9B /* Packages/SwiftfinItemMetadata/Tests/SwiftfinItemMetadataTests/ProgramMetadataRefreshContracts.swift in Sources */,
 				09E642D088F519B234D9BA10 /* Packages/SwiftfinUserMediaState/Tests/SwiftfinUserMediaStateTests/LibraryMembershipContracts.swift in Sources */,
 				18C19A5F0B0BCA9E9466C3A3 /* Packages/SwiftfinMediaCatalog/Tests/SwiftfinMediaCatalogTests/LibraryCatalogContracts.swift in Sources */,
@@ -2939,6 +2950,7 @@
 		};
 		9FB1D70736E18D99CC796DC9 /* SwiftfinAccountStore */ = {isa = XCSwiftPackageProductDependency; package = DA8559318BE0E97308E68DB1 /* XCLocalSwiftPackageReference "Packages/SwiftfinAccountStore" */; productName = SwiftfinAccountStore; };
 		E232BDED1C5CD65386196349 /* SwiftfinSessions */ = {isa = XCSwiftPackageProductDependency; package = DA87EA2E6E1125F208E61607 /* XCLocalSwiftPackageReference "Packages/SwiftfinSessions" */; productName = SwiftfinSessions; };
+		345C6C911BDA247EC39B5AB0 /* SwiftfinAsyncStreams */ = {isa = XCSwiftPackageProductDependency; package = DA8973D15AA3CE8C53314E47 /* XCLocalSwiftPackageReference "Packages/SwiftfinAsyncStreams" */; productName = SwiftfinAsyncStreams; };
 /* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 5377CBE9263B596A003A4E83 /* Project object */;

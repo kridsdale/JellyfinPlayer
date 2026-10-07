@@ -131,6 +131,24 @@ public final class ItemMetadataClient {
         ))
     }
 
+    /// One captured transport owns apply then reload. Validate before each stage
+    /// and before returning; cancellation cannot undo an already accepted apply.
+    public func applyIdentityAndReload(
+        itemID: String,
+        result: RemoteSearchResult,
+        validate: @MainActor @Sendable () throws -> Void = {}
+    ) async throws -> BaseItemDto {
+        try checkBinding()
+        try validate()
+        try await applyIdentity(itemID: itemID, result: result)
+        try checkBinding()
+        try validate()
+        let updated = try await item(id: itemID)
+        try checkBinding()
+        try validate()
+        return updated
+    }
+
     public func deleteItem(id: String) async throws {
         try await executor.complete(Paths.deleteItem(itemID: id))
     }
