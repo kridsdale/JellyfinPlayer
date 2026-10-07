@@ -83,7 +83,7 @@ final class IdentifyItemViewModel: ViewModel {
 
     @Function(\Action.Cases.search)
     private func _search(_ query: SearchQuery) async throws {
-        try Task.checkCancellation()
+        guard !Task.isCancelled else { return }
         // A duplicate intent must not retire the in-flight request that debounce
         // will keep. Changed queries carry a checkpoint through queued delivery.
         guard query != searchQuery.value.query else { return }

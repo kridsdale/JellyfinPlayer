@@ -2,7 +2,7 @@
 
 Active goal: complete the minimal-responsibility package refactor and remaining Swift 6 compatibility warnings. This document records scope and evidence, not a narrower replacement objective.
 
-Latest offline evidence:53 libraries, 870 native contracts, clean compile-only Debug129/tvOS Release54/iOS Release73;665 app sources with393 retained,12 mixed,260 pending and32 scoped API reviews. Full source/API/actor and held runtime acceptance remain required.
+Latest offline evidence:53 libraries, 877 native contracts, clean compile-only Debug131/tvOS Release56/iOS Release75;665 app sources with396 retained,14 mixed,255 pending and33 scoped API reviews. Full source/API/actor and held runtime acceptance remain required.
 
 ## Initial source map
 
@@ -748,3 +748,19 @@ Reading the actual app ItemFilter protocol corrected the provisional trait findi
 The ledger now records 665 app files:393 retained, 12 mixed and 260 pending, with 32 scoped interface/consumer reviews. No compiler input changed after identification checkpoint129/54/73:the same 1,242 hashes retain native59's870 contracts, macro18, boundary53/analyzer35 and three clean compile-only builds. These classifications establish source ownership, not correctness for every unsupported input or actual native layout/focus/notification lifetime. Existing TODOs and native visual acceptance remain open where recorded.
 
 Simulator automation, installation, launches, playback and server-facing diagnostics remain stopped until explicit human resumption. The full items1/2 source/API/actor and whole-graph acceptance goal remains active. Physical-device/live CloudKit and separate server/release gates stay deferred.
+
+## Component metadata update/reload ownership (2026-10-07, offline)
+
+The graph remains at53 libraries with no new production edge or external version. ItemMetadataClient.updateAndReload uses the existing captured executor/item/user and updatePayload normalization, checks binding and a main-actor Sendable caller checkpoint before each stage and return, and preserves accepted-update/reload-failure behavior. All pre-existing metadata methods and both metadata/async package manifests remain byte-identical. Seven adjacent fake-sender contracts cover SDK routes/body/userId, input immutability/trickplay omission, failure boundaries, expired binding, caller cancellation and checkpoint failures; the actual validation target compiles the suite.
+
+ItemComponentEditorViewModel captures query tickets before its existing0.5-second RunLoop debounce; equal queries remain distinct new intents, and a blank query clears matches only when that queued delivery is still current. Searches use one captured metadata client and check after await before matches assignment. Add/remove/reorder delegate their compound operation to ItemMetadata, then check exact task/item/operation/binding before each local effect. Rechecks follow item publication, metadata notification and the updated event before advisory didAdd. The editor is explicitly captured rather than the whole view model by the advisory callback. Only CancellationError is quietly retired in async handlers; genuine command/read errors propagate.
+
+The weak generation gate owns no tasks and does not serialize remote mutations. Concurrent updates already accepted remotely can still complete independently; no transaction, undo or complete macro-lifetime claim is made. Generic editor ports, missing-ID error, localized UI and partial notification/event/advisory order remain app composition.
+
+Native sweep 60 passes 877 contracts (848 Swift Testing and 29 XCTest), eight generator checks and three helper suites. Metadata476 independently passes 63 contracts, including seven new fake-sender update/reload checks. Unchanged owned macro inputs retain 18 passing contracts. All 53 library boundaries and 35 analyzer tests pass. Compile-only tvOS Debug131, tvOS Release56 and iOS Release75 pass without owned Swift/generated-macro diagnostics. Preservation audit485 verifies 1,243 frozen compiler inputs, both original forty-revision SDK graphs and clean tracked checkouts, paid-team/signing/persistence settings, five protected local files and equal cancellation-restored progress. Debug cloud transport remains NO.
+
+Two preparation assertions were corrected before any new native test run:an overly broad method-name substitution and a project comment anchor that omitted the existing relative source path. No failed native test is represented as a pass.
+
+Simulator automation, installation, launches, playback and server-facing diagnostics remain stopped until explicit human resumption. Cancelled acceptance79 remains cancelled. These checks prove synthetic contracts, source review and compilation; actual Combine debounce, Stateful background-state lifetime, GUI editing/authentication/native playback and full whole-graph acceptance remain held. No real credential access, native permission prompt, household-server request or RAID operation was performed. The complete items1/2 objective remains active; physical-device/live CloudKit and separate server/release gates remain deferred.
+
+The final input-handler correction uses a quiet task-cancellation guard in both component and identification search submission. Inspection of the pinned StatefulMacro confirms that a thrown cancellation can reach its error-publication path before the post-handler cancelled-task check. Library/test/helper source hashes are identical to native60; only these two app adapters changed afterward. Earlier Debug130/Release55/iOS74 compile the preceding adapter; final131/56/75 cover the corrected guard. Actual macro/UI runtime acceptance remains held.

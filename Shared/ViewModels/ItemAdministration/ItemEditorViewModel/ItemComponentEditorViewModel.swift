@@ -21,9 +21,14 @@ class ItemComponentEditorViewModel<Editor: ItemComponentEditor>: ViewModel {
 
     typealias Element = Editor.Element
 
+    struct SearchRequest: Sendable {
+        let term: String
+        let validate: AsyncOperationGate.Checkpoint
+    }
+
     @CasePathable
     enum Action {
-        case actuallySearch(String)
+        case actuallySearch(SearchRequest)
         case add([Element])
         case remove([Element])
         case reorder([Element])
@@ -61,22 +66,34 @@ class ItemComponentEditorViewModel<Editor: ItemComponentEditor>: ViewModel {
     private(set) var matches: [Element] = []
 
     let editor: Editor
-    private var searchQuery: CurrentValueSubject<String, Never> = .init("")
+    private let searchRequests: AsyncOperationGate
+    private let updateRequests = AsyncOperationGate()
+    private var searchQuery: CurrentValueSubject<SearchRequest, Never>
 
     init(editor: Editor, item: BaseItemDto) {
         self.editor = editor
         self.item = item
+        let requests = AsyncOperationGate()
+        self.searchRequests = requests
+        self.searchQuery = .init(.init(term: "", validate: requests.begin()))
 
         super.init()
 
         searchQuery
             .debounce(for: 0.5, scheduler: RunLoop.main)
-            .sink { [weak self] query in
+            .sink { [weak self] request in
                 guard let self else { return }
-                if query.isNotEmpty {
-                    actuallySearch(query)
-                } else {
-                    matches = []
+                do {
+                    try request.validate()
+                    if request.term.isNotEmpty {
+                        actuallySearch(request)
+                    } else {
+                        matches = []
+                    }
+                } catch is CancellationError {
+                    return
+                } catch {
+                    return
                 }
             }
             .store(in: &cancellables)
@@ -84,42 +101,80 @@ class ItemComponentEditorViewModel<Editor: ItemComponentEditor>: ViewModel {
 
     @Function(\Action.Cases.search)
     private func _search(_ searchTerm: String) async throws {
-        searchQuery.value = searchTerm
-
+        guard !Task.isCancelled else { return }
+        searchQuery.send(.init(term: searchTerm, validate: searchRequests.begin()))
         await cancel()
     }
 
     @Function(\Action.Cases.actuallySearch)
-    private func _actuallySearch(_ searchTerm: String) async throws {
-        matches = try await editor.search(searchTerm, metadata: requireItemMetadata())
+    private func _actuallySearch(_ request: SearchRequest) async throws {
+        do {
+            try request.validate()
+            let metadata = try requireItemMetadata()
+            let results = try await editor.search(request.term, metadata: metadata)
+            try metadata.checkBinding()
+            try request.validate()
+            matches = results
+        } catch is CancellationError {
+            return
+        }
     }
 
     @Function(\Action.Cases.add)
     private func _add(_ elements: [Element]) async throws {
-        let metadata = try await updateItem(editor.adding(elements, to: item))
-        editor.didAdd(elements, metadata: metadata)
+        do {
+            try await updateItem(editor.adding(elements, to: item)) { [editor] metadata in
+                editor.didAdd(elements, metadata: metadata)
+            }
+        } catch is CancellationError {
+            return
+        }
     }
 
     @Function(\Action.Cases.remove)
     private func _remove(_ elements: [Element]) async throws {
-        try await updateItem(editor.removing(elements, from: item))
+        do {
+            try await updateItem(editor.removing(elements, from: item))
+        } catch is CancellationError {
+            return
+        }
     }
 
     @Function(\Action.Cases.reorder)
     private func _reorder(_ elements: [Element]) async throws {
-        try await updateItem(editor.reordering(elements, in: item))
+        do {
+            try await updateItem(editor.reordering(elements, in: item))
+        } catch is CancellationError {
+            return
+        }
     }
 
-    @discardableResult
-    private func updateItem(_ newItem: BaseItemDto) async throws -> ItemMetadataClient {
+    private func updateItem(
+        _ newItem: BaseItemDto,
+        didApply: (@MainActor (ItemMetadataClient) -> Void)? = nil
+    ) async throws {
+        try Task.checkCancellation()
         guard let itemID = item.id else { throw ErrorMessage("Item ID is missing") }
+        searchRequests.cancel()
+        let checkpoint = updateRequests.begin()
+        let validate: AsyncOperationGate.Checkpoint = { [weak self] in
+            try checkpoint()
+            guard self?.item.id == itemID else { throw CancellationError() }
+        }
         let metadata = try requireItemMetadata()
-        try await metadata.update(itemID: itemID, item: newItem)
-        let updated = try await metadata.item(id: itemID)
-        guard item.id == itemID else { throw CancellationError() }
+        let updated = try await metadata.updateAndReload(itemID: itemID, item: newItem, validate: validate)
+        try metadata.checkBinding()
+        try validate()
         item = updated
+        try metadata.checkBinding()
+        try validate()
         Notifications[.itemMetadataDidChange].post(updated)
+        // Subscribers can synchronously replace the item or operation.
+        try metadata.checkBinding()
+        try validate()
         events.send(.updated)
-        return metadata
+        try metadata.checkBinding()
+        try validate()
+        didApply?(metadata)
     }
 }

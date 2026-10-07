@@ -170,6 +170,24 @@ public final class ItemMetadataClient {
         ))
     }
 
+    /// Captured update then reload, with caller relevance checked at each stage.
+    /// A reload failure cannot undo an update already accepted by the server.
+    public func updateAndReload(
+        itemID: String,
+        item: BaseItemDto,
+        validate: @MainActor @Sendable () throws -> Void = {}
+    ) async throws -> BaseItemDto {
+        try checkBinding()
+        try validate()
+        try await update(itemID: itemID, item: item)
+        try checkBinding()
+        try validate()
+        let updated = try await self.item(id: itemID)
+        try checkBinding()
+        try validate()
+        return updated
+    }
+
     public func searchSubtitles(itemID: String, language: String, perfectMatch: Bool) async throws -> [RemoteSubtitleInfo] {
         try checkBinding()
         guard !language.isEmpty else { return [] }

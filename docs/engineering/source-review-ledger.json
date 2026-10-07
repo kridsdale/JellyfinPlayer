@@ -3328,8 +3328,8 @@
         "SwiftfinItemMetadata"
       ],
       "path": "Shared/ViewModels/ItemAdministration/IdentifyItemViewModel.swift",
-      "reason": "Complete body reviewed: main-actor Stateful/Combine UI adapter retains the 0.5-second RunLoop debounce and presentation. AsyncStreams owns opaque weak-lifetime publication checkpoints captured at changed intent submission; consecutive duplicate input returns before retirement, and no post-debounce value filter can drop a new A after A-B-A. ItemMetadata owns captured apply-then-reload with binding and caller checkpoints before stages and return; app checks again before notification and after synchronous notification reentry before the updated event. Replaced/cancelled search and update handlers quietly return on CancellationError; real failures retain the macro error path. Caller owns task lifecycle; already accepted remote writes cannot be rolled back. Native synthetic checkpoints/transport contracts and compile-only builds cover this source; real Combine debounce, macro background-state lifetime and GUI operation acceptance remain held.",
-      "sha256": "4a71fd7bebda403b1644d13e7b6c25d3e140f569055074cb2947aab34a6334c3",
+      "reason": "Complete body reviewed: main-actor Stateful/Combine UI adapter retains the 0.5-second RunLoop debounce and presentation. AsyncStreams owns opaque weak-lifetime publication checkpoints captured at changed intent submission; consecutive duplicate input returns before retirement, and no post-debounce value filter can drop a new A after A-B-A. ItemMetadata owns captured apply-then-reload with binding and caller checkpoints before stages and return; app checks again before notification and after synchronous notification reentry before the updated event. Replaced/cancelled search and update handlers quietly return on CancellationError; real failures retain the macro error path. Caller owns task lifecycle; already accepted remote writes cannot be rolled back. Native synthetic checkpoints/transport contracts and compile-only builds cover this source; real Combine debounce, macro background-state lifetime and GUI operation acceptance remain held. Cancelled input handlers return before submission instead of throwing into the pinned macro error path; actual-search/update cancellation handling remains quiet and genuine data failures still propagate.",
+      "sha256": "483be5f524d4d3bd777cc7b5620a66ecd9ae198abca7b89b367eb1799db83cc0",
       "status": "source-reviewed-retained"
     },
     {
@@ -3356,9 +3356,9 @@
         "SwiftfinAsyncStreams"
       ],
       "path": "Shared/ViewModels/ItemAdministration/ItemEditorViewModel/ItemComponentEditorViewModel.swift",
-      "reason": "Mixed: editor labels/input/mutations delegate appropriately, but debounced query relevance and direct awaited match assignment need submitted-intent checkpoints. Update then reload/notify/event and advisory didAdd sequencing remain app-owned compound operations. Preserve generic editor ports, missing-ID error and partial effect ordering.",
-      "sha256": "ae86cc6b0032321d58699c4a9d69903b078be4ca0d444916292653fd07ff784b",
-      "status": "source-reviewed-mixed"
+      "reason": "Complete generic body and four editor ports reviewed: app retains Stateful/Combine UI, submitted query payload, 0.5-second RunLoop debounce, missing-ID error, item state, notification/event ordering and tag-cache advisory callback. AsyncStreams owns weak intent checkpoints; ItemMetadata owns captured update-then-reload. Exact task/operation/item/binding checks precede result/state/notification/event/advisory effects, with rechecks after synchronous publication; CancellationError quietly retires obsolete handlers while real data failures propagate. Equal queries remain new intents, and empty query clears only on current debounced delivery. Already accepted remote writes are not undone or serialized by these guards; actual macro/debounce/lifetime acceptance remains held. Cancelled input handlers return before submission instead of throwing into the pinned macro error path; actual-search/update cancellation handling remains quiet and genuine data failures still propagate.",
+      "sha256": "5db827b132c92d5b2db1c839564bcacfa83d5805203250e8189f913f07fc193f",
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [
@@ -4202,9 +4202,9 @@
     {
       "owners": [],
       "path": "Swiftfin/App/SwiftfinApp.swift",
-      "reason": "",
+      "reason": "Complete body reviewed: iOS App configures native scrolling/tab-bar appearance, supplied Spotlight presentation, preferences/local-auth/root wrappers and orientation by device idiom. The navigation-controller override chooses a minimal back-button label. These are platform startup/navigation UI choices, not persistence, catalog, permission or playback implementations; called providers retain separate review obligations.",
       "sha256": "415620f3423841a2e5f479d16b42fb31f5f49bbadf661212d8e38f09a07becce",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -4981,25 +4981,48 @@
       "status": "pending"
     },
     {
-      "owners": [],
+      "owners": [
+        "KidsAccounts",
+        "KidsCatalog",
+        "KidsDomain",
+        "SwiftfinAccountAccess",
+        "SwiftfinAccountModels",
+        "SwiftfinAccountStore",
+        "SwiftfinCredentials",
+        "SwiftfinNetworking",
+        "SwiftfinStoredValues"
+      ],
       "path": "Swiftfin tvOS/App/KidsAccountAdapter.swift",
-      "reason": "",
+      "reason": "Complete body and KidsAccountHost/KidsAuthenticatedAccount plus the application signIn consumer read: actor-owned identity projection schedules before assumeIsolated, and bound authentication/basic storage delegate appropriately. Still mixed/unapproved: parentPIN collapses credential read failure into absence, while that optional drives parental setup/authority; deferred credential-storage/cache/policy/activation closures also require end-to-end admission-intent and inter-await ownership validation. KidsAuthenticatedAccount checks binding at preparation/activation, but the application signIn body spans several awaits and writes without an inspected intent gate. No credential access or runtime sign-in occurred; no definite live failure is claimed.",
       "sha256": "ddc490e2b87d52ac4c031dcef5455b6c9ea923efcff2019baa070e6a5e8f203c",
-      "status": "pending"
+      "status": "source-reviewed-mixed"
     },
     {
-      "owners": [],
+      "owners": [
+        "KidsCatalog",
+        "KidsDomain",
+        "KidsExperience",
+        "KidsPlaybackSession",
+        "KidsDiagnostics",
+        "SwiftfinAsyncStreams",
+        "SwiftfinMediaTracks",
+        "SwiftfinFormatting",
+        "SwiftfinTime",
+        "SwiftfinText"
+      ],
       "path": "Swiftfin tvOS/App/KidsPlaybackAdapter.swift",
-      "reason": "",
+      "reason": "Complete261-line factory/driver/surface/track/presentation body read: UI surfaces and parent-authorized track controls compose existing owners; VLC driver delegates native commands/readiness and awaits manager stop. Still mixed/unapproved: factory captures account before awaited metadata, embeds start-position normalization and DTO tick override, then assembles provider/controller; exact post-await/current-account checks and provider/build publication require the full manager/builder consumer audit. Existing pre-build identity checks and kind/ID guards are preserved but do not prove all later receipts current. No new native/runtime acceptance is claimed.",
       "sha256": "aae72b9acc32dd644167a599cf6311d5e46a4525c38dbf8b9048a2720b787594",
-      "status": "pending"
+      "status": "source-reviewed-mixed"
     },
     {
-      "owners": [],
+      "owners": [
+        "KidsDiagnostics"
+      ],
       "path": "Swiftfin tvOS/App/SwiftfinApp.swift",
-      "reason": "",
+      "reason": "Complete body reviewed: tvOS App composes configure, launch timing, native navigation-bar appearance, local-auth/overlay/root presentation and the UIKit app delegate. The delegate conditionally registers silent remote notifications from the built cloud flag; SDK persistence owns CloudKit mirroring. Platform startup and callback registration remain composition; this source proves neither physical push/cloud delivery nor separate CoreStore/SDK startup paths.",
       "sha256": "2ff9055dd8a6817e6c53531a83d95e41147c59e142e5bb36aa136febf01befd4",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -5131,11 +5154,17 @@
       "status": "pending"
     },
     {
-      "owners": [],
+      "owners": [
+        "KidsPlayback",
+        "KidsDiagnostics",
+        "SwiftfinAsyncStreams",
+        "SwiftfinPlaybackReporting",
+        "SwiftfinTime"
+      ],
       "path": "Swiftfin tvOS/Kids/KidsMediaProgressObserver.swift",
-      "reason": "",
+      "reason": "Complete148-line body read: immutable report payloads/native sender/order delegate to existing owners, with weak item/manager/subscriptions and explicit ended state. Still mixed/unapproved: initial sender is resolved from current ViewModel session while identity is derived from a supplied MediaPlayerItem; exact item/account construction binding must be proved across the builder/manager flow. Static last-reporter linking, five-second sampling and terminal/manager-subscription lifetime also require coherent owner/caller review. Capturing a sender once prevents later redirection but alone does not prove its initial binding matches the item. No server report or native player operation was executed.",
       "sha256": "025143e7e94cdf3648da50177ab5fd23447701397e7102332169165e05a9c3bf",
-      "status": "pending"
+      "status": "source-reviewed-mixed"
     },
     {
       "owners": [],
@@ -5617,9 +5646,10 @@
     },
     {
       "path": "Packages/SwiftfinAsyncStreams/Sources/SwiftfinAsyncStreams/AsyncOperationGate.swift",
-      "reason": "Main-actor generation remains private; returned main-actor Sendable throwing checkpoint captures the owner weakly and checks the current calling Task plus operation identity. Capture precedes scheduling; cancel/replacement/release reject future effects without undoing prior commits. No tasks, native handles, SDK, settings or globals are owned/exposed; caller-owned tasks keep existing error/action semantics. Nine synthetic contracts include delayed noncooperating returns, queued A-B-A, release, cancellation, multistage effects and synchronous notification reentry. Actual debounce/GUI acceptance remains held.",
+      "reason": "Main-actor generation remains private; returned main-actor Sendable throwing checkpoint captures the owner weakly and checks the current calling Task plus operation identity. Capture precedes scheduling; cancel/replacement/release reject future effects without undoing prior commits. No tasks, native handles, SDK, settings or globals are owned/exposed; caller-owned tasks keep existing error/action semantics. Nine synthetic contracts include delayed noncooperating returns, queued A-B-A, release, cancellation, multistage effects and synchronous notification reentry. Actual debounce/GUI acceptance remains held. Additional complete component-editor consumer review covers queued empty delivery, exact current item ID and checkpoints between state, metadata notification, final event and tag-cache advisory; real data failures retain the macro error path, while cancellation is quiet. Actual Combine/macro lifetime remains held.",
       "reviewedConsumers": [
-        "Shared/ViewModels/ItemAdministration/IdentifyItemViewModel.swift"
+        "Shared/ViewModels/ItemAdministration/IdentifyItemViewModel.swift",
+        "Shared/ViewModels/ItemAdministration/ItemEditorViewModel/ItemComponentEditorViewModel.swift"
       ],
       "reviewedInterfaces": [
         "AsyncOperationGate.init()",
@@ -5638,7 +5668,18 @@
       "reviewedInterfaces": [
         "applyIdentityAndReload(itemID:result:validate:)"
       ],
-      "sha256": "83c6d46d35d53cdcd8ecdd0b00fe68299d0b9415517b817c6967e32aa318ce5e"
+      "sha256": "5fc94886d6d7fe04560c81b4b2640b740963ca12bfe1b3b848d3aa46acc2fa62"
+    },
+    {
+      "path": "Packages/SwiftfinItemMetadata/Sources/SwiftfinItemMetadata/ItemMetadataClient.swift",
+      "reason": "Scoped compound update/reload method reviewed: one captured executor/user/item request sequence, existing updatePayload normalization, binding and main-actor Sendable caller checkpoint before both stages and return. Seven fake-sender contracts cover pinned POST/GET routes/userId/body, no mutation of input value, trickplay omission, stage failures, expired binding, caller cancellation and checkpoint failures. All pre-existing client methods/manifests remain byte-identical. Accepted remote updates cannot be undone and concurrent writes are not claimed transactional or serialized; UI publication/advisory callbacks remain outside the owner.",
+      "reviewedConsumers": [
+        "Shared/ViewModels/ItemAdministration/ItemEditorViewModel/ItemComponentEditorViewModel.swift"
+      ],
+      "reviewedInterfaces": [
+        "updateAndReload(itemID:item:validate:)"
+      ],
+      "sha256": "5fc94886d6d7fe04560c81b4b2640b740963ca12bfe1b3b848d3aa46acc2fa62"
     }
   ],
   "limits": "This ledger records bodies explicitly reviewed, with exact current hashes; earlier prose or lexical inventory is not automatically promoted. Pending and mixed entries prevent whole-source completion. Retained UI algorithms have specific presentation reasons, not folder/import-based blanket approval. API entries do not classify the rest of the public graph. Source review and offline tests do not satisfy held runtime acceptance.",
@@ -5647,11 +5688,11 @@
   "summary": {
     "applicationSwiftFiles": 665,
     "classification": {
-      "pending": 260,
-      "source-reviewed-mixed": 12,
-      "source-reviewed-retained": 393
+      "pending": 255,
+      "source-reviewed-mixed": 14,
+      "source-reviewed-retained": 396
     },
-    "currentAPIReviews": 32,
+    "currentAPIReviews": 33,
     "runtimeAcceptance": "held by human; no simulator/server testing"
   }
 }
