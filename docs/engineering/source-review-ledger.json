@@ -3125,19 +3125,20 @@
         "SwiftfinUserMediaState"
       ],
       "path": "Shared/Services/UserSession/UserSession+ItemMetadata.swift",
-      "reason": "Complete updated feature composition body reviewed: captures one transport/user and weak root/client/manager checks before constructing existing feature owners. PlaybackConnection captures that same transport for preparation, URLs and terminal reporting; playbackPreparation projects the bound owner. Media-state reuse requires exact transport identity. This is application binding, not request/payload/transport policy. Currentness does not imply current GUI/account-switch acceptance.",
-      "sha256": "ee85c7204ae568da89c9bb47295bd62d64f0b03090f71176d2866c37d63d6dd4",
+      "reason": "Complete updated feature-composition body reviewed. Owners capture one transport/user and weak root/client/manager checks. Auto Play writer reuse requires exact transport identity; replacement cancels the obsolete owner and hands its retained tail to the new bound owner so accepted requests cannot be overtaken. No raw request or configuration queue implementation remains in this adapter. Full runtime account-switch acceptance remains held.",
+      "sha256": "68bd2058dbdb99658bff193a7136ec93efb91abf18f6640517e6b1828f42c4ca",
       "status": "source-reviewed-retained"
     },
     {
       "owners": [
         "SwiftfinSessions",
         "SwiftfinNetworking",
+        "SwiftfinUserAdministration",
         "SwiftfinUserMediaState"
       ],
       "path": "Shared/Services/UserSession/UserSession.swift",
-      "reason": "Complete body reviewed: immutable app account records compose a transport cache keyed by URL/server/user/token and bind connection/socket resources through weak session adapters. Preparation/start/stop implementation belongs to SessionLifecycle; transport implementation belongs to Networking. Cached media-state client is scoped by exact transport. No application container or native SDK lifecycle is implemented in the libraries through this adapter.",
-      "sha256": "6a909b3f3e9606a5c93e66b756464776d2afbbfbb755dfe6c0951951c0fb9b75",
+      "reason": "Complete updated session body reviewed. Immutable app account records compose cached transport and weak connection/socket resource adapters. A configuration writer is retained by the session, keyed by exact transport, and cancelled when the session stops. Libraries own writer/task and transport/lifecycle behavior; this file owns application lifetime composition. Persistence/schema fields are unchanged.",
+      "sha256": "a60c59cc33907373cf13966fe48f6ab19f468f62abba965a548d5edad699f02c",
       "status": "source-reviewed-retained"
     },
     {
@@ -3319,9 +3320,9 @@
         "SwiftfinAsyncStreams"
       ],
       "path": "Shared/ViewModels/AdminDashboard/Users/ServerUserAdminViewModel.swift",
-      "reason": "Main-actor edited-user screen delegates user/library/policy/configuration/name commands, updates its displayed DTO and current composed account after success, and posts the existing profile-change signal. Weak profile subscription is retained by the view-model cancellation bag; request/binding/server policy stay owned. Current notification/GUI acceptance remains held.",
+      "reason": "Complete146-line model reconsidered after the configuration-control review. SDK commands delegate, but a macro-scheduled action resolves requireUserAdministration at execution using the edited user captured earlier. The server/account intent is not bound at submission; after local DTO publication it resolves authenticatedUser again before active-account writes/notifications. Single-request executor binding checks do not close delayed target admission or synchronous publication reentry. Preserve selected-user administration semantics while enforcing one captured account/target and operation checkpoints; no live administration action was run.",
       "sha256": "2c9951d77b23c201e888e8a86bd35fd743256b273cf8ca89093e2cdeaeb24e39",
-      "status": "source-reviewed-retained"
+      "status": "source-reviewed-mixed"
     },
     {
       "owners": [
@@ -4063,32 +4064,46 @@
       "status": "pending"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinFormatting",
+        "SwiftfinLocalization",
+        "SwiftfinTime"
+      ],
       "path": "Shared/Views/SettingsView/CustomizeSettings/Components/HomeSection.swift",
-      "reason": "",
+      "reason": "Complete72-line form reviewed. Toggles installed visual home preferences and formats the next-up-day alert through owned time/formatting. Native input/range choice and presentation remain UI; no library read query or expiry calculation is implemented.",
       "sha256": "a254671d78c0729109e9c023c8501151bf09afd3435a188ceae8771bf752301e",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinLocalization",
+        "SwiftfinStoredValuesUI"
+      ],
       "path": "Shared/Views/SettingsView/CustomizeSettings/Components/ItemSection.swift",
-      "reason": "",
+      "reason": "Complete83-line form reviewed. Native pickers/toggles and router destinations compose installed item style, trailers, action placement and missing-content presentation preferences. Account stored-value access remains in StoredValuesUI; no catalog authorization/request is performed.",
       "sha256": "d663475fac867f9bd79313afda33949fae32355c647d9be47705c7507a0ac011",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinFilters",
+        "SwiftfinLocalization"
+      ],
       "path": "Shared/Views/SettingsView/CustomizeSettings/Components/LibrarySection.swift",
-      "reason": "",
+      "reason": "Complete87-line library form reviewed. Edits visual favorite/random/filter/style/column/letter-picker preferences and routes selectors. Native layout ranges and remember-layout/sort choices stay presentation; no metadata paging, filtering query or library grant is implemented.",
       "sha256": "000bbc0b61ffd79ba5d4b5aa95b8dc4876a97f6f90de327b4bcefb343cb2616e",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinLocalization",
+        "SwiftfinTime",
+        "SwiftfinUIState"
+      ],
       "path": "Shared/Views/SettingsView/CustomizeSettings/Components/PosterSection.swift",
-      "reason": "",
+      "reason": "Complete182-line poster form reviewed. Synthetic preview DTOs/clock offsets illustrate badges, runtime and quality; native preview layout, caption choices, OptionSet bindings and indicator style are presentation. It never writes the synthetic item/user data to Jellyfin. Installed preference storage and actual poster facts remain in owners.",
       "sha256": "7790294446f22e3703e8bc43ae2a73da4f15b73ef39bb51f7e3554a427bea488",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [
@@ -4153,11 +4168,16 @@
       "status": "pending"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinFormatting",
+        "SwiftfinLocalization",
+        "SwiftfinPlaybackProfiles",
+        "SwiftfinStoredValuesUI"
+      ],
       "path": "Shared/Views/SettingsView/PlaybackQualitySettingsView.swift",
-      "reason": "",
+      "reason": "Complete138-line quality form reviewed. Native controls bind installed resolution/bitrate/test-size/profile and HDR preferences; values and hardware capability decision delegate to owners. Routes, platform picker choices and formatted explanations remain UI. No probe, native hardware query or stream runs during this source review.",
       "sha256": "91359ed9b68b232683a2d753947ac4eceacc2abafcaf516b3a10abbee3a33d32",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -4167,11 +4187,16 @@
       "status": "pending"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinLocalization",
+        "SwiftfinPlaybackProfiles",
+        "SwiftfinStoredValuesUI",
+        "SwiftfinUserAdministration"
+      ],
       "path": "Shared/Views/SettingsView/VideoPlayerSettingsView.swift",
-      "reason": "",
+      "reason": "Complete385-line settings form read. Most controls are platform preference bindings and routes, but its initial ServerUserAdminViewModel user/configuration is modified into whole configuration snapshots and saved by a separately resolved delayed action. Fresh current-account intent, compound current-user configuration ownership and display/refresh receipt relevance remain required. No setting, server policy or playback action was actuated.",
       "sha256": "1ea1a14b7ed6f35037ded0e59837539675398a867332a3788b0d9db381435ad2",
-      "status": "pending"
+      "status": "source-reviewed-mixed"
     },
     {
       "owners": [],
@@ -4230,12 +4255,14 @@
     },
     {
       "owners": [
+        "SwiftfinLocalization",
+        "SwiftfinPlaybackPreparation",
         "SwiftfinUserAdministration"
       ],
       "path": "Shared/Views/VideoPlayer/Components/Toolbar/ActionButtons/AutoPlayActionButton.swift",
-      "reason": "Complete85-line button read. Toggle presentation/localized toasts and configuration commands are composed through ServerUserAdminViewModel, but initialization captures the then-current user/configuration while the button later reads and optimistically writes manager.userSession. Deferred administration work independently resolves its session. Exact submitted playback/account/configuration ownership must be enforced before that optimistic write and queued command; API request binding alone does not close this UI-intent gap. No server write or live button action was performed.",
-      "sha256": "5165250407013344666b589bbdd479cd6ffd1bcc7e54c808130e9194ddca2a31",
-      "status": "source-reviewed-mixed"
+      "reason": "Complete updated control body reviewed. A press validates the exact prepared connection, captures current session/configuration before scheduling and supplies weak session/manager/connection checkpoints to its session-owned writer. UI composes optimistic configuration/labels and weak failure feedback; the owner supplies toggle and serialized coalescing writes to the captured authenticated user. Account/connection/manager retirement rejects stale work; transient menu or icon disappearance does not cancel admitted account saves. Queue remains required, so Kids queue-nil behavior stays disabled. An optimistic mirror is used only while matching the current account snapshot.",
+      "sha256": "12484b35bc6adf52c4e239fb6cc5fcecd0eaa1cd7d3e9f420d3c838f8e41f0c6",
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -5977,6 +6004,34 @@
         "range"
       ],
       "sha256": "3ab727714468d649642fd1f775a84ac599c21b135ad82433b3aeaeac137a4547"
+    },
+    {
+      "path": "Packages/SwiftfinUserAdministration/Sources/SwiftfinUserAdministration/UserAdministrationClient.swift",
+      "reason": "Scoped factory review only: captures the existing immutable authenticated user ID and client; no caller-supplied target ID is exposed by the writer. Optional predecessor transfers only an accepted-write ordering handle, not its account authority. All other existing methods/manifests are unchanged; complete administration API review remains separate.",
+      "reviewedConsumers": [
+        "Shared/Services/UserSession/UserSession+ItemMetadata.swift"
+      ],
+      "reviewedInterfaces": [
+        "autoPlayUpdates(after:)"
+      ],
+      "sha256": "204e7c33412f0a12e7d8ce3ea660dee791f17bba299bdf6292834df497816ec4"
+    },
+    {
+      "path": "Packages/SwiftfinUserAdministration/Sources/SwiftfinUserAdministration/AutoPlayConfigurationUpdates.swift",
+      "reason": "Complete MainActor writer body/API reviewed. Immutable current-user/client, fresh copied configuration, synchronous guarded optimistic admission, UUID intent checks and serial predecessor tail own every command. Already accepted writes drain; pending intents coalesce, cancelled/expired work is quiet, and a current error may reach weak UI feedback. Cancel retains the tail for later ordering; deinit cancels. Nine synthetic contracts verify pinned SDK method/path/userId/body, sibling values, rapid ordering, binding/caller replacement, failure/retry, cancellation/reentry and successor transport. Accepted remote writes and optimistic UI are not rolled back, and unrelated administrative writers are not claimed transactional.",
+      "reviewedConsumers": [
+        "Shared/Services/UserSession/UserSession.swift",
+        "Shared/Services/UserSession/UserSession+ItemMetadata.swift",
+        "Shared/Views/VideoPlayer/Components/Toolbar/ActionButtons/AutoPlayActionButton.swift"
+      ],
+      "reviewedInterfaces": [
+        "toggle(from:validate:willSubmit:failure:)",
+        "cancel()",
+        "waitUntilFinished()",
+        "Checkpoint",
+        "Failure"
+      ],
+      "sha256": "73d4abdd193a16641a95e6a830a6a78d43bc1976d9f46ce4e1317e1563ccfbf9"
     }
   ],
   "limits": "This ledger records bodies explicitly reviewed, with exact current hashes; earlier prose or lexical inventory is not automatically promoted. Pending and mixed entries prevent whole-source completion. Retained UI algorithms have specific presentation reasons, not folder/import-based blanket approval. API entries do not classify the rest of the public graph. Source review and offline tests do not satisfy held runtime acceptance.",
@@ -5985,11 +6040,11 @@
   "summary": {
     "applicationSwiftFiles": 665,
     "classification": {
-      "pending": 224,
-      "source-reviewed-mixed": 11,
-      "source-reviewed-retained": 430
+      "pending": 218,
+      "source-reviewed-mixed": 12,
+      "source-reviewed-retained": 435
     },
-    "currentAPIReviews": 43,
+    "currentAPIReviews": 45,
     "runtimeAcceptance": "held by human; no simulator/server testing"
   }
 }

@@ -96,3 +96,19 @@ extension UserSession {
         return UserAdministrationClient(executor: executor, currentUserID: user.id)
     }
 }
+
+extension UserSession {
+    /// Keep one writer across videos. A replaced transport drains its accepted
+    /// predecessor before a new configuration command can be sent.
+    var autoPlayConfigurationUpdates: AutoPlayConfigurationUpdates {
+        let client = self.client
+        if let cached = autoPlayUpdatesOwner, cached.transport === client {
+            return cached.owner
+        }
+        let previous = autoPlayUpdatesOwner?.owner
+        previous?.cancel()
+        let owner = userAdministration.autoPlayUpdates(after: previous)
+        autoPlayUpdatesOwner = (client, owner)
+        return owner
+    }
+}

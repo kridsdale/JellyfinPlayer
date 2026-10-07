@@ -9,6 +9,8 @@
 import FactoryKit
 import JellyfinAPI
 import SwiftfinLocalization
+import SwiftfinPlaybackPreparation
+import SwiftfinUserAdministration
 import SwiftUI
 
 // TODO: static width for tvOS
@@ -24,16 +26,24 @@ extension VideoPlayer.PlaybackControls.Toolbar.ActionButtons {
         private var manager: MediaPlayerManager
 
         @State
-        private var userConfiguration: UserConfiguration
-
-        @StateObject
-        private var viewModel: ServerUserAdminViewModel
+        private var userConfiguration: UserConfiguration?
+        @State
+        private var updateConnection: PlaybackConnection?
+        @State
+        private var updates: AutoPlayConfigurationUpdates?
 
         @Toaster
         private var toaster
 
         private var isAutoPlayEnabled: Bool {
-            manager.userSession?.user.data.configuration?.enableNextEpisodeAutoPlay == true
+            guard let connection = manager.playbackItem?.connection,
+                  (try? connection.preparation.checkBinding()) != nil else { return false }
+            let current = Container.shared.currentUserSession()?.user.data.configuration
+            // Reuse optimistic presentation only while its account snapshot is current.
+            if updateConnection === connection, let userConfiguration, userConfiguration == current {
+                return userConfiguration.enableNextEpisodeAutoPlay == true
+            }
+            return current?.enableNextEpisodeAutoPlay == true
         }
 
         private var systemImage: String {
@@ -44,26 +54,55 @@ extension VideoPlayer.PlaybackControls.Toolbar.ActionButtons {
             }
         }
 
-        init() {
-            let user = Container.shared.currentUserSession()?.user.data ?? UserDto()
-
-            self.userConfiguration = user.configuration ?? UserConfiguration()
-            self._viewModel = StateObject(wrappedValue: ServerUserAdminViewModel(user: user))
+        @MainActor
+        private func toggleAutoPlay() {
+            guard manager.queue != nil,
+                  let connection = manager.playbackItem?.connection else { return }
+            do {
+                try connection.preparation.checkBinding()
+                guard let session = Container.shared.currentUserSession() else { throw CancellationError() }
+                let validate: AutoPlayConfigurationUpdates.Checkpoint = { [weak manager, weak session, weak connection] in
+                    guard let manager, let session, let connection,
+                          Container.shared.currentUserSession() === session,
+                          manager.playbackItem?.connection === connection,
+                          manager.queue != nil,
+                          manager.state != .stopped, manager.state != .error else { throw CancellationError() }
+                    try connection.preparation.checkBinding()
+                }
+                try validate()
+                if updateConnection !== connection || updates == nil {
+                    updates?.cancel()
+                    updates = session.autoPlayConfigurationUpdates
+                    updateConnection = connection
+                }
+                guard let updates else { throw CancellationError() }
+                let configuration = session.user.data.configuration ?? UserConfiguration()
+                let enabled = try updates.toggle(
+                    from: configuration,
+                    validate: validate,
+                    willSubmit: { updated in
+                        userConfiguration = updated
+                        session.user.data.configuration = updated
+                    },
+                    failure: { [weak toaster] _ in
+                        toaster?.present(L10n.unknownError, systemName: "exclamationmark.triangle")
+                    }
+                )
+                try validate()
+                toaster.present(
+                    enabled ? "Auto Play on" : "Auto Play off",
+                    systemName: enabled ? "play.circle.fill" : "stop.circle"
+                )
+            } catch is CancellationError {
+                // Retired playback/account intent has no new presentation effect.
+            } catch {
+                toaster.present(L10n.unknownError, systemName: "exclamationmark.triangle")
+            }
         }
 
         var body: some View {
             Button {
-                let newValue = !isAutoPlayEnabled
-
-                userConfiguration.enableNextEpisodeAutoPlay = newValue
-                manager.userSession?.user.data.configuration = userConfiguration
-                viewModel.updateConfiguration(userConfiguration)
-
-                if newValue {
-                    toaster.present("Auto Play on", systemName: "play.circle.fill")
-                } else {
-                    toaster.present("Auto Play off", systemName: "stop.circle")
-                }
+                toggleAutoPlay()
             } label: {
                 Label(
                     L10n.autoPlay,
@@ -76,10 +115,10 @@ extension VideoPlayer.PlaybackControls.Toolbar.ActionButtons {
             }
             .videoPlayerActionButtonTransition()
             .if(!UIDevice.isTV) { button in
-                button
-                    .id(isAutoPlayEnabled)
+                button.id(isAutoPlayEnabled)
             }
             .disabled(manager.queue == nil)
+            // Admitted saves belong to UserSession, not the transient menu/button.
         }
     }
 }

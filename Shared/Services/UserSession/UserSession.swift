@@ -9,6 +9,7 @@
 import Foundation
 import SwiftfinNetworking
 import SwiftfinSessions
+import SwiftfinUserAdministration
 import SwiftfinUserMediaState
 
 @MainActor
@@ -17,6 +18,7 @@ final class UserSession: AccountSessionLifecycle {
     let server: ServerState
     let user: UserState
     var mediaStateOwner: (transport: JellyfinTransport, owner: UserMediaStateClient)?
+    var autoPlayUpdatesOwner: (transport: JellyfinTransport, owner: AutoPlayConfigurationUpdates)?
 
     private let transports = AccountTransportCache { url, token in
         JellyfinTransport.swiftfin(url: url, accessToken: token)
@@ -57,6 +59,7 @@ final class UserSession: AccountSessionLifecycle {
     }
 
     func stop() {
+        autoPlayUpdatesOwner?.owner.cancel()
         lifecycle.stop()
     }
 }

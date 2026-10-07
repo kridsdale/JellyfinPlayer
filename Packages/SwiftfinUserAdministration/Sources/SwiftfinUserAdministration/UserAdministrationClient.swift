@@ -26,6 +26,11 @@ public final class UserAdministrationClient {
         try executor.checkBinding()
     }
 
+    /// A configuration writer for this captured authenticated user only.
+    public func autoPlayUpdates(after previous: AutoPlayConfigurationUpdates? = nil) -> AutoPlayConfigurationUpdates {
+        AutoPlayConfigurationUpdates(client: self, userID: currentUserID, after: previous)
+    }
+
     public func users(isHidden: Bool? = nil, isDisabled: Bool? = nil) async throws -> [UserDto] {
         try await executor.value(for: Paths.getUsers(isHidden: isHidden, isDisabled: isDisabled))
     }
