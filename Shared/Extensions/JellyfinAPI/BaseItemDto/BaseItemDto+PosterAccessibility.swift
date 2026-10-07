@@ -10,6 +10,7 @@ import Foundation
 import JellyfinAPI
 import SwiftfinFormatting
 import SwiftfinLocalization
+import SwiftfinMediaCatalog
 import SwiftfinTime
 
 extension BaseItemDto {
@@ -107,52 +108,25 @@ extension BaseItemDto {
     }
 
     private var posterAccessibilityPlaybackState: [String?] {
-        if isPosterAccessibilityProgram || isLiveStream || type == .tvChannel || type == .liveTvChannel {
-            if isAiring, let startDate, let endDate, endDate > startDate {
-                let now = Date.now
-                let remaining = Duration.seconds(max(0, endDate.timeIntervalSince(now)))
-                return [
-                    L10n.live,
-                    L10n.posterAccessibilityRemaining(PosterAccessibility.duration(remaining))
-                ]
-            }
-            if isUnaired {
-                return [L10n.unaired]
-            }
-            if hasAired {
-                return [L10n.ended]
-            }
-            return [isLiveStream ? L10n.live : nil]
+        let facts = CatalogItemState(self, at: .now).playbackState(canBePlayed: canBePlayed)
+        var labels: [String?] = []
+        switch facts.phase {
+        case .live: labels.append(L10n.live)
+        case .unaired: labels.append(L10n.unaired)
+        case .ended: labels.append(L10n.ended)
+        case .missing: labels.append(L10n.missing)
+        case .rewatching: labels.append(L10n.rewatching)
+        case .inProgress: labels.append(L10n.inProgress)
+        case .played: labels.append(L10n.played)
+        case .unplayed: labels.append(L10n.unplayed)
+        case nil: break
         }
-
-        if isUnaired {
-            return [L10n.unaired]
+        if let remaining = facts.remainingDuration {
+            labels.append(L10n.posterAccessibilityRemaining(PosterAccessibility.duration(remaining)))
         }
-        if isMissing {
-            return [L10n.missing]
+        if let count = facts.unplayedCount {
+            labels.append(L10n.posterAccessibilityUnplayedCount(count.formatted()))
         }
-        guard canBePlayed else { return [] }
-
-        var state: [String?] = []
-        let position = max(0, userData?.playbackPositionTicks ?? 0)
-        let percentage = userData?.playedPercentage ?? 0
-        let hasProgress = position > 0 || (userData?.isPlayed != true && percentage.isFinite && percentage > 0)
-
-        if hasProgress {
-            state.append(userData?.isPlayed == true ? L10n.rewatching : L10n.inProgress)
-
-            if let runTimeTicks, runTimeTicks > 0, position > 0 {
-                let remaining = Duration.ticks(max(0, runTimeTicks - position))
-                state.append(L10n.posterAccessibilityRemaining(PosterAccessibility.duration(remaining)))
-            }
-        } else if let isPlayed = userData?.isPlayed {
-            state.append(isPlayed ? L10n.played : L10n.unplayed)
-        }
-
-        if let count = userData?.unplayedItemCount, count > 0, userData?.isPlayed != true {
-            state.append(L10n.posterAccessibilityUnplayedCount(count.formatted()))
-        }
-
-        return state
+        return labels
     }
 }

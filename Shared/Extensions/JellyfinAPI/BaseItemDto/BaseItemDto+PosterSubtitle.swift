@@ -55,32 +55,12 @@ extension BaseItemDto {
     }
 
     private var posterQualityLabel: String? {
-        let streams = (mediaStreams ?? []) + (mediaSources ?? []).flatMap { $0.mediaStreams ?? [] }
-        let videos = streams.filter { $0.type == .video }
-        guard let stream = videos.first(where: { $0.isDefault == true }) ?? videos.first else { return nil }
-
-        var labels: [String] = []
-        let width = stream.width ?? 0
-        let height = stream.height ?? 0
-        // Width also accounts for widescreen films whose black bars were cropped.
-        if width >= 7680 || height >= 4320 {
-            labels.append("8K")
-        } else if width >= 3840 || height >= 2160 {
-            labels.append("4K")
-        } else if width >= 2560 || height >= 1440 {
-            labels.append("1440p")
-        } else if width >= 1920 || height >= 1080 {
-            labels.append("1080p")
-        } else if width >= 1280 || height >= 720 {
-            labels.append("720p")
-        } else if width > 0 || height > 0 {
-            labels.append("SD")
-        }
-
-        if stream.videoRangeType?.isDolbyVision == true {
-            labels.append(L10n.dolbyVision)
-        } else if stream.videoRangeType?.isHDR == true || stream.videoRange == .hdr {
-            labels.append(L10n.hdr)
+        let quality = MediaVideoQuality(self)
+        var labels = quality.resolution.map { [$0.rawValue] } ?? []
+        switch quality.range {
+        case .dolbyVision: labels.append(L10n.dolbyVision)
+        case .hdr: labels.append(L10n.hdr)
+        case nil: break
         }
         return labels.isEmpty ? nil : labels.joined(separator: " ")
     }

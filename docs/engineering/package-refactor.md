@@ -776,3 +776,14 @@ connection; all three native backends await audio acquisition before opening.
 Native implementation remains in NativePlayback/VLC/MPV, with report payloads and
 terminal transport in PlaybackReporting. This source integration is compile-only
 while the human runtime hold remains in force.
+
+
+## Poster value ownership and adjacent player UI (2026-10-07, offline)
+
+CatalogItemState now owns the visual progress-label interval and returns an immutable CatalogPlaybackState for spoken phase, remaining duration and unplayed count. A captured clock preserves nesting, airing end boundaries and separate elapsed-versus-remaining behavior. Resume labels retain installed signed whole-second tick precision. Malformed opposite-sign tick subtraction now returns an absent label instead of overflowing. The app retains duration/date/localization formatting and title/schedule accessibility composition.
+
+MediaVideoQuality owns default-video selection across item/source streams, ordered fallback, width-or-height resolution thresholds and Dolby Vision/HDR precedence. Its small immutable enums expose facts; the app supplies labels. Poster cutoffs remain deliberately distinct from inherited generic stream-characteristic cutoffs. No package, SDK revision, schema or graph edge changed.
+
+Seven catalog and four media-track contracts were added. The final affected suites pass 67 and 25 tests respectively. tvOS Debug compile-for-testing and iOS Release compilation pass without owned Swift/generated-macro diagnostics; these builds do not install, launch or execute tests. The first catalog run had one fixture expectation whose input was one tick off; the corrected final run passes. Full unchanged package sweeps/build matrices were not repeated.
+
+Twenty-three source bodies were inspected. Poster/progress/people/subtitle rendering, toolbar styles and native supplement presentation remain platform UI rather than new packages. The Auto Play button remains mixed: its initial user/configuration, later manager session and delayed administration command need one submitted account/playback intent before optimistic mutation. The ledger records 430 retained, 11 mixed and 224 pending sources, plus 43 scoped API reviews. The complete API/actor/bootstrap graph and held simulator/restricted playback acceptance remain unfinished. No live account/catalog/server action or RAID access occurred.

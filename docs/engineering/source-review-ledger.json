@@ -27,11 +27,13 @@
       "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinText"
+      ],
       "path": "Shared/Components/BaseItemDtoPosterLabel.swift",
-      "reason": "",
+      "reason": "Complete135-line label body reviewed. Poster configuration/type chooses visual title/subtitle visibility; schedule text and current-day formatting, episode labels, layout priorities, reserved text height and duplicate-label suppression are platform presentation. Stream facts and metadata progress are delegated by the DTO subtitle adapter.",
       "sha256": "b11c54e3b415b4b5f9565c133ad0257f73df6e4ea547d7318cf9919da4b347c6",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -484,18 +486,24 @@
       "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinCollections",
+        "SwiftfinLocalization"
+      ],
       "path": "Shared/Components/PosterIndicators/PosterIndicatorsOverlay.swift",
-      "reason": "",
+      "reason": "Complete indicator/selection overlay body reviewed. Configuration, resume view context and raw current displayed watched/favorite values choose visual badges; catalog progress/recording facts delegate to DTO owner adapters. SwiftUI quadrants, sizes/colors, opacity and selection outline are retained as presentation. No watched-state persistence or mutation is implemented here.",
       "sha256": "e9eac9a554dbf3e21ca920949d7c99729dde7cfd37343214daaf8ccadc171960",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinCollections",
+        "SwiftfinValues"
+      ],
       "path": "Shared/Components/PosterIndicators/ProgressIndicator.swift",
-      "reason": "",
+      "reason": "Complete136-line progress view body reviewed. Finite clamp is strictly visual geometry for a supplied scalar; builds landscape or compact bars, runtime capsule and icon track from inputs. Defaults only provide accent presentation; no catalog calculation, clock, I/O or playback state is owned here.",
       "sha256": "ec1907b63d3c0db283997ea920a92274608fcb79f0b99f10f4520dbc4f1dda54",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -935,25 +943,37 @@
       "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinImages",
+        "SwiftfinUserMediaState"
+      ],
       "path": "Shared/Extensions/JellyfinAPI/BaseItemDto/BaseItemDto+Poster.swift",
-      "reason": "",
+      "reason": "Complete307-line poster body reviewed. Display-type/context selects ordered image fallbacks, transform/crop and localized symbol/title/menu composition. Exact URL construction delegates to Images/ItemMetadata; user-media commands use one captured client, per-field mutation tickets and owner merge policy, with guarded optimistic UI completion/rollback. Poster environment, routes, menu effects and fallback ordering stay platform presentation.",
       "sha256": "2e3669f0282f2b7f9ff2bd5c15e37284cdf84e9e3002f431085a4f88c35e9c0f",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinFormatting",
+        "SwiftfinLocalization",
+        "SwiftfinMediaCatalog",
+        "SwiftfinTime"
+      ],
       "path": "Shared/Extensions/JellyfinAPI/BaseItemDto/BaseItemDto+PosterAccessibility.swift",
-      "reason": "",
-      "sha256": "96a1eef5f61d459efb8f7513b988879d4337b044db3d38100269ff262f259099",
-      "status": "pending"
+      "reason": "Complete updated accessibility body reviewed. CatalogItemState supplies playback phase, optional remaining Duration and count from one captured clock; this adapter composes spoken title/season/episode/schedule/rating labels, localized phase names and existing duration formatting. Child/current-program selection and spoken label order are retained; eligibility is explicitly supplied to the pure owner.",
+      "sha256": "45b4f2253f02c9aff9d1d1f90b7f8be6af8d90135aae7b0827909264ea95a5d3",
+      "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinFormatting",
+        "SwiftfinLocalization",
+        "SwiftfinMediaTracks"
+      ],
       "path": "Shared/Extensions/JellyfinAPI/BaseItemDto/BaseItemDto+PosterSubtitle.swift",
-      "reason": "",
-      "sha256": "fb9c6837a1ac7318de33a93c8ea3dbef08cb46b2183b37dc6cde63d6e7e585c5",
-      "status": "pending"
+      "reason": "Complete updated subtitle body reviewed. Default video-stream selection, resolution boundaries and dynamic-range facts delegate to MediaVideoQuality. Visual field selection, rating/year formatting, optional whitespace suppression and localized HDR labels remain poster presentation. No player/settings/network owner is introduced.",
+      "sha256": "6385d6994087a6bc477f9396310cee587cc8cda397f66bff21228f54cc37440a",
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [
@@ -973,16 +993,19 @@
         "SwiftfinValues"
       ],
       "path": "Shared/Extensions/JellyfinAPI/BaseItemDto/BaseItemDto.swift",
-      "reason": "Complete525-line updated DTO helper body read. Metadata facts, stream kinds, catalog/recording capabilities and transport delegate to owners; labels/native artwork render remain UI composition. Deferred media providers now capture one connection and preserve the original program explicit-session prerequisite. Thumbnail binding checks surround source materialization/image IO. Still mixed: progressLabel derives remaining/airing intervals inline rather than delegating the data projection; the full DTO/image-source/formatting consumer audit remains open.",
-      "sha256": "e31aabe35c630b08c714cd99e32553f56c04c7329a5c6684059b37d21406185e",
-      "status": "source-reviewed-mixed"
+      "reason": "Complete DTO adapter body reviewed. CatalogItemState now owns the remaining/elapsed label interval with one captured clock; metadata facts, stream kinds, availability/capabilities and requests delegate to existing owners. This file composes current account policy, deferred bound playback providers, localized/date labels, native Now Playing artwork and chapter thumbnail rendering. It contains no raw SDK send helper. Image I/O remains guarded by captured preparation before materialization and after await. This source classification does not approve the separate complete image/formatting/API graph.",
+      "sha256": "8c019b07caec411659b85aece02a0228ff61a577d8ba9abcf9ba88e352544cbd",
+      "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinFormatting",
+        "SwiftfinLocalization"
+      ],
       "path": "Shared/Extensions/JellyfinAPI/BaseItemDto+LibraryElement.swift",
-      "reason": "",
+      "reason": "Complete196-line library element body reviewed. Chooses display style, routes folders versus items, builds poster/list rows and formats program schedule/current progress. Layout widths, transitions/focus and date/rating accessories are UI presentation. It delegates catalog runtime/airing/progress facts through DTO adapters and has no request or persistence implementation.",
       "sha256": "3b85cb5af985307b90cfa928c3d18fbc918e85c3b9670d1e2ce05877531a1345",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -2524,11 +2547,13 @@
       "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinLocalization"
+      ],
       "path": "Shared/Objects/MediaPlayerManager/Supplements/MediaPeopleSupplement.swift",
-      "reason": "",
+      "reason": "Complete158-line supplement body reviewed. Immutable people are received from manager metadata composition; compact/regular/tvOS grids and localized role/poster rows are the full responsibility. No network, domain credit merge, player callback or asynchronous work is implemented.",
       "sha256": "0381bc6e7fff127804f385efea40edc7d7ea46ad2c6b9d9b585f2125ff194301",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [
@@ -2696,18 +2721,23 @@
       "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinImages"
+      ],
       "path": "Shared/Objects/Poster/AnyPoster.swift",
-      "reason": "",
+      "reason": "Complete type-erasure body reviewed. Preserves concrete poster type plus ID identity for hash/equality, delegates image sources and native SwiftUI bodies and forwards sizing/view context into a concrete environment. No catalog/storage/player task is implemented; erased views remain a UI boundary.",
       "sha256": "9ea25106811050c5aa8f167a1e212f3ae0642d60ba791632a8ba80922812e7f4",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinCollections",
+        "SwiftfinImages"
+      ],
       "path": "Shared/Objects/Poster/Poster.swift",
-      "reason": "",
+      "reason": "Complete156-line poster protocol/extensions reviewed. Associated SwiftUI view bodies, environment adaptation, display-type/size choices and context-menu rendering belong to platform UI composition. MainActor view witnesses are explicit; shared ImageSource/array builder ownership stays in libraries. Conditional environment casts preserve concrete environment identity.",
       "sha256": "e25b8fc5405818b69c950f5d65e1f0226f187f8134e7799c81a199c6478347d6",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -2908,18 +2938,24 @@
       "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinLocalization",
+        "SwiftfinStoredValues"
+      ],
       "path": "Shared/Objects/VideoPlayerActionButton.swift",
-      "reason": "",
+      "reason": "Complete133-line enum body reviewed. Installed raw persisted values, platform symbols, localized titles and configured bar/menu defaults are UI choices. No playback, account or storage implementation is present.",
       "sha256": "b116c694a2e7a60670e2664f7c9a0dc19091e9dc022eb7b77257b1ae29773706",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinTime",
+        "SwiftfinUIState"
+      ],
       "path": "Shared/Objects/VideoPlayerContainerState.swift",
-      "reason": "",
+      "reason": "Complete234-line container state body reviewed. Owns platform overlay/supplement/focus/gesture/scrub visibility, native presentation-controller links and timer policy around those views. Actual timer and event scheduling delegate to PokeIntervalTimer/PublishedBox; callbacks are weak and UI actor scoped. Commit/cancel scrub composes current player commands and presentation state; no transport/decoder/progress storage is implemented. Existing presentation behavior is retained, not redesigned by this review.",
       "sha256": "ccf0d6a99b24b070955445e7aaea9df982d2b0fb7d4e1e9d69d2c3bbac2ca49c",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -4154,18 +4190,26 @@
       "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinFormatting",
+        "SwiftfinText",
+        "SwiftfinUIState",
+        "SwiftfinValues"
+      ],
       "path": "Shared/Views/VideoPlayer/Components/PlaybackProgress/SplitTimestamp.swift",
-      "reason": "",
+      "reason": "Complete170-line timestamp view reviewed. Calculates supplied scrub-time offsets and overlap for rendered labels, uses owner formatting and PublishedBox input, and toggles display preference. These are layout/label calculations, with no playback mutation, parser or scheduling implementation.",
       "sha256": "2449b0020aaa3f93b1306f4e75e9b4bc6ff758b0be0f49886a422a1c1ac599f7",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinCollections",
+        "SwiftfinMPV"
+      ],
       "path": "Shared/Views/VideoPlayer/Components/TextSubtitleOverlay.swift",
-      "reason": "",
+      "reason": "Complete342-line subtitle body reviewed. Consumes immutable native caption snapshot; maps authored WebVTT anchors and automatic stacking into SwiftUI Layout/GeometryProxy with rotated vertical text, video letterbox/crop viewport and caption accessibility. These are platform layout calculations and remain in UI. Caption parsing/selection/lifetime belong to MPV/native owners; this file has no parser, HTTP or scheduler.",
       "sha256": "74a3f9de9ccf0f8deea7276b0094554afbdd8d77936ea9856a6e36f742edca0e",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -4175,18 +4219,23 @@
       "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinLocalization",
+        "SwiftfinMediaTracks"
+      ],
       "path": "Shared/Views/VideoPlayer/Components/Toolbar/ActionButtons/AudioActionButton.swift",
-      "reason": "",
+      "reason": "Complete71-line picker body reviewed. Displays already-prepared immutable audio streams and composes selected-index binding into the exact playback item. Track selection/rebuild decisions delegate to MediaPlayerItem and its library owners; this is platform menu presentation.",
       "sha256": "81d40462f6c96918e0ce247a38a8c9c4aa14f85f31242135ad655a2f546ac843",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinUserAdministration"
+      ],
       "path": "Shared/Views/VideoPlayer/Components/Toolbar/ActionButtons/AutoPlayActionButton.swift",
-      "reason": "",
+      "reason": "Complete85-line button read. Toggle presentation/localized toasts and configuration commands are composed through ServerUserAdminViewModel, but initialization captures the then-current user/configuration while the button later reads and optimistically writes manager.userSession. Deferred administration work independently resolves its session. Exact submitted playback/account/configuration ownership must be enforced before that optimistic write and queued command; API request binding alone does not close this UI-intent gap. No server write or live button action was performed.",
       "sha256": "5165250407013344666b589bbdd479cd6ffd1bcc7e54c808130e9194ddca2a31",
-      "status": "pending"
+      "status": "source-reviewed-mixed"
     },
     {
       "owners": [],
@@ -4235,25 +4284,31 @@
       "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinCollections",
+        "SwiftfinLocalization",
+        "SwiftfinMediaTracks"
+      ],
       "path": "Shared/Views/VideoPlayer/Components/Toolbar/ActionButtons/VideoPlayer+ActionButtons.swift",
-      "reason": "",
+      "reason": "Complete173-line toolbar action body reviewed. Configuration plus available item streams/queue/live status filter visible controls; view construction, menu grouping, focus and layout are platform presentation. No underlying playback selection, command transport or progress persistence is reimplemented.",
       "sha256": "8af9c66aaabc412501e6924647cdb6bcb67c873aa2cf76163d8f42d37e35742e",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
       "path": "Shared/Views/VideoPlayer/Components/Toolbar/OverlayButtonStyle.swift",
-      "reason": "",
+      "reason": "Complete146-line native button/menu styles reviewed. Glass/backport styling, pressed/focus geometry and menu lifetime compose container timer calls. UIKit/SwiftUI interaction and animation remain UI; actual deadline scheduling stays in the UIState owner.",
       "sha256": "79b91aaae6b987a1d500272a2aafda0c9e66449bbc51c7bea9df246592e219c9",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinLocalization"
+      ],
       "path": "Shared/Views/VideoPlayer/Components/Toolbar/VideoPlayer+Toolbar.swift",
-      "reason": "",
+      "reason": "Complete163-line toolbar/title body reviewed. Chooses platform sizes, native glass container, title/season labels and close-versus-collapse routing; stop delegates to manager. No library task, transport or domain selection is implemented.",
       "sha256": "7d4c390631354d66e5cc2054243dee3a8e3ae8dbd9bea2b7e636eae2b4f18032",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [
@@ -4266,11 +4321,13 @@
       "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinLocalization"
+      ],
       "path": "Shared/Views/VideoPlayer/VideoPlayerContainerView/SupplementContainerView.swift",
-      "reason": "",
+      "reason": "Complete269-line supplement body reviewed. Wraps supplied supplements into native tabs, composes selected/focused presentation, guest overlays, animation and iOS gestures. The manager owns available supplements; UI subscription only materializes views. Native selection-controller routing and focus-boundary behavior remain platform UI.",
       "sha256": "0f7096e53d4a66f3212efd0c3ae5dcafb55fe45f62d850378bfc797d2a6095a2",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -5049,9 +5106,9 @@
     {
       "owners": [],
       "path": "Swiftfin/Views/VideoPlayer/SupplementTabView.swift",
-      "reason": "",
+      "reason": "Complete212-line UIKit page-controller body reviewed. Hosts/reuses views by ID, supplies adjacent native pages, selects animation direction and commits selection only after settled swipes. Deferred main-queue binding assignment is native presentation composition; no network/domain task is implemented. This review does not claim current runtime swipe acceptance while testing is held.",
       "sha256": "319b3f49c8a2d60c1b7c7070d65726ecb98853e1ff4574dc14d1256fe6cc0c2e",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -5285,9 +5342,9 @@
     {
       "owners": [],
       "path": "Swiftfin tvOS/Views/VideoPlayer/SupplementTabView.swift",
-      "reason": "",
+      "reason": "Complete243-line MainActor native coordinator reviewed. Owns hosted child controllers, transitions, focus-selection debounce and teardown; delayed work explicitly executes on the main queue with weak coordinator/container and pending-ID guard. Host attachment/animation and selection callbacks stay platform UI, with no catalog or playback transport implementation. Runtime interaction remains held.",
       "sha256": "0e2e0b41ddff6c9287ee2f269cde86d94444619d5db08b696df1abc6e498e2ff",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     }
   ],
   "interfaceReviews": [
@@ -5851,33 +5908,75 @@
     },
     {
       "path": "Packages/SwiftfinUIState/Sources/SwiftfinUIState/CommittedPublished.swift",
-      "reviewedInterfaces": [
-        "init(wrappedValue:)",
-        "wrappedValue",
-        "projectedValue"
-      ],
       "reason": "Complete actor-qualified wrapper and closed UI-actor player consumers reviewed. Values commit before publication; current-value filtering discards an older emission after reentrant terminal assignment. Weak filter captures do not retain the value owner. Three native contracts verify stored-value reads, terminal reentry without assumed subscriber order and owner release; all26 UIState contracts pass. The publisher is explicitly a UI-actor composition API, not a foreign-executor bridge. Actual SwiftUI invalidation/native state observations remain held.",
       "reviewedConsumers": [
         "Shared/Objects/MediaPlayerManager/MediaPlayerManager.swift",
         "Shared/Objects/MediaPlayerManager/MediaPlayerProxy/MediaPlayerProxy+AVPlayer.swift",
         "Swiftfin tvOS/App/KidsPlaybackAdapter.swift"
       ],
+      "reviewedInterfaces": [
+        "init(wrappedValue:)",
+        "wrappedValue",
+        "projectedValue"
+      ],
       "sha256": "96daedac653abc355236253dc031c881a7a7ef472e284d0d469ff98b869ec125"
     },
     {
       "path": "Packages/KidsPlayback/Sources/KidsPlayback/PlaybackPositionPolicy.swift",
+      "reason": "Complete finite resume/tick and installed end-tolerance policies reviewed. Invalid/overflowing positions restart at zero; ordinary values keep seconds and truncate ticks. Four native contracts cover precision, invalid/boundary/representable maximum and early/exact/overrun end behavior. Missing runtime handling remains the caller Stop path; no decoder or persistence effect is owned here.",
+      "reviewedConsumers": [
+        "Swiftfin tvOS/App/KidsPlaybackAdapter.swift",
+        "Shared/Objects/MediaPlayerManager/MediaPlayerManager.swift"
+      ],
       "reviewedInterfaces": [
         "KidsPlaybackStartPosition.init(_)",
         "seconds",
         "ticks",
         "PlaybackCompletionPolicy.acceptsEnd(position:runtime:)"
       ],
-      "reason": "Complete finite resume/tick and installed end-tolerance policies reviewed. Invalid/overflowing positions restart at zero; ordinary values keep seconds and truncate ticks. Four native contracts cover precision, invalid/boundary/representable maximum and early/exact/overrun end behavior. Missing runtime handling remains the caller Stop path; no decoder or persistence effect is owned here.",
-      "reviewedConsumers": [
-        "Swiftfin tvOS/App/KidsPlaybackAdapter.swift",
-        "Shared/Objects/MediaPlayerManager/MediaPlayerManager.swift"
-      ],
       "sha256": "311c59093bd766c84207d6a9d4629118850e147ecac5be107f37686f2adef6a1"
+    },
+    {
+      "path": "Packages/SwiftfinMediaCatalog/Sources/SwiftfinMediaCatalog/CatalogItemState.swift",
+      "reason": "Scoped pure value projection review: immutable SDK item and explicit captured Date, nested program interval priority, installed whole-second visual label precision and separate spoken remaining-duration rules. Explicit media eligibility controls nonlive phase/count output. Checked opposite-sign tick subtraction returns nil on overflow rather than trapping. Seven native contracts cover date/tick boundaries, nesting, invalid values, permission/phase precedence and independent-executor transfer. Existing transport APIs are outside this scoped entry.",
+      "reviewedConsumers": [
+        "Shared/Extensions/JellyfinAPI/BaseItemDto/BaseItemDto.swift",
+        "Shared/Extensions/JellyfinAPI/BaseItemDto/BaseItemDto+PosterAccessibility.swift"
+      ],
+      "reviewedInterfaces": [
+        "progressLabelInterval",
+        "playbackState(canBePlayed:)"
+      ],
+      "sha256": "1ef09f2e46dfc2838f44988be3680b7877d355b0a09621b05f97863317aeafbe"
+    },
+    {
+      "path": "Packages/SwiftfinMediaCatalog/Sources/SwiftfinMediaCatalog/CatalogPlaybackState.swift",
+      "reason": "Small immutable Sendable/Equatable result; all fields read-only and initialization internal to catalog owner. No localized string, formatter, settings/account handle or UI actor requirement. Consumer maps exactly one optional phase then remaining duration/count into installed localized spoken order.",
+      "reviewedConsumers": [
+        "Shared/Extensions/JellyfinAPI/BaseItemDto/BaseItemDto+PosterAccessibility.swift"
+      ],
+      "reviewedInterfaces": [
+        "CatalogPlaybackState.Phase",
+        "phase",
+        "remainingDuration",
+        "unplayedCount"
+      ],
+      "sha256": "e81e95aa401438fed987d8ae67feec652e15fca70174bb8b1129d736dfba2d99"
+    },
+    {
+      "path": "Packages/SwiftfinMediaTracks/Sources/SwiftfinMediaTracks/MediaVideoQuality.swift",
+      "reason": "Small immutable Sendable/Equatable quality value from pinned SDK DTOs. Default video selection spans item/source streams before ordered first-video fallback; existing poster width-or-height cutoffs and Dolby-first/HDR fallback classification are preserved. Four synthetic native contracts cover cross-source ordering, every threshold, absent/malformed values and independent-executor use. Consumer provides only labels/localization; inherited generic stream-characteristic cutoffs remain distinct.",
+      "reviewedConsumers": [
+        "Shared/Extensions/JellyfinAPI/BaseItemDto/BaseItemDto+PosterSubtitle.swift"
+      ],
+      "reviewedInterfaces": [
+        "MediaVideoQuality.init(_:)",
+        "Resolution",
+        "resolution",
+        "Range",
+        "range"
+      ],
+      "sha256": "3ab727714468d649642fd1f775a84ac599c21b135ad82433b3aeaeac137a4547"
     }
   ],
   "limits": "This ledger records bodies explicitly reviewed, with exact current hashes; earlier prose or lexical inventory is not automatically promoted. Pending and mixed entries prevent whole-source completion. Retained UI algorithms have specific presentation reasons, not folder/import-based blanket approval. API entries do not classify the rest of the public graph. Source review and offline tests do not satisfy held runtime acceptance.",
@@ -5886,11 +5985,11 @@
   "summary": {
     "applicationSwiftFiles": 665,
     "classification": {
-      "pending": 246,
+      "pending": 224,
       "source-reviewed-mixed": 11,
-      "source-reviewed-retained": 408
+      "source-reviewed-retained": 430
     },
-    "currentAPIReviews": 40,
+    "currentAPIReviews": 43,
     "runtimeAcceptance": "held by human; no simulator/server testing"
   }
 }

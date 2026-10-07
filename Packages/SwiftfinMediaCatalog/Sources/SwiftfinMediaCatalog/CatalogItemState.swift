@@ -50,6 +50,69 @@ public struct CatalogItemState: Sendable {
         item.userData?.playbackPositionTicks.map(Duration.ticks)
     }
 
+    /// The installed poster label uses whole remaining seconds for resumed media,
+    /// then elapsed airing time. This differs from spoken remaining duration.
+    public var progressLabelInterval: TimeInterval? {
+        if let current = item.currentProgram {
+            return Self(current, at: now).progressLabelInterval
+        }
+        if let position = item.userData?.playbackPositionTicks,
+           let total = item.runTimeTicks,
+           position != 0, total != 0
+        {
+            let (remaining, overflow) = total.subtractingReportingOverflow(position)
+            // Malformed server values cannot trap the presentation caller.
+            guard !overflow else { return nil }
+            return TimeInterval(remaining / 10_000_000)
+        }
+        guard isAiring, let start = item.startDate else { return nil }
+        return now.timeIntervalSince(start)
+    }
+
+    /// Raw state and durations only; the app chooses localized spoken labels.
+    public func playbackState(canBePlayed: Bool) -> CatalogPlaybackState {
+        let isProgram = item.type == .program || item.type == .liveTvProgram || item.type == .tvProgram
+        if isProgram || isLiveStream || item.type == .tvChannel || item.type == .liveTvChannel {
+            if isAiring, let start = item.startDate, let end = item.endDate, end > start {
+                return .init(phase: .live, remainingDuration: .seconds(max(0, end.timeIntervalSince(now))))
+            }
+            if isUnaired {
+                return .init(phase: .unaired)
+            }
+            if hasAired {
+                return .init(phase: .ended)
+            }
+            return .init(phase: isLiveStream ? .live : nil)
+        }
+        if isUnaired {
+            return .init(phase: .unaired)
+        }
+        if isMissing {
+            return .init(phase: .missing)
+        }
+        guard canBePlayed else { return .init() }
+
+        let position = max(0, item.userData?.playbackPositionTicks ?? 0)
+        let percentage = item.userData?.playedPercentage ?? 0
+        let hasProgress = position > 0 || (item.userData?.isPlayed != true && percentage.isFinite && percentage > 0)
+        let phase: CatalogPlaybackState.Phase?
+        var remaining: Duration?
+        if hasProgress {
+            phase = item.userData?.isPlayed == true ? .rewatching : .inProgress
+            if let runtime = item.runTimeTicks, runtime > 0, position > 0 {
+                remaining = .ticks(max(0, runtime - position))
+            }
+        } else {
+            phase = item.userData?.isPlayed.map { $0 ? .played : .unplayed }
+        }
+        let count = item.userData?.unplayedItemCount
+        return .init(
+            phase: phase,
+            remainingDuration: remaining,
+            unplayedCount: item.userData?.isPlayed != true && (count ?? 0) > 0 ? count : nil
+        )
+    }
+
     public var programDuration: TimeInterval? {
         guard let start = item.startDate, let end = item.endDate else { return nil }
         return end.timeIntervalSince(start)

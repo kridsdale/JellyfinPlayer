@@ -282,23 +282,7 @@ extension BaseItemDto {
     }
 
     var progressLabel: String? {
-        if let currentProgram {
-            return currentProgram.progressLabel
-        }
-
-        let interval: TimeInterval
-
-        if let playbackPositionTicks = userData?.playbackPositionTicks,
-           let totalTicks = runTimeTicks,
-           playbackPositionTicks != 0,
-           totalTicks != 0
-        {
-            interval = TimeInterval((totalTicks - playbackPositionTicks) / 10_000_000)
-        } else if isAiring, let startDate {
-            interval = Date.now.timeIntervalSince(startDate)
-        } else {
-            return nil
-        }
+        guard let interval = CatalogItemState(self, at: .now).progressLabelInterval else { return nil }
 
         let formatter = DateComponentsFormatter()
         formatter.allowedUnits = [.hour, .minute]
