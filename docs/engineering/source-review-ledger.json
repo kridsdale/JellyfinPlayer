@@ -956,11 +956,26 @@
       "status": "pending"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinCollections",
+        "SwiftfinFilters",
+        "SwiftfinImages",
+        "SwiftfinItemMetadata",
+        "SwiftfinLocalization",
+        "SwiftfinMediaCatalog",
+        "SwiftfinMediaTracks",
+        "SwiftfinNowPlaying",
+        "SwiftfinPlaybackPreparation",
+        "SwiftfinRecordingTimers",
+        "SwiftfinText",
+        "SwiftfinTime",
+        "SwiftfinUserMediaState",
+        "SwiftfinValues"
+      ],
       "path": "Shared/Extensions/JellyfinAPI/BaseItemDto/BaseItemDto.swift",
-      "reason": "",
-      "sha256": "1afbb69d1d81926e26ff2805b7918dc44a22e34f2f19310afaf70c375098d2dd",
-      "status": "pending"
+      "reason": "Complete525-line updated DTO helper body read. Metadata facts, stream kinds, catalog/recording capabilities and transport delegate to owners; labels/native artwork render remain UI composition. Deferred media providers now capture one connection and preserve the original program explicit-session prerequisite. Thumbnail binding checks surround source materialization/image IO. Still mixed: progressLabel derives remaining/airing intervals inline rather than delegating the data projection; the full DTO/image-source/formatting consumer audit remains open.",
+      "sha256": "e31aabe35c630b08c714cd99e32553f56c04c7329a5c6684059b37d21406185e",
+      "status": "source-reviewed-mixed"
     },
     {
       "owners": [],
@@ -2314,38 +2329,47 @@
     },
     {
       "owners": [
-        "SwiftfinPlaybackPreparation",
-        "SwiftfinPlaybackProfiles",
-        "SwiftfinPlaybackPreviews",
+        "KidsDiagnostics",
+        "SwiftfinFormatting",
+        "SwiftfinLocalization",
         "SwiftfinMediaTracks",
-        "SwiftfinStoredValues"
+        "SwiftfinPlaybackPreparation",
+        "SwiftfinPlaybackPreviews",
+        "SwiftfinPlaybackProfiles",
+        "SwiftfinStoredValues",
+        "SwiftfinText"
       ],
       "path": "Shared/Objects/MediaPlayerManager/MediaPlayerItem/MediaPlayerItem+Build.swift",
-      "reason": "Complete builder read and exact connection wiring reviewed: injected PlaybackConnection survives metadata/info/bitrate awaits, carries the same reporting sender into the built item and checks binding before return. Preview reads and currentness use that preparation owner. Profile/source/sidecar/track decisions delegate to existing libraries; app retains installed settings and native item composition. Still mixed/unapproved: the now-playing thumbnail closure uses a DTO helper whose image-source/global-account composition has not been completed. Full downstream provider/generation/native publication audit remains separate; compile evidence alone does not approve it.",
-      "sha256": "c253d3f3de7b68c3b045f1f35f288b8fd4babb11781db9c52f45cf45033b6de0",
-      "status": "source-reviewed-mixed"
+      "reason": "Complete builder and specific thumbnail helper body reviewed. App composes installed settings/profile/preview/native item values from one bound connection. Preparation checks surround IO and construction; image URLs are materialized synchronously under the same binding, checked again after image IO, and exact item/audio-owner checks precede artwork publication. Native and report values retain original connection. Source/source selection, tracks, URLs, bitrate and preview lifetime belong to existing libraries. Native decoder and visual acceptance remain held.",
+      "sha256": "591f4c994aa8374e52aaa582d0da362c3ae7f349d3a43b187d24e471b1104de4",
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [
         "SwiftfinMediaTracks",
         "SwiftfinPlaybackPreparation",
-        "SwiftfinPlaybackReporting"
+        "SwiftfinPlaybackPreviews",
+        "SwiftfinPlaybackProfiles",
+        "SwiftfinPlaybackReporting",
+        "SwiftfinText"
       ],
       "path": "Shared/Objects/MediaPlayerManager/MediaPlayerItem/MediaPlayerItem.swift",
-      "reason": "Complete body reviewed: retains immutable item/profile/sidecar/preview values and delegates stream selection, rebuild choice and native index mapping to MediaTracks. One supplied PlaybackConnection creates platform-specific report identities from this exact item. The factory placeholder alone permits no connection and creates no reporter. Native track/observer bindings remain application composition; no transport is selected from a global inside this item. Runtime callbacks remain held.",
-      "sha256": "6ceb2dce3b4655fb31d565f9d1c1ef954734927341ad63017ba7fdfc0ea6d152",
+      "reason": "Complete body reviewed with captured connection/backend additions. Item stores immutable native/profile/sidecar/preview/report values and delegates track policy/mapping to MediaTracks. Original connection creates platform report identities; only the inert factory placeholder permits nil. Rebuild and synthetic failure clone preserve backend selection. Native track/observer bindings are composition and remain runtime-held.",
+      "sha256": "db56ba4c0bbd06020fdf395be20b1078e28d783375338049db35f2b62da3e8d2",
       "status": "source-reviewed-retained"
     },
     {
       "owners": [],
       "path": "Shared/Objects/MediaPlayerManager/MediaPlayerItemProvider.swift",
-      "reason": "Application resolver composition captures selected default bitrate and immutable DTO/source/track settings; modifyingItem composes callbacks passed unchanged to the injected app resolver. It creates no native player, performs no IO and owns no stream/session task.",
-      "sha256": "b3838dca6ccfbb128a2633b0e853ac79e4b27f1e0c7569dbfd2941825fed76e3",
+      "reason": "Complete body reviewed: immutable app DTO/stream/settings values and an actor-qualified Sendable resolver compose owned preparation. Modifier chaining is literal left-to-right DTO adaptation. The actual resolve entry is MainActor, checks cancellation and the resulting exact connection before return, and admits no accountless playable result. Manager separately checks publication scope. No transport or scheduler is implemented here.",
+      "sha256": "d4afac63a38c2781c9c79b3b38d8deb7d855e36c61cc08ac9de68044f89cdb13",
       "status": "source-reviewed-retained"
     },
     {
       "owners": [
+        "KidsDiagnostics",
         "KidsPlayback",
+        "SwiftfinAsyncStreams",
         "SwiftfinCollections",
         "SwiftfinFormatting",
         "SwiftfinMediaTracks",
@@ -2355,9 +2379,9 @@
         "SwiftfinUIState"
       ],
       "path": "Shared/Objects/MediaPlayerManager/MediaPlayerManager.swift",
-      "reason": "Complete baseline body and updated account-binding paths reviewed: asynchronous start/playNewItem/rebuild pass through a final synchronous installation check for task cancellation, stopped/error state and the exact item connection. Track rebuild retains currentItem connection and validates before stopping the proxy. Accountless factory placeholder stays inert. Still mixed/unapproved: queued operation generation, native/queue/supplement ownership and competing publication require coherent owner/caller extraction. Existing source-tagged retirement/reset protections remain; no native runtime acceptance is claimed.",
-      "sha256": "9d2e6676c0ad40370d07b85505bf470aa3e4a82af31ecdd2831f373a94a336ed",
-      "status": "source-reviewed-mixed"
+      "reason": "Complete updated body and native/provider/report consumers reviewed. App owns UI phases, settings/supplement selection and native command composition; AsyncStreams owns replaceable task lifetime and effect checkpoints, UIState commits phase before delivery, KidsPlayback owns resume/end timing, and feature/native owners handle preparation, reports and resources. Start/item/bitrate/track share one request owner. Stop/error revoke publication before callbacks; checked publication cannot continue after synchronous reentry. Rebuild preserves connection and backend. No state macro or queued phase shim remains here. Accepted effects are not rolled back; actual native/UI acceptance remains held.",
+      "sha256": "279df35211c1c60323be3f85ef3f004a8111d41dbf088021fca2b20afcfbe67a",
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -2367,25 +2391,46 @@
       "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinAsyncStreams",
+        "SwiftfinFormatting",
+        "SwiftfinNativePlayback",
+        "SwiftfinText",
+        "SwiftfinTime",
+        "SwiftfinUIState"
+      ],
       "path": "Shared/Objects/MediaPlayerManager/MediaPlayerProxy/MediaPlayerProxy+AVPlayer.swift",
-      "reason": "",
-      "sha256": "04ffea4ed6f4a755d0f87082d31374639717d0f2d62e7a61c7ece96aaa8b0635",
-      "status": "pending"
+      "reason": "Complete adapter body reviewed. App maps supplied item, preferences, UI boxes and native events into NativePlayback. AsyncStreams owns deferred audio-ready opening; exact manager/item/account checks guard publication, Stop cancels opening, and event receipts require the exact opened item. No SDK player/KVO/observer implementation escapes the native owner. Native decoding, audio and OS callbacks remain held.",
+      "sha256": "be176c09c9689de20fd710ebff65bf040d114f42bdcfb18b5a3aed9981208e17",
+      "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinMPV",
+        "SwiftfinMediaTracks",
+        "SwiftfinText",
+        "SwiftfinTime",
+        "SwiftfinUIState"
+      ],
       "path": "Shared/Objects/MediaPlayerManager/MediaPlayerProxy/MediaPlayerProxy+MPV.swift",
-      "reason": "",
-      "sha256": "356449f68ea772fd87fd1f3d90719a623e8c2d7df4cbf59ba2cb8e808f77ceb4",
-      "status": "pending"
+      "reason": "Complete adapter and native-text surface body reviewed. MPV owns native handle/generation/frame/sidecar behavior; MediaTracks owns mapping. App captures requested item/configuration and binds clock/subtitle surfaces. Audio acquisition and exact connection are checked before observe/open; native frame receipts require generation/sourceURL/item identity, and repeat surface attachment cannot restart the same item. No native backend or subtitle parser is implemented here. Real MPV/audio/surface acceptance remains held.",
+      "sha256": "3bbc7307096a9e2e577460a1ee7b8889e10e1316bb2ae30da868dbc33184ccac",
+      "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "KidsDiagnostics",
+        "SwiftfinFormatting",
+        "SwiftfinMediaTracks",
+        "SwiftfinText",
+        "SwiftfinTime",
+        "SwiftfinUIState",
+        "SwiftfinVLC"
+      ],
       "path": "Shared/Objects/MediaPlayerManager/MediaPlayerProxy/MediaPlayerProxy+VLC.swift",
-      "reason": "",
-      "sha256": "aa0393b8024460f9b8896885040281b693dee7c23b1084cf2e80f047155bb24a",
-      "status": "pending"
+      "reason": "Complete adapter/surface/subtitle-style body reviewed. NativeVLC owns handles, generations, opening, frame delivery, seeking, tracks and shutdown. App supplies item/sidecar/preferences, parent container bindings and natural-end callback. Surface task awaits audio, checks current manager/item/state/cancellation/account before open; stop revokes opened item and clock mapping. Frame callbacks require exact opened item. Forward-jump cap and resume offset are platform command adaptation. Actual decoder/drawable/audio acceptance remains held.",
+      "sha256": "1949a1f1c98fbcb8b105f1cf2141728ef1a6b2932096289b0920baf82801c0ee",
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -2406,11 +2451,18 @@
       "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinAsyncStreams",
+        "SwiftfinAudioSession",
+        "SwiftfinFormatting",
+        "SwiftfinNowPlaying",
+        "SwiftfinTime",
+        "SwiftfinVLC"
+      ],
       "path": "Shared/Objects/MediaPlayerManager/NowPlayable/NowPlayableObserver.swift",
-      "reason": "",
-      "sha256": "8b4a81bd1dd2c75f1e0353d4d13e84273d0b6c35913a9a055925b33677a7b273",
-      "status": "pending"
+      "reason": "Complete updated body reviewed. App composes OS commands/interruption observations with the existing NowPlaying/AudioSession/native owners and exact audio-owner UUID. AsyncStreams owns replaceable artwork task lifetime. Image binding is checked before/after IO and again for exact manager/item/audio owner before metadata publication. Terminal actions clear commands/subscriptions and release audio through captured native drain. All three backends now await audio acquisition before opening. Native interruptions/commands/audio output remain unexecuted under the hold.",
+      "sha256": "8929e91b1e00a261136ec426fc6794a74f4b8386a6fc87a3a420127a1a188b79",
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [
@@ -2441,11 +2493,16 @@
     {
       "owners": [
         "SwiftfinAsyncStreams",
-        "SwiftfinMediaCatalog"
+        "SwiftfinCollections",
+        "SwiftfinImages",
+        "SwiftfinLocalization",
+        "SwiftfinMediaCatalog",
+        "SwiftfinPlaybackPreparation",
+        "SwiftfinPlaybackProfiles"
       ],
       "path": "Shared/Objects/MediaPlayerManager/Supplements/EpisodeMediaPlayerQueue.swift",
-      "reason": "Season/episode UI and exact playback-provider composition retained. LatestRequest owns cancellation/generation/release, manager subscription preserves base session observers, catalog retains binding checks. Full overlay and resolver body comparisons retained.",
-      "sha256": "8e3d9a6917722040eb5b3a16d536dcadaf1577faba5074fe64ea66ef9219d01d",
+      "reason": "Complete updated queue and season/episode overlay body reviewed against retained baseline. LatestRequest owns metadata cancellation; exact current item/connection checks precede adjacent provider installation. All deferred adjacent/selected episode providers retain connection/backend. App retains picker/focus/layout and current bitrate composition; MediaCatalog owns adjacency/order. This does not enable a queue for the child manager or establish live queue acceptance.",
+      "sha256": "786918c224654aaf82a5ac4a9aae28a5ba879f7b472e277d7a4c4a36af0bd6bc",
       "status": "source-reviewed-retained"
     },
     {
@@ -4160,11 +4217,15 @@
       "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinCollections",
+        "SwiftfinLocalization",
+        "SwiftfinTime"
+      ],
       "path": "Shared/Views/VideoPlayer/Components/Toolbar/ActionButtons/PlaybackSettingsActionButton.swift",
-      "reason": "",
-      "sha256": "b014e1d52eefbaf6019398c65708b799e0329fe599991ef79c75823e3f10019e",
-      "status": "pending"
+      "reason": "Complete body reviewed. Retains version/bitrate picker presentation and supplied current playback DTO modification. Deferred version provider carries the original connection and backend; manager owns replaced request/current publication. Picker visibility, title and menu style are UI decisions; no request/profile implementation exists here.",
+      "sha256": "e14e3c0c2659b4db99c4766e544984e976319779e2687f1b326e4ab0325b3ebc",
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -5019,20 +5080,21 @@
     {
       "owners": [
         "KidsCatalog",
+        "KidsDiagnostics",
         "KidsDomain",
         "KidsExperience",
+        "KidsPlayback",
         "KidsPlaybackSession",
-        "KidsDiagnostics",
         "SwiftfinAsyncStreams",
-        "SwiftfinMediaTracks",
         "SwiftfinFormatting",
-        "SwiftfinTime",
-        "SwiftfinText"
+        "SwiftfinMediaTracks",
+        "SwiftfinText",
+        "SwiftfinTime"
       ],
       "path": "Swiftfin tvOS/App/KidsPlaybackAdapter.swift",
-      "reason": "Complete factory/driver/surface/track body reviewed, with exact connection repair: one captured PlaybackConnection performs metadata and deferred provider preparation, supplies the item reporting sender and rejects replacement before/after build. Synthetic failure clone preserves the same connection. Surface/native command readiness and parent-authorized tracks compose existing owners. Still mixed/unapproved: start-position normalization/DTO tick conversion and complete provider/manager generation-publication audit remain open. No native/runtime acceptance is claimed.",
-      "sha256": "e12112bbe36be82a199cdbe2efd83aec30d96af4d46a3e7455ae544274dec455",
-      "status": "source-reviewed-mixed"
+      "reason": "Complete updated factory/driver/surface/track/presentation body reviewed. One connection performs metadata and deferred build; exact kind/ID guards remain. KidsPlayback now owns finite resume normalization and safe integer ticks. Manager owns platform composition over tested request/effect owners; all native/report resources remain delegated. Synthetic failure clone preserves connection/backend. Parent-authorized track UI remains composition and child queue stays nil. This source does not establish real decoded readiness or playback under the runtime hold.",
+      "sha256": "44a720b3b85a7247bac6b8b7ace0169b2e11ecf9d5614558666a962afc195d7e",
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [
@@ -5586,18 +5648,20 @@
     },
     {
       "path": "Packages/SwiftfinAsyncStreams/Sources/SwiftfinAsyncStreams/LatestRequest.swift",
-      "reason": "Main-actor generic owner privately retains task/generation; value/UI callbacks are Sendable and caller UI is weakly captured. Retirement clears the task slot before cancellation; replace installs its ticket before cleanup and abandons obsolete reentrant work. Two new independently failing then passing cleanup-reentry contracts complement eight existing cancellation/failure/weak-owner/receipt tests. Cancellation/failure suppress publication; host logs current request failures explicitly. No unsafe production actor escape, application/SDK/settings dependency or public task handle is introduced.",
+      "reason": "Complete updated owner and original/new native contracts reviewed. Cancelled submission preserves current work; synchronous begin is checked against cancellation/replace reentry before IO; values and optional errors publish only for current noncancelled work. Fields revoke before callbacks. Waiting captures the task owned at entry. Seven new contracts plus existing scope/release/reentry tests pass (61 in the package). App player composes separate synchronous effect checkpoints and committed phases; UI actors/native decoder acceptance remains held.",
       "reviewedConsumers": [
-        "Shared/Services/UserSession/UserSessionManager.swift",
-        "Shared/Services/UserSession/UserSessionManager+SocketCommands.swift"
+        "Shared/Objects/MediaPlayerManager/MediaPlayerManager.swift",
+        "Shared/Objects/MediaPlayerManager/NowPlayable/NowPlayableObserver.swift",
+        "Shared/Objects/MediaPlayerManager/MediaPlayerProxy/MediaPlayerProxy+AVPlayer.swift"
       ],
       "reviewedInterfaces": [
         "init()",
-        "replace(operation:receive:)",
+        "replace(operation:begin:failure:receive:)",
+        "waitUntilFinished()",
         "cancel()",
         "isolated task teardown"
       ],
-      "sha256": "90a3b86573020168f4d358a80a8d70b937f9be28388b81e491e4bcf33be57af9"
+      "sha256": "4a3952b250c2d5ccbc555007fef09fb284fc2712afb47f79ac43381d8a4d3ac2"
     },
     {
       "path": "Packages/SwiftfinUIState/Sources/SwiftfinUIState/UIObjectSelection.swift",
@@ -5784,6 +5848,36 @@
         "reportingClient(identity:)"
       ],
       "sha256": "66793e814d66882d82fac37ee8c41bab359a82fce4dc75ccfc17328f6bc1c77b"
+    },
+    {
+      "path": "Packages/SwiftfinUIState/Sources/SwiftfinUIState/CommittedPublished.swift",
+      "reviewedInterfaces": [
+        "init(wrappedValue:)",
+        "wrappedValue",
+        "projectedValue"
+      ],
+      "reason": "Complete actor-qualified wrapper and closed UI-actor player consumers reviewed. Values commit before publication; current-value filtering discards an older emission after reentrant terminal assignment. Weak filter captures do not retain the value owner. Three native contracts verify stored-value reads, terminal reentry without assumed subscriber order and owner release; all26 UIState contracts pass. The publisher is explicitly a UI-actor composition API, not a foreign-executor bridge. Actual SwiftUI invalidation/native state observations remain held.",
+      "reviewedConsumers": [
+        "Shared/Objects/MediaPlayerManager/MediaPlayerManager.swift",
+        "Shared/Objects/MediaPlayerManager/MediaPlayerProxy/MediaPlayerProxy+AVPlayer.swift",
+        "Swiftfin tvOS/App/KidsPlaybackAdapter.swift"
+      ],
+      "sha256": "96daedac653abc355236253dc031c881a7a7ef472e284d0d469ff98b869ec125"
+    },
+    {
+      "path": "Packages/KidsPlayback/Sources/KidsPlayback/PlaybackPositionPolicy.swift",
+      "reviewedInterfaces": [
+        "KidsPlaybackStartPosition.init(_)",
+        "seconds",
+        "ticks",
+        "PlaybackCompletionPolicy.acceptsEnd(position:runtime:)"
+      ],
+      "reason": "Complete finite resume/tick and installed end-tolerance policies reviewed. Invalid/overflowing positions restart at zero; ordinary values keep seconds and truncate ticks. Four native contracts cover precision, invalid/boundary/representable maximum and early/exact/overrun end behavior. Missing runtime handling remains the caller Stop path; no decoder or persistence effect is owned here.",
+      "reviewedConsumers": [
+        "Swiftfin tvOS/App/KidsPlaybackAdapter.swift",
+        "Shared/Objects/MediaPlayerManager/MediaPlayerManager.swift"
+      ],
+      "sha256": "311c59093bd766c84207d6a9d4629118850e147ecac5be107f37686f2adef6a1"
     }
   ],
   "limits": "This ledger records bodies explicitly reviewed, with exact current hashes; earlier prose or lexical inventory is not automatically promoted. Pending and mixed entries prevent whole-source completion. Retained UI algorithms have specific presentation reasons, not folder/import-based blanket approval. API entries do not classify the rest of the public graph. Source review and offline tests do not satisfy held runtime acceptance.",
@@ -5792,11 +5886,11 @@
   "summary": {
     "applicationSwiftFiles": 665,
     "classification": {
-      "pending": 252,
-      "source-reviewed-mixed": 13,
-      "source-reviewed-retained": 400
+      "pending": 246,
+      "source-reviewed-mixed": 11,
+      "source-reviewed-retained": 408
     },
-    "currentAPIReviews": 38,
+    "currentAPIReviews": 40,
     "runtimeAcceptance": "held by human; no simulator/server testing"
   }
 }

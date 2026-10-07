@@ -764,3 +764,15 @@ Two preparation assertions were corrected before any new native test run:an over
 Simulator automation, installation, launches, playback and server-facing diagnostics remain stopped until explicit human resumption. Cancelled acceptance79 remains cancelled. These checks prove synthetic contracts, source review and compilation; actual Combine debounce, Stateful background-state lifetime, GUI editing/authentication/native playback and full whole-graph acceptance remain held. No real credential access, native permission prompt, household-server request or RAID operation was performed. The complete items1/2 objective remains active; physical-device/live CloudKit and separate server/release gates remain deferred.
 
 The final input-handler correction uses a quiet task-cancellation guard in both component and identification search submission. Inspection of the pinned StatefulMacro confirms that a thrown cancellation can reach its error-publication path before the post-handler cancelled-task check. Library/test/helper source hashes are identical to native60; only these two app adapters changed afterward. Earlier Debug130/Release55/iOS74 compile the preceding adapter; final131/56/75 cover the corrected guard. Actual macro/UI runtime acceptance remains held.
+
+## Player lifecycle composition (current source)
+
+The app player no longer relies on StatefulMacro scheduling. One LatestRequest
+owner replaces start/item/bitrate/track preparation. A separate effect checkpoint
+rejects synchronous publication reentry, while CommittedPublished supplies phase
+values after storage changes. Stop/error revoke both scopes before callbacks.
+Deferred providers, track/variant rebuilds and artwork carry the original account
+connection; all three native backends await audio acquisition before opening.
+Native implementation remains in NativePlayback/VLC/MPV, with report payloads and
+terminal transport in PlaybackReporting. This source integration is compile-only
+while the human runtime hold remains in force.

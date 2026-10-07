@@ -12,7 +12,7 @@ import JellyfinAPI
 typealias MediaPlayerItemProviderResolver = @MainActor @Sendable (BaseItemDto, (@Sendable (inout BaseItemDto) -> Void)?) async throws
     -> MediaPlayerItem
 
-struct MediaPlayerItemProvider {
+struct MediaPlayerItemProvider: Sendable {
 
     let item: BaseItemDto
     let mediaSource: MediaSourceInfo?
@@ -53,7 +53,12 @@ struct MediaPlayerItemProvider {
         return copy
     }
 
+    @MainActor
     func callAsFunction() async throws -> MediaPlayerItem {
-        try await resolver(item, modifyItem)
+        try Task.checkCancellation()
+        let prepared = try await resolver(item, modifyItem)
+        guard let connection = prepared.connection else { throw CancellationError() }
+        try connection.preparation.checkBinding()
+        return prepared
     }
 }

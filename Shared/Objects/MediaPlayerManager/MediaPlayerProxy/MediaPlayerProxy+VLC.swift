@@ -212,6 +212,8 @@ MediaPlayerOffsetConfigurable, MediaPlayerSubtitleConfigurable {
                         }
                         guard !Task.isCancelled, manager.state != .stopped, manager.state != .error,
                               manager.playbackItem === item else { return }
+                        guard let connection = item.connection else { throw CancellationError() }
+                        try connection.preparation.checkBinding()
                         let clockState = containerState
                         proxy.onClock = { [weak clockState] time in
                             guard let clockState, !clockState.isScrubbing else { return }

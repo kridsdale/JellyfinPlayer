@@ -41,7 +41,7 @@ class NowPlayableObserver: ViewModel, MediaPlayerObserver {
     }
 
     private let nowPlaying = NowPlayingController()
-    private var itemImageCancellable: AnyCancellable?
+    private let artworkRequests = LatestRequest<UIImage>()
     private var audioOwner: UUID?
     private var audioActivation: Task<Void, Error>?
     private var playbackRequestStateBeforeInterruption: MediaPlayerManager.PlaybackRequestStatus = .playing
@@ -124,26 +124,25 @@ class NowPlayableObserver: ViewModel, MediaPlayerObserver {
     // TODO: remove and respond to manager action publisher instead
     // TODO: register different commands based on item capabilities
     private func playbackItemDidChange(_ newItem: MediaPlayerItem?) {
-        itemImageCancellable?.cancel()
-        itemImageCancellable = nil
+        artworkRequests.cancel()
         guard let newItem else { return }
-
         nowPlaying.setMetadata(newItem.baseItem.nowPlayableStaticMetadata())
-
-        itemImageCancellable = Task {
-            let currentBaseItem = newItem.baseItem
-            guard let image = await newItem.thumbnailProvider?() else { return }
-            guard !Task.isCancelled, audioOwner != nil,
-                  manager?.state != .stopped, manager?.state != .error,
-                  manager?.item.id == currentBaseItem.id else { return }
-
-            await MainActor.run {
-                nowPlaying.setMetadata(
-                    currentBaseItem.nowPlayableStaticMetadata(image)
-                )
-            }
+        if let expectedManager = manager, let owner = audioOwner, let connection = newItem.connection {
+            artworkRequests.replace(operation: {
+                try connection.preparation.checkBinding()
+                guard let image = await newItem.thumbnailProvider?() else { throw CancellationError() }
+                try connection.preparation.checkBinding()
+                return image
+            }, receive: { [weak self, weak expectedManager, weak newItem] image in
+                guard let self, let expectedManager, let newItem,
+                      self.manager === expectedManager, self.audioOwner == owner,
+                      expectedManager.playbackItem === newItem,
+                      expectedManager.state != .stopped, expectedManager.state != .error else { return }
+                do { try connection.preparation.checkBinding() }
+                catch { return }
+                self.nowPlaying.setMetadata(newItem.baseItem.nowPlayableStaticMetadata(image))
+            })
         }
-        .asAnyCancellable()
 
         nowPlaying.updatePlayback(
             playing: true,
@@ -164,8 +163,7 @@ class NowPlayableObserver: ViewModel, MediaPlayerObserver {
 
     private func handleStopAction(draining player: VLCPlaybackController?) {
         cancellables = []
-        itemImageCancellable?.cancel()
-        itemImageCancellable = nil
+        artworkRequests.cancel()
         guard let owner = audioOwner else { return }
         audioOwner = nil
         audioActivation = nil

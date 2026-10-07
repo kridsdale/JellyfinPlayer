@@ -184,8 +184,10 @@ extension MediaPlayerItem {
         let sidecars = try preparation.sidecarSubtitles(from: trackPolicy.subtitleStreams)
 
         try preparation.checkBinding()
+        let thumbnailItem = item
         return .init(
             connection: connection,
+            videoPlayerType: videoPlayerType,
             baseItem: item,
             mediaSource: mediaSource,
             playSessionID: playSessionID,
@@ -197,7 +199,7 @@ extension MediaPlayerItem {
             initialAudioStreamIndex: audioStreamIndex,
             initialSubtitleStreamIndex: subtitleStreamIndex,
             previewImageProvider: previewImageProvider,
-            thumbnailProvider: item.getNowPlayingImage
+            thumbnailProvider: { await thumbnailItem.getNowPlayingImage(preparation: preparation) }
         )
     }
 }

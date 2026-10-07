@@ -29,9 +29,12 @@ extension VideoPlayer.PlaybackControls.Toolbar.ActionButtons {
             let requestedBitrate = playbackItem.requestedBitrate
 
             return MediaPlayerItemProvider(item: adjustedBaseItem, mediaSource: mediaSource) { baseItem, modifyItem in
-                try await MediaPlayerItem.build(
+                guard let connection = playbackItem.connection else { throw CancellationError() }
+                return try await MediaPlayerItem.build(
                     for: baseItem,
+                    connection: connection,
                     mediaSource: mediaSource,
+                    videoPlayerType: playbackItem.videoPlayerType,
                     requestedBitrate: requestedBitrate,
                     modifyItem: modifyItem
                 )

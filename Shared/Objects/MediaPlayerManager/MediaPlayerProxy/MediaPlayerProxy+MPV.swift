@@ -11,6 +11,7 @@ import Foundation
 import JellyfinAPI
 import SwiftfinMediaTracks
 import SwiftfinMPV
+import SwiftfinText
 import SwiftfinTime
 import SwiftfinUIState
 import SwiftUI
@@ -144,6 +145,9 @@ final class MPVMediaPlayerProxy: VideoMediaPlayerProxy, MediaPlayerOffsetConfigu
     }
 
     private func open(_ item: MediaPlayerItem, generation: UUID) {
+        guard let manager, manager.state != .stopped, manager.state != .error, let connection = item.connection else { return }
+        do { try connection.preparation.checkBinding() }
+        catch { return }
         // A caption/view-task reattachment must not restart the same active item.
         guard openedItem !== item || self.generation != generation || !native.isCurrent(generation) else { return }
         openedItem = item
@@ -158,8 +162,8 @@ final class MPVMediaPlayerProxy: VideoMediaPlayerProxy, MediaPlayerOffsetConfigu
             .init(
                 url: item.url,
                 start: item.baseItem.isLiveStream ? nil : start,
-                autoPlay: manager?.playbackRequestStatus == .playing,
-                rate: manager?.rate ?? 1,
+                autoPlay: manager.playbackRequestStatus == .playing,
+                rate: manager.rate,
                 sidecars: item.sidecarSubtitles.map { .init(jellyfinIndex: $0.jellyfinIndex, url: $0.url) }
             ),
             generation: generation
@@ -204,6 +208,19 @@ final class MPVMediaPlayerProxy: VideoMediaPlayerProxy, MediaPlayerOffsetConfigu
                     isAspectFilled: containerState.isAspectFilled
                 ) }
                 .task(id: ObjectIdentifier(item)) {
+                    do {
+                        for observer in proxy.observers {
+                            try await (observer as? NowPlayableObserver)?.prepareForPlayback()
+                        }
+                        guard let connection = item.connection else { throw CancellationError() }
+                        try connection.preparation.checkBinding()
+                    } catch is CancellationError { return }
+                    catch {
+                        guard !Task.isCancelled, manager.state != .stopped, manager.state != .error,
+                              manager.playbackItem === item else { return }
+                        await manager.error(ErrorMessage("Audio session could not start"))
+                        return
+                    }
                     guard !Task.isCancelled, manager.state != .stopped, manager.state != .error,
                           manager.playbackItem === item else { return }
                     let state = containerState

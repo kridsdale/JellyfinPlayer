@@ -20,6 +20,7 @@ import SwiftfinLocalization
 import SwiftfinMediaCatalog
 import SwiftfinMediaTracks
 import SwiftfinNowPlaying
+import SwiftfinPlaybackPreparation
 import SwiftfinRecordingTimers
 import SwiftfinText
 import SwiftfinTime
@@ -148,14 +149,22 @@ extension BaseItemDto {
     /// The primary image handler for building the
     /// image used in the now playing system.
     @MainActor
-    func getNowPlayingImage() async -> UIImage? {
+    func getNowPlayingImage(preparation: PlaybackPreparationClient? = nil) async -> UIImage? {
+        do { try Task.checkCancellation()
+            try preparation?.checkBinding()
+        } catch { return nil }
+        // Source URLs are materialized synchronously while this connection is current.
         let imageSources = imageSources(
             for: preferredPosterDisplayType,
             size: .small,
             environment: .init(useParent: true)
         )
 
-        guard let firstImage = await ImagePipeline.Swiftfin.other.loadFirstImage(from: imageSources) else {
+        let firstImage = await ImagePipeline.Swiftfin.other.loadFirstImage(from: imageSources)
+        do { try Task.checkCancellation()
+            try preparation?.checkBinding()
+        } catch { return nil }
+        guard let firstImage else {
             let failedSystemContentView = SystemImageContentView(
                 systemName: systemImage
             )
@@ -179,6 +188,7 @@ extension BaseItemDto {
         return ImageRenderer(content: transformedImage).uiImage
     }
 
+    @MainActor
     func getPlaybackItemProvider(
         userSession: UserSession?,
         mediaSource: MediaSourceInfo? = nil,
@@ -186,20 +196,25 @@ extension BaseItemDto {
         subtitleStreamIndex: Int? = nil,
         requestedBitrate: PlaybackBitrate = Defaults[.VideoPlayer.Playback.appMaximumBitrate]
     ) -> MediaPlayerItemProvider? {
+        guard let session = userSession ?? Container.shared.currentUserSession() else { return nil }
+        let connection = session.playbackConnection
+        do { try connection.preparation.checkBinding() }
+        catch { return nil }
         switch type {
         case .program:
-            guard isAiring, let userSession else { return nil }
+            guard isAiring, userSession != nil else { return nil }
 
             return MediaPlayerItemProvider(item: self) { program, modifyItem in
                 guard let channel = try? await program.getChannel(
                     for: program,
-                    userSession: userSession
+                    userSession: session
                 ) else {
                     throw ErrorMessage(L10n.unknownError)
                 }
 
                 return try await MediaPlayerItem.build(
                     for: channel,
+                    connection: connection,
                     modifyItem: modifyItem
                 )
             }
@@ -215,6 +230,7 @@ extension BaseItemDto {
             ) { item, modifyItem in
                 try await MediaPlayerItem.build(
                     for: item,
+                    connection: connection,
                     mediaSource: selectedMediaSource,
                     audioStreamIndex: audioStreamIndex,
                     subtitleStreamIndex: subtitleStreamIndex,

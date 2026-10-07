@@ -54,6 +54,7 @@ class MediaPlayerItem: ViewModel, MediaPlayerObserver {
 
     var observers: [any MediaPlayerObserver] = []
 
+    let videoPlayerType: VideoPlayerType
     let connection: PlaybackConnection?
     let baseItem: BaseItemDto
     let deviceProfile: DeviceProfile
@@ -75,6 +76,7 @@ class MediaPlayerItem: ViewModel, MediaPlayerObserver {
 
     init(
         connection: PlaybackConnection? = nil,
+        videoPlayerType: VideoPlayerType = Defaults[.VideoPlayer.videoPlayerType],
         baseItem: BaseItemDto,
         mediaSource: MediaSourceInfo,
         playSessionID: String,
@@ -88,6 +90,7 @@ class MediaPlayerItem: ViewModel, MediaPlayerObserver {
         previewImageProvider: (any PreviewImageProvider)? = nil,
         thumbnailProvider: ThumbnailProvider? = nil
     ) {
+        self.videoPlayerType = videoPlayerType
         self.connection = connection
         self.baseItem = baseItem
         self.mediaSource = mediaSource

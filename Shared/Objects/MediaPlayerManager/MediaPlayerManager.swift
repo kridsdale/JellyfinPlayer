@@ -6,13 +6,13 @@
 // Copyright (c) 2026 Jellyfin & Jellyfin Contributors
 //
 
-import CasePaths
 import Combine
 import Defaults
 import FactoryKit
 import Foundation
 import JellyfinAPI
 import KidsPlayback
+import SwiftfinAsyncStreams
 import SwiftfinCollections
 import SwiftfinFormatting
 import SwiftfinMediaTracks
@@ -65,16 +65,12 @@ extension Container {
     }
 }
 
-import StatefulMacros
-
 @MainActor
-@Stateful
 final class MediaPlayerManager: ViewModel {
 
-    @CasePathable
-    enum Action {
+    enum Action: Sendable {
         case ended
-        case error
+        case error(any Error)
         case playNewItem(provider: MediaPlayerItemProvider)
         case setBitrate(bitrate: PlaybackBitrate)
         case setRate(rate: Float)
@@ -82,25 +78,20 @@ final class MediaPlayerManager: ViewModel {
         case start
         case stop
         case togglePlayPause
-
-        var transition: Transition {
-            switch self {
-            case .error:
-                .to(.error)
-                    .invalid(.stopped)
-            case .playNewItem, .start:
-                .to(.loadingItem, then: .playback)
-                    .invalid(.stopped)
-            case .stop:
-                .to(.stopped)
-            default:
-                .none
-                    .invalid(.stopped)
-            }
-        }
     }
 
-    enum State {
+    typealias _Action = Action
+    let actions = LegacyEventPublisher<Action>()
+    private let preparationRequests = LatestRequest<MediaPlayerItem>()
+    private let publication = AsyncOperationGate()
+    @Published
+    private(set) var error: (any Error)?
+    @CommittedPublished
+    private(set) var state: State = .initial {
+        didSet { objectWillChange.send() }
+    }
+
+    enum State: Equatable, Sendable {
         case error
         case initial
         case loadingItem
@@ -252,231 +243,288 @@ final class MediaPlayerManager: ViewModel {
         self.playbackItem = playbackItem
     }
 
-    @Function(\Action.Cases.ended)
-    private func _ended() async throws {
-        // TODO: change to observe given seconds against runtime
-        //       instead of sent action?
+    private var acceptsCommands: Bool {
+        state != .stopped && state != .error
+    }
 
-        // Ended should represent natural ending of playback, which
-        // is verifiable by given seconds being near item runtime.
-        // VLC proxy will send ended early.
-        guard let runtime = item.runtime else {
-            await self.stop()
+    private func handleEnd() {
+        guard acceptsCommands else { return }
+        actions.send(.ended)
+        guard let runtime = item.runtime else { stop()
             return
         }
-        let isNearEnd = (runtime - seconds) <= .seconds(1)
-
-        guard isNearEnd else {
-            // If not near end, ignore.
+        guard PlaybackCompletionPolicy.acceptsEnd(position: seconds, runtime: runtime) else { return }
+        guard let connection = playbackItem?.connection else { stop()
             return
         }
-
-        if let nextItem = queue?.nextItem, try authenticatedUser.data.configuration?.enableNextEpisodeAutoPlay == true {
-            await self.playNewItem(provider: nextItem)
+        do { try connection.preparation.checkBinding() }
+        catch { stop()
+            return
+        }
+        if let nextItem = queue?.nextItem,
+           (try? authenticatedUser.data.configuration?.enableNextEpisodeAutoPlay) == true
+        {
+            playNewItem(provider: nextItem)
         } else {
-            await self.stop()
+            stop()
         }
     }
 
-    @Function(\Action.Cases.error)
-    private func onError(_ error: Error) async throws {
-        if let playbackItem {
-            logger.error(
-                "Error while playing item",
-                metadata: [
-                    "error": .string("\((error as NSError).domain):\((error as NSError).code)"),
-                    "itemID": .stringConvertible(playbackItem.baseItem.id ?? "Unknown"),
-                ]
-            )
-        } else {
-            logger.error(
-                "Error with no playback item",
-                metadata: [
-                    "error": .string("\((error as NSError).domain):\((error as NSError).code)"),
-                    "itemID": .stringConvertible(item.id ?? "Unknown"),
-                ]
-            )
-        }
+    func ended() {
+        handleEnd()
+    }
 
+    func ended() async {
+        handleEnd()
+        await preparationRequests.waitUntilFinished()
+    }
+
+    private func handleError(_ error: any Error) {
+        guard acceptsCommands else { return }
+        publication.cancel()
+        state = .error
+        preparationRequests.cancel()
+        self.error = error
+        actions.send(.error(error))
+        logger.error("Playback failed", metadata: [
+            "error": .string("\((error as NSError).domain):\((error as NSError).code)"),
+            "itemID": .stringConvertible(item.id ?? "Unknown")
+        ])
         onPlaybackError?(error)
         proxy?.stop()
         Container.shared.mediaPlayerManagerPublisher().send(.retired(self))
         Container.shared.resetMediaPlayerManager(ifCurrent: self)
     }
 
-    @Function(\Action.Cases.playNewItem)
-    private func _playNewItem(_ provider: MediaPlayerItemProvider) async throws {
-        item = provider.item
-        setSupplements()
-        proxy?.stop()
-        let prepared = try await provider()
-        try installPlaybackItem(prepared)
+    func error(_ error: any Error) {
+        handleError(error)
     }
 
-    @Function(\Action.Cases.setBitrate)
-    private func _setBitrate(_ requestedBitrate: PlaybackBitrate) async throws {
+    func error(_ error: any Error) async {
+        handleError(error)
+    }
+
+    private func submitItem(provider: MediaPlayerItemProvider) {
+        requestItem(action: .playNewItem(provider: provider), baseItem: provider.item) { try await provider() }
+    }
+
+    func playNewItem(provider: MediaPlayerItemProvider) {
+        submitItem(provider: provider)
+    }
+
+    func playNewItem(provider: MediaPlayerItemProvider) async {
+        submitItem(provider: provider)
+        await preparationRequests.waitUntilFinished()
+    }
+
+    private func submitBitrate(bitrate: PlaybackBitrate) {
         guard let currentItem = playbackItem else { return }
-
-        try await updateMediaPlayerItem(
-            currentItem: currentItem,
-            requestedBitrate: requestedBitrate
-        )
+        requestRebuild(currentItem: currentItem, requestedBitrate: bitrate, action: .setBitrate(bitrate: bitrate))
     }
 
-    // Transport observations are synchronous main-actor values, not queued state
-    // transitions. A queued native Play notification could otherwise execute after Stop.
-    func setPlaybackRequestStatus(status: PlaybackRequestStatus) {
-        guard state != .stopped, state != .error else { return }
-        if self.playbackRequestStatus != status {
-            self.playbackRequestStatus = status
+    func setBitrate(bitrate: PlaybackBitrate) {
+        submitBitrate(bitrate: bitrate)
+    }
 
-            switch status {
-            case .paused:
-                proxy?.pause()
-            case .playing:
-                proxy?.play()
-            }
+    func setBitrate(bitrate: PlaybackBitrate) async {
+        submitBitrate(bitrate: bitrate)
+        await preparationRequests.waitUntilFinished()
+    }
+
+    func setPlaybackRequestStatus(status: PlaybackRequestStatus) {
+        guard acceptsCommands, playbackRequestStatus != status else { return }
+        playbackRequestStatus = status
+        switch status {
+        case .paused: proxy?.pause()
+        case .playing: proxy?.play()
         }
     }
 
-    @Function(\Action.Cases.setRate)
-    private func set(_ rate: Float) async {
-        MainActor.preconditionIsolated()
-        guard !Task.isCancelled, state != .stopped, state != .error else { return }
+    private func updateRate(rate: Float) {
+        guard acceptsCommands, !Task.isCancelled else { return }
+        actions.send(.setRate(rate: rate))
         if self.rate != rate {
             self.rate = rate
         }
     }
 
-    @Function(\Action.Cases.setTrack)
-    private func _setTrack(_ type: MediaStreamType, _ oldIndex: Int?, _ newIndex: Int?) async throws {
-        guard let playbackItem else {
-            logger.warning("MediaPlayerManager.SetTrack call with an invalid playbackItem")
+    func setRate(rate: Float) {
+        updateRate(rate: rate)
+    }
+
+    func setRate(rate: Float) async {
+        updateRate(rate: rate)
+    }
+
+    private func submitTrack(type: MediaStreamType, from oldIndex: Int?, to newIndex: Int? = nil) {
+        guard acceptsCommands, let currentItem = playbackItem, let connection = currentItem.connection else { return }
+        do { try connection.preparation.checkBinding() }
+        catch { return }
+        let valid: Bool = switch type {
+        case .audio: currentItem.audioStreams.contains { $0.index == oldIndex }
+        case .subtitle: newIndex == -1 || currentItem.subtitleStreams.contains { $0.index == newIndex }
+        default: false
+        }
+        guard valid else { logger.warning("Invalid playback track selection")
             return
         }
-
-        switch type {
-        case .audio:
-            guard playbackItem.audioStreams.contains(where: { $0.index == oldIndex }) else {
-                logger.warning("MediaPlayerManager.SetTrack call with an invalid audio track index")
-                return
-            }
-
-            if playbackItem.isRebuildRequired(type: .audio, from: oldIndex, to: newIndex) {
-                try await updateMediaPlayerItem(
-                    currentItem: playbackItem,
-                    audioStreamIndex: newIndex
-                )
-            } else {
-                playbackItem.switchTrack(type: .audio, index: newIndex)
-            }
-        case .subtitle:
-            guard newIndex == -1 || playbackItem.subtitleStreams.contains(where: { $0.index == newIndex }) else {
-                logger.warning("MediaPlayerManager.SetTrack call with an invalid subtitle track index")
-                return
-            }
-
-            if playbackItem.isRebuildRequired(type: .subtitle, from: oldIndex, to: newIndex) {
-                try await updateMediaPlayerItem(
-                    currentItem: playbackItem,
-                    subtitleStreamIndex: newIndex
-                )
-            } else {
-                playbackItem.switchTrack(type: .subtitle, index: newIndex)
-            }
-        default:
-            logger.warning("MediaPlayerManager.SetTrack called with unsupported type: \(String(describing: type))")
+        let action = Action.setTrack(type: type, from: oldIndex, to: newIndex)
+        if currentItem.isRebuildRequired(type: type, from: oldIndex, to: newIndex) {
+            requestRebuild(
+                currentItem: currentItem,
+                audioStreamIndex: type == .audio ? newIndex : nil,
+                subtitleStreamIndex: type == .subtitle ? newIndex : nil,
+                action: action
+            )
+        } else {
+            actions.send(action)
+            currentItem.switchTrack(type: type, index: newIndex)
         }
     }
 
-    @Function(\Action.Cases.start)
-    private func _start() async throws {
-        guard let initialMediaPlayerItemProvider else {
-            await self.stop()
-            return
-        }
-        self.initialMediaPlayerItemProvider = nil
-        let prepared = try await initialMediaPlayerItemProvider()
-        try installPlaybackItem(prepared)
+    func setTrack(type: MediaStreamType, from oldIndex: Int?, to newIndex: Int? = nil) {
+        submitTrack(
+            type: type,
+            from: oldIndex,
+            to: newIndex
+        )
     }
 
-    // TODO: remove playback item?
-    //       - check that observers would respond correctly to stopping
-    @Function(\Action.Cases.stop)
-    private func _stop() async throws {
+    func setTrack(type: MediaStreamType, from oldIndex: Int?, to newIndex: Int? = nil) async {
+        submitTrack(type: type, from: oldIndex, to: newIndex)
+        await preparationRequests.waitUntilFinished()
+    }
+
+    private func submitStart() {
+        guard acceptsCommands else { return }
+        guard let provider = initialMediaPlayerItemProvider else { stop()
+            return
+        }
+        initialMediaPlayerItemProvider = nil
+        requestItem(action: .start, baseItem: provider.item) { try await provider() }
+    }
+
+    func start() {
+        submitStart()
+    }
+
+    func start() async {
+        submitStart()
+        await preparationRequests.waitUntilFinished()
+    }
+
+    private func retire() {
+        guard state != .stopped else { return }
+        publication.cancel()
+        state = .stopped
+        preparationRequests.cancel()
         playbackItem?.previewImageProvider?.invalidate()
-        await self.cancel()
-
+        actions.send(.stop)
         proxy?.stop()
         Container.shared.mediaPlayerManagerPublisher().send(.retired(self))
         Container.shared.resetMediaPlayerManager(ifCurrent: self)
     }
 
-    @Function(\Action.Cases.togglePlayPause)
-    private func _togglePlayPause() async {
-        MainActor.preconditionIsolated()
-        switch playbackRequestStatus {
-        case .playing:
-            setPlaybackRequestStatus(status: .paused)
-        case .paused:
-            setPlaybackRequestStatus(status: .playing)
-        }
+    func stop() {
+        retire()
+    }
+
+    func stop() async {
+        retire()
+    }
+
+    private func toggleTransport() {
+        guard acceptsCommands else { return }
+        actions.send(.togglePlayPause)
+        setPlaybackRequestStatus(status: playbackRequestStatus == .playing ? .paused : .playing)
+    }
+
+    func togglePlayPause() {
+        toggleTransport()
+    }
+
+    func togglePlayPause() async {
+        toggleTransport()
+    }
+
+    private func requestItem(
+        action: Action,
+        baseItem: BaseItemDto,
+        position: Duration? = nil,
+        operation: @escaping @MainActor @Sendable () async throws -> MediaPlayerItem
+    ) {
+        guard acceptsCommands, !Task.isCancelled else { return }
+        let validate = publication.begin()
+        preparationRequests.replace(operation: {
+            try validate()
+            let prepared = try await operation()
+            try validate()
+            return prepared
+        }, begin: { [weak self] in
+            guard let self else { return }
+            do {
+                try validate()
+                self.state = .loadingItem
+                try validate()
+                self.item = baseItem
+                try validate()
+                self.setSupplements()
+                try validate()
+                self.proxy?.stop()
+                try validate()
+                self.actions.send(action)
+            } catch {}
+        }, failure: { [weak self] failure in
+            self?.error(failure)
+        }, receive: { [weak self] prepared in
+            guard let self else { return }
+            do {
+                try validate()
+                try self.installPlaybackItem(prepared)
+                try validate()
+                if let position {
+                    self.seconds = position
+                    try validate()
+                }
+                self.state = .playback
+            } catch is CancellationError {}
+            catch { self.error(error) }
+        })
     }
 
     /// Rebuilds the playback item with new stream indexes / bitrate.
     /// Stops the current proxy, requests new playback info from the server, and starts playback with the new configuration.
     ///
     /// Rebuilds the current item
-    private func updateMediaPlayerItem(
+    private func requestRebuild(
         currentItem: MediaPlayerItem,
         audioStreamIndex: Int? = nil,
         subtitleStreamIndex: Int? = nil,
-        requestedBitrate: PlaybackBitrate? = nil
-    ) async throws {
-
-        guard let connection = currentItem.connection else { throw CancellationError() }
-        try connection.preparation.checkBinding()
-
-        // Capture the current playback position before stopping
-        let currentSeconds = self.seconds
+        requestedBitrate: PlaybackBitrate? = nil,
+        action: Action
+    ) {
+        guard acceptsCommands, let connection = currentItem.connection else { return }
+        do { try connection.preparation.checkBinding() }
+        catch { return }
+        let currentSeconds = seconds
         currentItem.previewImageProvider?.invalidate()
-
-        logger.info(
-            "Rebuilding Media Player Item",
-            metadata: [
-                "audioIndex": "\(audioStreamIndex ?? -1)",
-                "subtitleIndex": "\(subtitleStreamIndex ?? -1)",
-                "currentSeconds": "\(currentSeconds)",
-            ]
-        )
-
-        proxy?.stop()
-
-        let newItem = try await MediaPlayerItem.build(
-            for: currentItem.baseItem,
-            connection: connection,
-            mediaSource: currentItem.mediaSource,
-            audioStreamIndex: audioStreamIndex ?? currentItem.selectedAudioStreamIndex,
-            subtitleStreamIndex: subtitleStreamIndex ?? currentItem.selectedSubtitleStreamIndex,
-            requestedBitrate: requestedBitrate ?? currentItem.requestedBitrate,
-            modifyItem: { item in
-                if item.userData == nil {
-                    item.userData = UserItemDataDto(key: "")
+        requestItem(action: action, baseItem: currentItem.baseItem, position: currentSeconds) {
+            try await MediaPlayerItem.build(
+                for: currentItem.baseItem,
+                connection: connection,
+                mediaSource: currentItem.mediaSource,
+                audioStreamIndex: audioStreamIndex ?? currentItem.selectedAudioStreamIndex,
+                subtitleStreamIndex: subtitleStreamIndex ?? currentItem.selectedSubtitleStreamIndex,
+                videoPlayerType: currentItem.videoPlayerType,
+                requestedBitrate: requestedBitrate ?? currentItem.requestedBitrate,
+                modifyItem: { item in
+                    if item.userData == nil {
+                        item.userData = UserItemDataDto(key: "")
+                    }
+                    item.userData?.playbackPositionTicks = currentSeconds.ticks
                 }
-                item.userData?.playbackPositionTicks = currentSeconds.ticks
-            }
-        )
-
-        logger.info(
-            "Built new playback item",
-            metadata: [
-                "playSessionID": "\(newItem.playSessionID)",
-                "isTranscoding": "\(newItem.mediaSource.transcodingURL != nil)",
-            ]
-        )
-
-        try installPlaybackItem(newItem)
-        self.seconds = currentSeconds
+            )
+        }
     }
 
     /// Final synchronous publication check after any awaited provider/rebuild.

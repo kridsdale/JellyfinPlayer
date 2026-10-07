@@ -10,6 +10,7 @@ import Combine
 import Defaults
 import Foundation
 import JellyfinAPI
+import SwiftfinAsyncStreams
 import SwiftfinFormatting
 import SwiftfinNativePlayback
 import SwiftfinText
@@ -30,6 +31,7 @@ final class AVMediaPlayerProxy: VideoMediaPlayerProxy {
     private weak var openedItem: MediaPlayerItem?
     private var itemObservation: AnyCancellable?
     private var stateObservation: AnyCancellable?
+    private let openingRequests = LatestRequest<MediaPlayerItem>()
     var observers: [any MediaPlayerObserver] = [NowPlayableObserver()]
     weak var manager: MediaPlayerManager? {
         didSet {
@@ -44,7 +46,7 @@ final class AVMediaPlayerProxy: VideoMediaPlayerProxy {
                 guard let item else { self?.stop()
                     return
                 }
-                self?.open(item)
+                self?.prepare(item)
             }
             stateObservation = manager.$state.sink { [weak self] state in
                 if state == .stopped || state == .error {
@@ -58,7 +60,31 @@ final class AVMediaPlayerProxy: VideoMediaPlayerProxy {
         native.onEvent = { [weak self] event in self?.receive(event) }
     }
 
+    private func prepare(_ item: MediaPlayerItem) {
+        guard let expectedManager = manager, let connection = item.connection else { return }
+        let observers = self.observers
+        openingRequests.replace(operation: {
+            try connection.preparation.checkBinding()
+            for observer in observers {
+                try await (observer as? NowPlayableObserver)?.prepareForPlayback()
+            }
+            try connection.preparation.checkBinding()
+            return item
+        }, failure: { [weak self, weak expectedManager] error in
+            guard let self, let expectedManager, self.manager === expectedManager,
+                  expectedManager.playbackItem === item else { return }
+            expectedManager.error(error)
+        }, receive: { [weak self, weak expectedManager] item in
+            guard let self, let expectedManager, self.manager === expectedManager,
+                  expectedManager.playbackItem === item else { return }
+            self.open(item)
+        })
+    }
+
     private func open(_ item: MediaPlayerItem) {
+        guard let manager, manager.state != .stopped, manager.state != .error, let connection = item.connection else { return }
+        do { try connection.preparation.checkBinding() }
+        catch { return }
         let base = item.baseItem
         let episodeSeries = base.type == .episode ? base.seriesName : nil
         let start = max(.zero, (base.startSeconds ?? .zero) - .seconds(Defaults[.VideoPlayer.resumeOffset]))
@@ -111,6 +137,7 @@ final class AVMediaPlayerProxy: VideoMediaPlayerProxy {
     }
 
     func stop() {
+        openingRequests.cancel()
         openedItem = nil
         isBuffering.value = false
         native.stop()

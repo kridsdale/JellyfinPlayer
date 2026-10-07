@@ -14,6 +14,7 @@ import KidsCatalog
 import KidsDiagnostics
 import KidsDomain
 import KidsExperience
+import KidsPlayback
 import KidsPlaybackSession
 import SwiftfinAsyncStreams
 import SwiftfinFormatting
@@ -51,7 +52,7 @@ final class SwiftfinKidsPlaybackFactory: KidsPlaybackSessionFactory {
         guard raw.id == item.id, raw.mediaType == .video,
               (item.kind == .episode && raw.type == .episode) || (item.kind == .movie && raw.type == .movie)
         else { throw KidsContractError.denied }
-        let start = max(0, position)
+        let start = KidsPlaybackStartPosition(position)
         #if DEBUG
         let failStreamOnce = simulateStreamFailure
         #endif
@@ -69,7 +70,7 @@ final class SwiftfinKidsPlaybackFactory: KidsPlaybackSessionFactory {
                         if dto.userData == nil {
                             dto.userData = UserItemDataDto(key: "")
                         }
-                        dto.userData?.playbackPositionTicks = Int(start * 10_000_000)
+                        dto.userData?.playbackPositionTicks = start.ticks
                     }
                 )
                 try preparation.checkBinding()
@@ -79,6 +80,7 @@ final class SwiftfinKidsPlaybackFactory: KidsPlaybackSessionFactory {
                 if failStreamOnce {
                     return MediaPlayerItem(
                         connection: built.connection,
+                        videoPlayerType: built.videoPlayerType,
                         baseItem: built.baseItem,
                         mediaSource: built.mediaSource,
                         playSessionID: built.playSessionID,
@@ -111,7 +113,7 @@ final class SwiftfinKidsPlaybackFactory: KidsPlaybackSessionFactory {
             item: item,
             title: title,
             mode: mode,
-            position: start,
+            position: start.seconds,
             episodes: episodes,
             driver: driver,
             delegate: delegate,

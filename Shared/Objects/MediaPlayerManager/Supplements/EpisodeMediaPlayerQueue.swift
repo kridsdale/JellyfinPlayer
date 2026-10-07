@@ -18,6 +18,8 @@ import SwiftfinCollections
 import SwiftfinImages
 import SwiftfinLocalization
 import SwiftfinMediaCatalog
+import SwiftfinPlaybackPreparation
+import SwiftfinPlaybackProfiles
 import SwiftUI
 
 @MainActor
@@ -83,23 +85,27 @@ class EpisodeMediaPlayerQueue: ViewModel, MediaPlayerQueue {
 
     private func didReceive(newItem: MediaPlayerItem?) {
         resetAdjacentEpisodes()
-        guard let item = newItem?.baseItem else { return }
+        guard let newItem, let connection = newItem.connection else { return }
+        let item = newItem.baseItem
         do {
+            try connection.preparation.checkBinding()
             let catalog = try requireMediaCatalog()
             adjacencyRequests.replace(operation: {
                 let adjacent = try await catalog.adjacentEpisodes(for: item)
                 try catalog.checkBinding()
                 return adjacent
-            }, receive: { [weak self] adjacent in
-                guard let self, self.manager != nil else { return }
-                self.installAdjacentEpisodes(adjacent)
+            }, receive: { [weak self, weak newItem] adjacent in
+                guard let self, let newItem, self.manager?.playbackItem === newItem else { return }
+                do { try connection.preparation.checkBinding() }
+                catch { return }
+                self.installAdjacentEpisodes(adjacent, connection: connection, videoPlayerType: newItem.videoPlayerType)
             })
         } catch {
             // Missing or replaced account bindings leave the queue empty.
         }
     }
 
-    private func installAdjacentEpisodes(_ adjacent: AdjacentEpisodes) {
+    private func installAdjacentEpisodes(_ adjacent: AdjacentEpisodes, connection: PlaybackConnection, videoPlayerType: VideoPlayerType) {
         let nextItem = adjacent.next
         let previousItem = adjacent.previous
 
@@ -109,7 +115,12 @@ class EpisodeMediaPlayerQueue: ViewModel, MediaPlayerQueue {
         if let nextItem {
             nextProvider = MediaPlayerItemProvider(item: nextItem) { [weak self] item, modifyItem in
                 let bitrate = self?.manager?.playbackBitrate ?? Defaults[.VideoPlayer.Playback.appMaximumBitrate]
-                return try await MediaPlayerItem.build(for: item, requestedBitrate: bitrate) { item in
+                return try await MediaPlayerItem.build(
+                    for: item,
+                    connection: connection,
+                    videoPlayerType: videoPlayerType,
+                    requestedBitrate: bitrate
+                ) { item in
                     item.userData?.playbackPositionTicks = .zero
                     modifyItem?(&item)
                 }
@@ -119,7 +130,12 @@ class EpisodeMediaPlayerQueue: ViewModel, MediaPlayerQueue {
         if let previousItem {
             previousProvider = MediaPlayerItemProvider(item: previousItem) { [weak self] item, modifyItem in
                 let bitrate = self?.manager?.playbackBitrate ?? Defaults[.VideoPlayer.Playback.appMaximumBitrate]
-                return try await MediaPlayerItem.build(for: item, requestedBitrate: bitrate) { item in
+                return try await MediaPlayerItem.build(
+                    for: item,
+                    connection: connection,
+                    videoPlayerType: videoPlayerType,
+                    requestedBitrate: bitrate
+                ) { item in
                     item.userData?.playbackPositionTicks = .zero
                     modifyItem?(&item)
                 }
@@ -154,9 +170,13 @@ extension EpisodeMediaPlayerQueue {
         }
 
         private func select(episode: BaseItemDto) {
+            guard let playbackItem = manager.playbackItem, let connection = playbackItem.connection else { return }
+            let videoPlayerType = playbackItem.videoPlayerType
             let provider = MediaPlayerItemProvider(item: episode) { [manager] item, modifyItem in
                 try await MediaPlayerItem.build(
                     for: item,
+                    connection: connection,
+                    videoPlayerType: videoPlayerType,
                     requestedBitrate: manager.playbackBitrate,
                     modifyItem: modifyItem
                 )
