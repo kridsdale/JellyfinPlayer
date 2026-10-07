@@ -13,6 +13,9 @@ import JellyfinAPI
 import KidsAccounts
 import KidsCatalog
 import KidsDomain
+import SwiftfinAccountAccess
+import SwiftfinAccountModels
+import SwiftfinAccountStore
 import SwiftfinCredentials
 import SwiftfinNetworking
 
@@ -68,26 +71,29 @@ final class SwiftfinKidsAccountHost: KidsAccountHost {
         password: String
     ) async throws -> KidsAuthenticatedAccount {
         let client = JellyfinTransport.swiftfin(url: url, policy: .systemDefault, logging: false)
-        let result = try await client.authenticate(username: username, password: password)
-        guard let token = result.accessToken, let user = result.user, let userID = user.id else { throw KidsAPIError.authentication }
-        let identity = KidsAccountIdentity(serverURL: url, serverID: serverID, serverName: serverName, userID: userID, accessToken: token)
+        let access = AccountAccessClient(transport: client, expectedServerID: serverID)
+        let result: AccountAuthentication
+        do {
+            result = try await access.signIn(username: username, password: password, fallbackUsername: username)
+        } catch is AccountAccessError {
+            throw KidsAPIError.authentication
+        }
+        let identity = KidsAccountIdentity(
+            serverURL: url,
+            serverID: serverID,
+            serverName: serverName,
+            userID: result.userID,
+            accessToken: result.accessToken
+        )
+        let server = ServerState(urls: [url], currentURL: url, name: serverName, id: serverID, userIDs: [result.userID])
+        let saved = UserState(id: result.userID, serverID: serverID, username: result.username)
         return KidsAuthenticatedAccount(identity: identity, credentialStorage: {
-            let keychain = Container.shared.keychainService()
-            try keychain.write(token, to: .accessToken(userID: userID))
-            let server = ServerState(urls: [url], currentURL: url, name: serverName, id: serverID, userIDs: [userID])
-            var servers = StoredValues[.Server.servers]
-            servers.removeAll { $0.id == serverID }
-            servers.append(server)
-            StoredValues[.Server.servers] = servers
-            let saved = UserState(id: userID, serverID: serverID, username: user.name ?? username)
-            saved.data = user
+            let store = Container.shared.localAccountStore()
+            try store.saveAuthenticatedAccount(server, user: saved, accessToken: result.accessToken)
+            saved.data = result.user
             saved.accessPolicy = .none
-            var users = StoredValues[.User.users]
-            users.removeAll { $0.id == userID }
-            users.append(saved)
-            StoredValues[.User.users] = users
         }) { [sessions] in
-            try await sessions.signIn(userID: userID)
+            try await sessions.signIn(userID: result.userID)
         }
     }
 

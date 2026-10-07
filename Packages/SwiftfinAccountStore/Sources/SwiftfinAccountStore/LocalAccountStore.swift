@@ -12,6 +12,8 @@ import SwiftfinCredentials
 import SwiftfinStorage
 import SwiftfinStoredValues
 
+public enum AccountStoreError: Error, Sendable { case identityMismatch }
+
 /// Owns local account records, their scoped settings and credential operations.
 /// It neither contacts a server nor resolves an application session/global.
 @MainActor
@@ -117,6 +119,49 @@ public final class LocalAccountStore {
 
     public func storeAccessToken(_ token: String, userID: String) throws {
         try credentials.write(token, to: .accessToken(userID: userID))
+    }
+
+    /// Preserves credential-first local admission. Failures are not a cross-store transaction.
+    public func saveAuthenticatedUser(_ user: UserAccountRecord, accessToken: String, pin: String? = nil) throws {
+        try storeAccessToken(accessToken, userID: user.id)
+        if let pin {
+            try storePIN(pin, userID: user.id)
+        }
+        replaceUserRecord(user)
+        var records = servers
+        if let index = records.firstIndex(where: { $0.id == user.serverID }) {
+            let server = records[index]
+            let ids = server.userIDs.contains(user.id) ? server.userIDs : server.userIDs + [user.id]
+            records[index] = .init(
+                urls: server.urls,
+                currentURL: server.currentURL,
+                name: server.name,
+                id: server.id,
+                userIDs: ids
+            )
+            servers = records
+        }
+    }
+
+    /// Install the explicitly supplied local account records after successful authentication.
+    /// This retains the Kids admission order and replaces only matching record identities.
+    public func saveAuthenticatedAccount(_ server: ServerAccountRecord, user: UserAccountRecord, accessToken: String) throws {
+        guard user.serverID == server.id, server.userIDs.contains(user.id) else {
+            throw AccountStoreError.identityMismatch
+        }
+        try storeAccessToken(accessToken, userID: user.id)
+        var records = servers
+        records.removeAll { $0.id == server.id }
+        records.append(server)
+        servers = records
+        replaceUserRecord(user)
+    }
+
+    private func replaceUserRecord(_ user: UserAccountRecord) {
+        var records = users
+        records.removeAll { $0.id == user.id }
+        records.append(user)
+        users = records
     }
 
     public func pin(userID: String) throws -> String? {

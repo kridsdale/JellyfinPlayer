@@ -192,3 +192,28 @@ func `track snapshot and maps transfer to worker executor`() async {
     let result = await Task.detached { policy.initialIndexMap.playerIndex(for: policy.selectedAudioIndex) }.value
     #expect(result == 0)
 }
+
+@Test
+func `raw source projections preserve nil versus empty lists`() {
+    let missing = MediaSourceInfo()
+    #expect(missing.audioStreams == nil && missing.subtitleStreams == nil && missing.videoStreams == nil)
+    let empty = source([])
+    #expect(empty.audioStreams == [] && empty.subtitleStreams == [] && empty.videoStreams == [])
+}
+
+@Test
+func `raw source projections keep order and external streams without applying player policy`() {
+    let media = source([
+        stream(4, .audio, external: true),
+        stream(2, .video),
+        stream(8, .subtitle, codec: "pgs", external: true),
+        stream(1, .audio),
+        stream(9, .subtitle, method: .drop)
+    ])
+    #expect(media.audioStreams?.map(\.index) == [4, 1])
+    #expect(media.videoStreams?.map(\.index) == [2])
+    #expect(media.subtitleStreams?.map(\.index) == [8, 9])
+    let playback = MediaTrackPolicy(mediaSource: media, deviceProfile: profile(), compatibility: .directPlay)
+    #expect(playback.audioStreams.map(\.index) == [1])
+    #expect(playback.subtitleStreams.isEmpty)
+}

@@ -298,3 +298,56 @@ func `redirected connection includes changed port and base path but rejects wron
     #expect(AccountConnectionPolicy.redirectedURL(initial: initial, response: URL(string: "https://other.example/unrelated")) == initial)
     #expect(AccountConnectionPolicy.redirectedURL(initial: initial, response: nil) == initial)
 }
+
+@Test @MainActor
+func `explicit entered name fallback preserves kids login without weakening strict login`() async throws {
+    let transport = Transport()
+    transport.auth.user?.name = nil
+    let client = make(transport)
+    await #expect(throws: AccountAccessError.self) { try await client.signIn(username: "Entered", password: "fixture") }
+    let result = try await client.signIn(username: "Entered", password: "fixture", fallbackUsername: "Entered")
+    #expect(result.userID == "user" && result.username == "Entered" && result.accessToken == "fixture-token")
+    #expect(result.user.name == nil)
+}
+
+@Test @MainActor
+func `server username wins over entered fallback including an existing empty name`() async throws {
+    let transport = Transport()
+    let client = make(transport)
+    #expect(try await client.signIn(username: "Alias", password: "fixture", fallbackUsername: "Alias").username == "User")
+    transport.auth.user?.name = ""
+    #expect(try await client.signIn(username: "Alias", password: "fixture", fallbackUsername: "Alias").username == "")
+}
+
+@Test @MainActor
+func `fallback name cannot supply missing authentication identity or cross server binding`() async {
+    for missing in 0 ..< 4 {
+        let transport = Transport()
+        switch missing {
+        case 0: transport.auth.accessToken = nil
+        case 1: transport.auth.user = nil
+        case 2: transport.auth.user?.id = nil
+        default: transport.auth.serverID = "other"
+        }
+        let client = make(transport)
+        await #expect(throws: AccountAccessError.self) {
+            try await client.signIn(username: "Entered", password: "fixture", fallbackUsername: "Entered")
+        }
+    }
+}
+
+@Test @MainActor
+func `fallback login still rejects A replaced connection after the await`() async throws {
+    let transport = Transport()
+    transport.auth.user?.name = nil
+    transport.blocked = true
+    let binding = Binding()
+    let client = make(transport, binding)
+    let operation = Task { @MainActor in
+        try await client.signIn(username: "Entered", password: "fixture", fallbackUsername: "Entered")
+    }
+    try await transport.wait()
+    binding.current = false
+    transport.release()
+    await #expect(throws: CancellationError.self) { try await operation.value }
+}

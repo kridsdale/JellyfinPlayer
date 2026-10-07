@@ -13,6 +13,7 @@ import Foundation
 import JellyfinAPI
 import KidsPlayback
 import SwiftfinCollections
+import SwiftfinMediaTracks
 import SwiftfinPlaybackPreparation
 import SwiftfinUIState
 #if os(tvOS)

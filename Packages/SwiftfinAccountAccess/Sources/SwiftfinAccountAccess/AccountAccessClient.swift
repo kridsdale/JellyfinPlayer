@@ -20,8 +20,8 @@ public struct AccountAuthentication: Sendable {
     public let user: UserDto
     public let userID: String
     public let username: String
-    public init(_ result: AuthenticationResult) throws {
-        guard let accessToken = result.accessToken, let user = result.user, let id = user.id, let name = user.name
+    public init(_ result: AuthenticationResult, fallbackUsername: String? = nil) throws {
+        guard let accessToken = result.accessToken, let user = result.user, let id = user.id, let name = user.name ?? fallbackUsername
         else { throw AccountAccessError.invalidAuthentication }
         self.accessToken = accessToken
         self.user = user
@@ -78,15 +78,21 @@ public final class AccountAccessClient {
         return .init(users: result.0, disclaimer: disclaimer, quickConnectEnabled: Self.decodeBoolean(result.2))
     }
 
-    public func signIn(username: String, password: String) async throws -> AccountAuthentication {
-        try await authenticate { try await self.transport.authenticate(username: username, password: password) }
+    public func signIn(username: String, password: String, fallbackUsername: String? = nil) async throws -> AccountAuthentication {
+        try await authenticate(fallbackUsername: fallbackUsername) { try await self.transport.authenticate(
+            username: username,
+            password: password
+        ) }
     }
 
     public func signIn(quickConnectSecret: String) async throws -> AccountAuthentication {
         try await authenticate { try await self.transport.authenticate(quickConnectSecret: quickConnectSecret) }
     }
 
-    private func authenticate(_ operation: @MainActor () async throws -> AuthenticationResult) async throws -> AccountAuthentication {
+    private func authenticate(
+        fallbackUsername: String? = nil,
+        _ operation: @MainActor () async throws -> AuthenticationResult
+    ) async throws -> AccountAuthentication {
         try checkBinding()
         do {
             let result = try await operation()
@@ -94,7 +100,7 @@ public final class AccountAccessClient {
             if let expectedServerID, result.serverID != expectedServerID {
                 throw AccountAccessError.serverIdentityChanged
             }
-            return try .init(result)
+            return try .init(result, fallbackUsername: fallbackUsername)
         } catch { try checkBinding()
             throw error
         }

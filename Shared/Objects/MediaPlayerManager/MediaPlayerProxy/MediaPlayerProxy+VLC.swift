@@ -10,6 +10,7 @@ import Defaults
 import Foundation
 import JellyfinAPI
 import KidsDiagnostics
+import SwiftfinMediaTracks
 import SwiftfinUIState
 import SwiftfinVLC
 import SwiftUI

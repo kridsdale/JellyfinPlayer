@@ -261,4 +261,82 @@ struct AccountStoreContracts {
         #expect(try f.store.pin(userID: f.userID) == "old test PIN")
         #expect(f.store.accessPolicy(userID: f.userID) == .requirePin)
     }
+
+    @Test
+    func `authenticated account admission replaces only the explicit records and keeps adjacent state`() async throws {
+        let f = try await Fixture()
+        defer { f.clean() }
+        let otherServer = ServerAccountRecord(urls: [], currentURL: f.server.currentURL, name: "Other", id: f.otherID, userIDs: [])
+        let otherUser = UserAccountRecord(id: f.otherID, serverID: f.otherID, username: "Other")
+        f.store.servers = [otherServer, f.server]
+        f.store.users = [otherUser, f.user]
+        try f.seedOpaqueMetadata(owner: f.userID)
+        try f.store.storePIN("existing PIN", userID: f.userID)
+        f.store.setAccessPolicy(.requirePin, userID: f.userID)
+        let updated = UserAccountRecord(id: f.userID, serverID: f.serverID, username: "Updated")
+        try f.store.saveAuthenticatedAccount(f.server, user: updated, accessToken: "new test token")
+        #expect(f.store.servers == [otherServer, f.server])
+        #expect(f.store.users == [otherUser, updated])
+        #expect(try f.store.accessToken(userID: f.userID) == "new test token")
+        #expect(try f.store.pin(userID: f.userID) == "existing PIN")
+        #expect(f.store.accessPolicy(userID: f.userID) == .requirePin)
+        #expect(try f.database.read(.init(ownerID: f.userID, field: "userData", key: "userData")) == Data("opaque SDK metadata".utf8))
+        #expect(UserDefaults(suiteName: f.userID)?.string(forKey: "publicInfo") == "opaque defaults")
+        #expect(f.credentials.removals.isEmpty)
+    }
+
+    @Test
+    func `account identity mismatch rejects admission before any credential or record writes`() async throws {
+        let f = try await Fixture()
+        defer { f.clean() }
+        f.store.servers = [f.server]
+        f.store.users = [f.user]
+        let wrong = UserAccountRecord(id: f.userID, serverID: "other", username: "Wrong")
+        #expect(throws: AccountStoreError.self) { try f.store.saveAuthenticatedAccount(f.server, user: wrong, accessToken: "fixture") }
+        let unlinked = ServerAccountRecord(
+            urls: f.server.urls,
+            currentURL: f.server.currentURL,
+            name: "Server",
+            id: f.serverID,
+            userIDs: []
+        )
+        #expect(throws: AccountStoreError.self) { try f.store.saveAuthenticatedAccount(unlinked, user: f.user, accessToken: "fixture") }
+        #expect(f.credentials.values.isEmpty && f.store.servers == [f.server] && f.store.users == [f.user])
+    }
+
+    @Test
+    func `credential failure does not publish new account or user records`() async throws {
+        let f = try await Fixture()
+        defer { f.clean() }
+        f.store.servers = [f.server]
+        f.store.users = [f.user]
+        f.credentials.writeError = .system(operation: .write, status: -25293)
+        let new = UserAccountRecord(id: f.otherID, serverID: f.serverID, username: "New")
+        #expect(throws: CredentialStoreError.self) { try f.store.saveAuthenticatedAccount(f.server, user: f.user, accessToken: "fixture") }
+        #expect(throws: CredentialStoreError.self) { try f.store.saveAuthenticatedUser(new, accessToken: "fixture", pin: "fixture PIN") }
+        #expect(f.store.servers == [f.server] && f.store.users == [f.user])
+        #expect(f.credentials.values.isEmpty)
+    }
+
+    @Test
+    func `user admission is idempotent and preserves server connections and sibling links`() async throws {
+        let f = try await Fixture()
+        defer { f.clean() }
+        f.store.servers = [f.server]
+        f.store.users = [f.user]
+        let connection = try #require(f.store.ensureConnections(for: f.server).last)
+        f.store.setActiveConnection(connection, serverID: f.serverID)
+        f.store.setAutoSwitchEnabled(true, serverID: f.serverID)
+        let new = UserAccountRecord(id: f.otherID, serverID: f.serverID, username: "New")
+        try f.store.saveAuthenticatedUser(new, accessToken: "fixture", pin: "fixture PIN")
+        try f.store.saveAuthenticatedUser(new, accessToken: "replacement")
+        #expect(f.store.users == [f.user, new])
+        let linked = try #require(f.store.servers.first)
+        #expect(linked.userIDs == [f.userID, f.otherID])
+        #expect(linked.urls == f.server.urls && linked.currentURL == f.server.currentURL && linked.name == f.server.name)
+        #expect(f.store.activeConnection(for: linked) == connection)
+        #expect(f.store.autoSwitchEnabled(serverID: f.serverID))
+        #expect(try f.store.accessToken(userID: new.id) == "replacement")
+        #expect(try f.store.pin(userID: new.id) == "fixture PIN")
+    }
 }

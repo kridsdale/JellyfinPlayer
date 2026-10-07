@@ -15,6 +15,7 @@ import Logging
 import OrderedCollections
 import SwiftfinAccountAccess
 import SwiftfinAccountModels
+import SwiftfinAccountStore
 import SwiftfinCollections
 import SwiftfinLocalization
 import SwiftfinStoredValues
@@ -199,30 +200,11 @@ final class UserSignInViewModel: ObservableObject {
         let userState = user.state.state
 
         let savedUserState = userState
-        try savedUserState.storeAccessToken(user.state.accessToken)
-        if let evaluatedPinPolicy = evaluatedPolicy as? PinEvaluatedUserAccessPolicy {
-            try savedUserState.storePIN(evaluatedPinPolicy.pin)
-        }
-        var users = StoredValues[.User.users]
-        users.removeAll { $0.id == savedUserState.id }
-        users.append(savedUserState)
-        StoredValues[.User.users] = users
-
-        var servers = StoredValues[.Server.servers]
-        if let index = servers.firstIndex(where: { $0.id == savedUserState.serverID }) {
-            let existingServer = servers[index]
-            let userIDs = existingServer.userIDs.appending(savedUserState.id)
-
-            servers[index] = ServerState(
-                urls: existingServer.urls,
-                currentURL: existingServer.currentURL,
-                name: existingServer.name,
-                id: existingServer.id,
-                userIDs: userIDs
-            )
-
-            StoredValues[.Server.servers] = servers
-        }
+        try Container.shared.localAccountStore().saveAuthenticatedUser(
+            savedUserState,
+            accessToken: user.state.accessToken,
+            pin: (evaluatedPolicy as? PinEvaluatedUserAccessPolicy)?.pin
+        )
 
         savedUserState.accessPolicy = accessPolicy
         savedUserState.data = user.data

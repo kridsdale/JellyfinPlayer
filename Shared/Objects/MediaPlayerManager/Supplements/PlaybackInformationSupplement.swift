@@ -12,6 +12,7 @@ import FactoryKit
 import JellyfinAPI
 import SwiftfinCollections
 import SwiftfinLocalization
+import SwiftfinMediaTracks
 import SwiftUI
 
 // TODO: have proxies be a `PlaybackInformationProvider`

@@ -9,6 +9,7 @@
 import Defaults
 import SwiftfinCollections
 import SwiftfinLocalization
+import SwiftfinMediaTracks
 import SwiftUI
 
 // TODO: ensure changes on playback item change

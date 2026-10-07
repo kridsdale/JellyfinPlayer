@@ -10,6 +10,7 @@ import CoreTransferable
 import JellyfinAPI
 import SwiftfinCollections
 import SwiftfinLocalization
+import SwiftfinMediaTracks
 import SwiftfinPlaybackProfiles
 
 extension MediaSourceInfo: Displayable {
@@ -27,18 +28,6 @@ extension MediaSourceInfo {
             hasAudio: audioStreams?.isNotEmpty == true,
             sourceBitrate: bitrate
         )
-    }
-
-    var audioStreams: [MediaStream]? {
-        mediaStreams?.filter { $0.type == .audio }
-    }
-
-    var subtitleStreams: [MediaStream]? {
-        mediaStreams?.filter { $0.type == .subtitle }
-    }
-
-    var videoStreams: [MediaStream]? {
-        mediaStreams?.filter { $0.type == .video }
     }
 }
 
