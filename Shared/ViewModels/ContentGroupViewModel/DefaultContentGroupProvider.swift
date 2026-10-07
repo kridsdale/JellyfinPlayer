@@ -23,23 +23,11 @@ struct DefaultContentGroupProvider: ContentGroupProvider {
 
     func makeGroups(environment: Empty) async throws -> [any ContentGroup] {
         guard let userSession else { return [] }
-        let parameters = Paths.GetUserViewsParameters(userID: userSession.user.id)
-        let userViewsPath = Paths.getUserViews(parameters: parameters)
-        let userViews = try await userSession.client.send(userViewsPath)
-        let excludedLibraryIDs = userSession.user.data.configuration?.latestItemsExcludes ?? []
-
-        let resolvedUserViews = (userViews.value.items ?? []).subtracting(excludedLibraryIDs, using: \.id)
-            .intersecting(
-                [
-                    .homevideos,
-                    .movies,
-                    .musicvideos,
-                    .tvshows,
-                ],
-                using: \.collectionType
-            )
-
-        return _makeGroups(userViews: resolvedUserViews)
+        let catalog = userSession.mediaCatalog
+        let excludedIDs = userSession.user.data.configuration?.latestItemsExcludes ?? []
+        let views = try await catalog.homeViews(excludedIDs: excludedIDs)
+        try catalog.checkBinding()
+        return _makeGroups(userViews: views)
     }
 
     @ContentGroupBuilder

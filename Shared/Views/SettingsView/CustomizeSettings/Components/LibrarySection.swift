@@ -7,6 +7,7 @@
 //
 
 import Defaults
+import SwiftfinFilters
 import SwiftfinLocalization
 import SwiftUI
 

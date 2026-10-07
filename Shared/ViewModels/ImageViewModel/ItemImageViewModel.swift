@@ -8,7 +8,7 @@
 
 import Foundation
 import JellyfinAPI
-import SwiftfinCollections
+import SwiftfinItemMetadata
 import SwiftfinLocalization
 import UIKit
 
@@ -66,23 +66,17 @@ final class ItemImageViewModel: ViewModel {
     @Function(\Action.Cases.refresh)
     private func _refresh() async throws {
         guard let itemID = item.id else { return }
-
-        let request = Paths.getItemImageInfos(itemID: itemID)
-        let response = try await send(request)
-
-        images = response.value.grouped(by: \.imageType)
-            .mapValues { $0.sorted(using: \.imageIndex) }
-            .reduce(into: [:]) { partialResult, kv in
-                guard let k = kv.key else { return }
-                partialResult[k] = kv.value
-            }
+        let client = try requireItemMetadata()
+        try await refreshImages(using: client, itemID: itemID)
     }
 
     @Function(\Action.Cases.uploadImage)
     private func _uploadImage(_ image: UIImage, _ type: ImageType) async throws {
-        let (imageData, contentType) = try image.data()
-        try await upload(imageData: imageData, imageType: type, contentType: contentType)
-        try await _refresh()
+        guard let itemID = item.id else { return }
+        let client = try requireItemMetadata()
+        let (data, contentType) = try image.data()
+        try await client.uploadImage(itemID: itemID, type: type, data: data, contentType: contentType)
+        try await refreshImages(using: client, itemID: itemID)
         events.send(.updated)
     }
 
@@ -102,56 +96,33 @@ final class ItemImageViewModel: ViewModel {
         try await _uploadImage(image, type)
     }
 
-    private func upload(imageData: Data, imageType: ImageType, contentType: String) async throws {
-        guard let itemID = item.id else { return }
-
-        var request = Paths.setItemImage(
-            itemID: itemID,
-            imageType: imageType.rawValue,
-            imageData.base64EncodedData()
-        )
-        request.headers = ["Content-Type": contentType]
-
-        _ = try await send(request)
-    }
-
     @Function(\Action.Cases.saveRemoteImage)
     private func _saveRemoteImage(_ remoteImageInfo: RemoteImageInfo) async throws {
-        guard let itemID = item.id,
-              let type = remoteImageInfo.type,
-              let imageURL = remoteImageInfo.url else { return }
-
-        let request = Paths.downloadRemoteImage(itemID: itemID, type: type, imageURL: imageURL)
-
-        _ = try await send(request)
-
-        try await _refresh()
+        guard let itemID = item.id else { return }
+        let client = try requireItemMetadata()
+        guard try await client.saveRemoteImage(itemID: itemID, image: remoteImageInfo) else { return }
+        try await refreshImages(using: client, itemID: itemID)
         events.send(.updated)
     }
 
     @Function(\Action.Cases.deleteImage)
     private func _deleteImage(_ deleteImageInfo: ImageInfo) async throws {
-        guard let itemID = item.id,
-              let imageType = deleteImageInfo.imageType else { return }
-
-        if let imageIndex = deleteImageInfo.imageIndex {
-            let request = Paths.deleteItemImageByIndex(
-                itemID: itemID,
-                imageType: imageType.rawValue,
-                imageIndex: imageIndex
-            )
-            try await send(request)
-        } else {
-            let request = Paths.deleteItemImage(
-                itemID: itemID,
-                imageType: imageType.rawValue
-            )
-            try await send(request)
-        }
-
-        item = try await item.getFullItem(userSession: requireUserSession(), sendNotification: true)
-
-        try await _refresh()
+        guard let itemID = item.id else { return }
+        let client = try requireItemMetadata()
+        guard try await client.deleteImage(itemID: itemID, image: deleteImageInfo) else { return }
+        let updated = try await client.item(id: itemID)
+        try client.checkBinding()
+        guard item.id == itemID else { throw CancellationError() }
+        item = updated
+        Notifications[.itemMetadataDidChange].post(updated)
+        try await refreshImages(using: client, itemID: itemID)
         events.send(.deleted)
+    }
+
+    private func refreshImages(using client: ItemMetadataClient, itemID: String) async throws {
+        let updated = try await client.itemImages(itemID: itemID)
+        try client.checkBinding()
+        guard item.id == itemID else { throw CancellationError() }
+        images = updated
     }
 }

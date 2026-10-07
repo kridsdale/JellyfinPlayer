@@ -12,8 +12,11 @@ import Foundation
 import Get
 import JellyfinAPI
 import Logging
+import SwiftfinFilters
 import SwiftfinItemMetadata
+import SwiftfinMediaCatalog
 import SwiftfinNetworking
+import SwiftfinRecordingTimers
 import SwiftfinServerOperations
 import SwiftfinUserAdministration
 
@@ -95,6 +98,25 @@ extension ViewModel {
 }
 
 extension ViewModel {
+    func requireRecordingTimers(item: BaseItemDto) throws -> RecordingTimersClient {
+        let session = try requireUserSession()
+        return RecordingTimersClient(
+            executor: administrationExecutor(for: session),
+            userID: session.user.id,
+            item: item,
+            permission: { [weak session] in session?.user.data.policy?.enableLiveTvManagement == true }
+        )
+    }
+
+    func requireQueryFilters() throws -> QueryFiltersClient {
+        let session = try requireUserSession()
+        return QueryFiltersClient(executor: administrationExecutor(for: session), userID: session.user.id)
+    }
+
+    func requireMediaCatalog() throws -> MediaCatalogClient {
+        try requireUserSession().mediaCatalog
+    }
+
     func requireItemMetadata() throws -> ItemMetadataClient {
         try requireUserSession().itemMetadata
     }

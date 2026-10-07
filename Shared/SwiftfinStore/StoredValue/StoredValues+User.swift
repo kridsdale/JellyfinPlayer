@@ -12,6 +12,7 @@ import Foundation
 import JellyfinAPI
 import SwiftfinAccountModels
 import SwiftfinAccountStore
+import SwiftfinFilters
 import SwiftfinPlaybackProfiles
 import SwiftfinStoredValues
 

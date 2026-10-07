@@ -8,6 +8,7 @@
 
 import FactoryKit
 import SwiftfinItemMetadata
+import SwiftfinMediaCatalog
 import SwiftfinNetworking
 
 extension UserSession {
@@ -23,5 +24,16 @@ extension UserSession {
             userID: user.id,
             bindingID: .init(transport: ObjectIdentifier(client), userID: user.id)
         )
+    }
+}
+
+extension UserSession {
+    var mediaCatalog: MediaCatalogClient {
+        let client = self.client
+        let manager = Container.shared.userSessionManager()
+        return MediaCatalogClient(reader: client, userID: user.id, isCurrent: { [weak self, weak client, weak manager] in
+            guard let self, let client, let manager else { return false }
+            return manager.currentSession === self && self.client === client
+        })
     }
 }

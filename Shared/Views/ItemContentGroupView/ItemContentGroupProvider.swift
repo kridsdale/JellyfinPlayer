@@ -46,24 +46,21 @@ final class ItemContentGroupProvider: ViewModel, ContentGroupProvider {
     }
 
     func makeGroups(environment: Empty) async throws -> [any ContentGroup] {
-        let userSession = try requireUserSession()
-        let fullItem = try await item.getFullItem(userSession: userSession, sendNotification: true)
-        let newMediaPlayerItemProvider = try await resolveMediaPlayerItemProvider(
-            for: fullItem,
-            userSession: userSession
-        )
-        let newLocalTrailers = try? await localTrailers(for: fullItem)
-        let newRandomBackdropItem = try? await randomBackdropItem(for: fullItem)
-
+        let session = try requireUserSession()
+        let catalog = session.mediaCatalog
+        let fullItem = try await catalog.item(id: id)
+        let playbackItem = try await catalog.playbackSelection(for: fullItem)
+        let newLocalTrailers = try? await catalog.localTrailers(itemID: fullItem.id ?? id)
+        let newRandomBackdropItem = try? await catalog.randomBackdrop(for: fullItem)
+        try catalog.checkBinding()
         item = fullItem
         localTrailers = newLocalTrailers ?? []
-        mediaPlayerItemProvider = newMediaPlayerItemProvider
+        mediaPlayerItemProvider = playbackItem?.getPlaybackItemProvider(userSession: session)
         randomBackdropItem = newRandomBackdropItem
-
-        return try await _makeGroups(
-            item: fullItem,
-            itemID: id
-        )
+        Notifications[.itemMetadataDidChange].post(fullItem)
+        let groups = try await _makeGroups(item: fullItem, itemID: id)
+        try catalog.checkBinding()
+        return groups
     }
 
     @ContentGroupBuilder
@@ -309,116 +306,6 @@ final class ItemContentGroupProvider: ViewModel, ContentGroupProvider {
             subtitleStreamIndex: subtitleStreamIndex,
             requestedBitrate: requestedBitrate
         )
-    }
-
-    private func resolveMediaPlayerItemProvider(
-        for item: BaseItemDto,
-        userSession: UserSession
-    ) async throws -> MediaPlayerItemProvider? {
-        let playbackItem: BaseItemDto? = switch item.type {
-        case .series:
-            if let nextUp = try await nextUpItem(for: item) {
-                nextUp
-            } else if let resumeItem = try await resumeItem(for: item) {
-                resumeItem
-            } else {
-                try await firstAvailableItem(for: item)
-            }
-        case .season:
-            if let resumeItem = try await resumeItem(for: item) {
-                resumeItem
-            } else {
-                try await firstAvailableItem(for: item)
-            }
-        default:
-            item.isPlayable ? item : nil
-        }
-
-        guard let playbackItem else { return nil }
-
-        let fullPlaybackItem = if item.type == .series || item.type == .season {
-            try await playbackItem.getFullItem(userSession: userSession)
-        } else {
-            playbackItem
-        }
-
-        return fullPlaybackItem.getPlaybackItemProvider(userSession: userSession)
-    }
-
-    private func nextUpItem(for item: BaseItemDto) async throws -> BaseItemDto? {
-        var parameters = Paths.GetNextUpParameters()
-        parameters.seriesID = item.id
-
-        let request = Paths.getNextUp(parameters: parameters)
-        let response = try await send(request)
-
-        guard let item = response.value.items?.first, !item.isMissing else {
-            return nil
-        }
-
-        return item
-    }
-
-    private func resumeItem(for item: BaseItemDto) async throws -> BaseItemDto? {
-        var parameters = Paths.GetResumeItemsParameters()
-        parameters.limit = 1
-        parameters.parentID = item.id
-
-        let request = Paths.getResumeItems(parameters: parameters)
-        let response = try await send(request)
-
-        return response.value.items?.first
-    }
-
-    private func firstAvailableItem(for item: BaseItemDto) async throws -> BaseItemDto? {
-        var parameters = Paths.GetItemsParameters()
-        parameters.includeItemTypes = [.episode]
-        parameters.isMissing = false
-        parameters.isRecursive = true
-        parameters.limit = 1
-        parameters.parentID = item.id
-        parameters.sortOrder = [.ascending]
-
-        let request = Paths.getItems(parameters: parameters)
-        let response = try await send(request)
-
-        return response.value.items?.first
-    }
-
-    private func localTrailers(for item: BaseItemDto) async throws -> [BaseItemDto] {
-        guard let itemID = item.id else { return [] }
-
-        let request = try Paths.getLocalTrailers(itemID: itemID, userID: authenticatedUser.id)
-        let response = try await send(request)
-
-        return response.value
-    }
-
-    private func randomBackdropItem(for item: BaseItemDto) async throws -> BaseItemDto? {
-        guard item.type == .person || item.type == .musicArtist || item.type == .boxSet else {
-            return nil
-        }
-
-        var parameters = Paths.GetItemsParameters()
-        parameters.includeItemTypes = [.movie, .series]
-        parameters.isRecursive = true
-        parameters.limit = 1
-        parameters.sortBy = [.random]
-        parameters.userID = try authenticatedUser.id
-
-        switch item.libraryType {
-        case .boxSet, .collectionFolder, .userView:
-            parameters.parentID = item.id
-        case .person:
-            parameters.personIDs = item.id.map { [$0] }
-        default:
-            parameters.parentID = item.id
-        }
-
-        let request = Paths.getItems(parameters: parameters)
-        let response = try await send(request)
-
-        return response.value.items?.first
     }
 
     private func setIsPlayed(_ isPlayed: Bool) async throws {

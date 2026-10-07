@@ -6,25 +6,6 @@
 // Copyright (c) 2026 Jellyfin & Jellyfin Contributors
 //
 
-import Foundation
+import SwiftfinFilters
 
-struct ItemYear: Codable, ExpressibleByIntegerLiteral, Hashable, ItemFilter {
-
-    let value: String
-
-    var displayTitle: String {
-        value
-    }
-
-    var intValue: Int {
-        Int(value)!
-    }
-
-    init(integerLiteral value: IntegerLiteralType) {
-        self.value = "\(value)"
-    }
-
-    init(from anyFilter: AnyItemFilter) {
-        self.value = anyFilter.value
-    }
-}
+extension ItemYear: Displayable, ItemFilter {}

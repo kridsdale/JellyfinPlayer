@@ -10,6 +10,7 @@ import Combine
 import Defaults
 import JellyfinAPI
 import SwiftfinCollections
+import SwiftfinFilters
 import SwiftfinLocalization
 import SwiftfinMediaCatalog
 import SwiftfinPaging

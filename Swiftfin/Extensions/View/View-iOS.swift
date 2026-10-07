@@ -8,6 +8,7 @@
 
 import Defaults
 import Mantis
+import SwiftfinFilters
 import SwiftUI
 @_spi(Advanced) import SwiftUIIntrospect
 

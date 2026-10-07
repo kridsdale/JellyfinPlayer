@@ -219,3 +219,52 @@ public final class ItemMetadataClient {
         try await executor.value(for: Paths.getQueryFiltersLegacy(parameters: .init(userID: userID))).tags ?? []
     }
 }
+
+public extension ItemMetadataClient {
+    func itemImages(itemID: String) async throws -> [ImageType: [ImageInfo]] {
+        let images = try await executor.value(for: Paths.getItemImageInfos(itemID: itemID))
+        return Self.groupImages(images)
+    }
+
+    static func groupImages(_ images: [ImageInfo]) -> [ImageType: [ImageInfo]] {
+        var grouped: [ImageType: [ImageInfo]] = [:]
+        for image in images {
+            guard let type = image.imageType else { continue }
+            grouped[type, default: []].append(image)
+        }
+        return grouped.mapValues { values in
+            values.sorted { lhs, rhs in
+                if let a = lhs.imageIndex, let b = rhs.imageIndex {
+                    return a < b
+                }
+                return lhs.imageIndex != nil && rhs.imageIndex == nil
+            }
+        }
+    }
+
+    func uploadImage(itemID: String, type: ImageType, data: Data, contentType: String) async throws {
+        var request = Paths.setItemImage(itemID: itemID, imageType: type.rawValue, data.base64EncodedData())
+        request.headers = ["Content-Type": contentType]
+        try await executor.complete(request)
+    }
+
+    @discardableResult
+    func saveRemoteImage(itemID: String, image: RemoteImageInfo) async throws -> Bool {
+        try checkBinding()
+        guard let type = image.type, let url = image.url else { return false }
+        try await executor.complete(Paths.downloadRemoteImage(itemID: itemID, type: type, imageURL: url))
+        return true
+    }
+
+    @discardableResult
+    func deleteImage(itemID: String, image: ImageInfo) async throws -> Bool {
+        try checkBinding()
+        guard let type = image.imageType else { return false }
+        if let index = image.imageIndex {
+            try await executor.complete(Paths.deleteItemImageByIndex(itemID: itemID, imageType: type.rawValue, imageIndex: index))
+        } else {
+            try await executor.complete(Paths.deleteItemImage(itemID: itemID, imageType: type.rawValue))
+        }
+        return true
+    }
+}

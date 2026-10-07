@@ -10,6 +10,7 @@ import Foundation
 import JellyfinAPI
 import Nuke
 import SwiftfinImages
+import SwiftfinUserAdministration
 import UIKit
 
 @MainActor
@@ -57,44 +58,38 @@ final class UserImageViewModel: ViewModel {
     @Function(\Action.Cases.upload)
     private func _upload(_ image: UIImage) async throws {
         guard let userID = user.id else { return }
-
+        let client = try requireUserAdministration()
         let (imageData, contentType) = try image.data()
-
-        var request = Paths.postUserImage(
-            userID: userID,
-            imageData.base64EncodedData()
-        )
-        request.headers = ["Content-Type": contentType]
-
-        _ = try await send(request)
-
-        await cleanImageCache()
+        try await client.uploadImage(userID: userID, data: imageData, contentType: contentType)
+        try await cleanImageCache(using: client, userID: userID)
         events.send(.updated)
     }
 
     @Function(\Action.Cases.delete)
     private func _delete() async throws {
         guard let userID = user.id else { return }
-
-        let request = Paths.deleteUserImage(userID: userID)
-        _ = try await send(request)
-
-        await cleanImageCache()
+        let client = try requireUserAdministration()
+        try await client.deleteImage(userID: userID)
+        try await cleanImageCache(using: client, userID: userID)
         events.send(.deleted)
     }
 
-    private func cleanImageCache() async {
-        guard let userSession else { return }
+    private func cleanImageCache(using client: UserAdministrationClient, userID: String) async throws {
+        try client.checkBinding()
+        let session = try requireUserSession()
+        let transport = session.client
+        let selectedUser = user
+        guard selectedUser.id == userID else { throw CancellationError() }
 
         for width: CGFloat in [60, 120, 150] {
-            if let url = user.profileImageSource(client: userSession.client, maxWidth: width).url {
+            if let url = selectedUser.profileImageSource(client: transport, maxWidth: width).url {
                 await ImagePipeline.Swiftfin.local.removeItem(for: url)
                 await ImagePipeline.Swiftfin.posters.removeItem(for: url)
             }
         }
 
-        if let userID = user.id {
-            Notifications[.didChangeUserProfile].post(userID)
-        }
+        try client.checkBinding()
+        guard user.id == userID else { throw CancellationError() }
+        Notifications[.didChangeUserProfile].post(userID)
     }
 }

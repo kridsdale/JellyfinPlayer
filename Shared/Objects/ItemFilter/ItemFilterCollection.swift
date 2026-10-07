@@ -8,37 +8,12 @@
 
 import JellyfinAPI
 import SwiftfinCollections
-import SwiftfinMediaCatalog
+import SwiftfinFilters
 import SwiftfinStoredValues
 
-struct ItemFilterCollection: Hashable, Storable {
+extension ItemFilterCollection: @retroactive Storable {}
 
-    var audioLanguages: [ItemLanguage] = []
-    var categories: [ChannelCategory] = []
-    var genres: [ItemGenre] = []
-    var itemTypes: [BaseItemKind] = []
-    var letter: [ItemLetter] = []
-    var officialRatings: [ItemOfficialRating] = []
-    var sortBy: [ItemSortBy] = [ItemSortBy.sortName]
-    var sortOrder: [ItemSortOrder] = [ItemSortOrder.ascending]
-    var subtitleLanguages: [ItemLanguage] = []
-    var tags: [ItemTag] = []
-    var traits: [ItemTrait] = []
-    var years: [ItemYear] = []
-
-    var query: String?
-
-    /// The default collection of filters
-    static let `default`: ItemFilterCollection = .init()
-
-    static let favorites: ItemFilterCollection = .init(
-        traits: [ItemTrait.isFavorite]
-    )
-    static let recent: ItemFilterCollection = .init(
-        sortBy: [ItemSortBy.dateCreated],
-        sortOrder: [ItemSortOrder.descending]
-    )
-
+extension ItemFilterCollection {
     /// A collection that has all statically available values.
     ///
     /// These may be altered when used to better represent all
@@ -51,79 +26,4 @@ struct ItemFilterCollection: Hashable, Storable {
         sortOrder: ItemSortOrder.allCases,
         traits: ItemTrait.supportedCases
     )
-
-    var isNotEmpty: Bool {
-        self != Self.default
-    }
-
-    var hasQueryableFilters: Bool {
-        audioLanguages.isNotEmpty ||
-            categories.isNotEmpty ||
-            genres.isNotEmpty ||
-            itemTypes.isNotEmpty ||
-            letter.isNotEmpty ||
-            officialRatings.isNotEmpty ||
-            subtitleLanguages.isNotEmpty ||
-            tags.isNotEmpty ||
-            traits.isNotEmpty ||
-            years.isNotEmpty ||
-            !query.isNilOrEmpty
-    }
-
-    func containsFilters(ofType type: ItemFilterType) -> Bool {
-        type.group.contains { group in
-            self[keyPath: group.keyPath] != Self.default[keyPath: group.keyPath]
-        }
-    }
-
-    /// The union of this collection and another collection, with
-    /// precedence given to this collection's values.
-    func union(_ other: Self) -> Self {
-        var result = other
-
-        func apply(_ keyPath: WritableKeyPath<Self, some Equatable>) {
-            if self[keyPath: keyPath] != Self.default[keyPath: keyPath] {
-                result[keyPath: keyPath] = self[keyPath: keyPath]
-            }
-        }
-
-        apply(\.audioLanguages)
-        apply(\.categories)
-        apply(\.genres)
-        apply(\.itemTypes)
-        apply(\.letter)
-        apply(\.officialRatings)
-        apply(\.subtitleLanguages)
-        apply(\.tags)
-        apply(\.traits)
-        apply(\.years)
-        apply(\.query)
-
-        if containsFilters(ofType: .sortBy) {
-            result.sortBy = sortBy
-            result.sortOrder = sortOrder
-        }
-
-        return result
-    }
-}
-
-extension ItemFilterCollection {
-    var catalogSnapshot: CatalogFilters {
-        CatalogFilters(
-            audioLanguages: audioLanguages.map(\.value),
-            categories: categories.compactMap { MediaProgramCategory(rawValue: $0.rawValue) },
-            genres: genres.map(\.value),
-            itemTypes: itemTypes,
-            letter: letter.first?.value,
-            officialRatings: officialRatings.map(\.value),
-            sortBy: sortBy,
-            sortOrder: sortOrder,
-            subtitleLanguages: subtitleLanguages.map(\.value),
-            tags: tags.map(\.value),
-            traits: traits,
-            years: years.map(\.value),
-            query: query
-        )
-    }
 }

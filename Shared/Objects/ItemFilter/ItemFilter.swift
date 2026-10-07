@@ -8,6 +8,7 @@
 
 import Defaults
 import Foundation
+import SwiftfinFilters
 
 protocol ItemFilter: Displayable {
 

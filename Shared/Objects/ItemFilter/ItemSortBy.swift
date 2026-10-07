@@ -9,6 +9,7 @@
 import Foundation
 import JellyfinAPI
 import SwiftfinCollections
+import SwiftfinFilters
 import SwiftfinLocalization
 
 extension ItemSortBy: Displayable, @retroactive SupportedCaseIterable {

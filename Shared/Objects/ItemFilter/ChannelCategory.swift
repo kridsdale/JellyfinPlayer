@@ -6,17 +6,10 @@
 // Copyright (c) 2026 Jellyfin & Jellyfin Contributors
 //
 
-import Foundation
+import SwiftfinFilters
 import SwiftfinLocalization
 
-enum ChannelCategory: String, CaseIterable, Codable, Displayable, Hashable, ItemFilter {
-
-    case movies
-    case series
-    case news
-    case kids
-    case sports
-
+extension ChannelCategory: Displayable, ItemFilter {
     var displayTitle: String {
         switch self {
         case .movies:

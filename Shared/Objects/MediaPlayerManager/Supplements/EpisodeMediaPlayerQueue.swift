@@ -51,6 +51,7 @@ class EpisodeMediaPlayerQueue: ViewModel, MediaPlayerQueue {
     lazy var nextItemPublisher: Published<MediaPlayerItemProvider?>.Publisher = $nextItem
     lazy var previousItemPublisher: Published<MediaPlayerItemProvider?>.Publisher = $previousItem
 
+    private var adjacencyGeneration = UUID()
     private var currentAdjacentEpisodesTask: AnyCancellable?
     private let seasonsViewModel: PagingLibraryViewModel<SeasonViewModelLibrary>
 
@@ -71,6 +72,8 @@ class EpisodeMediaPlayerQueue: ViewModel, MediaPlayerQueue {
     }
 
     private func didReceive(newItem: MediaPlayerItem?) {
+        adjacencyGeneration = UUID()
+        let generation = adjacencyGeneration
         self.currentAdjacentEpisodesTask = Task {
             await MainActor.run {
                 self.nextItem = nil
@@ -79,48 +82,17 @@ class EpisodeMediaPlayerQueue: ViewModel, MediaPlayerQueue {
                 self.hasPreviousItem = false
             }
 
-            try await self.getAdjacentEpisodes(for: newItem?.baseItem)
+            try await self.getAdjacentEpisodes(for: newItem?.baseItem, generation: generation)
         }
         .asAnyCancellable()
     }
 
-    private func getAdjacentEpisodes(for item: BaseItemDto?) async throws {
+    private func getAdjacentEpisodes(for item: BaseItemDto?, generation: UUID) async throws {
         guard let item else { return }
-        guard let seriesID = item.seriesID, item.type == .episode else { return }
-
-        let parameters = try Paths.GetEpisodesParameters(
-            userID: authenticatedUser.id,
-            adjacentTo: item.id!,
-            limit: 3
-        )
-        let request = Paths.getEpisodes(seriesID: seriesID, parameters: parameters)
-        let response = try await send(request)
-
-        // 4 possible states:
-        //  1 - only current episode
-        //  2 - two episodes with next episode
-        //  3 - two episodes with previous episode
-        //  4 - three episodes with current in middle
-
-        // 1
-        guard let items = response.value.items, items.count > 1 else { return }
-
-        var previousItem: BaseItemDto?
-        var nextItem: BaseItemDto?
-
-        if items.count == 2 {
-            if items[0].id == item.id {
-                // 2
-                nextItem = items[1]
-
-            } else {
-                // 3
-                previousItem = items[0]
-            }
-        } else {
-            nextItem = items[2]
-            previousItem = items[0]
-        }
+        let catalog = try requireMediaCatalog()
+        let adjacent = try await catalog.adjacentEpisodes(for: item)
+        let nextItem = adjacent.next
+        let previousItem = adjacent.previous
 
         var nextProvider: MediaPlayerItemProvider?
         var previousProvider: MediaPlayerItemProvider?
@@ -145,7 +117,8 @@ class EpisodeMediaPlayerQueue: ViewModel, MediaPlayerQueue {
             }
         }
 
-        guard !Task.isCancelled else { return }
+        try catalog.checkBinding()
+        guard generation == adjacencyGeneration else { return }
 
         await MainActor.run {
             self.nextItem = nextProvider

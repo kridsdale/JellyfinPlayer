@@ -6,6 +6,7 @@
 // Copyright (c) 2026 Jellyfin & Jellyfin Contributors
 //
 
+import SwiftfinFilters
 import SwiftUI
 
 struct LetterPickerActiveLetterKey: PreferenceKey {

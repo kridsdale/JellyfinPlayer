@@ -7,6 +7,7 @@
 //
 
 import Defaults
+import SwiftfinFilters
 import SwiftUI
 
 struct FilterBarModifier: ViewModifier {

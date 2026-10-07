@@ -9,6 +9,7 @@
 import Foundation
 import JellyfinAPI
 import SwiftfinCollections
+import SwiftfinFilters
 
 struct ItemTypeContentGroupProvider: ContentGroupProvider {
 

@@ -6,24 +6,6 @@
 // Copyright (c) 2026 Jellyfin & Jellyfin Contributors
 //
 
-import Foundation
+import SwiftfinFilters
 
-/// A type-erased instance of an item filter.
-struct AnyItemFilter: Displayable, Hashable, ItemFilter {
-
-    let displayTitle: String
-    let value: String
-
-    init(
-        displayTitle: String,
-        value: String
-    ) {
-        self.displayTitle = displayTitle
-        self.value = value
-    }
-
-    init(from anyFilter: AnyItemFilter) {
-        self.displayTitle = anyFilter.displayTitle
-        self.value = anyFilter.value
-    }
-}
+extension AnyItemFilter: Displayable, ItemFilter {}

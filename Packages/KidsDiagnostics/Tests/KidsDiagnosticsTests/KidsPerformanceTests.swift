@@ -74,6 +74,18 @@ func `diagnostics redact arbitrary measurement keys and reject nonfinite values`
 }
 
 @Test
+func `premature end measurements retain numeric time and redact unrelated keys`() throws {
+    let events = PerformanceEvents()
+    let recorder = KidsPerformanceRecorder(enabled: true, sink: events.append)
+    let span = try #require(recorder.begin(.decode))
+    span.mark(.playerError, values: ["seconds": 133, "runtime_seconds": 900, "token=private-secret": 1])
+    recorder.flush()
+    let event = try #require(events.events.last)
+    #expect(event.phase == .playerError && event.values == ["seconds": 133, "runtime_seconds": 900])
+    #expect(try !String(decoding: JSONEncoder().encode(event), as: UTF8.self).contains("private-secret"))
+}
+
+@Test
 func `profiling files have complete JSON lines and a finite recording cap`() throws {
     let dir = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
     defer { try? FileManager.default.removeItem(at: dir) }

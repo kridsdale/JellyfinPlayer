@@ -248,6 +248,7 @@ public final class KidsPerformanceSpan: Sendable {
         "lost_pictures",
         "resume_pending",
         "seconds",
+        "runtime_seconds",
         "failure_code",
         "native_reason",
         "native_severity",

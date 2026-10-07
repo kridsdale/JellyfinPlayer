@@ -33,6 +33,8 @@ private struct Captured {
     let method: String
     let query: [String: String]
     let body: Data?
+    let headers: [String: String]
+    let rawData: Data?
 }
 
 @MainActor
@@ -47,7 +49,9 @@ private final class Sender: JellyfinRequestSending {
             path: request.url?.path ?? "",
             method: request.method.rawValue,
             query: Dictionary(grouping: pairs, by: { $0.0 }).mapValues { $0.map(\.1).joined(separator: ",") },
-            body: request.body.map { try JSONEncoder().encode($0) }
+            body: request.body.map { try JSONEncoder().encode($0) },
+            headers: request.headers ?? [:],
+            rawData: request.body as? Data
         ))
     }
 
@@ -178,5 +182,47 @@ struct UserAdministrationTests {
         b.current = false
         gate.finish()
         await #expect(throws: CancellationError.self) { try await task.value }
+    }
+}
+
+@Suite("Account profile image administration")
+@MainActor
+struct UserImageAdministrationTests {
+    private func client(_ sender: Sender, binding: Binding? = nil) -> UserAdministrationClient {
+        .init(executor: .init(sender: sender, isCurrent: { binding?.current ?? true }), currentUserID: "self")
+    }
+
+    @Test
+    func `avatar upload retains selected user single base 64 layer and content type`() async throws {
+        let sender = Sender()
+        let data = Data([3, 4, 5, 254])
+        try await client(sender).uploadImage(userID: "selected", data: data, contentType: "image/jpeg")
+        #expect(sender.calls.count == 1)
+        let call = sender.calls[0]
+        #expect(call.path == "/UserImage" && call.query == ["userId": "selected"] && call.method == "POST")
+        #expect(call.rawData == data.base64EncodedData() && call.headers == ["Content-Type": "image/jpeg"])
+    }
+
+    @Test
+    func `avatar deletion uses SDK user image query route`() async throws {
+        let sender = Sender()
+        try await client(sender).deleteImage(userID: "selected")
+        #expect(sender.calls.count == 1 && sender.calls[0].path == "/UserImage" && sender.calls[0].method == "DELETE")
+        #expect(sender.calls[0].query == ["userId": "selected"])
+    }
+
+    @Test
+    func `late avatar command cannot publish after replacement`() async {
+        let sender = Sender()
+        let gate = Gate()
+        sender.gate = gate
+        let binding = Binding()
+        let c = client(sender, binding: binding)
+        let task = Task { try await c.deleteImage(userID: "selected") }
+        await settle { gate.continuation != nil }
+        binding.current = false
+        gate.finish()
+        await #expect(throws: CancellationError.self) { try await task.value }
+        #expect(sender.calls.count == 1)
     }
 }

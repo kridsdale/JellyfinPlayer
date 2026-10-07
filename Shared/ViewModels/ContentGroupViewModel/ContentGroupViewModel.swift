@@ -9,6 +9,7 @@
 import Combine
 import Foundation
 import JellyfinAPI
+import SwiftfinPaging
 
 @MainActor
 @Stateful
@@ -38,13 +39,7 @@ final class ContentGroupViewModel<Provider: ContentGroupProvider>: ViewModel {
     @Published
     private(set) var groups: [any ContentGroup] = []
 
-    private var candidateGroups: [any ContentGroup] = []
-    private var lastRefreshDate = Date.distantPast
-    private var lastRefreshSignalDate = Date.distantPast
-
-    private var hasPendingRefreshSignals: Bool {
-        lastRefreshSignalDate > lastRefreshDate
-    }
+    private let refreshCoordinator = ContentRefreshCoordinator<any ContentGroup>()
 
     var provider: Provider
 
@@ -57,7 +52,7 @@ final class ContentGroupViewModel<Provider: ContentGroupProvider>: ViewModel {
             Notifications[.itemMetadataDidChange].publisher.map { _ in () }
         )
         .sink { [weak self] _ in
-            self?.lastRefreshSignalDate = Date.now
+            self?.refreshCoordinator.markChanged()
         }
         .store(in: &cancellables)
     }
@@ -66,97 +61,44 @@ final class ContentGroupViewModel<Provider: ContentGroupProvider>: ViewModel {
         sinceLastDisappear interval: TimeInterval,
         staleThreshold: TimeInterval = 60
     ) {
-        guard interval > staleThreshold || hasPendingRefreshSignals else { return }
+        guard refreshCoordinator.shouldRefresh(sinceLastDisappear: interval, staleThreshold: staleThreshold) else { return }
 
         background.refresh()
     }
 
     func refreshIfPendingChanges() {
-        guard hasPendingRefreshSignals else { return }
+        guard refreshCoordinator.hasPendingChanges else { return }
 
         refresh()
     }
 
     @Function(\Action.Cases.refresh)
     private func _refresh() async throws {
-        if StateTask.isBackground {
-            try await backgroundRefresh()
-        } else {
-            try await fullRefresh()
+        let inBackground = StateTask.isBackground
+        if !inBackground {
+            groups = []
         }
-
-        lastRefreshDate = Date.now
-    }
-
-    private func getViewModel(for group: some ContentGroup) -> any WithRefresh {
-        group.viewModel
-    }
-
-    private func resolveGroups() {
-        groups = candidateGroups
-            .filter(\._shouldBeResolved)
-    }
-
-    private func refreshViewModels(
-        for groups: [any ContentGroup],
-        inBackground: Bool
-    ) async throws {
-        let viewModels = groups.map { getViewModel(for: $0) }
-            .uniqued { ObjectIdentifier($0 as AnyObject) }
-
-        let batch = ContentGroupRefreshBatch(viewModels)
-        try await withThrowingTaskGroup(of: Void.self) { group in
-            for index in viewModels.indices {
-                group.addTask { [batch] in
-                    await batch.refresh(at: index, inBackground: inBackground)
+        let updated = try await refreshCoordinator.refresh(
+            inBackground: inBackground,
+            makeGroups: { [weak self] in
+                guard let self else { throw CancellationError() }
+                return try await provider.makeGroups(environment: provider.environment)
+            },
+            operations: { groups, background in
+                groups.map { group in
+                    let model = group.viewModel
+                    return ContentRefreshOperation(identity: ObjectIdentifier(model as AnyObject)) {
+                        if background {
+                            await model.background.refresh()
+                        } else {
+                            await model.refresh()
+                        }
+                    }
                 }
-            }
-            try await group.waitForAll()
-        }
-    }
-
-    private func backgroundRefresh() async throws {
-        try await refreshViewModels(
-            for: candidateGroups,
-            inBackground: true
+            },
+            shouldResolve: { $0._shouldBeResolved }
         )
-
-        resolveGroups()
-    }
-
-    private func fullRefresh() async throws {
-
-        self.groups = []
-        self.candidateGroups = []
-
-        let newGroups = try await provider.makeGroups(environment: provider.environment)
-
-        try await refreshViewModels(
-            for: newGroups,
-            inBackground: false
-        )
-
-        candidateGroups = newGroups
-        resolveGroups()
-    }
-}
-
-/// Keep non-Sendable, actor-isolated library conformances on their owner actor.
-/// Child tasks carry only the Sendable batch reference and an immutable index.
-@MainActor
-private final class ContentGroupRefreshBatch {
-    private let viewModels: [any WithRefresh]
-
-    init(_ viewModels: [any WithRefresh]) {
-        self.viewModels = viewModels
-    }
-
-    func refresh(at index: Int, inBackground: Bool) async {
-        let viewModel = viewModels[index]
-        if inBackground {
-            await viewModel.background.refresh()
-        } else {
-            await viewModel.refresh()
-        }
+        try Task.checkCancellation()
+        groups = updated
     }
 }

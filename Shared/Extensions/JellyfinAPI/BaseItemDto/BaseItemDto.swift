@@ -14,9 +14,11 @@ import JellyfinAPI
 import MediaPlayer
 import Nuke
 import SwiftfinCollections
+import SwiftfinFilters
 import SwiftfinImages
 import SwiftfinLocalization
 import SwiftfinNowPlaying
+import SwiftfinRecordingTimers
 import SwiftUI
 
 // TODO: clean up
@@ -535,16 +537,11 @@ extension BaseItemDto {
     /// Can this `BaseItemDto` be recorded
     @MainActor
     var canBeRecorded: Bool {
-        guard Container.shared.currentUserSession()?.user.data.policy?.enableLiveTvManagement == true else { return false }
-
-        switch type {
-        case .channel, .liveTvChannel, .tvChannel:
-            return true
-        case .program, .liveTvProgram, .tvProgram:
-            return (endDate ?? .distantPast) > Date()
-        default:
-            return false
-        }
+        RecordingTimerPolicy.canRecord(
+            self,
+            permitted: Container.shared.currentUserSession()?.user.data.policy?.enableLiveTvManagement == true,
+            now: .now
+        )
     }
 
     @MainActor

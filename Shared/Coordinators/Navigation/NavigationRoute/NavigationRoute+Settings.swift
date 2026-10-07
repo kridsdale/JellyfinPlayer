@@ -10,6 +10,7 @@ import JellyfinAPI
 import PulseUI
 import SwiftfinAccountModels
 import SwiftfinCollections
+import SwiftfinFilters
 import SwiftfinLocalization
 import SwiftfinPlaybackProfiles
 import SwiftUI

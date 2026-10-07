@@ -10,6 +10,7 @@ import Defaults
 import FactoryKit
 import Foundation
 import SwiftfinAccountModels
+import SwiftfinFilters
 import SwiftfinLocalization
 import SwiftfinPlaybackProfiles
 import SwiftfinStoredValues

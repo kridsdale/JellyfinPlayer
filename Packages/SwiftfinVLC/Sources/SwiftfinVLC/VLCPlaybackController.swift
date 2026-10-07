@@ -46,6 +46,7 @@ public final class VLCPlaybackController {
     private var pendingStart: Duration?
     private var buffering = false
     private var ended = false
+    private var terminalPosition: Duration = .zero
     private var performance: KidsPerformanceSpan?
     private var performanceSampler: Task<Void, Never>?
     private var nativeDiagnostics: Task<Void, Never>?
@@ -90,6 +91,7 @@ public final class VLCPlaybackController {
         self.performance = performance
         self.pendingStart = !request.live && request.start > .zero ? request.start : nil
         self.ended = false
+        self.terminalPosition = .zero
         performanceSampler?.cancel()
         nativeDiagnostics?.cancel()
         do {
@@ -128,6 +130,7 @@ public final class VLCPlaybackController {
 
     public func jump(_ offset: Duration) {
         guard generation != nil else { return }
+        terminalPosition = .zero
         engine.jump(offset)
     }
 
@@ -139,7 +142,10 @@ public final class VLCPlaybackController {
     public func seek(_ value: Duration) {
         guard generation != nil, engine.frame.seekable else { return }
         pendingStart = nil
-        perform(.seek) { try engine.seek(value) }
+        perform(.seek) {
+            try engine.seek(value)
+            terminalPosition = max(.zero, value)
+        }
     }
 
     public func setAudioTrack(_ index: Int?) {
@@ -183,6 +189,7 @@ public final class VLCPlaybackController {
         performance?.once(.resumeSeek, values: ["seconds": pendingStart.vlcSeconds])
         do {
             try engine.seek(pendingStart)
+            terminalPosition = pendingStart
             onEvent?(.resumePosition(pendingStart))
         } catch { onEvent?(.operationRejected(.seek)) }
         return true
@@ -194,6 +201,7 @@ public final class VLCPlaybackController {
         switch kind {
         case .clock:
             guard native.state == .playing || native.state == .paused, !applyPendingStart() else { return }
+            terminalPosition = max(.zero, native.time)
             if native.time.vlcSeconds > (request?.start.vlcSeconds ?? 0) + 0.1 {
                 performance?.once(.firstClock, values: ["seconds": native.time.vlcSeconds])
             }
@@ -230,7 +238,18 @@ public final class VLCPlaybackController {
             guard native.reachedEnd, request?.live == false, !ended else { return }
             ended = true
             buffering = false
-            onEvent?(.naturalEnd(request?.runtime))
+            // SwiftVLC resets its clock when stopping. Keep the latest clock/accepted
+            // seek, but do not turn an early stream termination into watched progress.
+            let position = max(native.time, terminalPosition)
+            if let runtime = request?.runtime, runtime > .zero,
+               position < max(.zero, runtime - .seconds(5))
+            {
+                performance?.once(.playerError, values: ["seconds": position.vlcSeconds, "runtime_seconds": runtime.vlcSeconds])
+                performance?.finish(.failure)
+                onEvent?(.playbackFailed)
+            } else {
+                onEvent?(.naturalEnd(request?.runtime))
+            }
         case .audioTracks: onEvent?(.audioTracksChanged)
         case .subtitleTracks: onEvent?(.subtitleTracksChanged(engine.subtitleTracks))
         }

@@ -39,6 +39,7 @@ private final class Reader: MediaCatalogReading {
     var captured: [Captured] = []
     var responses: [String: Data] = [:]
     var failure = false
+    var gatePath: String?
     var gate: Gate?
     func read<Value: Decodable & Sendable>(_ request: Request<Value>) async throws -> Value {
         let values = (request.query ?? []).compactMap { key, value in value.map { (key, $0) } }
@@ -48,7 +49,7 @@ private final class Reader: MediaCatalogReading {
             query: Dictionary(grouping: values, by: { $0.0 }).mapValues { $0.map(\.1).joined(separator: ",") },
             hasBody: request.body != nil
         ))
-        if let gate {
+        if let gate, gatePath == nil || gatePath == request.url?.path {
             await gate.wait()
         }
         if failure {
@@ -445,5 +446,185 @@ struct MediaCatalogClientTests {
         let parser = ISO8601DateFormatter()
         parser.formatOptions = [.withInternetDateTime]
         #expect(parser.date(from: value)?.timeIntervalSince1970 == 90)
+    }
+}
+
+@MainActor
+private final class CatalogBinding { var current = true }
+
+@Suite("Bound content selection")
+@MainActor
+struct ContentSelectionTests {
+    private func client(_ reader: Reader, binding: CatalogBinding? = nil) -> MediaCatalogClient {
+        .init(reader: reader, userID: "exact-user", isCurrent: { binding?.current ?? true })
+    }
+
+    @Test
+    func `next up wins and fetches full episode once`() async throws {
+        let reader = Reader()
+        reader.responses["/Shows/NextUp"] = Data(#"{"Items":[{"Id":"episode","LocationType":"FileSystem"}]}"#.utf8)
+        reader.responses["/Items/episode"] = Data(#"{"Id":"episode","Name":"Full"}"#.utf8)
+        let result = try await client(reader).playbackSelection(for: .init(id: "series", type: .series))
+        #expect(result?.id == "episode" && result?.name == "Full")
+        #expect(reader.captured.map(\.path) == ["/Shows/NextUp", "/Items/episode"])
+        #expect(reader.captured[0].query == ["seriesId": "series", "userId": "exact-user"])
+        #expect(reader.captured[1].query == ["userId": "exact-user"])
+    }
+
+    @Test
+    func `missing next up falls back to resume without first query`() async throws {
+        let reader = Reader()
+        reader.responses["/Shows/NextUp"] = Data(#"{"Items":[{"Id":"missing","LocationType":"Virtual"}]}"#.utf8)
+        reader.responses["/UserItems/Resume"] = Data(#"{"Items":[{"Id":"resume"}]}"#.utf8)
+        reader.responses["/Items/resume"] = Data(#"{"Id":"resume"}"#.utf8)
+        #expect(try await client(reader).playbackSelection(for: .init(id: "series", type: .series))?.id == "resume")
+        #expect(reader.captured.map(\.path) == ["/Shows/NextUp", "/UserItems/Resume", "/Items/resume"])
+        #expect(reader.captured[1].query == ["parentId": "series", "limit": "1", "userId": "exact-user"])
+    }
+
+    @Test
+    func `season falls back to first non missing episode and empty selection stops`() async throws {
+        let reader = Reader()
+        reader.responses["/Items"] = Data(#"{"Items":[{"Id":"first"}]}"#.utf8)
+        reader.responses["/Items/first"] = Data(#"{"Id":"first"}"#.utf8)
+        #expect(try await client(reader).playbackSelection(for: .init(id: "season", type: .season))?.id == "first")
+        #expect(reader.captured.map(\.path) == ["/UserItems/Resume", "/Items", "/Items/first"])
+        let q = reader.captured[1].query
+        #expect(q["parentId"] == "season" && q["userId"] == "exact-user" && q["isMissing"] == "false" && q["recursive"] == "true")
+        #expect(q["sortOrder"] == "Ascending" && q["includeItemTypes"] == "Episode" && q["limit"] == "1")
+        let empty = Reader()
+        #expect(try await client(empty).playbackSelection(for: .init(id: "series", type: .series)) == nil)
+        #expect(empty.captured.map(\.path) == ["/Shows/NextUp", "/UserItems/Resume", "/Items"])
+    }
+
+    @Test
+    func `absent container identity and direct missing item do no reads`() async throws {
+        let reader = Reader()
+        let c = client(reader)
+        #expect(try await c.playbackSelection(for: .init(type: .series)) == nil)
+        #expect(try await c.playbackSelection(for: .init(type: .season)) == nil)
+        #expect(try await c.playbackSelection(for: .init(id: "missing", locationType: .virtual, type: .movie)) == nil)
+        #expect(try await c.playbackSelection(for: .init(id: "movie", type: .movie))?.id == "movie")
+        #expect(reader.captured.isEmpty)
+    }
+
+    @Test
+    func `home views preserve order and exact exclusions and supported types`() async throws {
+        let reader = Reader()
+        reader
+            .responses["/UserViews"] = Data(
+                #"{"Items":[{"Id":"one","CollectionType":"tvshows"},{"Id":"excluded","CollectionType":"movies"},{"Id":"music","CollectionType":"music"},{"Id":"two","CollectionType":"homevideos"},{"Id":"three","CollectionType":"musicvideos"},{"Id":"unknown"}]}"#
+                    .utf8
+            )
+        let result = try await client(reader).homeViews(excludedIDs: ["excluded"])
+        #expect(result.map(\.id) == ["one", "two", "three"])
+        #expect(reader.captured[0].query == ["userId": "exact-user"])
+    }
+
+    @Test
+    func `suggestions are bounded metadata and preserve supplied fields`() async throws {
+        let reader = Reader()
+        _ = try await client(reader).suggestions(fields: [.overview, .primaryImageAspectRatio])
+        let q = reader.captured[0].query
+        #expect(q["fields"] == "Overview,PrimaryImageAspectRatio" && q["includeItemTypes"] == "Movie,Series")
+        #expect(q["recursive"] == "true" && q["limit"] == "10" && q["sortBy"] == "Random" && q["userId"] == "exact-user")
+        #expect(reader.captured.allSatisfy { $0.method == "GET" && !$0.hasBody })
+    }
+
+    @Test(arguments: [BaseItemKind.person, .boxSet, .musicArtist])
+    func `backdrop scope retains person or parent routing`(_ type: BaseItemKind) async throws {
+        let reader = Reader()
+        _ = try await client(reader).randomBackdrop(for: .init(id: "selected", type: type))
+        #expect(reader.captured.count == 1)
+        let q = reader.captured[0].query
+        #expect(q["userId"] == "exact-user" && q["limit"] == "1" && q["sortBy"] == "Random")
+        #expect(q["personIds"] == (type == .person ? "selected" : nil))
+        #expect(q["parentId"] == (type == .person ? nil : "selected"))
+    }
+
+    @Test
+    func `backdrop unsupported and empty guide or adjacent identity do no IO`() async throws {
+        let reader = Reader()
+        let c = client(reader)
+        #expect(try await c.randomBackdrop(for: .init(id: "movie", type: .movie)) == nil)
+        #expect(try await c.programs(channelIDs: [], startDate: .distantPast, endDate: .distantFuture).isEmpty)
+        let adjacent = try await c.adjacentEpisodes(for: .init(seriesID: "series", type: .episode))
+        #expect(adjacent.next == nil && adjacent.previous == nil && reader.captured.isEmpty)
+    }
+
+    @Test
+    func `adjacent responses find current identity rather than assuming center`() {
+        let a = BaseItemDto(id: "a"), b = BaseItemDto(id: "b"), c = BaseItemDto(id: "c")
+        let only = AdjacentEpisodes.resolve([b], currentID: "b")
+        #expect(only.previous == nil && only.next == nil)
+        let left = AdjacentEpisodes.resolve([b, c], currentID: "b")
+        #expect(left.previous == nil && left.next?.id == "c")
+        let right = AdjacentEpisodes.resolve([a, b], currentID: "b")
+        #expect(right.previous?.id == "a" && right.next == nil)
+        let middle = AdjacentEpisodes.resolve([a, b, c], currentID: "b")
+        #expect(middle.previous?.id == "a" && middle.next?.id == "c")
+        let first = AdjacentEpisodes.resolve([a, b, c], currentID: "a")
+        #expect(first.previous == nil && first.next?.id == "b")
+        let absent = AdjacentEpisodes.resolve([a, c], currentID: "b")
+        #expect(absent.previous == nil && absent.next == nil)
+    }
+
+    @Test
+    func `adjacent and trailers keep exact user series and item`() async throws {
+        let reader = Reader()
+        let c = client(reader)
+        _ = try await c.adjacentEpisodes(for: .init(id: "episode", seriesID: "series", type: .episode))
+        _ = try await c.localTrailers(itemID: "movie")
+        #expect(reader.captured[0].path == "/Shows/series/Episodes" && reader.captured[0].query == [
+            "userId": "exact-user",
+            "adjacentTo": "episode",
+            "limit": "3"
+        ])
+        #expect(reader.captured[1].path == "/Items/movie/LocalTrailers" && reader.captured[1].query == ["userId": "exact-user"])
+    }
+
+    @Test
+    func `guide window retains finite channels dates and disabled payload fields`() async throws {
+        let reader = Reader()
+        _ = try await client(reader).programs(
+            channelIDs: ["one", "two"],
+            startDate: Date(timeIntervalSince1970: 0),
+            endDate: Date(timeIntervalSince1970: 3600)
+        )
+        let q = reader.captured[0].query
+        #expect(reader.captured[0].path == "/LiveTv/Programs")
+        #expect(q["channelIds"] == "one,two" && q["userId"] == "exact-user" && q["sortBy"] == "StartDate")
+        #expect(q["minEndDate"] == "1970-01-01T00:00:00Z" && q["maxStartDate"] == "1970-01-01T01:00:00Z")
+        #expect(q["enableImages"] == "false" && q["enableUserData"] == "false" && q["enableTotalRecordCount"] == "false")
+    }
+
+    @Test
+    func `replaced binding cannot continue selection or publish late failure`() async {
+        for failure in [false, true] {
+            let reader = Reader()
+            let binding = CatalogBinding()
+            let gate = Gate()
+            reader.gate = gate
+            reader.failure = failure
+            let c = client(reader, binding: binding)
+            let task = Task { try await c.playbackSelection(for: .init(id: "series", type: .series)) }
+            await settle { gate.continuation != nil }
+            binding.current = false
+            gate.finish()
+            await #expect(throws: CancellationError.self) { try await task.value }
+            #expect(reader.captured.count == 1)
+        }
+    }
+
+    @Test
+    func `binding expires between returned value and publication`() async throws {
+        let reader = Reader()
+        let binding = CatalogBinding()
+        let c = client(reader, binding: binding)
+        _ = try await c.suggestions(fields: [])
+        binding.current = false
+        #expect(throws: CancellationError.self) { try c.checkBinding() }
+        await #expect(throws: CancellationError.self) { try await c.homeViews(excludedIDs: []) }
+        #expect(reader.captured.count == 1)
     }
 }

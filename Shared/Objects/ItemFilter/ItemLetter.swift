@@ -6,33 +6,13 @@
 // Copyright (c) 2026 Jellyfin & Jellyfin Contributors
 //
 
-import Foundation
 import SwiftfinCollections
+import SwiftfinFilters
 import UIKit
 
-struct ItemLetter: @MainActor CaseIterable, Codable, ExpressibleByStringLiteral, Hashable, ItemFilter {
-
-    let value: String
-
-    var displayTitle: String {
-        value
-    }
-
-    init(stringLiteral value: String) {
-        self.value = value
-    }
-
-    init(from anyFilter: AnyItemFilter) {
-        self.value = anyFilter.value
-    }
-
+extension ItemLetter: Displayable, ItemFilter {
     @MainActor
     static var allCases: [ItemLetter] {
-        UILocalizedIndexedCollation
-            .current()
-            .sectionTitles
-            .subtracting(["#"])
-            .prepending("#")
-            .map(Self.init)
+        UILocalizedIndexedCollation.current().sectionTitles.subtracting(["#"]).prepending("#").map(Self.init)
     }
 }

@@ -6,28 +6,6 @@
 // Copyright (c) 2026 Jellyfin & Jellyfin Contributors
 //
 
-import Foundation
-import JellyfinAPI
+import SwiftfinFilters
 
-struct ItemLanguage: Codable, Hashable, ItemFilter {
-
-    let displayTitle: String
-    let value: String
-
-    init(displayTitle: String, value: String) {
-        self.displayTitle = displayTitle
-        self.value = value
-    }
-
-    init(from anyFilter: AnyItemFilter) {
-        self.displayTitle = anyFilter.displayTitle
-        self.value = anyFilter.value
-    }
-
-    init?(_ nameValuePair: NameValuePair) {
-        guard let name = nameValuePair.name, let value = nameValuePair.value else { return nil }
-
-        self.displayTitle = name
-        self.value = value
-    }
-}
+extension ItemLanguage: Displayable, ItemFilter {}

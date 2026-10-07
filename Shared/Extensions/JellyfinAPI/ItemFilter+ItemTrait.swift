@@ -9,6 +9,7 @@
 import Foundation
 import JellyfinAPI
 import SwiftfinCollections
+import SwiftfinFilters
 import SwiftfinLocalization
 
 /// Aliased so the name `ItemFilter` can be repurposed.

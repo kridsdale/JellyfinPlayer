@@ -6,21 +6,6 @@
 // Copyright (c) 2026 Jellyfin & Jellyfin Contributors
 //
 
-import Foundation
+import SwiftfinFilters
 
-struct ItemOfficialRating: Codable, ExpressibleByStringLiteral, Hashable, ItemFilter {
-
-    let value: String
-
-    var displayTitle: String {
-        value
-    }
-
-    init(stringLiteral value: String) {
-        self.value = value
-    }
-
-    init(from anyFilter: AnyItemFilter) {
-        self.value = anyFilter.value
-    }
-}
+extension ItemOfficialRating: Displayable, ItemFilter {}

@@ -33,6 +33,8 @@ private struct Captured {
     let method: String
     let query: [String: String]
     let body: Data?
+    let headers: [String: String]
+    let rawData: Data?
 }
 
 @MainActor
@@ -48,7 +50,9 @@ private final class Sender: JellyfinRequestSending {
             path: request.url?.path ?? "",
             method: request.method.rawValue,
             query: Dictionary(grouping: pairs, by: { $0.0 }).mapValues { $0.map(\.1).joined(separator: ",") },
-            body: request.body.map { try JSONEncoder().encode($0) }
+            body: request.body.map { try JSONEncoder().encode($0) },
+            headers: request.headers ?? [:],
+            rawData: request.body as? Data
         ))
     }
 
@@ -470,5 +474,115 @@ struct MetadataTagTests {
         binding.current = false
         await #expect(throws: CancellationError.self) { try await store.search(prefix: "a", client: c) }
         #expect(s.calls.count == 1)
+    }
+}
+
+@Suite("Item image administration")
+@MainActor
+struct ItemImageAdministrationTests {
+    private func client(_ sender: Sender, binding: Binding? = nil) -> ItemMetadataClient {
+        .init(
+            executor: .init(sender: sender, isCurrent: { binding?.current ?? true }),
+            userID: "exact-user",
+            bindingID: .init(transport: ObjectIdentifier(sender), userID: "exact-user")
+        )
+    }
+
+    @Test
+    func `grouping drops untyped and keeps indexed then unindexed stable`() {
+        let images: [ImageInfo] = [
+            .init(imageIndex: 2, imageType: .backdrop),
+            .init(imageType: .primary),
+            .init(imageIndex: 0, imageType: .backdrop),
+            .init(imageType: .backdrop),
+            .init(imageType: .backdrop),
+            .init(imageIndex: 3)
+        ]
+        let grouped = ItemMetadataClient.groupImages(images)
+        #expect(Set(grouped.keys) == [.primary, .backdrop])
+        #expect(grouped[.backdrop]?.map(\.imageIndex) == [0, 2, nil, nil])
+        #expect(grouped[.primary]?.count == 1)
+    }
+
+    @Test
+    func `image read has exact item and normalizes empty result`() async throws {
+        let sender = Sender()
+        let images = try await client(sender).itemImages(itemID: "selected")
+        #expect(images.isEmpty && sender.calls.count == 1)
+        #expect(sender.calls[0].path == "/Items/selected/Images" && sender.calls[0].method == "GET")
+    }
+
+    @Test
+    func `upload has exactly one base 64 layer and supplied content type`() async throws {
+        let sender = Sender()
+        let data = Data([0, 1, 2, 255])
+        try await client(sender).uploadImage(itemID: "selected", type: .primary, data: data, contentType: "image/png")
+        let call = try #require(sender.calls.first)
+        #expect(call.path == "/Items/selected/Images/Primary" && call.method == "POST")
+        #expect(call.headers == ["Content-Type": "image/png"] && call.rawData == data.base64EncodedData())
+    }
+
+    @Test
+    func `remote download retains type and URL and rejects incomplete records`() async throws {
+        let sender = Sender()
+        let c = client(sender)
+        #expect(try await !(c.saveRemoteImage(itemID: "selected", image: .init(type: .primary))))
+        #expect(try await !(c.saveRemoteImage(itemID: "selected", image: .init(url: "https://example.invalid/image"))))
+        #expect(sender.calls.isEmpty)
+        #expect(try await c.saveRemoteImage(itemID: "selected", image: .init(type: .backdrop, url: "https://example.invalid/image")))
+        #expect(sender.calls[0].path == "/Items/selected/RemoteImages/Download" && sender.calls[0].method == "POST")
+        #expect(sender.calls[0].query == ["type": "Backdrop", "imageUrl": "https://example.invalid/image"])
+    }
+
+    @Test
+    func `indexed and unindexed deletion use distinct SDK routes`() async throws {
+        let sender = Sender()
+        let c = client(sender)
+        #expect(try await !(c.deleteImage(itemID: "selected", image: .init(imageIndex: 1))))
+        #expect(sender.calls.isEmpty)
+        #expect(try await c.deleteImage(itemID: "selected", image: .init(imageIndex: 3, imageType: .backdrop)))
+        #expect(try await c.deleteImage(itemID: "selected", image: .init(imageType: .primary)))
+        #expect(sender.calls.map(\.path) == ["/Items/selected/Images/Backdrop/3", "/Items/selected/Images/Primary"])
+        #expect(sender.calls.allSatisfy { $0.method == "DELETE" && $0.query.isEmpty })
+    }
+
+    @Test
+    func `replaced account cannot publish late images`() async {
+        let sender = Sender()
+        let binding = Binding()
+        let gate = Gate()
+        sender.gate = gate
+        let c = client(sender, binding: binding)
+        let task = Task { try await c.itemImages(itemID: "selected") }
+        await settle { gate.continuation != nil }
+        binding.current = false
+        gate.finish()
+        await #expect(throws: CancellationError.self) { try await task.value }
+        #expect(sender.calls.count == 1)
+    }
+
+    @Test
+    func `expired image write and late failed command become cancellation`() async throws {
+        let sender = Sender()
+        let binding = Binding()
+        binding.current = false
+        let c = client(sender, binding: binding)
+        await #expect(throws: CancellationError.self) { try await c.uploadImage(
+            itemID: "selected",
+            type: .primary,
+            data: Data(),
+            contentType: "image/png"
+        ) }
+        #expect(sender.calls.isEmpty)
+        binding.current = true
+        sender.failure = true
+        let gate = Gate()
+        sender.gate = gate
+        let task = Task { try await c.deleteImage(itemID: "selected", image: .init(imageType: .primary)) }
+        await settle { gate.continuation != nil }
+        binding.current = false
+        gate.finish()
+        await #expect(throws: CancellationError.self) { try await task.value }
+        #expect(sender.calls.count == 1)
     }
 }

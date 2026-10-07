@@ -8,10 +8,11 @@
 
 import JellyfinAPI
 import SwiftfinCollections
+import SwiftfinFilters
 import SwiftfinLocalization
 import SwiftfinStoredValues
 
-enum ItemFilterType: String, CaseIterable, Displayable, Identifiable, Storable, SystemImageable {
+extension ItemFilterType: Displayable, @retroactive Storable, SystemImageable {
 
     typealias Group = (
         displayTitle: String,
@@ -19,17 +20,6 @@ enum ItemFilterType: String, CaseIterable, Displayable, Identifiable, Storable, 
         setter: @MainActor ([AnyItemFilter], FilterViewModel) -> Void,
         selectorType: SelectorType
     )
-
-    case audioLanguage
-    case genres
-    case letter
-    case officialRatings
-    case sortBy
-    case subtitleLanguage
-    case tags
-    case traits
-    case years
-    case category
 
     var displayTitle: String {
         switch self {
@@ -136,10 +126,6 @@ enum ItemFilterType: String, CaseIterable, Displayable, Identifiable, Storable, 
                 selectorType: .multi
             )
         }
-    }
-
-    var id: String {
-        rawValue
     }
 
     var systemImage: String {

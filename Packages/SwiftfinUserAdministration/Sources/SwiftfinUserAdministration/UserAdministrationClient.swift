@@ -90,3 +90,15 @@ public final class UserAdministrationClient {
         enabled ? true : nil
     }
 }
+
+public extension UserAdministrationClient {
+    func uploadImage(userID: String, data: Data, contentType: String) async throws {
+        var request = Paths.postUserImage(userID: userID, data.base64EncodedData())
+        request.headers = ["Content-Type": contentType]
+        try await executor.complete(request)
+    }
+
+    func deleteImage(userID: String) async throws {
+        try await executor.complete(Paths.deleteUserImage(userID: userID))
+    }
+}

@@ -7,6 +7,7 @@
 //
 
 import JellyfinAPI
+import SwiftfinFilters
 import SwiftfinLocalization
 import SwiftUI
 

@@ -131,11 +131,63 @@ final class VLCPlaybackOwnershipTests: XCTestCase {
         XCTAssertFalse(player.frame.applyingStartPosition)
     }
 
+    func testPrematureNativeEndAfterSeekCannotAdvancePlayback() {
+        let engine = Engine(), player = VLCPlaybackController(engine: engine), generation = UUID()
+        var events: [VLCPlaybackEvent] = []
+        player.onEvent = { events.append($0) }
+        player.open(request(start: .seconds(113)), generation: generation)
+        engine.frame.state = .paused
+        engine.frame.seekable = true
+        engine.frame.time = .seconds(118)
+        player.seek(.seconds(133))
+        engine.frame.time = .seconds(133)
+        engine.frame.reachedEnd = true
+        player.observed(.end, generation: generation)
+        player.observed(.end, generation: generation)
+        XCTAssertEqual(events, [.playbackFailed])
+        XCTAssertFalse(events.contains(.naturalEnd(.seconds(900))))
+    }
+
+    func testNaturalEndRetainsLastClockWhenNativeStopResetsTime() {
+        let engine = Engine(), player = VLCPlaybackController(engine: engine), generation = UUID()
+        var events: [VLCPlaybackEvent] = []
+        player.onEvent = { events.append($0) }
+        player.open(request(start: .zero), generation: generation)
+        engine.frame.state = .playing
+        engine.frame.time = .seconds(899)
+        player.observed(.clock, generation: generation)
+        events.removeAll()
+        engine.frame.state = .stopped
+        engine.frame.time = .zero
+        engine.frame.reachedEnd = true
+        player.observed(.end, generation: generation)
+        XCTAssertEqual(events, [.naturalEnd(.seconds(900))])
+    }
+
+    func testBackwardSeekCannotReuseAnEarlierNearEndClock() {
+        let engine = Engine(), player = VLCPlaybackController(engine: engine), generation = UUID()
+        var events: [VLCPlaybackEvent] = []
+        player.onEvent = { events.append($0) }
+        player.open(request(start: .zero), generation: generation)
+        engine.frame.state = .playing
+        engine.frame.seekable = true
+        engine.frame.time = .seconds(899)
+        player.observed(.clock, generation: generation)
+        player.seek(.seconds(120))
+        events.removeAll()
+        engine.frame.state = .stopped
+        engine.frame.time = .zero
+        engine.frame.reachedEnd = true
+        player.observed(.end, generation: generation)
+        XCTAssertEqual(events, [.playbackFailed])
+    }
+
     func testNaturalEndReportsTimelineOnceAndLiveStreamCannotAdvance() {
         let engine = Engine(), player = VLCPlaybackController(engine: engine), generation = UUID()
         var events: [VLCPlaybackEvent] = []
         player.onEvent = { events.append($0) }
         player.open(request(start: .zero), generation: generation)
+        engine.frame.time = .seconds(900)
         engine.frame.reachedEnd = true
         player.observed(.end, generation: generation)
         player.observed(.end, generation: generation)

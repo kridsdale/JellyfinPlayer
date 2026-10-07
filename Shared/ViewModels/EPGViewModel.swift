@@ -11,6 +11,7 @@ import Foundation
 import IdentifiedCollections
 import JellyfinAPI
 import SwiftfinCollections
+import SwiftfinMediaCatalog
 
 @MainActor
 @Stateful
@@ -142,9 +143,10 @@ final class EPGViewModel: ViewModel {
         guard hasNextChannelPage else { return }
 
         let generation = requestGeneration
+        let catalog = try requireMediaCatalog()
         let requestStartDate = startDate
         let requestEndDate = endDate
-        let page = try await getChannelPage(offset: nextChannelOffset)
+        let page = try await getChannelPage(offset: nextChannelOffset, catalog: catalog)
         let existingChannelIDs = Set(channels.compactMap(\.id))
         let newChannels = IdentifiedArray(
             page.channels.elements.filter { channel in
@@ -155,9 +157,11 @@ final class EPGViewModel: ViewModel {
         let newPrograms = try await getProgramBlocks(
             for: newChannels,
             startDate: requestStartDate,
-            endDate: requestEndDate
+            endDate: requestEndDate,
+            catalog: catalog
         )
 
+        try catalog.checkBinding()
         guard !Task.isCancelled,
               generation == requestGeneration,
               startDate == requestStartDate
@@ -177,15 +181,18 @@ final class EPGViewModel: ViewModel {
     private func _refresh(_ requestedStartDate: Date?) async throws {
         requestGeneration += 1
         let generation = requestGeneration
+        let catalog = try requireMediaCatalog()
         let requestStartDate = requestedStartDate ?? refreshedStartDate()
         let requestEndDate = endDate(startingAt: requestStartDate)
-        let page = try await getChannelPage(offset: 0)
+        let page = try await getChannelPage(offset: 0, catalog: catalog)
         let newPrograms = try await getProgramBlocks(
             for: page.channels,
             startDate: requestStartDate,
-            endDate: requestEndDate
+            endDate: requestEndDate,
+            catalog: catalog
         )
 
+        try catalog.checkBinding()
         guard !Task.isCancelled,
               generation == requestGeneration
         else { return }
@@ -198,15 +205,8 @@ final class EPGViewModel: ViewModel {
         hasNextChannelPage = page.hasNextPage
     }
 
-    private func getChannelPage(offset: Int) async throws -> ChannelPage {
-        let items = try await channelsLibrary.retrievePage(
-            environment: Empty(),
-            pageState: LibraryPageState(
-                pageOffset: offset,
-                pageSize: channelPageSize,
-                userSession: requireUserSession()
-            )
-        )
+    private func getChannelPage(offset: Int, catalog: MediaCatalogClient) async throws -> ChannelPage {
+        let items = try await catalog.page(.channels, at: CatalogPageRequest(offset: offset, limit: channelPageSize)).items
         let validChannels = items.filter { channel in
             guard let id = channel.id else { return false }
             return id.nilIfBlank == id
@@ -225,12 +225,13 @@ final class EPGViewModel: ViewModel {
     private func getProgramBlocks(
         for channels: IdentifiedArrayOf<BaseItemDto>,
         startDate: Date,
-        endDate: Date
+        endDate: Date,
+        catalog: MediaCatalogClient
     ) async throws -> [String: [ProgramBlock]] {
         let channelIDs = channels.compactMap(\.id)
         guard channelIDs.isNotEmpty else { return [:] }
 
-        let fetchedPrograms = try await getPrograms(
+        let fetchedPrograms = try await catalog.programs(
             channelIDs: channelIDs,
             startDate: startDate,
             endDate: endDate
@@ -249,27 +250,6 @@ final class EPGViewModel: ViewModel {
                 endDate: endDate
             )
         }
-    }
-
-    private func getPrograms(
-        channelIDs: [String],
-        startDate: Date,
-        endDate: Date
-    ) async throws -> [BaseItemDto] {
-        var parameters = Paths.GetLiveTvProgramsParameters()
-        parameters.channelIDs = channelIDs
-        parameters.enableImages = false
-        parameters.enableTotalRecordCount = false
-        parameters.enableUserData = false
-        parameters.maxStartDate = endDate
-        parameters.minEndDate = startDate
-        parameters.sortBy = [.startDate]
-        parameters.userID = try authenticatedUser.id
-
-        let request = Paths.getLiveTvPrograms(parameters: parameters)
-        let response = try await send(request)
-
-        return response.value.items ?? []
     }
 
     private func endDate(startingAt startDate: Date) -> Date {

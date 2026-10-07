@@ -29,22 +29,34 @@ extension JellyfinTransport: MediaCatalogReading {
 public final class MediaCatalogClient {
     private let reader: any MediaCatalogReading
     private let userID: String
+    private let isCurrent: @MainActor @Sendable () -> Bool
     private let now: @MainActor @Sendable () -> Date
-    public init(reader: any MediaCatalogReading, userID: String, now: @escaping @MainActor @Sendable () -> Date = { .now }) {
+    public init(
+        reader: any MediaCatalogReading,
+        userID: String,
+        now: @escaping @MainActor @Sendable () -> Date = { .now },
+        isCurrent: @escaping @MainActor @Sendable () -> Bool = { true }
+    ) {
+        self.isCurrent = isCurrent
         self.reader = reader
         self.userID = userID
         self.now = now
     }
 
-    private func read<Value: Decodable & Sendable>(_ request: Request<Value>) async throws -> Value {
+    public func checkBinding() throws {
         try Task.checkCancellation()
+        guard isCurrent() else { throw CancellationError() }
+    }
+
+    private func read<Value: Decodable & Sendable>(_ request: Request<Value>) async throws -> Value {
+        try checkBinding()
         guard request.method == .get else { throw MediaCatalogError.nonReadRequest }
         do {
             let result = try await reader.read(request)
-            try Task.checkCancellation()
+            try checkBinding()
             return result
         } catch {
-            try Task.checkCancellation()
+            try checkBinding()
             throw error
         }
     }
@@ -56,7 +68,7 @@ public final class MediaCatalogClient {
     }
 
     public func page(_ query: MediaCatalogQuery, at page: CatalogPageRequest) async throws -> CatalogPage {
-        try Task.checkCancellation()
+        try checkBinding()
         if !query.supportsPagination && page.offset != 0 {
             return CatalogPage(items: [])
         }
@@ -212,3 +224,141 @@ public final class MediaCatalogClient {
 }
 
 public enum MediaCatalogError: Error, Sendable { case nonReadRequest }
+
+public struct AdjacentEpisodes: Sendable {
+    public let previous: BaseItemDto?
+    public let next: BaseItemDto?
+    public init(previous: BaseItemDto?, next: BaseItemDto?) {
+        self.previous = previous
+        self.next = next
+    }
+
+    public static func resolve(_ items: [BaseItemDto], currentID: String) -> AdjacentEpisodes {
+        guard let index = items.firstIndex(where: { $0.id == currentID }) else { return .init(previous: nil, next: nil) }
+        let previous = index > 0 ? items[index - 1] : nil
+        let next = index + 1 < items.count ? items[index + 1] : nil
+        return .init(previous: previous, next: next)
+    }
+}
+
+public extension MediaCatalogClient {
+    func item(id: String) async throws -> BaseItemDto {
+        try await read(Paths.getItem(itemID: id, userID: userID))
+    }
+
+    func homeViews(excludedIDs: [String]) async throws -> [BaseItemDto] {
+        let response = try await read(Paths.getUserViews(parameters: .init(userID: userID)))
+        return (response.items ?? []).filter {
+            !excludedIDs.contains($0.id ?? "") && [.homevideos, .movies, .musicvideos, .tvshows].contains($0.collectionType)
+        }
+    }
+
+    func suggestions(fields: [ItemFields]) async throws -> [BaseItemDto] {
+        var p = Paths.GetItemsParameters()
+        p.fields = fields
+        p.includeItemTypes = [.movie, .series]
+        p.isRecursive = true
+        p.limit = 10
+        p.sortBy = [.random]
+        p.userID = userID
+        return try await read(Paths.getItems(parameters: p)).items ?? []
+    }
+
+    func playbackSelection(for item: BaseItemDto) async throws -> BaseItemDto? {
+        try checkBinding()
+        let candidate: BaseItemDto?
+        switch item.type {
+        case .series:
+            guard let id = item.id else { return nil }
+            var next = Paths.GetNextUpParameters()
+            next.seriesID = id
+            next.userID = userID
+            let first = try await read(Paths.getNextUp(parameters: next)).items?.first
+            if let first, first.locationType != .virtual {
+                candidate = first
+            } else if let resumed = try await resumeCandidate(parentID: id) {
+                candidate = resumed
+            } else {
+                candidate = try await firstCandidate(parentID: id)
+            }
+        case .season:
+            guard let id = item.id else { return nil }
+            if let resumed = try await resumeCandidate(parentID: id) {
+                candidate = resumed
+            } else {
+                candidate = try await firstCandidate(parentID: id)
+            }
+        default:
+            return item.locationType == .virtual ? nil : item
+        }
+        guard let id = candidate?.id else { return nil }
+        return try await self.item(id: id)
+    }
+
+    private func resumeCandidate(parentID: String) async throws -> BaseItemDto? {
+        var p = Paths.GetResumeItemsParameters()
+        p.limit = 1
+        p.parentID = parentID
+        p.userID = userID
+        return try await read(Paths.getResumeItems(parameters: p)).items?.first
+    }
+
+    private func firstCandidate(parentID: String) async throws -> BaseItemDto? {
+        var p = Paths.GetItemsParameters()
+        p.includeItemTypes = [.episode]
+        p.isMissing = false
+        p.isRecursive = true
+        p.limit = 1
+        p.parentID = parentID
+        p.sortOrder = [.ascending]
+        p.userID = userID
+        return try await read(Paths.getItems(parameters: p)).items?.first
+    }
+
+    func localTrailers(itemID: String) async throws -> [BaseItemDto] {
+        try await read(Paths.getLocalTrailers(itemID: itemID, userID: userID))
+    }
+
+    func randomBackdrop(for item: BaseItemDto) async throws -> BaseItemDto? {
+        try checkBinding()
+        guard [.person, .musicArtist, .boxSet].contains(item.type), let id = item.id else { return nil }
+        var p = Paths.GetItemsParameters()
+        p.includeItemTypes = [.movie, .series]
+        p.isRecursive = true
+        p.limit = 1
+        p.sortBy = [.random]
+        p.userID = userID
+        if item.type == .person {
+            p.personIDs = [id]
+        } else {
+            p.parentID = id
+        }
+        return try await read(Paths.getItems(parameters: p)).items?.first
+    }
+
+    func adjacentEpisodes(for item: BaseItemDto) async throws -> AdjacentEpisodes {
+        try checkBinding()
+        guard item.type == .episode, let seriesID = item.seriesID, let itemID = item.id else { return .init(previous: nil, next: nil) }
+        var p = Paths.GetEpisodesParameters()
+        p.userID = userID
+        p.adjacentTo = itemID
+        p.limit = 3
+        let items = try await read(Paths.getEpisodes(seriesID: seriesID, parameters: p)).items ?? []
+        return .resolve(items, currentID: itemID)
+    }
+
+    func programs(channelIDs: [String], startDate: Date, endDate: Date) async throws -> [BaseItemDto] {
+        try checkBinding()
+        guard !channelIDs.isEmpty else { return [] }
+        var p = Paths.GetLiveTvProgramsParameters()
+        p.channelIDs = channelIDs
+        p.enableImages = false
+        p.enableTotalRecordCount = false
+        p.enableUserData = false
+        p.maxStartDate = endDate
+        p.minEndDate = startDate
+        p.sortBy = [.startDate]
+        p.userID = userID
+        return try await read(Paths.getLiveTvPrograms(parameters: p)).items ?? []
+    }
+}
