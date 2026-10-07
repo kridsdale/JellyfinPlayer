@@ -11,6 +11,7 @@ import Defaults
 import FactoryKit
 import JellyfinAPI
 import SwiftfinCollections
+import SwiftfinFormatting
 import SwiftfinLocalization
 import SwiftfinMediaTracks
 import SwiftUI

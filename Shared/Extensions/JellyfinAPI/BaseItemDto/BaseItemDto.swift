@@ -20,6 +20,8 @@ import SwiftfinItemMetadata
 import SwiftfinLocalization
 import SwiftfinNowPlaying
 import SwiftfinRecordingTimers
+import SwiftfinTime
+import SwiftfinValues
 import SwiftUI
 
 // TODO: clean up

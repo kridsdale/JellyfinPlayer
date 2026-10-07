@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import SwiftfinFormatting
 import SwiftfinLocalization
 import SwiftfinPlaybackProfiles
 import SwiftfinStoredValues

@@ -7,6 +7,7 @@
 //
 
 import JellyfinAPI
+import SwiftfinTime
 import SwiftUI
 
 extension TaskTriggerInfo {

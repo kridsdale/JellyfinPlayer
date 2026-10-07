@@ -8,6 +8,9 @@
 
 import Defaults
 import MediaPlayer
+import SwiftfinFormatting
+import SwiftfinTime
+import SwiftfinValues
 import SwiftUI
 import UIKit
 

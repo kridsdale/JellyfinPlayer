@@ -18,6 +18,7 @@ import SwiftfinConnections
 import SwiftfinConnectivity
 import SwiftfinLocalization
 import SwiftfinNetworking
+import SwiftfinTime
 
 @MainActor
 @Stateful

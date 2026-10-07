@@ -9,6 +9,8 @@
 import Combine
 import JellyfinAPI
 import SwiftfinLocalization
+import SwiftfinTime
+import SwiftfinValues
 import SwiftUI
 
 struct EPGProgramCell: View {

@@ -8,6 +8,7 @@
 
 import Foundation
 import SwiftfinCollections
+import SwiftfinTime
 
 // TODO: replace all with formatters or use Duration
 

@@ -14,6 +14,7 @@ import JellyfinAPI
 import SwiftfinCollections
 import SwiftfinNetworking
 import SwiftfinPaging
+import SwiftfinTime
 
 let defaultPagingLibraryPageSize = 50
 

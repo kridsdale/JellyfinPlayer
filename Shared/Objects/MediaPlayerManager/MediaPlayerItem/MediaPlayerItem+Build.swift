@@ -11,6 +11,7 @@ import FactoryKit
 import Foundation
 import JellyfinAPI
 import Logging
+import SwiftfinFormatting
 import SwiftfinLocalization
 import SwiftfinPlaybackPreparation
 import SwiftfinPlaybackPreviews

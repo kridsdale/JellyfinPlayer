@@ -9,7 +9,9 @@
 import Defaults
 import PreferencesView
 import SwiftfinCollections
+import SwiftfinFormatting
 import SwiftfinLocalization
+import SwiftfinValues
 import SwiftUI
 
 // TODO: protect against holding down

@@ -11,6 +11,7 @@ import Defaults
 import Foundation
 import JellyfinAPI
 import SwiftfinCollections
+import SwiftfinTime
 import UIKit
 
 extension UserSessionManager {

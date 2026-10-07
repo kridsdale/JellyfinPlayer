@@ -7,6 +7,7 @@
 //
 
 import SwiftfinCollections
+import SwiftfinValues
 import SwiftUI
 
 // TODO: use _UIHostingView for button animation workaround?

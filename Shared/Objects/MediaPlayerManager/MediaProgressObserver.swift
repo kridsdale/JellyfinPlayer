@@ -14,6 +14,7 @@ import JellyfinAPI
 import SwiftfinAsyncStreams
 import SwiftfinNetworking
 import SwiftfinPlaybackReporting
+import SwiftfinTime
 
 /// Platform subscriptions feed one shared serialized reporting queue. Every
 /// playback report retains the connection captured when this observer is made.

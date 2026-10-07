@@ -1,0 +1,113 @@
+{
+  "bitrate": [
+    {
+      "raw": 0,
+      "text": "0.0 bps"
+    },
+    {
+      "raw": 999,
+      "text": "999.0 bps"
+    },
+    {
+      "raw": 1000,
+      "text": "1.0 kbps"
+    },
+    {
+      "raw": 1000000,
+      "text": "1.0 Mbps"
+    },
+    {
+      "raw": 9223372036854775807,
+      "text": "9223372.0 Tbps"
+    }
+  ],
+  "days": [
+    {
+      "raw": -1,
+      "text": "0"
+    },
+    {
+      "raw": 0,
+      "text": "0"
+    },
+    {
+      "raw": 86400,
+      "text": "1"
+    },
+    {
+      "raw": 123456,
+      "text": "1"
+    },
+    {
+      "raw": 99999999,
+      "text": "365"
+    }
+  ],
+  "lastSeenNil": "Never",
+  "locale": "en_US",
+  "minuteSeconds90": "1m 30s",
+  "nilEmpty": "",
+  "provenance": "Captured from original production formatting, duration and value helpers at b47e0770; private probe 193; en_US; no preferences changed.",
+  "runtime": [
+    {
+      "seconds": 59,
+      "text": "0:59"
+    },
+    {
+      "seconds": 3599,
+      "text": "59:59"
+    },
+    {
+      "seconds": 3600,
+      "text": "1:00:00"
+    },
+    {
+      "seconds": -3661,
+      "text": "-1:01:01"
+    }
+  ],
+  "speed": [
+    {
+      "raw": 0.25,
+      "text": "0.25\u00d7"
+    },
+    {
+      "raw": 1.375,
+      "text": "1.38\u00d7"
+    },
+    {
+      "raw": 2,
+      "text": "2\u00d7"
+    }
+  ],
+  "tickConversion": [
+    {
+      "input": -21,
+      "roundtrip": -20
+    },
+    {
+      "input": -19,
+      "roundtrip": -10
+    },
+    {
+      "input": -1,
+      "roundtrip": 0
+    },
+    {
+      "input": 0,
+      "roundtrip": 0
+    },
+    {
+      "input": 1,
+      "roundtrip": 0
+    },
+    {
+      "input": 19,
+      "roundtrip": 10
+    },
+    {
+      "input": 21,
+      "roundtrip": 20
+    }
+  ]
+}

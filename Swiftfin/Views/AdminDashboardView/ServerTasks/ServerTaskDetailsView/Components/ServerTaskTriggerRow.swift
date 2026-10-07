@@ -8,7 +8,9 @@
 
 import Engine
 import JellyfinAPI
+import SwiftfinFormatting
 import SwiftfinLocalization
+import SwiftfinTime
 import SwiftUI
 
 extension ServerTaskDetailsView {

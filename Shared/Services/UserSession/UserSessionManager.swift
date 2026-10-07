@@ -16,6 +16,7 @@ import SwiftfinCredentials
 import SwiftfinLocalization
 import SwiftfinSessions
 import SwiftfinStoredValues
+import SwiftfinTime
 
 extension Container {
 

@@ -11,6 +11,7 @@ import Nuke
 import NukeUI
 import SwiftfinCollections
 import SwiftfinImages
+import SwiftfinValues
 import SwiftUI
 
 // TODO: currently SVGs are only supported for logos, which are only used in a few places.

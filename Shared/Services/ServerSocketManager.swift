@@ -12,6 +12,7 @@ import JellyfinAPI
 import Logging
 import SwiftfinAsyncStreams
 import SwiftfinNetworking
+import SwiftfinTime
 
 /// App session binding and legacy presentation publishers. Native socket
 /// sessions, reconnect state and subscription leases belong to Networking.

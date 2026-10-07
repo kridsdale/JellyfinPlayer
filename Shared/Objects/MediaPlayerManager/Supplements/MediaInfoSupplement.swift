@@ -8,6 +8,7 @@
 
 import JellyfinAPI
 import SwiftfinLocalization
+import SwiftfinTime
 import SwiftUI
 
 // TODO: scroll if description too long

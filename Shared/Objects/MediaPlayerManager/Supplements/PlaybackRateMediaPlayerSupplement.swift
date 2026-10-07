@@ -6,6 +6,7 @@
 // Copyright (c) 2026 Jellyfin & Jellyfin Contributors
 //
 
+import SwiftfinFormatting
 import SwiftUI
 
 // TODO: POC of a "guest" supplement, finish

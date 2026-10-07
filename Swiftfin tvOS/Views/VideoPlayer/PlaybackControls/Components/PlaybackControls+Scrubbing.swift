@@ -8,6 +8,7 @@
 
 import Defaults
 import Foundation
+import SwiftfinFormatting
 import SwiftUI
 
 extension VideoPlayer.PlaybackControls {

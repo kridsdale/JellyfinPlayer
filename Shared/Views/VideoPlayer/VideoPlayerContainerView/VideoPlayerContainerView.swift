@@ -10,6 +10,7 @@ import Combine
 import Defaults
 import Logging
 import MediaPlayer
+import SwiftfinValues
 import SwiftUI
 
 // TODO: don't dismiss overlay while panning and supplement not presented

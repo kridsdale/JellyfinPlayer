@@ -12,6 +12,7 @@ import IdentifiedCollections
 import JellyfinAPI
 import SwiftfinCollections
 import SwiftfinMediaCatalog
+import SwiftfinTime
 
 @MainActor
 @Stateful

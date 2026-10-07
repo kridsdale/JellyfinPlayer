@@ -8,7 +8,9 @@
 
 import CollectionVGrid
 import JellyfinAPI
+import SwiftfinFormatting
 import SwiftfinLocalization
+import SwiftfinTime
 import SwiftUI
 
 struct ActiveSessionsView: View {

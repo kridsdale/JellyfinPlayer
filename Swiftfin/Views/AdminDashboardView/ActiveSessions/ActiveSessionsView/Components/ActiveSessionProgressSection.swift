@@ -7,6 +7,8 @@
 //
 
 import JellyfinAPI
+import SwiftfinFormatting
+import SwiftfinValues
 import SwiftUI
 
 extension ActiveSessionsView {

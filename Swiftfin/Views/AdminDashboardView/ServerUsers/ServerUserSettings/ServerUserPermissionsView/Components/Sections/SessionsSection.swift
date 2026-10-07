@@ -9,6 +9,7 @@
 import JellyfinAPI
 import SwiftfinLocalization
 import SwiftfinUIState
+import SwiftfinValues
 import SwiftUI
 
 extension ServerUserPermissionsView {

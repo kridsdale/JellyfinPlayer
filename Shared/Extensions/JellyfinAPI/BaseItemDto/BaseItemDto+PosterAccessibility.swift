@@ -8,7 +8,9 @@
 
 import Foundation
 import JellyfinAPI
+import SwiftfinFormatting
 import SwiftfinLocalization
+import SwiftfinTime
 
 extension BaseItemDto {
 

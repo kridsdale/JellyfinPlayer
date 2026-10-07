@@ -8,6 +8,7 @@
 
 import Defaults
 import SwiftfinCollections
+import SwiftfinValues
 import SwiftUI
 
 struct ProgressIndicator: View {

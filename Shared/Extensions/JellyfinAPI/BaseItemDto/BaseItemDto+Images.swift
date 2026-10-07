@@ -12,6 +12,7 @@ import JellyfinAPI
 import SwiftfinCollections
 import SwiftfinImages
 import SwiftfinItemMetadata
+import SwiftfinValues
 import UIKit
 
 extension BaseItemDto {

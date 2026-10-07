@@ -8,6 +8,7 @@
 
 import JellyfinAPI
 import SwiftfinCollections
+import SwiftfinFormatting
 import SwiftfinLocalization
 import SwiftfinMediaCatalog
 

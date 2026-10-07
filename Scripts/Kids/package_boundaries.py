@@ -34,6 +34,9 @@ EXTERNAL_POLICIES = {
     ],
 }
 POLICIES = {
+    "SwiftfinValues": ({}, {"Foundation"}),
+    "SwiftfinTime": ({}, {"Foundation"}),
+    "SwiftfinFormatting": ({"SwiftfinValues", "SwiftfinLocalization"}, {"Foundation"}),
     "SwiftfinAccountAccess": ({"SwiftfinNetworking"}, {"Foundation", "JellyfinAPI"}),
     "SwiftfinUserMediaState": ({"SwiftfinNetworking"}, {"Foundation", "JellyfinAPI"}),
     "SwiftfinPlaybackReporting": ({"SwiftfinNetworking", "SwiftfinAsyncStreams"}, {"Foundation", "JellyfinAPI"}),

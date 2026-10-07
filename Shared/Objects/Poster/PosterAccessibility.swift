@@ -8,6 +8,7 @@
 
 import Foundation
 import SwiftfinLocalization
+import SwiftfinTime
 import SwiftUI
 
 struct PosterAccessibility {

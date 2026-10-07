@@ -9,6 +9,7 @@
 import CoreTransferable
 import JellyfinAPI
 import SwiftfinCollections
+import SwiftfinFormatting
 import SwiftfinLocalization
 import SwiftfinMediaTracks
 import SwiftfinPlaybackProfiles

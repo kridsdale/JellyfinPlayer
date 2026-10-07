@@ -9,6 +9,7 @@
 import Engine
 import JellyfinAPI
 import SwiftfinLocalization
+import SwiftfinTime
 import SwiftfinUIState
 import SwiftUI
 

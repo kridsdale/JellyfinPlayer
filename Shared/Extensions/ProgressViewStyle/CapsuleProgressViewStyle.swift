@@ -6,6 +6,7 @@
 // Copyright (c) 2026 Jellyfin & Jellyfin Contributors
 //
 
+import SwiftfinValues
 import SwiftUI
 
 struct CapsuleProgressViewStyle: ProgressViewStyle {

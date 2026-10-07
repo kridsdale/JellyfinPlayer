@@ -7,6 +7,7 @@
 //
 
 import JellyfinAPI
+import SwiftfinValues
 import SwiftUI
 
 extension VideoPlayer.PlaybackControls.PlaybackProgress {

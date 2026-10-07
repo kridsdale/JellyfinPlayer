@@ -8,6 +8,7 @@
 
 import Defaults
 import JellyfinAPI
+import SwiftfinFormatting
 import SwiftfinLocalization
 import SwiftUI
 

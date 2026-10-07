@@ -7,6 +7,7 @@
 //
 
 import JellyfinAPI
+import SwiftfinFormatting
 import SwiftfinLocalization
 import SwiftfinMediaCatalog
 import SwiftfinStoredValues

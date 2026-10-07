@@ -8,8 +8,10 @@
 
 import Foundation
 import JellyfinAPI
+import SwiftfinFormatting
 import SwiftfinImages
 import SwiftfinLocalization
+import SwiftfinTime
 import SwiftUI
 
 extension ChapterInfo: Displayable {

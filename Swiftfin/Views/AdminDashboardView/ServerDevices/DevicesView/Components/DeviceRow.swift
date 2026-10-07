@@ -9,6 +9,7 @@
 import Defaults
 import FactoryKit
 import JellyfinAPI
+import SwiftfinFormatting
 import SwiftfinLocalization
 import SwiftUI
 

@@ -11,6 +11,7 @@ import JellyfinAPI
 import MPVUI
 import SwiftfinCollections
 import SwiftfinMediaTracks
+import SwiftfinTime
 import SwiftfinUIState
 import SwiftUI
 

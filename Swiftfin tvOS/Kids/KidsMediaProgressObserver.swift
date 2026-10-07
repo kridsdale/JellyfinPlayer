@@ -6,7 +6,6 @@
 // Copyright (c) 2026 Jellyfin & Jellyfin Contributors
 //
 
-// SPDX-License-Identifier: MPL-2.0
 import Combine
 import Defaults
 import Foundation
@@ -15,6 +14,9 @@ import KidsDiagnostics
 import KidsPlayback
 import SwiftfinAsyncStreams
 import SwiftfinPlaybackReporting
+
+// SPDX-License-Identifier: MPL-2.0
+import SwiftfinTime
 
 /// Reports only after the kids controller proves decoded video and an advancing
 /// clock. The transport captures its client once; a queued report can never be

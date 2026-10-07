@@ -7,234 +7,24 @@
 //
 
 import Foundation
-import SwiftfinCollections
-import SwiftfinLocalization
+import SwiftfinFormatting
 
-// TODO: break into separate files
+typealias MinuteSecondsFormatStyle = SwiftfinFormatting.MinuteSecondsFormatStyle
+typealias RuntimeFormatStyle = SwiftfinFormatting.RuntimeFormatStyle
+typealias VerbatimFormatStyle<Value: CustomStringConvertible> = SwiftfinFormatting.VerbatimFormatStyle<Value>
+typealias PlaybackRateStyle = SwiftfinFormatting.PlaybackRateStyle
+typealias DayIntervalParseableFormatStyle = SwiftfinFormatting.DayIntervalParseableFormatStyle
+typealias DayIntervalParseStrategy = SwiftfinFormatting.DayIntervalParseStrategy
+typealias NilIfEmptyStringFormatStyle = SwiftfinFormatting.NilIfEmptyStringFormatStyle
+typealias NilIfEmptyStringParseStrategy = SwiftfinFormatting.NilIfEmptyStringParseStrategy
+typealias LastSeenFormatStyle = SwiftfinFormatting.LastSeenFormatStyle
+typealias AgeFormatStyle = SwiftfinFormatting.AgeFormatStyle
+typealias IntBitRateFormatStyle = SwiftfinFormatting.IntBitRateFormatStyle
 
-struct MinuteSecondsFormatStyle: FormatStyle {
-
-    func format(_ value: TimeInterval) -> String {
-        let formatter = DateComponentsFormatter()
-        formatter.unitsStyle = .abbreviated
-        formatter.allowedUnits = [.minute, .second]
-        return formatter.string(from: value) ?? .emptyDash
-    }
-}
-
-extension FormatStyle where Self == MinuteSecondsFormatStyle {
-
-    @available(*, deprecated, message: "Use `Duration` instead.")
-    static var minuteSeconds: MinuteSecondsFormatStyle {
-        MinuteSecondsFormatStyle()
-    }
-}
-
-extension FormatStyle where Self == Duration.UnitsFormatStyle {
-
-    static var minuteSecondsAbbreviated: Duration.UnitsFormatStyle {
-        Duration.UnitsFormatStyle(
-            allowedUnits: [.minutes, .seconds],
-            width: .abbreviated
-        )
-    }
-
-    static var hourMinuteAbbreviated: Duration.UnitsFormatStyle {
-        Duration.UnitsFormatStyle(
-            allowedUnits: [.hours, .minutes],
-            width: .abbreviated
-        )
-    }
-
-    static var minuteSecondsNarrow: Duration.UnitsFormatStyle {
-        Duration.UnitsFormatStyle(
-            allowedUnits: [.minutes, .seconds],
-            width: .narrow
-        )
-    }
-}
-
-struct RuntimeFormatStyle: FormatStyle {
-
-    func format(_ value: Duration) -> String {
-
-        let formatStyle: Duration.TimeFormatStyle = if value.components.seconds.magnitude >= 3600 {
-            Duration.TimeFormatStyle(pattern: .hourMinuteSecond)
-        } else {
-            Duration.TimeFormatStyle(pattern: .minuteSecond)
-        }
-
-        return formatStyle.format(value)
-    }
-}
-
-extension FormatStyle where Self == RuntimeFormatStyle {
-
-    static var runtime: RuntimeFormatStyle {
-        RuntimeFormatStyle()
-    }
-}
-
-struct VerbatimFormatStyle<Value: CustomStringConvertible>: FormatStyle {
-
-    func format(_ value: Value) -> String {
-        value.description
-    }
-}
-
+// This adapter depends on the application's UI display protocol.
 struct DisplayableFormatStyle<Value: Displayable>: FormatStyle {
 
     func format(_ value: Value) -> String {
         value.displayTitle
-    }
-}
-
-extension FormatStyle where Self == PlaybackRateStyle {
-
-    static var playbackRate: PlaybackRateStyle {
-        PlaybackRateStyle()
-    }
-
-    static func playbackRate(precision: Int) -> PlaybackRateStyle {
-        PlaybackRateStyle(precision: precision)
-    }
-}
-
-struct PlaybackRateStyle: FormatStyle {
-
-    private let precision: Int
-
-    init(precision: Int = 2) {
-        self.precision = precision
-    }
-
-    func format(_ value: Float) -> String {
-        FloatingPointFormatStyle<Float>()
-            .precision(.fractionLength(0 ... precision))
-            .format(value)
-            .appending(.multiply)
-    }
-}
-
-/// Represent intervals as 24 hour, 60 minute, 60 second days
-struct DayIntervalParseableFormatStyle: ParseableFormatStyle {
-
-    let range: ClosedRange<Int>
-    var parseStrategy: DayIntervalParseStrategy = .init()
-
-    func format(_ value: TimeInterval) -> String {
-        "\(clamp(Int(value / 86400), min: range.lowerBound, max: range.upperBound))"
-    }
-}
-
-struct DayIntervalParseStrategy: ParseStrategy {
-
-    func parse(_ value: String) throws -> TimeInterval {
-        (TimeInterval(value) ?? 0) * 86400
-    }
-}
-
-extension ParseableFormatStyle where Self == DayIntervalParseableFormatStyle {
-
-    static func dayInterval(range: ClosedRange<Int>) -> DayIntervalParseableFormatStyle {
-        .init(range: range)
-    }
-}
-
-struct NilIfEmptyStringFormatStyle: ParseableFormatStyle {
-
-    var parseStrategy: NilIfEmptyStringParseStrategy = .init()
-
-    func format(_ value: String?) -> String {
-        value ?? ""
-    }
-}
-
-struct NilIfEmptyStringParseStrategy: ParseStrategy {
-
-    func parse(_ value: String) -> String? {
-        value.isEmpty ? nil : value
-    }
-}
-
-extension ParseableFormatStyle where Self == NilIfEmptyStringFormatStyle {
-
-    static var nilIfEmptyString: NilIfEmptyStringFormatStyle {
-        .init()
-    }
-}
-
-struct LastSeenFormatStyle: FormatStyle {
-
-    func format(_ value: Date?) -> String {
-
-        guard let value else {
-            return L10n.never
-        }
-
-        let timeInterval = Date.now.timeIntervalSince(value)
-        let twentyFourHours: TimeInterval = 24 * 60 * 60
-
-        if timeInterval <= twentyFourHours {
-            return value.formatted(.relative(presentation: .numeric, unitsStyle: .narrow))
-        } else {
-            return value.formatted(Date.FormatStyle.dateTime.year().month().day())
-        }
-    }
-}
-
-extension FormatStyle where Self == LastSeenFormatStyle {
-
-    static var lastSeen: LastSeenFormatStyle {
-        LastSeenFormatStyle()
-    }
-}
-
-extension FormatStyle where Self == AgeFormatStyle {
-
-    static var age: AgeFormatStyle {
-        AgeFormatStyle()
-    }
-}
-
-struct AgeFormatStyle: FormatStyle {
-
-    private var death: Date?
-
-    func death(_ date: Date?) -> AgeFormatStyle {
-        copy(self, modifying: \.death, to: date)
-    }
-
-    func format(_ value: Date) -> String {
-        let age = Calendar.current.dateComponents([.year], from: value, to: death ?? .now).year ?? 0
-        return L10n.yearsOld(age)
-    }
-}
-
-struct IntBitRateFormatStyle: FormatStyle {
-    func format(_ value: Int) -> String {
-        let units = [
-            L10n.bitsPerSecond,
-            L10n.kilobitsPerSecond,
-            L10n.megabitsPerSecond,
-            L10n.gigabitsPerSecond,
-            L10n.terabitsPerSecond,
-        ]
-        var adjustedValue = Double(value)
-        var unitIndex = 0
-
-        while adjustedValue >= 1000, unitIndex < units.count - 1 {
-            adjustedValue /= 1000
-            unitIndex += 1
-        }
-
-        let formattedValue = String(format: "%.1f", adjustedValue)
-        return "\(formattedValue) \(units[unitIndex])"
-    }
-}
-
-extension FormatStyle where Self == IntBitRateFormatStyle {
-    static var bitRate: IntBitRateFormatStyle {
-        IntBitRateFormatStyle()
     }
 }

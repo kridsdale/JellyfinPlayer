@@ -6,6 +6,8 @@
 // Copyright (c) 2026 Jellyfin & Jellyfin Contributors
 //
 
+import SwiftfinTime
+import SwiftfinValues
 import SwiftUI
 
 final class UISliderContainer<Value: BinaryFloatingPoint>: UIControl {

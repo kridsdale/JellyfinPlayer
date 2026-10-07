@@ -7,6 +7,7 @@
 //
 
 import Combine
+import SwiftfinTime
 import UIKit
 
 final class EPGScrollState {

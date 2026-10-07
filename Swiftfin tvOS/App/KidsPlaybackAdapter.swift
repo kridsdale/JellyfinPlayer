@@ -15,7 +15,9 @@ import KidsDiagnostics
 import KidsDomain
 import KidsExperience
 import KidsPlaybackSession
+import SwiftfinFormatting
 import SwiftfinMediaTracks
+import SwiftfinTime
 import SwiftUI
 
 @MainActor

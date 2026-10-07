@@ -8,6 +8,7 @@
 
 import Defaults
 import SwiftfinLocalization
+import SwiftfinTime
 import SwiftfinUIState
 import SwiftUI
 
