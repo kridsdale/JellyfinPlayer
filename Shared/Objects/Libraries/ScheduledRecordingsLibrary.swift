@@ -27,7 +27,7 @@ struct ScheduledRecordingsLibrary: BaseItemKindLibrary {
         guard pageState.pageOffset == 0 else { return [] }
 
         let request = Paths.getTimers()
-        let response = try await pageState.userSession.client.send(request)
+        let response = try await pageState.client.send(request)
 
         return (response.value.items ?? [])
             .filter(\.isScheduledRecording)

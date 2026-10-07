@@ -20,7 +20,7 @@ struct SpecialFeaturesLibrary: BaseItemKindLibrary {
         pageState: LibraryPageState
     ) async throws -> [BaseItemDto] {
         let request = Paths.getSpecialFeatures(itemID: itemID)
-        let response = try await pageState.userSession.client.send(request)
+        let response = try await pageState.client.send(request)
 
         return response.value
     }

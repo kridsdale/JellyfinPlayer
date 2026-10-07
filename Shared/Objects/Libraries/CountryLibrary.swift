@@ -18,7 +18,7 @@ struct CountryLibrary: PagingLibrary {
         pageState: LibraryPageState
     ) async throws -> [CountryInfo] {
         let request = Paths.getCountries
-        let response = try await pageState.userSession.client.send(request)
+        let response = try await pageState.client.send(request)
 
         return response.value
     }

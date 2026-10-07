@@ -23,14 +23,14 @@ struct RecordingsLibrary: BaseItemKindLibrary {
     ) async throws -> [BaseItemDto] {
         var parameters = Paths.GetRecordingsParameters()
         parameters.fields = PosterSubtitleField.itemFields
-        parameters.userID = pageState.userSession.user.id
+        parameters.userID = pageState.userID
         parameters.startIndex = pageState.pageOffset
         parameters.limit = pageState.pageSize
         parameters.enableUserData = true
         parameters.isInProgress = false
 
         let request = Paths.getRecordings(parameters: parameters)
-        let response = try await pageState.userSession.client.send(request)
+        let response = try await pageState.client.send(request)
 
         return response.value.items ?? []
     }

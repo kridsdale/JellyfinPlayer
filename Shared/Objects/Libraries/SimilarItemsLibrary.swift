@@ -28,7 +28,7 @@ struct SimilarItemsLibrary: PagingLibrary {
         var parameters = Paths.GetSimilarItemsParameters()
         parameters.fields = PosterSubtitleField.itemFields
         parameters.limit = pageState.pageSize
-        parameters.userID = pageState.userSession.user.id
+        parameters.userID = pageState.userID
 
         if let itemType, [.liveTvProgram, .program, .tvProgram].contains(itemType) {
             parameters.fields = PosterSubtitleField.itemFields + [.channelInfo]
@@ -38,7 +38,7 @@ struct SimilarItemsLibrary: PagingLibrary {
             itemID: itemID,
             parameters: parameters
         )
-        let response = try await pageState.userSession.client.send(request)
+        let response = try await pageState.client.send(request)
 
         return response.value.items ?? []
     }

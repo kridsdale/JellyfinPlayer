@@ -18,7 +18,7 @@ struct ParentalRatingLibrary: PagingLibrary {
         pageState: LibraryPageState
     ) async throws -> [ParentalRating] {
         let request = Paths.getParentalRatings
-        let response = try await pageState.userSession.client.send(request)
+        let response = try await pageState.client.send(request)
 
         return response.value
     }

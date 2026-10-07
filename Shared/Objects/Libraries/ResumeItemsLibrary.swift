@@ -32,10 +32,10 @@ struct ResumeItemsLibrary: BaseItemKindLibrary {
         parameters.limit = pageState.pageSize
         parameters.mediaTypes = mediaTypes
         parameters.startIndex = pageState.pageOffset
-        parameters.userID = pageState.userSession.user.id
+        parameters.userID = pageState.userID
 
         let request = Paths.getResumeItems(parameters: parameters)
-        let response = try await pageState.userSession.client.send(request)
+        let response = try await pageState.client.send(request)
 
         return response.value.items ?? []
     }
@@ -47,7 +47,7 @@ struct ResumeItemsLibrary: BaseItemKindLibrary {
         guard let itemID = userData.itemID else { return }
 
         if userData.isPlayed == true {
-            viewModel.elements.removeAll { $0.id == itemID }
+            viewModel.removeElements { $0.id == itemID }
             return
         }
 

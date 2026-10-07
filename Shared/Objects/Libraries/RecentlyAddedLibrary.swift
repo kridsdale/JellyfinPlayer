@@ -27,10 +27,10 @@ struct RecentlyAddedLibrary: BaseItemKindLibrary {
         parameters.sortBy = [.dateCreated]
         parameters.sortOrder = [.descending]
         parameters.startIndex = pageState.pageOffset
-        parameters.userID = pageState.userSession.user.id
+        parameters.userID = pageState.userID
 
         let request = Paths.getItems(parameters: parameters)
-        let response = try await pageState.userSession.client.send(request)
+        let response = try await pageState.client.send(request)
 
         return response.value.items ?? []
     }

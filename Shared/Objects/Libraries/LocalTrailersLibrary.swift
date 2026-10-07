@@ -26,9 +26,9 @@ struct LocalTrailerLibrary: BaseItemKindLibrary {
 
         let request = Paths.getLocalTrailers(
             itemID: itemID,
-            userID: pageState.userSession.user.id
+            userID: pageState.userID
         )
-        let response = try await pageState.userSession.client.send(request)
+        let response = try await pageState.client.send(request)
 
         return response.value
     }

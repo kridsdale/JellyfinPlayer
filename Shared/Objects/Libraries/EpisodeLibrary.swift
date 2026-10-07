@@ -33,13 +33,13 @@ struct EpisodeLibrary: BaseItemKindLibrary {
         parameters.fields = PosterSubtitleField.itemFields + [.overview]
         parameters.isMissing = Defaults[.Customization.shouldShowMissingEpisodes] ? nil : false
         parameters.seasonID = seasonID
-        parameters.userID = pageState.userSession.user.id
+        parameters.userID = pageState.userID
 
         let request = Paths.getEpisodes(
             seriesID: seasonID,
             parameters: parameters
         )
-        let response = try await pageState.userSession.client.send(request)
+        let response = try await pageState.client.send(request)
 
         return response.value.items ?? []
     }

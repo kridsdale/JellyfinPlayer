@@ -41,7 +41,7 @@ struct RemoteImageLibrary: PagingLibrary {
         parameters.type = imageType
 
         let request = Paths.getRemoteImages(itemID: itemID, parameters: parameters)
-        let response = try await pageState.userSession.client.send(request)
+        let response = try await pageState.client.send(request)
 
         return response.value.images ?? []
     }

@@ -7,10 +7,13 @@
 //
 
 import Combine
+import FactoryKit
 import Foundation
 import IdentifiedCollections
 import JellyfinAPI
 import SwiftfinCollections
+import SwiftfinNetworking
+import SwiftfinPaging
 
 let defaultPagingLibraryPageSize = 50
 
@@ -72,21 +75,26 @@ class PagingLibraryViewModel<Library: PagingLibrary>: ViewModel, Identifiable {
     }
 
     @Published
-    var elements: IdentifiedArrayOf<Element>
+    private(set) var elements: IdentifiedArrayOf<Element>
     @Published
-    var environment: Environment
+    var environment: Environment {
+        didSet { invalidatePaging() }
+    }
+
     @Published
-    var searchElements: IdentifiedArrayOf<Element>
+    private(set) var searchElements: IdentifiedArrayOf<Element>
     @Published
-    var searchQuery: String = ""
+    var searchQuery: String = "" {
+        didSet { paging.prepareSearch(searchQuery) }
+    }
 
     let library: Library
     let pageSize: Int
-
-    private var hasNextPage: Bool
-    private var hasNextSearchPage: Bool
-    private var itemUserDataRefreshTask: AnyCancellable?
-    private var lastItemUserDataRefresh = Date.distantPast
+    private let paging: PagingStore<Element>
+    private let refreshScheduler = PagingRefreshScheduler()
+    private var sourceIdentity = UUID()
+    private var sourceSession: UserSession?
+    private var sourceClient: JellyfinTransport?
 
     nonisolated let id: String
 
@@ -110,46 +118,48 @@ class PagingLibraryViewModel<Library: PagingLibrary>: ViewModel, Identifiable {
         library as? any SearchablePagingLibrary<Element, Environment>
     }
 
-    init(
-        library: Library,
-        pageSize: Int = defaultPagingLibraryPageSize
-    ) {
+    init(library: Library, pageSize: Int = defaultPagingLibraryPageSize) {
         self.elements = IdentifiedArray([], uniquingIDsWith: { existing, _ in existing })
         self.environment = library.environment ?? .default
         self.searchElements = IdentifiedArray([], uniquingIDsWith: { existing, _ in existing })
-        self.hasNextPage = library.hasNextPage
-        self.hasNextSearchPage = false
         self.id = library.parent.pagingLibraryID
         self.library = library
-        self.pageSize = pageSize
-
+        self.paging = PagingStore(pageSize: pageSize)
+        self.pageSize = max(1, pageSize)
         super.init()
 
-        Notifications[.didDeleteItem]
-            .publisher
-            .sink { [weak self] id in
-                self?.removeDeletedItem(withID: id)
-            }
+        paging.$elements.sink { [weak self] rows in
+            self?.elements = IdentifiedArray(rows, uniquingIDsWith: { existing, _ in existing })
+        }.store(in: &cancellables)
+        paging.$searchElements.sink { [weak self] rows in
+            self?.searchElements = IdentifiedArray(rows, uniquingIDsWith: { existing, _ in existing })
+        }.store(in: &cancellables)
+        Container.shared.userSessionManager().$currentSession.dropFirst().sink { [weak self] _ in
+            self?.invalidatePaging()
+        }.store(in: &cancellables)
+        Notifications[.didChangeServerConnection].publisher.sink { [weak self] _ in
+            self?.invalidatePaging()
+        }.store(in: &cancellables)
+        Notifications[.didDeleteItem].publisher.sink { [weak self] id in
+            self?.removeDeletedItem(withID: id)
+        }.store(in: &cancellables)
+        Notifications[.itemUserDataDidChange].publisher.sink { [weak self] userData in
+            guard let self else { return }
+            updateItemUserData(userData)
+            library.onItemUserDataChanged(viewModel: self, userData: userData)
+        }.store(in: &cancellables)
+        $searchQuery.map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
+            .removeDuplicates().debounce(for: .milliseconds(350), scheduler: RunLoop.main)
+            .sink { [weak self] query in self?.search(query: query) }
             .store(in: &cancellables)
+    }
 
-        Notifications[.itemUserDataDidChange]
-            .publisher
-            .sink { [weak self] userData in
-                guard let self else { return }
-
-                updateItemUserData(userData)
-                library.onItemUserDataChanged(viewModel: self, userData: userData)
-            }
-            .store(in: &cancellables)
-
-        $searchQuery
-            .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
-            .removeDuplicates()
-            .debounce(for: .milliseconds(350), scheduler: RunLoop.main)
-            .sink { [weak self] query in
-                self?.search(query: query)
-            }
-            .store(in: &cancellables)
+    private func invalidatePaging() {
+        sourceIdentity = UUID()
+        sourceSession = nil
+        sourceClient = nil
+        refreshScheduler.cancel()
+        paging.invalidate()
     }
 
     func refreshForEnvironmentChange() {
@@ -160,195 +170,121 @@ class PagingLibraryViewModel<Library: PagingLibrary>: ViewModel, Identifiable {
         }
     }
 
-    private func removeDeletedItem(withID id: String) {
-        removeDeletedItem(withID: id, from: &elements)
-        removeDeletedItem(withID: id, from: &searchElements)
+    func removeElements(where predicate: (Element) -> Bool) {
+        paging.remove(where: predicate)
     }
 
-    private func removeDeletedItem(
-        withID id: String,
-        from elements: inout IdentifiedArrayOf<Element>
-    ) {
-        elements.removeAll { element in
+    private func removeDeletedItem(withID id: String) {
+        paging.remove { element in
             if let item = element as? BaseItemDto {
                 return item.id == id
             }
-
             if let user = element as? UserDto {
                 return user.id == id
             }
-
             if let elementID = element.id as? String {
                 return elementID == id
             }
-
             if let elementID = element.id as? String? {
                 return elementID == id
             }
-
             return false
         }
     }
 
     private func updateItemUserData(_ userData: UserItemDataDto) {
-        updateItemUserData(userData, in: &elements)
-        updateItemUserData(userData, in: &searchElements)
-    }
-
-    private func updateItemUserData(
-        _ userData: UserItemDataDto,
-        in elements: inout IdentifiedArrayOf<Element>
-    ) {
         guard let itemID = userData.itemID else { return }
-
-        for index in elements.indices {
-            guard var item = elements[index] as? BaseItemDto,
-                  item.id == itemID
-            else { continue }
-
+        paging.update { element in
+            guard var item = element as? BaseItemDto, item.id == itemID else { return element }
             item.userData = userData
-            elements[index] = item as! Element
-            return
+            return (item as? Element) ?? element
         }
     }
 
-    func scheduleRefreshForItemUserData(
-        debounce: TimeInterval = 0.35,
-        minimumInterval: TimeInterval = 5
-    ) {
-        guard Date.now.timeIntervalSince(lastItemUserDataRefresh) >= minimumInterval else {
-            return
+    func scheduleRefreshForItemUserData(debounce: TimeInterval = 0.35, minimumInterval: TimeInterval = 5) {
+        guard debounce.isFinite, minimumInterval.isFinite else { return }
+        refreshScheduler.schedule(debounce: .seconds(max(0, debounce)), minimumInterval: .seconds(max(0, minimumInterval))) { [weak self] in
+            await self?.background.refresh()
         }
-
-        itemUserDataRefreshTask?.cancel()
-        itemUserDataRefreshTask = Task { @MainActor [weak self] in
-            guard let self else { return }
-
-            if debounce > 0 {
-                try? await Task.sleep(for: .seconds(debounce))
-            }
-
-            guard !Task.isCancelled else { return }
-
-            await self.background.refresh()
-            self.lastItemUserDataRefresh = Date.now
-            self.itemUserDataRefreshTask = nil
-        }
-        .asAnyCancellable()
     }
 
     @Function(\Action.Cases.refresh)
     private func _refresh() async throws {
-        hasNextPage = true
-
-        if StateTask.isBackground {
-            try await replaceElements()
-        } else {
-            elements.removeAll()
-            try await __actuallyGetNextPage()
-        }
+        try await paging.refresh(using: makeSource(), retainingContent: StateTask.isBackground)
     }
 
     @Function(\Action.Cases.getNextPage)
     private func _getNextPage() async throws {
-        guard hasNextPage else { return }
+        guard paging.hasMore else { return }
         await _actuallyGetNextPage()
     }
 
     @Function(\Action.Cases._actuallyGetNextPage)
     private func __actuallyGetNextPage() async throws {
-        guard hasNextPage else { return }
-
-        let nextPageElements = try await retrievePage(offset: elements.count)
-
-        guard !Task.isCancelled else { return }
-
-        hasNextPage = !(nextPageElements.count < pageSize)
-        elements.append(contentsOf: nextPageElements)
-    }
-
-    private func replaceElements() async throws {
-        let newElements = try await retrievePage(offset: 0)
-
-        guard !Task.isCancelled else { return }
-
-        hasNextPage = !(newElements.count < pageSize)
-        elements = IdentifiedArray(newElements, uniquingIDsWith: { existing, _ in existing })
-    }
-
-    private func retrievePage(offset: Int) async throws -> [Element] {
-        try await library.retrievePage(
-            environment: environment,
-            pageState: pageState(offset: offset, pageSize: pageSize)
-        )
+        try await paging.nextPage(using: makeSource())
     }
 
     @Function(\Action.Cases.search)
     private func _search(_ query: String) async throws {
-        guard query.isNotEmpty,
-              searchableLibrary != nil
-        else {
-            hasNextSearchPage = false
-            searchElements.removeAll()
-            return
-        }
-
-        searchElements.removeAll()
-        hasNextSearchPage = true
-        try await retrieveNextSearchPage(query: query)
+        guard query == normalizedSearchQuery else { return }
+        try await paging.search(query, using: makeSource())
     }
 
     @Function(\Action.Cases.getNextSearchPage)
     private func _getNextSearchPage() async throws {
-        guard isSearchActive,
-              hasNextSearchPage,
-              !background.is(.searching)
-        else { return }
-
-        try await retrieveNextSearchPage(query: normalizedSearchQuery)
-    }
-
-    private func retrieveNextSearchPage(query: String) async throws {
-        guard let searchableLibrary,
-              hasNextSearchPage
-        else { return }
-
-        let nextPageElements = try await searchableLibrary.retrieveSearchPage(
-            query: query,
-            environment: environment,
-            pageState: pageState(offset: searchElements.count, pageSize: pageSize)
-        )
-
-        guard !Task.isCancelled,
-              query == normalizedSearchQuery
-        else { return }
-
-        hasNextSearchPage = !(nextPageElements.count < pageSize)
-        searchElements.append(contentsOf: nextPageElements)
+        guard isSearchActive, !background.is(.searching) else { return }
+        try await paging.nextSearchPage(using: makeSource())
     }
 
     @Function(\Action.Cases.getRandomItem)
     private func _getRandomItem() async throws {
-        let randomElement: Element? = if let randomLibrary = library as? any WithRandomElementLibrary<Element, Environment> {
-            try await randomLibrary.retrieveRandomElement(
-                environment: environment,
-                pageState: pageState(offset: 0, pageSize: 1)
-            )
-        } else {
-            elements.randomElement()
-        }
-
-        guard !Task.isCancelled, let randomElement else { return }
-
-        events.send(.gotRandomItem(randomElement))
+        guard let element = try await paging.randomElement(using: makeSource()) else { return }
+        events.send(.gotRandomItem(element))
     }
 
-    private func pageState(offset: Int, pageSize: Int) throws -> LibraryPageState {
-        try .init(
-            pageOffset: offset,
-            pageSize: pageSize,
-            userSession: requireUserSession()
-        )
+    /// Bind once before suspension; request adapters cannot reread a replacement transport.
+    private func makeSource() throws -> PagingSource<Element> {
+        let manager = Container.shared.userSessionManager()
+        guard let session = manager.currentSession else { throw UserSessionError.missingCurrentSession }
+        let client = session.client
+        if sourceSession !== session || sourceClient !== client {
+            invalidatePaging()
+            sourceSession = session
+            sourceClient = client
+        }
+        let identity = sourceIdentity
+        let environment = environment
+        let library = library
+        let userID = session.user.id
+        let state: @MainActor @Sendable (PagingRequest) -> LibraryPageState = { request in
+            LibraryPageState(pageOffset: request.offset, pageSize: request.limit, client: client, userID: userID)
+        }
+        let search: PagingSource<Element>.Load? = if let searchable = searchableLibrary {
+            { request in
+                try await searchable.retrieveSearchPageResult(
+                    query: request.query ?? "",
+                    environment: environment,
+                    pageState: state(request)
+                )
+            }
+        } else {
+            nil
+        }
+        let random: (@MainActor @Sendable () async throws -> Element?)? = if let randomLibrary = library as? any WithRandomElementLibrary<
+            Element,
+            Environment
+        > {
+            { try await randomLibrary.retrieveRandomElement(environment: environment, pageState: state(PagingRequest(offset: 0, limit: 1)))
+            }
+        } else {
+            nil
+        }
+        return PagingSource(identity: identity, canPage: library.hasNextPage, isCurrent: { [weak self, weak session] in
+            guard let self, let session else { return false }
+            return sourceIdentity == identity && manager.currentSession === session && session.client === client
+        }, load: { request in
+            try await library.retrievePageResult(environment: environment, pageState: state(request))
+        }, search: search, random: random)
     }
 }
 

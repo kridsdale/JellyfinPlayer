@@ -31,7 +31,7 @@ struct ProgramsLibrary: BaseItemKindLibrary {
         parameters.hasAired = false
         parameters.limit = pageState.pageSize
         parameters.startIndex = pageState.pageOffset
-        parameters.userID = pageState.userSession.user.id
+        parameters.userID = pageState.userID
 
         parameters.isKids = section == .kids
         parameters.isMovie = section == .movies
@@ -40,7 +40,7 @@ struct ProgramsLibrary: BaseItemKindLibrary {
         parameters.isSports = section == .sports
 
         let request = Paths.getLiveTvPrograms(parameters: parameters)
-        let response = try await pageState.userSession.client.send(request)
+        let response = try await pageState.client.send(request)
 
         return response.value.items ?? []
     }

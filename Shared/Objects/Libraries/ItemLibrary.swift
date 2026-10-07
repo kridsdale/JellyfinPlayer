@@ -11,6 +11,7 @@ import Defaults
 import JellyfinAPI
 import SwiftfinCollections
 import SwiftfinLocalization
+import SwiftfinPaging
 import SwiftfinStoredValues
 import SwiftUI
 
@@ -107,6 +108,10 @@ struct ItemLibrary: PagingLibrary, SearchablePagingLibrary, WithRandomElementLib
         environment: Environment,
         pageState: LibraryPageState
     ) async throws -> [BaseItemDto] {
+        try await retrievePageResult(environment: environment, pageState: pageState).items
+    }
+
+    func retrievePageResult(environment: Environment, pageState: LibraryPageState) async throws -> PagingPage<BaseItemDto> {
         var parameters = attachPage(
             to: attachFilters(
                 to: makeBaseItemParameters(environment: environment),
@@ -114,12 +119,13 @@ struct ItemLibrary: PagingLibrary, SearchablePagingLibrary, WithRandomElementLib
             ),
             pageState: pageState
         )
-        parameters.userID = pageState.userSession.user.id
+        parameters.userID = pageState.userID
 
         let request = Paths.getItems(parameters: parameters)
-        let response = try await pageState.userSession.client.send(request)
+        let response = try await pageState.client.send(request)
 
-        return normalize(response.value.items ?? [])
+        let rows = response.value.items ?? []
+        return PagingPage(items: normalize(rows), consumedCount: rows.count)
     }
 
     func retrieveRandomElement(
@@ -132,10 +138,10 @@ struct ItemLibrary: PagingLibrary, SearchablePagingLibrary, WithRandomElementLib
         )
         parameters.limit = 1
         parameters.sortBy = [.random]
-        parameters.userID = pageState.userSession.user.id
+        parameters.userID = pageState.userID
 
         let request = Paths.getItems(parameters: parameters)
-        let response = try await pageState.userSession.client.send(request)
+        let response = try await pageState.client.send(request)
 
         return response.value.items?.first
     }
@@ -145,6 +151,14 @@ struct ItemLibrary: PagingLibrary, SearchablePagingLibrary, WithRandomElementLib
         environment: Environment,
         pageState: LibraryPageState
     ) async throws -> [BaseItemDto] {
+        try await retrieveSearchPageResult(query: query, environment: environment, pageState: pageState).items
+    }
+
+    func retrieveSearchPageResult(
+        query: String,
+        environment: Environment,
+        pageState: LibraryPageState
+    ) async throws -> PagingPage<BaseItemDto> {
         var parameters = attachPage(
             to: attachFilters(
                 to: makeBaseItemParameters(environment: environment),
@@ -153,12 +167,13 @@ struct ItemLibrary: PagingLibrary, SearchablePagingLibrary, WithRandomElementLib
             pageState: pageState
         )
         parameters.searchTerm = filterViewModel.staticFilters.query ?? query
-        parameters.userID = pageState.userSession.user.id
+        parameters.userID = pageState.userID
 
         let request = Paths.getItems(parameters: parameters)
-        let response = try await pageState.userSession.client.send(request)
+        let response = try await pageState.client.send(request)
 
-        return normalize(response.value.items ?? [])
+        let rows = response.value.items ?? []
+        return PagingPage(items: normalize(rows), consumedCount: rows.count)
     }
 
     private func makeBaseItemParameters(environment: Environment) -> Paths.GetItemsParameters {

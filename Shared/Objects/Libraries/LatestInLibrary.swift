@@ -31,10 +31,10 @@ struct LatestInLibrary: BaseItemKindLibrary {
         parameters.fields = PosterSubtitleField.itemFields
         parameters.limit = pageState.pageSize
         parameters.parentID = parent.id
-        parameters.userID = pageState.userSession.user.id
+        parameters.userID = pageState.userID
 
         let request = Paths.getLatestMedia(parameters: parameters)
-        let response = try await pageState.userSession.client.send(request)
+        let response = try await pageState.client.send(request)
 
         return response.value
     }

@@ -20,7 +20,7 @@ struct AdditionalPartsLibrary: BaseItemKindLibrary {
         pageState: LibraryPageState
     ) async throws -> [BaseItemDto] {
         let request = Paths.getAdditionalPart(itemID: itemID)
-        let response = try await pageState.userSession.client.send(request)
+        let response = try await pageState.client.send(request)
 
         return response.value.items ?? []
     }

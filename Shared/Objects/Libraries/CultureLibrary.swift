@@ -18,7 +18,7 @@ struct CultureLibrary: PagingLibrary {
         pageState: LibraryPageState
     ) async throws -> [CultureDto] {
         let request = Paths.getCultures
-        let response = try await pageState.userSession.client.send(request)
+        let response = try await pageState.client.send(request)
 
         return response.value
     }

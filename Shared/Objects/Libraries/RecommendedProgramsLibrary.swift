@@ -22,10 +22,10 @@ struct RecommendedProgramsLibrary: BaseItemKindLibrary {
         parameters.fields = [.channelInfo]
         parameters.isAiring = true
         parameters.limit = pageState.pageSize
-        parameters.userID = pageState.userSession.user.id
+        parameters.userID = pageState.userID
 
         let request = Paths.getRecommendedPrograms(parameters: parameters)
-        let response = try await pageState.userSession.client.send(request)
+        let response = try await pageState.client.send(request)
 
         return response.value.items ?? []
     }

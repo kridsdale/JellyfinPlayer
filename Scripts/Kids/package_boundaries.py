@@ -24,6 +24,7 @@ EXTERNAL_POLICIES = {
     ],
 }
 POLICIES = {
+    "SwiftfinPaging": ({}, {"Foundation", "Combine"}),
     "SwiftfinScrolling": ({}, {"Foundation", "UIKit", "Combine"}),
     "SwiftfinMediaTracks": ({"SwiftfinPlaybackProfiles"}, {"Foundation", "CryptoKit", "JellyfinAPI"}),
     "SwiftfinPlaybackPreviews": ({}, {"Foundation", "UIKit", "Combine"}),

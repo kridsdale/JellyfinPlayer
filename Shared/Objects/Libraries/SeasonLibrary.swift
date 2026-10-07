@@ -48,10 +48,10 @@ struct SeasonLibrary: BaseItemKindLibrary {
         var parameters = Paths.GetSeasonsParameters()
         parameters.fields = PosterSubtitleField.itemFields
         parameters.isMissing = Defaults[.Customization.shouldShowMissingSeasons] ? nil : false
-        parameters.userID = pageState.userSession.user.id
+        parameters.userID = pageState.userID
 
         let request = Paths.getSeasons(seriesID: seriesID, parameters: parameters)
-        let response = try await pageState.userSession.client.send(request)
+        let response = try await pageState.client.send(request)
 
         return response.value.items ?? []
     }

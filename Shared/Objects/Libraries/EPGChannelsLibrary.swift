@@ -25,10 +25,10 @@ struct EPGChannelsLibrary: BaseItemKindLibrary {
         var parameters = Paths.GetLiveTvChannelsParameters()
         parameters.limit = pageState.pageSize
         parameters.startIndex = pageState.pageOffset
-        parameters.userID = pageState.userSession.user.id
+        parameters.userID = pageState.userID
 
         let request = Paths.getLiveTvChannels(parameters: parameters)
-        let response = try await pageState.userSession.client.send(request)
+        let response = try await pageState.client.send(request)
 
         return response.value.items ?? []
     }

@@ -42,7 +42,7 @@ struct NextUpLibrary: BaseItemKindLibrary {
         }
 
         let request = Paths.getNextUp(parameters: parameters)
-        let response = try await pageState.userSession.client.send(request)
+        let response = try await pageState.client.send(request)
 
         return response.value.items ?? []
     }

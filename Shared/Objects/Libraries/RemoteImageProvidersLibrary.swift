@@ -24,7 +24,7 @@ struct RemoteImageProvidersLibrary: PagingLibrary {
         guard let itemID = parent.id else { return [] }
 
         let request = Paths.getRemoteImageProviders(itemID: itemID)
-        let response = try await pageState.userSession.client.send(request)
+        let response = try await pageState.client.send(request)
 
         return response.value
     }

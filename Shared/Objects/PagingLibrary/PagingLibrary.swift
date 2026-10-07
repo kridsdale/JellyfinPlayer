@@ -7,16 +7,31 @@
 //
 
 import JellyfinAPI
+import SwiftfinNetworking
+import SwiftfinPaging
 import SwiftUI
 
+@MainActor
 struct LibraryPageState {
     let pageOffset: Int
     let pageSize: Int
-    let userSession: UserSession
+    let client: JellyfinTransport
+    let userID: String
+
+    init(pageOffset: Int, pageSize: Int, client: JellyfinTransport, userID: String) {
+        self.pageOffset = pageOffset
+        self.pageSize = pageSize
+        self.client = client
+        self.userID = userID
+    }
+
+    init(pageOffset: Int, pageSize: Int, userSession: UserSession) {
+        self.init(pageOffset: pageOffset, pageSize: pageSize, client: userSession.client, userID: userSession.user.id)
+    }
 }
 
 @MainActor
-protocol PagingLibrary<Element>: SendableMetatype {
+protocol PagingLibrary<Element>: Sendable, SendableMetatype {
 
     associatedtype Element: Identifiable
     associatedtype Environment: WithDefaultValue = Empty
@@ -30,6 +45,8 @@ protocol PagingLibrary<Element>: SendableMetatype {
         environment: Environment,
         pageState: LibraryPageState
     ) async throws -> [Element]
+
+    func retrievePageResult(environment: Environment, pageState: LibraryPageState) async throws -> PagingPage<Element>
 
     @ViewBuilder
     func makeLibraryBody(
@@ -65,6 +82,10 @@ extension PagingLibrary where Element: LibraryElement {
 }
 
 extension PagingLibrary {
+
+    func retrievePageResult(environment: Environment, pageState: LibraryPageState) async throws -> PagingPage<Element> {
+        try await PagingPage(items: retrievePage(environment: environment, pageState: pageState))
+    }
 
     var environment: Environment? {
         nil
@@ -107,9 +128,21 @@ protocol WithRandomElementLibrary<Element, Environment>: PagingLibrary {
 
 protocol SearchablePagingLibrary<Element, Environment>: PagingLibrary {
 
+    func retrieveSearchPageResult(query: String, environment: Environment, pageState: LibraryPageState) async throws -> PagingPage<Element>
+
     func retrieveSearchPage(
         query: String,
         environment: Environment,
         pageState: LibraryPageState
     ) async throws -> [Element]
+}
+
+extension SearchablePagingLibrary {
+    func retrieveSearchPageResult(
+        query: String,
+        environment: Environment,
+        pageState: LibraryPageState
+    ) async throws -> PagingPage<Element> {
+        try await PagingPage(items: retrieveSearchPage(query: query, environment: environment, pageState: pageState))
+    }
 }

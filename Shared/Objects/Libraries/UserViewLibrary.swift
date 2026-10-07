@@ -34,11 +34,11 @@ struct UserViewLibrary: PagingLibrary {
     ) async throws -> [UserViewLibraryElement] {
         guard pageState.pageOffset == 0 else { return [] }
 
-        let parameters = Paths.GetUserViewsParameters(userID: pageState.userSession.user.id)
+        let parameters = Paths.GetUserViewsParameters(userID: pageState.userID)
         let request = Paths.getUserViews(parameters: parameters)
 
-        async let userViews = pageState.userSession.client.send(request)
-        async let currentUser = pageState.userSession.client.send(Paths.getCurrentUser)
+        async let userViews = pageState.client.send(request)
+        async let currentUser = pageState.client.send(Paths.getCurrentUser)
 
         let excludedLibraryIDs = try await currentUser.value.configuration?.myMediaExcludes ?? []
         let elements = try await (userViews.value.items ?? [])
