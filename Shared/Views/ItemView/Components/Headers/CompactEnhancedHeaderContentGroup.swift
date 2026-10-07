@@ -7,6 +7,7 @@
 //
 
 import Defaults
+import Engine
 import JellyfinAPI
 import SwiftfinImages
 import SwiftfinStoredValuesUI

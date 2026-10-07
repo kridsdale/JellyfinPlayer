@@ -6,6 +6,7 @@
 // Copyright (c) 2026 Jellyfin & Jellyfin Contributors
 //
 
+import Engine
 import SwiftUI
 
 struct NavigationBarDrawerView<Content: View, Drawer: View>: PlatformViewControllerRepresentable {

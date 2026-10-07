@@ -8,6 +8,7 @@
 
 // This component based on https://github.com/SwiftUIKit/Marquee
 
+import Engine
 import SwiftUI
 
 struct Marquee<Content: View>: View {

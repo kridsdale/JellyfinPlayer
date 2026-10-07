@@ -10,9 +10,6 @@ import CasePaths
 import Foundation
 import SwiftfinValues
 
-// Remaining Engine UI compatibility export is an explicit retained-source audit item.
-@_exported import Engine
-
 // StatefulMacro erases closure executor annotations in its worker registry.
 // Keep app @Function handlers async: the generated await crosses to the
 // explicitly main-actor-isolated method before it touches UI or session state.

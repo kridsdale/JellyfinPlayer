@@ -8,6 +8,7 @@
 
 import CasePaths
 import Defaults
+import Engine
 import JellyfinAPI
 import Mantis
 import SwiftfinLocalization

@@ -7,6 +7,7 @@
 //
 
 import CasePaths
+import Engine
 import JellyfinAPI
 import SwiftfinImages
 import SwiftfinLocalization

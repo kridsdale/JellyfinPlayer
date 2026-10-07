@@ -121,6 +121,20 @@ def validate_source(name, source, dependencies, frameworks):
     return problems
 
 
+def application_import_problems(root):
+    """App composition may import SDKs directly, but may not hide file dependencies."""
+    problems = []
+    for directory in ("Shared", "Swiftfin", "Swiftfin tvOS"):
+        for source in sorted((root / directory).rglob("*.swift")):
+            if not source.resolve().is_relative_to(root.resolve()):
+                problems.append(f"{source.relative_to(root)}: application source escapes the checkout")
+                continue
+            for match in IMPORT.finditer(source.read_text()):
+                if "@_exported" in match.group(0):
+                    problems.append(f"{source.relative_to(root)}: application re-export of {match.group(1)} hides a file dependency")
+    return problems
+
+
 def inspect_package(path, root):
     manifest = json.loads(subprocess.check_output(["swift", "package", "--package-path", str(path), "dump-package"], text=True))
     dependencies = set()
@@ -175,6 +189,7 @@ def check(root):
                 problems.append(f"{name}: source escapes its owning library")
                 continue
             problems.extend(f"{source.relative_to(root)}: {problem}" for problem in validate_source(name, source.read_text(), dependencies, frameworks))
+    problems.extend(application_import_problems(root))
     problems.extend("Library dependency cycle: " + " -> ".join(cycle) for cycle in cycles(graph))
     tools = json.loads(subprocess.check_output(["swift", "package", "--package-path", str(root / "KidsCore"), "dump-package"], text=True))
     if any("library" in product["type"] for product in tools["products"]):

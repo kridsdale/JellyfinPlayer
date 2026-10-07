@@ -8,6 +8,7 @@
 
 import Combine
 import Defaults
+import Engine
 import Logging
 import MediaPlayer
 import SwiftfinAsyncStreams

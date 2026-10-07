@@ -4,6 +4,7 @@ import unittest
 from unittest.mock import patch
 import copy
 import json
+import tempfile
 
 SPEC = importlib.util.spec_from_file_location("package_boundaries", Path(__file__).parents[1] / "package_boundaries.py")
 MODULE = importlib.util.module_from_spec(SPEC)
@@ -44,6 +45,25 @@ class PackageBoundariesTests(unittest.TestCase):
         problems = MODULE.validate_source("UI", source, {"Domain"}, {"UIKit"})
         self.assertEqual(len(problems), 1)
         self.assertIn("re-export", problems[0])
+
+    def test_real_application_trees_require_explicit_file_imports(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            for tree in ["Shared", "Swiftfin", "Swiftfin tvOS"]:
+                folder = root / tree
+                folder.mkdir()
+                (folder / "UI.swift").write_text("import Engine\nimport SwiftUI\n")
+            self.assertEqual(MODULE.application_import_problems(root), [])
+            for tree, source in [
+                ("Shared", "@_exported import Engine"),
+                ("Swiftfin", "@_exported\n@preconcurrency public import CasePaths"),
+                ("Swiftfin tvOS", "@_exported import struct FactoryKit.Container")
+            ]:
+                (root / tree / "Hidden.swift").write_text(source)
+            problems = MODULE.application_import_problems(root)
+            self.assertEqual(len(problems), 3)
+            for path, module in [("Shared/Hidden.swift", "Engine"), ("Swiftfin/Hidden.swift", "CasePaths"), ("Swiftfin tvOS/Hidden.swift", "FactoryKit")]:
+                self.assertTrue(any(path in problem and module in problem for problem in problems))
 
     def test_direct_value_and_framework_imports_are_allowed(self):
         self.assertEqual(MODULE.validate_source("UI", "import Domain\nimport UIKit", {"Domain"}, {"UIKit"}), [])
