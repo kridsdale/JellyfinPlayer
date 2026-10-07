@@ -7,6 +7,6 @@ let package = Package(
     products: [.library(name: "SwiftfinPlaybackPreviews", targets: ["SwiftfinPlaybackPreviews"])],
     targets: [
         .target(name: "SwiftfinPlaybackPreviews"),
-        .testTarget(name: "SwiftfinPlaybackPreviewsTests", dependencies: ["SwiftfinPlaybackPreviews"])
+        .testTarget(name: "SwiftfinPlaybackPreviewsTests", dependencies: ["SwiftfinPlaybackPreviews"], resources: [.process("Fixtures")])
     ]
 )

@@ -52,7 +52,7 @@ The item-type provider's single box-set rule now delegates to MediaCatalogPolicy
 
 ## Remaining mixed responsibilities
 
-EpisodeMediaPlayerQueue is an app-owned platform overlay and selected-playback-provider composer. Catalog adjacency already delegates to MediaCatalog with binding and generation checks; review cancellation/task ownership before classifying its entire body. The remaining library/view-model/content/queue adapters and full public API/consumer graph still need body-level review. Direct request construction/import counts alone do not prove they retain only composition or UI state.
+EpisodeMediaPlayerQueue is an app-owned platform overlay and selected-playback-provider composer. Catalog adjacency delegates to MediaCatalog with exact binding checks; LatestRequest now owns request generation/cancellation/release. Its manager subscription is independent of base session subscriptions, and its weak publication requires a live manager. Provider/resume/bitrate and overlay bodies are unchanged. The remaining library/view-model/content/queue adapters and full public API/consumer graph still need body-level review. Direct request construction/import counts alone do not prove they retain only composition or UI state.
 
 ## Additional service and supplement bodies reviewed
 
@@ -61,7 +61,7 @@ EpisodeMediaPlayerQueue is an app-owned platform overlay and selected-playback-p
 - UserSessionService.swift is the app's actor-isolated lifecycle composition protocol and empty defaults; it contains no native resource implementation.
 - ServerSocketManager.swift retains exact weak UserSession binding and presentation publishers. Native sessions/reconnection/subscription leases delegate to Networking. Its tasks consume checked values on the main actor, capture the manager weakly and cancel at stop/isolated deinit.
 - MediaPlayerSupplement.swift retains platform overlay type erasure, labels/presentation style and identity equality. PlaybackRateMediaPlayerSupplement.swift retains UI increment/decrement actions through the app manager. MediaPeopleSupplement.swift contains only immutable people input and platform poster/row layout; role facts already delegate to ItemMetadata.
-- MediaChaptersSupplement.swift mixes platform chapter layout/seek actions with a pure chapter-selection algorithm. That selection belongs to the existing playback-preview/timeline owner; preserve original missing/first/last/unsorted date behavior before extracting it. Episode queue cancellation/task ownership still requires review.
+- MediaChaptersSupplement.swift now retains chapter layout/seek actions and prepares the PlaybackPreviews selection snapshot once. Its thin index-to-ID adapter preserves payload order and all original missing/first/last/unsorted/duplicate behavior, independently checked against 8,613 original decisions. Episode queue task ownership delegates to AsyncStreams as described below.
 
 ## Completion evidence still required
 
@@ -70,3 +70,18 @@ EpisodeMediaPlayerQueue is an app-owned platform overlay and selected-playback-p
 - Complete current whole-graph navigation, restricted-account playback/recovery and renderer/output cleanup after the human lifts the simulator hold.
 
 Physical-device/live CloudKit/server boot/App Store release gates remain separate. Nothing in this review authorizes RAID access, household account/catalog changes, or resuming simulator testing.
+
+
+## Chapter and episode queue body review
+
+MediaChaptersSupplement retains immutable chapter/poster payloads, the existing hash-based ID, selected/initial IDs, SwiftUI layouts/focus, localized text and manager seek/play actions. ChapterSelectionTimeline owns the only removed pure selection algorithm. Its prepared ordered optional times are immutable and checked Sendable. The entire extension containing platform overlay/rows/buttons compares byte-identical with the original source at 453c223f. It is retained presentation/composition.
+
+EpisodeMediaPlayerQueue's remaining head composes seasonal paging models, a weak player manager, its independent Published subscription, adjacency UI publication and SDK-value playback providers. LatestRequest owns replaceable task/generation/cancellation/release; MediaCatalog owns the bound adjacency read. The app captures client/item before asynchronous execution, keeps the binding check, and receives values weakly on the main actor. Cancellation clears visible adjacency before a new request. Releasing the request owner cancels without waiting for a noncooperating operation. The complete seasonal/episode overlay extension and both bitrate/reset/modifier resolver bodies compare byte-identical with the original source. These retained bodies are platform UI and playback composition, rather than a new public library exposing app player objects.
+
+Further source inspection identified specific remaining behavior to review/extract or repair:
+
+- MediaInfoSupplement.updateCurrentProgram swallows Task.sleep cancellation and continues to a catalog refresh. Its delay and cancellation/publication policy require an explicit owner/binding review.
+- PlaybackInformationProvider embeds device/item session preference and queues untracked main-actor publication from a session stream. Session/account generation and selection ownership require review.
+- EPGSupplement embeds a wall-clock refresh-age decision in presentation. Its view state guards/selected channel/playback-provider composition remain UI concerns; the reusable age policy is a concrete ownership candidate.
+
+These candidates and the complete 668-file/public-interface consumer classification remain open. Search/import counts, generated inventories and passing synthetic tests do not close the whole-client review or held runtime acceptance.

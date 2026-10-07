@@ -263,6 +263,8 @@
 		D47A7FCAE914808F5EBC2F7E /* Packages/SwiftfinMediaTracks/Tests/SwiftfinMediaTracksTests/RawItemStreamsContracts.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3E6DC660C9E7E4D9C70A829 /* Packages/SwiftfinMediaTracks/Tests/SwiftfinMediaTracksTests/RawItemStreamsContracts.swift */; };
 		11A638812AF4E5F9DFC887EB /* Packages/SwiftfinAsyncStreams/Tests/SwiftfinAsyncStreamsTests/NotificationContracts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FA5B7C0FD676588F9568B80 /* Packages/SwiftfinAsyncStreams/Tests/SwiftfinAsyncStreamsTests/NotificationContracts.swift */; };
 		D4841EA4F7E852F806B8C864 /* Packages/SwiftfinMediaCatalog/Tests/SwiftfinMediaCatalogTests/GroupedItemQueryContracts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E7BF883F1A7F49A4F719DF /* Packages/SwiftfinMediaCatalog/Tests/SwiftfinMediaCatalogTests/GroupedItemQueryContracts.swift */; };
+		D40A181777DC71DC94AB8C34 /* Packages/SwiftfinPlaybackPreviews/Tests/SwiftfinPlaybackPreviewsTests/ChapterSelectionContracts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23596BD7AC544B17AD419A28 /* Packages/SwiftfinPlaybackPreviews/Tests/SwiftfinPlaybackPreviewsTests/ChapterSelectionContracts.swift */; };
+		C8667080982A9448993F0ECF /* Packages/SwiftfinAsyncStreams/Tests/SwiftfinAsyncStreamsTests/LatestRequestContracts.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3BF96600B6CAC908DAD2F74 /* Packages/SwiftfinAsyncStreams/Tests/SwiftfinAsyncStreamsTests/LatestRequestContracts.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -354,6 +356,8 @@
 		B3E6DC660C9E7E4D9C70A829 /* Packages/SwiftfinMediaTracks/Tests/SwiftfinMediaTracksTests/RawItemStreamsContracts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Packages/SwiftfinMediaTracks/Tests/SwiftfinMediaTracksTests/RawItemStreamsContracts.swift; sourceTree = SOURCE_ROOT; };
 		9FA5B7C0FD676588F9568B80 /* Packages/SwiftfinAsyncStreams/Tests/SwiftfinAsyncStreamsTests/NotificationContracts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Packages/SwiftfinAsyncStreams/Tests/SwiftfinAsyncStreamsTests/NotificationContracts.swift; sourceTree = SOURCE_ROOT; };
 		51E7BF883F1A7F49A4F719DF /* Packages/SwiftfinMediaCatalog/Tests/SwiftfinMediaCatalogTests/GroupedItemQueryContracts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Packages/SwiftfinMediaCatalog/Tests/SwiftfinMediaCatalogTests/GroupedItemQueryContracts.swift; sourceTree = SOURCE_ROOT; };
+		23596BD7AC544B17AD419A28 /* Packages/SwiftfinPlaybackPreviews/Tests/SwiftfinPlaybackPreviewsTests/ChapterSelectionContracts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Packages/SwiftfinPlaybackPreviews/Tests/SwiftfinPlaybackPreviewsTests/ChapterSelectionContracts.swift; sourceTree = SOURCE_ROOT; };
+		C3BF96600B6CAC908DAD2F74 /* Packages/SwiftfinAsyncStreams/Tests/SwiftfinAsyncStreamsTests/LatestRequestContracts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Packages/SwiftfinAsyncStreams/Tests/SwiftfinAsyncStreamsTests/LatestRequestContracts.swift; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -693,6 +697,8 @@
 				A05991277BB492088ED1D37D /* Packages/SwiftfinMediaCatalog/Tests/SwiftfinMediaCatalogTests/ProgramGroupingContracts.swift */,
 				5CF9B84AEAB3C95CF1DA0A11 /* Packages/SwiftfinMediaCatalog/Tests/SwiftfinMediaCatalogTests/ProgramGroupingFixtures.swift */,
 				51E7BF883F1A7F49A4F719DF /* Packages/SwiftfinMediaCatalog/Tests/SwiftfinMediaCatalogTests/GroupedItemQueryContracts.swift */,
+				23596BD7AC544B17AD419A28 /* Packages/SwiftfinPlaybackPreviews/Tests/SwiftfinPlaybackPreviewsTests/ChapterSelectionContracts.swift */,
+				C3BF96600B6CAC908DAD2F74 /* Packages/SwiftfinAsyncStreams/Tests/SwiftfinAsyncStreamsTests/LatestRequestContracts.swift */,
 				9FA5B7C0FD676588F9568B80 /* Packages/SwiftfinAsyncStreams/Tests/SwiftfinAsyncStreamsTests/NotificationContracts.swift */,
 				B3E6DC660C9E7E4D9C70A829 /* Packages/SwiftfinMediaTracks/Tests/SwiftfinMediaTracksTests/RawItemStreamsContracts.swift */,
 				84909BC3A673B077CA312B06 /* Packages/SwiftfinUserMediaState/Tests/SwiftfinUserMediaStateTests/UserMediaCapabilitiesContracts.swift */,
@@ -1446,6 +1452,8 @@
 				1A6DA26BD413085B6536D433 /* Packages/SwiftfinMediaCatalog/Tests/SwiftfinMediaCatalogTests/ProgramGroupingContracts.swift in Sources */,
 				55AFB9A17436E18513CFF408 /* Packages/SwiftfinMediaCatalog/Tests/SwiftfinMediaCatalogTests/ProgramGroupingFixtures.swift in Sources */,
 				D4841EA4F7E852F806B8C864 /* Packages/SwiftfinMediaCatalog/Tests/SwiftfinMediaCatalogTests/GroupedItemQueryContracts.swift in Sources */,
+				D40A181777DC71DC94AB8C34 /* Packages/SwiftfinPlaybackPreviews/Tests/SwiftfinPlaybackPreviewsTests/ChapterSelectionContracts.swift in Sources */,
+				C8667080982A9448993F0ECF /* Packages/SwiftfinAsyncStreams/Tests/SwiftfinAsyncStreamsTests/LatestRequestContracts.swift in Sources */,
 				11A638812AF4E5F9DFC887EB /* Packages/SwiftfinAsyncStreams/Tests/SwiftfinAsyncStreamsTests/NotificationContracts.swift in Sources */,
 				D47A7FCAE914808F5EBC2F7E /* Packages/SwiftfinMediaTracks/Tests/SwiftfinMediaTracksTests/RawItemStreamsContracts.swift in Sources */,
 				00AD29B46C1F41880582C8C4 /* Packages/SwiftfinUserMediaState/Tests/SwiftfinUserMediaStateTests/UserMediaCapabilitiesContracts.swift in Sources */,

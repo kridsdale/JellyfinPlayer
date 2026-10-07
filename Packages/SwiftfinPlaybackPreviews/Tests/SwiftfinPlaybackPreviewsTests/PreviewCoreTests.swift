@@ -11,6 +11,9 @@ import SwiftfinPlaybackPreviews
 import Testing
 
 @MainActor
+private final class PreviewIdentity { var isCurrent = true }
+
+@MainActor
 private final class Loader {
     var requests: [Int] = []
     private var pending: [Int: [CheckedContinuation<Int?, Never>]] = [:]
@@ -151,16 +154,16 @@ func `invalidation drops late noncooperating load and prevents more io`() async 
 
 @Test @MainActor
 func `identity replacement drops late and cached images`() async {
-    var current = true
-    let loader = Loader(), cache = PreviewImageCache<Int>(isCurrent: { current }, load: loader.load)
+    let identity = PreviewIdentity()
+    let loader = Loader(), cache = PreviewImageCache<Int>(isCurrent: { identity.isCurrent }, load: loader.load)
     let pending = Task { await cache.image(at: 0) }
     await loader.started(0)
-    current = false
+    identity.isCurrent = false
     loader.finish(0, 42)
     let result = await pending.value
     #expect(result == nil)
     #expect(!cache.isValid)
-    current = true
+    identity.isCurrent = true
     let later = await cache.image(at: 0)
     #expect(later == nil)
     #expect(loader.requests == [0])

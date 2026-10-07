@@ -17,6 +17,7 @@ import SwiftfinAsyncStreams
 import SwiftfinCollections
 import SwiftfinImages
 import SwiftfinLocalization
+import SwiftfinMediaCatalog
 import SwiftUI
 
 @MainActor
@@ -24,13 +25,13 @@ class EpisodeMediaPlayerQueue: ViewModel, MediaPlayerQueue {
 
     weak var manager: MediaPlayerManager? {
         didSet {
-            cancellables = []
+            managerSubscription = nil
+            resetAdjacentEpisodes()
             guard let manager else { return }
-            manager.$playbackItem
+            managerSubscription = manager.$playbackItem
                 .sink { [weak self] newItem in
                     self?.didReceive(newItem: newItem)
                 }
-                .store(in: &cancellables)
         }
     }
 
@@ -52,8 +53,8 @@ class EpisodeMediaPlayerQueue: ViewModel, MediaPlayerQueue {
     lazy var nextItemPublisher: Published<MediaPlayerItemProvider?>.Publisher = $nextItem
     lazy var previousItemPublisher: Published<MediaPlayerItemProvider?>.Publisher = $previousItem
 
-    private var adjacencyGeneration = UUID()
-    private var currentAdjacentEpisodesTask: AnyCancellable?
+    private var managerSubscription: AnyCancellable?
+    private let adjacencyRequests = LatestRequest<AdjacentEpisodes>()
     private let seasonsViewModel: PagingLibraryViewModel<SeasonViewModelLibrary>
 
     init(episode: BaseItemDto) {
@@ -72,26 +73,33 @@ class EpisodeMediaPlayerQueue: ViewModel, MediaPlayerQueue {
         EpisodeOverlay(viewModel: seasonsViewModel)
     }
 
-    private func didReceive(newItem: MediaPlayerItem?) {
-        adjacencyGeneration = UUID()
-        let generation = adjacencyGeneration
-        self.currentAdjacentEpisodesTask = Task {
-            await MainActor.run {
-                self.nextItem = nil
-                self.previousItem = nil
-                self.hasNextItem = false
-                self.hasPreviousItem = false
-            }
-
-            try await self.getAdjacentEpisodes(for: newItem?.baseItem, generation: generation)
-        }
-        .asAnyCancellable()
+    private func resetAdjacentEpisodes() {
+        adjacencyRequests.cancel()
+        nextItem = nil
+        previousItem = nil
+        hasNextItem = false
+        hasPreviousItem = false
     }
 
-    private func getAdjacentEpisodes(for item: BaseItemDto?, generation: UUID) async throws {
-        guard let item else { return }
-        let catalog = try requireMediaCatalog()
-        let adjacent = try await catalog.adjacentEpisodes(for: item)
+    private func didReceive(newItem: MediaPlayerItem?) {
+        resetAdjacentEpisodes()
+        guard let item = newItem?.baseItem else { return }
+        do {
+            let catalog = try requireMediaCatalog()
+            adjacencyRequests.replace(operation: {
+                let adjacent = try await catalog.adjacentEpisodes(for: item)
+                try catalog.checkBinding()
+                return adjacent
+            }, receive: { [weak self] adjacent in
+                guard let self, self.manager != nil else { return }
+                self.installAdjacentEpisodes(adjacent)
+            })
+        } catch {
+            // Missing or replaced account bindings leave the queue empty.
+        }
+    }
+
+    private func installAdjacentEpisodes(_ adjacent: AdjacentEpisodes) {
         let nextItem = adjacent.next
         let previousItem = adjacent.previous
 
@@ -118,15 +126,10 @@ class EpisodeMediaPlayerQueue: ViewModel, MediaPlayerQueue {
             }
         }
 
-        try catalog.checkBinding()
-        guard generation == adjacencyGeneration else { return }
-
-        await MainActor.run {
-            self.nextItem = nextProvider
-            self.previousItem = previousProvider
-            self.hasNextItem = nextProvider != nil
-            self.hasPreviousItem = previousProvider != nil
-        }
+        self.nextItem = nextProvider
+        self.previousItem = previousProvider
+        hasNextItem = nextProvider != nil
+        hasPreviousItem = previousProvider != nil
     }
 }
 

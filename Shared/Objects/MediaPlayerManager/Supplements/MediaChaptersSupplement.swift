@@ -10,9 +10,9 @@ import CollectionHStack
 import CollectionVGrid
 import Defaults
 import JellyfinAPI
-import SwiftfinCollections
 import SwiftfinFormatting
 import SwiftfinLocalization
+import SwiftfinPlaybackPreviews
 import SwiftfinTime
 import SwiftUI
 
@@ -21,6 +21,7 @@ import SwiftUI
 class MediaChaptersSupplement: ObservableObject, MediaPlayerSupplement {
 
     let chapters: [ChapterInfo.FullInfo]
+    private let selectionTimeline: ChapterSelectionTimeline
     let displayTitle: String = L10n.chapters
     let id: String
 
@@ -29,17 +30,12 @@ class MediaChaptersSupplement: ObservableObject, MediaPlayerSupplement {
 
     init(chapters: [ChapterInfo.FullInfo]) {
         self.chapters = chapters
+        self.selectionTimeline = ChapterSelectionTimeline(starts: chapters.map(\.chapterInfo.startSeconds))
         self.id = "Chapters-\(chapters.hashValue)"
     }
 
     func chapterID(at seconds: Duration) -> ChapterInfo.FullInfo.ID? {
-        guard let nextIndex = chapters.firstIndex(where: {
-            guard let startSeconds = $0.chapterInfo.startSeconds else { return false }
-            return startSeconds > seconds
-        }) else {
-            return chapters.last?.id
-        }
-        return chapters[safe: max(0, nextIndex - 1)]?.id
+        selectionTimeline.index(at: seconds).map { chapters[$0].id }
     }
 
     var videoPlayerBody: some PlatformView {
