@@ -22,3 +22,5 @@ extension LocalUserAccessPolicy: @retroactive Defaults.Serializable, Storable {}
 extension ServerConnection: @retroactive Defaults.Serializable, Storable {}
 extension ServerConnection.Interface: @retroactive Defaults.Serializable, Storable {}
 extension UserSessionState: @retroactive Defaults.Serializable, Storable {}
+
+extension ServerSelection: @retroactive Defaults.Serializable, Storable {}

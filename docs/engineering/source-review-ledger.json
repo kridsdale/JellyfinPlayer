@@ -757,9 +757,9 @@
     {
       "owners": [],
       "path": "Shared/Extensions/ButtonStyle/BasicHoverButtonStyle.swift",
-      "reason": "",
+      "reason": "Platform UI hover styling delegates tvOS lift and iOS borderless style; no behavior beyond presentation.",
       "sha256": "7ca422d12938c8f8faef24751d454e852f68139d075208a35f6ae868e596d6df",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -799,9 +799,9 @@
     {
       "owners": [],
       "path": "Shared/Extensions/EnvironmentValues.swift",
-      "reason": "",
+      "reason": "SwiftUI environment composition defaults for poster, bindings, frames, selection, speed, offsets and safe area. Safe-area default is zero and does not query actor-bound UIKit; action implementations remain separate.",
       "sha256": "ce2a1a66ca817ce29c9effd9cc5f3fc6e1ac6f951c4c5da1ee2470f07f6c5e6d",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -841,23 +841,23 @@
     {
       "owners": [],
       "path": "Shared/Extensions/JellyfinAPI/ActiveSessionsPolicy.swift",
-      "reason": "",
+      "reason": "Localized admin-form unlimited/custom choice with exact numeric values and nil-aware init; no active-session enforcement or request implementation.",
       "sha256": "3d7e1acae6240ef58218932b1239114ea9915555289c1c6769c442fbe2e4bdd8",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
       "path": "Shared/Extensions/JellyfinAPI/AnyView.swift",
-      "reason": "",
+      "reason": "SwiftUI platform conformance returns the erased view unchanged on iOS/tvOS; presentation only.",
       "sha256": "e9a0420d84463aeda61327bb574d4ccca13c20f9a668785b07acbf398c1f4c71",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
       "path": "Shared/Extensions/JellyfinAPI/AuthenticationInfo.swift",
-      "reason": "",
+      "reason": "Transferable/UI export projection chooses title and token text from a caller-supplied immutable SDK value; file creation is in the separately mixed TextTransferable body. No credentials are fetched or exported during review.",
       "sha256": "cc1602f741a2ba332759e7a89fd4616c6e2762eac4a53ad7499d7e352aee2df9",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -869,16 +869,16 @@
     {
       "owners": [],
       "path": "Shared/Extensions/JellyfinAPI/BaseItemDto/BaseItemDto+LibraryParent.swift",
-      "reason": "",
+      "reason": "UI grouping labels/choices and LibraryParent composition; supported kinds and recursion delegate to MediaCatalogPolicy with immutable parent/collection/grouping values.",
       "sha256": "71b7b107ebecc8e0511dd3c1b84efda6db064dddcf1ba9c56b80614d2c79b2c6",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
       "path": "Shared/Extensions/JellyfinAPI/BaseItemDto/BaseItemDto+Permissions.swift",
-      "reason": "",
+      "reason": "Main-actor composition captures the current account policy and delegates immutable permission decisions to ItemMetadataPolicy; implements no authorization, download or metadata command.",
       "sha256": "471ef828d04ea2e63d61f4438bb164d64e3277e2297f746caf5d49dadde5c175",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -925,23 +925,23 @@
     {
       "owners": [],
       "path": "Shared/Extensions/JellyfinAPI/BaseItemPerson/BaseItemPerson+Poster.swift",
-      "reason": "",
+      "reason": "Poster UI adapts person values through BaseItemDto presentation; portrait/symbol/subtitle/context-menu and image-source delegation only. Poster internals remain separately reviewed.",
       "sha256": "385a5792e7ba182de4f6b03b4c1660179dfb9efb29010172adb33ba42591c8bd",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
       "path": "Shared/Extensions/JellyfinAPI/BaseItemPerson/BaseItemPerson.swift",
-      "reason": "",
+      "reason": "Display-title and person-parent projections retain UI adaptation; crew and role facts delegate to ItemMetadataPolicy.",
       "sha256": "3f252082d8af6f9de17d5140a0f06f8f2be720518aa16c4c440af28f08c50507",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
       "path": "Shared/Extensions/JellyfinAPI/BaseItemPerson+LibraryElement.swift",
-      "reason": "",
+      "reason": "UI layout/routing/render forwarding delegates person presentation through the app BaseItemDto wrapper; no catalog/player operation.",
       "sha256": "42a8a40e2cab061a4a9cbe4bca557dc4b7567b25bb4906252eae54edb9a71528",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -953,44 +953,44 @@
     {
       "owners": [],
       "path": "Shared/Extensions/JellyfinAPI/CollectionType.swift",
-      "reason": "",
+      "reason": "Conformance-only supported-case projection delegates immutable collection support to MediaCatalogPolicy.",
       "sha256": "67e1c302a070c40fa75c9cdc565a2ed1c3a5c607c6464279f3d81524a36a544e",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
       "path": "Shared/Extensions/JellyfinAPI/CountryInfo.swift",
-      "reason": "",
+      "reason": "Locale-driven region display fallback and hash identity for UI rows; no account/library eligibility or data mutation.",
       "sha256": "cd0778739790b00beea52c246060e0c181284d0850e1ec2e258a6980c48f26be",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
       "path": "Shared/Extensions/JellyfinAPI/CultureDto.swift",
-      "reason": "",
+      "reason": "Locale-driven language label fallback and hash identity for UI rows; no selection/request policy.",
       "sha256": "6a800141c94ef75e67791a0eb9de1f7fb1de4919169ba4d797cb207f6bed068b",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
       "path": "Shared/Extensions/JellyfinAPI/DayOfWeek.swift",
-      "reason": "",
+      "reason": "Display-only conversion maps the SDK English weekday label through a POSIX formatter to the current calendar label; no schedule construction or time policy.",
       "sha256": "a0af192b91d200b9d17d076476875163a0fabaa502b0775fd0522edbae33dfb3",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
       "path": "Shared/Extensions/JellyfinAPI/DeviceInfoDto.swift",
-      "reason": "",
+      "reason": "Thin DTO composition forwards app/device names to the application DeviceType presentation adapter; no device query or resource lifetime.",
       "sha256": "c419f35b7849f743fd024f8ee35f7e747e82534e534f737c37ed2173a06e24d0",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
       "path": "Shared/Extensions/JellyfinAPI/DeviceProfile.swift",
-      "reason": "",
+      "reason": "Main-actor app composition captures selected subtitle/custom profile/default resolution and hardware snapshot, then delegates immutable profile construction to PlaybackProfiles.",
       "sha256": "1a264eea8ecfe9df6a7004cd5e4a0791cd9ea4e90e8d58db472a20f8e1c284e5",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -1002,9 +1002,9 @@
     {
       "owners": [],
       "path": "Shared/Extensions/JellyfinAPI/DynamicDayOfWeek.swift",
-      "reason": "",
+      "reason": "Localized display projection maps weekday enums to the existing DayOfWeek label and everyday/weekday/weekend titles; no schedule evaluation.",
       "sha256": "29e171a9b9f6312775fc6125ffa7eb36e9762d030ea81de5354529cdcca7d3eb",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -1014,25 +1014,27 @@
       "status": "pending"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinItemMetadata"
+      ],
       "path": "Shared/Extensions/JellyfinAPI/ImageBlurHashes.swift",
-      "reason": "",
+      "reason": "Pure SDK image-type to blurhash-dictionary projection still lives in the app. The existing metadata/image-fact owner can own this mapping without app UI/global inputs; preserve all13 enum cases and optional dictionaries.",
       "sha256": "23f8cdf5ace540a22cfd622997d78509aaa81f801b44d5e2280a64bb7057ef0d",
-      "status": "pending"
+      "status": "source-reviewed-mixed"
     },
     {
       "owners": [],
       "path": "Shared/Extensions/JellyfinAPI/ImageInfo.swift",
-      "reason": "",
+      "reason": "UI identity plus ImageSource composition delegates raw URL policy to ItemMetadata with an explicit caller-supplied transport; no image fetching or processing.",
       "sha256": "f05635fc3a9a2807c0226b16f55dddb4537c29744af8807aafd735b92ce18774",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
       "path": "Shared/Extensions/JellyfinAPI/ImageProviderInfo.swift",
-      "reason": "",
+      "reason": "Identifiable conformance exposes the SDK provider name for UI rows; no provider query/selection implementation.",
       "sha256": "26ee786817625d42a99a2b20975010c250007bb5c62abe4673ca3789f26ebc98",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -1051,37 +1053,37 @@
     {
       "owners": [],
       "path": "Shared/Extensions/JellyfinAPI/JellyfinClient.swift",
-      "reason": "",
+      "reason": "Main-actor composition captures UIKit/bundle app identity and optional Pulse delegate to initialize owned JellyfinTransport. Mutable SDK construction/lifecycle remains Networking-owned; no transport implementation here.",
       "sha256": "dfc0ab9afed327aaca9839e55d1d7a152767867649124ba36a6b3404ab624e3b",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
       "path": "Shared/Extensions/JellyfinAPI/LogFile.swift",
-      "reason": "",
+      "reason": "App account composition captures the current transport and delegates log URL policy to ServerOperations; type calls the separately mixed ServerLogType classifier. No file read or server request.",
       "sha256": "a8bc574d3249d7d71863886e407bbde47686a365917e72c7d2572e072ae2090d",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
       "path": "Shared/Extensions/JellyfinAPI/LogLevel.swift",
-      "reason": "",
+      "reason": "UI color/symbol/raw display-title projections for immutable SDK log severity only.",
       "sha256": "b6116a80f8a26ba2e6a1da58fd7e0fe7a3a168dc7719f5df4d88cc88532d99ef",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
       "path": "Shared/Extensions/JellyfinAPI/LoginFailurePolicy.swift",
-      "reason": "",
+      "reason": "Localized admin-form numeric choice labels; no credential validation, retry or login-attempt enforcement.",
       "sha256": "343b5f012a00e497c10e8b35846d24a638335f0dd996ea7c088e7ab75459f6d7",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
       "path": "Shared/Extensions/JellyfinAPI/MaxBitratePolicy.swift",
-      "reason": "",
+      "reason": "Localized admin-form unlimited/custom numeric choice with nil-aware init; no stream bitrate calculation or transport limit implementation.",
       "sha256": "aa099a0d7baa39440f3627533466c5332c0a8f4d6a6ac2208c10b2baddb51932",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -1100,16 +1102,16 @@
     {
       "owners": [],
       "path": "Shared/Extensions/JellyfinAPI/MediaStreamType.swift",
-      "reason": "",
+      "reason": "Localized stream-kind labels only; no stream classification/selection/decoder logic.",
       "sha256": "54228b11c91636453dd15c4e959fadb187a57a0b291f45457029cc31d675d698",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
       "path": "Shared/Extensions/JellyfinAPI/MetadataField.swift",
-      "reason": "",
+      "reason": "Localized metadata-field labels only; no metadata refresh/edit validation or request implementation.",
       "sha256": "4ff1e4ba6433783fa380a967edd9157df2bc0ca8c368225079db9e8a09d2e4c8",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -1121,9 +1123,9 @@
     {
       "owners": [],
       "path": "Shared/Extensions/JellyfinAPI/ParentalRating.swift",
-      "reason": "",
+      "reason": "Rating row title/hash identity and localized UnratedItem choice labels only; no account/content eligibility or policy enforcement.",
       "sha256": "f710f2c0ce151f514ff3171e59f3a856a79f8eb4be75a26087195abeb8d6c01b",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -1135,16 +1137,18 @@
     {
       "owners": [],
       "path": "Shared/Extensions/JellyfinAPI/PlayMethod.swift",
-      "reason": "",
+      "reason": "Localized SDK DirectPlay/DirectStream/transcode labels only; no playback choice or transport implementation.",
       "sha256": "3acc02c26d5a2f1e45fe040d1bcc100d53a79fc07a0b23a1a9aaf37abaff055c",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinTime"
+      ],
       "path": "Shared/Extensions/JellyfinAPI/PlayerStateInfo.swift",
-      "reason": "",
+      "reason": "Thin DTO wrapper still performs direct legacy tick-to-duration/seconds arithmetic. Preserve truncation/sign/extreme inputs while delegating the arithmetic to the existing time owner; app may retain optional SDK field composition.",
       "sha256": "64da9cc6dfcb38b788f7947ea1ecd3cba62caa7ee28533f3457000531e412ae7",
-      "status": "pending"
+      "status": "source-reviewed-mixed"
     },
     {
       "owners": [],
@@ -1163,79 +1167,83 @@
     {
       "owners": [],
       "path": "Shared/Extensions/JellyfinAPI/RemoteSearchResult.swift",
-      "reason": "",
+      "reason": "Portrait/symbol/title/hash identity and a URL-to-ImageSource UI adapter for supplied search results; text parsing/image contracts delegate to existing owners.",
       "sha256": "1537e6d271888dad4f41aac346671e557a7d89ed9669fc37205c25fa9cf26f15",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
       "path": "Shared/Extensions/JellyfinAPI/SessionInfoDto.swift",
-      "reason": "",
+      "reason": "App device/display comparison adapter: immutable stream flags choose displayed remux/direct labels; Comparable delegates session ordering to ServerOperations with an explicit current time. No playback transport decision or session mutation.",
       "sha256": "0df7c921cc2294f78d5a9ba2f988f525dd7f6c5933ceadaea90db8eace6882e9",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
       "path": "Shared/Extensions/JellyfinAPI/SortOrder+ItemSortOrder.swift",
-      "reason": "",
+      "reason": "Alias resolves Foundation name conflict, localized sort labels and trusted UI AnyItemFilter raw reconstruction retain display adaptation; the existing forced unwrap is not broad query evaluation and invalid-choice runtime behavior remains unverified.",
       "sha256": "198fa63491f194779ad55a1a050af2db7cb4fcc08b1b6ab27da70f996e2a22cf",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinMediaCatalog"
+      ],
       "path": "Shared/Extensions/JellyfinAPI/SpecialFeatureType.swift",
-      "reason": "",
+      "reason": "Localized extra-type titles coexist with pure themeSong-only exclusion for video eligibility. Move immutable kind eligibility into the catalog owner while retaining label presentation.",
       "sha256": "0276c3de3dc10a1229957947426b7224cb04d8dd399ab47f5eb96321018821ee",
-      "status": "pending"
+      "status": "source-reviewed-mixed"
     },
     {
       "owners": [],
       "path": "Shared/Extensions/JellyfinAPI/SubtitlePlaybackMode.swift",
-      "reason": "",
+      "reason": "Localized subtitle-choice labels/descriptions only; no subtitle eligibility or native application.",
       "sha256": "0cae05f75a11be52052806fa9842200f51e10156eed14ec52ae6065eac06ed33",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
       "path": "Shared/Extensions/JellyfinAPI/SyncPlayUserAccessType.swift",
-      "reason": "",
+      "reason": "Localized SyncPlay admin-choice labels only; no group authorization or operation.",
       "sha256": "ace328d8d1d042b7d5aba5c9fe19f01173ef91a9e5644fd1014bbd83fd41b580",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
       "path": "Shared/Extensions/JellyfinAPI/TaskCompletionStatus.swift",
-      "reason": "",
+      "reason": "Localized SDK task completion status labels only; no scheduling or task lifecycle implementation.",
       "sha256": "5fe7d5a70d93222e728297fda54d3e39c8e61d512c3b6ab5cc7f3dc405a09c5d",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
       "path": "Shared/Extensions/JellyfinAPI/TaskState.swift",
-      "reason": "",
+      "reason": "Localized SDK task-state labels only; no task execution or observation.",
       "sha256": "daf8a9a75549dc27a3e41b6643e1e347f28e9f4111b1d02fdde85b652e55553c",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinServerOperations"
+      ],
       "path": "Shared/Extensions/JellyfinAPI/TaskTriggerInfo.swift",
-      "reason": "",
+      "reason": "Daily/weekly/interval/startup default request constructors remain app behavior. Existing server-operations owner should own exact Sunday/midnight/one-hour policy; preserve SDK DTO values and keep choice UI separate.",
       "sha256": "2f061958daadd8c3420d712b8a39d1b147addbb94d5a1f35606ffffcd82f8740",
-      "status": "pending"
+      "status": "source-reviewed-mixed"
     },
     {
       "owners": [],
       "path": "Shared/Extensions/JellyfinAPI/TaskTriggerInfoType.swift",
-      "reason": "",
+      "reason": "Localized trigger-type title and system-symbol projections only; trigger construction is reviewed separately.",
       "sha256": "2718785e1fcaab9b7a1fc2fec8f75ac48e0108a2b5c6fd59a08f104e1e8f4298",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
       "path": "Shared/Extensions/JellyfinAPI/TimerInfoDto.swift",
-      "reason": "",
+      "reason": "Thin DTO/time composition forwards scheduled-recording decision to MediaCatalogPolicy with explicit now; no timer/read/command implementation.",
       "sha256": "80192cf2afecd05304867e215fe7deab58abd179dbfebc78d9b3447f7e8eff64",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -1247,23 +1255,23 @@
     {
       "owners": [],
       "path": "Shared/Extensions/JellyfinAPI/UserDto.swift",
-      "reason": "",
+      "reason": "Profile ImageSource composes AccountAccess-owned URL policy; missing-ID UI error and full-user lookup delegate to UserAdministration. No credential/query implementation.",
       "sha256": "6e267dc8bb4f91c6500c6510c7d9153765f0e2d77de9b6633c64eadbee9edffd",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
       "path": "Shared/Extensions/JellyfinAPI/Video3DFormat.swift",
-      "reason": "",
+      "reason": "Localized SDK 3D format labels only; no decoder/capability or profile policy.",
       "sha256": "e252ca313b4ae80a2dd4672b4fb9e53e462b835d407a2784166a4529f8e940af",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
       "path": "Shared/Extensions/JellyfinAPI/VideoRangeType.swift",
-      "reason": "",
+      "reason": "Localized SDK range/enhancement labels only; no hardware/stream range classification or decoder policy.",
       "sha256": "e841ba30f47a03a6cc5267c9cc3d7b335ef7363951a38134b24afc9e3b09cb66",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -1275,16 +1283,16 @@
     {
       "owners": [],
       "path": "Shared/Extensions/LabelStyle/HorizontalLabelStyle.swift",
-      "reason": "",
+      "reason": "Label layout places icon/title according to edge and current control-size spacing; presentation geometry only.",
       "sha256": "648bdda8e9319d83d81128a20c7ca7b062af917a86493da5f920bfe5a2565d11",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
       "path": "Shared/Extensions/LabelStyle/SectionFooterWithImageLabelStyle.swift",
-      "reason": "",
+      "reason": "Label icon/title styling and fixed spacing only; no state or resource lifetime.",
       "sha256": "1af328c555554e29c59ec4217cbcceb5b948d8d639a00de69bf32a8932634b72",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -1296,9 +1304,9 @@
     {
       "owners": [],
       "path": "Shared/Extensions/Nuke/ImagePipeline.swift",
-      "reason": "",
+      "reason": "Main-actor application composition supplies cache identity snapshots and a configured/logged native loader factory to the existing Images owner; getters forward owner pipelines. Cache/task/native lifecycle is library-owned.",
       "sha256": "43cf906887e31499598940d477683dd440217f54a8e78369de451d226934fb1a",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -1324,9 +1332,9 @@
     {
       "owners": [],
       "path": "Shared/Extensions/ProgressViewStyle/ProgressViewStyle.swift",
-      "reason": "",
+      "reason": "Presentation style factories and immutable style-value copies delegate generic transforms to Values; no progress measurement or playback behavior.",
       "sha256": "dfd35a6eb582180847ead30a719db5d82ae8e48a8a07c7b08e2e18b00dc963dc",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -1345,9 +1353,9 @@
     {
       "owners": [],
       "path": "Shared/Extensions/SecureField.swift",
-      "reason": "",
+      "reason": "Main-actor platform secure-field/unmask choice and submit forwarding bind UI text; no credential storage or authentication authority.",
       "sha256": "c6d985f9457de330eb437ffda6960bb6de3321d55ba6a12877e538c9ce837dbb",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -1415,16 +1423,16 @@
     {
       "owners": [],
       "path": "Shared/Extensions/ViewExtensions/Backport/Backport.swift",
-      "reason": "",
+      "reason": "Main-actor SwiftUI availability/backport modifier dispatch for buttons/glass/scroll edges; no generic domain policy or resource implementation.",
       "sha256": "6ece61d568fd65fa091cb9950c50c99554f1b767e81ada0d0388ba06e6ff0adc",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
       "path": "Shared/Extensions/ViewExtensions/Backport/BackportButtonStyle.swift",
-      "reason": "",
+      "reason": "Main-actor presentation protocol and primitive-button style forwarding only.",
       "sha256": "ac7f31dd203a8cbc69c8a7d11bf71b90baa3382fa6114d3c342afbd8efa72036",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -1436,16 +1444,16 @@
     {
       "owners": [],
       "path": "Shared/Extensions/ViewExtensions/Backport/NavigationTransition.swift",
-      "reason": "",
+      "reason": "SwiftUI automatic/zoom source-and-namespace presentation descriptor only.",
       "sha256": "17f747a3ace45d0b47eae37feff68cc61fc5263686aa89f578f078952a6aaeca",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
       "path": "Shared/Extensions/ViewExtensions/Backport/ScrollEdgeEffectStyle.swift",
-      "reason": "",
+      "reason": "Checked-Sendable presentation enum maps to available SwiftUI edge styles only.",
       "sha256": "987bba252704584862a1322d985c0f2e7044f9cacd2b06d94e3134bdd7f9c3d4",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -1457,9 +1465,9 @@
     {
       "owners": [],
       "path": "Shared/Extensions/ViewExtensions/Modifiers/BottomEdgeGradientModifier.swift",
-      "reason": "",
+      "reason": "SwiftUI gradient/background layout with fixed view extents; no image decode, IO or task.",
       "sha256": "d4ac53dd6f066afba5ae673195ac1b310a2a6a5828300a0c72c88cc4056be95d",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -1471,9 +1479,9 @@
     {
       "owners": [],
       "path": "Shared/Extensions/ViewExtensions/Modifiers/LetterPickerBarModifier.swift",
-      "reason": "",
+      "reason": "App selected preference/filter-state composition chooses visible UI inset/focus/callout. Filter membership delegates to owned values; no catalog query or evaluation implementation.",
       "sha256": "f4c477f012fff9351b04e923ef6ec197ed77bcde2e2338ac3733c56e7f2651ad",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -1483,60 +1491,64 @@
       "status": "pending"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinUIState"
+      ],
       "path": "Shared/Extensions/ViewExtensions/Modifiers/OnFinalDisappearModifier.swift",
-      "reason": "",
+      "reason": "View composition stores an arbitrary callback in an unisolated ObservableObject and executes it in deinit. Final release can occur on a foreign executor; actor delivery/lifetime needs an explicit owned contract and synthetic release regression before this is classified complete. UI callback timing/consumer expectations also require review.",
       "sha256": "89d66fd2e9da78930f59346546b9012c139689db1e69c12566382a7095b21527",
-      "status": "pending"
+      "status": "source-reviewed-mixed"
     },
     {
       "owners": [],
       "path": "Shared/Extensions/ViewExtensions/Modifiers/OnFirstAppearModifier.swift",
-      "reason": "",
+      "reason": "View-lifetime State guards one onAppear UI callback; no timer, native resource or cross-executor publication.",
       "sha256": "e5623149d2504f6d88a841ce41f12d67e0c5058d95bd6ac791826c165e3f4724",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
       "path": "Shared/Extensions/ViewExtensions/Modifiers/OnReceiveNotificationModifier.swift",
-      "reason": "",
+      "reason": "SwiftUI onReceive presentation forwards an already-owned typed notification publisher and callback; notification decoding/scheduling/subscription primitives remain in their explicit owners.",
       "sha256": "49c9b8d05cf6f65a03361e28620d0ce25bfc404aae09c2ac8697ce4450cbcddf",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
       "path": "Shared/Extensions/ViewExtensions/Modifiers/OnScenePhaseChangedModifier.swift",
-      "reason": "",
+      "reason": "View-lifetime environment/onChange callback dispatch for one scene phase; no account/session/background service implementation.",
       "sha256": "808066029f835ab99bad884959c0ced6291d5baa017df297b881f45006079f33",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
       "path": "Shared/Extensions/ViewExtensions/Modifiers/OnSizeChangedModifier.swift",
-      "reason": "",
+      "reason": "SwiftUI measured size/safe-area projection and local rendering state through native onGeometryChange; no separate observer/timer/resource implementation.",
       "sha256": "1f273cfc0a7f6a1b8b5299a46ea5488c529480b55e9e1dbb0e49d93d49c1333c",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
       "path": "Shared/Extensions/ViewExtensions/Modifiers/ScrollIfLargerThanContainerModifier.swift",
-      "reason": "",
+      "reason": "View geometry chooses content frame and scroll availability from measured sizes, padding and axes; this is layout policy, not scrolling observation/task ownership.",
       "sha256": "ee1ffed508ce1d8703f293fbf0aa8e381e8a345da030d111def1e26bd00f4d27",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinScrolling"
+      ],
       "path": "Shared/Extensions/ViewExtensions/Modifiers/ScrollViewOffsetModifier.swift",
-      "reason": "",
+      "reason": "SwiftUI introspection directly replaces a borrowed UIScrollView delegate with an object that publishes a Binding. Observer/delegate restoration, native view replacement and stale-binding lifetime are not explicit; review/move native observation ownership behind the existing scrolling owner while retaining UI composition.",
       "sha256": "2b396713c7f36f186ec5f2c3ff8832db24bad5f2011d4641866f8eacce3fb425",
-      "status": "pending"
+      "status": "source-reviewed-mixed"
     },
     {
       "owners": [],
       "path": "Shared/Extensions/ViewExtensions/Modifiers/SinceLastDisappearModifier.swift",
-      "reason": "",
+      "reason": "Local SwiftUI appearance/disappearance State reports elapsed UI absence to a caller; no cache/session expiry or native scheduler implementation.",
       "sha256": "8138a7eadcf7fa687ebebf4dbf6226180f5bb5c67c00fcb7c0d52896b83df74b",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -1603,23 +1615,23 @@
     {
       "owners": [],
       "path": "Shared/Objects/ContentGroup/ContentGroup.swift",
-      "reason": "",
+      "reason": "Main-actor presentation composition protocol ties view/model/refresh identity to a ViewBuilder; ArrayBuilder delegates to Collections. Empty defaults and resolve flag define UI composition, not catalog or refresh behavior.",
       "sha256": "af8ad8aa1426b561cf34711ee9972182e0682a9dbe17e6faa60028d69e9a80fc",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
       "path": "Shared/Objects/ContentGroup/ContentGroupCustomization.swift",
-      "reason": "",
+      "reason": "Presentation PreferenceKey accumulates the ignore-safe-area UI option with standard OptionSet union; no domain, server or lifetime behavior.",
       "sha256": "78a0b5fe2e962abfe3f8490b69428d64d6148e66acf50b9289a0e8e5a826e822",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
       "path": "Shared/Objects/ContentGroup/ContentGroupProvider.swift",
-      "reason": "",
+      "reason": "Main-actor presentation factory protocol exposes named groups and environment without an implementation. Actual factories/fetching remain separate review scopes.",
       "sha256": "a51b448447e69ca215d5519de6b4464ed41c8b2d1a23d223f9dc1236f3ad8317",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -1631,9 +1643,9 @@
     {
       "owners": [],
       "path": "Shared/Objects/ContentGroup/PosterGroup.swift",
-      "reason": "",
+      "reason": "Poster section composition captures display title, layout/context, a paging view model with page size20 and nonempty visibility; delegates rendered body to the app section and query/paging to their respective owners.",
       "sha256": "96184e75aa608cd0c08be095dd2de3831e9601e5e9ea3de027f9fa7368c36f3f",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -1680,16 +1692,16 @@
     {
       "owners": [],
       "path": "Shared/Objects/DisplayOrder/BoxSetDisplayOrder.swift",
-      "reason": "",
+      "reason": "Localized UI selection labels and exact server-facing order raw strings; no sorting or request implementation.",
       "sha256": "1b1c20876cca4bceb499e30d27c7f37b1430838977890cbececd37ffe4711cbd",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
       "path": "Shared/Objects/DisplayOrder/SeriesDisplayOrder.swift",
-      "reason": "",
+      "reason": "Localized UI selection labels and exact order raw strings including Aired/altdvd; no episode ordering, lookup or IO implementation.",
       "sha256": "c820aad1d966bc77f7941e14c292d62b9011f278b1c10f8ece2c12a5a2dd3235",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -1701,9 +1713,9 @@
     {
       "owners": [],
       "path": "Shared/Objects/EPG/EPGLayout.swift",
-      "reason": "",
+      "reason": "UIKit idiom/font metrics choose guide row/ruler/channel dimensions; time-to-points width is view geometry. No catalog, settings or transport behavior.",
       "sha256": "4d44af4ecc52e5026ed9d56742301a6f9191b010cfa625e7ba4e3966817a492f",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -1738,51 +1750,51 @@
     {
       "owners": [],
       "path": "Shared/Objects/GestureAction/DoubleTouchGestureAction.swift",
-      "reason": "",
+      "reason": "Persisted app gesture configuration enum supplies localized labels only; action execution is outside this body.",
       "sha256": "24ee1f95424073ef9675d8cff26faef2b6b6837977f0d23e6cd02124c69aceef",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
       "path": "Shared/Objects/GestureAction/GestureAction.swift",
-      "reason": "",
+      "reason": "App presentation/storage conformance protocol combines CaseIterable/Displayable with owned Storable; no gesture recognition or action implementation.",
       "sha256": "4bf963471056317d01a50e680ea4f465d1e8f5eced64949c257e4efc8cd456b2",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
       "path": "Shared/Objects/GestureAction/LongPressGestureAction.swift",
-      "reason": "",
+      "reason": "Persisted app gesture-choice labels only; no locking, speed policy or native action implementation.",
       "sha256": "b503b4eeb1676821075a173d1b11ea2554c69dc9fd9ff92670b9f8e0f637cbaa",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
       "path": "Shared/Objects/GestureAction/MultiTapGestureAction.swift",
-      "reason": "",
+      "reason": "Persisted none/jump UI choice with localized title; actual jump aggregation/dispatch is separately reviewed.",
       "sha256": "57c9cdfaa69f4a00bc6aca63de1ecd8c6dfd297f17fa52248fdd782d5620d5ac",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
       "path": "Shared/Objects/GestureAction/PanGestureAction.swift",
-      "reason": "",
+      "reason": "Persisted pan-choice labels for brightness/scrub/volume; no transform, transport or resource behavior implemented.",
       "sha256": "a73e302dc62ed8516cb52851334d5299eb246f600014110f146af88bb359453a",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
       "path": "Shared/Objects/GestureAction/PinchGestureAction.swift",
-      "reason": "",
+      "reason": "Persisted none/aspect-fill UI choice labels; native resizing/action implementation is elsewhere.",
       "sha256": "e4bc44c5f3377fde322af342d1865dd6095a61276311d9f83b10c6b3b14270a4",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
       "path": "Shared/Objects/GestureAction/SwipeGestureAction.swift",
-      "reason": "",
+      "reason": "Persisted none/jump UI choice with localized labels; no jump calculation or dispatch.",
       "sha256": "2bddafe3db503825630b55d2250257bccbb7f241cbceed30a7bb2e1e827b7a9d",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -1801,30 +1813,30 @@
     {
       "owners": [],
       "path": "Shared/Objects/ItemFilter/AnyItemFilter.swift",
-      "reason": "",
+      "reason": "Presentation conformance only for the immutable Filters-owned value; no new filter/storage/query algorithm.",
       "sha256": "9b3af71ea4536d8e502abbfb8e8c3c4b3885713a2f11c4b55f33a306f54220b5",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
       "path": "Shared/Objects/ItemFilter/ChannelCategory.swift",
-      "reason": "",
+      "reason": "Localized title/display/filter adaptation for the Filters-owned enum; raw values and domain filtering remain owned.",
       "sha256": "45272dc94a14080522685584ce1c66faabc755817b3ede2bb9b87ea985db0847",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
       "path": "Shared/Objects/ItemFilter/ItemFilter.swift",
-      "reason": "",
+      "reason": "App display/type-erasure adaptation pairs Displayable title with Filters-owned AnyItemFilter. Raw-value reconstruction retains the existing force unwrap and trusted-choice contract; it is not query evaluation. Runtime invalid-choice handling remains unverified, and typed filter owners are separate.",
       "sha256": "083e462d97bb6ff741322af3fbd942eaaf586ba2032aa826d8e64a3a590f7fea",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
       "path": "Shared/Objects/ItemFilter/ItemFilterCollection.swift",
-      "reason": "",
+      "reason": "Storable composition and the UI all-values snapshot join localized/collation/supported choices from existing owners; no evaluation or fetching implementation.",
       "sha256": "b6a1e76aac410a09f280b0a09d2ea0c9583db7c3bb109338367c48806a9ddd7a",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -1836,30 +1848,30 @@
     {
       "owners": [],
       "path": "Shared/Objects/ItemFilter/ItemGenre.swift",
-      "reason": "",
+      "reason": "Display/filter conformance adapter for the Filters-owned immutable value only.",
       "sha256": "c874f3c5243b9e9b47af8cfcd08d664ed73cedd28c6d535ab644c66013c50e16",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
       "path": "Shared/Objects/ItemFilter/ItemLanguage.swift",
-      "reason": "",
+      "reason": "Display/filter conformance adapter for the Filters-owned immutable value only.",
       "sha256": "04340f1cd44a8a6a8149080359562693a2c8930e2ed31988e83dcefb41446ae3",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
       "path": "Shared/Objects/ItemFilter/ItemLetter.swift",
-      "reason": "",
+      "reason": "Native localized index section titles form UI letter choices using owned collection projections; no server search/filter behavior.",
       "sha256": "8edc441e1c62dd9fce3c22a3e637a82b486b8b1e41549e5035c0ee62d0161b36",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
       "path": "Shared/Objects/ItemFilter/ItemOfficialRating.swift",
-      "reason": "",
+      "reason": "Display/filter conformance adapter for the Filters-owned immutable rating value only.",
       "sha256": "f49fdf333bc02cbbac69da49d060db9556d18f626506f5d5aa5121f289c6c6e2",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -1871,16 +1883,16 @@
     {
       "owners": [],
       "path": "Shared/Objects/ItemFilter/ItemTag.swift",
-      "reason": "",
+      "reason": "Display/filter conformance adapter for the Filters-owned immutable tag value only.",
       "sha256": "79a9aab455fb0cb5c4cf4c5ef8ac0b536f9306be62b4a82431857142c527bd3d",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
       "path": "Shared/Objects/ItemFilter/ItemYear.swift",
-      "reason": "",
+      "reason": "Display/filter conformance adapter for the Filters-owned immutable year value only.",
       "sha256": "c8c05c40254c7ec4fc05c6460d81a0273cc95502a23c4bdad75c59d6f5c9f474",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [
@@ -1903,11 +1915,13 @@
       "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinUIState"
+      ],
       "path": "Shared/Objects/JumpProgressObserver.swift",
-      "reason": "",
+      "reason": "Reusable main-actor direction-aware repeated-jump aggregation mixes a native UI observation wrapper with counter/reset/deadline behavior. Delegate or move aggregation to existing UI-state ownership, preserving direction switch/reset and timer semantics; consumer bindings require review.",
       "sha256": "66dc7cc18b01443ad2d147e28ac4893ec51c9c33d952f14c0c5c0918f10cfcb2",
-      "status": "pending"
+      "status": "source-reviewed-mixed"
     },
     {
       "owners": [],
@@ -2185,18 +2199,20 @@
       "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinMediaCatalog"
+      ],
       "path": "Shared/Objects/LibraryParent/LibraryParent.swift",
-      "reason": "",
+      "reason": "Presentation parent protocol/ID/title composes immutable supported media-kind rules; folder-specific default kinds are still chosen in the app. Move the pure kind policy into existing Catalog ownership while retaining UI identity/display composition.",
       "sha256": "a86ecf33a41488f156dca861fab4c9d9d5749b4778d13b215b6c56fb3eb3b569",
-      "status": "pending"
+      "status": "source-reviewed-mixed"
     },
     {
       "owners": [],
       "path": "Shared/Objects/LibraryParent/TitledLibraryParent.swift",
-      "reason": "",
+      "reason": "Application display-title/optional-ID wrapper for a presentation parent; no lookup, catalog request or supported-type implementation.",
       "sha256": "2aa2a31588c03d27e29141dcb0e6abd6ee051305b60456e7856135f2517aaa73",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [
@@ -2218,9 +2234,9 @@
     {
       "owners": [],
       "path": "Shared/Objects/MediaJumpInterval.swift",
-      "reason": "",
+      "reason": "Alias of PlaybackProfiles-owned interval with duration-format/localized display and forward/back symbol projection only.",
       "sha256": "449acd16b1d6839666403e9d37852d042b844086342105b35dee54e1094ff6a2",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -2239,9 +2255,9 @@
     {
       "owners": [],
       "path": "Shared/Objects/MediaPlayerManager/MediaPlayerItemProvider.swift",
-      "reason": "",
+      "reason": "Application resolver composition captures selected default bitrate and immutable DTO/source/track settings; modifyingItem composes callbacks passed unchanged to the injected app resolver. It creates no native player, performs no IO and owns no stream/session task.",
       "sha256": "b3838dca6ccfbb128a2633b0e853ac79e4b27f1e0c7569dbfd2941825fed76e3",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -2253,9 +2269,9 @@
     {
       "owners": [],
       "path": "Shared/Objects/MediaPlayerManager/MediaPlayerObserver.swift",
-      "reason": "",
+      "reason": "Main-actor application manager observer protocol only, documenting weak ownership; no observation/subscription implementation.",
       "sha256": "c5849708148f805732f256726cbda73330c3dd72812d58c273d8a30e0a4f7e70",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -2281,9 +2297,9 @@
     {
       "owners": [],
       "path": "Shared/Objects/MediaPlayerManager/MediaPlayerProxy/MediaPlayerProxy.swift",
-      "reason": "",
+      "reason": "Main-actor app composition interfaces connect manager, rendering View, track/settings DTOs and explicit commands. Native implementations/handle lifetimes remain behind their separate owning libraries; no engine behavior in this body.",
       "sha256": "342027ea82c8d7d61708537e093dc18817e0e98df046df0e00fffc66ffee13ae",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -2309,9 +2325,9 @@
     {
       "owners": [],
       "path": "Shared/Objects/MediaPlayerManager/Supplements/Components/MediaPlayerSupplement.swift",
-      "reason": "",
+      "reason": "Main-actor display/identity/render composition protocol, default presentation style and view-erased forwarding wrapper; no native player, queue or task implementation.",
       "sha256": "a3908ab7b07e30ddd5d16fcca96bd4239ff927e2a09784e680adc974ba56aa51",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [
@@ -2372,9 +2388,9 @@
     {
       "owners": [],
       "path": "Shared/Objects/MediaPlayerManager/Supplements/PlaybackRateMediaPlayerSupplement.swift",
-      "reason": "",
+      "reason": "SwiftUI controls format current rate and dispatch plus/minus0.05 to the app manager; platform placeholders are presentation. The manager owns command validation/transport.",
       "sha256": "2ea863905bb50234e769da8a0c6a0947dc8e7d91bed8400f606c7a819c3f78fb",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -2384,11 +2400,13 @@
       "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinItemMetadata"
+      ],
       "path": "Shared/Objects/MetadataRefreshType.swift",
-      "reason": "",
+      "reason": "Localized refresh choices coexist with immutable request policy for replacement/mode/selected images/trickplay. Existing metadata owner should own the scan/missing/all request semantics; preserve exact values and keep localized presentation in the app.",
       "sha256": "65dc17e62b192f6de92e45fc64143f14b3743aa6abc1f5fc6d3a5c772566523e",
-      "status": "pending"
+      "status": "source-reviewed-mixed"
     },
     {
       "owners": [],
@@ -2407,9 +2425,9 @@
     {
       "owners": [],
       "path": "Shared/Objects/PagingLibrary/BaseItemKindLibrary.swift",
-      "reason": "",
+      "reason": "Library presentation protocol delegates supported layout selection to the BaseItemKind UI projection; no query or paging implementation.",
       "sha256": "aa40cd0dabe6a98471f907c192af34f7686f1eb179df6689efc85fc692599990",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -2421,9 +2439,9 @@
     {
       "owners": [],
       "path": "Shared/Objects/PagingLibrary/PagingLibraryView/Components/LibraryStyleSection.swift",
-      "reason": "",
+      "reason": "SwiftUI layout/poster pickers and device-specific list-column Stepper bind app presentation state; no catalog, persistence or task logic.",
       "sha256": "867ac45593b9b971767ff4b58a4983fe4e03009a3004401d0e26ec437b5cbe78",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -2435,9 +2453,9 @@
     {
       "owners": [],
       "path": "Shared/Objects/PagingLibrary/PagingLibraryViewModel+WithRefresh.swift",
-      "reason": "",
+      "reason": "Conformance-only app adapter attaches the UI refresh composition protocol; no behavior implemented.",
       "sha256": "0e02d149b6cbf94851675faf263ec624c0318906a5f46429ee91b511b4934633",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -2463,23 +2481,23 @@
     {
       "owners": [],
       "path": "Shared/Objects/PlatformView.swift",
-      "reason": "",
+      "reason": "SwiftUI platform-body dispatch protocol and view-builder composition wrapper; no IO/state/lifetime behavior.",
       "sha256": "369d4f59a30731806ac1fb6e447ebcb2f2ea515b8454028d9d0ca08d2a060319",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
       "path": "Shared/Objects/PlaybackBitrate/PlaybackBitrate.swift",
-      "reason": "",
+      "reason": "Alias of PlaybackProfiles-owned value with Auto/Maximum/localized formatted bitrate display only.",
       "sha256": "6f538a573f3077bb65e284efe691eb4fbe1102fa5816c6aca062e685dea4e6b2",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
       "path": "Shared/Objects/PlaybackBitrate/PlaybackBitrateTestSize.swift",
-      "reason": "",
+      "reason": "Alias of PlaybackProfiles-owned test-size value with localized choice labels only; no payload/timing measurement.",
       "sha256": "58238982464340a2455975086b756c3e95a86f5b59ed653f7e882604c221a276",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [
@@ -2538,9 +2556,9 @@
     {
       "owners": [],
       "path": "Shared/Objects/Poster/PosterAccessibility.swift",
-      "reason": "",
+      "reason": "Presentation-only accessible label/value normalization, component de-duplication, duration prose and SwiftUI selected traits; no catalog authorization or playback state mutation.",
       "sha256": "1a22de5ad24e98538d42cb52065fae01416e3679c6027704a968548dc99426e1",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [
@@ -2615,9 +2633,9 @@
         "SwiftfinStoredValues"
       ],
       "path": "Shared/Objects/SelectUserServerSelection.swift",
-      "reason": "Stored server selection mixes app Storable composition with immutable all/server identity, exact installed swiftfin-all sentinel and first matching-ID selection. Pure account-selection ownership and original raw-value/duplicate-order behavior require extraction or a justified disposition; current body is not classified complete.",
-      "sha256": "94f2d0bfe5bf8b987bcb037603205d0b6f8f1b0030a9651be8161cb6cd6b81c9",
-      "status": "source-reviewed-mixed"
+      "reason": "App spelling-only alias delegates immutable all/server identity, installed raw/Codable sentinel and first exact-ID lookup to AccountModels. Storable/Defaults conformance is owned by StoredValues. Original app key names and consumer bodies remain unchanged.",
+      "sha256": "3619773cd634efbffdcceb7b28f28955d6d72bce355b7765596e1eba27e09177",
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [
@@ -2637,18 +2655,20 @@
       "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinServerOperations"
+      ],
       "path": "Shared/Objects/ServerLogType.swift",
-      "reason": "",
+      "reason": "Localized labels/symbols coexist with FFmpeg/log filename classification. Pure diagnostic classification should be owned by server operations; preserve prefix/regex precedence without querying the server.",
       "sha256": "979f43bf035d63dc00f0015cbe2258d13bad958b969135e7682e21a5ad0b063c",
-      "status": "pending"
+      "status": "source-reviewed-mixed"
     },
     {
       "owners": [],
       "path": "Shared/Objects/SubtitleConfiguration.swift",
-      "reason": "",
+      "reason": "Persisted SwiftUI subtitle styling: Color/font/size, exact hex-string Codable projection and local UI defaults. No native subtitle application or track behavior.",
       "sha256": "5d9205b4205db6b3748d3455aae1114003d18164032d405ef04a47049e44b7ca",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -2682,11 +2702,13 @@
       "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinText"
+      ],
       "path": "Shared/Objects/TextTransferable.swift",
-      "reason": "",
+      "reason": "ShareLink/native transfer presentation coexists with text file creation and export path/content IO. Export ownership, lifetime and original naming semantics require review before pure file materialization can move behind an explicit interface; no files are exported in this review.",
       "sha256": "4380976a1f411a70915b3091a6f9784382094ff78856ad3860cd55f352687981",
-      "status": "pending"
+      "status": "source-reviewed-mixed"
     },
     {
       "owners": [],
@@ -2698,9 +2720,9 @@
     {
       "owners": [],
       "path": "Shared/Objects/ToastProxy.swift",
-      "reason": "",
+      "reason": "Main-actor SwiftUI toast presentation/animation with weak subscription to the existing owned deadline timer; text/symbol state and dismiss semantics are presentation. It implements no native timer/scheduler.",
       "sha256": "13f588fa60779b94cd15131b8e359140c72e07a69026014f5861a71e4e4d1305",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -2746,16 +2768,16 @@
     {
       "owners": [],
       "path": "Shared/Objects/VideoPlayerSupplement.swift",
-      "reason": "",
+      "reason": "Persisted app overlay-choice identity, localized titles/symbols and UI supported menu choices; no supplement/player/query behavior.",
       "sha256": "67c6f404bfbc8a954163f4eb291e664228bd7280d7dda2d19f49f72fc28a2423",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
       "path": "Shared/Objects/VideoPlayerType/VideoPlayerType.swift",
-      "reason": "",
+      "reason": "PlaybackProfiles-owned enum adapted to localized UI labels, selected experimental mpv menu availability and main-actor capability snapshot composition; pure profile assembly already delegates to the owner.",
       "sha256": "7c6b49545b4e8c194030d2716854f1af0203e97906edc2c7e38ee46c2b7c4a1a",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -3936,23 +3958,23 @@
     {
       "owners": [],
       "path": "Swiftfin/Extensions/ButtonStyle-iOS.swift",
-      "reason": "",
+      "reason": "Platform borderless alias and pressed-state UI callback style only; caller action/lifecycle implementation is separate.",
       "sha256": "a13edcca8df40059eaef464193b677c2948c4f750a85a4d5cfefbcf4a70fba35",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
       "path": "Swiftfin/Extensions/Stepper.swift",
-      "reason": "",
+      "reason": "Presentation initializer forwards existing SwiftUI Stepper binding/range/stride/label; implements no numeric policy.",
       "sha256": "4cc82c09addfb8ffcdf8b3a33e1e360e80e0431db0233fadd7c37d779f0282fc",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
       "path": "Swiftfin/Extensions/View/Modifiers/NavigationBarCloseButton.swift",
-      "reason": "",
+      "reason": "Availability-aware SwiftUI close toolbar and selected accent styling forward the caller action; no route/resource teardown implementation.",
       "sha256": "caa644a18ca21b59b1f1b9d4d1ff9c5312f0c57cac47c3daeba5d5bacf7bbf13",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -4941,19 +4963,47 @@
         "NativeSVGRenderView.intrinsicContentSize"
       ],
       "sha256": "9e8e6cd285d67a07d0ff1a1eac32c187fed4f58285ea0fd0ab109df81751ee07"
+    },
+    {
+      "path": "Packages/SwiftfinAccountModels/Sources/SwiftfinAccountModels/ServerSelection.swift",
+      "reason": "Checked-Sendable immutable account selection; no settings, lookup client or native handle. Original swiftfin-all sentinel/raw Codable values remain exact, including reserved-ID roundtrip collision. Lookup accepts a caller-provided sequence, all consumes nothing and server uses first exact ID without normalization/deduplication.",
+      "reviewedConsumers": [
+        "Shared/Objects/SelectUserServerSelection.swift",
+        "Packages/SwiftfinStoredValues/Sources/SwiftfinStoredValues/Storable.swift"
+      ],
+      "reviewedInterfaces": [
+        "ServerSelection.all",
+        "ServerSelection.server(id:)",
+        "ServerSelection.rawValue",
+        "ServerSelection.init(rawValue:)",
+        "ServerSelection.server(from:)"
+      ],
+      "sha256": "5d0081b6311a3373a98fda2f408c1bd6f6578caa6961e497c73c2c3c0cc36bfe"
+    },
+    {
+      "path": "Packages/SwiftfinStoredValues/Sources/SwiftfinStoredValues/Storable.swift",
+      "reason": "Storage owner adds the same existing raw-Codable Defaults bridge for the transferred account value. Original app suite/key declarations remain untouched; isolated-suite tests seed captured JSON strings and verify independent app keys. This scoped entry does not classify other existing conformances.",
+      "reviewedConsumers": [
+        "Shared/Services/SwiftfinDefaults.swift",
+        "Shared/Objects/SelectUserServerSelection.swift"
+      ],
+      "reviewedInterfaces": [
+        "ServerSelection Defaults.Serializable/Storable conformance"
+      ],
+      "sha256": "69697f44063de631c5d91dfede2885b0cad151576fabf2e3df136ce0abf3fd7a"
     }
   ],
   "limits": "This ledger records bodies explicitly reviewed, with exact current hashes; earlier prose or lexical inventory is not automatically promoted. Pending and mixed entries prevent whole-source completion. Retained UI algorithms have specific presentation reasons, not folder/import-based blanket approval. API entries do not classify the rest of the public graph. Source review and offline tests do not satisfy held runtime acceptance.",
   "schemaVersion": 1,
-  "scope": "All current app Swift files; source-body classification and nine limited interface/internal lifecycle/consumer reviews. No server/media/simulator data.",
+  "scope": "All current app Swift files; source-body classification and eleven limited interface/internal lifecycle/consumer reviews. No server/media/simulator data.",
   "summary": {
     "applicationSwiftFiles": 667,
     "classification": {
-      "pending": 554,
-      "source-reviewed-mixed": 1,
-      "source-reviewed-retained": 112
+      "pending": 441,
+      "source-reviewed-mixed": 11,
+      "source-reviewed-retained": 215
     },
-    "currentAPIReviews": 9,
+    "currentAPIReviews": 11,
     "runtimeAcceptance": "held by human; no simulator/server testing"
   }
 }

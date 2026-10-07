@@ -11,6 +11,6 @@ let package = Package(
             name: "SwiftfinAccountModels",
             dependencies: [.product(name: "SwiftfinLocalization", package: "SwiftfinLocalization")]
         ),
-        .testTarget(name: "SwiftfinAccountModelsTests", dependencies: ["SwiftfinAccountModels"])
+        .testTarget(name: "SwiftfinAccountModelsTests", dependencies: ["SwiftfinAccountModels"], resources: [.process("Fixtures")])
     ]
 )

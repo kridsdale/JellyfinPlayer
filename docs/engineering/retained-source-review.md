@@ -116,6 +116,15 @@ Nineteen additional Shared/Components bodies were inspected. Eighteen remain spe
 
 ## SVG transfer and small presentation bodies
 
-FastSVGView is now retained presentation: it delegates native parse/render/retirement to ImageProcessing, preserving exact original style/priorities after explicit update/dismantle additions. Fourteen geometry/formatting/color/image/URL extension bodies and fifteen object bodies were inspected in full. Their individual ledger reasons retain 27 specific presentation/composition adapters; the SelectUserServerSelection body remains mixed because installed raw identity and first-ID lookup belong with immutable account selection while Storable conformance is application composition. No folder/import-based blanket classification was added.
+FastSVGView is now retained presentation: it delegates native parse/render/retirement to ImageProcessing, preserving exact original style/priorities after explicit update/dismantle additions. Fourteen geometry/formatting/color/image/URL extension bodies and fifteen object bodies were inspected in full. Their individual ledger reasons retain 28 specific presentation/composition adapters; the SelectUserServerSelection body remains mixed because installed raw identity and first-ID lookup belong with immutable account selection while Storable conformance is application composition. No folder/import-based blanket classification was added.
 
 Current totals are 667 app files: 112 retained, one mixed and 554 pending. Nine scoped interface/consumer entries include the internal SVG controller and public native surface; they do not close the complete public graph. Six fake-render contracts prove reuse, invalid replacement, empty input, reset/reentrancy and release, while compile-only platform checks prove linkage. Actual parser/drawing and UI lifecycle remain held.
+
+
+## Account selection and 113 additional source bodies
+
+SelectUserServerSelection is a retained app alias of the AccountModels-owned checked-Sendable value. StoredValues owns serialization conformance; original consumer bodies/keys/suite declarations are exact. Independent original captures preserve the reserved sentinel collision, raw/JSON/defaults shape and first exact record in duplicate order. The fixture is packaged for native and platform test hosts; current platform proof is compile/copy only.
+
+The review inspected all 47 selected object bodies, 42 SDK adapters and 24 platform UI/SDK composition bodies. Each of the 102 retained and 11 mixed dispositions records a concrete reason and current hash. Among the mixed bodies, OnFinalDisappearModifier calls an arbitrary callback from unisolated deinit; its native-player consumer calls main-actor manager.stop. ScrollViewOffsetModifier replaces a borrowed delegate without explicit restoration/rebinding ownership. These source findings are actionable follow-ups, not observed runtime failures or completed repairs. Reusable request/value classifications remain with their named existing-owner candidates.
+
+Current source totals are 667: 215 retained, 11 mixed, 441 pending. Eleven interface/consumer entries remain limited to their recorded scopes. The new six synthetic/native contracts and final platform compiles pass, while full UI/native teardown/streaming acceptance remains held.

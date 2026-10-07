@@ -1,0 +1,156 @@
+{
+  "cases": [
+    {
+      "defaults": "\"swiftfin-all\"",
+      "json": "\"swiftfin-all\"",
+      "label": "all",
+      "raw": "swiftfin-all",
+      "roundtripKind": "all",
+      "selectedIndex": -1
+    },
+    {
+      "defaults": "\"swiftfin-all\"",
+      "json": "\"swiftfin-all\"",
+      "label": "reserved-server",
+      "raw": "swiftfin-all",
+      "roundtripKind": "all",
+      "selectedIndex": 6
+    },
+    {
+      "defaults": "\"\"",
+      "json": "\"\"",
+      "label": "empty",
+      "raw": "",
+      "roundtripKind": "server",
+      "selectedIndex": 3
+    },
+    {
+      "defaults": "\"A\"",
+      "json": "\"A\"",
+      "label": "upper",
+      "raw": "A",
+      "roundtripKind": "server",
+      "selectedIndex": 0
+    },
+    {
+      "defaults": "\"a\"",
+      "json": "\"a\"",
+      "label": "lower",
+      "raw": "a",
+      "roundtripKind": "server",
+      "selectedIndex": 2
+    },
+    {
+      "defaults": "\" A \"",
+      "json": "\" A \"",
+      "label": "space",
+      "raw": " A ",
+      "roundtripKind": "server",
+      "selectedIndex": 4
+    },
+    {
+      "defaults": "\"家🧒\"",
+      "json": "\"家🧒\"",
+      "label": "unicode",
+      "raw": "家🧒",
+      "roundtripKind": "server",
+      "selectedIndex": 5
+    },
+    {
+      "defaults": "\"missing\"",
+      "json": "\"missing\"",
+      "label": "missing",
+      "raw": "missing",
+      "roundtripKind": "server",
+      "selectedIndex": -1
+    }
+  ],
+  "equalities": [
+    [
+      true,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ],
+    [
+      true,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ],
+    [
+      false,
+      false,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false
+    ],
+    [
+      false,
+      false,
+      false,
+      true,
+      false,
+      false,
+      false,
+      false
+    ],
+    [
+      false,
+      false,
+      false,
+      false,
+      true,
+      false,
+      false,
+      false
+    ],
+    [
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      false,
+      false
+    ],
+    [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      false
+    ],
+    [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true
+    ]
+  ],
+  "hashSetCount": 7,
+  "original": {
+    "commit": "98e6c8b7436ac9cb340bd06dc4a2700b7150cbe2",
+    "path": "Shared/Objects/SelectUserServerSelection.swift",
+    "sha256": "94f2d0bfe5bf8b987bcb037603205d0b6f8f1b0030a9651be8161cb6cd6b81c9"
+  }
+}

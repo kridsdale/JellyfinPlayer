@@ -6,37 +6,7 @@
 // Copyright (c) 2026 Jellyfin & Jellyfin Contributors
 //
 
-enum SelectUserServerSelection: RawRepresentable, Hashable, Storable {
+import SwiftfinAccountModels
 
-    case all
-    case server(id: String)
-
-    var rawValue: String {
-        switch self {
-        case .all:
-            "swiftfin-all"
-        case let .server(id):
-            id
-        }
-    }
-
-    init?(rawValue: String) {
-        switch rawValue {
-        case "swiftfin-all":
-            self = .all
-        default:
-            self = .server(id: rawValue)
-        }
-    }
-
-    func server(from servers: some Sequence<ServerState>) -> ServerState? {
-        switch self {
-        case .all:
-            nil
-        case let .server(id):
-            servers.first { $0.id == id }
-        }
-    }
-}
-
-import SwiftfinStoredValues
+// Installed application spelling; immutable identity/lookup lives with account values.
+typealias SelectUserServerSelection = ServerSelection
