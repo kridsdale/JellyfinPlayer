@@ -20,6 +20,7 @@ import SwiftfinPlaybackPreparation
 import SwiftfinSessions
 import SwiftfinStoredValues
 import SwiftfinTime
+import SwiftfinUIState
 
 extension Container {
 
@@ -82,7 +83,10 @@ final class UserSessionManager: ObservableObject {
 
     let logger = Logger.swiftfin()
 
-    private(set) var mediaPlayerManager: MediaPlayerManager?
+    private let playerSelection = UIObjectSelection<MediaPlayerManager>()
+    var mediaPlayerManager: MediaPlayerManager? {
+        playerSelection.current
+    }
 
     @MainActor
     var hasActivePlayback: Bool {
@@ -152,8 +156,9 @@ final class UserSessionManager: ObservableObject {
 
     @MainActor
     private func stopActivePlayback() async {
-        await mediaPlayerManager?.stop()
-        self.mediaPlayerManager = nil
+        guard let manager = mediaPlayerManager else { return }
+        await manager.stop()
+        playerSelection.apply(.retired(manager))
     }
 
     @MainActor
@@ -307,11 +312,7 @@ final class UserSessionManager: ObservableObject {
             .store(in: &cancellables)
 
         Container.shared.mediaPlayerManagerPublisher()
-            .sink { [weak self] manager in
-                Task { @MainActor in
-                    self?.mediaPlayerManager = manager
-                }
-            }
+            .sink { [weak self] event in self?.playerSelection.apply(event) }
             .store(in: &cancellables)
 
         observeSocketCommands()
@@ -322,6 +323,7 @@ final class UserSessionManager: ObservableObject {
         currentSession = session
         Container.shared.currentUserSession.reset()
         if identityChanged {
+            playerSelection.clear()
             Container.shared.mediaPlayerManager.reset()
         }
         state = session == nil ? .signedOut : .signedIn

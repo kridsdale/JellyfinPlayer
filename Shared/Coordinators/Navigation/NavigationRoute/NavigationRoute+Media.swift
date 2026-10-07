@@ -70,7 +70,7 @@ extension NavigationRoute {
         }
 
         Container.shared.mediaPlayerManagerPublisher()
-            .send(manager)
+            .send(.activated(manager))
 
         return NavigationRoute(
             id: "videoPlayer",

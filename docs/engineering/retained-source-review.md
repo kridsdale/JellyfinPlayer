@@ -1,6 +1,6 @@
 # Retained application responsibility review
 
-The application is intended to retain composition and platform presentation. This is a source-reviewed ledger, not an automatic approval of files based on their folder, filename or import count. The full-client refactor remains active. Live simulator/server activity is held by the human. Current ledger: 270 retained, three mixed and 393 pending among 666 app files; twenty-six scoped interface reviews.
+The application is intended to retain composition and platform presentation. This is a source-reviewed ledger, not an automatic approval of files based on their folder, filename or import count. The full-client refactor remains active. Live simulator/server activity is held by the human. Current ledger: 316 retained, two mixed and 348 pending among 666 app files; twenty-nine scoped interface reviews.
 
 ## Reviewed boundaries at the date/program checkpoint
 
@@ -158,3 +158,19 @@ ScopedPublisher privately owns source cancellation, queued generations, executor
 Fifteen whole sources were read and hashed. UserSession/resource and feature-owner adapters, socket bridging, connection resolution, cache-index observations, the base view model, notification names/native values, storage opening, application framework configuration and diagnostic presentation remain app composition. NetworkLogger now delegates its reusable DTO redaction to Networking. Remote SDK command interpretation belongs to PlaybackPreparation; the iOS host retains native player controls, preference values and navigation while composing scoped/lazy async owners. All tvOS remote subscriptions remain disabled.
 
 UserSessionManager remains mixed because its delayed mediaPlayerManagerPublisher assignment needs a downstream identity/generation and operation audit. ServerState/UserState extensions remain mixed because replacement account/cache writes after metadata reads belong to coherent AccountStore persistence/merge ownership. These are explicit findings, not approvals based on folder/import counts. Current ledger: 270 retained, three mixed and 393 pending; 26 scoped interface reviews. Native tests and compilation do not establish actual socket, navigation, player or account-switch behavior under the continuing runtime hold.
+
+
+## Metadata adapters and further presentation review (2026-10-07, offline)
+
+ServerState/UserState retain reader/settings/version/image composition after metadata writes moved to AccountStore, with explicit post-await checks before commit. Complete server/user key adapters preserve current-session app settings while delegating account/cache addresses. NavigationRoute+Media and VideoPlayer/updated NativeVideoPlayer retain route/proxy/safe-area/scrub/control presentation, with exact-origin factory resets.
+
+Forty unchanged complete presentation bodies were reviewed with individual ledger reasons: metadata/policy edit sections, item actions/labels, country/rating pickers, guide date/ruler geometry, letter focus/callout, poster indicators, slider color/progress styles and toolbar controls. UI binding/layout/interaction remains in the app; providers own catalog/metadata/queue/native operations. These classifications do not approve whole provider bodies or claim OS callbacks tested.
+
+UserSessionManager's delayed player assignment is resolved but deep-link/authentication/sign-in/foreground inter-await sequencing and shared freshness remain mixed. The entire MediaPlayerManager body is now reviewed/mixed: async start/playNewItem/rebuild publication and queue/provider/supplement responsibility extraction still require work. Reading or compiling does not establish those operations safe.
+
+
+Native sweep **56** passes **831** contracts (**802** Swift Testing and **29** XCTest), eight generator checks and three runtime helpers. Unchanged macro inputs retain **18** passing contracts. Boundary **53** and analyzer **35** pass, including a new explicit network-API ban in AccountStore while permitting metadata types and their Defaults bridge. Compile-only tvOS Debug **125**, tvOS Release **50** and iOS Release **69** pass without owned Swift/generated-macro diagnostics.
+
+Accepted preservation audit **434** verifies **1,237** frozen inputs, both original forty-revision SDK graphs and clean tracked checkouts, paid-team/signing/persistence configuration, all five protected local files and equal cancellation-restored progress. Simulator cloud transport remains NO. Metadata426's no-write assertion confused registered defaults with persistent data; it now checks persistent domains. Debug124's missing test-runner link was fixed by explicitly linking AccountStore. The import-only boundary expectation was revised to permit storage types while rejecting request APIs. Audit433's method-range selector was corrected. Failed attempts remain recorded.
+
+**Simulator automation, installation, launches, playback and server-facing diagnostics remain stopped until the human explicitly resumes them.** No live acceptance or server account/catalog/configuration/RAID change occurred. The ledger is **316 retained / 2 mixed / 348 pending / 29 scoped API reviews** among666 app sources. Full items1/2 remain active; physical-device/live CloudKit and independently managed server/release gates remain separate.

@@ -91,20 +91,7 @@ extension ServerState {
         let access = accountAccess
         let publicInfo = try await access.publicInfo().value
         try access.checkBinding()
-        let servers = StoredValues[.Server.servers]
-        guard let currentServer = servers.first(where: { $0.id == id }) else { return }
-        let updatedName = publicInfo.serverName ?? currentServer.name
-
-        let updatedServer = ServerState(
-            urls: currentServer.urls,
-            currentURL: currentServer.currentURL,
-            name: updatedName,
-            id: currentServer.id,
-            userIDs: currentServer.userIDs
-        )
-
-        StoredValues[.Server.servers] = servers.map { $0.id == id ? updatedServer : $0 }
-        StoredValues[.Server.publicInfo(id: currentServer.id)] = publicInfo
+        try Container.shared.localAccountStore().updateServerMetadata(serverID: id, info: publicInfo)
     }
 }
 

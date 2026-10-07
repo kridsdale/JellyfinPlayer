@@ -69,9 +69,9 @@
     {
       "owners": [],
       "path": "Shared/Components/ButtonStyles/SupplementActionButtonStyle.swift",
-      "reason": "",
+      "reason": "Chooses glass/card presentation by platform capability and destructive role, sizes/clips labels and forwards PrimitiveButtonStyle.trigger. No non-UI capability implementation or business operation.",
       "sha256": "b49aafcd001488df1b27aacde875b6f5ee6266086ff658100f8a6a31bc6b27e4",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -104,9 +104,9 @@
     {
       "owners": [],
       "path": "Shared/Components/ConditionalMenu.swift",
-      "reason": "",
+      "reason": "Chooses Menu versus Button from explicit presentation mode or optional tracked item and forwards supplied closures. No asynchronous work, domain selection or data loading.",
       "sha256": "eb3553d44cdbfbf2a93054312c9adc02551a9d185e8a34883b84da43f0bd4cd6",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -176,16 +176,16 @@
     {
       "owners": [],
       "path": "Shared/Components/EPG/Body/EPGTimeRuler.swift",
-      "reason": "",
+      "reason": "Lays out guide timestamps in 30-minute increments using the existing guide dates/layout and formats day-start versus time labels. This is ruler geometry/localized presentation.",
       "sha256": "80ea6dda23686a4ac190cf15e4e71bceb7af8247612f1e7c271d37b03e74e125",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
       "path": "Shared/Components/EPG/Toolbar/EPGDateMenu.swift",
-      "reason": "",
+      "reason": "Builds a date-menu selection binding clamped to today's day and delegates setDate to the guide model, presenting available-date tags. Calendar clamp/formatting is guide presentation.",
       "sha256": "3538453444e0209b61663f27f73b999c66310d18dba6fdca75743a0bc7f12296",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -290,16 +290,16 @@
     {
       "owners": [],
       "path": "Shared/Components/LetterPickerBar/Components/LetterPickerButton.swift",
-      "reason": "",
+      "reason": "Draws one letter with focus/selection/accent-dependent glass, color, animation and scale; uses the Filters letter value but performs no filtering/query.",
       "sha256": "1355f5eec56ec28d538d57b144152f8b5e498185957dbb34dcd35f957409f875",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
       "path": "Shared/Components/LetterPickerBar/Components/LetterPickerCallout.swift",
-      "reason": "",
+      "reason": "Reduces the active-letter preference and measures hidden labels for a fixed callout size, then draws the selected letter. This is view preference/layout behavior.",
       "sha256": "f4bcf47ce4fd8ec42c4f7b36bcb5205ae27e66ddd633a0d81f00cf1d209c0189",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -325,9 +325,9 @@
     {
       "owners": [],
       "path": "Shared/Components/ListRow.swift",
-      "reason": "",
+      "reason": "Composes a leading/content button row, records content size for a matching separator, and applies platform card/insets. Supplied action owns any domain work.",
       "sha256": "ce73ea18997addf4c791ac015619c869fc11850a77e4019a45e77da531fa3c02",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -339,9 +339,9 @@
     {
       "owners": [],
       "path": "Shared/Components/Localization/CountryPicker.swift",
-      "reason": "",
+      "reason": "Maps selected ISO region to the existing paged country results for a platform picker/menu and triggers model refresh on first appearance. Paging/network behavior is delegated.",
       "sha256": "b913ab327a79f6989d5551ce8cd5338699062218485198ceade54e6561cc3434",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -353,9 +353,9 @@
     {
       "owners": [],
       "path": "Shared/Components/Localization/ParentalRatingPicker.swift",
-      "reason": "",
+      "reason": "Maps selected rating name to the existing paged rating results for a platform picker/menu and triggers model refresh. No rating policy/authorization/network implementation.",
       "sha256": "406b49e99f154759b058eb0805b593f0d97509898939c9361ea31d9081c50470",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -374,9 +374,9 @@
     {
       "owners": [],
       "path": "Shared/Components/MediaPlayer/PreviewImageView.swift",
-      "reason": "",
+      "reason": "Composes the existing PreviewImageSelection with scrubbed position, drawing returned image and forwarding appear/change/disappear request/stop. Selection/cache/task generation stays in PlaybackPreviews.",
       "sha256": "ed7d9c3499907f1e8b6608f7fe681b9330fb84bf167fb7adf128902edd96ecb0",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -391,8 +391,8 @@
         "SwiftfinUIState"
       ],
       "path": "Shared/Components/NativeVideoPlayer.swift",
-      "reason": "Complete unchanged body reviewed: composes the injected manager, lazy native proxy, router and platform presentation; delegates native surface and start/stop operations to existing owners. Alerts/status presentation and final-disappearance hook belong to the app. It implements no decoder, transport, persistence or capability query. Actual native playback/teardown remains runtime-held.",
-      "sha256": "c89b3d99598ec9432435ee8d7fffaf8fe23775847c34b4af7be62e665976833e",
+      "reason": "Complete updated body reviewed: composes injected manager/native proxy/surface and platform status/alert/dismissal presentation. Factory resets now require exact originating manager identity, preserving a newer replacement. Native start/stop/surface ownership remains delegated. Actual callbacks/playback/teardown acceptance is held.",
+      "sha256": "a5825f7be2326c2be16bf67e37a105ede0248515f741b965e3554ae58feba98e",
       "status": "source-reviewed-retained"
     },
     {
@@ -475,9 +475,9 @@
     {
       "owners": [],
       "path": "Shared/Components/PosterIndicators/UnplayedIndicator.swift",
-      "reason": "",
+      "reason": "Draws a count badge or triangular unwatched indicator with localized accessibility and accent setting. Path/count decision is indicator presentation only.",
       "sha256": "5446a6af14dc21703b3ffca5f3edef8bec852183d5eac9f5bad1030f80f00f21",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -538,9 +538,9 @@
     {
       "owners": [],
       "path": "Shared/Components/SliderContainer/ColorGradientSlider.swift",
-      "reason": "",
+      "reason": "Maps a color-component binding to 0...255 slider units and tvOS five-unit movement, clamps the displayed component and composes the gradient style. This is color-picker interaction.",
       "sha256": "5cec7aafc205aa687b1d20a0d0dd28d64951e38488d892f8951bc21a6bfbd3df",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -552,23 +552,23 @@
     {
       "owners": [],
       "path": "Shared/Components/SliderContainer/SliderContainerStyle.swift",
-      "reason": "",
+      "reason": "Defines slider-style presentation snapshots and finite bounded progress/origin ratios used only for drawing, then connects Engine's styled-view adapter. No playback/time/capability policy.",
       "sha256": "aaf3ddc653d6dedc438a198f542b4570ce13fa404e82b949e29be51e7f80ad41",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
       "path": "Shared/Components/SliderContainer/Styles/CapsuleSliderStyle.swift",
-      "reason": "",
+      "reason": "Draws committed/pending/tick capsule progress from the style snapshot, with focus opacity/animation and explicit unfocused visibility. No data or native playback operation.",
       "sha256": "28d3bdd13bc30ef7415b61e807cf76226b65ce4b628b5cb3e504cafd99cb0201",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
       "path": "Shared/Components/SliderContainer/Styles/ColorGradientSliderStyle.swift",
-      "reason": "",
+      "reason": "Draws a selected RGBA-component gradient and measured circular thumb with focus size/stroke/animation, delegating color conversion to Values. Geometry/color are presentation.",
       "sha256": "7fbbcf9dd59c218a1da6bd43218953ad97a876eb5828fa15a1732604bff61a5d",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -665,11 +665,13 @@
       "status": "pending"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinUIState"
+      ],
       "path": "Shared/Coordinators/Navigation/NavigationRoute/NavigationRoute+Media.swift",
-      "reason": "",
-      "sha256": "03e5dcbd80e89890cd5b6fd98550d93bfbf5944945ba4b82a31f1c6809f00b08",
-      "status": "pending"
+      "reason": "Complete body reviewed: constructs app media routes/sheets, registers the chosen manager, sends a synchronous source-tagged activation and composes player-safe-area/platform presentation. Manager resource/preparation behavior remains a separate mixed entry. No simulator/navigation acceptance claimed.",
+      "sha256": "4fe0168513512af19f948190be4fbd21a226d52ad4d7cc2fadd71922956b5fce",
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -716,9 +718,9 @@
     {
       "owners": [],
       "path": "Shared/Coordinators/Root/RootView.swift",
-      "reason": "",
+      "reason": "Switches initial/error/ready root presentations using its coordinator and triggers coordinator startup from the view task. The view does not implement startup/resource sequencing.",
       "sha256": "9efcd236a536dcf7bd11be7553d257c3fd79033fdb37339322b822bd53b894ed",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -2263,11 +2265,15 @@
       "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinUIState",
+        "SwiftfinPlaybackPreparation",
+        "SwiftfinMediaTracks"
+      ],
       "path": "Shared/Objects/MediaPlayerManager/MediaPlayerManager.swift",
-      "reason": "",
-      "sha256": "d41e52b2a28afcbf5470ab2a63e1a7412014a07953c8544f42f1efd2071da028",
-      "status": "pending"
+      "reason": "Complete 500-line body reviewed: immutable stream/bitrate/time helpers and native proxy adapters use extracted owners; source-tagged retirement and exact-current factory reset repair obsolete-manager selection effects. Still mixed: inherited queue/provider/supplement composition and async start/playNewItem/rebuild publication need responsibility extraction and full generation/cancellation/account audit. Reading the entire body or compiling does not prove these operations safe or complete.",
+      "sha256": "f61ad664d8f932a863eb9e3964a831d045480058f96ad265db397ccb6d63503c",
+      "status": "source-reviewed-mixed"
     },
     {
       "owners": [],
@@ -2969,13 +2975,14 @@
     },
     {
       "owners": [
+        "SwiftfinUIState",
         "SwiftfinSessions",
         "SwiftfinAccountAccess",
         "SwiftfinAsyncStreams"
       ],
       "path": "Shared/Services/UserSession/UserSessionManager.swift",
-      "reason": "Complete body reviewed: session publication delegates to ActiveSessionCoordinator and socket lifetime slots now compose existing owners. App preferences, auth prompt and navigation remain composition. Mixed unresolved scope: mediaPlayerManagerPublisher queues assignment without an explicit identity/generation; its relation to delayed factory/player replacement requires full downstream player/source review. Deep-link/sign-in/foreground and shared freshness timestamp behavior need an actor/operation audit before this whole body is retained. No live authentication or player test was performed.",
-      "sha256": "46e91ce87d96bd5d6c9ff48b44a86e19783d3c5f830265ad8ab759b64c776739",
+      "reason": "Complete updated body reviewed. Player publication now synchronously composes UIObjectSelection with source-tagged retirement; stopActivePlayback cannot clear a newer manager, and account identity change explicitly clears selection. App preference/auth-prompt/navigation choices remain composition. Still unresolved: deep-link authentication and sign-in/foreground refresh across awaits need request-generation/account identity audit; the shared global freshness timestamp may suppress a different account's refresh. These outstanding operation scopes prevent whole-body retention.",
+      "sha256": "cc9d1711436a782d53138b5b44174fd26c3244ddbd4181e53f16607227bb79cf",
       "status": "source-reviewed-mixed"
     },
     {
@@ -2988,18 +2995,24 @@
       "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinAccountStore",
+        "SwiftfinStoredValues"
+      ],
       "path": "Shared/SwiftfinStore/StoredValue/StoredValues+Server.swift",
-      "reason": "",
-      "sha256": "59f669091f691fbe8c6287e603798157780f1d1b471a76fc391e46f7f51db9e0",
-      "status": "pending"
+      "reason": "Complete key adapter body reviewed: concrete account/settings/public-info keys delegate to AccountStore with exact installed fields/destinations. Generic ServerKey construction remains application key composition. SDK metadata conformance now resides with AccountStore.",
+      "sha256": "f83bc42eb3090bfd44c1b321a0b83015d86f8699adbda96b0d926ae99d71c37d",
+      "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinAccountStore",
+        "SwiftfinStoredValues"
+      ],
       "path": "Shared/SwiftfinStore/StoredValue/StoredValues+User.swift",
-      "reason": "",
-      "sha256": "bdf14c108db412df2fa4e92d62e091bfa000d4895f1b2e77a44a3babca7046b8",
-      "status": "pending"
+      "reason": "Complete key adapter body reviewed: explicit-account keys delegate to AccountStore; current-session key binding and selected app UI/playback/filter preferences remain composition. Literal installed fields/defaults/platform destinations retained. UserDto storage conformance belongs to AccountStore.",
+      "sha256": "9f6640333e6eb6854ef7fc5d647056ce3b3ef24094c18db236b3e192105b1df9",
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [
@@ -3007,9 +3020,9 @@
         "SwiftfinAccountAccess"
       ],
       "path": "Shared/SwiftfinStore/SwiftfinStore+ServerState.swift",
-      "reason": "Complete body reviewed: connection/settings/read adapters mostly delegate to existing owners. Mixed unresolved scope: updateServerInfo constructs replacement account/name records and writes both account inventory and cached SDK public-info data directly to StoredValues after async reading. Move coherent metadata-cache persistence/merge ownership into AccountStore while preserving namespace, partial-failure ordering and exact captured URL checks. Native compatibility/version/image presentation remains composition.",
-      "sha256": "814497ed07a64700d74f1f48fb1a2714ec82c3112ba3d1936a4a4c89d27796b6",
-      "status": "source-reviewed-mixed"
+      "reason": "Complete body reviewed: connection/account settings and metadata-cache commits delegate to AccountStore; public-info/URLs use captured AccountAccess and recheck binding immediately before synchronous local metadata merge. SDK version comparison, splash presentation and Factory composition remain app adapters. Installed publicInfo address/defaults format and record-before-cache ordering are preserved. No live transport acceptance is claimed.",
+      "sha256": "d34b25e043290fbee6c07c17e7eb169f0d2eae1b0b25ec2333810ab5e960f5fd",
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [
@@ -3017,9 +3030,9 @@
         "SwiftfinAccountAccess"
       ],
       "path": "Shared/SwiftfinStore/SwiftinStore+UserState.swift",
-      "reason": "Complete body reviewed: credential/PIN/access-policy/delete adapters delegate to AccountStore and profile URLs to AccountAccess. Mixed unresolved scope: updateUserData rebuilds username/account records and writes inventory/cached SDK user data directly after a bound async read. Review coherent cache update ownership, account/server identity, credential binding and inter-await publication before retaining the whole body. No credential values were read or changed.",
-      "sha256": "9cb59c692c5cffd30193ecf92e51bbd8ab7a52e52671f8e0785568e4eeecb98d",
-      "status": "source-reviewed-mixed"
+      "reason": "Complete body reviewed: credential/PIN/policy/delete and metadata commits delegate to AccountStore. Captured URL/token AccountAccess is now shared by the fetch and explicitly rechecked after await before synchronous commit; mismatched DTO/current-record server IDs are rejected by the store. Current-user settings/profile-image composition remains in the app. No real credential/store/server access occurred.",
+      "sha256": "f1b0b5f55504457fabff9e609feb38bca5d7e8a969ef6a75fa7983fa854c0283",
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [
@@ -3467,9 +3480,9 @@
     {
       "owners": [],
       "path": "Shared/Views/ItemContentGroupView/LabeledContentGroup.swift",
-      "reason": "",
+      "reason": "Creates a title/value content group with presentation identity and styled labels. UUID is view/group identity; no catalog identity or persistence behavior.",
       "sha256": "d9578c5d6b1ea99bddd1460e935c6d4b428199badb84e26b1663fe21ef396839",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -3513,9 +3526,9 @@
     {
       "owners": [],
       "path": "Shared/Views/ItemView/Components/ActionButtons/FavoritedActionButton.swift",
-      "reason": "",
+      "reason": "Reads favorite selection, chooses the localized icon/text and invokes the provider's toggle from a view task. No favorites transport/persistence implementation.",
       "sha256": "c696de0a6b314a4bcd3689fefeda030d0584bfac46a1aa6c0151c0b38f4a701a",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -3534,9 +3547,9 @@
     {
       "owners": [],
       "path": "Shared/Views/ItemView/Components/ActionButtons/PlayedActionButton.swift",
-      "reason": "",
+      "reason": "Reads the selected item's played flag for label/selection presentation and invokes the provider's existing asynchronous toggle. No query, credentials or persistence implementation.",
       "sha256": "eef77c6b5bee615cef7929505087abbf1628e7414ad127d68230a4f3671d4894",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -3557,9 +3570,9 @@
     {
       "owners": [],
       "path": "Shared/Views/ItemView/Components/ActionButtons/SubtitlesActionButton.swift",
-      "reason": "",
+      "reason": "Chooses the platform subtitle-edit/search navigation route for the displayed item and presents its action button. No subtitle search/request implementation.",
       "sha256": "5144bc3705b78fc9ecdd6f75fd85bd1a927ef72649175ce5ee7e28a33b9f3557",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -3620,16 +3633,16 @@
     {
       "owners": [],
       "path": "Shared/Views/ItemView/Components/ItemView+MetadataHStack.swift",
-      "reason": "",
+      "reason": "Composes optional genre, premiere-year, runtime and episode labels using existing item projections and formatter; no metadata interpretation implementation.",
       "sha256": "06f68de843a6f18e88eedd688bfe68d9825084c07b26ef12c5a328029da55ff2",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
       "path": "Shared/Views/ItemView/Components/ItemView+ParentButton.swift",
-      "reason": "",
+      "reason": "Routes to the supplied parent item ID and draws a platform-sized trailing capsule label; no parent lookup/query.",
       "sha256": "790c8f0ebd916d8ad98f929cb65e5661b63a54c4d18a906895c589d6a31bcdfa",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -3830,9 +3843,9 @@
     {
       "owners": [],
       "path": "Shared/Views/SettingsView/IndicatorSettingsView.swift",
-      "reason": "",
+      "reason": "Binds four poster-indicator toggles to the existing configuration setting and composes the localized Form; no independent storage or indicator-policy implementation.",
       "sha256": "395f3d1db31b1b3f0b2f4a5d8548f19e2641b467af798fca0b6bfdaf7098f684",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -3900,9 +3913,9 @@
     {
       "owners": [],
       "path": "Shared/Views/VideoPlayer/Components/Toolbar/ActionButtons/AspectFillActionButton.swift",
-      "reason": "",
+      "reason": "Toggles aspect-fill state and chooses toolbar label/icon for that presentation. No codec, session or transport behavior.",
       "sha256": "660fdf1c02b7d9e32ff0e58c0d78528fe9cbec4f2e5a5dfdd1f47af0366bb160",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -3921,30 +3934,30 @@
     {
       "owners": [],
       "path": "Shared/Views/VideoPlayer/Components/Toolbar/ActionButtons/GestureLockActionButton.swift",
-      "reason": "",
+      "reason": "Displays the gesture-lock button and toggles the existing container interaction state. No native permission, account or playback operation.",
       "sha256": "c33209e80c5871aec7fcd9f321d61d1623d8d5b5d553035ce5089ca551f3a021",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
       "path": "Shared/Views/VideoPlayer/Components/Toolbar/ActionButtons/PlayNextItemActionButton.swift",
-      "reason": "",
+      "reason": "Presents the observed queue's next availability and forwards a selected next provider to the manager. It does not implement queue ordering or preparation.",
       "sha256": "25298472c84ac8d64d06fecdce309d2e44337e856c21d0e7c044d8d9fd6416b7",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
       "path": "Shared/Views/VideoPlayer/Components/Toolbar/ActionButtons/PlayPreviousItemActionButton.swift",
-      "reason": "",
+      "reason": "Presents the observed queue's previous availability and forwards its selected previous provider. Queue traversal/preparation remains elsewhere.",
       "sha256": "aa958363c8178a0d5276cd5f5c0dd698ec4587dabd9b73905c4a9720813cb51b",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
       "path": "Shared/Views/VideoPlayer/Components/Toolbar/ActionButtons/PlaybackRateActionButton.swift",
-      "reason": "",
+      "reason": "Displays configured and current playback rates through the existing formatter and binds selection to the current manager rate. Native application and installed preference behavior remain in owners.",
       "sha256": "1f367ee680534da34fa2c3758d63205547f44ea7ef089002182b254c7bd40c9d",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -3956,9 +3969,9 @@
     {
       "owners": [],
       "path": "Shared/Views/VideoPlayer/Components/Toolbar/ActionButtons/SubtitleActionButton.swift",
-      "reason": "",
+      "reason": "Builds current-item subtitle-menu rows including the existing none stream, mirrors the item's selected index and forwards UI selection to that item. Does not interpret codec/stream metadata or implement decoder mutation.",
       "sha256": "d97bf46982a89899d7f7259ddc7a01776a5f118157e678dbaaa0fbbcb2de8aa9",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -3982,11 +3995,14 @@
       "status": "pending"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinUIState",
+        "SwiftfinTime"
+      ],
       "path": "Shared/Views/VideoPlayer/VideoPlayer.swift",
-      "reason": "",
-      "sha256": "10a9769dd18492b8eb8bf43909268e6b81908771d630c59fad6759dda19ff3c2",
-      "status": "pending"
+      "reason": "Complete body reviewed: composes chosen proxy, current manager/container/controls; applies audio/subtitle offsets and aspect fill, throttles gesture scrubbing to 0.1 seconds/one second, resets displayed track/position state and routes dismissal/alerts. Factory alert reset now requires manager identity. These are platform interaction/composition; decoder/preparation/queue/reporting policies remain outside this body. Native UI runtime is held.",
+      "sha256": "6726321df51728e64fc4f4259e4a12c95cbe77938f353ded83795ba7f52f1ab0",
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -4047,9 +4063,9 @@
     {
       "owners": [],
       "path": "Swiftfin/Components/SettingsBarButton.swift",
-      "reason": "",
+      "reason": "Composes the Settings button's supplied action, profile image and fallback gear layout. Delegates profile URL composition and image loading; no storage/network implementation.",
       "sha256": "6a0286daef2af3900c3daa4c31e30232bc2b6384f98401907e525b4319bdb485",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -4173,9 +4189,9 @@
     {
       "owners": [],
       "path": "Swiftfin/Views/AdminDashboardView/Components/DeviceSection.swift",
-      "reason": "",
+      "reason": "Displays three already-provided device/client/version values with localized fallbacks. No native device or network query.",
       "sha256": "8d91a633aec67e85f5b274a8b0bb611c3ba9ca2d3bafa94b85ef1b380c86c79a",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -4357,9 +4373,9 @@
     {
       "owners": [],
       "path": "Swiftfin/Views/AdminDashboardView/ServerUsers/ServerUserSettings/ServerUserAccessTags/EditServerUserAccessTagsView/Components/EditAccessTagRow.swift",
-      "reason": "",
+      "reason": "Draws an editable access-tag row with checkbox and destructive swipe action, forwarding caller closures. No account/policy mutation transport.",
       "sha256": "3c2b183df00b34b0dcb2ac8503ac5398b8a908aede45e529dc024a97bae1b897",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -4420,16 +4436,16 @@
     {
       "owners": [],
       "path": "Swiftfin/Views/AdminDashboardView/ServerUsers/ServerUserSettings/ServerUserPermissionsView/Components/Sections/PermissionSection.swift",
-      "reason": "",
+      "reason": "Binds content-download and login-visibility flags on an edited UserPolicy to localized toggles. No remote permissions command or account authorization is performed here.",
       "sha256": "fafb34ddd7771eff8807d36a05726aeb8ec1bfdc1f889655590637abc1223cda",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
       "path": "Swiftfin/Views/AdminDashboardView/ServerUsers/ServerUserSettings/ServerUserPermissionsView/Components/Sections/RemoteControlSection.swift",
-      "reason": "",
+      "reason": "Binds other-user/shared-device remote-control flags in the edited policy to localized toggles; server persistence and authorization remain elsewhere.",
       "sha256": "4b0c84fe20000f7cbfd2d315d77df3d2810ad040b84da3c729c293e3e441e79c",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -4586,23 +4602,23 @@
     {
       "owners": [],
       "path": "Swiftfin/Views/ItemEditorView/ItemMetadata/EditMetadataView/Components/Sections/LocalizationSection.swift",
-      "reason": "",
+      "reason": "Binds the item's metadata language/country to existing culture/country pickers. Remote reads and metadata saves belong to their existing providers.",
       "sha256": "5cb327c11c7d36f90d69dae82edcbedaaf872d9070961ea30a6d23495b9671ba",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
       "path": "Swiftfin/Views/ItemEditorView/ItemMetadata/EditMetadataView/Components/Sections/LockMetadataSection.swift",
-      "reason": "",
+      "reason": "Binds lock-all and individual MetadataField flags on the edited DTO, hiding individual flags while all are locked. Set membership is edit-form binding; no remote mutation.",
       "sha256": "959983085e4ec06fb6e4810e45fd1ba8744b1a2c354f61128ebb51d2fc1a779b",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
       "path": "Swiftfin/Views/ItemEditorView/ItemMetadata/EditMetadataView/Components/Sections/MediaFormatSection.swift",
-      "reason": "",
+      "reason": "Binds aspect-ratio text through the existing nil-string formatter and 3D-format picker to the edited DTO. Parsing and metadata writes remain owned elsewhere.",
       "sha256": "ec76682604673be4448d3496a0b72f7dae59e145d5c28781d9a1a2330358afad",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -4658,9 +4674,9 @@
     {
       "owners": [],
       "path": "Swiftfin/Views/ItemEditorView/ItemSubtitles/ItemSubtitlesView/Components/ItemSubtitleButton.swift",
-      "reason": "",
+      "reason": "Presents subtitle display text and edit/selection checkbox state, forwarding the supplied action. No subtitle decoding, deletion or upload.",
       "sha256": "8b2c8539c2c2ccee9db65d44e1710290d9c8e9ff9c82f6abb6a5c3eb04ca3989",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -4714,9 +4730,9 @@
     {
       "owners": [],
       "path": "Swiftfin/Views/VideoPlayer/Gestures/VideoPlayerContainerView+PinchGesture.swift",
-      "reason": "",
+      "reason": "Interprets a configured pinch interaction against gesture lock, supplement visibility and completion state, updating aspect-fill presentation for scale above/below one. Threshold and duplicate end guard are UI gesture behavior, not media policy.",
       "sha256": "08a0b3d26918530a1eb8629f343a564bf58a5741c71c294fcff6c5085d729eca",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -4784,9 +4800,9 @@
     {
       "owners": [],
       "path": "Swiftfin tvOS/Components/CinematicContentGroupContainer.swift",
-      "reason": "",
+      "reason": "Computes a bounded parent-scroll height minus 75 points for the cinematic layout and embeds supplied content. Geometry is presentation-specific; no domain behavior.",
       "sha256": "7e02999d2cf346c84f69247cebe48a49312f5f3f8392804af4c949af612d568a",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -5320,6 +5336,48 @@
         "isolated task teardown"
       ],
       "sha256": "90a3b86573020168f4d358a80a8d70b937f9be28388b81e491e4bcf33be57af9"
+    },
+    {
+      "path": "Packages/SwiftfinUIState/Sources/SwiftfinUIState/UIObjectSelection.swift",
+      "reason": "Main-actor generic selection uses reference identity, synchronous UI events and explicit account clear. Events are Sendable only for Sendable objects; current is publicly read-only. Four native contracts cover equal-value/different-object retirement, immediate send/cancellation, weak payload release, replacement and reopen. Native player lifecycle/task ownership is outside this interface; runtime is held.",
+      "reviewedConsumers": [
+        "Shared/Services/UserSession/UserSessionManager.swift",
+        "Shared/Objects/MediaPlayerManager/MediaPlayerManager.swift",
+        "Shared/Coordinators/Navigation/NavigationRoute/NavigationRoute+Media.swift"
+      ],
+      "reviewedInterfaces": [
+        "UIObjectEvent.activated/retired",
+        "UIObjectSelection.init/current/apply/clear",
+        "conditional event Sendable"
+      ],
+      "sha256": "b09c76cac80343cfb1ddee690273f6d73e37785d7d5848968a868f8deaba5822"
+    },
+    {
+      "path": "Packages/SwiftfinAccountStore/Sources/SwiftfinAccountStore/AccountStorageKeys.swift",
+      "reason": "Metadata keys preserve exact name/field/owner and defaults versus SQL-with-tvOS-defaults destination. Explicit database injection is retained; raw legacy SDK JSON and Defaults bridge are tested using disposable stores. DTO Serializable/Storable conformances move with metadata persistence; no migration or server request.",
+      "reviewedConsumers": [
+        "Shared/SwiftfinStore/StoredValue/StoredValues+Server.swift",
+        "Shared/SwiftfinStore/StoredValue/StoredValues+User.swift"
+      ],
+      "reviewedInterfaces": [
+        "publicInfo(serverID:database:)",
+        "userData(userID:database:)",
+        "unchanged installed account/settings key inventory"
+      ],
+      "sha256": "a35bb780d5ab1c52b91f80de966cbb6e49006060c602cbbf5b64c60381e7160a"
+    },
+    {
+      "path": "Packages/SwiftfinAccountStore/Sources/SwiftfinAccountStore/LocalAccountStore.swift",
+      "reason": "Two synchronous main-actor metadata commits read current inventories, preserve order/sibling/URL/membership fields and nil-name fallbacks, then write cached DTO after records. Missing records return false; mismatched identities throw before mutation, including explicit cross-server user payloads. Seven native contracts cover original JSON/destinations/current-record merge/missing/duplicates/mismatch/credential non-use. StoredValues retains nonthrowing storage failures; writes are not transactional. This review adds methods to the earlier scoped store audit, not blanket API approval.",
+      "reviewedConsumers": [
+        "Shared/SwiftfinStore/SwiftfinStore+ServerState.swift",
+        "Shared/SwiftfinStore/SwiftinStore+UserState.swift"
+      ],
+      "reviewedInterfaces": [
+        "updateServerMetadata(serverID:info:)",
+        "updateUserMetadata(userID:serverID:data:)"
+      ],
+      "sha256": "e25dbdc4701281dfa8db6d0ab19a17921b9044d3ab131cddc32e97eb29434921"
     }
   ],
   "limits": "This ledger records bodies explicitly reviewed, with exact current hashes; earlier prose or lexical inventory is not automatically promoted. Pending and mixed entries prevent whole-source completion. Retained UI algorithms have specific presentation reasons, not folder/import-based blanket approval. API entries do not classify the rest of the public graph. Source review and offline tests do not satisfy held runtime acceptance.",
@@ -5328,11 +5386,11 @@
   "summary": {
     "applicationSwiftFiles": 666,
     "classification": {
-      "pending": 393,
-      "source-reviewed-mixed": 3,
-      "source-reviewed-retained": 270
+      "pending": 348,
+      "source-reviewed-mixed": 2,
+      "source-reviewed-retained": 316
     },
-    "currentAPIReviews": 26,
+    "currentAPIReviews": 29,
     "runtimeAcceptance": "held by human; no simulator/server testing"
   }
 }

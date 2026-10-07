@@ -6,7 +6,6 @@
 // Copyright (c) 2026 Jellyfin & Jellyfin Contributors
 //
 
-import Defaults
 import FactoryKit
 import Foundation
 import JellyfinAPI
@@ -68,9 +67,6 @@ extension StoredValues.Keys {
 
 // MARK: values
 
-extension UserDto: @retroactive Defaults.Serializable {}
-extension UserDto: @retroactive Storable {}
-
 @MainActor
 extension StoredValues.Keys {
 
@@ -90,11 +86,7 @@ extension StoredValues.Keys {
         // Doesn't use `CurrentUserKey` because data may be
         // retrieved and stored without a user session
         static func data(id: String) -> Key<UserDto> {
-            UserKey(
-                ownerID: id,
-                field: "userData",
-                default: .init()
-            )
+            AccountStorageKeys.userData(userID: id)
         }
 
         @MainActor

@@ -6,7 +6,6 @@
 // Copyright (c) 2026 Jellyfin & Jellyfin Contributors
 //
 
-import Defaults
 import FactoryKit
 import Foundation
 import JellyfinAPI
@@ -42,9 +41,6 @@ extension StoredValues.Keys {
 
 // MARK: values
 
-extension PublicSystemInfo: @retroactive Defaults.Serializable {}
-extension PublicSystemInfo: @retroactive Storable {}
-
 @MainActor
 extension StoredValues.Keys {
 
@@ -56,11 +52,7 @@ extension StoredValues.Keys {
         }
 
         static func publicInfo(id: String) -> Key<PublicSystemInfo> {
-            ServerKey(
-                ownerID: id,
-                field: "publicInfo",
-                default: .init()
-            )
+            AccountStorageKeys.publicInfo(serverID: id)
         }
 
         static func connections(id: String) -> Key<[ServerConnection]> {

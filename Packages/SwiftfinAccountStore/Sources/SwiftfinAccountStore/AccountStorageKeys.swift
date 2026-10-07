@@ -6,12 +6,13 @@
 // Copyright (c) 2026 Jellyfin & Jellyfin Contributors
 //
 
+import JellyfinAPI
 import SwiftfinAccountModels
 import SwiftfinStorage
 import SwiftfinStoredValues
 
-/// Exact installed-account addresses. SDK metadata and current-session/UI
-/// settings remain with their owners, rather than expanding this inventory.
+/// Exact installed account/metadata addresses. Current-session and UI settings
+/// remain in application composition.
 @MainActor
 public enum AccountStorageKeys {
     public static func servers(ownerID: String = "swiftfinApp", database: SwiftfinDatabase = .shared) -> StoredValues
@@ -56,5 +57,13 @@ public enum AccountStorageKeys {
 
     public static func pinHint(userID: String, database: SwiftfinDatabase = .shared) -> StoredValues.Key<String> {
         .init("pinHint", ownerID: userID, field: "pinHint", storage: .sql, default: "", database: database)
+    }
+
+    public static func publicInfo(serverID: String, database: SwiftfinDatabase = .shared) -> StoredValues.Key<PublicSystemInfo> {
+        .init("publicInfo", ownerID: serverID, field: "publicInfo", storage: .defaults, default: .init(), database: database)
+    }
+
+    public static func userData(userID: String, database: SwiftfinDatabase = .shared) -> StoredValues.Key<UserDto> {
+        .init("userData", ownerID: userID, field: "userData", storage: .sql, default: .init(), database: database)
     }
 }

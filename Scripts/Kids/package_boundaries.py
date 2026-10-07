@@ -12,6 +12,7 @@ import subprocess
 
 # Explicit responsibilities, not a permission derived from whatever code happens to import.
 EXTERNAL_POLICIES = {
+    "SwiftfinAccountStore": [("jellyfin-sdk-swift", "https://github.com/jellyfin/jellyfin-sdk-swift.git", "3.2.0"), ("defaults", "https://github.com/sindresorhus/Defaults", "9.0.9")],
     "SwiftfinImageProcessing": [("svgkit", "https://github.com/SVGKit/SVGKit", "3.0.0"), ("cocoalumberjack", "https://github.com/CocoaLumberjack/CocoaLumberjack.git", "3.9.1")],
     "SwiftfinMPV": [("mpvui", "https://github.com/LePips/MPVUI", "0.1.1")],
     "SwiftfinCollections": [("swift-collections", "https://github.com/apple/swift-collections.git", "1.6.0")],
@@ -66,7 +67,7 @@ POLICIES = {
     "SwiftfinNetworking": ({}, {"Foundation", "Get", "JellyfinAPI"}),
     "SwiftfinAsyncStreams": ({}, {"Foundation", "Combine", "os"}),
     "SwiftfinConnections": ({"SwiftfinAccountModels"}, {"Foundation"}),
-    "SwiftfinAccountStore": ({"SwiftfinAccountModels", "SwiftfinStorage", "SwiftfinStoredValues", "SwiftfinCredentials"}, {"Foundation"}),
+    "SwiftfinAccountStore": ({"SwiftfinAccountModels", "SwiftfinStorage", "SwiftfinStoredValues", "SwiftfinCredentials"}, {"Foundation", "JellyfinAPI", "Defaults"}),
     "SwiftfinCredentials": ({}, {"Foundation", "Security"}),
     "SwiftfinConnectivity": ({"SwiftfinAccountModels"}, {"Foundation", "Network", "NetworkExtension", "os"}),
     "SwiftfinAccountModels": ({"SwiftfinLocalization"}, {"Foundation"}),
@@ -121,6 +122,8 @@ def validate_source(name, source, dependencies, frameworks):
     problems = [f"{name}: forbidden or undeclared import {module}" for module in sorted(set(IMPORT.findall(source)) - allowed)]
     if any("@_exported" in match.group(0) for match in IMPORT.finditer(source)):
         problems.append(f"{name}: umbrella re-export hides an explicit dependency")
+    if name == "SwiftfinAccountStore" and re.search(r"\b(?:JellyfinClient|JellyfinTransport|Paths|URLSession|URLRequest)\b", source):
+        problems.append(f"{name}: account metadata storage must not issue network requests")
     return problems
 
 

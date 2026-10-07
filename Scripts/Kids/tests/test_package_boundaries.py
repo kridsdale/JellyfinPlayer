@@ -187,10 +187,18 @@ class PackageBoundariesTests(unittest.TestCase):
 
     def test_account_store_cannot_contact_servers_or_resolve_ui_globals(self):
         edges, frameworks = MODULE.POLICIES["SwiftfinAccountStore"]
-        for module in ["JellyfinAPI", "FactoryKit", "UIKit", "SwiftUI", "Network", "CoreStore", "Defaults"]:
+        for module in ["FactoryKit", "UIKit", "SwiftUI", "Network", "CoreStore", "SwiftfinNetworking"]:
             with self.subTest(module=module):
                 self.assertTrue(MODULE.validate_source("SwiftfinAccountStore", "import " + module, edges, frameworks))
-        self.assertNotIn("SwiftfinAccountStore", MODULE.EXTERNAL_POLICIES)
+        for module in ["JellyfinAPI", "Defaults"]:
+            self.assertEqual(MODULE.validate_source("SwiftfinAccountStore", "import " + module, edges, frameworks), [])
+        for token in ["JellyfinClient", "JellyfinTransport", "Paths", "URLSession", "URLRequest"]:
+            with self.subTest(token=token):
+                self.assertTrue(MODULE.validate_source("SwiftfinAccountStore", token + ".send()", edges, frameworks))
+        self.assertEqual(MODULE.EXTERNAL_POLICIES["SwiftfinAccountStore"], [
+            ("jellyfin-sdk-swift", "https://github.com/jellyfin/jellyfin-sdk-swift.git", "3.2.0"),
+            ("defaults", "https://github.com/sindresorhus/Defaults", "9.0.9"),
+        ])
 
     def test_connection_selection_has_no_storage_native_transport_or_ui_globals(self):
         edges, frameworks = MODULE.POLICIES["SwiftfinConnections"]

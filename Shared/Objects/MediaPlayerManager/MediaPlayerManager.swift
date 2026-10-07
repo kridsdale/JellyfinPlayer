@@ -27,7 +27,7 @@ import KidsDiagnostics
 // TODO: proper error catching
 // TODO: be a UserSessionService?
 
-typealias MediaPlayerManagerPublisher = LegacyEventPublisher<MediaPlayerManager?>
+typealias MediaPlayerManagerPublisher = LegacyEventPublisher<UIObjectEvent<MediaPlayerManager>>
 
 extension Scope {
     static let session = Cached()
@@ -38,6 +38,13 @@ extension Container {
     var mediaPlayerManagerPublisher: Factory<MediaPlayerManagerPublisher> {
         self { MediaPlayerManagerPublisher() }
             .singleton
+    }
+
+    /// An obsolete player's completion must not evict a newer factory selection.
+    @MainActor
+    func resetMediaPlayerManager(ifCurrent manager: MediaPlayerManager) {
+        guard mediaPlayerManager() === manager else { return }
+        mediaPlayerManager.reset()
     }
 
     @MainActor
@@ -293,8 +300,8 @@ final class MediaPlayerManager: ViewModel {
 
         onPlaybackError?(error)
         proxy?.stop()
-        Container.shared.mediaPlayerManagerPublisher().send(nil)
-        Container.shared.mediaPlayerManager.reset()
+        Container.shared.mediaPlayerManagerPublisher().send(.retired(self))
+        Container.shared.resetMediaPlayerManager(ifCurrent: self)
     }
 
     @Function(\Action.Cases.playNewItem)
@@ -399,8 +406,8 @@ final class MediaPlayerManager: ViewModel {
         await self.cancel()
 
         proxy?.stop()
-        Container.shared.mediaPlayerManagerPublisher().send(nil)
-        Container.shared.mediaPlayerManager.reset()
+        Container.shared.mediaPlayerManagerPublisher().send(.retired(self))
+        Container.shared.resetMediaPlayerManager(ifCurrent: self)
     }
 
     @Function(\Action.Cases.togglePlayPause)

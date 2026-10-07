@@ -51,7 +51,7 @@ struct NativeVideoPlayer: View {
         }
         .prefersStatusBarHidden()
         .onChange(of: presentationCoordinator.isPresented) {
-            Container.shared.mediaPlayerManager.reset()
+            Container.shared.resetMediaPlayerManager(ifCurrent: manager)
             guard !presentationCoordinator.isPresented else { return }
             manager.stop()
         }
@@ -60,7 +60,7 @@ struct NativeVideoPlayer: View {
             isPresented: .constant(manager.error != nil)
         ) {
             Button(L10n.close, role: .cancel) {
-                Container.shared.mediaPlayerManager.reset()
+                Container.shared.resetMediaPlayerManager(ifCurrent: manager)
                 router.dismiss()
             }
         } message: {

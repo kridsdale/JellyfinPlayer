@@ -125,7 +125,7 @@ struct VideoPlayer: View {
             isPresented: .constant(manager.error != nil)
         ) {
             Button(L10n.close, role: .cancel) {
-                Container.shared.mediaPlayerManager.reset()
+                Container.shared.resetMediaPlayerManager(ifCurrent: manager)
                 router.dismiss()
             }
         } message: {

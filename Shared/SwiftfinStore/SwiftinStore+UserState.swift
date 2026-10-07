@@ -85,31 +85,25 @@ extension UserState {
     /// with an access token
     @MainActor
     func getUserData(server: ServerState) async throws -> UserDto {
+        try await accountAccess(server: server).currentUser(expectedUserID: id)
+    }
+
+    private func accountAccess(server: ServerState) -> AccountAccessClient {
         let url = server.effectiveServerURL
         let token = accessToken
         let client = JellyfinTransport.swiftfin(url: url, accessToken: token)
         let store = Container.shared.localAccountStore()
-        let access = AccountAccessClient(transport: client, expectedServerID: server.id, isCurrent: {
+        return AccountAccessClient(transport: client, expectedServerID: server.id, isCurrent: {
             server.effectiveServerURL == url && (try? store.accessToken(userID: id)) == token
         })
-        return try await access.currentUser(expectedUserID: id)
     }
 
     @MainActor
     func updateUserData(server: ServerState) async throws {
-        let userData = try await getUserData(server: server)
-        let users = StoredValues[.User.users]
-        guard let currentUser = users.first(where: { $0.id == id }) else { return }
-        let updatedUsername = userData.name ?? currentUser.username
-
-        let updatedUser = UserState(
-            id: currentUser.id,
-            serverID: currentUser.serverID,
-            username: updatedUsername
-        )
-
-        StoredValues[.User.users] = users.map { $0.id == id ? updatedUser : $0 }
-        StoredValues[.User.data(id: currentUser.id)] = userData
+        let access = accountAccess(server: server)
+        let userData = try await access.currentUser(expectedUserID: id)
+        try access.checkBinding()
+        try Container.shared.localAccountStore().updateUserMetadata(userID: id, serverID: server.id, data: userData)
     }
 
     func profileImageSource(

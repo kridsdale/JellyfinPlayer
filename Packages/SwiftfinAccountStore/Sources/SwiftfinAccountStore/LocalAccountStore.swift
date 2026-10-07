@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import JellyfinAPI
 import SwiftfinAccountModels
 import SwiftfinCredentials
 import SwiftfinStorage
@@ -162,6 +163,35 @@ public final class LocalAccountStore {
         records.removeAll { $0.id == user.id }
         records.append(user)
         users = records
+    }
+
+    /// Merge with the current inventory rather than a pre-request snapshot.
+    /// Record writes precede cached DTO writes, preserving installed behavior;
+    /// StoredValues retains its existing nonthrowing storage-failure semantics.
+    @discardableResult
+    public func updateServerMetadata(serverID: String, info: PublicSystemInfo) throws -> Bool {
+        guard info.id == serverID else { throw AccountStoreError.identityMismatch }
+        let records = servers
+        guard let current = records.first(where: { $0.id == serverID }) else { return false }
+        let updated = ServerAccountRecord(
+            urls: current.urls, currentURL: current.currentURL,
+            name: info.serverName ?? current.name, id: current.id, userIDs: current.userIDs
+        )
+        servers = records.map { $0.id == serverID ? updated : $0 }
+        StoredValues[AccountStorageKeys.publicInfo(serverID: serverID, database: database)] = info
+        return true
+    }
+
+    @discardableResult
+    public func updateUserMetadata(userID: String, serverID: String, data: UserDto) throws -> Bool {
+        guard data.id == userID, data.serverID == nil || data.serverID == serverID else { throw AccountStoreError.identityMismatch }
+        let records = users
+        guard let current = records.first(where: { $0.id == userID }) else { return false }
+        guard current.serverID == serverID else { throw AccountStoreError.identityMismatch }
+        let updated = UserAccountRecord(id: current.id, serverID: current.serverID, username: data.name ?? current.username)
+        users = records.map { $0.id == userID ? updated : $0 }
+        StoredValues[AccountStorageKeys.userData(userID: userID, database: database)] = data
+        return true
     }
 
     public func pin(userID: String) throws -> String? {
