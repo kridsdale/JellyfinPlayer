@@ -14,6 +14,7 @@ import Logging
 import Pulse
 import SwiftfinAccountAccess
 import SwiftfinAccountModels
+import SwiftfinAsyncStreams
 import SwiftfinConnections
 import SwiftfinConnectivity
 import SwiftfinLocalization

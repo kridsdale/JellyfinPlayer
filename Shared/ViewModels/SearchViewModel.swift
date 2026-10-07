@@ -9,6 +9,7 @@
 import Combine
 import Foundation
 import JellyfinAPI
+import SwiftfinAsyncStreams
 import SwiftUI
 
 @MainActor

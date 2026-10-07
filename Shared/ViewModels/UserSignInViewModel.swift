@@ -50,7 +50,7 @@ final class UserSignInViewModel: ObservableObject {
         case error
         case getPublicData
         case signIn(username: String, password: String)
-        case signInQuickConnect(secret: String)
+        case signInQuickConnect(secret: String, access: AccountAccessClient)
 
         case save(
             user: UserStateDataPair,
@@ -154,9 +154,11 @@ final class UserSignInViewModel: ObservableObject {
 
     @Function(\Action.Cases.signInQuickConnect)
     private func _signInQuickConnect(
-        _ secret: String
+        _ secret: String,
+        _ access: AccountAccessClient
     ) async throws {
-        let response = try await server.accountAccess.signIn(quickConnectSecret: secret)
+        let response = try await access.signIn(quickConnectSecret: secret)
+        try access.checkBinding()
 
         let accessToken = response.accessToken
         let userData = response.user

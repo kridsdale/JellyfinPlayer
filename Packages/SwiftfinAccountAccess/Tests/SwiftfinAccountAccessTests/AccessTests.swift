@@ -9,7 +9,7 @@
 import Foundation
 import Get
 import JellyfinAPI
-import SwiftfinAccountAccess
+@testable import SwiftfinAccountAccess
 import SwiftfinNetworking
 import Testing
 
@@ -34,6 +34,8 @@ private final class Transport: AccountAccessTransport {
     var boolBytes = Data("true".utf8)
     var auth = AuthenticationResult(accessToken: "fixture-token", serverID: "server", user: .init(id: "user", name: "User"))
     var authCalls: [(String, String?)] = []
+    var quickInitial = QuickConnectResult(code: "123456", secret: "initial-secret")
+    var quickPolls: [Result<QuickConnectResult, Failure>] = []
     var failure = false
     var blocked = false
     var gate: CheckedContinuation<Void, Never>?
@@ -68,6 +70,10 @@ private final class Transport: AccountAccessTransport {
         case "/Users/Public": data = try JSONEncoder().encode(publicUsers)
         case "/Branding/Configuration": data = try JSONEncoder().encode(branding)
         case "/Users/Me": data = try JSONEncoder().encode(currentUser)
+        case "/QuickConnect/Initiate": data = try JSONEncoder().encode(quickInitial)
+        case "/QuickConnect/Connect":
+            let result = quickPolls.isEmpty ? QuickConnectResult(isAuthenticated: false) : try quickPolls.removeFirst().get()
+            data = try JSONEncoder().encode(result)
         default: throw Failure.offline
         }
         return try JSONDecoder().decode(Value.self, from: data)
@@ -350,4 +356,183 @@ func `fallback login still rejects A replaced connection after the await`() asyn
     binding.current = false
     transport.release()
     await #expect(throws: CancellationError.self) { try await operation.value }
+}
+
+@MainActor
+private final class PollClock {
+    var sleeps: [Duration] = []
+    var continuation: CheckedContinuation<Void, Never>?
+    var entered = false
+    var cancelled = false
+    func wait() async {
+        await withCheckedContinuation { continuation = $0 }
+    }
+
+    func release() {
+        continuation?.resume()
+        continuation = nil
+    }
+}
+
+@MainActor
+private func settle(_ condition: () -> Bool) async {
+    for _ in 0 ..< 2000 {
+        if condition() {
+            return
+        }
+        await Task.yield()
+    }
+    #expect(condition())
+}
+
+@Suite("Connection-bound Quick Connect")
+@MainActor
+struct QuickConnectContracts {
+    private func access(_ transport: Transport, _ binding: Binding? = nil) -> AccountAccessClient {
+        .init(transport: transport, expectedServerID: "server", isCurrent: { binding?.current ?? true })
+    }
+
+    private func policy(_ clock: PollClock, maximum: Int = 4, tolerance: Int = 5) -> QuickConnectPollingPolicy {
+        .init(maximumPolls: maximum, failureTolerance: tolerance, sleep: { clock.sleeps.append($0) })
+    }
+
+    private func collect(_ client: AccountAccessClient, _ policy: QuickConnectPollingPolicy) async throws -> [AccountQuickConnectEvent] {
+        var events: [AccountQuickConnectEvent] = []
+        for try await event in client.quickConnectEvents(policy: policy) {
+            events.append(event)
+        }
+        return events
+    }
+
+    @Test
+    func `production polling defaults preserve pinned SDK cadence and limits`() {
+        let policy = QuickConnectPollingPolicy()
+        #expect(policy.interval == .seconds(5) && policy.maximumPolls == 200 && policy.failureTolerance == 5)
+    }
+
+    @Test
+    func `polling and approved secret keep the original transport through final sign in`() async throws {
+        let t = Transport(), clock = PollClock()
+        t.quickPolls = [.success(.init(isAuthenticated: false)), .success(.init(isAuthenticated: true, secret: "approved-secret"))]
+        let client = access(t)
+        let events = try await collect(client, policy(clock))
+        #expect(events == [.polling(code: "123456"), .authenticated(secret: "approved-secret")])
+        #expect(t.calls.map(\.path) == ["/QuickConnect/Initiate", "/QuickConnect/Connect", "/QuickConnect/Connect"])
+        #expect(t.calls.dropFirst().allSatisfy { $0.query == ["secret": "initial-secret"] })
+        #expect(clock.sleeps == [.seconds(5)])
+        _ = try await client.signIn(quickConnectSecret: "approved-secret")
+        #expect(t.authCalls.count == 1 && t.authCalls[0].0 == "approved-secret")
+    }
+
+    @Test
+    func `missing initial code or secret fails before polling`() async {
+        for initial in [QuickConnectResult(code: "123456"), QuickConnectResult(secret: "initial-secret")] {
+            let t = Transport(), clock = PollClock()
+            t.quickInitial = initial
+            await #expect(throws: AccountQuickConnectError.retrievingCodeFailed) { try await collect(access(t), policy(clock)) }
+            #expect(t.calls.map(\.path) == ["/QuickConnect/Initiate"] && clock.sleeps.isEmpty)
+        }
+    }
+
+    @Test
+    func `successful pending response resets consecutive failures before authorization`() async throws {
+        let t = Transport(), clock = PollClock()
+        t.quickPolls = [
+            .failure(.offline),
+            .success(.init(isAuthenticated: false)),
+            .failure(.offline),
+            .success(.init(isAuthenticated: true, secret: "approved"))
+        ]
+        let events = try await collect(access(t), policy(clock, tolerance: 1))
+        #expect(events.last == .authenticated(secret: "approved") && clock.sleeps.count == 3 && t.calls.count == 5)
+    }
+
+    @Test
+    func `failure limit and poll limit preserve separate terminal errors`() async {
+        let t = Transport(), clock = PollClock()
+        t.quickPolls = [.failure(.offline), .failure(.offline), .success(.init(isAuthenticated: true, secret: "unused"))]
+        await #expect(throws: Transport.Failure.self) { try await collect(access(t), policy(clock, tolerance: 1)) }
+        #expect(t.calls.count == 3 && clock.sleeps.count == 1 && t.quickPolls.count == 1)
+        let pending = Transport(), pendingClock = PollClock()
+        // An authenticated response without a secret remains pending, as in the SDK.
+        pending.quickPolls = [.success(.init(isAuthenticated: true))]
+        await #expect(throws: AccountQuickConnectError.maxPollingHit) {
+            try await collect(access(pending), policy(pendingClock, maximum: 2))
+        }
+        #expect(pending.calls.count == 3 && pendingClock.sleeps.count == 2)
+    }
+
+    @Test
+    func `already expired connection starts no Quick Connect requests`() async {
+        let t = Transport(), binding = Binding(), clock = PollClock()
+        binding.current = false
+        await #expect(throws: CancellationError.self) { try await collect(access(t, binding), policy(clock)) }
+        #expect(t.calls.isEmpty && clock.sleeps.isEmpty)
+    }
+
+    @Test
+    func `connection replacement rejects delayed initial success and error before polling`() async {
+        for failure in [false, true] {
+            let t = Transport(), binding = Binding(), clock = PollClock()
+            t.blocked = true
+            t.failure = failure
+            let client = access(t, binding)
+            let task = Task { try await collect(client, policy(clock)) }
+            defer { task.cancel()
+                t.release()
+            }
+            await settle { t.gate != nil }
+            binding.current = false
+            t.release()
+            await #expect(throws: CancellationError.self) { try await task.value }
+            #expect(t.calls.count == 1 && clock.sleeps.isEmpty)
+        }
+    }
+
+    @Test
+    func `replacement during the sleep prevents the next silent poll`() async {
+        let t = Transport(), binding = Binding(), clock = PollClock()
+        let client = access(t, binding)
+        let p = QuickConnectPollingPolicy(maximumPolls: 3, sleep: { _ in await clock.wait() })
+        let task = Task { try await collect(client, p) }
+        defer { task.cancel()
+            clock.release()
+        }
+        await settle { clock.continuation != nil }
+        binding.current = false
+        clock.release()
+        await #expect(throws: CancellationError.self) { try await task.value }
+        #expect(t.calls.map(\.path) == ["/QuickConnect/Initiate", "/QuickConnect/Connect"])
+    }
+
+    @Test
+    func `consumer cancellation cancels producer sleep without another request`() async {
+        let t = Transport(), clock = PollClock()
+        let client = access(t)
+        let p = QuickConnectPollingPolicy(sleep: { _ in
+            clock.entered = true
+            do { try await Task.sleep(for: .seconds(100)) }
+            catch { clock.cancelled = true
+                throw error
+            }
+        })
+        let task = Task { try await collect(client, p) }
+        defer { task.cancel() }
+        await settle { clock.entered }
+        task.cancel()
+        _ = try? await task.value
+        await settle { clock.cancelled }
+        #expect(t.calls.count == 2)
+    }
+
+    @Test
+    func `replacement after approval rejects authentication through captured client`() async throws {
+        let t = Transport(), binding = Binding(), clock = PollClock()
+        t.quickPolls = [.success(.init(isAuthenticated: true, secret: "approved"))]
+        let client = access(t, binding)
+        #expect(try await collect(client, policy(clock)).last == .authenticated(secret: "approved"))
+        binding.current = false
+        await #expect(throws: CancellationError.self) { try await client.signIn(quickConnectSecret: "approved") }
+        #expect(t.authCalls.isEmpty)
+    }
 }

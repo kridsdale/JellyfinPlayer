@@ -7,6 +7,7 @@
 //
 
 import SwiftfinTime
+import SwiftfinValues
 import SwiftUI
 
 nonisolated struct EasedGradient: View, ShapeStyle {

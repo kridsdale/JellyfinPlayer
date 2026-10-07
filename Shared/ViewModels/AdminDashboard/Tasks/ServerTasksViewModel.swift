@@ -11,6 +11,7 @@ import FactoryKit
 import Foundation
 import JellyfinAPI
 import OrderedCollections
+import SwiftfinAsyncStreams
 import SwiftfinCollections
 import SwiftfinServerOperations
 import SwiftfinTime

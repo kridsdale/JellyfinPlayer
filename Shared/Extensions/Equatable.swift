@@ -6,13 +6,4 @@
 // Copyright (c) 2026 Jellyfin & Jellyfin Contributors
 //
 
-import Foundation
-
-extension Equatable {
-
-    func mutating<Value>(_ keyPath: WritableKeyPath<Self, Value>, with newValue: Value) -> Self {
-        var copy = self
-        copy[keyPath: keyPath] = newValue
-        return copy
-    }
-}
+import SwiftfinValues

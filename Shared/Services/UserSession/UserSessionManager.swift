@@ -12,6 +12,7 @@ import FactoryKit
 import Foundation
 import JellyfinAPI
 import Logging
+import SwiftfinAsyncStreams
 import SwiftfinCredentials
 import SwiftfinLocalization
 import SwiftfinSessions

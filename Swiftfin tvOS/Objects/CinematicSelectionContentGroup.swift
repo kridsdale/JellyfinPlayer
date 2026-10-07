@@ -8,6 +8,7 @@
 
 import Combine
 import JellyfinAPI
+import SwiftfinAsyncStreams
 import SwiftfinCollections
 import SwiftfinImages
 import SwiftUI

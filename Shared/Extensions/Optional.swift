@@ -6,26 +6,4 @@
 // Copyright (c) 2026 Jellyfin & Jellyfin Contributors
 //
 
-import Foundation
-
-extension Optional where Wrapped: Collection {
-
-    var isNilOrEmpty: Bool {
-        self?.isEmpty ?? true
-    }
-
-    mutating func appendedOrInit(_ element: Wrapped.Element) -> [Wrapped.Element] {
-        if let self {
-            self + [element]
-        } else {
-            [element]
-        }
-    }
-}
-
-extension Optional where Wrapped: Hashable {
-
-    var hashValueOrZero: Int {
-        self?.hashValue ?? 0
-    }
-}
+import SwiftfinCollections

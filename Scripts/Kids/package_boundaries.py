@@ -12,6 +12,7 @@ import subprocess
 
 # Explicit responsibilities, not a permission derived from whatever code happens to import.
 EXTERNAL_POLICIES = {
+    "SwiftfinCollections": [("swift-collections", "https://github.com/apple/swift-collections.git", "1.6.0")],
     "SwiftfinAccountAccess": [("jellyfin-sdk-swift", "https://github.com/jellyfin/jellyfin-sdk-swift.git", "3.2.0"), ("get", "https://github.com/kean/Get", "2.2.1")],
     "SwiftfinUserMediaState": [("jellyfin-sdk-swift", "https://github.com/jellyfin/jellyfin-sdk-swift.git", "3.2.0"), ("get", "https://github.com/kean/Get", "2.2.1")],
     "SwiftfinPlaybackReporting": [("jellyfin-sdk-swift", "https://github.com/jellyfin/jellyfin-sdk-swift.git", "3.2.0"), ("get", "https://github.com/kean/Get", "2.2.1")],
@@ -52,7 +53,7 @@ POLICIES = {
     "SwiftfinMediaTracks": ({"SwiftfinPlaybackProfiles"}, {"Foundation", "CryptoKit", "JellyfinAPI"}),
     "SwiftfinPlaybackPreviews": ({}, {"Foundation", "UIKit", "Combine"}),
     "SwiftfinNativePlayback": ({}, {"Foundation", "AVFoundation", "AVKit", "SwiftUI"}),
-    "SwiftfinCollections": ({}, {"Foundation"}),
+    "SwiftfinCollections": ({}, {"Foundation", "OrderedCollections"}),
     "SwiftfinPlaybackProfiles": ({"SwiftfinCollections"}, {"Foundation", "JellyfinAPI"}),
     "SwiftfinImages": ({}, {"Foundation", "Nuke", "CryptoKit", "os"}),
     "SwiftfinSessions": ({}, {"Foundation"}),

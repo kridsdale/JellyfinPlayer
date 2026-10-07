@@ -6,6 +6,7 @@
 // Copyright (c) 2026 Jellyfin & Jellyfin Contributors
 //
 
+import SwiftfinCollections
 import SwiftUI
 
 /// Geometry callbacks capture a value rather than SwiftUI's non-Sendable AnyHashable space.

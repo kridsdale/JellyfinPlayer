@@ -15,6 +15,7 @@ import KidsDiagnostics
 import KidsDomain
 import KidsExperience
 import KidsPlaybackSession
+import SwiftfinAsyncStreams
 import SwiftfinFormatting
 import SwiftfinMediaTracks
 import SwiftfinTime

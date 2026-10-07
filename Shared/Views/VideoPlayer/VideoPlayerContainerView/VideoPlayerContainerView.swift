@@ -10,6 +10,7 @@ import Combine
 import Defaults
 import Logging
 import MediaPlayer
+import SwiftfinAsyncStreams
 import SwiftfinValues
 import SwiftUI
 

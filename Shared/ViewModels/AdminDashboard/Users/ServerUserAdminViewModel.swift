@@ -10,6 +10,7 @@ import Combine
 import Foundation
 import JellyfinAPI
 import OrderedCollections
+import SwiftfinAsyncStreams
 import SwiftfinUserAdministration
 
 @MainActor

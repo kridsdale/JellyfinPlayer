@@ -6,21 +6,5 @@
 // Copyright (c) 2026 Jellyfin & Jellyfin Contributors
 //
 
-import Foundation
-
-extension Set {
-
-    mutating func toggle(value: Element) {
-        if contains(value) {
-            remove(value)
-        } else {
-            insert(value)
-        }
-    }
-
-    mutating func insert(contentsOf elements: [Element]) {
-        for element in elements {
-            insert(element)
-        }
-    }
-}
+// Set operations are provided by the generic SetAlgebra owner.
+import SwiftfinCollections

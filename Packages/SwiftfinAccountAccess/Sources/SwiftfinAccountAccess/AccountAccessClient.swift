@@ -42,7 +42,7 @@ public struct AccountLoginOptions: Sendable {
 @MainActor
 public final class AccountAccessClient {
     private let transport: any AccountAccessTransport
-    private let executor: AuthenticatedRequestExecutor
+    let executor: AuthenticatedRequestExecutor
     private let expectedServerID: String?
     public init(
         transport: any AccountAccessTransport,

@@ -11,6 +11,7 @@ import Foundation
 import Logging
 import MediaPlayer
 import Nuke
+import SwiftfinAsyncStreams
 import SwiftfinAudioSession
 import SwiftfinFormatting
 import SwiftfinNowPlaying

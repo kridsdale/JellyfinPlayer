@@ -9,6 +9,7 @@
 import Combine
 import Defaults
 import JellyfinAPI
+import SwiftfinAsyncStreams
 import SwiftfinScrolling
 import SwiftfinTime
 import SwiftUI

@@ -10,6 +10,7 @@ import Combine
 import Defaults
 import FactoryKit
 import JellyfinAPI
+import SwiftfinAsyncStreams
 import SwiftfinCollections
 import SwiftfinFormatting
 import SwiftfinLocalization

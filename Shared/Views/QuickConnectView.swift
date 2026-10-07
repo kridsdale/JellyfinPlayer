@@ -6,9 +6,8 @@
 // Copyright (c) 2026 Jellyfin & Jellyfin Contributors
 //
 
-import JellyfinAPI
+import SwiftfinAccountAccess
 import SwiftfinLocalization
-import SwiftfinNetworking
 import SwiftUI
 
 struct QuickConnectView: View {
@@ -21,7 +20,7 @@ struct QuickConnectView: View {
     @State
     private var error: Error? = nil
 
-    let client: JellyfinTransport
+    let access: AccountAccessClient
     let action: (String) async -> Void
 
     private func pollingView(code: String) -> some View {
@@ -62,7 +61,8 @@ struct QuickConnectView: View {
         .edgePadding()
         .task {
             do {
-                for try await event in client.quickConnectEvents() {
+                for try await event in access.quickConnectEvents() {
+                    try access.checkBinding()
                     switch event {
                     case let .polling(code: code):
                         self.code = code
@@ -71,6 +71,8 @@ struct QuickConnectView: View {
                         await action(secret)
                     }
                 }
+            } catch is CancellationError {
+                // Closing the sheet or replacing the connection ends this flow.
             } catch {
                 self.error = error
             }

@@ -6,12 +6,4 @@
 // Copyright (c) 2026 Jellyfin & Jellyfin Contributors
 //
 
-import Foundation
 import SwiftfinValues
-
-extension Comparable {
-
-    func clamped(to range: ClosedRange<Self>) -> Self {
-        clamp(self, min: range.lowerBound, max: range.upperBound)
-    }
-}

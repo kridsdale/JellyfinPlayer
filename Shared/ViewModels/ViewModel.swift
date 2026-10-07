@@ -11,6 +11,7 @@ import FactoryKit
 import Foundation
 import JellyfinAPI
 import Logging
+import SwiftfinAsyncStreams
 import SwiftfinFilters
 import SwiftfinItemMetadata
 import SwiftfinMediaCatalog

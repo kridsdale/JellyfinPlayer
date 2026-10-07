@@ -6,17 +6,4 @@
 // Copyright (c) 2026 Jellyfin & Jellyfin Contributors
 //
 
-import Combine
-import Foundation
-
-extension Task {
-
-    @inlinable
-    func asAnyCancellable() -> AnyCancellable {
-        AnyCancellable(cancel)
-    }
-
-    func store(in set: inout Set<AnyCancellable>) {
-        set.insert(asAnyCancellable())
-    }
-}
+import SwiftfinAsyncStreams

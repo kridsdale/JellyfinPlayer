@@ -11,6 +11,7 @@ import FactoryKit
 import Foundation
 import IdentifiedCollections
 import JellyfinAPI
+import SwiftfinAsyncStreams
 import SwiftfinCollections
 import SwiftfinNetworking
 import SwiftfinPaging

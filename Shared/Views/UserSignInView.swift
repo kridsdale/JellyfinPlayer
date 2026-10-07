@@ -201,11 +201,12 @@ struct UserSignInView: View {
         if viewModel.isQuickConnectEnabled {
             Section {
                 Button {
+                    let access = viewModel.server.accountAccess
                     router.route(
                         to: .quickConnect(
-                            client: viewModel.server.client
+                            access: access
                         ) { secret in
-                            await viewModel.signInQuickConnect(secret: secret)
+                            await viewModel.signInQuickConnect(secret: secret, access: access)
                         }
                     )
                 } label: {

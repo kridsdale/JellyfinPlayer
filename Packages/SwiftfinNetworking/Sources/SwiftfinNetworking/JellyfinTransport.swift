@@ -145,30 +145,6 @@ public final class JellyfinTransport: CustomStringConvertible {
         return result
     }
 
-    public enum QuickConnectEvent: Equatable, Sendable {
-        case polling(code: String)
-        case authenticated(secret: String)
-    }
-
-    public func quickConnectEvents() -> AsyncThrowingStream<QuickConnectEvent, any Error> {
-        AsyncThrowingStream { continuation in
-            let task = Task {
-                do {
-                    for try await event in sdk.quickConnect.connect() {
-                        try Task.checkCancellation()
-                        switch event {
-                        case let .polling(code): continuation.yield(.polling(code: code))
-                        case let .authenticated(secret): continuation.yield(.authenticated(secret: secret))
-                        }
-                    }
-                    continuation.finish()
-                } catch is CancellationError { continuation.finish() }
-                catch { continuation.finish(throwing: error) }
-            }
-            continuation.onTermination = { _ in task.cancel() }
-        }
-    }
-
     public struct DiscoveredServer: Equatable, Sendable {
         public let id: String
         public let name: String
