@@ -1,6 +1,6 @@
 # Actor and SDK interoperability review
 
-This review covers the remaining explicit interoperability exceptions in the owned production sources at the date/program checkpoint. The source inventory is a review aid; it is not proof that the complete retained-source/public-API review or current GUI/playback acceptance has finished. Live simulator and server activity remain held by the human.
+This review covers the remaining explicit interoperability exceptions in the owned production sources at the item-projection checkpoint. The source inventory is a review aid; it is not proof that the complete retained-source/public-API review or current GUI/playback acceptance has finished. Live simulator and server activity remain held by the human.
 
 ## Explicit executor bridges
 
@@ -29,6 +29,10 @@ SwiftfinPermissions exposes only checked-Sendable statuses/errors and two main-a
 
 Cancellation completes a waiting location request even if the SDK never replies. The public location SDK cannot withdraw an authorization dialog already requested: cleanup means delegate/callback retirement, not dialog dismissal. Native tests use fake drivers and synthetic results, with no actual permission query, location service or biometric session.
 
+## Pure item projections and policy capture
+
+ItemMetadataFacts, ItemMetadataPermissions, CatalogItemState and UserMediaCapabilities are compiler-checked Sendable values. Their stored DTO/time/flag inputs are immutable, and they contain no task, callback, global settings or account lookup. MediaStreamKindPolicy is a stateless raw-value filter. Explicit time inputs avoid repeated wall-clock reads inside a single catalog decision. App wrappers capture current account policy on the main actor before calling the pure metadata/play-button decisions. These policies grant only presentation eligibility; bound mutation owners and Jellyfin retain authorization authority.
+
 ## Public native handles and composition
 
 The reviewed native owners retain SDK clients, players, contexts, managers, storage stacks and observer handles privately. JellyfinTransport's public version is an immutable SDK version value; it is not its mutable client. Request/response SDK DTOs remain values at inherited feature boundaries. The mpv owner's explicit semantic-caption interoperability value remains immutable; renderer teardown still needs runtime acceptance because the pinned SDK has no awaited shutdown API.
@@ -39,5 +43,5 @@ The platform App initializers call Shared/App/SwiftfinApp+configure.swift. UserS
 
 - Classify every retained application source by UI, composition or behavior; do not infer completion from file counts or a clean import search.
 - Review the full public API and consumer graph, not only the native-handle names above.
-- CurrentDate observation and EPG grouping now have existing library owners. The [retained-source review](retained-source-review.md) identifies mixed item metadata/permission rules, person-role parsing and generic notification/adaptor review still requiring work.
+- CurrentDate observation and EPG grouping now have existing library owners. The [retained-source review](retained-source-review.md) records the newly extracted item metadata/permission/role policies and generic notification/adaptor review still requiring work.
 - Final navigation, decoder/render/output teardown and restricted-account playback/recovery remain held. Compilation and fake-driver tests cannot satisfy those gates.

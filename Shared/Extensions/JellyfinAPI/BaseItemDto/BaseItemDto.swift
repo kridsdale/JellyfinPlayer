@@ -6,7 +6,6 @@
 // Copyright (c) 2026 Jellyfin & Jellyfin Contributors
 //
 
-import Algorithms
 import Defaults
 import FactoryKit
 import Foundation
@@ -18,14 +17,15 @@ import SwiftfinFilters
 import SwiftfinImages
 import SwiftfinItemMetadata
 import SwiftfinLocalization
+import SwiftfinMediaCatalog
+import SwiftfinMediaTracks
 import SwiftfinNowPlaying
 import SwiftfinRecordingTimers
 import SwiftfinText
 import SwiftfinTime
+import SwiftfinUserMediaState
 import SwiftfinValues
 import SwiftUI
-
-// TODO: clean up
 
 extension BaseItemDto {
 
@@ -100,18 +100,15 @@ extension BaseItemDto {
     }
 
     var birthday: Date? {
-        guard type == .person else { return nil }
-        return premiereDate
+        ItemMetadataFacts(self).birthday
     }
 
     var birthplace: String? {
-        guard type == .person else { return nil }
-        return productionLocations?.first { $0.isNotEmpty }
+        ItemMetadataFacts(self).birthplace
     }
 
     var deathday: Date? {
-        guard type == .person else { return nil }
-        return endDate
+        ItemMetadataFacts(self).deathday
     }
 
     var episodeLocator: String? {
@@ -121,26 +118,7 @@ extension BaseItemDto {
 
     /// Merges crew credits
     var mergedPeople: [BaseItemPerson]? {
-        guard let people else { return nil }
-
-        let crew = Dictionary(grouping: people.filter(\.isCrew), by: \.id)
-        var seen: Set<String> = []
-
-        return people.compactMap { person in
-            guard person.isCrew, let id = person.id, let credits = crew[id], credits.count > 1 else {
-                return person
-            }
-            guard seen.insert(id).inserted else { return nil }
-
-            let roles = credits.compactMap(\.role)
-                .filter(\.isNotEmpty)
-                .uniqued()
-                .joined(separator: " / ")
-
-            var person = person
-            person.role = roles.isEmpty ? nil : roles
-            return person
-        }
+        ItemMetadataPolicy.mergedPeople(in: self)
     }
 
     var itemGenres: [ItemGenre]? {
@@ -151,16 +129,11 @@ extension BaseItemDto {
     /// Differs from `isLive` to indicate an item
     /// would be streaming from a live source.
     var isLiveStream: Bool {
-        channelType == .tv
+        CatalogItemState(self, at: .now).isLiveStream
     }
 
     var isAiring: Bool {
-        if let currentProgram {
-            return currentProgram.isAiring
-        }
-
-        guard let startDate, let endDate else { return false }
-        return startDate <= .now && .now <= endDate
+        CatalogItemState(self, at: .now).isAiring
     }
 
     /// Whether the item has independent playable content, similar
@@ -169,14 +142,7 @@ extension BaseItemDto {
     /// ie: A movie and an episode can be directly played,
     ///     but a series is not as its episodes are playable.
     var isPlayable: Bool {
-        guard !isMissing else { return false }
-
-        return switch type {
-        case .series:
-            false
-        default:
-            true
-        }
+        CatalogItemState(self, at: .now).isPlayable
     }
 
     /// The primary image handler for building the
@@ -271,13 +237,11 @@ extension BaseItemDto {
     }
 
     var runtime: Duration? {
-        guard let ticks = runTimeTicks, ticks > 0 else { return nil }
-        return Duration.ticks(ticks)
+        CatalogItemState(self, at: .now).runtime
     }
 
     var startSeconds: Duration? {
-        guard let ticks = userData?.playbackPositionTicks else { return nil }
-        return Duration.ticks(ticks)
+        CatalogItemState(self, at: .now).startSeconds
     }
 
     var seasonEpisodeLabel: String? {
@@ -328,92 +292,49 @@ extension BaseItemDto {
     }
 
     var programDuration: TimeInterval? {
-        guard let startDate, let endDate else { return nil }
-        return endDate.timeIntervalSince(startDate)
+        CatalogItemState(self, at: .now).programDuration
     }
 
     var programProgress: Double? {
-        guard let startDate, let endDate else { return nil }
-
-        let length = endDate.timeIntervalSince(startDate)
-        let progress = Date.now.timeIntervalSince(startDate)
-
-        return progress / length
+        CatalogItemState(self, at: .now).programProgress
     }
 
     func programProgress(relativeTo other: Date) -> Double? {
-        guard let startDate, let endDate else { return nil }
-
-        let length = endDate.timeIntervalSince(startDate)
-        let progress = other.timeIntervalSince(startDate)
-
-        return progress / length
+        CatalogItemState(self, at: other).programProgress
     }
 
     var progressPercentage: Double? {
-        if let currentProgram {
-            return currentProgram.progressPercentage
-        }
-
-        if isAiring, let startDate, let endDate {
-            let length = endDate.timeIntervalSince(startDate)
-            guard length > 0 else { return nil }
-
-            return clamp(
-                Date.now.timeIntervalSince(startDate) / length,
-                min: 0,
-                max: 1
-            )
-        }
-
-        guard let playedPercentage = userData?.playedPercentage, playedPercentage > 0 else {
-            return nil
-        }
-
-        return playedPercentage / 100
+        CatalogItemState(self, at: .now).progressPercentage
     }
 
     var subtitleStreams: [MediaStream] {
-        mediaStreams?.filter { $0.type == .subtitle } ?? []
+        MediaStreamKindPolicy.streams(in: mediaStreams, matching: .subtitle)
     }
 
     var audioStreams: [MediaStream] {
-        mediaStreams?.filter { $0.type == .audio } ?? []
+        MediaStreamKindPolicy.streams(in: mediaStreams, matching: .audio)
     }
 
     var videoStreams: [MediaStream] {
-        mediaStreams?.filter { $0.type == .video } ?? []
+        MediaStreamKindPolicy.streams(in: mediaStreams, matching: .video)
     }
 
     var isRecording: Bool {
-        if let currentProgram {
-            return currentProgram.isRecording
-        }
-
-        return timerID != nil
+        CatalogItemState(self, at: .now).isRecording
     }
 
     // MARK: Missing and Unaired
 
     var isMissing: Bool {
-        locationType == .virtual
+        CatalogItemState(self, at: .now).isMissing
     }
 
     var isUnaired: Bool {
-        if let startDate {
-            return startDate > Date.now
-        }
-
-        if let premiereDate {
-            return premiereDate > Date.now
-        }
-
-        return false
+        CatalogItemState(self, at: .now).isUnaired
     }
 
     var hasAired: Bool {
-        guard let startDate, let endDate else { return false }
-        return startDate <= Date.now && endDate < Date.now
+        CatalogItemState(self, at: .now).hasAired
     }
 
     var airDateLabel: String? {
@@ -437,15 +358,11 @@ extension BaseItemDto {
     }
 
     var hasExternalLinks: Bool {
-        guard let externalURLs else { return false }
-        return externalURLs.isNotEmpty
+        ItemMetadataFacts(self).hasExternalLinks
     }
 
     var hasRatings: Bool {
-        [
-            criticRating,
-            communityRating,
-        ].contains { $0 != nil }
+        ItemMetadataFacts(self).hasRatings
     }
 
     // MARK: Chapter Images
@@ -492,38 +409,18 @@ extension BaseItemDto {
     /// Can this `BaseItemDto` be played
     @MainActor
     var presentPlayButton: Bool {
-        guard Container.shared.currentUserSession()?.user.data.policy?.enableMediaPlayback == true else { return false }
-
-        switch type {
-        case .audio, .audioBook, .book, .channel, .channelFolderItem, .episode,
-             .movie, .liveTvChannel, .liveTvProgram, .musicAlbum, .musicArtist, .musicVideo, .playlist,
-             .program, .recording, .season, .series, .trailer, .tvChannel, .tvProgram, .video:
-            return true
-        default:
-            return false
-        }
+        CatalogItemState(self, at: .now)
+            .presentsPlayButton(permitted: Container.shared.currentUserSession()?.user.data.policy?.enableMediaPlayback == true)
     }
 
     /// Can this `BaseItemDto` be favorited
     var canBeFavorited: Bool {
-        switch type {
-        case .program, .liveTvProgram, .tvProgram:
-            false
-        default:
-            true
-        }
+        UserMediaStatePolicy.capabilities(for: type).canBeFavorited
     }
 
     /// Can this `BaseItemDto` be mark as played
     var canBePlayed: Bool {
-        switch type {
-        case .audio, .audioBook, .book, .boxSet, .channelFolderItem, .collectionFolder, .episode, .manualPlaylistsFolder,
-             .movie, .musicAlbum, .musicArtist, .musicVideo, .playlist, .playlistsFolder, .recording, .season,
-             .series, .trailer, .video:
-            true
-        default:
-            false
-        }
+        UserMediaStatePolicy.capabilities(for: type).canBePlayed
     }
 
     /// Can this `BaseItemDto` be recorded
@@ -573,39 +470,16 @@ extension BaseItemDto {
     }
 
     var parentTitle: String? {
-        switch type {
-        case .audio:
-            album
-        case .episode, .season:
-            seriesName
-        case .musicAlbum:
-            albumArtist
-        case .liveTvProgram, .program, .tvProgram:
-            channelName
-        default:
-            nil
-        }
+        CatalogItemState(self, at: .now).parentTitle
     }
 
     var parentRootID: String? {
-        switch type {
-        case .episode:
-            seriesID
-        default:
-            parentID
-        }
+        CatalogItemState(self, at: .now).parentRootID
     }
 
     /// Does this `BaseItemDto` have `Genres`, `People`, `Studios`, or `Tags`
     var hasComponents: Bool {
-        switch type {
-        case .audio, .audioBook, .book, .boxSet, .channelFolderItem, .collectionFolder, .episode, .manualPlaylistsFolder, .movie,
-             .liveTvProgram, .musicAlbum, .musicArtist, .musicVideo, .playlist, .playlistsFolder, .program, .recording, .season,
-             .series, .trailer, .tvProgram, .video:
-            true
-        default:
-            false
-        }
+        ItemMetadataFacts(self).hasComponents
     }
 
     @MainActor

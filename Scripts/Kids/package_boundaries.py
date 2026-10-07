@@ -52,7 +52,7 @@ POLICIES = {
     "SwiftfinItemMetadata": ({"SwiftfinNetworking"}, {"Foundation", "Get", "JellyfinAPI"}),
     "SwiftfinUserAdministration": ({"SwiftfinNetworking", "SwiftfinCollections"}, {"Foundation", "Get", "JellyfinAPI"}),
     "SwiftfinServerOperations": ({"SwiftfinNetworking", "SwiftfinCollections"}, {"Foundation", "Get", "JellyfinAPI"}),
-    "SwiftfinMediaCatalog": ({"SwiftfinNetworking", "SwiftfinCollections"}, {"Foundation", "Get", "JellyfinAPI"}),
+    "SwiftfinMediaCatalog": ({"SwiftfinNetworking", "SwiftfinCollections", "SwiftfinTime"}, {"Foundation", "Get", "JellyfinAPI"}),
     "SwiftfinPaging": ({}, {"Foundation", "Combine"}),
     "SwiftfinScrolling": ({}, {"Foundation", "UIKit", "Combine"}),
     "SwiftfinMediaTracks": ({"SwiftfinPlaybackProfiles"}, {"Foundation", "CryptoKit", "JellyfinAPI"}),

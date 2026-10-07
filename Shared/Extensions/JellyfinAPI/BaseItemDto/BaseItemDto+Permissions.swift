@@ -8,52 +8,28 @@
 
 import FactoryKit
 import JellyfinAPI
-import SwiftUI
+import SwiftfinItemMetadata
 
 @MainActor
 extension BaseItemDto {
 
     /// Indicates whether the item can be downloaded by the current user
     var canBeDownloaded: Bool {
-        guard let userPolicy = Container.shared.currentUserSession()?.user.data.policy else { return false }
-        return userPolicy.enableContentDownloading == true && canDownload == true
+        ItemMetadataPolicy.permissions(for: self, policy: Container.shared.currentUserSession()?.user.data.policy).canDownload
     }
 
     /// Indicates whether the item's metadata can be edited by the current user
     var canEditMetadata: Bool {
-        guard let userPolicy = Container.shared.currentUserSession()?.user.data.policy else { return false }
-
-        switch type {
-        case .playlist:
-            return canDelete == true
-        case .boxSet:
-            return userPolicy.enableCollectionManagement == true || userPolicy.isAdministrator == true
-        default:
-            return userPolicy.isAdministrator == true
-        }
+        ItemMetadataPolicy.permissions(for: self, policy: Container.shared.currentUserSession()?.user.data.policy).canEditMetadata
     }
 
     /// Indicates whether the item's lyrics can be edited by the current user
     var canEditLyrics: Bool {
-        guard let userPolicy = Container.shared.currentUserSession()?.user.data.policy else { return false }
-
-        switch type {
-        case .audio:
-            return userPolicy.enableLyricManagement == true || userPolicy.isAdministrator == true
-        default:
-            return false
-        }
+        ItemMetadataPolicy.permissions(for: self, policy: Container.shared.currentUserSession()?.user.data.policy).canEditLyrics
     }
 
     /// Indicates whether the item's subtitles can be edited by the current user
     var canEditSubtitles: Bool {
-        guard let userPolicy = Container.shared.currentUserSession()?.user.data.policy else { return false }
-
-        switch type {
-        case .episode, .movie, .musicVideo, .trailer, .video:
-            return userPolicy.enableSubtitleManagement == true || userPolicy.isAdministrator == true
-        default:
-            return false
-        }
+        ItemMetadataPolicy.permissions(for: self, policy: Container.shared.currentUserSession()?.user.data.policy).canEditSubtitles
     }
 }
