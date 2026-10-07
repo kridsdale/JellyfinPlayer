@@ -54,35 +54,47 @@ public struct KidsAccountIdentity: Equatable, Hashable, Sendable, CustomStringCo
     }
 }
 
+public typealias KidsAccountCheckpoint = @MainActor @Sendable () throws -> Void
+
 /// SDK-specific authentication data stays inside the host's activation closure.
 /// The application must verify policy and the exact libraries before activation.
 @MainActor
 public final class KidsAuthenticatedAccount {
     public let identity: KidsAccountIdentity
-    private let credentialStorage: @MainActor () throws -> Void
-    private let activation: @MainActor () async throws -> Void
+    private let credentialStorage: @MainActor (KidsAccountCheckpoint) throws -> Void
+    private let activation: @MainActor (KidsAccountCheckpoint) async throws -> Void
     private var preparedBinding: KidsBinding?
 
     public init(
         identity: KidsAccountIdentity,
-        credentialStorage: @escaping @MainActor () throws -> Void = {},
-        activation: @escaping @MainActor () async throws -> Void
+        credentialStorage: @escaping @MainActor (KidsAccountCheckpoint) throws -> Void = { try $0() },
+        activation: @escaping @MainActor (KidsAccountCheckpoint) async throws -> Void
     ) {
         self.identity = identity
         self.credentialStorage = credentialStorage
         self.activation = activation
     }
 
-    /// Store the host credentials after catalog authorization, before saving the application binding.
-    public func prepareActivation(binding: KidsBinding) throws {
+    /// Each preparation revokes earlier authority, including a failed retry.
+    public func prepareActivation(
+        binding: KidsBinding,
+        validate: @escaping KidsAccountCheckpoint = { try Task.checkCancellation() }
+    ) throws {
+        preparedBinding = nil
+        try validate()
         guard identity.matches(binding) else { throw KidsContractError.denied }
-        try credentialStorage()
+        try credentialStorage(validate)
+        try validate()
         preparedBinding = binding
     }
 
-    public func activate(binding: KidsBinding) async throws {
+    /// Preparation is consumed before suspension. The host checks before native publication.
+    public func activate(binding: KidsBinding, validate: @escaping KidsAccountCheckpoint = { try Task.checkCancellation() }) async throws {
+        try validate()
         guard preparedBinding == binding, identity.matches(binding) else { throw KidsContractError.denied }
-        try await activation()
+        preparedBinding = nil
+        try await activation(validate)
+        try validate()
     }
 }
 
@@ -91,6 +103,7 @@ public final class KidsAuthenticatedAccount {
 @MainActor
 public protocol KidsAccountHost: AnyObject {
     var currentIdentity: KidsAccountIdentity? { get }
+    /// Deliver identity changes synchronously on the main actor, including credential replacement.
     var identityChanges: AnyPublisher<KidsAccountIdentity?, Never> { get }
     var parentPIN: String? { get throws }
     func storeParentPIN(_ pin: String) throws
@@ -101,5 +114,5 @@ public protocol KidsAccountHost: AnyObject {
         username: String,
         password: String
     ) async throws -> KidsAuthenticatedAccount
-    func signOut() async
+    func signOut(validate: @escaping KidsAccountCheckpoint) async throws
 }

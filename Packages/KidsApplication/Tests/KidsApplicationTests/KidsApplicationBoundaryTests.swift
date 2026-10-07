@@ -60,8 +60,10 @@ final class KidsApplicationBoundaryTests: XCTestCase {
             throw KidsContractError.denied
         }
 
-        func signOut() async {
+        func signOut(validate: @escaping KidsAccountCheckpoint) async throws {
+            try validate()
             signOuts += 1
+            changes.send(nil)
         }
     }
 

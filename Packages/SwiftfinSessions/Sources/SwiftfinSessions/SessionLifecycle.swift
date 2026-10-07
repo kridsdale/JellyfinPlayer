@@ -107,42 +107,62 @@ public final class ActiveSessionCoordinator<Session: AccountSessionLifecycle> {
     }
 
     public func replace(with replacement: Session?) async {
+        try? await replace(with: replacement, validate: {})
+    }
+
+    /// Admission checks precede teardown and surround noncooperating preparation/publication.
+    public func replace(with replacement: Session?, validate: @MainActor @Sendable () throws -> Void) async throws {
+        try Task.checkCancellation()
+        try validate()
         if let current, let replacement, current === replacement {
             return
         }
         generation &+= 1
         let attempt = generation
-        preparing?.stop()
+        let oldPreparing = preparing
+        let oldCurrent = current
         preparing = nil
-        current?.stop()
         current = nil
-        preparing = replacement
-        await replacement?.prepare()
-
-        guard generation == attempt, !Task.isCancelled else {
-            replacement?.stop()
+        oldPreparing?.stop()
+        oldCurrent?.stop()
+        do {
+            try validate()
+            guard generation == attempt else { throw CancellationError() }
+            preparing = replacement
+            await replacement?.prepare()
+            try Task.checkCancellation()
+            try validate()
+            guard generation == attempt else { throw CancellationError() }
+            preparing = nil
+            current = replacement
+            let identity = replacement?.sessionIdentity
+            let changed = publishedIdentity != identity
+            publishedIdentity = identity
+            publish(replacement, changed)
+            try validate()
+            guard generation == attempt else { throw CancellationError() }
+            replacement?.start()
+        } catch {
+            // Never stop an instance that a newer request now owns.
             if generation == attempt {
                 preparing = nil
+                current = nil
+                replacement?.stop()
+            } else if current !== replacement, preparing !== replacement {
+                replacement?.stop()
             }
-            return
+            throw error
         }
-        preparing = nil
-        current = replacement
-        let identity = replacement?.sessionIdentity
-        let changed = publishedIdentity != identity
-        publishedIdentity = identity
-        publish(replacement, changed)
-        // Publication can synchronously request stop/replacement.
-        guard generation == attempt else { return }
-        replacement?.start()
     }
 
     public func stop() {
         generation &+= 1
-        preparing?.stop()
+        let oldPreparing = preparing
+        let oldCurrent = current
         preparing = nil
-        current?.stop()
         current = nil
+        oldPreparing?.stop()
+        oldCurrent?.stop()
     }
 
     isolated deinit { stop() }

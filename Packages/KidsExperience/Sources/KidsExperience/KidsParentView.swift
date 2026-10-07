@@ -208,6 +208,9 @@ struct KidsParentView: View {
                             model.lockParents()
                             dismiss()
                         }
+                    } catch is CancellationError {
+                        busy = false
+                        password = ""
                     } catch { busy = false
                         password = ""
                         message = (error as? KidsParentPINError)?.localizedDescription ?? (error as? KidsAPIError)?.localizedDescription ??

@@ -147,6 +147,32 @@ final class UserSessionManager: ObservableObject {
         }
     }
 
+    /// Restricted child activation resolves the exact account pair before publication.
+    func signIn(
+        userID: String,
+        serverID: String,
+        validate: AsyncOperationGate.Checkpoint,
+        validateSession: @MainActor @Sendable (UserSession) throws -> Void
+    ) async throws {
+        try validate()
+        guard let user = StoredValues[.User.users].first(where: { $0.id == userID && $0.serverID == serverID }),
+              let server = StoredValues[.Server.servers].first(where: { $0.id == serverID })
+        else { throw UserSessionError.invalidStoredSession(userID: userID) }
+        let session = UserSession(server: server, user: user)
+        try validateSession(session)
+        try validate()
+        Defaults[.lastSignedInUserID] = .signedIn(userID: userID)
+        try validate()
+        metadataRefresh.cancel()
+        try await sessionCoordinator.replace(with: session, validate: {
+            try validate()
+            try validateSession(session)
+        })
+        try validate()
+        guard currentSession === session else { throw CancellationError() }
+        refreshServerInformationIfNeeded(reason: .explicitSignIn, session: session)
+    }
+
     @MainActor
     func signOut(reason: SignOutReason) async {
         metadataRefresh.cancel()
@@ -159,6 +185,17 @@ final class UserSessionManager: ObservableObject {
             "Signed out current user",
             metadata: ["reason": .string(String(describing: reason))]
         )
+    }
+
+    /// Child sign-out participates in the same admission scope as sign-in.
+    func signOut(reason: SignOutReason, validate: AsyncOperationGate.Checkpoint) async throws {
+        try validate()
+        metadataRefresh.cancel()
+        Defaults[.lastSignedInUserID] = .signedOut
+        try validate()
+        try await sessionCoordinator.replace(with: nil, validate: validate)
+        try validate()
+        logger.info("Signed out current user", metadata: ["reason": .string(String(describing: reason))])
     }
 
     @MainActor

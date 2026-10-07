@@ -29,6 +29,7 @@ public final class KidsAppModel: ObservableObject, KidsPlaybackSessionDelegate {
     public private(set) var accountRevision = UUID()
     private let playbackFactory: (any KidsPlaybackSessionFactory)?
     private let accounts: (any KidsAccountHost)?
+    private let admission: KidsAccountAdmission?
     @Published
     private(set) var accountIdentity: KidsAccountIdentity?
     @Published
@@ -269,6 +270,7 @@ public final class KidsAppModel: ObservableObject, KidsPlaybackSessionDelegate {
     init(accounts: (any KidsAccountHost)? = nil, playbackFactory: (any KidsPlaybackSessionFactory)? = nil, preview: Bool = false) {
         self.playbackFactory = playbackFactory
         self.accounts = accounts
+        self.admission = accounts.map { KidsAccountAdmission(host: $0) }
         self.accountIdentity = accounts?.currentIdentity
         if preview {
             isPreview = true
@@ -649,6 +651,7 @@ public final class KidsAppModel: ObservableObject, KidsPlaybackSessionDelegate {
     }
 
     public func lockParents() {
+        admission?.cancel()
         gate.lock()
         saveGate()
         speechTask?.cancel()
@@ -708,73 +711,111 @@ public final class KidsAppModel: ObservableObject, KidsPlaybackSessionDelegate {
         guard let url = URL(string: urlText.trimmingCharacters(in: .whitespacesAndNewlines)),
               ["http", "https"].contains(url.scheme?.lowercased()), url.host != nil, url.user == nil,
               url.password == nil else { throw KidsAPIError.connection }
-        let info = try await KidsAPI(serverURL: url, token: "").serverInfo()
-        let authenticated = try await accounts.authenticate(
-            url: url,
-            serverID: info.id,
-            serverName: info.name,
-            username: username,
-            password: password
-        )
-        let token = authenticated.identity.accessToken
-        let userID = authenticated.identity.userID
-        let newAPI = KidsAPI(serverURL: url, token: token)
-        let libraries = try await newAPI.libraries(userID: userID)
-        guard let shows = libraries.first(where: { $0.name == "Kid TV" && $0.collectionType == "tvshows" }),
-              let movies = libraries.first(where: { $0.name == "Kid Movies" && $0.collectionType == "movies" })
-        else { throw KidsAPIError.libraryChanged }
-        let binding = KidsBinding(serverID: info.id, userID: userID, showsID: shows.id, moviesID: movies.id)
-        try await newAPI.validate(binding)
-        try accounts.authorizeParentSetup(unlocked: unlocked, recovering: recovering)
-        let restored: KidsSyncSnapshot
-        if recovering {
-            guard let data = UserDefaults.standard.data(forKey: bindingKey) ?? UserDefaults.standard.data(forKey: recoveryBindingKey),
-                  let previous = try? JSONDecoder().decode(KidsBinding.self, from: data), previous == binding
-            else { throw KidsContractError.denied }
-            // Verify the same restricted account and both library identities before resetting the gate.
-            guard gate.mayAttempt(at: .now) else { throw KidsContractError.denied }
-            restored = try repository().reset(binding: binding)
-        } else {
-            if accounts.hasParentPIN {
-                guard try accounts.matchesParentPIN(parentPIN) else { throw KidsContractError.denied }
+        guard let admission else { throw KidsAPIError.authentication }
+        let attempt = try admission.begin()
+        do {
+            let info = try await KidsAPI(serverURL: url, token: "").serverInfo()
+            try attempt.check()
+            let authenticated = try await accounts.authenticate(
+                url: url,
+                serverID: info.id,
+                serverName: info.name,
+                username: username,
+                password: password
+            )
+            try attempt.check()
+            let token = authenticated.identity.accessToken
+            let userID = authenticated.identity.userID
+            let newAPI = KidsAPI(serverURL: url, token: token)
+            let libraries = try await newAPI.libraries(userID: userID)
+            try attempt.check()
+            guard authenticated.identity.serverURL == url,
+                  authenticated.identity.serverID == info.id else { throw KidsContractError.denied }
+            guard let shows = libraries.first(where: { $0.name == "Kid TV" && $0.collectionType == "tvshows" }),
+                  let movies = libraries.first(where: { $0.name == "Kid Movies" && $0.collectionType == "movies" })
+            else { throw KidsAPIError.libraryChanged }
+            let binding = KidsBinding(serverID: info.id, userID: userID, showsID: shows.id, moviesID: movies.id)
+            try await newAPI.validate(binding)
+            try attempt.check()
+            try accounts.authorizeParentSetup(unlocked: unlocked, recovering: recovering)
+            let restored: KidsSyncSnapshot
+            if recovering {
+                guard let data = UserDefaults.standard.data(forKey: bindingKey) ?? UserDefaults.standard.data(forKey: recoveryBindingKey),
+                      let previous = try? JSONDecoder().decode(KidsBinding.self, from: data), previous == binding
+                else { throw KidsContractError.denied }
+                // Verify the same restricted account and both library identities before resetting the gate.
+                guard gate.mayAttempt(at: .now) else { throw KidsContractError.denied }
+                restored = try repository().reset(binding: binding)
+            } else {
+                if accounts.hasParentPIN {
+                    guard try accounts.matchesParentPIN(parentPIN) else { throw KidsContractError.denied }
+                }
+                // Refreshing credentials for the same binding retains ordered progress, bags, and session budget.
+                restored = try repository().load(binding: binding, legacyURL: stateURL)
             }
-            // Refreshing credentials for the same binding retains ordered progress, bags, and session budget.
-            restored = try repository().load(binding: binding, legacyURL: stateURL)
+            // Only the same-account/library recovery above may replace a locked PIN.
+            // Parent access is granted after secure storage succeeds.
+            try replacePIN(parentPIN, verifiedRecovery: recovering)
+            try attempt.check()
+            await stopPlayback()
+            try attempt.check()
+            try attempt.prepare(authenticated, binding: binding)
+            let encodedBinding = try JSONEncoder().encode(binding)
+            try attempt.check()
+            UserDefaults.standard.set(encodedBinding, forKey: bindingKey)
+            try attempt.check()
+            UserDefaults.standard.set(encodedBinding, forKey: recoveryBindingKey)
+            try attempt.check()
+            syncBaseline = restored
+            state = restored.state
+            // Use the existing session lifecycle for playback SDK integration, without exposing its library UI.
+            try attempt.check()
+            try await attempt.activate(authenticated, binding: binding)
+            try attempt.check()
+            await refresh()
+            try attempt.check()
+        } catch {
+            // Obsolete failures cannot become a current setup error.
+            try attempt.check()
+            throw error
         }
-        // Only the same-account/library recovery above may replace a locked PIN.
-        // Parent access is granted after secure storage succeeds.
-        try replacePIN(parentPIN, verifiedRecovery: recovering)
-        await stopPlayback()
-        try authenticated.prepareActivation(binding: binding)
-        let encodedBinding = try JSONEncoder().encode(binding)
-        UserDefaults.standard.set(encodedBinding, forKey: bindingKey)
-        UserDefaults.standard.set(encodedBinding, forKey: recoveryBindingKey)
-        syncBaseline = restored
-        state = restored.state
-        // Use the existing session lifecycle for playback SDK integration, without exposing its library UI.
-        try await authenticated.activate(binding: binding)
-        await refresh()
     }
 
     public func signOut() async {
-        guard !isPreview, unlocked else { return }
-        refreshFlight?.task.cancel()
-        refreshFlight = nil
-        refreshGeneration = UUID()
-        retainedAPI = nil
-        invalidateEpisodeMetadata()
-        invalidateArtwork()
-        await stopPlayback()
-        catalog = [:]
-        lastFocus = [:]
-        state = nil
-        if let data = UserDefaults.standard.data(forKey: bindingKey) {
-            UserDefaults.standard.set(data, forKey: recoveryBindingKey)
+        guard !isPreview, unlocked, let admission else { return }
+        let attempt: KidsAccountAdmission.Attempt
+        do { attempt = try admission.begin() }
+        catch { return }
+        do {
+            refreshFlight?.task.cancel()
+            refreshFlight = nil
+            refreshGeneration = UUID()
+            retainedAPI = nil
+            invalidateEpisodeMetadata()
+            invalidateArtwork()
+            await stopPlayback()
+            try attempt.check()
+            catalog = [:]
+            try attempt.check()
+            lastFocus = [:]
+            state = nil
+            try attempt.check()
+            if let data = UserDefaults.standard.data(forKey: bindingKey) {
+                UserDefaults.standard.set(data, forKey: recoveryBindingKey)
+            }
+            try attempt.check()
+            UserDefaults.standard.removeObject(forKey: bindingKey)
+            try await attempt.signOut()
+            try attempt.check()
+            requiresParent = true
+            lockParents()
+        } catch is CancellationError {
+            // A replacement admission owns subsequent effects.
+        } catch {
+            do { try attempt.check()
+                show(error)
+            } catch { return }
         }
-        UserDefaults.standard.removeObject(forKey: bindingKey)
-        await accounts?.signOut()
-        lockParents()
-        requiresParent = true
     }
 
     public func play(

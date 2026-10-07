@@ -19,6 +19,7 @@ private final class Resource: SessionResource {
     var continuation: CheckedContinuation<Void, Never>?
     let suspended: Bool
     var onStart: (@MainActor () -> Void)?
+    var onStop: (@MainActor () -> Void)?
     init(_ name: String, log: Log, suspended: Bool = false) {
         self.name = name
         self.log = log
@@ -40,6 +41,7 @@ private final class Resource: SessionResource {
 
     func stop() {
         log.events.append("stop-" + name)
+        onStop?()
     }
 }
 
@@ -230,5 +232,77 @@ struct SessionLifecycleContracts {
         await coordinator.replace(with: session)
         #expect(publications == 1 && log.events.filter { $0 == "start-one" }.count == 1)
         #expect(!log.events.contains("stop-one"))
+    }
+}
+
+@MainActor
+private final class AdmissionValidity {
+    var current = true
+    func check() throws {
+        if !current {
+            throw CancellationError()
+        }
+    }
+}
+
+extension SessionLifecycleContracts {
+    @Test
+    func `failed admission preflight leaves the active session untouched`() async throws {
+        let log = Log(), validity = AdmissionValidity()
+        let owner = ActiveSessionCoordinator<Session> { _, _ in }
+        let current = Session(user: "current", resources: [Resource("current", log: log)])
+        await owner.replace(with: current)
+        let before = log.events
+        validity.current = false
+        do { try await owner.replace(with: Session(user: "next", resources: []), validate: { try validity.check() })
+            Issue.record("Failed preflight replaced session")
+        } catch { #expect(error is CancellationError) }
+        #expect(owner.current === current && log.events == before)
+    }
+
+    @Test
+    func `admission retired during resource preparation cannot publish or start`() async throws {
+        let log = Log(), validity = AdmissionValidity()
+        let resource = Resource("pending", log: log, suspended: true)
+        var published = 0
+        let owner = ActiveSessionCoordinator<Session> { _, _ in published += 1 }
+        let task = Task { try await owner.replace(with: Session(user: "next", resources: [resource]), validate: { try validity.check() }) }
+        for _ in 0 ..< 100 where resource.continuation == nil {
+            await Task.yield()
+        }
+        let continuation = try #require(resource.continuation)
+        validity.current = false
+        continuation.resume()
+        do { try await task.value
+            Issue.record("Retired preparation published")
+        } catch { #expect(error is CancellationError) }
+        #expect(owner.current == nil && published == 0 && !log.events.contains("start-pending"))
+        #expect(log.events.last == "stop-pending")
+    }
+
+    @Test
+    func `publication reentry revokes resource start and cleans up`() async throws {
+        let log = Log(), validity = AdmissionValidity()
+        let owner = ActiveSessionCoordinator<Session> { _, _ in validity.current = false }
+        do { try await owner.replace(
+            with: Session(user: "next", resources: [Resource("pending", log: log)]),
+            validate: { try validity.check() }
+        )
+        Issue.record("Revoked publication started resources")
+        } catch { #expect(error is CancellationError) }
+        #expect(owner.current == nil && !log.events.contains("start-pending") && log.events.last == "stop-pending")
+    }
+
+    @Test
+    func `teardown reentry cannot let the outer replacement resume preparation`() async throws {
+        let log = Log()
+        let resource = Resource("current", log: log)
+        let owner = ActiveSessionCoordinator<Session> { _, _ in }
+        await owner.replace(with: Session(user: "current", resources: [resource]))
+        resource.onStop = { owner.stop() }
+        do { try await owner.replace(with: Session(user: "next", resources: [Resource("next", log: log)]), validate: {})
+            Issue.record("Outer replacement survived stop reentry")
+        } catch { #expect(error is CancellationError) }
+        #expect(owner.current == nil && !log.events.contains("prepare-next"))
     }
 }

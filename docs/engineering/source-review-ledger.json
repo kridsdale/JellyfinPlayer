@@ -3055,8 +3055,8 @@
         "SwiftfinAsyncStreams"
       ],
       "path": "Shared/Services/UserSession/UserSessionManager.swift",
-      "reason": "Mixed: scoped metadata freshness/lifetime now delegates to SessionMetadataRefresh with exact weak session/transport identity and explicit pre-commit checkpoints; captured sign-in scheduling replaces delayed current-account selection. Selection and bound SDK socket/metadata operations delegate. Deep-link authentication, sign-in/sign-out and foreground inter-await intent sequencing still require a higher-level operation audit; this entry does not approve them. Exact evaluated-PIN validation now delegates to AccountStore with strict missing-PIN denial; local authentication prompting and localized errors remain composition.",
-      "sha256": "1ff065c0cd88eb23bb25a23444db6b78403c875e8b0571a1def3c26d8c1ec7cb",
+      "reason": "Mixed: scoped metadata freshness/lifetime now delegates to SessionMetadataRefresh with exact weak session/transport identity and explicit pre-commit checkpoints; captured sign-in scheduling replaces delayed current-account selection. Selection and bound SDK socket/metadata operations delegate. Deep-link authentication, sign-in/sign-out and foreground inter-await intent sequencing still require a higher-level operation audit; this entry does not approve them. Exact evaluated-PIN validation now delegates to AccountStore with strict missing-PIN denial; local authentication prompting and localized errors remain composition. Scoped child sign-in/sign-out overloads now resolve an exact account pair and borrow a caller checkpoint/full-session validator through resource preparation and publication. The existing inherited login/start/deep-link/foreground paths remain outside that scoped approval, so the file stays mixed.",
+      "sha256": "97698003251eccf00e739612cdb36b2547ede1307698c9008f1e6bca283206ce",
       "status": "source-reviewed-mixed"
     },
     {
@@ -4993,9 +4993,9 @@
         "SwiftfinStoredValues"
       ],
       "path": "Swiftfin tvOS/App/KidsAccountAdapter.swift",
-      "reason": "Complete host adapter body and parent consumers reviewed: identity projection and captured authentication/storage delegate to existing owners. The PIN read now throws instead of collapsing credential failure into absence; KidsAccounts owns fail-closed setup/matching/replacement with eight new fake-host contracts. Still mixed: deferred authenticated-account credential/cache/policy/activation closures require end-to-end admission-intent and inter-await ownership validation. The coordinator still spans asynchronous authentication/catalog/player/session stages. No household credential, server or simulator was accessed; no full activation/runtime approval is claimed.",
-      "sha256": "c2ad0f376e3583a6899f114c5abe74b32aa154912b784943d12319ce354af7f4",
-      "status": "source-reviewed-mixed"
+      "reason": "Complete adapter body reviewed: projects full identity from main-actor session publication synchronously, delegates throwing PIN access, captures validated SDK authentication and composes credential/cache/policy effects with admission checkpoints. Activation resolves the exact server/user pair and checks full URL/server/user/token identity through prepared-session publication; sign-out carries the same checkpoint. Library owners implement admission, local storage and resource lifetime. Accepted compound local-store effects are not rolled back; inherited manager flows and real Keychain/network/player acceptance remain separate and unapproved here.",
+      "sha256": "195bcfdae3c5f5d56c9791dd84b91fa23547040b84deccb635eac29fb1059691",
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [
@@ -5698,6 +5698,54 @@
         "replaceParentPIN(_:unlocked:)"
       ],
       "sha256": "bf14e672ed470e4ca456489992c525a6e614cff630a89192f226d3abdfc86412"
+    },
+    {
+      "path": "Packages/KidsAccounts/Sources/KidsAccounts/KidsAccountHost.swift",
+      "reason": "Scoped staged-account and host contracts reviewed: throwing main-actor Sendable checkpoints enter secure storage and activation callbacks; each preparation revokes previous authority and activation consumes preparation before suspension. The original failed-preparation retry regression failed, then passes. Identity changes must be synchronous on the main actor; the concrete adapter uses the actor-owned session publisher directly. No transactional rollback or generic approval of all host implementations is claimed.",
+      "reviewedConsumers": [
+        "Packages/KidsApplication/Sources/KidsApplication/KidsAppModel.swift",
+        "Swiftfin tvOS/App/KidsAccountAdapter.swift"
+      ],
+      "reviewedInterfaces": [
+        "KidsAccountCheckpoint",
+        "KidsAuthenticatedAccount.init",
+        "prepareActivation(binding:validate:)",
+        "activate(binding:validate:)",
+        "KidsAccountHost.identityChanges",
+        "signOut(validate:)"
+      ],
+      "sha256": "fd577f3c71ca2d4d88f10172402116be0171316897606f769cb7c800ce1870ed"
+    },
+    {
+      "path": "Packages/KidsAccounts/Sources/KidsAccounts/KidsAccountAdmission.swift",
+      "reason": "Complete admission owner reviewed: existing AsyncStreams ticket gate rejects replaced/cancelled/released work, full identity signals permanently reject ABA, and the exact authenticated target is admitted during own credential replacement/activation. Nil is an explicit sign-out target. Ten synthetic contracts cover owner lifetime, cancelled submission, identity replacement, old work, checked storage reentry, one-shot activation, missing/wrong publication and late logout. It starts no tasks, performs no IO and undoes no accepted effects. UIKit/SDK composition is compile-only under the human hold.",
+      "reviewedConsumers": [
+        "Packages/KidsApplication/Sources/KidsApplication/KidsAppModel.swift",
+        "Swiftfin tvOS/App/KidsAccountAdapter.swift"
+      ],
+      "reviewedInterfaces": [
+        "init(host:)",
+        "begin()",
+        "cancel()",
+        "Attempt.checkpoint",
+        "Attempt.check()",
+        "Attempt.prepare(_:binding:)",
+        "Attempt.activate(_:binding:)",
+        "Attempt.signOut()"
+      ],
+      "sha256": "29c76afbab141953d699c90e014fceda7df95dfe2f5ed360a48ebee4bf9a945a"
+    },
+    {
+      "path": "Packages/SwiftfinSessions/Sources/SwiftfinSessions/SessionLifecycle.swift",
+      "reason": "Scoped checked replacement and teardown reviewed with the existing lifecycle consumers: borrowed main-actor Sendable admission checks precede teardown and follow noncooperating preparation/publication; expired work cleans its own resources without stopping an instance a newer request owns. Teardown revokes fields before synchronous stop callbacks. Four added contracts cover preflight preservation, retired preparation, publication reentry and teardown reentry; all 29 session library contracts pass. Already published app/settings effects are not rolled back; the complete global manager/routing audit remains open.",
+      "reviewedConsumers": [
+        "Shared/Services/UserSession/UserSessionManager.swift"
+      ],
+      "reviewedInterfaces": [
+        "ActiveSessionCoordinator.replace(with:validate:)",
+        "ActiveSessionCoordinator.stop()"
+      ],
+      "sha256": "764745ad0af34eb22659b87f261b54f26754708e9bf3d19e663713afa0bf36ff"
     }
   ],
   "limits": "This ledger records bodies explicitly reviewed, with exact current hashes; earlier prose or lexical inventory is not automatically promoted. Pending and mixed entries prevent whole-source completion. Retained UI algorithms have specific presentation reasons, not folder/import-based blanket approval. API entries do not classify the rest of the public graph. Source review and offline tests do not satisfy held runtime acceptance.",
@@ -5707,10 +5755,10 @@
     "applicationSwiftFiles": 665,
     "classification": {
       "pending": 255,
-      "source-reviewed-mixed": 14,
-      "source-reviewed-retained": 396
+      "source-reviewed-mixed": 13,
+      "source-reviewed-retained": 397
     },
-    "currentAPIReviews": 34,
+    "currentAPIReviews": 37,
     "runtimeAcceptance": "held by human; no simulator/server testing"
   }
 }

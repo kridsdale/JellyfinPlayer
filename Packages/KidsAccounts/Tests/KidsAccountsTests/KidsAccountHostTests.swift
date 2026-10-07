@@ -53,7 +53,7 @@ final class KidsAccountHostTests: XCTestCase {
     @MainActor
     func testAuthenticationDoesNotActivateBeforeVerifiedBinding() async throws {
         var activated = false
-        let account = KidsAuthenticatedAccount(identity: identity()) { activated = true }
+        let account = KidsAuthenticatedAccount(identity: identity()) { _ in activated = true }
         XCTAssertFalse(activated)
         for binding in [
             KidsBinding(serverID: "wrong", userID: "child", showsID: "tv", moviesID: "movies"),
@@ -79,7 +79,7 @@ final class KidsAccountHostTests: XCTestCase {
     @MainActor
     func testActivationFailureRemainsVisibleToApplication() async throws {
         struct ActivationFailure: Error {}
-        let account = KidsAuthenticatedAccount(identity: identity()) { throw ActivationFailure() }
+        let account = KidsAuthenticatedAccount(identity: identity()) { _ in throw ActivationFailure() }
         try account.prepareActivation(binding: .init(serverID: "server", userID: "child", showsID: "tv", moviesID: "movies"))
         do {
             try await account.activate(binding: .init(serverID: "server", userID: "child", showsID: "tv", moviesID: "movies"))
@@ -93,7 +93,7 @@ extension KidsAccountHostTests {
     func testPreparedAccountCannotActivateAnotherLibraryBinding() async throws {
         var stored = false
         var activated = false
-        let account = KidsAuthenticatedAccount(identity: identity(), credentialStorage: { stored = true }) { activated = true }
+        let account = KidsAuthenticatedAccount(identity: identity(), credentialStorage: { _ in stored = true }) { _ in activated = true }
         let binding = KidsBinding(serverID: "server", userID: "child", showsID: "tv", moviesID: "movies")
         try account.prepareActivation(binding: binding)
         XCTAssertTrue(stored)
@@ -109,7 +109,9 @@ extension KidsAccountHostTests {
     func testFailedCredentialStorageCannotActivateAccount() async throws {
         struct StorageFailure: Error {}
         var activated = false
-        let account = KidsAuthenticatedAccount(identity: identity(), credentialStorage: { throw StorageFailure() }) { activated = true }
+        let account = KidsAuthenticatedAccount(identity: identity(), credentialStorage: { _ in throw StorageFailure() }) { _ in
+            activated = true
+        }
         let binding = KidsBinding(serverID: "server", userID: "child", showsID: "tv", moviesID: "movies")
         XCTAssertThrowsError(try account.prepareActivation(binding: binding)) { XCTAssertTrue($0 is StorageFailure) }
         do {
@@ -162,7 +164,9 @@ private final class ParentPINHost: KidsAccountHost {
         throw KidsContractError.denied
     }
 
-    func signOut() async {}
+    func signOut(validate: @escaping KidsAccountCheckpoint) async throws {
+        try validate()
+    }
 }
 
 extension KidsAccountHostTests {
@@ -275,4 +279,32 @@ extension KidsAccountHostTests {
         XCTAssertEqual(host.savedPIN, "1234")
         XCTAssertEqual(host.writes, 0)
     }
+}
+
+extension KidsAccountHostTests {
+    @MainActor
+    func testFailedPreparationRevokesEarlierPreparedBinding() async throws {
+        struct RetryFailure: Error {}
+        let flags = AdmissionRetryFlags()
+        let account = KidsAuthenticatedAccount(identity: identity(), credentialStorage: { _ in
+            if flags.fail {
+                throw RetryFailure()
+            }
+        }) { _ in flags.activated = true }
+        let binding = KidsBinding(serverID: "server", userID: "child", showsID: "tv", moviesID: "movies")
+        try account.prepareActivation(binding: binding)
+        flags.fail = true
+        XCTAssertThrowsError(try account.prepareActivation(binding: binding))
+        do {
+            try await account.activate(binding: binding)
+            XCTFail("Failed retry retained earlier preparation authority")
+        } catch { XCTAssertEqual(error as? KidsContractError, .denied) }
+        XCTAssertFalse(flags.activated)
+    }
+}
+
+@MainActor
+private final class AdmissionRetryFlags {
+    var fail = false
+    var activated = false
 }

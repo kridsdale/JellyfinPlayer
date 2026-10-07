@@ -56,7 +56,7 @@ Before extraction the app compiled 614 Shared Swift files, 32 tvOS Swift files a
 | SwiftfinLocalization | Typed localized display strings, all 54 language resources, deterministic read-only build-tool generation | Foundation |
 | SwiftfinUIState | Main-actor observable value boxes, binding adapters, periodic date observation, final-view lifetime callbacks, direction-aware jump aggregation, transient UI events and cancellable one-shot deadlines | SwiftUI, Combine, Foundation |
 | KidsDiagnosticsUI | Presentation-frame trace probe | KidsDiagnostics, SwiftUI, UIKit |
-| KidsAccounts | account host, immutable identity, prepared activation and parent-PIN authorization | KidsDomain, Foundation, Combine |
+| KidsAccounts | account host, immutable identity, staged activation, parent-PIN policy and admission relevance | KidsDomain, SwiftfinAsyncStreams, Foundation, Combine |
 | KidsArtworkUI | Prepared UIKit pixels, single-flight decode and bounded ephemeral pixel retention | KidsDomain, KidsCatalog, KidsDiagnostics, KidsArtwork, UIKit |
 | KidsDomain | Immutable identity/content contracts, eligibility, user-visible failure contracts, ordered/Shuffle/session rules and parent-gate timing | Foundation |
 | KidsDiagnostics | Compiler-checked concurrent bounded numeric traces and network timing delegate | KidsDomain, Foundation, OSLog, os |

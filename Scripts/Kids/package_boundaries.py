@@ -80,7 +80,7 @@ POLICIES = {
     "KidsApplication": ({"KidsAccounts","KidsArtwork","KidsArtworkUI","KidsCatalog","KidsDiagnostics","KidsDomain","KidsPersistence","KidsPlaybackSession"}, {"Foundation", "Combine", "CoreData", "SwiftData", "UIKit", "AVFoundation"}),
     "KidsExperience": ({"KidsAccounts","KidsApplication","KidsCatalog","KidsDiagnostics","KidsDiagnosticsUI","KidsDomain","KidsPlaybackSession","SwiftfinUIState"}, {"SwiftUI", "Combine"}),
     "KidsDomain": ({}, {"Foundation"}),
-    "KidsAccounts": ({"KidsDomain"}, {"Foundation", "Combine"}),
+    "KidsAccounts": ({"KidsDomain","SwiftfinAsyncStreams"}, {"Foundation", "Combine"}),
     "KidsDiagnostics": ({"KidsDomain"}, {"Foundation", "OSLog", "os"}),
     "KidsCatalog": ({"KidsDomain", "KidsDiagnostics"}, {"Foundation"}),
     "KidsArtwork": ({"KidsDomain", "KidsCatalog", "KidsDiagnostics"}, {"Foundation"}),

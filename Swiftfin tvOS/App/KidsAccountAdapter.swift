@@ -49,7 +49,6 @@ final class SwiftfinKidsAccountHost: KidsAccountHost {
 
     var identityChanges: AnyPublisher<KidsAccountIdentity?, Never> {
         sessions.$currentSession
-            .receive(on: DispatchQueue.main)
             .map { session in MainActor.assumeIsolated { Self.identity(from: session) } }
             .removeDuplicates()
             .eraseToAnyPublisher()
@@ -87,17 +86,22 @@ final class SwiftfinKidsAccountHost: KidsAccountHost {
         )
         let server = ServerState(urls: [url], currentURL: url, name: serverName, id: serverID, userIDs: [result.userID])
         let saved = UserState(id: result.userID, serverID: serverID, username: result.username)
-        return KidsAuthenticatedAccount(identity: identity, credentialStorage: {
+        return KidsAuthenticatedAccount(identity: identity, credentialStorage: { validate in
+            try validate()
             let store = Container.shared.localAccountStore()
             try store.saveAuthenticatedAccount(server, user: saved, accessToken: result.accessToken)
+            try validate()
             saved.data = result.user
+            try validate()
             saved.accessPolicy = .none
-        }) { [sessions] in
-            try await sessions.signIn(userID: result.userID)
+        }) { [sessions] validate in
+            try await sessions.signIn(userID: result.userID, serverID: serverID, validate: validate) { session in
+                guard Self.identity(from: session) == identity else { throw KidsContractError.denied }
+            }
         }
     }
 
-    func signOut() async {
-        await sessions.signOut(reason: .explicit)
+    func signOut(validate: @escaping KidsAccountCheckpoint) async throws {
+        try await sessions.signOut(reason: .explicit, validate: validate)
     }
 }
