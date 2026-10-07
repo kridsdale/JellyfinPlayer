@@ -10,6 +10,7 @@ import Foundation
 import JellyfinAPI
 import SwiftfinCollections
 import SwiftfinFilters
+import SwiftfinMediaCatalog
 
 struct ItemTypeContentGroupProvider: ContentGroupProvider {
 
@@ -44,8 +45,7 @@ struct ItemTypeContentGroupProvider: ContentGroupProvider {
         guard environment.filters.isNotEmpty || parent != nil else { return [] }
 
         return itemTypes.map { itemType in
-            // Server will edit filters if only boxset, add userView as workaround.
-            let itemTypes = (itemType == .boxSet ? [.boxSet, .userView] : [itemType])
+            let itemTypes = MediaCatalogPolicy.groupedItemTypes(for: itemType)
 
             var filters = environment.filters
             filters.itemTypes = itemTypes

@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-struct RedrawOnNotificationView<Content: View, P>: View {
+struct RedrawOnNotificationView<Content: View, P: Sendable>: View {
 
     @State
     private var id = 0

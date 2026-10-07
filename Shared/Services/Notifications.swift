@@ -12,6 +12,7 @@ import FactoryKit
 import Foundation
 import JellyfinAPI
 import SwiftfinAccountModels
+import SwiftfinAsyncStreams
 import UIKit
 
 extension Container {
@@ -28,93 +29,58 @@ enum Notifications {
         typealias Key = Notifications.Key
     }
 
-    class Key<Payload>: _AnyKey {
-
+    /// App-owned names and injected center; all custom posts are actor-bound.
+    @MainActor
+    class Key<Payload: Sendable>: _AnyKey {
         @Injected(\.notificationCenter)
         fileprivate var notificationCenter
 
-        let name: Notification.Name
-        let decodeStrategy: ([AnyHashable: Any]) -> Payload?
-
-        static func defaultDecodeStrategy(userInfo: [AnyHashable: Any]) -> Payload? {
-            if let payload = userInfo["payload"] as? Payload {
-                return payload
-            }
-            return nil
+        fileprivate nonisolated let event: NotificationEvent<Payload>
+        nonisolated var name: Notification.Name {
+            event.name
         }
 
-        var rawValue: String {
-            name.rawValue
+        nonisolated var rawValue: String {
+            event.name.rawValue
         }
 
         convenience init(_ string: String) {
             self.init(Notification.Name(string))
         }
 
-        init(
-            _ name: Notification.Name,
-            decodeStrategy: (([AnyHashable: Any]) -> Payload?)? = nil
-        ) {
-            self.name = name
-            self.decodeStrategy = decodeStrategy ?? Self.defaultDecodeStrategy
+        init(_ name: Notification.Name, decodeStrategy: (@Sendable ([AnyHashable: Any]) -> Payload?)? = nil) {
+            event = .init(name, decode: decodeStrategy)
         }
 
         func post(_ payload: Payload) {
-            notificationCenter
-                .post(
-                    name: name,
-                    object: nil,
-                    userInfo: ["payload": payload]
-                )
+            event.post(payload, to: notificationCenter)
         }
 
         func post() where Payload == Void {
-            notificationCenter
-                .post(
-                    name: name,
-                    object: nil,
-                    userInfo: nil
-                )
+            event.post(to: notificationCenter)
         }
 
         var publisher: AnyPublisher<Payload, Never> {
-            notificationCenter
-                .publisher(for: name)
-                .compactMap { output in
-                    if Payload.self == Void.self {
-                        return () as? Payload
-                    }
-
-                    guard let userInfo = output.userInfo else {
-                        return nil
-                    }
-
-                    return self.decodeStrategy(userInfo)
-                }
-                .eraseToAnyPublisher()
+            event.publisher(in: notificationCenter)
         }
     }
 
-    /// UIKit status must be read on the main actor, including notifications without userInfo.
+    /// UIKit status is read on the main actor after a value-free notification.
+    @MainActor
     private final class MainActorKey<Payload: Sendable>: Key<Payload> {
-        private let decodeOnMain: @MainActor () -> Payload?
-
-        init(_ name: Notification.Name, decode: @escaping @MainActor () -> Payload?) {
+        private let decodeOnMain: @MainActor @Sendable () -> Payload?
+        init(_ name: Notification.Name, decode: @escaping @MainActor @Sendable () -> Payload?) {
             decodeOnMain = decode
             super.init(name)
         }
 
         override var publisher: AnyPublisher<Payload, Never> {
-            notificationCenter.publisher(for: name)
-                .receive(on: DispatchQueue.main)
-                .compactMap { [decodeOnMain] _ in
-                    MainActor.assumeIsolated { decodeOnMain() }
-                }
-                .eraseToAnyPublisher()
+            event.mainActorPublisher(in: notificationCenter, read: decodeOnMain)
         }
     }
 
-    static subscript<Payload>(key: Key<Payload>) -> Key<Payload> {
+    @MainActor
+    static subscript<Payload: Sendable>(key: Key<Payload>) -> Key<Payload> {
         key
     }
 }

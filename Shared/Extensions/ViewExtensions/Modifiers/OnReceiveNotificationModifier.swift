@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-struct OnReceiveNotificationModifier<P, K: Notifications.Key<P>>: ViewModifier {
+struct OnReceiveNotificationModifier<P: Sendable, K: Notifications.Key<P>>: ViewModifier {
 
     let key: K
     let onReceive: (P) -> Void

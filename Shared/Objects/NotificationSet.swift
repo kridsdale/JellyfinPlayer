@@ -11,15 +11,15 @@ struct NotificationSet {
 
     private var names: Set<String> = []
 
-    func contains(_ key: Notifications.Key<some Any>) -> Bool {
+    func contains(_ key: Notifications.Key<some Sendable>) -> Bool {
         names.contains(key.name.rawValue)
     }
 
-    mutating func insert(_ key: Notifications.Key<some Any>) {
+    mutating func insert(_ key: Notifications.Key<some Sendable>) {
         names.insert(key.name.rawValue)
     }
 
-    mutating func remove(_ key: Notifications.Key<some Any>) {
+    mutating func remove(_ key: Notifications.Key<some Sendable>) {
         names.remove(key.name.rawValue)
     }
 }

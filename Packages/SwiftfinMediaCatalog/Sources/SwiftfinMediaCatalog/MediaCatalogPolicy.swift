@@ -22,6 +22,11 @@ public enum MediaCatalogPolicy {
         .livetv
     ]
 
+    /// Preserve the single-kind group query workaround without changing other queries.
+    public static func groupedItemTypes(for kind: BaseItemKind) -> [BaseItemKind] {
+        kind == .boxSet ? [.boxSet, .userView] : [kind]
+    }
+
     public static func itemTypes(parentType: BaseItemKind?, collectionType: CollectionType?, groupingID: String?) -> [BaseItemKind] {
         switch (collectionType, parentType) {
         case (_, .folder): defaultItemTypes + [.folder, .collectionFolder]
