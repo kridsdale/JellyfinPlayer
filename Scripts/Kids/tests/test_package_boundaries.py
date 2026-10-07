@@ -63,6 +63,34 @@ class PackageBoundariesTests(unittest.TestCase):
             self.assertEqual(len(problems), 3)
             self.assertTrue(all("belongs to SwiftfinPermissions" in p for p in problems))
 
+    def test_native_svg_import_cannot_escape_the_image_owner(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            for tree in ["Shared", "Swiftfin", "Swiftfin tvOS"]:
+                (root / tree).mkdir()
+                (root / tree / "SVG.swift").write_text("import SwiftfinImageProcessing\nimport UIKit\n")
+            self.assertEqual(MODULE.application_import_problems(root), [])
+            for tree, spelling in [("Shared", "import SVGKit"),
+                                   ("Swiftfin", "@preconcurrency import SVGKit"),
+                                   ("Swiftfin tvOS", "public import class SVGKit.SVGKImage")]:
+                (root / tree / "SVG.swift").write_text(spelling + "\n")
+            problems = MODULE.application_import_problems(root)
+            self.assertEqual(len(problems), 3)
+            self.assertTrue(all("belongs to SwiftfinImageProcessing" in p for p in problems))
+
+    def test_svg_owner_requires_both_original_exact_sdk_versions(self):
+        root = Path("/fixture")
+        dependencies = [{"sourceControl": [{"identity": name, "location": {"remote": [{"urlString": url}]}, "requirement": {"exact": [version]}}]} for name, url, version in MODULE.EXTERNAL_POLICIES["SwiftfinImageProcessing"]]
+        manifest = {"dependencies": dependencies}
+        with patch.object(MODULE.subprocess, "check_output", return_value=json.dumps(manifest)):
+            _, local = MODULE.inspect_package(root / "Packages/SwiftfinImageProcessing", root)
+            self.assertEqual(local, set())
+        for index, version in [(0, "3.1.0"), (1, "3.9.2")]:
+            changed = copy.deepcopy(manifest)
+            changed["dependencies"][index]["sourceControl"][0]["requirement"] = {"exact": [version]}
+            with patch.object(MODULE.subprocess, "check_output", return_value=json.dumps(changed)), self.assertRaises(ValueError):
+                MODULE.inspect_package(root / "Packages/SwiftfinImageProcessing", root)
+
     def test_real_application_trees_require_explicit_file_imports(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
@@ -193,7 +221,10 @@ class PackageBoundariesTests(unittest.TestCase):
         for module in ["SwiftfinImages", "Nuke", "JellyfinAPI", "FactoryKit", "Defaults", "SwiftfinNetworking", "SwiftfinLocalization", "SwiftUI"]:
             with self.subTest(module=module):
                 self.assertTrue(MODULE.validate_source("SwiftfinImageProcessing", "import " + module, edges, frameworks))
-        self.assertNotIn("SwiftfinImageProcessing", MODULE.EXTERNAL_POLICIES)
+        self.assertEqual(MODULE.EXTERNAL_POLICIES["SwiftfinImageProcessing"], [
+            ("svgkit", "https://github.com/SVGKit/SVGKit", "3.0.0"),
+            ("cocoalumberjack", "https://github.com/CocoaLumberjack/CocoaLumberjack.git", "3.9.1")
+        ])
 
     def test_mpv_owner_cannot_access_application_accounts_settings_or_catalog(self):
         edges, frameworks = MODULE.POLICIES["SwiftfinMPV"]

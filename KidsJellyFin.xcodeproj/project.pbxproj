@@ -89,8 +89,6 @@
 		E114DB332B1944FA00B75FB3 /* CollectionVGrid in Frameworks */ = {isa = PBXBuildFile; productRef = E114DB322B1944FA00B75FB3 /* CollectionVGrid */; };
 		E1153DA42BBA614F00424D36 /* CollectionVGrid in Frameworks */ = {isa = PBXBuildFile; productRef = E1153DA32BBA614F00424D36 /* CollectionVGrid */; };
 		E1153DAC2BBA6AD200424D36 /* CollectionHStack in Frameworks */ = {isa = PBXBuildFile; productRef = E1153DAB2BBA6AD200424D36 /* CollectionHStack */; };
-		E1153DD02BBB634F00424D36 /* SVGKit in Frameworks */ = {isa = PBXBuildFile; productRef = E1153DCF2BBB634F00424D36 /* SVGKit */; };
-		E1153DD22BBB649C00424D36 /* SVGKit in Frameworks */ = {isa = PBXBuildFile; productRef = E1153DD12BBB649C00424D36 /* SVGKit */; };
 		E1155ACB2D0584A90021557A /* IdentifiedCollections in Frameworks */ = {isa = PBXBuildFile; productRef = E1155ACA2D0584A90021557A /* IdentifiedCollections */; };
 		E11ADE842E7E73B6008074FC /* StatefulMacros in Frameworks */ = {isa = PBXBuildFile; productRef = E11ADE832E7E73B6008074FC /* StatefulMacros */; };
 		E12186DE2718F1C50010884C /* Defaults in Frameworks */ = {isa = PBXBuildFile; productRef = E12186DD2718F1C50010884C /* Defaults */; };
@@ -272,6 +270,7 @@
 		18C19A5F0B0BCA9E9466C3A3 /* Packages/SwiftfinMediaCatalog/Tests/SwiftfinMediaCatalogTests/LibraryCatalogContracts.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3891F2F5B681B68C5F72B7D /* Packages/SwiftfinMediaCatalog/Tests/SwiftfinMediaCatalogTests/LibraryCatalogContracts.swift */; };
 		FA3FDEE8F4465249CADCA3B6 /* Packages/SwiftfinAccountAccess/Tests/SwiftfinAccountAccessTests/LocalAccessPolicyContracts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91E50DA2DBFE11433CA5B297 /* Packages/SwiftfinAccountAccess/Tests/SwiftfinAccountAccessTests/LocalAccessPolicyContracts.swift */; };
 		F592A228D472773A384D26B6 /* Packages/SwiftfinNativePlayback/Tests/SwiftfinNativePlaybackTests/HardwareReaderContracts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D398FB4A311E02B078B7F6C /* Packages/SwiftfinNativePlayback/Tests/SwiftfinNativePlaybackTests/HardwareReaderContracts.swift */; };
+		95F5CDA646C98074444086D4 /* Packages/SwiftfinImageProcessing/Tests/SwiftfinImageProcessingTests/SVGRenderStateContracts.swift in Sources */ = {isa = PBXBuildFile; fileRef = E48C3FE91DA20460FB967687 /* Packages/SwiftfinImageProcessing/Tests/SwiftfinImageProcessingTests/SVGRenderStateContracts.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -372,6 +371,7 @@
 		C3891F2F5B681B68C5F72B7D /* Packages/SwiftfinMediaCatalog/Tests/SwiftfinMediaCatalogTests/LibraryCatalogContracts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Packages/SwiftfinMediaCatalog/Tests/SwiftfinMediaCatalogTests/LibraryCatalogContracts.swift; sourceTree = SOURCE_ROOT; };
 		91E50DA2DBFE11433CA5B297 /* Packages/SwiftfinAccountAccess/Tests/SwiftfinAccountAccessTests/LocalAccessPolicyContracts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Packages/SwiftfinAccountAccess/Tests/SwiftfinAccountAccessTests/LocalAccessPolicyContracts.swift; sourceTree = SOURCE_ROOT; };
 		0D398FB4A311E02B078B7F6C /* Packages/SwiftfinNativePlayback/Tests/SwiftfinNativePlaybackTests/HardwareReaderContracts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Packages/SwiftfinNativePlayback/Tests/SwiftfinNativePlaybackTests/HardwareReaderContracts.swift; sourceTree = SOURCE_ROOT; };
+		E48C3FE91DA20460FB967687 /* Packages/SwiftfinImageProcessing/Tests/SwiftfinImageProcessingTests/SVGRenderStateContracts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Packages/SwiftfinImageProcessing/Tests/SwiftfinImageProcessingTests/SVGRenderStateContracts.swift; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -530,7 +530,6 @@
 				DA610EFC0C429C6A7C95B209 /* KidsDiagnostics in Frameworks */,
 				CAFE00000000000000000004 /* KidsPersistence in Frameworks */,
 				E12CDBC12FFB593800828742 /* CollectionVGrid in Frameworks */,
-				E1153DD22BBB649C00424D36 /* SVGKit in Frameworks */,
 				62666E1527E501C800EC0ECD /* AVFoundation.framework in Frameworks */,
 				E13AF3BC28A0C59E009093AB /* BlurHashKit in Frameworks */,
 				62666E1327E501C300EC0ECD /* AudioToolbox.framework in Frameworks */,
@@ -625,7 +624,6 @@
 				E1BD95B22FBE8E44001CDA57 /* JellyfinAPI in Frameworks */,
 				62666E0C27E501A500EC0ECD /* OpenGLES.framework in Frameworks */,
 				E19E6E0A28A0BEFF005C10C8 /* BlurHashKit in Frameworks */,
-				E1153DD02BBB634F00424D36 /* SVGKit in Frameworks */,
 				E19FA1A02E84F0A800F5A60D /* StatefulMacros in Frameworks */,
 				E18D6AA62BAA96F000A0D167 /* CollectionHStack in Frameworks */,
 				E16C08F7305A385900895062 /* CollectionHStack in Frameworks */,
@@ -720,6 +718,7 @@
 				C3891F2F5B681B68C5F72B7D /* Packages/SwiftfinMediaCatalog/Tests/SwiftfinMediaCatalogTests/LibraryCatalogContracts.swift */,
 				91E50DA2DBFE11433CA5B297 /* Packages/SwiftfinAccountAccess/Tests/SwiftfinAccountAccessTests/LocalAccessPolicyContracts.swift */,
 				0D398FB4A311E02B078B7F6C /* Packages/SwiftfinNativePlayback/Tests/SwiftfinNativePlaybackTests/HardwareReaderContracts.swift */,
+				E48C3FE91DA20460FB967687 /* Packages/SwiftfinImageProcessing/Tests/SwiftfinImageProcessingTests/SVGRenderStateContracts.swift */,
 				9FA5B7C0FD676588F9568B80 /* Packages/SwiftfinAsyncStreams/Tests/SwiftfinAsyncStreamsTests/NotificationContracts.swift */,
 				B3E6DC660C9E7E4D9C70A829 /* Packages/SwiftfinMediaTracks/Tests/SwiftfinMediaTracksTests/RawItemStreamsContracts.swift */,
 				84909BC3A673B077CA312B06 /* Packages/SwiftfinUserMediaState/Tests/SwiftfinUserMediaStateTests/UserMediaCapabilitiesContracts.swift */,
@@ -917,7 +916,6 @@
 				DA61A5476E30615076D64517 /* KidsDiagnostics */,
 				CAFE00000000000000000005 /* KidsPersistence */,
 				E1392FEC2BA218A80034110D /* SwiftUIIntrospect */,
-				E1153DD12BBB649C00424D36 /* SVGKit */,
 				E1155ACA2D0584A90021557A /* IdentifiedCollections */,
 				BD88CB412D77E6A0006BB5E3 /* TVOSPicker */,
 				E19005010000000000000004 /* MPVUI */,
@@ -1020,7 +1018,6 @@
 				E18D6AA52BAA96F000A0D167 /* CollectionHStack */,
 				E1153DA32BBA614F00424D36 /* CollectionVGrid */,
 				E1153DAB2BBA6AD200424D36 /* CollectionHStack */,
-				E1153DCF2BBB634F00424D36 /* SVGKit */,
 				E132D3C72BD200C10058A2DF /* CollectionVGrid */,
 				E14EA1642BF70A8E00DE757A /* Mantis */,
 				E176EBDD2D050067009F4CF1 /* IdentifiedCollections */,
@@ -1285,7 +1282,6 @@
 				E1DC9812296DC06200982F06 /* XCRemoteSwiftPackageReference "PulseLogHandler" */,
 				E15D4F032B1B0C3C00442DB8 /* XCLocalSwiftPackageReference "PreferencesView" */,
 				E19009260000000000000005 /* XCLocalSwiftPackageReference "SwiftfinMacros" */,
-				E1153DCE2BBB634F00424D36 /* XCRemoteSwiftPackageReference "SVGKit" */,
 				E14EA1632BF70A8E00DE757A /* XCRemoteSwiftPackageReference "Mantis" */,
 				E176EBDC2D050067009F4CF1 /* XCRemoteSwiftPackageReference "swift-identified-collections" */,
 				BD88CB402D77E6A0006BB5E3 /* XCRemoteSwiftPackageReference "TVOSPicker" */,
@@ -1482,6 +1478,7 @@
 				18C19A5F0B0BCA9E9466C3A3 /* Packages/SwiftfinMediaCatalog/Tests/SwiftfinMediaCatalogTests/LibraryCatalogContracts.swift in Sources */,
 				FA3FDEE8F4465249CADCA3B6 /* Packages/SwiftfinAccountAccess/Tests/SwiftfinAccountAccessTests/LocalAccessPolicyContracts.swift in Sources */,
 				F592A228D472773A384D26B6 /* Packages/SwiftfinNativePlayback/Tests/SwiftfinNativePlaybackTests/HardwareReaderContracts.swift in Sources */,
+				95F5CDA646C98074444086D4 /* Packages/SwiftfinImageProcessing/Tests/SwiftfinImageProcessingTests/SVGRenderStateContracts.swift in Sources */,
 				11A638812AF4E5F9DFC887EB /* Packages/SwiftfinAsyncStreams/Tests/SwiftfinAsyncStreamsTests/NotificationContracts.swift in Sources */,
 				D47A7FCAE914808F5EBC2F7E /* Packages/SwiftfinMediaTracks/Tests/SwiftfinMediaTracksTests/RawItemStreamsContracts.swift in Sources */,
 				00AD29B46C1F41880582C8C4 /* Packages/SwiftfinUserMediaState/Tests/SwiftfinUserMediaStateTests/UserMediaCapabilitiesContracts.swift in Sources */,
@@ -2057,14 +2054,6 @@
 				minimumVersion = 2.0.0;
 			};
 		};
-		E1153DCE2BBB634F00424D36 /* XCRemoteSwiftPackageReference "SVGKit" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/SVGKit/SVGKit";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 3.0.0;
-			};
-		};
 		E1240A272FEA4F69004E6588 /* XCRemoteSwiftPackageReference "StatefulMacro" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/LePips/StatefulMacro";
@@ -2436,16 +2425,6 @@
 		E1153DAB2BBA6AD200424D36 /* CollectionHStack */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = CollectionHStack;
-		};
-		E1153DCF2BBB634F00424D36 /* SVGKit */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = E1153DCE2BBB634F00424D36 /* XCRemoteSwiftPackageReference "SVGKit" */;
-			productName = SVGKit;
-		};
-		E1153DD12BBB649C00424D36 /* SVGKit */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = E1153DCE2BBB634F00424D36 /* XCRemoteSwiftPackageReference "SVGKit" */;
-			productName = SVGKit;
 		};
 		E1155ACA2D0584A90021557A /* IdentifiedCollections */ = {
 			isa = XCSwiftPackageProductDependency;

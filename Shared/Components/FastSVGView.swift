@@ -7,7 +7,7 @@
 //
 
 import Engine
-import SVGKit
+import SwiftfinImageProcessing
 import SwiftUI
 
 // Note: SVGKit does not support the simulator and will appear blank.
@@ -17,8 +17,8 @@ struct FastSVGView: PlatformViewRepresentable {
 
     let data: Data
 
-    func makeUIView(context: Context) -> some UIView {
-        let imageView = SVGKFastImageView(svgkImage: SVGKImage(data: data))!
+    func makeUIView(context: Context) -> NativeSVGRenderView {
+        let imageView = NativeSVGRenderView(data: data)
         imageView.contentMode = .scaleAspectFit
         imageView.clipsToBounds = true
 
@@ -30,5 +30,11 @@ struct FastSVGView: PlatformViewRepresentable {
         return imageView
     }
 
-    func updateUIView(_ uiView: UIViewType, context: Context) {}
+    func updateUIView(_ uiView: UIViewType, context: Context) {
+        uiView.update(data)
+    }
+
+    static func dismantleUIView(_ uiView: UIViewType, coordinator: ()) {
+        uiView.clear()
+    }
 }

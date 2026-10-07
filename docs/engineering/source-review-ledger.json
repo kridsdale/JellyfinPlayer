@@ -225,11 +225,13 @@
       "status": "pending"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinImageProcessing"
+      ],
       "path": "Shared/Components/FastSVGView.swift",
-      "reason": "Full native UIView representable inspected. App currently imports SVGKit and performs parsing/native image-view construction with a force unwrap and empty update. Review installed SVG dependency/import boundary and move parsing/rendering behind the appropriate image owner with malformed/changed-data handling; UI hugging/contentMode/clipping remain presentation.",
-      "sha256": "adc8565bd6bd29fadcfe4563f0e02dbc316c0a5eeaae31e22acf0d957c4e534f",
-      "status": "source-reviewed-mixed"
+      "reason": "Native SVGKit parsing/fast view allocation/replacement/retirement moved behind the existing image-processing owner with original exact SDK revisions. App adapter retains UIKit contentMode/clipping and layout priorities; it delegates changed bytes and dismantle cleanup. Malformed/un-sized/nonfinite parses clear output instead of force unwrap. Actual SVG drawing/layout remains runtime-held.",
+      "sha256": "6ccf38dfad030b5b6d29906bede744a361f428055ffd9633ae438de66ad5a3df",
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -762,9 +764,9 @@
     {
       "owners": [],
       "path": "Shared/Extensions/CGSize.swift",
-      "reason": "",
+      "reason": "App layout ratios/orientation comparisons operate on view geometry; no resource, image sampling or business data policy.",
       "sha256": "9443125d509a8071a2753768c0be7e3d621766d6539fdbed2b7fbde88763747b",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -776,16 +778,16 @@
     {
       "owners": [],
       "path": "Shared/Extensions/CoordinateSpace.swift",
-      "reason": "",
+      "reason": "Main-actor named app navigation/scroll coordinate spaces; no observable state or algorithm.",
       "sha256": "5362d08bd04b755c14444192f4dca13f8477f596a8c1c47e28d11ab0da55ed88",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
       "path": "Shared/Extensions/Edge.swift",
-      "reason": "",
+      "reason": "SwiftUI/UIApplication edge mapping is platform presentation geometry, retaining existing default/all semantics.",
       "sha256": "d065b9887cc2b490ccab209ef27342f508bd4df7e98eca259f70a623457a5bd0",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -804,16 +806,16 @@
     {
       "owners": [],
       "path": "Shared/Extensions/FocusedValues.swift",
-      "reason": "",
+      "reason": "App focus environment entry stores its presentation poster reference; no catalog, playback or image implementation.",
       "sha256": "c0ce249ae4ca2dd55bbb0ee97e953b4b48e8d3cd68877893863d0ca61a32278f",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
       "path": "Shared/Extensions/Font.swift",
-      "reason": "",
+      "reason": "Explicit SwiftUI-to-UIKit preferred text style mapping follows platform typography; no font cache or dynamic resource ownership.",
       "sha256": "4c0ccf90b2192b80bbba4187135835e9c73337f46acf7e4d85e81948e9f45b18",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -825,16 +827,16 @@
     {
       "owners": [],
       "path": "Shared/Extensions/FormatStyle.swift",
-      "reason": "",
+      "reason": "Compatibility aliases delegate all general formatting/parsing to Formatting. DisplayableFormatStyle only projects the app display-title protocol for UI.",
       "sha256": "ede3a5f470458b617568f0e138d734ee5bc6ef0d4803625174b204b905e0be1f",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
       "path": "Shared/Extensions/Int.swift",
-      "reason": "",
+      "reason": "Existing UI SecondFormatter alias resolves owned second-label formatting; no integer/time conversion remains.",
       "sha256": "dd6e4e28355e11e87814e3994a1e31aaf7bbc4f3508abd6197442745e3bd0977",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -1329,9 +1331,9 @@
     {
       "owners": [],
       "path": "Shared/Extensions/RatingType.swift",
-      "reason": "",
+      "reason": "SDK score/likes localized display adapter only.",
       "sha256": "81fd51a7d95914b8787d06fc52f86f57d37546106471263911bed6572ee8e832",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -1364,9 +1366,9 @@
     {
       "owners": [],
       "path": "Shared/Extensions/UIColor.swift",
-      "reason": "",
+      "reason": "Native selected-color components choose black/white overlay text with the existing brightness threshold. This is app presentation contrast rather than image palette/sampling or media behavior.",
       "sha256": "a30927c0a27265f6030134ac7ffafd833310836e136ac44012619ecf9959990f",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -1378,37 +1380,37 @@
     {
       "owners": [],
       "path": "Shared/Extensions/UIGestureRecognizer.swift",
-      "reason": "",
+      "reason": "UIKit location-to-unit-point conversion is view coordinate handling; no gesture-to-playback/domain action policy.",
       "sha256": "dbe27dcb948469021400d33586be6544ca24eb5d3c6b0558665574c7157d4278",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
       "path": "Shared/Extensions/UIImage+InterestingColor.swift",
-      "reason": "",
+      "reason": "Image palette sampling delegates to ImageProcessing; app maps the immutable sample to its SwiftUI Color.",
       "sha256": "b0824065793021992ba408e42a7af127fc85eb8e4541cbd8224d87e026281381",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
       "path": "Shared/Extensions/UIImage.swift",
-      "reason": "",
+      "reason": "Image encoding/size limit delegates to ImageProcessing; app projects the tuple and localized user-facing errors. Encoding bytes/format/limit behavior is owned.",
       "sha256": "5b2ae5c2d8496abe9e3e1182be6903c070120cd5881f0748c38244015aa7f676",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
       "path": "Shared/Extensions/URL.swift",
-      "reason": "",
+      "reason": "Static app documentation/upstream-credit links remain presentation; normalized server endpoint behavior delegates to AccountModels. No endpoint discovery, network or URL parsing algorithm remains.",
       "sha256": "8c460c6a5a81079bbd2ffe24feb80abdc79ec6f9cdab42e31722432a054d4284",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
       "path": "Shared/Extensions/UnitPoint.swift",
-      "reason": "",
+      "reason": "UnitPoint inversion is app gesture/layout coordinate semantics only.",
       "sha256": "5b5dc15d33de0f6766289851486e7a84c9b3fac19b3c30e92731a1eeacf89b95",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -1577,9 +1579,9 @@
     {
       "owners": [],
       "path": "Shared/Objects/ActiveSessionFilter.swift",
-      "reason": "",
+      "reason": "App-persisted all/active/inactive UI selection supplies localized titles and system symbols only; it implements no session query/filter or transport lifecycle.",
       "sha256": "a3f663487389a18be68968007194abadba645f2bbe9e44f1f6c782b3c8f7dfe9",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [
@@ -1664,16 +1666,16 @@
     {
       "owners": [],
       "path": "Shared/Objects/Direction.swift",
-      "reason": "",
+      "reason": "Presentation gesture-direction OptionSet and grouped/contains projections; no media transport, preference or account behavior. Native gesture consumers are separately reviewed.",
       "sha256": "50350643b89e25b044641992bd5d61b1f29eed68414a969239547b5f2bb601a5",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
       "path": "Shared/Objects/DirectionalPanGestureRecognizer.swift",
-      "reason": "",
+      "reason": "UIKit gesture presentation: reads native pan velocity at began, applies allowed UI directions and cancels that recognizer. No playback command, domain policy or cross-executor resource ownership.",
       "sha256": "71d51e3bcd79d802ebdbdfda0aee77d116f2faf16048628bd1b1d1f57dfdb0d1",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -1910,9 +1912,9 @@
     {
       "owners": [],
       "path": "Shared/Objects/LabeledContentBuilder.swift",
-      "reason": "",
+      "reason": "SwiftUI result builder erases LabeledContent TupleView/ForEach presentation into AnyView; no persistent/domain behavior.",
       "sha256": "d6edee68481cbd708350bb95696b5cb7dcadab362e412dc4c44ae1e731354c25",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [
@@ -2209,9 +2211,9 @@
     {
       "owners": [],
       "path": "Shared/Objects/LongPressAction.swift",
-      "reason": "",
+      "reason": "SwiftUI environment callback carrier forwards point/unit point/native gesture state exactly. Consumer actions remain their own review scope; no subscription or task lifecycle here.",
       "sha256": "0c6880f014f274da561922b59ffaf90fed0294807c734eb7300527e5dfacdcd0",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -2377,9 +2379,9 @@
     {
       "owners": [],
       "path": "Shared/Objects/MenuContentGroup.swift",
-      "reason": "",
+      "reason": "UI menu identity, AnyView/isPrimary composition and concatenating PreferenceKey; ArrayBuilder delegates to Collections. ID-only equality and default UUID are presentation identity.",
       "sha256": "a409850f05cff9e052acbc7175cecff11118b3a06109662fd93a6ffacdf2fbfc",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -2398,9 +2400,9 @@
     {
       "owners": [],
       "path": "Shared/Objects/NotificationSet.swift",
-      "reason": "",
+      "reason": "App notification-key membership adapter delegates string-set contains/insert/remove to the standard library. It owns neither notification transport, center, decoding nor subscription lifecycle.",
       "sha256": "900c86ac59036993cae9dc439aec24d61f01e7bbf7745e9846ec4ad768097187",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -2447,16 +2449,16 @@
     {
       "owners": [],
       "path": "Shared/Objects/PanAction.swift",
-      "reason": "",
+      "reason": "SwiftUI environment callback carrier forwards translation, velocity, location, unit point and native gesture state; action implementation/lifecycle is owned by its consumer.",
       "sha256": "bc61a9606d9d4ced5a814c57acf552c5e1aab4f7f4bb4133d00b47fcc99c3028",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
       "path": "Shared/Objects/PinchAction.swift",
-      "reason": "",
+      "reason": "SwiftUI environment callback carrier forwards native scale, velocity and gesture state; implements no media command or persistent behavior.",
       "sha256": "364565ac3db0e92215c96ff6f3a741d0d5d16615fb3c798145f733fa5cb364ba",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -2603,16 +2605,19 @@
     {
       "owners": [],
       "path": "Shared/Objects/RectangleCorner.swift",
-      "reason": "",
+      "reason": "Macro-derived four-corner OptionSet and all projection specify presentation geometry only.",
       "sha256": "e45b0af10d2b42a42197a2a8fb145c92a5c2d2efe94fe8d8d658bee3e36ae912",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinAccountModels",
+        "SwiftfinStoredValues"
+      ],
       "path": "Shared/Objects/SelectUserServerSelection.swift",
-      "reason": "",
+      "reason": "Stored server selection mixes app Storable composition with immutable all/server identity, exact installed swiftfin-all sentinel and first matching-ID selection. Pure account-selection ownership and original raw-value/duplicate-order behavior require extraction or a justified disposition; current body is not classified complete.",
       "sha256": "94f2d0bfe5bf8b987bcb037603205d0b6f8f1b0030a9651be8161cb6cd6b81c9",
-      "status": "pending"
+      "status": "source-reviewed-mixed"
     },
     {
       "owners": [
@@ -2672,9 +2677,9 @@
     {
       "owners": [],
       "path": "Shared/Objects/TapGestureAction.swift",
-      "reason": "",
+      "reason": "SwiftUI environment callback carrier forwards location/unit point/tap count; consumer actions require separate review.",
       "sha256": "c8c80b9f3f479c6ac454ca4b2eeaba871e3128348e077d95ea7a6979cf2f22c2",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -2700,9 +2705,9 @@
     {
       "owners": [],
       "path": "Shared/Objects/TrailerSelection.swift",
-      "reason": "",
+      "reason": "Persisted app presentation choice with original local/external/none bits and localized titles; none remains its own bit and all remains local+external. Actual trailer eligibility/fetch behavior is not implemented here.",
       "sha256": "250f29bd30dace699551ccf6b559284bb8178acffb67d46101c30c3a702e91fa",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [
@@ -2762,16 +2767,16 @@
     {
       "owners": [],
       "path": "Shared/Objects/WithRefresh.swift",
-      "reason": "",
+      "reason": "Main-actor UI composition protocol with sync/async refresh and optional Empty background default; defines no scheduling, fetching or refresh algorithm.",
       "sha256": "b1ad1faee028ea99a99f4450ed5e97d0c857e8f3fc2bb0103c63827e5d80cb25",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
       "path": "Shared/Objects/WithText.swift",
-      "reason": "",
+      "reason": "SwiftUI Text presentation protocol with identity Text and String-to-Text projections only.",
       "sha256": "c4c0b845affaade837588cc3d664b9b4de6da2befe25531331891a65953a7e47",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -4910,19 +4915,45 @@
         "NativePlaybackHardwareReader.supports(_:)"
       ],
       "sha256": "da4c12deeedd78180dfded13e7d78f492504efb669d0af1e0d81fce16816461c"
+    },
+    {
+      "path": "Packages/SwiftfinImageProcessing/Sources/SwiftfinImageProcessing/SVGRenderState.swift",
+      "reason": "Internal main-actor single-payload replacement/retirement: identical/failing inputs are memoized, empty input bypasses parse, invalid replacement clears old output, reentrant revisions/reset reject obsolete results. Factories are synchronous and not retained; generic fake renders prove lifetime without SDK/UI/network.",
+      "reviewedConsumers": [
+        "Packages/SwiftfinImageProcessing/Sources/SwiftfinImageProcessing/NativeSVGRenderView.swift"
+      ],
+      "reviewedInterfaces": [
+        "internal SVGRenderState.update(_:make:)",
+        "internal SVGRenderState.reset()"
+      ],
+      "sha256": "64641092e0242799b285c79127be7c9a936f5f2d6408036b6944b59365ab7650"
+    },
+    {
+      "path": "Packages/SwiftfinImageProcessing/Sources/SwiftfinImageProcessing/NativeSVGRenderView.swift",
+      "reason": "Main-actor UIKit surface hides SVGKit image/parser/fast-view types. Private render guard handles nil/un-sized/invalid dimensions without forced unwrap; native child fill/intrinsic size is owned. App supplies immutable data and presentation priorities; controller replacement/reset owns SDK object retirement. Compile-only UIKit integration and fake lifecycle evidence are separate from held actual rendering.",
+      "reviewedConsumers": [
+        "Shared/Components/FastSVGView.swift"
+      ],
+      "reviewedInterfaces": [
+        "NativeSVGRenderView.init(data:)",
+        "NativeSVGRenderView.update(_:)",
+        "NativeSVGRenderView.clear()",
+        "NativeSVGRenderView.intrinsicContentSize"
+      ],
+      "sha256": "9e8e6cd285d67a07d0ff1a1eac32c187fed4f58285ea0fd0ab109df81751ee07"
     }
   ],
   "limits": "This ledger records bodies explicitly reviewed, with exact current hashes; earlier prose or lexical inventory is not automatically promoted. Pending and mixed entries prevent whole-source completion. Retained UI algorithms have specific presentation reasons, not folder/import-based blanket approval. API entries do not classify the rest of the public graph. Source review and offline tests do not satisfy held runtime acceptance.",
   "schemaVersion": 1,
-  "scope": "All current app Swift files; explicit source-body classification and seven limited interface/consumer reviews. No server/media/simulator data.",
+  "scope": "All current app Swift files; source-body classification and nine limited interface/internal lifecycle/consumer reviews. No server/media/simulator data.",
   "summary": {
     "applicationSwiftFiles": 667,
     "classification": {
-      "pending": 583,
+      "pending": 554,
       "source-reviewed-mixed": 1,
-      "source-reviewed-retained": 83
+      "source-reviewed-retained": 112
     },
-    "currentAPIReviews": 7,
+    "currentAPIReviews": 9,
     "runtimeAcceptance": "held by human; no simulator/server testing"
   }
 }

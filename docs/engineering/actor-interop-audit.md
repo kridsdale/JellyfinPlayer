@@ -68,3 +68,10 @@ EvaluatedLocalUserAccessPolicy is a public Sendable marker. PinEvaluatedUserAcce
 NativePlaybackHardwareReader stores three private checked-Sendable closures. Default closures query platform HDR/GPU/decoder flags lazily and return only Bool/String values; no native handle or mutable SDK instance escapes. Its semantic codec enum maps privately to the original five CoreMedia constants. Injected tests exercise demand/ordering/missing GPU/checked task transfer without actual hardware probes. The app's existing preference and profile expressions remain source-identical after delegation. Hardware changes, SwiftUI prompt delivery and real playback remain runtime-held.
 
 The source/API ledger remains partial. Native SVG parsing/view construction is a newly inspected mixed responsibility and 583 app bodies await review; no complete actor/public-consumer audit is claimed.
+
+
+## Native SVG ownership (2026-10-07)
+
+SVGRenderState and NativeSVGRenderView are main-actor owners. SVGKit image/parser/fast-view values remain private; the public surface accepts Data and offers native update/clear/intrinsic-size behavior. A synchronous nonescaping factory is never retained. Changed input drops the current object, empty input avoids parsing, and a revision guard rejects reentrant/reset-obsolete results. The UIKit surface owns child mounting/removal; the app forwards representable updates and dismantle. No unchecked Sendable, unsafe nonisolation, preconcurrency suppression or new production-local dependency was introduced.
+
+Six synthetic native contracts cover controller ownership, not SVGKit parsing/drawing. The final compile-only tvOS/iOS checks and frozen-source preservation audit pass; live renderer/callback/teardown acceptance remains held. The source/API ledger is still partial (112 retained, one mixed, 554 pending and nine scoped API reviews); no whole-graph completion is claimed.

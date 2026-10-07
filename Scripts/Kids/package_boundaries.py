@@ -12,6 +12,7 @@ import subprocess
 
 # Explicit responsibilities, not a permission derived from whatever code happens to import.
 EXTERNAL_POLICIES = {
+    "SwiftfinImageProcessing": [("svgkit", "https://github.com/SVGKit/SVGKit", "3.0.0"), ("cocoalumberjack", "https://github.com/CocoaLumberjack/CocoaLumberjack.git", "3.9.1")],
     "SwiftfinMPV": [("mpvui", "https://github.com/LePips/MPVUI", "0.1.1")],
     "SwiftfinCollections": [("swift-collections", "https://github.com/apple/swift-collections.git", "1.6.0")],
     "SwiftfinAccountAccess": [("jellyfin-sdk-swift", "https://github.com/jellyfin/jellyfin-sdk-swift.git", "3.2.0"), ("get", "https://github.com/kean/Get", "2.2.1")],
@@ -37,7 +38,7 @@ EXTERNAL_POLICIES = {
 }
 POLICIES = {
     "SwiftfinPermissions": ({}, {"Foundation", "os", "CoreLocation", "LocalAuthentication"}),
-    "SwiftfinImageProcessing": ({}, {"Foundation", "CoreGraphics", "UIKit"}),
+    "SwiftfinImageProcessing": ({}, {"Foundation", "CoreGraphics", "UIKit", "SVGKit"}),
     "SwiftfinMPV": ({}, {"Foundation", "MPVUI", "Observation", "SwiftUI"}),
     "SwiftfinText": ({}, {"Foundation", "CryptoKit"}),
     "SwiftfinValues": ({}, {"Foundation"}),
@@ -132,6 +133,8 @@ def application_import_problems(root):
                 problems.append(f"{source.relative_to(root)}: application source escapes the checkout")
                 continue
             for match in IMPORT.finditer(source.read_text()):
+                if match.group(1) == "SVGKit":
+                    problems.append(f"{source.relative_to(root)}: native SVG parsing/rendering belongs to SwiftfinImageProcessing")
                 if match.group(1) in {"CoreLocation", "LocalAuthentication"}:
                     problems.append(f"{source.relative_to(root)}: native permission import {match.group(1)} belongs to SwiftfinPermissions")
                 if "@_exported" in match.group(0):

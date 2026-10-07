@@ -33,7 +33,7 @@ Before extraction the app compiled 614 Shared Swift files, 32 tvOS Swift files a
 | SwiftfinCollections | Array/dictionary/set/ordered/optional collection projections, safe access/mutation, ArrayBuilder, subset cases and a synchronous single-owner prefix trie | Foundation, exact Swift Collections 1.6.0 |
 | SwiftfinPlaybackProfiles | Immutable codec/player/resolution/speed/jump/bitrate values, source bitrate limits, SDK constructors, compatibility/capability policies and pure snapshot-driven profile assembly | SwiftfinCollections, pinned Jellyfin SDK 3.2.0, Foundation |
 | SwiftfinPermissions | System permission status/query/request policy, cancellable exactly-once callback coordination and private native authentication/location drivers | Foundation, os, CoreLocation, LocalAuthentication; no library or external dependency |
-| SwiftfinImageProcessing | Bounded CoreGraphics pixel sampling/median-cut interest, alpha/PNG/JPEG selection, byte limits and the actor-isolated UIKit encoding adapter | Foundation, CoreGraphics, conditional UIKit; no library or external dependency |
+| SwiftfinImageProcessing | Bounded CoreGraphics pixel sampling/median-cut interest, alpha/PNG/JPEG selection, byte limits, actor-isolated UIKit encoding and private native SVG parsing/render lifecycle | Foundation, CoreGraphics, conditional UIKit; original exact SVGKit 3.0.0 and CocoaLumberjack 3.9.1; no local library edge |
 | SwiftfinImages | Installed image-source/options contracts, immutable cache identity snapshots, native Nuke pipelines and persistent cache-key/path policies; logging/settings supplied by composition | pinned Nuke 13.0.6, Foundation, CryptoKit, os |
 | SwiftfinSessions | Ordered account resource preparation/activation/teardown and latest-wins session publication; no application globals | Foundation |
 | SwiftfinNetworking | Actor-owned Jellyfin HTTP/auth/discovery transport, native socket session lifecycle and typed scoped payload streams | pinned Jellyfin SDK 3.2.0, pinned Get 2.2.1, Foundation |
@@ -70,8 +70,8 @@ KidsPersistence module identity, model name, entity properties, cloud container 
 
 ## Remaining work before completion
 
-- Finish all source-body classifications: the current hashed ledger has 83 retained, one mixed and 583 pending app files. Evaluated prompt/PIN values and hardware probing have owners; FastSVGView's native parsing/rendering is the next mixed candidate. Classifications are based on inspected bodies, not folder/import names.
-- Audit all public interfaces and production consumers, SDK/native-handle boundaries, dependency directions and extension paths. Seven current API entries cover only their named scopes, not the complete graph.
+- Finish all source-body classifications: the current hashed ledger has 112 retained, one mixed and 554 pending app files. Prompt/PIN values, hardware probing and SVG parsing/rendering have owners; stored server-selection identity/lookup is the next mixed candidate. Classifications are based on inspected bodies, not folder/import names.
+- Audit all public interfaces and production consumers, SDK/native-handle boundaries, dependency directions and extension paths. Nine current API entries cover only their named scopes, not the complete graph.
 - Complete the remaining actor/callback/bootstrap review and preserve explicit native-player ownership. The pinned mpv SDK's unawaited renderer shutdown still requires runtime acceptance.
 - Final navigation, artwork/SVG rendering, exact account/connection switching, decoder/output/teardown and restricted-account playback/recovery remain held by the human. Automatic continuations do not authorize simulator launches/tests or server-facing probes.
 - Preserve household signing/iCloud namespace, persistent schema/progress, original SDK revisions, performance evidence and immutable RAID media. Meet every original criterion in next-goal.md before marking the full goal complete.
@@ -639,3 +639,10 @@ Native sweep **48** passes **741** contracts (**712** Swift Testing plus **29** 
 The hashed ledger now records **83 retained**, **one mixed** and **583 pending** app files, plus **seven** limited interface/consumer reviews. The two previous mixed candidates are resolved. Full authentication-prompt body review and nineteen further component body reviews retain platform presentation with per-file reasons; **FastSVGView** remains mixed because parsing/native view construction and force-unwrapped SVG results still live in the app. The complete source/public-consumer graph is unproven.
 
 **Simulator and server-connected testing remain stopped by the human.** Compilation/fake tests do not establish current navigation, account switching, real hardware flags, SVG rendering, decoding or native teardown. Full items1/2 remain active; held runtime acceptance and full source/API/actor review are still required. Physical-device/cloud/server/release gates remain separate.
+
+
+## SVG parser and render lifecycle (2026-10-07, offline)
+
+The existing ImageProcessing owner uses the original exact SVG/logging SDK versions on iOS/tvOS; app targets no longer declare or import SVGKit directly. NativeSVGRenderView exposes only immutable input bytes and UIKit update/clear/intrinsic-size operations. Private main-actor state memoizes one input, discards obsolete reentrant results and retires old render objects. FastSVGView remains presentation composition with unchanged content mode, clipping and layout priorities. Invalid/un-sized/nonfinite input clears the surface instead of force-unwrapping SDK results; changed bytes now update the mounted renderer.
+
+Native sweep 49 passes 747 contracts plus helpers, compile-only Debug 116/tvOS Release 43/iOS Release 62 pass, and boundary/analyzer checks retain 53 libraries/35 tests. Preservation audit 372 binds these results to 1,201 unchanged inputs and original SDK/signing/persistence evidence. New fake-render tests prove controller lifetime only; default parser behavior, SVG drawing/layout and the full runtime acceptance gate remain held. The complete source/public-consumer/actor objective remains unfinished.
