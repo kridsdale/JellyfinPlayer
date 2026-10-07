@@ -52,3 +52,11 @@ The platform App initializers call Shared/App/SwiftfinApp+configure.swift. UserS
 ## Foreign notification callback regression
 
 The first new native run (notification310) terminated with EXC_BREAKPOINT/SIGTRAP. The diagnostic report names dispatch_assert_queue, Swift's executor check and the first closure in NotificationEvent.mainActorPublisher, reached from the foreign synthetic notification post. The map closure had inherited the surrounding main actor before receive(on:main). Moving that raw projection into a nonisolated helper repairs the ownership boundary. The same foreign-posting regression passes in notification311, alongside eight other notification contracts. No unchecked Sendable, unsafe nonisolation or preconcurrency suppression was introduced. The warning about a local weak variable was also removed before the passing run. This native result does not establish UIKit/live-client delivery.
+
+## Library artwork and membership boundaries
+
+LibraryMembershipChange is a checked-Sendable immutable action; the pure UserMediaState rules accept explicit SDK change values and loaded membership. Their callers retain row lookup and UI scheduler/removal execution. LibraryArtworkScope and Catalog's library type/query projections use immutable SDK values without Factory, defaults or SwiftUI dependencies.
+
+UserView captures one main-actor manager/session/transport/user pair before suspension and supplies a weak exact-binding closure to MediaCatalogClient. The existing owner checks that binding before and after each read, including error paths. Grid/list view task identity incorporates root/connection revisions, and corresponding events clear old image state. Final cancellation and exact captured account/transport checks remain beside publication. Fake noncooperating late reads prove discarded obsolete/cancelled results; source review and compile-only checks cover app integration. SwiftUI task cancellation, event/render delivery and actual network/player acceptance remain held.
+
+The expanded source ledger identifies evaluated local-access tokens and native hardware probes as remaining mixed ownership candidates. This audit does not claim all app sources, public consumers or runtime native teardown complete.

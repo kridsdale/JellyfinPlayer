@@ -135,6 +135,12 @@ enum UserViewLibraryElement: Displayable, Hashable, Identifiable, LibraryElement
 
 private struct UserViewLibraryGridElement: View {
 
+    @Injected(\.userSessionManager)
+    private var sessionManager
+
+    @State
+    private var bindingRevision = UUID()
+
     @Default(.Customization.Library.randomImage)
     private var useRandomImage
 
@@ -186,7 +192,15 @@ private struct UserViewLibraryGridElement: View {
                 .posterStyle(.landscape)
                 .matchedTransitionSource(id: "item", in: namespace)
         }
-        .task(id: UserViewArtworkRequest(element: element, random: useRandomImage)) {
+        .onReceive(sessionManager.$currentSession) { _ in
+            imageSources = []
+            bindingRevision = UUID()
+        }
+        .onReceive(Notifications[.didChangeServerConnection].publisher) { _ in
+            imageSources = []
+            bindingRevision = UUID()
+        }
+        .task(id: UserViewArtworkRequest(element: element, random: useRandomImage, bindingRevision: bindingRevision)) {
             await setImageSources()
         }
         .buttonStyle(.card)
@@ -223,6 +237,12 @@ private struct UserViewLibraryGridElement: View {
 
 private struct UserViewLibraryListElement: View {
 
+    @Injected(\.userSessionManager)
+    private var sessionManager
+
+    @State
+    private var bindingRevision = UUID()
+
     @Default(.Customization.Library.randomImage)
     private var useRandomImage
 
@@ -254,7 +274,15 @@ private struct UserViewLibraryListElement: View {
         #if !os(tvOS)
         .matchedTransitionSource(id: "item", in: namespace)
         #endif
-        .task(id: UserViewArtworkRequest(element: element, random: useRandomImage)) {
+        .onReceive(sessionManager.$currentSession) { _ in
+            imageSources = []
+            bindingRevision = UUID()
+        }
+        .onReceive(Notifications[.didChangeServerConnection].publisher) { _ in
+            imageSources = []
+            bindingRevision = UUID()
+        }
+        .task(id: UserViewArtworkRequest(element: element, random: useRandomImage, bindingRevision: bindingRevision)) {
             await setImageSources()
         }
     }
@@ -289,6 +317,7 @@ private struct UserViewLibraryListElement: View {
 private struct UserViewArtworkRequest: Hashable {
     let element: UserViewLibraryElement
     let random: Bool
+    let bindingRevision: UUID
 }
 
 private extension UserViewLibraryElement {
@@ -312,22 +341,16 @@ private extension UserViewLibraryElement {
         let manager = Container.shared.userSessionManager()
         guard let session = manager.currentSession else { throw UserSessionError.missingCurrentSession }
         let client = session.client
-        let catalog = MediaCatalogClient(reader: client, userID: session.user.id)
-        let parentID: String?
-        let favorites: Bool
-        let types: [BaseItemKind]
-        switch self {
-        case .favorites:
-            parentID = nil
-            favorites = true
-            types = BaseItemKind.supportedCases
-        case let .userView(item):
-            parentID = item.collectionType == .livetv ? nil : item.id
-            favorites = false
-            types = item.collectionType == .livetv ? [.tvProgram, .liveTvProgram] : BaseItemKind.supportedCases
+        let catalog = MediaCatalogClient(reader: client, userID: session.user.id, isCurrent: { [weak manager, weak session] in
+            guard let manager, let session else { return false }
+            return manager.currentSession === session && session.client === client
+        })
+        let scope: LibraryArtworkScope = switch self {
+        case .favorites: .favorites
+        case let .userView(item): .userView(item)
         }
         let page = try await catalog.page(
-            .artworkSample(parentID: parentID, itemTypes: types, favorites: favorites),
+            MediaCatalogPolicy.artworkQuery(for: scope),
             at: CatalogPageRequest(offset: 0, limit: 3)
         )
         try Task.checkCancellation()

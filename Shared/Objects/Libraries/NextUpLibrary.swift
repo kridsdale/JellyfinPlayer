@@ -11,6 +11,7 @@ import Foundation
 import JellyfinAPI
 import SwiftfinLocalization
 import SwiftfinMediaCatalog
+import SwiftfinUserMediaState
 
 struct NextUpLibrary: BaseItemKindLibrary {
 
@@ -38,18 +39,14 @@ struct NextUpLibrary: BaseItemKindLibrary {
         viewModel: PagingLibraryViewModel<NextUpLibrary>,
         userData: UserItemDataDto
     ) {
-        guard let itemID = userData.itemID else { return }
-
-        if viewModel.elements.contains(where: { $0.id == itemID }) {
-            viewModel.scheduleRefreshForItemUserData(minimumInterval: 3)
-            return
+        let isLoaded = userData.itemID.map { id in viewModel.elements.contains { $0.id == id } } ?? false
+        switch UserMediaStatePolicy.nextUpChange(for: userData, isLoaded: isLoaded) {
+        case .none:
+            break
+        case let .remove(itemID):
+            viewModel.removeElements { $0.id == itemID }
+        case let .refresh(minimumInterval):
+            viewModel.scheduleRefreshForItemUserData(minimumInterval: minimumInterval)
         }
-
-        let hasResumePosition = (userData.playbackPositionTicks ?? 0) > 0
-        let canAffectMembership = hasResumePosition || userData.isPlayed != nil
-
-        guard canAffectMembership else { return }
-
-        viewModel.scheduleRefreshForItemUserData(minimumInterval: 30)
     }
 }

@@ -1,0 +1,3269 @@
+{
+  "artwork": [
+    {
+      "favorites": false,
+      "types": [
+        "boxSet",
+        "movie",
+        "musicVideo",
+        "series",
+        "video"
+      ]
+    },
+    {
+      "favorites": false,
+      "types": [
+        "tvProgram",
+        "liveTvProgram"
+      ]
+    },
+    {
+      "favorites": false,
+      "parentID": "",
+      "types": [
+        "boxSet",
+        "movie",
+        "musicVideo",
+        "series",
+        "video"
+      ]
+    },
+    {
+      "favorites": false,
+      "types": [
+        "tvProgram",
+        "liveTvProgram"
+      ]
+    },
+    {
+      "favorites": false,
+      "parentID": "library",
+      "types": [
+        "boxSet",
+        "movie",
+        "musicVideo",
+        "series",
+        "video"
+      ]
+    },
+    {
+      "favorites": false,
+      "types": [
+        "tvProgram",
+        "liveTvProgram"
+      ]
+    },
+    {
+      "favorites": true,
+      "types": [
+        "boxSet",
+        "movie",
+        "musicVideo",
+        "series",
+        "video"
+      ]
+    },
+    {
+      "favorites": true,
+      "types": [
+        "boxSet",
+        "movie",
+        "musicVideo",
+        "series",
+        "video"
+      ]
+    },
+    {
+      "favorites": true,
+      "types": [
+        "boxSet",
+        "movie",
+        "musicVideo",
+        "series",
+        "video"
+      ]
+    },
+    {
+      "favorites": true,
+      "types": [
+        "boxSet",
+        "movie",
+        "musicVideo",
+        "series",
+        "video"
+      ]
+    },
+    {
+      "favorites": true,
+      "types": [
+        "boxSet",
+        "movie",
+        "musicVideo",
+        "series",
+        "video"
+      ]
+    },
+    {
+      "favorites": true,
+      "types": [
+        "boxSet",
+        "movie",
+        "musicVideo",
+        "series",
+        "video"
+      ]
+    }
+  ],
+  "artworkInputs": [
+    {
+      "favorites": false,
+      "live": false,
+      "parentID": null
+    },
+    {
+      "favorites": false,
+      "live": true,
+      "parentID": null
+    },
+    {
+      "favorites": false,
+      "live": false,
+      "parentID": ""
+    },
+    {
+      "favorites": false,
+      "live": true,
+      "parentID": ""
+    },
+    {
+      "favorites": false,
+      "live": false,
+      "parentID": "library"
+    },
+    {
+      "favorites": false,
+      "live": true,
+      "parentID": "library"
+    },
+    {
+      "favorites": true,
+      "live": false,
+      "parentID": null
+    },
+    {
+      "favorites": true,
+      "live": true,
+      "parentID": null
+    },
+    {
+      "favorites": true,
+      "live": false,
+      "parentID": ""
+    },
+    {
+      "favorites": true,
+      "live": true,
+      "parentID": ""
+    },
+    {
+      "favorites": true,
+      "live": false,
+      "parentID": "library"
+    },
+    {
+      "favorites": true,
+      "live": true,
+      "parentID": "library"
+    }
+  ],
+  "changes": [
+    {
+      "itemID": null,
+      "loaded": false,
+      "played": null,
+      "ticks": null
+    },
+    {
+      "itemID": null,
+      "loaded": true,
+      "played": null,
+      "ticks": null
+    },
+    {
+      "itemID": null,
+      "loaded": false,
+      "played": false,
+      "ticks": null
+    },
+    {
+      "itemID": null,
+      "loaded": true,
+      "played": false,
+      "ticks": null
+    },
+    {
+      "itemID": null,
+      "loaded": false,
+      "played": true,
+      "ticks": null
+    },
+    {
+      "itemID": null,
+      "loaded": true,
+      "played": true,
+      "ticks": null
+    },
+    {
+      "itemID": null,
+      "loaded": false,
+      "played": null,
+      "ticks": -9223372036854775808
+    },
+    {
+      "itemID": null,
+      "loaded": true,
+      "played": null,
+      "ticks": -9223372036854775808
+    },
+    {
+      "itemID": null,
+      "loaded": false,
+      "played": false,
+      "ticks": -9223372036854775808
+    },
+    {
+      "itemID": null,
+      "loaded": true,
+      "played": false,
+      "ticks": -9223372036854775808
+    },
+    {
+      "itemID": null,
+      "loaded": false,
+      "played": true,
+      "ticks": -9223372036854775808
+    },
+    {
+      "itemID": null,
+      "loaded": true,
+      "played": true,
+      "ticks": -9223372036854775808
+    },
+    {
+      "itemID": null,
+      "loaded": false,
+      "played": null,
+      "ticks": -1
+    },
+    {
+      "itemID": null,
+      "loaded": true,
+      "played": null,
+      "ticks": -1
+    },
+    {
+      "itemID": null,
+      "loaded": false,
+      "played": false,
+      "ticks": -1
+    },
+    {
+      "itemID": null,
+      "loaded": true,
+      "played": false,
+      "ticks": -1
+    },
+    {
+      "itemID": null,
+      "loaded": false,
+      "played": true,
+      "ticks": -1
+    },
+    {
+      "itemID": null,
+      "loaded": true,
+      "played": true,
+      "ticks": -1
+    },
+    {
+      "itemID": null,
+      "loaded": false,
+      "played": null,
+      "ticks": 0
+    },
+    {
+      "itemID": null,
+      "loaded": true,
+      "played": null,
+      "ticks": 0
+    },
+    {
+      "itemID": null,
+      "loaded": false,
+      "played": false,
+      "ticks": 0
+    },
+    {
+      "itemID": null,
+      "loaded": true,
+      "played": false,
+      "ticks": 0
+    },
+    {
+      "itemID": null,
+      "loaded": false,
+      "played": true,
+      "ticks": 0
+    },
+    {
+      "itemID": null,
+      "loaded": true,
+      "played": true,
+      "ticks": 0
+    },
+    {
+      "itemID": null,
+      "loaded": false,
+      "played": null,
+      "ticks": 1
+    },
+    {
+      "itemID": null,
+      "loaded": true,
+      "played": null,
+      "ticks": 1
+    },
+    {
+      "itemID": null,
+      "loaded": false,
+      "played": false,
+      "ticks": 1
+    },
+    {
+      "itemID": null,
+      "loaded": true,
+      "played": false,
+      "ticks": 1
+    },
+    {
+      "itemID": null,
+      "loaded": false,
+      "played": true,
+      "ticks": 1
+    },
+    {
+      "itemID": null,
+      "loaded": true,
+      "played": true,
+      "ticks": 1
+    },
+    {
+      "itemID": null,
+      "loaded": false,
+      "played": null,
+      "ticks": 9223372036854775807
+    },
+    {
+      "itemID": null,
+      "loaded": true,
+      "played": null,
+      "ticks": 9223372036854775807
+    },
+    {
+      "itemID": null,
+      "loaded": false,
+      "played": false,
+      "ticks": 9223372036854775807
+    },
+    {
+      "itemID": null,
+      "loaded": true,
+      "played": false,
+      "ticks": 9223372036854775807
+    },
+    {
+      "itemID": null,
+      "loaded": false,
+      "played": true,
+      "ticks": 9223372036854775807
+    },
+    {
+      "itemID": null,
+      "loaded": true,
+      "played": true,
+      "ticks": 9223372036854775807
+    },
+    {
+      "itemID": "",
+      "loaded": false,
+      "played": null,
+      "ticks": null
+    },
+    {
+      "itemID": "",
+      "loaded": true,
+      "played": null,
+      "ticks": null
+    },
+    {
+      "itemID": "",
+      "loaded": false,
+      "played": false,
+      "ticks": null
+    },
+    {
+      "itemID": "",
+      "loaded": true,
+      "played": false,
+      "ticks": null
+    },
+    {
+      "itemID": "",
+      "loaded": false,
+      "played": true,
+      "ticks": null
+    },
+    {
+      "itemID": "",
+      "loaded": true,
+      "played": true,
+      "ticks": null
+    },
+    {
+      "itemID": "",
+      "loaded": false,
+      "played": null,
+      "ticks": -9223372036854775808
+    },
+    {
+      "itemID": "",
+      "loaded": true,
+      "played": null,
+      "ticks": -9223372036854775808
+    },
+    {
+      "itemID": "",
+      "loaded": false,
+      "played": false,
+      "ticks": -9223372036854775808
+    },
+    {
+      "itemID": "",
+      "loaded": true,
+      "played": false,
+      "ticks": -9223372036854775808
+    },
+    {
+      "itemID": "",
+      "loaded": false,
+      "played": true,
+      "ticks": -9223372036854775808
+    },
+    {
+      "itemID": "",
+      "loaded": true,
+      "played": true,
+      "ticks": -9223372036854775808
+    },
+    {
+      "itemID": "",
+      "loaded": false,
+      "played": null,
+      "ticks": -1
+    },
+    {
+      "itemID": "",
+      "loaded": true,
+      "played": null,
+      "ticks": -1
+    },
+    {
+      "itemID": "",
+      "loaded": false,
+      "played": false,
+      "ticks": -1
+    },
+    {
+      "itemID": "",
+      "loaded": true,
+      "played": false,
+      "ticks": -1
+    },
+    {
+      "itemID": "",
+      "loaded": false,
+      "played": true,
+      "ticks": -1
+    },
+    {
+      "itemID": "",
+      "loaded": true,
+      "played": true,
+      "ticks": -1
+    },
+    {
+      "itemID": "",
+      "loaded": false,
+      "played": null,
+      "ticks": 0
+    },
+    {
+      "itemID": "",
+      "loaded": true,
+      "played": null,
+      "ticks": 0
+    },
+    {
+      "itemID": "",
+      "loaded": false,
+      "played": false,
+      "ticks": 0
+    },
+    {
+      "itemID": "",
+      "loaded": true,
+      "played": false,
+      "ticks": 0
+    },
+    {
+      "itemID": "",
+      "loaded": false,
+      "played": true,
+      "ticks": 0
+    },
+    {
+      "itemID": "",
+      "loaded": true,
+      "played": true,
+      "ticks": 0
+    },
+    {
+      "itemID": "",
+      "loaded": false,
+      "played": null,
+      "ticks": 1
+    },
+    {
+      "itemID": "",
+      "loaded": true,
+      "played": null,
+      "ticks": 1
+    },
+    {
+      "itemID": "",
+      "loaded": false,
+      "played": false,
+      "ticks": 1
+    },
+    {
+      "itemID": "",
+      "loaded": true,
+      "played": false,
+      "ticks": 1
+    },
+    {
+      "itemID": "",
+      "loaded": false,
+      "played": true,
+      "ticks": 1
+    },
+    {
+      "itemID": "",
+      "loaded": true,
+      "played": true,
+      "ticks": 1
+    },
+    {
+      "itemID": "",
+      "loaded": false,
+      "played": null,
+      "ticks": 9223372036854775807
+    },
+    {
+      "itemID": "",
+      "loaded": true,
+      "played": null,
+      "ticks": 9223372036854775807
+    },
+    {
+      "itemID": "",
+      "loaded": false,
+      "played": false,
+      "ticks": 9223372036854775807
+    },
+    {
+      "itemID": "",
+      "loaded": true,
+      "played": false,
+      "ticks": 9223372036854775807
+    },
+    {
+      "itemID": "",
+      "loaded": false,
+      "played": true,
+      "ticks": 9223372036854775807
+    },
+    {
+      "itemID": "",
+      "loaded": true,
+      "played": true,
+      "ticks": 9223372036854775807
+    },
+    {
+      "itemID": "item",
+      "loaded": false,
+      "played": null,
+      "ticks": null
+    },
+    {
+      "itemID": "item",
+      "loaded": true,
+      "played": null,
+      "ticks": null
+    },
+    {
+      "itemID": "item",
+      "loaded": false,
+      "played": false,
+      "ticks": null
+    },
+    {
+      "itemID": "item",
+      "loaded": true,
+      "played": false,
+      "ticks": null
+    },
+    {
+      "itemID": "item",
+      "loaded": false,
+      "played": true,
+      "ticks": null
+    },
+    {
+      "itemID": "item",
+      "loaded": true,
+      "played": true,
+      "ticks": null
+    },
+    {
+      "itemID": "item",
+      "loaded": false,
+      "played": null,
+      "ticks": -9223372036854775808
+    },
+    {
+      "itemID": "item",
+      "loaded": true,
+      "played": null,
+      "ticks": -9223372036854775808
+    },
+    {
+      "itemID": "item",
+      "loaded": false,
+      "played": false,
+      "ticks": -9223372036854775808
+    },
+    {
+      "itemID": "item",
+      "loaded": true,
+      "played": false,
+      "ticks": -9223372036854775808
+    },
+    {
+      "itemID": "item",
+      "loaded": false,
+      "played": true,
+      "ticks": -9223372036854775808
+    },
+    {
+      "itemID": "item",
+      "loaded": true,
+      "played": true,
+      "ticks": -9223372036854775808
+    },
+    {
+      "itemID": "item",
+      "loaded": false,
+      "played": null,
+      "ticks": -1
+    },
+    {
+      "itemID": "item",
+      "loaded": true,
+      "played": null,
+      "ticks": -1
+    },
+    {
+      "itemID": "item",
+      "loaded": false,
+      "played": false,
+      "ticks": -1
+    },
+    {
+      "itemID": "item",
+      "loaded": true,
+      "played": false,
+      "ticks": -1
+    },
+    {
+      "itemID": "item",
+      "loaded": false,
+      "played": true,
+      "ticks": -1
+    },
+    {
+      "itemID": "item",
+      "loaded": true,
+      "played": true,
+      "ticks": -1
+    },
+    {
+      "itemID": "item",
+      "loaded": false,
+      "played": null,
+      "ticks": 0
+    },
+    {
+      "itemID": "item",
+      "loaded": true,
+      "played": null,
+      "ticks": 0
+    },
+    {
+      "itemID": "item",
+      "loaded": false,
+      "played": false,
+      "ticks": 0
+    },
+    {
+      "itemID": "item",
+      "loaded": true,
+      "played": false,
+      "ticks": 0
+    },
+    {
+      "itemID": "item",
+      "loaded": false,
+      "played": true,
+      "ticks": 0
+    },
+    {
+      "itemID": "item",
+      "loaded": true,
+      "played": true,
+      "ticks": 0
+    },
+    {
+      "itemID": "item",
+      "loaded": false,
+      "played": null,
+      "ticks": 1
+    },
+    {
+      "itemID": "item",
+      "loaded": true,
+      "played": null,
+      "ticks": 1
+    },
+    {
+      "itemID": "item",
+      "loaded": false,
+      "played": false,
+      "ticks": 1
+    },
+    {
+      "itemID": "item",
+      "loaded": true,
+      "played": false,
+      "ticks": 1
+    },
+    {
+      "itemID": "item",
+      "loaded": false,
+      "played": true,
+      "ticks": 1
+    },
+    {
+      "itemID": "item",
+      "loaded": true,
+      "played": true,
+      "ticks": 1
+    },
+    {
+      "itemID": "item",
+      "loaded": false,
+      "played": null,
+      "ticks": 9223372036854775807
+    },
+    {
+      "itemID": "item",
+      "loaded": true,
+      "played": null,
+      "ticks": 9223372036854775807
+    },
+    {
+      "itemID": "item",
+      "loaded": false,
+      "played": false,
+      "ticks": 9223372036854775807
+    },
+    {
+      "itemID": "item",
+      "loaded": true,
+      "played": false,
+      "ticks": 9223372036854775807
+    },
+    {
+      "itemID": "item",
+      "loaded": false,
+      "played": true,
+      "ticks": 9223372036854775807
+    },
+    {
+      "itemID": "item",
+      "loaded": true,
+      "played": true,
+      "ticks": 9223372036854775807
+    }
+  ],
+  "kinds": [
+    [],
+    [
+      "audio",
+      "musicAlbum"
+    ],
+    [
+      "episode",
+      "movie",
+      "video"
+    ],
+    [
+      "book"
+    ],
+    [
+      "photo"
+    ],
+    [],
+    [
+      "audio",
+      "musicAlbum",
+      "audio",
+      "musicAlbum"
+    ],
+    [
+      "audio",
+      "musicAlbum",
+      "episode",
+      "movie",
+      "video"
+    ],
+    [
+      "audio",
+      "musicAlbum",
+      "book"
+    ],
+    [
+      "audio",
+      "musicAlbum",
+      "photo"
+    ],
+    [
+      "audio",
+      "musicAlbum"
+    ],
+    [
+      "episode",
+      "movie",
+      "video",
+      "audio",
+      "musicAlbum"
+    ],
+    [
+      "episode",
+      "movie",
+      "video",
+      "episode",
+      "movie",
+      "video"
+    ],
+    [
+      "episode",
+      "movie",
+      "video",
+      "book"
+    ],
+    [
+      "episode",
+      "movie",
+      "video",
+      "photo"
+    ],
+    [
+      "episode",
+      "movie",
+      "video"
+    ],
+    [
+      "book",
+      "audio",
+      "musicAlbum"
+    ],
+    [
+      "book",
+      "episode",
+      "movie",
+      "video"
+    ],
+    [
+      "book",
+      "book"
+    ],
+    [
+      "book",
+      "photo"
+    ],
+    [
+      "book"
+    ],
+    [
+      "photo",
+      "audio",
+      "musicAlbum"
+    ],
+    [
+      "photo",
+      "episode",
+      "movie",
+      "video"
+    ],
+    [
+      "photo",
+      "book"
+    ],
+    [
+      "photo",
+      "photo"
+    ],
+    [
+      "photo"
+    ],
+    [
+      "audio",
+      "musicAlbum"
+    ],
+    [
+      "episode",
+      "movie",
+      "video"
+    ],
+    [
+      "book"
+    ],
+    [
+      "photo"
+    ],
+    [],
+    [
+      "audio",
+      "musicAlbum",
+      "audio",
+      "musicAlbum",
+      "audio",
+      "musicAlbum"
+    ],
+    [
+      "audio",
+      "musicAlbum",
+      "audio",
+      "musicAlbum",
+      "episode",
+      "movie",
+      "video"
+    ],
+    [
+      "audio",
+      "musicAlbum",
+      "audio",
+      "musicAlbum",
+      "book"
+    ],
+    [
+      "audio",
+      "musicAlbum",
+      "audio",
+      "musicAlbum",
+      "photo"
+    ],
+    [
+      "audio",
+      "musicAlbum",
+      "audio",
+      "musicAlbum"
+    ],
+    [
+      "audio",
+      "musicAlbum",
+      "episode",
+      "movie",
+      "video",
+      "audio",
+      "musicAlbum"
+    ],
+    [
+      "audio",
+      "musicAlbum",
+      "episode",
+      "movie",
+      "video",
+      "episode",
+      "movie",
+      "video"
+    ],
+    [
+      "audio",
+      "musicAlbum",
+      "episode",
+      "movie",
+      "video",
+      "book"
+    ],
+    [
+      "audio",
+      "musicAlbum",
+      "episode",
+      "movie",
+      "video",
+      "photo"
+    ],
+    [
+      "audio",
+      "musicAlbum",
+      "episode",
+      "movie",
+      "video"
+    ],
+    [
+      "audio",
+      "musicAlbum",
+      "book",
+      "audio",
+      "musicAlbum"
+    ],
+    [
+      "audio",
+      "musicAlbum",
+      "book",
+      "episode",
+      "movie",
+      "video"
+    ],
+    [
+      "audio",
+      "musicAlbum",
+      "book",
+      "book"
+    ],
+    [
+      "audio",
+      "musicAlbum",
+      "book",
+      "photo"
+    ],
+    [
+      "audio",
+      "musicAlbum",
+      "book"
+    ],
+    [
+      "audio",
+      "musicAlbum",
+      "photo",
+      "audio",
+      "musicAlbum"
+    ],
+    [
+      "audio",
+      "musicAlbum",
+      "photo",
+      "episode",
+      "movie",
+      "video"
+    ],
+    [
+      "audio",
+      "musicAlbum",
+      "photo",
+      "book"
+    ],
+    [
+      "audio",
+      "musicAlbum",
+      "photo",
+      "photo"
+    ],
+    [
+      "audio",
+      "musicAlbum",
+      "photo"
+    ],
+    [
+      "audio",
+      "musicAlbum",
+      "audio",
+      "musicAlbum"
+    ],
+    [
+      "audio",
+      "musicAlbum",
+      "episode",
+      "movie",
+      "video"
+    ],
+    [
+      "audio",
+      "musicAlbum",
+      "book"
+    ],
+    [
+      "audio",
+      "musicAlbum",
+      "photo"
+    ],
+    [
+      "audio",
+      "musicAlbum"
+    ],
+    [
+      "episode",
+      "movie",
+      "video",
+      "audio",
+      "musicAlbum",
+      "audio",
+      "musicAlbum"
+    ],
+    [
+      "episode",
+      "movie",
+      "video",
+      "audio",
+      "musicAlbum",
+      "episode",
+      "movie",
+      "video"
+    ],
+    [
+      "episode",
+      "movie",
+      "video",
+      "audio",
+      "musicAlbum",
+      "book"
+    ],
+    [
+      "episode",
+      "movie",
+      "video",
+      "audio",
+      "musicAlbum",
+      "photo"
+    ],
+    [
+      "episode",
+      "movie",
+      "video",
+      "audio",
+      "musicAlbum"
+    ],
+    [
+      "episode",
+      "movie",
+      "video",
+      "episode",
+      "movie",
+      "video",
+      "audio",
+      "musicAlbum"
+    ],
+    [
+      "episode",
+      "movie",
+      "video",
+      "episode",
+      "movie",
+      "video",
+      "episode",
+      "movie",
+      "video"
+    ],
+    [
+      "episode",
+      "movie",
+      "video",
+      "episode",
+      "movie",
+      "video",
+      "book"
+    ],
+    [
+      "episode",
+      "movie",
+      "video",
+      "episode",
+      "movie",
+      "video",
+      "photo"
+    ],
+    [
+      "episode",
+      "movie",
+      "video",
+      "episode",
+      "movie",
+      "video"
+    ],
+    [
+      "episode",
+      "movie",
+      "video",
+      "book",
+      "audio",
+      "musicAlbum"
+    ],
+    [
+      "episode",
+      "movie",
+      "video",
+      "book",
+      "episode",
+      "movie",
+      "video"
+    ],
+    [
+      "episode",
+      "movie",
+      "video",
+      "book",
+      "book"
+    ],
+    [
+      "episode",
+      "movie",
+      "video",
+      "book",
+      "photo"
+    ],
+    [
+      "episode",
+      "movie",
+      "video",
+      "book"
+    ],
+    [
+      "episode",
+      "movie",
+      "video",
+      "photo",
+      "audio",
+      "musicAlbum"
+    ],
+    [
+      "episode",
+      "movie",
+      "video",
+      "photo",
+      "episode",
+      "movie",
+      "video"
+    ],
+    [
+      "episode",
+      "movie",
+      "video",
+      "photo",
+      "book"
+    ],
+    [
+      "episode",
+      "movie",
+      "video",
+      "photo",
+      "photo"
+    ],
+    [
+      "episode",
+      "movie",
+      "video",
+      "photo"
+    ],
+    [
+      "episode",
+      "movie",
+      "video",
+      "audio",
+      "musicAlbum"
+    ],
+    [
+      "episode",
+      "movie",
+      "video",
+      "episode",
+      "movie",
+      "video"
+    ],
+    [
+      "episode",
+      "movie",
+      "video",
+      "book"
+    ],
+    [
+      "episode",
+      "movie",
+      "video",
+      "photo"
+    ],
+    [
+      "episode",
+      "movie",
+      "video"
+    ],
+    [
+      "book",
+      "audio",
+      "musicAlbum",
+      "audio",
+      "musicAlbum"
+    ],
+    [
+      "book",
+      "audio",
+      "musicAlbum",
+      "episode",
+      "movie",
+      "video"
+    ],
+    [
+      "book",
+      "audio",
+      "musicAlbum",
+      "book"
+    ],
+    [
+      "book",
+      "audio",
+      "musicAlbum",
+      "photo"
+    ],
+    [
+      "book",
+      "audio",
+      "musicAlbum"
+    ],
+    [
+      "book",
+      "episode",
+      "movie",
+      "video",
+      "audio",
+      "musicAlbum"
+    ],
+    [
+      "book",
+      "episode",
+      "movie",
+      "video",
+      "episode",
+      "movie",
+      "video"
+    ],
+    [
+      "book",
+      "episode",
+      "movie",
+      "video",
+      "book"
+    ],
+    [
+      "book",
+      "episode",
+      "movie",
+      "video",
+      "photo"
+    ],
+    [
+      "book",
+      "episode",
+      "movie",
+      "video"
+    ],
+    [
+      "book",
+      "book",
+      "audio",
+      "musicAlbum"
+    ],
+    [
+      "book",
+      "book",
+      "episode",
+      "movie",
+      "video"
+    ],
+    [
+      "book",
+      "book",
+      "book"
+    ],
+    [
+      "book",
+      "book",
+      "photo"
+    ],
+    [
+      "book",
+      "book"
+    ],
+    [
+      "book",
+      "photo",
+      "audio",
+      "musicAlbum"
+    ],
+    [
+      "book",
+      "photo",
+      "episode",
+      "movie",
+      "video"
+    ],
+    [
+      "book",
+      "photo",
+      "book"
+    ],
+    [
+      "book",
+      "photo",
+      "photo"
+    ],
+    [
+      "book",
+      "photo"
+    ],
+    [
+      "book",
+      "audio",
+      "musicAlbum"
+    ],
+    [
+      "book",
+      "episode",
+      "movie",
+      "video"
+    ],
+    [
+      "book",
+      "book"
+    ],
+    [
+      "book",
+      "photo"
+    ],
+    [
+      "book"
+    ],
+    [
+      "photo",
+      "audio",
+      "musicAlbum",
+      "audio",
+      "musicAlbum"
+    ],
+    [
+      "photo",
+      "audio",
+      "musicAlbum",
+      "episode",
+      "movie",
+      "video"
+    ],
+    [
+      "photo",
+      "audio",
+      "musicAlbum",
+      "book"
+    ],
+    [
+      "photo",
+      "audio",
+      "musicAlbum",
+      "photo"
+    ],
+    [
+      "photo",
+      "audio",
+      "musicAlbum"
+    ],
+    [
+      "photo",
+      "episode",
+      "movie",
+      "video",
+      "audio",
+      "musicAlbum"
+    ],
+    [
+      "photo",
+      "episode",
+      "movie",
+      "video",
+      "episode",
+      "movie",
+      "video"
+    ],
+    [
+      "photo",
+      "episode",
+      "movie",
+      "video",
+      "book"
+    ],
+    [
+      "photo",
+      "episode",
+      "movie",
+      "video",
+      "photo"
+    ],
+    [
+      "photo",
+      "episode",
+      "movie",
+      "video"
+    ],
+    [
+      "photo",
+      "book",
+      "audio",
+      "musicAlbum"
+    ],
+    [
+      "photo",
+      "book",
+      "episode",
+      "movie",
+      "video"
+    ],
+    [
+      "photo",
+      "book",
+      "book"
+    ],
+    [
+      "photo",
+      "book",
+      "photo"
+    ],
+    [
+      "photo",
+      "book"
+    ],
+    [
+      "photo",
+      "photo",
+      "audio",
+      "musicAlbum"
+    ],
+    [
+      "photo",
+      "photo",
+      "episode",
+      "movie",
+      "video"
+    ],
+    [
+      "photo",
+      "photo",
+      "book"
+    ],
+    [
+      "photo",
+      "photo",
+      "photo"
+    ],
+    [
+      "photo",
+      "photo"
+    ],
+    [
+      "photo",
+      "audio",
+      "musicAlbum"
+    ],
+    [
+      "photo",
+      "episode",
+      "movie",
+      "video"
+    ],
+    [
+      "photo",
+      "book"
+    ],
+    [
+      "photo",
+      "photo"
+    ],
+    [
+      "photo"
+    ],
+    [
+      "audio",
+      "musicAlbum",
+      "audio",
+      "musicAlbum"
+    ],
+    [
+      "audio",
+      "musicAlbum",
+      "episode",
+      "movie",
+      "video"
+    ],
+    [
+      "audio",
+      "musicAlbum",
+      "book"
+    ],
+    [
+      "audio",
+      "musicAlbum",
+      "photo"
+    ],
+    [
+      "audio",
+      "musicAlbum"
+    ],
+    [
+      "episode",
+      "movie",
+      "video",
+      "audio",
+      "musicAlbum"
+    ],
+    [
+      "episode",
+      "movie",
+      "video",
+      "episode",
+      "movie",
+      "video"
+    ],
+    [
+      "episode",
+      "movie",
+      "video",
+      "book"
+    ],
+    [
+      "episode",
+      "movie",
+      "video",
+      "photo"
+    ],
+    [
+      "episode",
+      "movie",
+      "video"
+    ],
+    [
+      "book",
+      "audio",
+      "musicAlbum"
+    ],
+    [
+      "book",
+      "episode",
+      "movie",
+      "video"
+    ],
+    [
+      "book",
+      "book"
+    ],
+    [
+      "book",
+      "photo"
+    ],
+    [
+      "book"
+    ],
+    [
+      "photo",
+      "audio",
+      "musicAlbum"
+    ],
+    [
+      "photo",
+      "episode",
+      "movie",
+      "video"
+    ],
+    [
+      "photo",
+      "book"
+    ],
+    [
+      "photo",
+      "photo"
+    ],
+    [
+      "photo"
+    ],
+    [
+      "audio",
+      "musicAlbum"
+    ],
+    [
+      "episode",
+      "movie",
+      "video"
+    ],
+    [
+      "book"
+    ],
+    [
+      "photo"
+    ],
+    []
+  ],
+  "mediaTypes": [
+    [],
+    [
+      "audio"
+    ],
+    [
+      "video"
+    ],
+    [
+      "book"
+    ],
+    [
+      "photo"
+    ],
+    [
+      "unknown"
+    ],
+    [
+      "audio",
+      "audio"
+    ],
+    [
+      "audio",
+      "video"
+    ],
+    [
+      "audio",
+      "book"
+    ],
+    [
+      "audio",
+      "photo"
+    ],
+    [
+      "audio",
+      "unknown"
+    ],
+    [
+      "video",
+      "audio"
+    ],
+    [
+      "video",
+      "video"
+    ],
+    [
+      "video",
+      "book"
+    ],
+    [
+      "video",
+      "photo"
+    ],
+    [
+      "video",
+      "unknown"
+    ],
+    [
+      "book",
+      "audio"
+    ],
+    [
+      "book",
+      "video"
+    ],
+    [
+      "book",
+      "book"
+    ],
+    [
+      "book",
+      "photo"
+    ],
+    [
+      "book",
+      "unknown"
+    ],
+    [
+      "photo",
+      "audio"
+    ],
+    [
+      "photo",
+      "video"
+    ],
+    [
+      "photo",
+      "book"
+    ],
+    [
+      "photo",
+      "photo"
+    ],
+    [
+      "photo",
+      "unknown"
+    ],
+    [
+      "unknown",
+      "audio"
+    ],
+    [
+      "unknown",
+      "video"
+    ],
+    [
+      "unknown",
+      "book"
+    ],
+    [
+      "unknown",
+      "photo"
+    ],
+    [
+      "unknown",
+      "unknown"
+    ],
+    [
+      "audio",
+      "audio",
+      "audio"
+    ],
+    [
+      "audio",
+      "audio",
+      "video"
+    ],
+    [
+      "audio",
+      "audio",
+      "book"
+    ],
+    [
+      "audio",
+      "audio",
+      "photo"
+    ],
+    [
+      "audio",
+      "audio",
+      "unknown"
+    ],
+    [
+      "audio",
+      "video",
+      "audio"
+    ],
+    [
+      "audio",
+      "video",
+      "video"
+    ],
+    [
+      "audio",
+      "video",
+      "book"
+    ],
+    [
+      "audio",
+      "video",
+      "photo"
+    ],
+    [
+      "audio",
+      "video",
+      "unknown"
+    ],
+    [
+      "audio",
+      "book",
+      "audio"
+    ],
+    [
+      "audio",
+      "book",
+      "video"
+    ],
+    [
+      "audio",
+      "book",
+      "book"
+    ],
+    [
+      "audio",
+      "book",
+      "photo"
+    ],
+    [
+      "audio",
+      "book",
+      "unknown"
+    ],
+    [
+      "audio",
+      "photo",
+      "audio"
+    ],
+    [
+      "audio",
+      "photo",
+      "video"
+    ],
+    [
+      "audio",
+      "photo",
+      "book"
+    ],
+    [
+      "audio",
+      "photo",
+      "photo"
+    ],
+    [
+      "audio",
+      "photo",
+      "unknown"
+    ],
+    [
+      "audio",
+      "unknown",
+      "audio"
+    ],
+    [
+      "audio",
+      "unknown",
+      "video"
+    ],
+    [
+      "audio",
+      "unknown",
+      "book"
+    ],
+    [
+      "audio",
+      "unknown",
+      "photo"
+    ],
+    [
+      "audio",
+      "unknown",
+      "unknown"
+    ],
+    [
+      "video",
+      "audio",
+      "audio"
+    ],
+    [
+      "video",
+      "audio",
+      "video"
+    ],
+    [
+      "video",
+      "audio",
+      "book"
+    ],
+    [
+      "video",
+      "audio",
+      "photo"
+    ],
+    [
+      "video",
+      "audio",
+      "unknown"
+    ],
+    [
+      "video",
+      "video",
+      "audio"
+    ],
+    [
+      "video",
+      "video",
+      "video"
+    ],
+    [
+      "video",
+      "video",
+      "book"
+    ],
+    [
+      "video",
+      "video",
+      "photo"
+    ],
+    [
+      "video",
+      "video",
+      "unknown"
+    ],
+    [
+      "video",
+      "book",
+      "audio"
+    ],
+    [
+      "video",
+      "book",
+      "video"
+    ],
+    [
+      "video",
+      "book",
+      "book"
+    ],
+    [
+      "video",
+      "book",
+      "photo"
+    ],
+    [
+      "video",
+      "book",
+      "unknown"
+    ],
+    [
+      "video",
+      "photo",
+      "audio"
+    ],
+    [
+      "video",
+      "photo",
+      "video"
+    ],
+    [
+      "video",
+      "photo",
+      "book"
+    ],
+    [
+      "video",
+      "photo",
+      "photo"
+    ],
+    [
+      "video",
+      "photo",
+      "unknown"
+    ],
+    [
+      "video",
+      "unknown",
+      "audio"
+    ],
+    [
+      "video",
+      "unknown",
+      "video"
+    ],
+    [
+      "video",
+      "unknown",
+      "book"
+    ],
+    [
+      "video",
+      "unknown",
+      "photo"
+    ],
+    [
+      "video",
+      "unknown",
+      "unknown"
+    ],
+    [
+      "book",
+      "audio",
+      "audio"
+    ],
+    [
+      "book",
+      "audio",
+      "video"
+    ],
+    [
+      "book",
+      "audio",
+      "book"
+    ],
+    [
+      "book",
+      "audio",
+      "photo"
+    ],
+    [
+      "book",
+      "audio",
+      "unknown"
+    ],
+    [
+      "book",
+      "video",
+      "audio"
+    ],
+    [
+      "book",
+      "video",
+      "video"
+    ],
+    [
+      "book",
+      "video",
+      "book"
+    ],
+    [
+      "book",
+      "video",
+      "photo"
+    ],
+    [
+      "book",
+      "video",
+      "unknown"
+    ],
+    [
+      "book",
+      "book",
+      "audio"
+    ],
+    [
+      "book",
+      "book",
+      "video"
+    ],
+    [
+      "book",
+      "book",
+      "book"
+    ],
+    [
+      "book",
+      "book",
+      "photo"
+    ],
+    [
+      "book",
+      "book",
+      "unknown"
+    ],
+    [
+      "book",
+      "photo",
+      "audio"
+    ],
+    [
+      "book",
+      "photo",
+      "video"
+    ],
+    [
+      "book",
+      "photo",
+      "book"
+    ],
+    [
+      "book",
+      "photo",
+      "photo"
+    ],
+    [
+      "book",
+      "photo",
+      "unknown"
+    ],
+    [
+      "book",
+      "unknown",
+      "audio"
+    ],
+    [
+      "book",
+      "unknown",
+      "video"
+    ],
+    [
+      "book",
+      "unknown",
+      "book"
+    ],
+    [
+      "book",
+      "unknown",
+      "photo"
+    ],
+    [
+      "book",
+      "unknown",
+      "unknown"
+    ],
+    [
+      "photo",
+      "audio",
+      "audio"
+    ],
+    [
+      "photo",
+      "audio",
+      "video"
+    ],
+    [
+      "photo",
+      "audio",
+      "book"
+    ],
+    [
+      "photo",
+      "audio",
+      "photo"
+    ],
+    [
+      "photo",
+      "audio",
+      "unknown"
+    ],
+    [
+      "photo",
+      "video",
+      "audio"
+    ],
+    [
+      "photo",
+      "video",
+      "video"
+    ],
+    [
+      "photo",
+      "video",
+      "book"
+    ],
+    [
+      "photo",
+      "video",
+      "photo"
+    ],
+    [
+      "photo",
+      "video",
+      "unknown"
+    ],
+    [
+      "photo",
+      "book",
+      "audio"
+    ],
+    [
+      "photo",
+      "book",
+      "video"
+    ],
+    [
+      "photo",
+      "book",
+      "book"
+    ],
+    [
+      "photo",
+      "book",
+      "photo"
+    ],
+    [
+      "photo",
+      "book",
+      "unknown"
+    ],
+    [
+      "photo",
+      "photo",
+      "audio"
+    ],
+    [
+      "photo",
+      "photo",
+      "video"
+    ],
+    [
+      "photo",
+      "photo",
+      "book"
+    ],
+    [
+      "photo",
+      "photo",
+      "photo"
+    ],
+    [
+      "photo",
+      "photo",
+      "unknown"
+    ],
+    [
+      "photo",
+      "unknown",
+      "audio"
+    ],
+    [
+      "photo",
+      "unknown",
+      "video"
+    ],
+    [
+      "photo",
+      "unknown",
+      "book"
+    ],
+    [
+      "photo",
+      "unknown",
+      "photo"
+    ],
+    [
+      "photo",
+      "unknown",
+      "unknown"
+    ],
+    [
+      "unknown",
+      "audio",
+      "audio"
+    ],
+    [
+      "unknown",
+      "audio",
+      "video"
+    ],
+    [
+      "unknown",
+      "audio",
+      "book"
+    ],
+    [
+      "unknown",
+      "audio",
+      "photo"
+    ],
+    [
+      "unknown",
+      "audio",
+      "unknown"
+    ],
+    [
+      "unknown",
+      "video",
+      "audio"
+    ],
+    [
+      "unknown",
+      "video",
+      "video"
+    ],
+    [
+      "unknown",
+      "video",
+      "book"
+    ],
+    [
+      "unknown",
+      "video",
+      "photo"
+    ],
+    [
+      "unknown",
+      "video",
+      "unknown"
+    ],
+    [
+      "unknown",
+      "book",
+      "audio"
+    ],
+    [
+      "unknown",
+      "book",
+      "video"
+    ],
+    [
+      "unknown",
+      "book",
+      "book"
+    ],
+    [
+      "unknown",
+      "book",
+      "photo"
+    ],
+    [
+      "unknown",
+      "book",
+      "unknown"
+    ],
+    [
+      "unknown",
+      "photo",
+      "audio"
+    ],
+    [
+      "unknown",
+      "photo",
+      "video"
+    ],
+    [
+      "unknown",
+      "photo",
+      "book"
+    ],
+    [
+      "unknown",
+      "photo",
+      "photo"
+    ],
+    [
+      "unknown",
+      "photo",
+      "unknown"
+    ],
+    [
+      "unknown",
+      "unknown",
+      "audio"
+    ],
+    [
+      "unknown",
+      "unknown",
+      "video"
+    ],
+    [
+      "unknown",
+      "unknown",
+      "book"
+    ],
+    [
+      "unknown",
+      "unknown",
+      "photo"
+    ],
+    [
+      "unknown",
+      "unknown",
+      "unknown"
+    ]
+  ],
+  "memberHashes": {
+    "artworkScope": "a2c3f76e802c115cf2ff23df75017d05ed14fbf6af129356bc3bbd82fb33d33c",
+    "mediaKinds": "a88b74bb9be55187ebd548420e6bdf00e706a964089be246e72aedd416ce7b8e",
+    "nextUp": "f91331a51036808f5603cd33d3caec36f5c6f31bc7bee32c33b12e11350a43ca",
+    "resume": "0ac46aef5df4ae3560a46a031885bad47201c84af15065812605cfb9894633e8"
+  },
+  "nextUp": [
+    {
+      "kind": "none"
+    },
+    {
+      "kind": "none"
+    },
+    {
+      "kind": "none"
+    },
+    {
+      "kind": "none"
+    },
+    {
+      "kind": "none"
+    },
+    {
+      "kind": "none"
+    },
+    {
+      "kind": "none"
+    },
+    {
+      "kind": "none"
+    },
+    {
+      "kind": "none"
+    },
+    {
+      "kind": "none"
+    },
+    {
+      "kind": "none"
+    },
+    {
+      "kind": "none"
+    },
+    {
+      "kind": "none"
+    },
+    {
+      "kind": "none"
+    },
+    {
+      "kind": "none"
+    },
+    {
+      "kind": "none"
+    },
+    {
+      "kind": "none"
+    },
+    {
+      "kind": "none"
+    },
+    {
+      "kind": "none"
+    },
+    {
+      "kind": "none"
+    },
+    {
+      "kind": "none"
+    },
+    {
+      "kind": "none"
+    },
+    {
+      "kind": "none"
+    },
+    {
+      "kind": "none"
+    },
+    {
+      "kind": "none"
+    },
+    {
+      "kind": "none"
+    },
+    {
+      "kind": "none"
+    },
+    {
+      "kind": "none"
+    },
+    {
+      "kind": "none"
+    },
+    {
+      "kind": "none"
+    },
+    {
+      "kind": "none"
+    },
+    {
+      "kind": "none"
+    },
+    {
+      "kind": "none"
+    },
+    {
+      "kind": "none"
+    },
+    {
+      "kind": "none"
+    },
+    {
+      "kind": "none"
+    },
+    {
+      "kind": "none"
+    },
+    {
+      "interval": 3,
+      "kind": "refresh"
+    },
+    {
+      "interval": 30,
+      "kind": "refresh"
+    },
+    {
+      "interval": 3,
+      "kind": "refresh"
+    },
+    {
+      "interval": 30,
+      "kind": "refresh"
+    },
+    {
+      "interval": 3,
+      "kind": "refresh"
+    },
+    {
+      "kind": "none"
+    },
+    {
+      "interval": 3,
+      "kind": "refresh"
+    },
+    {
+      "interval": 30,
+      "kind": "refresh"
+    },
+    {
+      "interval": 3,
+      "kind": "refresh"
+    },
+    {
+      "interval": 30,
+      "kind": "refresh"
+    },
+    {
+      "interval": 3,
+      "kind": "refresh"
+    },
+    {
+      "kind": "none"
+    },
+    {
+      "interval": 3,
+      "kind": "refresh"
+    },
+    {
+      "interval": 30,
+      "kind": "refresh"
+    },
+    {
+      "interval": 3,
+      "kind": "refresh"
+    },
+    {
+      "interval": 30,
+      "kind": "refresh"
+    },
+    {
+      "interval": 3,
+      "kind": "refresh"
+    },
+    {
+      "kind": "none"
+    },
+    {
+      "interval": 3,
+      "kind": "refresh"
+    },
+    {
+      "interval": 30,
+      "kind": "refresh"
+    },
+    {
+      "interval": 3,
+      "kind": "refresh"
+    },
+    {
+      "interval": 30,
+      "kind": "refresh"
+    },
+    {
+      "interval": 3,
+      "kind": "refresh"
+    },
+    {
+      "interval": 30,
+      "kind": "refresh"
+    },
+    {
+      "interval": 3,
+      "kind": "refresh"
+    },
+    {
+      "interval": 30,
+      "kind": "refresh"
+    },
+    {
+      "interval": 3,
+      "kind": "refresh"
+    },
+    {
+      "interval": 30,
+      "kind": "refresh"
+    },
+    {
+      "interval": 3,
+      "kind": "refresh"
+    },
+    {
+      "interval": 30,
+      "kind": "refresh"
+    },
+    {
+      "interval": 3,
+      "kind": "refresh"
+    },
+    {
+      "interval": 30,
+      "kind": "refresh"
+    },
+    {
+      "interval": 3,
+      "kind": "refresh"
+    },
+    {
+      "interval": 30,
+      "kind": "refresh"
+    },
+    {
+      "interval": 3,
+      "kind": "refresh"
+    },
+    {
+      "kind": "none"
+    },
+    {
+      "interval": 3,
+      "kind": "refresh"
+    },
+    {
+      "interval": 30,
+      "kind": "refresh"
+    },
+    {
+      "interval": 3,
+      "kind": "refresh"
+    },
+    {
+      "interval": 30,
+      "kind": "refresh"
+    },
+    {
+      "interval": 3,
+      "kind": "refresh"
+    },
+    {
+      "kind": "none"
+    },
+    {
+      "interval": 3,
+      "kind": "refresh"
+    },
+    {
+      "interval": 30,
+      "kind": "refresh"
+    },
+    {
+      "interval": 3,
+      "kind": "refresh"
+    },
+    {
+      "interval": 30,
+      "kind": "refresh"
+    },
+    {
+      "interval": 3,
+      "kind": "refresh"
+    },
+    {
+      "kind": "none"
+    },
+    {
+      "interval": 3,
+      "kind": "refresh"
+    },
+    {
+      "interval": 30,
+      "kind": "refresh"
+    },
+    {
+      "interval": 3,
+      "kind": "refresh"
+    },
+    {
+      "interval": 30,
+      "kind": "refresh"
+    },
+    {
+      "interval": 3,
+      "kind": "refresh"
+    },
+    {
+      "kind": "none"
+    },
+    {
+      "interval": 3,
+      "kind": "refresh"
+    },
+    {
+      "interval": 30,
+      "kind": "refresh"
+    },
+    {
+      "interval": 3,
+      "kind": "refresh"
+    },
+    {
+      "interval": 30,
+      "kind": "refresh"
+    },
+    {
+      "interval": 3,
+      "kind": "refresh"
+    },
+    {
+      "interval": 30,
+      "kind": "refresh"
+    },
+    {
+      "interval": 3,
+      "kind": "refresh"
+    },
+    {
+      "interval": 30,
+      "kind": "refresh"
+    },
+    {
+      "interval": 3,
+      "kind": "refresh"
+    },
+    {
+      "interval": 30,
+      "kind": "refresh"
+    },
+    {
+      "interval": 3,
+      "kind": "refresh"
+    },
+    {
+      "interval": 30,
+      "kind": "refresh"
+    },
+    {
+      "interval": 3,
+      "kind": "refresh"
+    },
+    {
+      "interval": 30,
+      "kind": "refresh"
+    },
+    {
+      "interval": 3,
+      "kind": "refresh"
+    },
+    {
+      "interval": 30,
+      "kind": "refresh"
+    },
+    {
+      "interval": 3,
+      "kind": "refresh"
+    }
+  ],
+  "originalCommit": "985add6dca6e4733923857c8f0765cc77649691e",
+  "resume": [
+    {
+      "kind": "none"
+    },
+    {
+      "kind": "none"
+    },
+    {
+      "kind": "none"
+    },
+    {
+      "kind": "none"
+    },
+    {
+      "kind": "none"
+    },
+    {
+      "kind": "none"
+    },
+    {
+      "kind": "none"
+    },
+    {
+      "kind": "none"
+    },
+    {
+      "kind": "none"
+    },
+    {
+      "kind": "none"
+    },
+    {
+      "kind": "none"
+    },
+    {
+      "kind": "none"
+    },
+    {
+      "kind": "none"
+    },
+    {
+      "kind": "none"
+    },
+    {
+      "kind": "none"
+    },
+    {
+      "kind": "none"
+    },
+    {
+      "kind": "none"
+    },
+    {
+      "kind": "none"
+    },
+    {
+      "kind": "none"
+    },
+    {
+      "kind": "none"
+    },
+    {
+      "kind": "none"
+    },
+    {
+      "kind": "none"
+    },
+    {
+      "kind": "none"
+    },
+    {
+      "kind": "none"
+    },
+    {
+      "kind": "none"
+    },
+    {
+      "kind": "none"
+    },
+    {
+      "kind": "none"
+    },
+    {
+      "kind": "none"
+    },
+    {
+      "kind": "none"
+    },
+    {
+      "kind": "none"
+    },
+    {
+      "kind": "none"
+    },
+    {
+      "kind": "none"
+    },
+    {
+      "kind": "none"
+    },
+    {
+      "kind": "none"
+    },
+    {
+      "kind": "none"
+    },
+    {
+      "kind": "none"
+    },
+    {
+      "kind": "none"
+    },
+    {
+      "kind": "none"
+    },
+    {
+      "kind": "none"
+    },
+    {
+      "kind": "none"
+    },
+    {
+      "kind": "remove",
+      "removed": []
+    },
+    {
+      "kind": "remove",
+      "removed": [
+        ""
+      ]
+    },
+    {
+      "kind": "none"
+    },
+    {
+      "kind": "none"
+    },
+    {
+      "kind": "none"
+    },
+    {
+      "kind": "none"
+    },
+    {
+      "kind": "remove",
+      "removed": []
+    },
+    {
+      "kind": "remove",
+      "removed": [
+        ""
+      ]
+    },
+    {
+      "kind": "none"
+    },
+    {
+      "kind": "none"
+    },
+    {
+      "kind": "none"
+    },
+    {
+      "kind": "none"
+    },
+    {
+      "kind": "remove",
+      "removed": []
+    },
+    {
+      "kind": "remove",
+      "removed": [
+        ""
+      ]
+    },
+    {
+      "kind": "none"
+    },
+    {
+      "kind": "none"
+    },
+    {
+      "kind": "none"
+    },
+    {
+      "kind": "none"
+    },
+    {
+      "kind": "remove",
+      "removed": []
+    },
+    {
+      "kind": "remove",
+      "removed": [
+        ""
+      ]
+    },
+    {
+      "interval": 30,
+      "kind": "refresh"
+    },
+    {
+      "kind": "none"
+    },
+    {
+      "interval": 30,
+      "kind": "refresh"
+    },
+    {
+      "kind": "none"
+    },
+    {
+      "kind": "remove",
+      "removed": []
+    },
+    {
+      "kind": "remove",
+      "removed": [
+        ""
+      ]
+    },
+    {
+      "interval": 30,
+      "kind": "refresh"
+    },
+    {
+      "kind": "none"
+    },
+    {
+      "interval": 30,
+      "kind": "refresh"
+    },
+    {
+      "kind": "none"
+    },
+    {
+      "kind": "remove",
+      "removed": []
+    },
+    {
+      "kind": "remove",
+      "removed": [
+        ""
+      ]
+    },
+    {
+      "kind": "none"
+    },
+    {
+      "kind": "none"
+    },
+    {
+      "kind": "none"
+    },
+    {
+      "kind": "none"
+    },
+    {
+      "kind": "remove",
+      "removed": []
+    },
+    {
+      "kind": "remove",
+      "removed": [
+        "item"
+      ]
+    },
+    {
+      "kind": "none"
+    },
+    {
+      "kind": "none"
+    },
+    {
+      "kind": "none"
+    },
+    {
+      "kind": "none"
+    },
+    {
+      "kind": "remove",
+      "removed": []
+    },
+    {
+      "kind": "remove",
+      "removed": [
+        "item"
+      ]
+    },
+    {
+      "kind": "none"
+    },
+    {
+      "kind": "none"
+    },
+    {
+      "kind": "none"
+    },
+    {
+      "kind": "none"
+    },
+    {
+      "kind": "remove",
+      "removed": []
+    },
+    {
+      "kind": "remove",
+      "removed": [
+        "item"
+      ]
+    },
+    {
+      "kind": "none"
+    },
+    {
+      "kind": "none"
+    },
+    {
+      "kind": "none"
+    },
+    {
+      "kind": "none"
+    },
+    {
+      "kind": "remove",
+      "removed": []
+    },
+    {
+      "kind": "remove",
+      "removed": [
+        "item"
+      ]
+    },
+    {
+      "interval": 30,
+      "kind": "refresh"
+    },
+    {
+      "kind": "none"
+    },
+    {
+      "interval": 30,
+      "kind": "refresh"
+    },
+    {
+      "kind": "none"
+    },
+    {
+      "kind": "remove",
+      "removed": []
+    },
+    {
+      "kind": "remove",
+      "removed": [
+        "item"
+      ]
+    },
+    {
+      "interval": 30,
+      "kind": "refresh"
+    },
+    {
+      "kind": "none"
+    },
+    {
+      "interval": 30,
+      "kind": "refresh"
+    },
+    {
+      "kind": "none"
+    },
+    {
+      "kind": "remove",
+      "removed": []
+    },
+    {
+      "kind": "remove",
+      "removed": [
+        "item"
+      ]
+    }
+  ],
+  "sourceHashes": {
+    "Packages/SwiftfinMediaCatalog/Sources/SwiftfinMediaCatalog/MediaCatalogPolicy.swift": "e7215c21a86322f75b846d9e03d494aec03b764bb824303754397d5a3af845b7",
+    "Shared/Objects/Libraries/NextUpLibrary.swift": "34ae2e074ede1bbe68d2ac42b93e2ec7ea778aae3de3a24a91a2a75a9a86fa57",
+    "Shared/Objects/Libraries/ResumeItemsLibrary.swift": "2f06888401d02af6ed2d611d12a92d09a15527758b20429f7af0bffd81286c28",
+    "Shared/Objects/Libraries/UserViewLibrary.swift": "f3b860cc41baa55cc85e2dce4b834d9e2e955ec740eee411bf6476d0e06eece9"
+  }
+}

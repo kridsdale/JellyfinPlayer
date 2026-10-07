@@ -1562,11 +1562,14 @@
       "status": "pending"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinAccountModels",
+        "SwiftfinStoredValues"
+      ],
       "path": "Shared/Objects/AccountModelAdapters.swift",
-      "reason": "",
+      "reason": "Three empty display protocol conformances adapt existing owned account models; no value/IO behavior.",
       "sha256": "e75bdf70195b0b5198f70e46fcaedee3d0b67de8f572065af8354e9f2b3296cc",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -1576,18 +1579,21 @@
       "status": "pending"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinLocalization",
+        "SwiftfinStoredValues"
+      ],
       "path": "Shared/Objects/AppAppearance.swift",
-      "reason": "",
+      "reason": "Stored display choice and localized system/dark/light labels map directly to UIKit presentation style; no setting mutation/native resource owner.",
       "sha256": "92ca8c05859fcaf05a87c0a6cb55bc412128932c3a1c7f5349da8a6f6366e75f",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
       "path": "Shared/Objects/AppIcons.swift",
-      "reason": "",
+      "reason": "App asset prefix, alternate icon identity/default-blue resolution and localized labels are platform appearance composition; no icon installation or filesystem access.",
       "sha256": "9caf2b6f28e04129c5de311f5af2e25af98632a6250506866d0adbcc80c0f265",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -1683,9 +1689,9 @@
     {
       "owners": [],
       "path": "Shared/Objects/Displayable.swift",
-      "reason": "",
+      "reason": "App display-title protocol defines one presentation requirement; no state/algorithm.",
       "sha256": "99fc18fae81d349f8863a0158f8fe3bf98b85ccc1a5b931262217b2c28ef7779",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -1697,16 +1703,18 @@
     {
       "owners": [],
       "path": "Shared/Objects/Empty.swift",
-      "reason": "",
+      "reason": "App presentation environment sentinel and no-op refresh/default/evaluated-policy conformances; no validation/storage behavior. Evaluated access-token ownership remains a separate mixed file.",
       "sha256": "dfe3ebddc0cf634bd1370552b39981e4e9868a0bc5bcb2eb49b7276500218daf",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinUIState"
+      ],
       "path": "Shared/Objects/EventPublisher.swift",
-      "reason": "",
+      "reason": "Legacy app typealias points at the existing checked UI event owner; no publisher implementation.",
       "sha256": "9f1d405501afe1f51c12ce60590774cf03d7ff4b00f3d817ffd965c0e47797ef",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -1718,9 +1726,9 @@
     {
       "owners": [],
       "path": "Shared/Objects/FrameAndSafeAreaInsets.swift",
-      "reason": "",
+      "reason": "Immutable CGRect/EdgeInsets presentation measurement and zero value only.",
       "sha256": "645442a8cc8606f5c96b06240b152e09eb93b42e1103c515333dbe82596ce4f4",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -1774,9 +1782,9 @@
     {
       "owners": [],
       "path": "Shared/Objects/IsSafeAreaBarApplied.swift",
-      "reason": "",
+      "reason": "SwiftUI preference reduction forwards the latest child layout flag; no asynchronous/data/resource behavior.",
       "sha256": "a7ffa48eacbbcaf708da51f376bb3c334a1c808e64764497d9b4c4d442f72ddc",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -1870,18 +1878,24 @@
       "status": "pending"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinStoredValues",
+        "SwiftfinLocalization"
+      ],
       "path": "Shared/Objects/ItemViewAttributes.swift",
-      "reason": "",
+      "reason": "Stored presentation-attribute selection cases and localized labels only.",
       "sha256": "308d907e37bd6e8acc1f8abc6d65ed158f9d6b1d499620925e9840a126289855",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinStoredValues",
+        "SwiftfinLocalization"
+      ],
       "path": "Shared/Objects/ItemViewType.swift",
-      "reason": "",
+      "reason": "Stored simple/enhanced presentation choice and localized labels only.",
       "sha256": "9095cfadcefa7a0e093b1391da8ff248f36a29e262d5eb36c6ffdd73820738ce",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -1991,11 +2005,14 @@
       "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinUserMediaState",
+        "SwiftfinMediaCatalog"
+      ],
       "path": "Shared/Objects/Libraries/NextUpLibrary.swift",
-      "reason": "Membership-refresh decisions remain embedded: item identity, loaded membership, positive resume ticks and played-field presence choose minimum intervals 3 or 30. Review/extract into existing user-media/paging owners.",
-      "sha256": "34ae2e074ede1bbe68d2ac42b93e2ec7ea778aae3de3a24a91a2a75a9a86fa57",
-      "status": "source-reviewed-mixed"
+      "reason": "Localized next-up parent, selected defaults and bound page query remain composition. Loaded row identity is supplied to the pure membership owner; the adapter executes its refresh/removal action without choosing policy intervals.",
+      "sha256": "5b07fb8a86a83f14f96a760bdaa93c593412d6d10ec2bdb17a9861b72121d546",
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [
@@ -2070,11 +2087,14 @@
       "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinUserMediaState",
+        "SwiftfinMediaCatalog"
+      ],
       "path": "Shared/Objects/Libraries/ResumeItemsLibrary.swift",
-      "reason": "Played/removal and positive-progress refresh decisions plus MediaType-to-library-kind mapping remain mixed with the presentation adapter. Preserve missing/zero/negative/played/loaded cases before extraction.",
-      "sha256": "2f06888401d02af6ed2d611d12a92d09a15527758b20429f7af0bffd81286c28",
-      "status": "source-reviewed-mixed"
+      "reason": "Selected resume media types and localized parent remain composition. Media-kind flattening and membership precedence/removal/refresh rules delegate to existing owners; the view model applies the returned action.",
+      "sha256": "e0d20ed6384b20f7e866260a1157f7ea50c0b357666f079d5335518a54ed4544",
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [
@@ -2140,18 +2160,24 @@
       "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinMediaCatalog",
+        "SwiftfinImages"
+      ],
       "path": "Shared/Objects/Libraries/UserViewLibrary.swift",
-      "reason": "Layout/router and artwork publication are presentation; live-TV/favorites artwork query classification and sample image projection/binding deserve explicit existing-owner review. Current post-await account/client/cancellation checks are retained; do not infer completion from delegated IO.",
-      "sha256": "f3b860cc41baa55cc85e2dce4b834d9e2e955ec740eee411bf6476d0e06eece9",
-      "status": "source-reviewed-mixed"
+      "reason": "Full grid/list/router/body reviewed. Library presentation defaults, SwiftUI image projection, labels/routes and static primary presentation remain app responsibilities. Catalog owns favorites/live-TV/parent/type classification and exact bound read. Root/connection events clear old image state and restart task identity; post-await cancellation and exact session/client publication guards remain. General Poster.imageSources internals require their own review and are not promoted by this entry.",
+      "sha256": "9066d259224c60b42e5935fd0b8a54404807df1e0d7eb909f95fb58beb71da3a",
+      "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinStoredValues",
+        "SwiftfinLocalization"
+      ],
       "path": "Shared/Objects/LibraryDisplayType.swift",
-      "reason": "",
+      "reason": "Grid/list presentation enum retains stored raw values, localized titles and symbols.",
       "sha256": "74ffc6e62a4505fdfff3a04eaaee6d24f6c987fc6024ef3d74eee4198412fab6",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -2168,18 +2194,21 @@
       "status": "pending"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinStoredValues",
+        "SwiftfinCollections"
+      ],
       "path": "Shared/Objects/LibraryStyle.swift",
-      "reason": "",
+      "reason": "Full style/default/options/normalization/binding/resolution bodies reviewed. Selected display/poster/list dimensions and allowed UI-control union remain app presentation; no catalog/data paging/IO algorithm.",
       "sha256": "d96ead967de8c036326758bf75ef9fa268940a211ab68b19b1a2c675e29611e0",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
       "path": "Shared/Objects/LocalUserAccessPolicy.swift",
-      "reason": "",
+      "reason": "Sendable evaluated-policy marker and PIN/hint token are still app-defined security boundary values. Review all validation consumers and whether AccountAccess should own the token before moving; no PIN/authorization behavior is certified here.",
       "sha256": "538dba99c7d4d44eda2f5c2f08c282b697425b63c0aa3ca6e25776b03fc6f901",
-      "status": "pending"
+      "status": "source-reviewed-mixed"
     },
     {
       "owners": [],
@@ -2366,9 +2395,9 @@
     {
       "owners": [],
       "path": "Shared/Objects/NoneStyle.swift",
-      "reason": "",
+      "reason": "App display placeholder enum renders localized none, caller-chosen hyphens or explicit label text; assertions define the presentation input precondition. No text parsing or media data policy.",
       "sha256": "d57bf20fa6cb076d193ae75b2400ef7f5beddc1b3b439b9ec12807ad86de34e5",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -2457,30 +2486,38 @@
     {
       "owners": [],
       "path": "Shared/Objects/PlaybackCapabilities.swift",
-      "reason": "",
+      "reason": "Full hardware probe and selected HDR/DV settings composition reviewed. Native VideoToolbox/AVPlayer/Metal probing is still app-local alongside pure boolean combinations; isolate a platform capability reader behind the appropriate existing playback owner and inject synthetic snapshots before classifying complete.",
       "sha256": "aa56d0de805440f956ab7abca62a4acc90c72cb5ebf51143f1438b39ba13f6fd",
-      "status": "pending"
+      "status": "source-reviewed-mixed"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinPlaybackProfiles",
+        "SwiftfinLocalization"
+      ],
       "path": "Shared/Objects/PlaybackProfileAdapters.swift",
-      "reason": "",
+      "reason": "Full codec/container/subtitle/profile display switches, selected label formatting and UTType presentation adapter reviewed; no profile construction or transport/native player ownership.",
       "sha256": "338faf84f96a33869c6d2f314aac4866a52858ca644525e7a1d49c8fb142e641",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinPlaybackProfiles",
+        "SwiftfinFormatting"
+      ],
       "path": "Shared/Objects/PlaybackSpeed.swift",
-      "reason": "",
+      "reason": "Alias to owned playback-speed value plus localized/formatted display rate; no selection/engine policy.",
       "sha256": "757fa74d0646da1efb2805087bc85e0147042184eb0db8ff18b3ff67f6e886cb",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinUIState"
+      ],
       "path": "Shared/Objects/PokeIntervalTimer.swift",
-      "reason": "",
+      "reason": "App compatibility alias; timer scheduling and lifecycle already reside in UIState.",
       "sha256": "b89295f0ec66bd0792382f79c8eea2ea3e0bf17d94e0ee82f860795a8cd1f7f1",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -2504,46 +2541,64 @@
       "status": "pending"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinStoredValues",
+        "SwiftfinMacros"
+      ],
       "path": "Shared/Objects/PosterConfiguration.swift",
-      "reason": "",
+      "reason": "Only persisted presentation options/defaults and synthesized decoding; no image/resource or progress behavior.",
       "sha256": "ac8bf15c127e9b356451dfb59c37a9c247fd13f45d04b7472d2dc169d1a0c435",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinStoredValues",
+        "SwiftfinLocalization"
+      ],
       "path": "Shared/Objects/PosterDisplayType.swift",
-      "reason": "",
+      "reason": "Full orientation/size raw cases, platform image widths, selected quality and symbols are view presentation geometry; no image transfer/cache/decoding.",
       "sha256": "f1cb6cfbaa312cb460699ab351e0ded3782922418a99798e17f54331e58b19d0",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinLocalization",
+        "SwiftfinStoredValues"
+      ],
       "path": "Shared/Objects/PosterIndicator.swift",
-      "reason": "",
+      "reason": "Synthesized persisted UI option bits choose displayed favorite/played/progress/unplayed badges; no watched/progress state mutation or calculation.",
       "sha256": "d106c1c4bfd94f2f70068ac138aa7abc3da9065635fc576ab4ddfc42c46bab46",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinLocalization",
+        "SwiftfinStoredValues"
+      ],
       "path": "Shared/Objects/PosterSubtitleField.swift",
-      "reason": "",
+      "reason": "Stored poster-label choice and localized titles; requested fields delegate to existing MediaCatalog itemFields to avoid per-item reads.",
       "sha256": "e78e9fcc82197c9c4d4ca8a8668f482649bc3a4be4cbc386aefde3978ba62a97",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinLocalization",
+        "SwiftfinStoredValues"
+      ],
       "path": "Shared/Objects/PreviewImageScrubbingOption.swift",
-      "reason": "",
+      "reason": "App stored preview presentation choice, chapter-fallback flag and fullscreen eligibility; no preview fetch/decode/timeline implementation.",
       "sha256": "e91f605a76f5d86063bce40b8a006e2ee8719a01661f3d3e4a6519ba533e067d",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinMediaCatalog",
+        "SwiftfinLocalization"
+      ],
       "path": "Shared/Objects/ProgramSection.swift",
-      "reason": "",
+      "reason": "Alias to owned catalog category plus localized titles; no program classification/read policy.",
       "sha256": "5b4b4d18900c0896bc505c6ef68478af9ae3ac7f3b1162bdd371d94e378c5ab4",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -2560,18 +2615,21 @@
       "status": "pending"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinLocalization",
+        "SwiftfinStoredValues"
+      ],
       "path": "Shared/Objects/SelectUserSortOrder.swift",
-      "reason": "",
+      "reason": "Stored user-list UI sort choice and label/symbols; account ordering is a separate owner rather than this selector.",
       "sha256": "8b159c8a615609308ed229c2269675806fd141e1f4db7f0a9011ae569e376fcb",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
       "path": "Shared/Objects/SeriesStatus.swift",
-      "reason": "",
+      "reason": "Metadata-editor form selection carries existing server string choices and localized labels; no status discovery/validation/mutation implementation.",
       "sha256": "9cfc30cf57b569c3717e6b3e5d71f60ca8ee88b7b61f9ba9f44507704ba54977",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -2597,16 +2655,19 @@
     {
       "owners": [],
       "path": "Shared/Objects/SystemImageable.swift",
-      "reason": "",
+      "reason": "App SF Symbol protocol and secondary-symbol fallback are presentation semantics only.",
       "sha256": "3966e0af4fec28e8a02c7790af6d62ecb6ab5b200db07aa7465c3a7923c51002",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinLocalization",
+        "SwiftfinStoredValues"
+      ],
       "path": "Shared/Objects/TabBarPlacement.swift",
-      "reason": "",
+      "reason": "Stored sidebar/tab presentation selection and localized labels only.",
       "sha256": "59d7cceed52693794b7243182a56af2fd264867e8c02847c7608ed794827c1a4",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -2625,9 +2686,9 @@
     {
       "owners": [],
       "path": "Shared/Objects/TimeStampType.swift",
-      "reason": "",
+      "reason": "Persisted split/compact timestamp display selection and localized labels only; time formatting is owned separately.",
       "sha256": "3c5ac3f8ac8b4eef655cd641169e088bfd033f9c6e464bc6eb4caf2f594c63f0",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -2644,18 +2705,24 @@
       "status": "pending"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinLocalization",
+        "SwiftfinStoredValues"
+      ],
       "path": "Shared/Objects/TrailingTimestampType.swift",
-      "reason": "",
+      "reason": "Stored total/time-left UI selection and localized labels only.",
       "sha256": "7396680b034168d08661cbc3d98c83ce24844155cd0a3f623e376a26bc574800",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinLocalization",
+        "SwiftfinStoredValues"
+      ],
       "path": "Shared/Objects/UnplayedIndicatorType.swift",
-      "reason": "",
+      "reason": "Stored none/indicator/count poster UI selection and localized titles; no membership or playback/progress algorithm.",
       "sha256": "0412fd1e5c7161948c10baed0b7582979dd9143b8d0c35e1bfbcf73e0ca7ce45",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -2688,9 +2755,9 @@
     {
       "owners": [],
       "path": "Shared/Objects/WithDefaultValue.swift",
-      "reason": "",
+      "reason": "Equatable default-environment contract is used by app composition/UI models; no default storage/query implementation.",
       "sha256": "a83ead2fd5ad0c6d6377a65d9320b168f58ad7ca6c8d3ff3fb17f32ab47b4190",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -4780,19 +4847,47 @@
         "ServerOperationsPolicy.playbackSession(in:deviceID:itemID:)"
       ],
       "sha256": "c8e99a7dcec6442a40646e3306e3b52b0f70a924d396499aa9ff36ba1ca127ff"
+    },
+    {
+      "path": "Packages/SwiftfinUserMediaState/Sources/SwiftfinUserMediaState/LibraryMembershipChange.swift",
+      "reason": "Immutable action output and explicit DTO/loaded inputs. No view model, scheduler, settings/global lookup, or new production dependency. App computes current loaded identity and executes the action.",
+      "reviewedConsumers": [
+        "Shared/Objects/Libraries/NextUpLibrary.swift",
+        "Shared/Objects/Libraries/ResumeItemsLibrary.swift"
+      ],
+      "reviewedInterfaces": [
+        "LibraryMembershipChange",
+        "UserMediaStatePolicy.nextUpChange(for:isLoaded:)",
+        "UserMediaStatePolicy.resumeChange(for:isLoaded:)"
+      ],
+      "sha256": "fb9ee7d0488d7b539200db37f616e7d0f1c58c44aa987e464979cffad3714a52"
+    },
+    {
+      "path": "Packages/SwiftfinMediaCatalog/Sources/SwiftfinMediaCatalog/LibraryCatalogPolicy.swift",
+      "reason": "Checked Sendable query classification and ordered media-kind projection. Existing catalog read owner enforces exact user/transport binding; app captures current manager/session/client and view identity.",
+      "reviewedConsumers": [
+        "Shared/Objects/Libraries/ResumeItemsLibrary.swift",
+        "Shared/Objects/Libraries/UserViewLibrary.swift"
+      ],
+      "reviewedInterfaces": [
+        "LibraryArtworkScope",
+        "MediaCatalogPolicy.libraryItemTypes(for:)",
+        "MediaCatalogPolicy.artworkQuery(for:)"
+      ],
+      "sha256": "f6ebbfdf382c27cb362836180515d24421d8554f2f44cc97bd6b86de1ffaec92"
     }
   ],
-  "limits": "This hashed ledger starts with bodies explicitly reviewed in this pass; earlier prose evidence is not automatically promoted. Pending and mixed entries prevent whole-source completion. Source review is distinct from held UI/native playback acceptance. API entries do not classify the rest of the public graph.",
+  "limits": "This ledger records bodies explicitly reviewed, with exact current hashes; earlier prose or lexical inventory is not automatically promoted. Pending and mixed entries prevent whole-source completion. Retained UI algorithms have specific presentation reasons, not folder/import-based blanket approval. API entries do not classify the rest of the public graph. Source review and offline tests do not satisfy held runtime acceptance.",
   "schemaVersion": 1,
-  "scope": "All current app Swift files; explicit source-body classification and three current API/consumer reviews. No server/media/simulator data.",
+  "scope": "All current app Swift files; explicit source-body classification and five current interface/consumer reviews. No server/media/simulator data.",
   "summary": {
     "applicationSwiftFiles": 668,
     "classification": {
-      "pending": 635,
-      "source-reviewed-mixed": 3,
-      "source-reviewed-retained": 30
+      "pending": 603,
+      "source-reviewed-mixed": 2,
+      "source-reviewed-retained": 63
     },
-    "currentAPIReviews": 3,
+    "currentAPIReviews": 5,
     "runtimeAcceptance": "held by human; no simulator/server testing"
   }
 }

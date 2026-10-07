@@ -9,6 +9,7 @@
 import JellyfinAPI
 import SwiftfinLocalization
 import SwiftfinMediaCatalog
+import SwiftfinUserMediaState
 
 struct ResumeItemsLibrary: BaseItemKindLibrary {
 
@@ -16,7 +17,7 @@ struct ResumeItemsLibrary: BaseItemKindLibrary {
     let parent: TitledLibraryParent = .init(displayTitle: L10n.continue, id: "continue-watching")
 
     var libraryItemTypes: [BaseItemKind] {
-        mediaTypes.flatMap(\.supportedLibraryItemTypes)
+        MediaCatalogPolicy.libraryItemTypes(for: mediaTypes)
     }
 
     init(mediaTypes: [MediaType] = [.video]) {
@@ -34,35 +35,14 @@ struct ResumeItemsLibrary: BaseItemKindLibrary {
         viewModel: PagingLibraryViewModel<ResumeItemsLibrary>,
         userData: UserItemDataDto
     ) {
-        guard let itemID = userData.itemID else { return }
-
-        if userData.isPlayed == true {
+        let isLoaded = userData.itemID.map { id in viewModel.elements.contains { $0.id == id } } ?? false
+        switch UserMediaStatePolicy.resumeChange(for: userData, isLoaded: isLoaded) {
+        case .none:
+            break
+        case let .remove(itemID):
             viewModel.removeElements { $0.id == itemID }
-            return
-        }
-
-        let isAlreadyLoaded = viewModel.elements.contains { $0.id == itemID }
-        guard !isAlreadyLoaded else { return }
-        guard (userData.playbackPositionTicks ?? 0) > 0 else { return }
-
-        viewModel.scheduleRefreshForItemUserData(minimumInterval: 30)
-    }
-}
-
-private extension MediaType {
-
-    var supportedLibraryItemTypes: [BaseItemKind] {
-        switch self {
-        case .audio:
-            [.audio, .musicAlbum]
-        case .video:
-            [.episode, .movie, .video]
-        case .book:
-            [.book]
-        case .photo:
-            [.photo]
-        case .unknown:
-            []
+        case let .refresh(minimumInterval):
+            viewModel.scheduleRefreshForItemUserData(minimumInterval: minimumInterval)
         }
     }
 }

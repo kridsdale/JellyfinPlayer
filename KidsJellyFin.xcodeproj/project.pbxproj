@@ -268,6 +268,8 @@
 		EBE102B74A9A5D7A2BB9FAA3 /* Packages/SwiftfinTime/Tests/SwiftfinTimeTests/DateRecencyContracts.swift in Sources */ = {isa = PBXBuildFile; fileRef = E74894C66001E1B378C81306 /* Packages/SwiftfinTime/Tests/SwiftfinTimeTests/DateRecencyContracts.swift */; };
 		09ED488E2AB927D0CE713FD2 /* Packages/SwiftfinServerOperations/Tests/SwiftfinServerOperationsTests/PlaybackSessionSelectionContracts.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE34A9A3B9561717ABE92899 /* Packages/SwiftfinServerOperations/Tests/SwiftfinServerOperationsTests/PlaybackSessionSelectionContracts.swift */; };
 		CE182C66CA656530BA509C9B /* Packages/SwiftfinItemMetadata/Tests/SwiftfinItemMetadataTests/ProgramMetadataRefreshContracts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E367BB07E4541C91247CFBD /* Packages/SwiftfinItemMetadata/Tests/SwiftfinItemMetadataTests/ProgramMetadataRefreshContracts.swift */; };
+		09E642D088F519B234D9BA10 /* Packages/SwiftfinUserMediaState/Tests/SwiftfinUserMediaStateTests/LibraryMembershipContracts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34EA01031BDD9A4863ADC020 /* Packages/SwiftfinUserMediaState/Tests/SwiftfinUserMediaStateTests/LibraryMembershipContracts.swift */; };
+		18C19A5F0B0BCA9E9466C3A3 /* Packages/SwiftfinMediaCatalog/Tests/SwiftfinMediaCatalogTests/LibraryCatalogContracts.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3891F2F5B681B68C5F72B7D /* Packages/SwiftfinMediaCatalog/Tests/SwiftfinMediaCatalogTests/LibraryCatalogContracts.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -364,6 +366,8 @@
 		E74894C66001E1B378C81306 /* Packages/SwiftfinTime/Tests/SwiftfinTimeTests/DateRecencyContracts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Packages/SwiftfinTime/Tests/SwiftfinTimeTests/DateRecencyContracts.swift; sourceTree = SOURCE_ROOT; };
 		BE34A9A3B9561717ABE92899 /* Packages/SwiftfinServerOperations/Tests/SwiftfinServerOperationsTests/PlaybackSessionSelectionContracts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Packages/SwiftfinServerOperations/Tests/SwiftfinServerOperationsTests/PlaybackSessionSelectionContracts.swift; sourceTree = SOURCE_ROOT; };
 		8E367BB07E4541C91247CFBD /* Packages/SwiftfinItemMetadata/Tests/SwiftfinItemMetadataTests/ProgramMetadataRefreshContracts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Packages/SwiftfinItemMetadata/Tests/SwiftfinItemMetadataTests/ProgramMetadataRefreshContracts.swift; sourceTree = SOURCE_ROOT; };
+		34EA01031BDD9A4863ADC020 /* Packages/SwiftfinUserMediaState/Tests/SwiftfinUserMediaStateTests/LibraryMembershipContracts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Packages/SwiftfinUserMediaState/Tests/SwiftfinUserMediaStateTests/LibraryMembershipContracts.swift; sourceTree = SOURCE_ROOT; };
+		C3891F2F5B681B68C5F72B7D /* Packages/SwiftfinMediaCatalog/Tests/SwiftfinMediaCatalogTests/LibraryCatalogContracts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Packages/SwiftfinMediaCatalog/Tests/SwiftfinMediaCatalogTests/LibraryCatalogContracts.swift; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -708,6 +712,8 @@
 				E74894C66001E1B378C81306 /* Packages/SwiftfinTime/Tests/SwiftfinTimeTests/DateRecencyContracts.swift */,
 				BE34A9A3B9561717ABE92899 /* Packages/SwiftfinServerOperations/Tests/SwiftfinServerOperationsTests/PlaybackSessionSelectionContracts.swift */,
 				8E367BB07E4541C91247CFBD /* Packages/SwiftfinItemMetadata/Tests/SwiftfinItemMetadataTests/ProgramMetadataRefreshContracts.swift */,
+				34EA01031BDD9A4863ADC020 /* Packages/SwiftfinUserMediaState/Tests/SwiftfinUserMediaStateTests/LibraryMembershipContracts.swift */,
+				C3891F2F5B681B68C5F72B7D /* Packages/SwiftfinMediaCatalog/Tests/SwiftfinMediaCatalogTests/LibraryCatalogContracts.swift */,
 				9FA5B7C0FD676588F9568B80 /* Packages/SwiftfinAsyncStreams/Tests/SwiftfinAsyncStreamsTests/NotificationContracts.swift */,
 				B3E6DC660C9E7E4D9C70A829 /* Packages/SwiftfinMediaTracks/Tests/SwiftfinMediaTracksTests/RawItemStreamsContracts.swift */,
 				84909BC3A673B077CA312B06 /* Packages/SwiftfinUserMediaState/Tests/SwiftfinUserMediaStateTests/UserMediaCapabilitiesContracts.swift */,
@@ -1466,6 +1472,8 @@
 				EBE102B74A9A5D7A2BB9FAA3 /* Packages/SwiftfinTime/Tests/SwiftfinTimeTests/DateRecencyContracts.swift in Sources */,
 				09ED488E2AB927D0CE713FD2 /* Packages/SwiftfinServerOperations/Tests/SwiftfinServerOperationsTests/PlaybackSessionSelectionContracts.swift in Sources */,
 				CE182C66CA656530BA509C9B /* Packages/SwiftfinItemMetadata/Tests/SwiftfinItemMetadataTests/ProgramMetadataRefreshContracts.swift in Sources */,
+				09E642D088F519B234D9BA10 /* Packages/SwiftfinUserMediaState/Tests/SwiftfinUserMediaStateTests/LibraryMembershipContracts.swift in Sources */,
+				18C19A5F0B0BCA9E9466C3A3 /* Packages/SwiftfinMediaCatalog/Tests/SwiftfinMediaCatalogTests/LibraryCatalogContracts.swift in Sources */,
 				11A638812AF4E5F9DFC887EB /* Packages/SwiftfinAsyncStreams/Tests/SwiftfinAsyncStreamsTests/NotificationContracts.swift in Sources */,
 				D47A7FCAE914808F5EBC2F7E /* Packages/SwiftfinMediaTracks/Tests/SwiftfinMediaTracksTests/RawItemStreamsContracts.swift in Sources */,
 				00AD29B46C1F41880582C8C4 /* Packages/SwiftfinUserMediaState/Tests/SwiftfinUserMediaStateTests/UserMediaCapabilitiesContracts.swift in Sources */,
