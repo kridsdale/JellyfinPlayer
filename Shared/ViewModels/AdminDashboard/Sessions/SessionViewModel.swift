@@ -9,6 +9,7 @@
 import Combine
 import Foundation
 import JellyfinAPI
+import SwiftfinServerOperations
 
 @MainActor
 @Stateful
@@ -72,20 +73,16 @@ final class SessionViewModel: ViewModel, @MainActor Identifiable {
         _ startIndex: Int? = nil
     ) async throws {
         guard let id else { return }
-
-        let request = Paths.play(
+        try await requireServerOperations().play(
             sessionID: id,
-            parameters: .init(
-                playCommand: command,
-                itemIDs: itemIDs,
-                startPositionTicks: startPositionTicks,
-                mediaSourceID: mediaSourceID,
-                audioStreamIndex: audioStreamIndex,
-                subtitleStreamIndex: subtitleStreamIndex,
-                startIndex: startIndex
-            )
+            command: command,
+            itemIDs: itemIDs,
+            position: startPositionTicks,
+            mediaSourceID: mediaSourceID,
+            audioIndex: audioStreamIndex,
+            subtitleIndex: subtitleStreamIndex,
+            startIndex: startIndex
         )
-        try await send(request)
     }
 
     @Function(\Action.Cases.stopReportPlaybackSession)
@@ -98,28 +95,18 @@ final class SessionViewModel: ViewModel, @MainActor Identifiable {
     @Function(\Action.Cases.sendMessage)
     private func _sendMessage(_ command: MessageCommand) async throws {
         guard let id else { return }
-
-        let request = Paths.sendMessageCommand(sessionID: id, command)
-        try await send(request)
+        try await requireServerOperations().message(sessionID: id, command: command)
     }
 
     @Function(\Action.Cases.sendPlaystateCommand)
     private func _sendPlaystateCommand(_ command: PlaystateCommand, _ seekPositionTicks: Int?) async throws {
         guard let id else { return }
-
-        let request = Paths.sendPlaystateCommand(
-            sessionID: id,
-            command: command.rawValue,
-            seekPositionTicks: seekPositionTicks
-        )
-        try await send(request)
+        try await requireServerOperations().playstate(sessionID: id, command: command, position: seekPositionTicks)
     }
 
     @Function(\Action.Cases.sendGeneralCommand)
     private func _sendGeneralCommand(_ command: GeneralCommandType) async throws {
         guard let id else { return }
-
-        let request = Paths.sendGeneralCommand(sessionID: id, command: command.rawValue)
-        try await send(request)
+        try await requireServerOperations().general(sessionID: id, command: command)
     }
 }

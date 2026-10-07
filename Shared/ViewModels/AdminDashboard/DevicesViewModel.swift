@@ -11,6 +11,7 @@ import Foundation
 import JellyfinAPI
 import OrderedCollections
 import SwiftfinCollections
+import SwiftfinServerOperations
 import SwiftUI
 
 @MainActor
@@ -54,24 +55,13 @@ final class DevicesViewModel: ViewModel {
 
     @Function(\Action.Cases.refresh)
     private func _refresh() async throws {
-        let request = Paths.getDevices()
-        let response = try await send(request)
-
-        guard let devices = response.value.items else {
-            return
-        }
-
-        let sortedDevices = Array(devices.sorted(using: \.dateLastActivity)
-            .reversed()
-        )
-
-        self.devices = sortedDevices
+        guard let values = try await requireServerOperations().devices() else { return }
+        devices = values
     }
 
     @Function(\Action.Cases.update)
     private func _update(_ id: String, _ options: DeviceOptionsDto) async throws {
-        let request = Paths.updateDeviceOptions(id: id, options)
-        try await send(request)
+        try await requireServerOperations().updateDevice(id: id, options: options)
 
         let deviceIndices = devices.indices.filter { devices[$0].id == id }
 
@@ -85,16 +75,7 @@ final class DevicesViewModel: ViewModel {
     @Function(\Action.Cases.delete)
     private func _delete(_ ids: Set<String>) async throws {
         guard ids.isNotEmpty else { return }
-
-        // TODO: allow deleting same-device entry, but cannot delete the same-device/same-user pair (current session)
-        let currentDeviceID = try authenticatedClient.configuration.deviceID
-        let deviceIdsToDelete = ids.filter { $0 != currentDeviceID }
-
-        guard deviceIdsToDelete.isNotEmpty else { return }
-
-        let request = Paths.deleteDevice(id: Array(deviceIdsToDelete))
-        try await send(request)
-
-        devices = devices.subtracting(deviceIdsToDelete, using: \.id)
+        let deleted = try await requireServerOperations().deleteDevices(ids: ids)
+        devices = devices.subtracting(deleted, using: \.id)
     }
 }

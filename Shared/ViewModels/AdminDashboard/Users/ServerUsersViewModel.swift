@@ -11,6 +11,7 @@ import Foundation
 import IdentifiedCollections
 import JellyfinAPI
 import SwiftfinCollections
+import SwiftfinUserAdministration
 import SwiftUI
 
 @MainActor
@@ -80,10 +81,7 @@ final class ServerUsersViewModel: ViewModel, Identifiable {
     private func _refreshUser(_ userID: String) async throws {
         await cancel()
 
-        let request = Paths.getUserByID(userID: userID)
-        let response = try await send(request)
-
-        let newUser = response.value
+        let newUser = try await requireUserAdministration().user(id: userID)
 
         if let index = users.firstIndex(where: { $0.id == userID }) {
             users[index] = newUser
@@ -95,14 +93,11 @@ final class ServerUsersViewModel: ViewModel, Identifiable {
     @Function(\Action.Cases.getUsers)
     private func _getUsers(_ isHidden: Bool, _ isDisabled: Bool) async throws {
         await cancel()
-
-        let request = Paths.getUsers(isHidden: isHidden ? true : nil, isDisabled: isDisabled ? true : nil)
-        let response = try await send(request)
-
-        let newUsers = response.value
-            .sorted(using: \.name)
-
-        users = IdentifiedArray(uniqueElements: newUsers)
+        let users = try await requireUserAdministration().users(
+            isHidden: UserAdministrationClient.filterValue(isHidden),
+            isDisabled: UserAdministrationClient.filterValue(isDisabled)
+        )
+        self.users = IdentifiedArray(uniqueElements: UserAdministrationClient.sortedUsers(users))
     }
 
     // MARK: - Delete Users
@@ -110,35 +105,9 @@ final class ServerUsersViewModel: ViewModel, Identifiable {
     @Function(\Action.Cases.deleteUsers)
     private func _deleteUsers(_ ids: [String]) async throws {
         await cancel()
-
-        guard ids.isNotEmpty else {
-            events.send(.deleted)
-            return
-        }
-
-        // Don't allow self-deletion
-        let currentUserID = try authenticatedUser.id
-        let userIdsToDelete = ids.filter { $0 != currentUserID }
-
-        try await withThrowingTaskGroup(of: Void.self) { group in
-            for userId in userIdsToDelete {
-                group.addTask {
-                    try await self.deleteUser(id: userId)
-                }
-            }
-
-            try await group.waitForAll()
-        }
-
-        users.removeAll(where: { userIdsToDelete.contains($0.id ?? "") })
+        let deleted = try await requireUserAdministration().deleteUsers(ids: ids)
+        users.removeAll { deleted.contains($0.id ?? "") }
         events.send(.deleted)
-    }
-
-    // MARK: - Delete User
-
-    private func deleteUser(id: String) async throws {
-        let request = Paths.deleteUser(userID: id)
-        try await send(request)
     }
 
     // MARK: - Append User

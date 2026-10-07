@@ -9,6 +9,7 @@
 import Foundation
 import JellyfinAPI
 import SwiftfinCollections
+import SwiftfinServerOperations
 
 @MainActor
 @Stateful
@@ -52,8 +53,7 @@ final class ServerTaskViewModel: ViewModel, @MainActor Identifiable {
 
         task.state = .running
 
-        let request = Paths.startTask(taskID: id)
-        try await send(request)
+        try await requireServerOperations().startTask(id: id)
     }
 
     @Function(\Action.Cases.stop)
@@ -62,8 +62,7 @@ final class ServerTaskViewModel: ViewModel, @MainActor Identifiable {
 
         task.state = .cancelling
 
-        let request = Paths.stopTask(taskID: id)
-        try await send(request)
+        try await requireServerOperations().stopTask(id: id)
     }
 
     @Function(\Action.Cases.addTrigger)
@@ -76,8 +75,7 @@ final class ServerTaskViewModel: ViewModel, @MainActor Identifiable {
 
     @Function(\Action.Cases.removeTrigger)
     private func _removeTrigger(_ trigger: TaskTriggerInfo) async throws {
-        let updatedTriggers = (task.triggers ?? [])
-            .filtering { $0 == trigger }
+        let updatedTriggers = ServerOperationsPolicy.triggers(removing: trigger, from: task.triggers ?? [])
 
         try await updateTriggers(updatedTriggers)
     }
@@ -89,8 +87,7 @@ final class ServerTaskViewModel: ViewModel, @MainActor Identifiable {
         task.triggers = updatedTriggers
 
         do {
-            let updateRequest = Paths.updateTask(taskID: id, updatedTriggers)
-            try await send(updateRequest)
+            try await requireServerOperations().updateTriggers(id: id, triggers: updatedTriggers)
         } catch {
             task.triggers = previousTriggers
             throw error

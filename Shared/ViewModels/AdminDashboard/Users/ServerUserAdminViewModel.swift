@@ -10,6 +10,7 @@ import Combine
 import Foundation
 import JellyfinAPI
 import OrderedCollections
+import SwiftfinUserAdministration
 
 @MainActor
 @Stateful
@@ -73,15 +74,13 @@ final class ServerUserAdminViewModel: ViewModel, Identifiable {
 
     @Function(\Action.Cases.refresh)
     private func _refresh() async throws {
-        user = try await user.getFullUser(userSession: requireUserSession())
+        guard let id = user.id else { throw ErrorMessage("User ID is missing") }
+        user = try await requireUserAdministration().user(id: id)
     }
 
     @Function(\Action.Cases.getLibraries)
     private func _getLibraries(_ isHidden: Bool?) async throws {
-        let request = Paths.getMediaFolders(isHidden: isHidden)
-        let response = try await send(request)
-
-        libraries = response.value.items ?? []
+        libraries = try await requireUserAdministration().libraries(isHidden: isHidden)
     }
 
     @Function(\Action.Cases.updatePolicy)
@@ -90,8 +89,7 @@ final class ServerUserAdminViewModel: ViewModel, Identifiable {
             throw ErrorMessage("User ID is missing")
         }
 
-        let request = Paths.updateUserPolicy(userID: userID, policy)
-        try await send(request)
+        try await requireUserAdministration().updatePolicy(id: userID, policy: policy)
 
         user.policy = policy
 
@@ -109,8 +107,7 @@ final class ServerUserAdminViewModel: ViewModel, Identifiable {
             throw ErrorMessage("User ID is missing")
         }
 
-        let request = Paths.updateUserConfiguration(userID: userID, configuration)
-        try await send(request)
+        try await requireUserAdministration().updateConfiguration(id: userID, configuration: configuration)
 
         user.configuration = configuration
 
@@ -131,8 +128,7 @@ final class ServerUserAdminViewModel: ViewModel, Identifiable {
         var updatedUser = user
         updatedUser.name = username
 
-        let request = Paths.updateUser(userID: userID, updatedUser)
-        try await send(request)
+        try await requireUserAdministration().updateUser(id: userID, user: updatedUser)
 
         user.name = username
 

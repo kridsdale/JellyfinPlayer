@@ -8,6 +8,7 @@
 
 import Foundation
 import JellyfinAPI
+import SwiftfinUserAdministration
 
 @MainActor
 @Stateful
@@ -40,12 +41,12 @@ final class AddServerUserViewModel: ViewModel {
 
     @Function(\Action.Cases.add)
     private func _add(_ username: String, _ password: String) async throws {
-        let parameters = CreateUserByName(name: username, password: password)
-        let request = Paths.createUserByName(parameters)
-        let response = try await send(request)
+        let accounts = try requireUserAdministration()
+        let user = try await accounts.create(name: username, password: password)
 
         try await Task.sleep(for: .seconds(5))
+        try accounts.checkBinding()
 
-        events.send(.created(user: response.value))
+        events.send(.created(user: user))
     }
 }

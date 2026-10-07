@@ -11,6 +11,7 @@ import JellyfinAPI
 import OrderedCollections
 import SwiftfinCollections
 import SwiftfinLocalization
+import SwiftfinServerOperations
 
 @MainActor
 @Stateful
@@ -52,51 +53,37 @@ final class APIKeysViewModel: ViewModel {
 
     @Function(\Action.Cases.refresh)
     private func _refresh() async throws {
-        let request = Paths.getKeys
-        let response = try await send(request)
-
-        guard let items = response.value.items else { return }
-
-        apiKeys = items.sorted { lhs, rhs in
-            let lhsName = lhs.appName ?? ""
-            let rhsName = rhs.appName ?? ""
-            return lhsName.localizedCaseInsensitiveCompare(rhsName) == .orderedAscending
-        }
+        guard let items = try await requireServerOperations().keys() else { return }
+        apiKeys = items
     }
 
     @Function(\Action.Cases.create)
     private func _create(_ name: String) async throws {
-        let request = Paths.createKey(app: name)
-        try await send(request)
-
-        /// API does not return the new key so a full refresh is required.
-        /// There is no API to return a single API Key.
-        try await _refresh()
-
+        let operations = try requireServerOperations()
+        try await operations.createKey(name: name)
+        if let keys = try await operations.keys() {
+            apiKeys = keys
+        }
         events.send(.createdKey)
     }
 
     @Function(\Action.Cases.replace)
     private func _replace(_ key: AuthenticationInfo) async throws {
-        guard let appName = key.appName else {
-            logger.error("App name is nil")
-            throw ErrorMessage(L10n.unknownError)
+        guard let name = key.appName, let token = key.accessToken else { throw ErrorMessage(L10n.unknownError) }
+        let operations = try requireServerOperations()
+        try await operations.revokeKey(token: token)
+        apiKeys.removeFirst(equalTo: key)
+        try await operations.createKey(name: name)
+        if let keys = try await operations.keys() {
+            apiKeys = keys
         }
-
-        try await _delete(key)
-        try await _create(appName)
+        events.send(.createdKey)
     }
 
     @Function(\Action.Cases.delete)
     private func _delete(_ key: AuthenticationInfo) async throws {
-        guard let accessToken = key.accessToken else {
-            logger.error("Access token is nil")
-            throw ErrorMessage(L10n.unknownError)
-        }
-
-        let request = Paths.revokeKey(key: accessToken)
-        try await send(request)
-
+        guard let token = key.accessToken else { throw ErrorMessage(L10n.unknownError) }
+        try await requireServerOperations().revokeKey(token: token)
         apiKeys.removeFirst(equalTo: key)
     }
 }

@@ -10,6 +10,8 @@ import JellyfinAPI
 import SwiftfinMediaCatalog
 import SwiftfinNetworking
 import SwiftfinPaging
+import SwiftfinServerOperations
+import SwiftfinUserAdministration
 import SwiftUI
 
 @MainActor
@@ -24,6 +26,14 @@ struct LibraryPageState {
         self.pageSize = pageSize
         self.client = client
         self.userID = userID
+    }
+
+    var serverOperations: ServerOperationsClient {
+        ServerOperationsClient(executor: .init(sender: client), deviceID: client.configuration.deviceID)
+    }
+
+    var userAdministration: UserAdministrationClient {
+        UserAdministrationClient(executor: .init(sender: client), currentUserID: userID)
     }
 
     var mediaCatalog: MediaCatalogClient {

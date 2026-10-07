@@ -8,6 +8,7 @@
 
 import JellyfinAPI
 import OrderedCollections
+import SwiftfinServerOperations
 import SwiftUI
 
 @MainActor
@@ -36,10 +37,9 @@ final class ServerLogsViewModel: ViewModel {
 
     @Function(\Action.Cases.refresh)
     private func _refresh(_ filter: ServerLogType?) async throws {
-        let request = Paths.getServerLogs
-        let response = try await send(request)
+        let values = try await requireServerOperations().logs()
 
-        self.logs = OrderedSet(response.value)
+        self.logs = OrderedSet(values)
             .filter { filter == nil ? true : $0.type == filter }
     }
 }

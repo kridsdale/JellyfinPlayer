@@ -8,6 +8,7 @@
 
 import JellyfinAPI
 import SwiftfinLocalization
+import SwiftfinUserAdministration
 
 struct ServerUsersLibrary: PagingLibrary {
 
@@ -19,9 +20,7 @@ struct ServerUsersLibrary: PagingLibrary {
         environment: Empty,
         pageState: LibraryPageState
     ) async throws -> [UserDto] {
-        let request = Paths.getUsers()
-        let response = try await pageState.client.send(request)
-
-        return response.value
+        guard pageState.pageOffset == 0 else { return [] }
+        return try await pageState.userAdministration.users()
     }
 }

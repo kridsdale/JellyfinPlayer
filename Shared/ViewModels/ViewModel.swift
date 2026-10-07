@@ -13,6 +13,8 @@ import Get
 import JellyfinAPI
 import Logging
 import SwiftfinNetworking
+import SwiftfinServerOperations
+import SwiftfinUserAdministration
 
 @MainActor
 class ViewModel: ObservableObject {
@@ -67,5 +69,26 @@ class ViewModel: ObservableObject {
 
     func send(_ request: Request<Void>) async throws {
         try await authenticatedClient.send(request)
+    }
+}
+
+extension ViewModel {
+    private func administrationExecutor(for session: UserSession) -> AuthenticatedRequestExecutor {
+        let client = session.client
+        let manager = Container.shared.userSessionManager()
+        return AuthenticatedRequestExecutor(sender: client, isCurrent: { [weak session, weak client, weak manager] in
+            guard let session, let client, let manager else { return false }
+            return manager.currentSession === session && session.client === client
+        })
+    }
+
+    func requireServerOperations() throws -> ServerOperationsClient {
+        let session = try requireUserSession()
+        return ServerOperationsClient(executor: administrationExecutor(for: session), deviceID: session.client.configuration.deviceID)
+    }
+
+    func requireUserAdministration() throws -> UserAdministrationClient {
+        let session = try requireUserSession()
+        return UserAdministrationClient(executor: administrationExecutor(for: session), currentUserID: session.user.id)
     }
 }

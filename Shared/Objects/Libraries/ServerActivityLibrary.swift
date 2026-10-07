@@ -9,6 +9,7 @@
 import Foundation
 import JellyfinAPI
 import SwiftfinLocalization
+import SwiftfinServerOperations
 
 struct ServerActivityLibrary: PagingLibrary {
 
@@ -27,15 +28,11 @@ struct ServerActivityLibrary: PagingLibrary {
         environment: Environment,
         pageState: LibraryPageState
     ) async throws -> [ActivityLogEntry] {
-        var parameters = Paths.GetLogEntriesParameters()
-        parameters.hasUserID = environment.hasUserID
-        parameters.limit = pageState.pageSize
-        parameters.minDate = environment.minDate
-        parameters.startIndex = pageState.pageOffset
-
-        let request = Paths.getLogEntries(parameters: parameters)
-        let response = try await pageState.client.send(request)
-
-        return response.value.items ?? []
+        try await pageState.serverOperations.activity(
+            offset: pageState.pageOffset,
+            limit: pageState.pageSize,
+            hasUserID: environment.hasUserID,
+            minimumDate: environment.minDate
+        )
     }
 }

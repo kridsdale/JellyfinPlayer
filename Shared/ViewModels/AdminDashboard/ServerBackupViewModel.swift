@@ -9,6 +9,7 @@
 import Foundation
 import JellyfinAPI
 import SwiftfinCollections
+import SwiftfinServerOperations
 
 @MainActor
 @Stateful
@@ -53,29 +54,19 @@ final class ServerBackupViewModel: ViewModel {
 
     @Function(\Action.Cases.refresh)
     private func _refresh() async throws {
-        let request = Paths.listBackups
-        let response = try await send(request)
-
-        backups = response.value.sorted { $0.dateCreated > $1.dateCreated }
+        backups = try await requireServerOperations().backups()
     }
 
     @Function(\Action.Cases.createBackup)
     private func _createBackup(_ options: BackupOptionsDto) async throws {
-        let request = Paths.createBackup(options)
-        let response = try await send(request)
-
-        backups = backups.prepending(response.value)
-
+        let backup = try await requireServerOperations().createBackup(options: options)
+        backups = backups.prepending(backup)
         events.send(.created)
     }
 
     @Function(\Action.Cases.restore)
     private func _restore(_ backup: BackupManifestDto) async throws {
-        let archiveFileName = URL(fileURLWithPath: backup.path).lastPathComponent
-        let parameters = BackupRestoreRequestDto(archiveFileName: archiveFileName)
-        let request = Paths.startRestoreBackup(parameters)
-        _ = try await send(request)
-
+        try await requireServerOperations().restoreBackup(path: backup.path)
         events.send(.restored)
     }
 }

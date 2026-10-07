@@ -12,6 +12,8 @@ import subprocess
 
 # Explicit responsibilities, not a permission derived from whatever code happens to import.
 EXTERNAL_POLICIES = {
+    "SwiftfinUserAdministration": [("jellyfin-sdk-swift", "https://github.com/jellyfin/jellyfin-sdk-swift.git", "3.2.0"), ("get", "https://github.com/kean/Get", "2.2.1")],
+    "SwiftfinServerOperations": [("jellyfin-sdk-swift", "https://github.com/jellyfin/jellyfin-sdk-swift.git", "3.2.0"), ("get", "https://github.com/kean/Get", "2.2.1")],
     "SwiftfinMediaCatalog": [("jellyfin-sdk-swift", "https://github.com/jellyfin/jellyfin-sdk-swift.git", "3.2.0"), ("get", "https://github.com/kean/Get", "2.2.1")],
     "SwiftfinMediaTracks": [("jellyfin-sdk-swift", "https://github.com/jellyfin/jellyfin-sdk-swift.git", "3.2.0")],
     "SwiftfinPlaybackProfiles": [("jellyfin-sdk-swift", "https://github.com/jellyfin/jellyfin-sdk-swift.git", "3.2.0")],
@@ -25,6 +27,8 @@ EXTERNAL_POLICIES = {
     ],
 }
 POLICIES = {
+    "SwiftfinUserAdministration": ({"SwiftfinNetworking", "SwiftfinCollections"}, {"Foundation", "Get", "JellyfinAPI"}),
+    "SwiftfinServerOperations": ({"SwiftfinNetworking", "SwiftfinCollections"}, {"Foundation", "Get", "JellyfinAPI"}),
     "SwiftfinMediaCatalog": ({"SwiftfinNetworking", "SwiftfinCollections"}, {"Foundation", "Get", "JellyfinAPI"}),
     "SwiftfinPaging": ({}, {"Foundation", "Combine"}),
     "SwiftfinScrolling": ({}, {"Foundation", "UIKit", "Combine"}),

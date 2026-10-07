@@ -11,6 +11,7 @@ import FactoryKit
 import Foundation
 import JellyfinAPI
 import OrderedCollections
+import SwiftfinServerOperations
 
 @MainActor
 @Stateful
@@ -82,11 +83,8 @@ final class ActiveSessionsViewModel: ViewModel {
 
     @Function(\Action.Cases.refresh)
     private func _refresh() async throws {
-        let parameters = Paths.GetSessionsParameters(activeWithinSeconds: environment.activeWithinSeconds)
-        let request = Paths.getSessions(parameters: parameters)
-        let response = try await send(request)
-
-        updateSessions(response.value)
+        let values = try await requireServerOperations().sessions(activeWithinSeconds: environment.activeWithinSeconds)
+        updateSessions(values)
     }
 
     private func updateSessions(_ incomingSessions: [SessionInfoDto]) {
@@ -99,23 +97,13 @@ final class ActiveSessionsViewModel: ViewModel {
         // Reuse existing observers so ActiveSessionDetailsViews keep receiving updates
         var updatedSessions: OrderedDictionary<String, SessionViewModel> = [:]
 
-        let filteredSessions = incomingSessions
-            .filter { session in
-                guard let seconds = environment.activeWithinSeconds else { return true }
-                guard let date = session.lastActivityDate else { return true }
-                return Date.now.timeIntervalSince(date) <= TimeInterval(seconds)
-            }
-            .filter { session in
-                switch environment.showSessionType {
-                case .all:
-                    true
-                case .active:
-                    session.nowPlayingItem != nil
-                case .inactive:
-                    session.nowPlayingItem == nil
-                }
-            }
-            .sorted()
+        let filteredSessions = ServerOperationsPolicy.sessions(
+            incomingSessions,
+            activeWithinSeconds: environment.activeWithinSeconds,
+            filter: ServerSessionFilter(rawValue: environment.showSessionType.rawValue) ??
+                .all,
+            now: .now
+        )
 
         for session in filteredSessions {
             guard let id = session.id else { continue }

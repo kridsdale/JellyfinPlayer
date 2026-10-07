@@ -9,6 +9,8 @@
 import Combine
 import Dispatch
 import JellyfinAPI
+import SwiftfinServerOperations
+import SwiftfinUserAdministration
 
 @MainActor
 @Stateful
@@ -49,29 +51,29 @@ final class ServerActivityDetailViewModel: ViewModel {
 
     @Function(\Action.Cases.refresh)
     private func _refresh() async {
-        async let fetchedItem: BaseItemDto? = getItem(for: log.itemID)
-        async let fetchedUser: UserDto? = getUser(for: log.userID)
-
-        let results = try? await (fetchedItem, fetchedUser)
-        item = results?.0
-        user = results?.1
+        do {
+            let operations = try requireServerOperations()
+            let accounts = try requireUserAdministration()
+            async let fetchedItem = readItem(log.itemID, operations: operations)
+            async let fetchedUser = readUser(log.userID, accounts: accounts)
+            let results = try await (fetchedItem, fetchedUser)
+            item = results.0
+            user = results.1
+        } catch is CancellationError {
+            return
+        } catch {
+            item = nil
+            user = nil
+        }
     }
 
-    private func getItem(for itemID: String?) async throws -> BaseItemDto? {
+    private func readItem(_ itemID: String?, operations: ServerOperationsClient) async throws -> BaseItemDto? {
         guard let itemID else { return nil }
-
-        let request = Paths.getItem(itemID: itemID)
-        let response = try await send(request)
-
-        return response.value
+        return try await operations.activityItem(id: itemID)
     }
 
-    private func getUser(for userID: String?) async throws -> UserDto? {
+    private func readUser(_ userID: String?, accounts: UserAdministrationClient) async throws -> UserDto? {
         guard let userID else { return nil }
-
-        let request = Paths.getUserByID(userID: userID)
-        let response = try await send(request)
-
-        return response.value
+        return try await accounts.user(id: userID)
     }
 }

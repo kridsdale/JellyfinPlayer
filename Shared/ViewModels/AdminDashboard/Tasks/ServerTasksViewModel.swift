@@ -12,6 +12,7 @@ import Foundation
 import JellyfinAPI
 import OrderedCollections
 import SwiftfinCollections
+import SwiftfinServerOperations
 import SwiftUI
 
 // TODO: do something for errors from restart/shutdown
@@ -78,14 +79,11 @@ final class ServerTasksViewModel: ViewModel {
 
     @Function(\Action.Cases.refresh)
     private func _refresh() async throws {
-        let request = Paths.getTasks(isHidden: false, isEnabled: true)
-        let response = try await send(request)
-
-        let allTasks = response.value
+        let allTasks = try await requireServerOperations().tasks()
         let allTaskIDs = allTasks.compactMap(\.id)
 
         let existingTaskIDs = tasks.values.flattened().compactMap(\.task.id)
-        let removedTaskIDs = existingTaskIDs.filtering { allTaskIDs.contains($0) }
+        let removedTaskIDs = ServerOperationsPolicy.removedTaskIDs(existing: existingTaskIDs, incoming: allTasks)
 
         for category in tasks.keys {
             tasks[category]?.removeAll { taskViewModel in
@@ -133,13 +131,11 @@ final class ServerTasksViewModel: ViewModel {
 
     @Function(\Action.Cases.restartApplication)
     private func _restartApplication() async throws {
-        let request = Paths.restartApplication
-        try await send(request)
+        try await requireServerOperations().restart()
     }
 
     @Function(\Action.Cases.shutdownApplication)
     private func _shutdownApplication() async throws {
-        let request = Paths.shutdownApplication
-        try await send(request)
+        try await requireServerOperations().shutdown()
     }
 }

@@ -9,6 +9,7 @@
 import Foundation
 import JellyfinAPI
 import SwiftfinLocalization
+import SwiftfinServerOperations
 
 extension SessionInfoDto: @retroactive Comparable {
 
@@ -49,21 +50,6 @@ extension SessionInfoDto: @retroactive Comparable {
     /// - Now playing title
     /// - Last activity.
     public static func < (lhs: SessionInfoDto, rhs: SessionInfoDto) -> Bool {
-        let lhsIsPlaying = lhs.nowPlayingItem != nil
-        let rhsIsPlaying = rhs.nowPlayingItem != nil
-
-        if lhsIsPlaying != rhsIsPlaying {
-            return lhsIsPlaying
-        }
-
-        if lhs.userName != rhs.userName {
-            return (lhs.userName ?? .empty) < (rhs.userName ?? .empty)
-        }
-
-        if lhsIsPlaying {
-            return (lhs.nowPlayingItem?.name ?? .empty) < (rhs.nowPlayingItem?.name ?? .empty)
-        } else {
-            return (lhs.lastActivityDate ?? Date.now) > (rhs.lastActivityDate ?? Date.now)
-        }
+        ServerOperationsPolicy.sessionPrecedes(lhs, rhs, now: .now)
     }
 }
