@@ -46,6 +46,23 @@ class PackageBoundariesTests(unittest.TestCase):
         self.assertEqual(len(problems), 1)
         self.assertIn("re-export", problems[0])
 
+    def test_application_permissions_use_the_owning_library(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            for tree in ["Shared", "Swiftfin", "Swiftfin tvOS"]:
+                folder = root / tree
+                folder.mkdir()
+                source = folder / "Permissions.swift"
+                source.write_text("import SwiftfinPermissions\nimport SwiftUI\n")
+            self.assertEqual(MODULE.application_import_problems(root), [])
+            for tree, spelling in [("Shared", "import LocalAuthentication"),
+                                   ("Swiftfin", "@preconcurrency import CoreLocation"),
+                                   ("Swiftfin tvOS", "public import class LocalAuthentication.LAContext")]:
+                (root / tree / "Permissions.swift").write_text(spelling + "\n")
+            problems = MODULE.application_import_problems(root)
+            self.assertEqual(len(problems), 3)
+            self.assertTrue(all("belongs to SwiftfinPermissions" in p for p in problems))
+
     def test_real_application_trees_require_explicit_file_imports(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
@@ -161,6 +178,14 @@ class PackageBoundariesTests(unittest.TestCase):
             with self.subTest(module=module):
                 self.assertTrue(MODULE.validate_source("SwiftfinText", "import " + module, edges, frameworks))
         self.assertNotIn("SwiftfinText", MODULE.EXTERNAL_POLICIES)
+
+    def test_permissions_have_no_account_storage_presentation_or_global_dependencies(self):
+        edges, frameworks = MODULE.POLICIES["SwiftfinPermissions"]
+        self.assertEqual(set(edges), set())
+        for module in ["SwiftUI", "UIKit", "JellyfinAPI", "FactoryKit", "Defaults", "SwiftfinCredentials", "SwiftfinNetworking", "SwiftfinLocalization"]:
+            with self.subTest(module=module):
+                self.assertTrue(MODULE.validate_source("SwiftfinPermissions", "import " + module, edges, frameworks))
+        self.assertNotIn("SwiftfinPermissions", MODULE.EXTERNAL_POLICIES)
 
     def test_image_processing_has_no_cache_transport_settings_or_localization(self):
         edges, frameworks = MODULE.POLICIES["SwiftfinImageProcessing"]

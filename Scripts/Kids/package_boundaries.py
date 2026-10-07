@@ -36,6 +36,7 @@ EXTERNAL_POLICIES = {
     ],
 }
 POLICIES = {
+    "SwiftfinPermissions": ({}, {"Foundation", "os", "CoreLocation", "LocalAuthentication"}),
     "SwiftfinImageProcessing": ({}, {"Foundation", "CoreGraphics", "UIKit"}),
     "SwiftfinMPV": ({}, {"Foundation", "MPVUI", "Observation", "SwiftUI"}),
     "SwiftfinText": ({}, {"Foundation", "CryptoKit"}),
@@ -123,7 +124,7 @@ def validate_source(name, source, dependencies, frameworks):
 
 
 def application_import_problems(root):
-    """App composition may import SDKs directly, but may not hide file dependencies."""
+    """Composition uses explicit imports; native permission drivers stay with their owner."""
     problems = []
     for directory in ("Shared", "Swiftfin", "Swiftfin tvOS"):
         for source in sorted((root / directory).rglob("*.swift")):
@@ -131,6 +132,8 @@ def application_import_problems(root):
                 problems.append(f"{source.relative_to(root)}: application source escapes the checkout")
                 continue
             for match in IMPORT.finditer(source.read_text()):
+                if match.group(1) in {"CoreLocation", "LocalAuthentication"}:
+                    problems.append(f"{source.relative_to(root)}: native permission import {match.group(1)} belongs to SwiftfinPermissions")
                 if "@_exported" in match.group(0):
                     problems.append(f"{source.relative_to(root)}: application re-export of {match.group(1)} hides a file dependency")
     return problems

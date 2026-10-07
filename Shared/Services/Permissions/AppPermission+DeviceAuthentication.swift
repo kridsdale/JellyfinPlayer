@@ -7,38 +7,20 @@
 //
 
 #if os(iOS)
-import LocalAuthentication
 import SwiftfinLocalization
+import SwiftfinPermissions
 
 extension AppPermission {
-
     static let deviceAuthentication = AppPermission(
         id: "device-authentication",
         displayTitle: L10n.deviceAuth,
         privacyDescriptionKey: "NSFaceIDUsageDescription",
-        canRequest: {
-            var error: NSError?
-            return LAContext().canEvaluatePolicy(.deviceOwnerAuthentication, error: &error)
-        },
+        canRequest: { DeviceAuthenticationPermission.canRequest },
         request: { reason in
-            let context = LAContext()
-            var error: NSError?
-
-            guard context.canEvaluatePolicy(.deviceOwnerAuthentication, error: &error) else {
-                if let error {
-                    throw error
-                } else {
-                    throw ErrorMessage(L10n.deviceAuthFailed)
-                }
-            }
-
-            try await context.evaluatePolicy(.deviceOwnerAuthentication, localizedReason: reason ?? "")
-            return .authorized
+            do { return try await DeviceAuthenticationPermission.request(reason: reason ?? "") }
+            catch PermissionRequestError.deviceAuthenticationUnavailable { throw ErrorMessage(L10n.deviceAuthFailed) }
         },
-        status: {
-            var error: NSError?
-            return LAContext().canEvaluatePolicy(.deviceOwnerAuthentication, error: &error) ? .authorized : .denied
-        }
+        status: { DeviceAuthenticationPermission.status }
     )
 }
 #endif

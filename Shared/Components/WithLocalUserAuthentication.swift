@@ -6,12 +6,9 @@
 // Copyright (c) 2026 Jellyfin & Jellyfin Contributors
 //
 
-#if canImport(LocalAuthentication)
-import LocalAuthentication
 import SwiftfinAccountModels
 import SwiftfinLocalization
-#endif
-
+import SwiftfinPermissions
 import SwiftUI
 
 @MainActor
@@ -80,9 +77,11 @@ struct WithLocalUserAuthentication<Content: View>: View {
 
     private func handleDeviceAuthentication(reason: String?) async throws {
         #if os(iOS)
-        let context = LAContext()
-        try context.canEvaluatePolicy(.deviceOwnerAuthentication)
-        try await context.evaluatePolicy(.deviceOwnerAuthentication, localizedReason: reason ?? "")
+        do {
+            _ = try await DeviceAuthenticationPermission.request(reason: reason ?? "")
+        } catch PermissionRequestError.deviceAuthenticationUnavailable {
+            throw ErrorMessage(L10n.deviceAuthFailed)
+        }
         #else
         throw ErrorMessage(L10n.deviceAuthFailed)
         #endif

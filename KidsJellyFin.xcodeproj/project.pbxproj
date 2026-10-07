@@ -249,6 +249,10 @@
 		CDB8CDEA5F44664E811FD251 /* Packages/SwiftfinImageProcessing/Tests/SwiftfinImageProcessingTests/SyntheticImageFixtures.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB4E6132DA3AC9E3A7DAFE2A /* Packages/SwiftfinImageProcessing/Tests/SwiftfinImageProcessingTests/SyntheticImageFixtures.swift */; };
 		0974CAB6539134A334BFEC65 /* SwiftfinImageProcessing in Frameworks */ = {isa = PBXBuildFile; productRef = 70119D4C3198655B9F3FFB3F /* SwiftfinImageProcessing */; };
 		C1CFF2763CCFA54853160B3A /* SwiftfinImageProcessing in Frameworks */ = {isa = PBXBuildFile; productRef = C389DCFDA2D6736FE3ABFAA0 /* SwiftfinImageProcessing */; };
+		2C2A54F9A60D32DB50AEF5E1 /* SwiftfinPermissions in Frameworks */ = {isa = PBXBuildFile; productRef = 8DBD184AC84412E1AB85DFBD /* SwiftfinPermissions */; };
+		B64DD3D38DA5AD446106CEB8 /* Packages/SwiftfinPermissions/Tests/SwiftfinPermissionsTests/PermissionContracts.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAB6EEF3CB5F187B79DC02FE /* Packages/SwiftfinPermissions/Tests/SwiftfinPermissionsTests/PermissionContracts.swift */; };
+		8D00C0D2B34C22F4C294E32C /* SwiftfinPermissions in Frameworks */ = {isa = PBXBuildFile; productRef = 8EEEB7CF4FB6444FEB8D59C3 /* SwiftfinPermissions */; };
+		713F13FE3EC2CD62C3531901 /* SwiftfinPermissions in Frameworks */ = {isa = PBXBuildFile; productRef = C58B2BB13D75BC7E65C9EA22 /* SwiftfinPermissions */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -330,6 +334,7 @@
 		65DF727592561962027DDB5C /* Packages/SwiftfinMPV/Tests/SwiftfinMPVTests/MPVOwnershipContracts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Packages/SwiftfinMPV/Tests/SwiftfinMPVTests/MPVOwnershipContracts.swift; sourceTree = SOURCE_ROOT; };
 		0C509282CCA33DE0F86770A5 /* Packages/SwiftfinImageProcessing/Tests/SwiftfinImageProcessingTests/ImageProcessingContracts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Packages/SwiftfinImageProcessing/Tests/SwiftfinImageProcessingTests/ImageProcessingContracts.swift; sourceTree = SOURCE_ROOT; };
 		CB4E6132DA3AC9E3A7DAFE2A /* Packages/SwiftfinImageProcessing/Tests/SwiftfinImageProcessingTests/SyntheticImageFixtures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Packages/SwiftfinImageProcessing/Tests/SwiftfinImageProcessingTests/SyntheticImageFixtures.swift; sourceTree = SOURCE_ROOT; };
+		DAB6EEF3CB5F187B79DC02FE /* Packages/SwiftfinPermissions/Tests/SwiftfinPermissionsTests/PermissionContracts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Packages/SwiftfinPermissions/Tests/SwiftfinPermissionsTests/PermissionContracts.swift; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -401,6 +406,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8D00C0D2B34C22F4C294E32C /* SwiftfinPermissions in Frameworks */,
 				0974CAB6539134A334BFEC65 /* SwiftfinImageProcessing in Frameworks */,
 				08871F7EFE7C1ADC154B6CFB /* SwiftfinMPV in Frameworks */,
 				D684D5375131BE33B753D0FE /* SwiftfinText in Frameworks */,
@@ -501,6 +507,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				713F13FE3EC2CD62C3531901 /* SwiftfinPermissions in Frameworks */,
 				C1CFF2763CCFA54853160B3A /* SwiftfinImageProcessing in Frameworks */,
 				F57984C16D455B286CD02025 /* SwiftfinMPV in Frameworks */,
 				14D0F1402BBB0F912BFE3017 /* SwiftfinText in Frameworks */,
@@ -619,6 +626,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2C2A54F9A60D32DB50AEF5E1 /* SwiftfinPermissions in Frameworks */,
 				3C41CB85E45C4E2E602771A6 /* SwiftfinImageProcessing in Frameworks */,
 				3CE6706575AF3851ED4B254B /* SwiftfinMPV in Frameworks */,
 				784AC8A8FF6AFB6B01E90E4F /* SwiftfinText in Frameworks */,
@@ -660,6 +668,7 @@
 		5377CBE8263B596A003A4E83 = {
 			isa = PBXGroup;
 			children = (
+				DAB6EEF3CB5F187B79DC02FE /* Packages/SwiftfinPermissions/Tests/SwiftfinPermissionsTests/PermissionContracts.swift */,
 				CB4E6132DA3AC9E3A7DAFE2A /* Packages/SwiftfinImageProcessing/Tests/SwiftfinImageProcessingTests/SyntheticImageFixtures.swift */,
 				0C509282CCA33DE0F86770A5 /* Packages/SwiftfinImageProcessing/Tests/SwiftfinImageProcessingTests/ImageProcessingContracts.swift */,
 				65DF727592561962027DDB5C /* Packages/SwiftfinMPV/Tests/SwiftfinMPVTests/MPVOwnershipContracts.swift */,
@@ -784,6 +793,7 @@
 			);
 			name = "KidsJellyFin tvOS";
 			packageProductDependencies = (
+				8EEEB7CF4FB6444FEB8D59C3 /* SwiftfinPermissions */,
 				70119D4C3198655B9F3FFB3F /* SwiftfinImageProcessing */,
 				D870297AB87FD8D3700F5261 /* SwiftfinMPV */,
 				C69C50DFE46E94EC60F3CD4C /* SwiftfinText */,
@@ -889,6 +899,7 @@
 			);
 			name = "KidsJellyFin iOS";
 			packageProductDependencies = (
+				C58B2BB13D75BC7E65C9EA22 /* SwiftfinPermissions */,
 				C389DCFDA2D6736FE3ABFAA0 /* SwiftfinImageProcessing */,
 				142376011BCE7D7D0FCDB0E0 /* SwiftfinMPV */,
 				285167D352EDB9CCB20D6DA7 /* SwiftfinText */,
@@ -1003,6 +1014,7 @@
 			);
 			name = KidsUITests;
 			packageProductDependencies = (
+				8DBD184AC84412E1AB85DFBD /* SwiftfinPermissions */,
 				2DEBB5E5F9986330C3E97B32 /* SwiftfinImageProcessing */,
 				BD1DCFC9C12AAA76AFFF59BF /* SwiftfinMPV */,
 				10C1FDCADC4525095D1A9E9C /* SwiftfinText */,
@@ -1150,6 +1162,7 @@
 			);
 			mainGroup = 5377CBE8263B596A003A4E83;
 			packageReferences = (
+				66511D990DFD262233B90248 /* XCLocalSwiftPackageReference "Packages/SwiftfinPermissions" */,
 				C1299E2895E0D5D3B62BF4EC /* XCLocalSwiftPackageReference "Packages/SwiftfinImageProcessing" */,
 				64A5CA823973250C3F5A99E8 /* XCLocalSwiftPackageReference "Packages/SwiftfinMPV" */,
 				241C4499C30B5F3968156386 /* XCLocalSwiftPackageReference "Packages/SwiftfinText" */,
@@ -1398,6 +1411,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B64DD3D38DA5AD446106CEB8 /* Packages/SwiftfinPermissions/Tests/SwiftfinPermissionsTests/PermissionContracts.swift in Sources */,
 				CDB8CDEA5F44664E811FD251 /* Packages/SwiftfinImageProcessing/Tests/SwiftfinImageProcessingTests/SyntheticImageFixtures.swift in Sources */,
 				7C11D554BD12A200AF1CBD34 /* Packages/SwiftfinImageProcessing/Tests/SwiftfinImageProcessingTests/ImageProcessingContracts.swift in Sources */,
 				EAFACE31A890F2080C7D45CB /* Packages/SwiftfinMPV/Tests/SwiftfinMPVTests/MPVOwnershipContracts.swift in Sources */,
@@ -1932,6 +1946,7 @@
 		241C4499C30B5F3968156386 /* XCLocalSwiftPackageReference "Packages/SwiftfinText" */ = {isa = XCLocalSwiftPackageReference; relativePath = Packages/SwiftfinText; };
 		64A5CA823973250C3F5A99E8 /* XCLocalSwiftPackageReference "Packages/SwiftfinMPV" */ = {isa = XCLocalSwiftPackageReference; relativePath = Packages/SwiftfinMPV; };
 		C1299E2895E0D5D3B62BF4EC /* XCLocalSwiftPackageReference "Packages/SwiftfinImageProcessing" */ = {isa = XCLocalSwiftPackageReference; relativePath = Packages/SwiftfinImageProcessing; };
+		66511D990DFD262233B90248 /* XCLocalSwiftPackageReference "Packages/SwiftfinPermissions" */ = {isa = XCLocalSwiftPackageReference; relativePath = Packages/SwiftfinPermissions; };
 /* End XCLocalSwiftPackageReference section */
 
 /* Begin XCRemoteSwiftPackageReference section */
@@ -2754,6 +2769,9 @@
 		2DEBB5E5F9986330C3E97B32 /* SwiftfinImageProcessing */ = {isa = XCSwiftPackageProductDependency; package = C1299E2895E0D5D3B62BF4EC /* XCLocalSwiftPackageReference "Packages/SwiftfinImageProcessing" */; productName = SwiftfinImageProcessing; };
 		70119D4C3198655B9F3FFB3F /* SwiftfinImageProcessing */ = {isa = XCSwiftPackageProductDependency; package = C1299E2895E0D5D3B62BF4EC /* XCLocalSwiftPackageReference "Packages/SwiftfinImageProcessing" */; productName = SwiftfinImageProcessing; };
 		C389DCFDA2D6736FE3ABFAA0 /* SwiftfinImageProcessing */ = {isa = XCSwiftPackageProductDependency; package = C1299E2895E0D5D3B62BF4EC /* XCLocalSwiftPackageReference "Packages/SwiftfinImageProcessing" */; productName = SwiftfinImageProcessing; };
+		8DBD184AC84412E1AB85DFBD /* SwiftfinPermissions */ = {isa = XCSwiftPackageProductDependency; package = 66511D990DFD262233B90248 /* XCLocalSwiftPackageReference "Packages/SwiftfinPermissions" */; productName = SwiftfinPermissions; };
+		8EEEB7CF4FB6444FEB8D59C3 /* SwiftfinPermissions */ = {isa = XCSwiftPackageProductDependency; package = 66511D990DFD262233B90248 /* XCLocalSwiftPackageReference "Packages/SwiftfinPermissions" */; productName = SwiftfinPermissions; };
+		C58B2BB13D75BC7E65C9EA22 /* SwiftfinPermissions */ = {isa = XCSwiftPackageProductDependency; package = 66511D990DFD262233B90248 /* XCLocalSwiftPackageReference "Packages/SwiftfinPermissions" */; productName = SwiftfinPermissions; };
 /* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 5377CBE9263B596A003A4E83 /* Project object */;

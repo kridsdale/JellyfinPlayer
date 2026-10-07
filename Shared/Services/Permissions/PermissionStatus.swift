@@ -7,21 +7,17 @@
 //
 
 import SwiftfinLocalization
+import SwiftfinPermissions
 
 #if os(iOS)
-enum PermissionStatus: Equatable {
-    case authorized
-    case denied
-    case unknown
+typealias PermissionStatus = SwiftfinPermissions.PermissionStatus
 
+extension SwiftfinPermissions.PermissionStatus {
     var displayTitle: String {
         switch self {
-        case .authorized:
-            L10n.allowed
-        case .denied:
-            L10n.unauthorized
-        case .unknown:
-            L10n.unknown
+        case .authorized: L10n.allowed
+        case .denied: L10n.unauthorized
+        case .unknown: L10n.unknown
         }
     }
 }
