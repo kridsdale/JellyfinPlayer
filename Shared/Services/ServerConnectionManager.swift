@@ -12,6 +12,7 @@ import Foundation
 import JellyfinAPI
 import Logging
 import Pulse
+import SwiftfinAccountAccess
 import SwiftfinAccountModels
 import SwiftfinConnections
 import SwiftfinConnectivity
@@ -240,12 +241,9 @@ private struct JellyfinServerConnectionProbe: ServerConnectionProbing {
     func serverID(at connection: ServerConnection, accessToken: String?) async throws -> String? {
         let client = JellyfinTransport.swiftfin(url: connection.url, accessToken: accessToken, policy: .connectionProbe)
         do {
-            return try await client.send(Paths.getPublicSystemInfo).value.id
+            return try await AccountAccessClient(transport: client).publicInfo().value.id
         } catch {
-            Self.logger.info("Server connection probe failed", metadata: [
-                "url": .string(connection.url.absoluteString),
-                "error": .string(error.localizedDescription)
-            ])
+            Self.logger.info("Server connection probe failed")
             throw error
         }
     }

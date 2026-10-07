@@ -65,6 +65,10 @@ private final class Sender: JellyfinRequestSending {
         return try decoder.decode(Value.self, from: data)
     }
 
+    func response<Value: Decodable & Sendable>(for request: Request<Value>) async throws -> JellyfinResponse<Value> {
+        try await .init(value: value(for: request), responseURL: URL(string: "https://redirect.example/base"))
+    }
+
     func complete(_ request: Request<Void>) async throws {
         try capture(request)
         if let gate {
@@ -164,4 +168,46 @@ struct AuthenticatedExecutorTests {
         try await executor.complete(Request<Void>(path: "/command", method: .post))
         #expect(first.calls.map(\.path) == ["/read", "/command"] && other.calls.isEmpty)
     }
+}
+
+@Test @MainActor
+func `metadata response preserves value and URL`() async throws {
+    let sender = Sender()
+    sender.responses["/read"] = try JSONEncoder().encode("value")
+    let executor = AuthenticatedRequestExecutor(sender: sender)
+    let result = try await executor.response(for: Request<String>(path: "/read"))
+    #expect(result.value == "value")
+    #expect(result.responseURL?.absoluteString == "https://redirect.example/base")
+}
+
+@Test @MainActor
+func `obsolete metadata response rejected before IO`() async {
+    let sender = Sender()
+    let executor = AuthenticatedRequestExecutor(sender: sender, isCurrent: { false })
+    await #expect(throws: CancellationError.self) { try await executor.response(for: Request<String>(path: "/read")) }
+    #expect(sender.calls.isEmpty)
+}
+
+@Test(arguments: [false, true]) @MainActor
+func `replaced metadata response rejects late success and failure`(_ failure: Bool) async {
+    let sender = Sender()
+    let binding = Binding()
+    let gate = Gate()
+    sender.gate = gate
+    sender.failure = failure
+    sender.responses["/read"] = try? JSONEncoder().encode("value")
+    let executor = AuthenticatedRequestExecutor(sender: sender, isCurrent: { binding.current })
+    let task = Task { try await executor.response(for: Request<String>(path: "/read")) }
+    await settle { gate.continuation != nil }
+    binding.current = false
+    gate.finish()
+    await #expect(throws: CancellationError.self) { try await task.value }
+}
+
+@Test @MainActor
+func `metadata response current error is preserved`() async {
+    let sender = Sender()
+    sender.failure = true
+    let executor = AuthenticatedRequestExecutor(sender: sender)
+    await #expect(throws: StubError.self) { try await executor.response(for: Request<String>(path: "/read")) }
 }

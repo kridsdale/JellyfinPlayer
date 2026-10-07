@@ -9,12 +9,14 @@
 import Foundation
 import SwiftfinNetworking
 import SwiftfinSessions
+import SwiftfinUserMediaState
 
 @MainActor
 final class UserSession: AccountSessionLifecycle {
 
     let server: ServerState
     let user: UserState
+    var mediaStateOwner: (transport: JellyfinTransport, owner: UserMediaStateClient)?
 
     private let transports = AccountTransportCache { url, token in
         JellyfinTransport.swiftfin(url: url, accessToken: token)

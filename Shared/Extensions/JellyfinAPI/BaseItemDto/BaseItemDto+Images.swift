@@ -11,6 +11,7 @@ import Foundation
 import JellyfinAPI
 import SwiftfinCollections
 import SwiftfinImages
+import SwiftfinItemMetadata
 import UIKit
 
 extension BaseItemDto {
@@ -39,21 +40,16 @@ extension BaseItemDto {
         // TODO: put into environment?
         let scale = UITraitCollection.current.displayScale
 
-        let parameters = Paths.GetItemImageParameters(
+        guard let url = ItemImageURLPolicy.url(
+            using: client,
+            itemID: itemID,
+            type: type.rawValue,
+            tag: tag,
             maxWidth: environment.maxWidth.map { Int($0 * scale) },
             maxHeight: environment.maxHeight.map { Int($0 * scale) },
             quality: environment.quality.map { clamp($0, min: 1, max: 100) },
-            tag: tag,
-            format: type == .logo ? .png : nil
-        )
-
-        let request = Paths.getItemImage(
-            itemID: itemID,
-            imageType: type.rawValue,
-            parameters: parameters
-        )
-
-        guard let url = client.url(with: request) else { return nil }
+            png: type == .logo
+        ) else { return nil }
 
         let blurHashes = itemID == id && type != .logo ? imageBlurHashes?[type] : nil
 

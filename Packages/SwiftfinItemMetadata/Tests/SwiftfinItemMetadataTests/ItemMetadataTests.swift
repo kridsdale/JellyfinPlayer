@@ -40,6 +40,7 @@ private struct Captured {
 @MainActor
 private final class Sender: JellyfinRequestSending {
     var calls: [Captured] = []
+    var metricsDelegate: (any URLSessionDataDelegate)?
     var responses: [String: Data] = [:]
     var gate: Gate?
     var failure = false
@@ -68,6 +69,11 @@ private final class Sender: JellyfinRequestSending {
         let decoder = JSONDecoder()
         decoder.dateDecodingStrategy = .iso8601
         return try decoder.decode(Value.self, from: data)
+    }
+
+    func value<Value: Decodable & Sendable>(for request: Request<Value>, delegate: (any URLSessionDataDelegate)?) async throws -> Value {
+        metricsDelegate = delegate
+        return try await value(for: request)
     }
 
     func complete(_ request: Request<Void>) async throws {
@@ -585,4 +591,19 @@ struct ItemImageAdministrationTests {
         await #expect(throws: CancellationError.self) { try await task.value }
         #expect(sender.calls.count == 1)
     }
+}
+
+private final class MetadataMetricsDelegate: NSObject, URLSessionDataDelegate {}
+@Test @MainActor
+func `full item metadata retains native timing delegate`() async throws {
+    let sender = Sender()
+    sender.responses["/Users/user/Items/item"] = Data(#"{"Id":"item"}"#.utf8)
+    let client = ItemMetadataClient(
+        executor: .init(sender: sender),
+        userID: "user",
+        bindingID: .init(transport: ObjectIdentifier(sender), userID: "user")
+    )
+    let delegate = MetadataMetricsDelegate()
+    _ = try await client.item(id: "item", delegate: delegate)
+    #expect(sender.metricsDelegate === delegate)
 }

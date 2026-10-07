@@ -13,6 +13,8 @@ import Foundation
 import JellyfinAPI
 import KidsDiagnostics
 import KidsPlayback
+import SwiftfinAsyncStreams
+import SwiftfinPlaybackReporting
 
 /// Reports only after the kids controller proves decoded video and an advancing
 /// clock. The transport captures its client once; a queued report can never be
@@ -23,6 +25,7 @@ final class KidsMediaProgressObserver: ViewModel, MediaPlayerObserver {
     // the next worker captures a task handle, never a previous observer/item.
     private static var lastReporter: KidsPlaybackReporter<PlaybackStateInfo>?
     private weak var item: MediaPlayerItem?
+    private var reportClient: PlaybackReportingClient?
     private var reporter: KidsPlaybackReporter<PlaybackStateInfo>?
     private var subscriptions = Set<AnyCancellable>()
     private var lastSnapshot: PlaybackStateInfo?
@@ -41,6 +44,13 @@ final class KidsMediaProgressObserver: ViewModel, MediaPlayerObserver {
     init(item: MediaPlayerItem) {
         self.item = item
         super.init()
+        if let transport = try? authenticatedClient, let itemID = item.baseItem.id {
+            reportClient = PlaybackReportingClient(sender: transport, identity: .init(
+                itemID: itemID, mediaSourceID: item.mediaSource.id, liveStreamID: item.mediaSource.liveStreamID,
+                playSessionID: item.playSessionID, canSeek: !item.baseItem.isLiveStream,
+                playMethod: item.mediaSource.transcodingURL == nil ? .directPlay : .transcode
+            ))
+        }
     }
 
     func beginPlayback() {
@@ -48,7 +58,7 @@ final class KidsMediaProgressObserver: ViewModel, MediaPlayerObserver {
         #if DEBUG
         guard Defaults[.sendProgressReports] else { return }
         #endif
-        guard let client = try? authenticatedClient else { return }
+        guard let reportClient else { return }
         lastSnapshot = snapshot
         let logger = self.logger
         reporter = KidsPlaybackReporter(initial: snapshot, after: Self.lastReporter) { event in
@@ -59,28 +69,11 @@ final class KidsMediaProgressObserver: ViewModel, MediaPlayerObserver {
             }
             let trace = KidsPerformance.begin(.playbackReport, endpoint: endpoint)
             do {
-                switch event.kind {
-                case .start:
-                    try await client.send(
-                        Paths.reportPlaybackStart(event.snapshot),
-                        delegate: trace.map(KidsPerformanceTaskDelegate.init(span:))
-                    )
-                case .progress:
-                    try await client.send(
-                        Paths.reportPlaybackProgress(event.snapshot),
-                        delegate: trace.map(KidsPerformanceTaskDelegate.init(span:))
-                    )
-                case .stop:
-                    let snapshot = event.snapshot
-                    let stop = PlaybackStopInfo(
-                        itemID: snapshot.itemID,
-                        liveStreamID: snapshot.liveStreamID,
-                        mediaSourceID: snapshot.mediaSourceID,
-                        playSessionID: snapshot.playSessionID,
-                        positionTicks: snapshot.positionTicks
-                    )
-                    try await client.send(Paths.reportPlaybackStopped(stop), delegate: trace.map(KidsPerformanceTaskDelegate.init(span:)))
-                }
+                try await reportClient.send(
+                    event.kind,
+                    snapshot: event.snapshot,
+                    delegate: trace.map(KidsPerformanceTaskDelegate.init(span:))
+                )
                 trace?.finish()
             } catch {
                 trace?.finish(error: error)
@@ -94,17 +87,11 @@ final class KidsMediaProgressObserver: ViewModel, MediaPlayerObserver {
 
     private func snapshot() -> PlaybackStateInfo? {
         guard let item, let manager else { return nil }
-        return PlaybackStateInfo(
-            audioStreamIndex: item.selectedAudioStreamIndex,
-            canSeek: !item.baseItem.isLiveStream,
-            isPaused: manager.playbackRequestStatus == .paused,
-            itemID: item.baseItem.id,
-            liveStreamID: item.mediaSource.liveStreamID,
-            mediaSourceID: item.mediaSource.id,
-            playMethod: item.mediaSource.transcodingURL == nil ? .directPlay : .transcode,
-            playSessionID: item.playSessionID,
+        return reportClient?.identity.snapshot(
             positionTicks: manager.seconds.ticks,
-            subtitleStreamIndex: item.selectedSubtitleStreamIndex
+            audio: item.selectedAudioStreamIndex,
+            subtitle: item.selectedSubtitleStreamIndex,
+            isPaused: manager.playbackRequestStatus == .paused
         )
     }
 

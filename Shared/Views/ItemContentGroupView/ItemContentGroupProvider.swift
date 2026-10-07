@@ -11,12 +11,20 @@ import Get
 import JellyfinAPI
 import SwiftfinCollections
 import SwiftfinLocalization
+import SwiftfinUserMediaState
 import SwiftUI
 
 final class ItemContentGroupProvider: ViewModel, ContentGroupProvider {
 
     @Published
-    private(set) var item: BaseItemDto
+    private(set) var item: BaseItemDto {
+        didSet {
+            if item.id != oldValue.id {
+                mediaMutations.invalidate()
+            }
+        }
+    }
+
     @Published
     private(set) var localTrailers: [BaseItemDto] = []
     @Published
@@ -26,6 +34,8 @@ final class ItemContentGroupProvider: ViewModel, ContentGroupProvider {
 
     @Published
     var isPresentingDeleteConfirmation = false
+
+    private let mediaMutations = UserMediaMutationSequence()
 
     nonisolated let id: String
 
@@ -250,24 +260,38 @@ final class ItemContentGroupProvider: ViewModel, ContentGroupProvider {
     }
 
     func toggleIsFavorite() async {
-        let beforeIsFavorite = item.userData?.isFavorite ?? false
-
-        item.userData?.isFavorite = !beforeIsFavorite
-        do {
-            try await setIsFavorite(!beforeIsFavorite)
-        } catch {
-            item.userData?.isFavorite = beforeIsFavorite
-        }
+        await toggleMediaState(.favorite)
     }
 
     func toggleIsPlayed() async {
-        let beforeIsPlayed = item.userData?.isPlayed ?? false
+        await toggleMediaState(.played)
+    }
 
-        item.userData?.isPlayed = !beforeIsPlayed
+    private func toggleMediaState(_ field: UserMediaStateField) async {
+        guard let itemID = item.id, let session = try? requireUserSession() else { return }
+        let client = session.mediaState
+        let ticket = mediaMutations.begin(itemID: itemID, field: field)
+        let previous = field == .played ? item.userData?.isPlayed ?? false : item.userData?.isFavorite ?? false
+        if field == .played {
+            item.userData?.isPlayed = !previous
+        } else {
+            item.userData?.isFavorite = !previous
+        }
         do {
-            try await setIsPlayed(!beforeIsPlayed)
+            let response = try await client.set(field, value: !previous, itemID: itemID)
+            try client.checkBinding()
+            guard mediaMutations.accepts(ticket, currentItemID: item.id) else { return }
+            let data = UserMediaStatePolicy.merge(response, into: item.userData, field: field)
+            item.userData = data
+            Notifications[.itemUserDataDidChange].post(data)
+            Notifications[.itemShouldRefreshMetadata].post(itemID)
         } catch {
-            item.userData?.isPlayed = beforeIsPlayed
+            guard mediaMutations.accepts(ticket, currentItemID: item.id), (try? client.checkBinding()) != nil else { return }
+            if field == .played {
+                item.userData?.isPlayed = previous
+            } else {
+                item.userData?.isFavorite = previous
+            }
         }
     }
 
@@ -306,45 +330,5 @@ final class ItemContentGroupProvider: ViewModel, ContentGroupProvider {
             subtitleStreamIndex: subtitleStreamIndex,
             requestedBitrate: requestedBitrate
         )
-    }
-
-    private func setIsPlayed(_ isPlayed: Bool) async throws {
-        guard let itemID = item.id else { return }
-
-        let request: Request<UserItemDataDto> = if isPlayed {
-            try Paths.markPlayedItem(
-                itemID: itemID,
-                userID: authenticatedUser.id
-            )
-        } else {
-            try Paths.markUnplayedItem(
-                itemID: itemID,
-                userID: authenticatedUser.id
-            )
-        }
-
-        let response = try await send(request)
-        Notifications[.itemUserDataDidChange].post(response.value)
-        Notifications[.itemShouldRefreshMetadata].post(itemID)
-    }
-
-    private func setIsFavorite(_ isFavorite: Bool) async throws {
-        guard let itemID = item.id else { return }
-
-        let request: Request<UserItemDataDto> = if isFavorite {
-            try Paths.markFavoriteItem(
-                itemID: itemID,
-                userID: authenticatedUser.id
-            )
-        } else {
-            try Paths.unmarkFavoriteItem(
-                itemID: itemID,
-                userID: authenticatedUser.id
-            )
-        }
-
-        let response = try await send(request)
-        Notifications[.itemUserDataDidChange].post(response.value)
-        Notifications[.itemShouldRefreshMetadata].post(itemID)
     }
 }

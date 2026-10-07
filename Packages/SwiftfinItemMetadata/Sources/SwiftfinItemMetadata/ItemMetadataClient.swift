@@ -26,8 +26,8 @@ public final class ItemMetadataClient {
         try executor.checkBinding()
     }
 
-    public func item(id: String) async throws -> BaseItemDto {
-        try await executor.value(for: Paths.getItem(itemID: id, userID: userID))
+    public func item(id: String, delegate: (any URLSessionDataDelegate)? = nil) async throws -> BaseItemDto {
+        try await executor.value(for: Paths.getItem(itemID: id, userID: userID), delegate: delegate)
     }
 
     public func countries() async throws -> [CountryInfo] {

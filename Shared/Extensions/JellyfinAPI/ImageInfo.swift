@@ -9,6 +9,7 @@
 import Foundation
 import JellyfinAPI
 import SwiftfinImages
+import SwiftfinItemMetadata
 import SwiftfinNetworking
 
 extension ImageInfo: @retroactive Identifiable {
@@ -19,17 +20,13 @@ extension ImageInfo: @retroactive Identifiable {
 
     @MainActor
     func itemImageSource(itemID: String, client: JellyfinTransport) -> ImageSource {
-        let parameters = Paths.GetItemImageParameters(
-            tag: imageTag,
-            imageIndex: imageIndex
-        )
-        let request = Paths.getItemImage(
+        let itemImageURL = ItemImageURLPolicy.url(
+            using: client,
             itemID: itemID,
-            imageType: imageType?.rawValue ?? "",
-            parameters: parameters
+            type: imageType?.rawValue ?? "",
+            index: imageIndex,
+            tag: imageTag
         )
-
-        let itemImageURL = client.url(with: request)
 
         return ImageSource(url: itemImageURL)
     }

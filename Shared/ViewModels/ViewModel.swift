@@ -9,7 +9,6 @@
 import Combine
 import FactoryKit
 import Foundation
-import Get
 import JellyfinAPI
 import Logging
 import SwiftfinFilters
@@ -65,14 +64,6 @@ class ViewModel: ObservableObject {
         get throws {
             try requireUserSession().user
         }
-    }
-
-    func send<Value: Decodable & Sendable>(_ request: Request<Value>) async throws -> Response<Value> {
-        try await authenticatedClient.send(request)
-    }
-
-    func send(_ request: Request<Void>) async throws {
-        try await authenticatedClient.send(request)
     }
 }
 

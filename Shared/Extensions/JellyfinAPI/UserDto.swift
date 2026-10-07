@@ -8,6 +8,7 @@
 
 import Foundation
 import JellyfinAPI
+import SwiftfinAccountAccess
 import SwiftfinImages
 import SwiftfinLocalization
 import SwiftfinNetworking
@@ -19,14 +20,7 @@ extension UserDto {
         client: JellyfinTransport,
         maxWidth: CGFloat? = nil
     ) -> ImageSource {
-        UserState(
-            id: id ?? "",
-            serverID: "",
-            username: ""
-        )
-        .profileImageSource(
-            client: client
-        )
+        ImageSource(url: try? AccountAccessClient(transport: client).profileURL(userID: id ?? "", imageTag: primaryImageTag))
     }
 
     func getFullUser(userSession: UserSession) async throws -> UserDto {
@@ -34,9 +28,6 @@ extension UserDto {
             throw ErrorMessage(L10n.unknownError)
         }
 
-        let request = Paths.getUserByID(userID: id)
-        let response = try await userSession.client.send(request)
-
-        return response.value
+        return try await userSession.userAdministration.user(id: id)
     }
 }

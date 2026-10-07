@@ -10,6 +10,7 @@ import FactoryKit
 import Foundation
 import JellyfinAPI
 import Pulse
+import SwiftfinAccountAccess
 import SwiftfinAccountModels
 import SwiftfinAccountStore
 import SwiftfinImages
@@ -84,20 +85,21 @@ extension UserState {
     /// with an access token
     @MainActor
     func getUserData(server: ServerState) async throws -> UserDto {
-        let client = JellyfinTransport.swiftfin(url: server.effectiveServerURL, accessToken: accessToken)
-
-        let request = Paths.getCurrentUser
-        let response = try await client.send(request)
-
-        return response.value
+        let url = server.effectiveServerURL
+        let token = accessToken
+        let client = JellyfinTransport.swiftfin(url: url, accessToken: token)
+        let store = Container.shared.localAccountStore()
+        let access = AccountAccessClient(transport: client, expectedServerID: server.id, isCurrent: {
+            server.effectiveServerURL == url && (try? store.accessToken(userID: id)) == token
+        })
+        return try await access.currentUser(expectedUserID: id)
     }
 
     @MainActor
     func updateUserData(server: ServerState) async throws {
+        let userData = try await getUserData(server: server)
         let users = StoredValues[.User.users]
         guard let currentUser = users.first(where: { $0.id == id }) else { return }
-
-        let userData = try await getUserData(server: server)
         let updatedUsername = userData.name ?? currentUser.username
 
         let updatedUser = UserState(
@@ -113,15 +115,6 @@ extension UserState {
     func profileImageSource(
         client: JellyfinTransport
     ) -> ImageSource {
-        ImageSource(
-            url: client.url(
-                with: Paths.getUserImage(
-                    parameters: Paths.GetUserImageParameters(
-                        userID: id,
-                        tag: data.primaryImageTag
-                    )
-                )
-            )
-        )
+        ImageSource(url: try? AccountAccessClient(transport: client).profileURL(userID: id, imageTag: data.primaryImageTag))
     }
 }

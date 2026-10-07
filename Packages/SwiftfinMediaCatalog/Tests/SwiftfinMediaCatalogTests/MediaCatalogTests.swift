@@ -628,3 +628,32 @@ struct ContentSelectionTests {
         #expect(reader.captured.count == 1)
     }
 }
+
+@Test @MainActor
+func `channel lookup is bounded to exact user and channel`() async throws {
+    let reader = Reader()
+    reader.responses["/Items"] = Data(#"{"Items":[{"Id":"wrong"},{"Id":"channel"}]}"#.utf8)
+    let client = MediaCatalogClient(reader: reader, userID: "user")
+    #expect(try await client.channel(id: "channel")?.id == "channel")
+    let request = try #require(reader.captured.first)
+    #expect(request.path == "/Items")
+    #expect(request.query["userId"] == "user")
+    #expect(request.query["ids"] == "channel")
+    #expect(request.query["limit"] == "1")
+}
+
+@Test @MainActor
+func `empty channel cannot expand into unfiltered catalog read`() async throws {
+    let reader = Reader()
+    let client = MediaCatalogClient(reader: reader, userID: "user")
+    #expect(try await client.channel(id: "") == nil)
+    #expect(reader.captured.isEmpty)
+}
+
+@Test @MainActor
+func `channel lookup rejects different returned identity`() async throws {
+    let reader = Reader()
+    reader.responses["/Items"] = Data(#"{"Items":[{"Id":"wrong"}]}"#.utf8)
+    let client = MediaCatalogClient(reader: reader, userID: "user")
+    #expect(try await client.channel(id: "channel") == nil)
+}

@@ -163,3 +163,13 @@ struct ExecutorMetricsTests {
         ) }
     }
 }
+
+@Test @MainActor
+func `simple value sender response default has no invented URL`() async throws {
+    let sender = BasicMetricsSender()
+    let executor = AuthenticatedRequestExecutor(sender: sender)
+    let response = try await executor.response(for: Request<Int>(path: "/read"))
+    #expect(response.value == 7)
+    #expect(response.responseURL == nil)
+    #expect(sender.plainValues == 1)
+}

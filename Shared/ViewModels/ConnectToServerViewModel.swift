@@ -14,6 +14,7 @@ import JellyfinAPI
 import Logging
 import OrderedCollections
 import Pulse
+import SwiftfinAccountAccess
 import SwiftfinAccountModels
 import SwiftfinCollections
 import SwiftfinLocalization
@@ -79,7 +80,7 @@ final class ConnectToServerViewModel: ObservableObject {
 
         let client = JellyfinTransport.swiftfin(url: url, policy: .systemDefault)
 
-        let response = try await client.send(Paths.getPublicSystemInfo)
+        let response = try await AccountAccessClient(transport: client).publicInfo()
 
         guard let name = response.value.serverName,
               let id = response.value.id
@@ -90,7 +91,7 @@ final class ConnectToServerViewModel: ObservableObject {
 
         let connectionURL = processConnectionURL(
             initial: url,
-            response: response.response.url
+            response: response.responseURL
         )
 
         let newServerState = ServerState(
@@ -117,20 +118,8 @@ final class ConnectToServerViewModel: ObservableObject {
     // In the event of redirects, get the new host URL from response
     private func processConnectionURL(initial url: URL, response: URL?) -> URL {
 
-        let normalizedURL = url.normalizedServerConnectionURL ?? url
-
-        guard let response else { return normalizedURL }
-
-        if url.scheme != response.scheme ||
-            url.host != response.host
-        {
-            let newURL = response.absoluteString.trimmingSuffix(
-                Paths.getPublicSystemInfo.url?.absoluteString ?? ""
-            )
-            return URL(string: newURL)?.normalizedServerConnectionURL ?? normalizedURL
-        }
-
-        return normalizedURL
+        let redirected = AccountConnectionPolicy.redirectedURL(initial: url, response: response)
+        return redirected.normalizedServerConnectionURL ?? redirected
     }
 
     private func save(server: ServerState) async throws {

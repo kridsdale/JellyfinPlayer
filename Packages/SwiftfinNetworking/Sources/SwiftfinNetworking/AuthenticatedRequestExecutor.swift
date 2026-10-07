@@ -14,11 +14,25 @@ import Get
 public protocol JellyfinRequestSending {
     func value<Value: Decodable & Sendable>(for request: Request<Value>) async throws -> Value
     func complete(_ request: Request<Void>) async throws
+    func response<Value: Decodable & Sendable>(for request: Request<Value>) async throws -> JellyfinResponse<Value>
     func value<Value: Decodable & Sendable>(for request: Request<Value>, delegate: (any URLSessionDataDelegate)?) async throws -> Value
     func complete(_ request: Request<Void>, delegate: (any URLSessionDataDelegate)?) async throws
 }
 
+public struct JellyfinResponse<Value: Sendable>: Sendable {
+    public let value: Value
+    public let responseURL: URL?
+    public init(value: Value, responseURL: URL? = nil) {
+        self.value = value
+        self.responseURL = responseURL
+    }
+}
+
 public extension JellyfinRequestSending {
+    func response<Value: Decodable & Sendable>(for request: Request<Value>) async throws -> JellyfinResponse<Value> {
+        try await .init(value: value(for: request))
+    }
+
     func value<Value: Decodable & Sendable>(for request: Request<Value>, delegate: (any URLSessionDataDelegate)?) async throws -> Value {
         try await value(for: request)
     }
@@ -29,6 +43,11 @@ public extension JellyfinRequestSending {
 }
 
 extension JellyfinTransport: JellyfinRequestSending {
+    public func response<Value: Decodable & Sendable>(for request: Request<Value>) async throws -> JellyfinResponse<Value> {
+        let response = try await send(request)
+        return .init(value: response.value, responseURL: response.response.url)
+    }
+
     public func value<Value: Decodable & Sendable>(
         for request: Request<Value>,
         delegate: (any URLSessionDataDelegate)?
@@ -107,6 +126,18 @@ public final class AuthenticatedRequestExecutor {
         do {
             try await sender.complete(request, delegate: delegate)
             try checkBinding()
+        } catch {
+            try checkBinding()
+            throw error
+        }
+    }
+
+    public func response<Value: Decodable & Sendable>(for request: Request<Value>) async throws -> JellyfinResponse<Value> {
+        try checkBinding()
+        do {
+            let response = try await sender.response(for: request)
+            try checkBinding()
+            return response
         } catch {
             try checkBinding()
             throw error

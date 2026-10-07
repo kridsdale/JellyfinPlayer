@@ -10,6 +10,7 @@ import FactoryKit
 import Foundation
 import JellyfinAPI
 import Pulse
+import SwiftfinAccountAccess
 import SwiftfinAccountModels
 import SwiftfinAccountStore
 import SwiftfinImages
@@ -51,10 +52,7 @@ extension ServerState {
     @MainActor
     func getPublicSystemInfo() async throws -> PublicSystemInfo {
 
-        let request = Paths.getPublicSystemInfo
-        let response = try await client.send(request)
-
-        return response.value
+        try await accountAccess.publicInfo().value
     }
 
     func hasServerConnection(url: URL) -> Bool {
@@ -84,15 +82,16 @@ extension ServerState {
 
     @MainActor
     var splashScreenImageSource: ImageSource {
-        ImageSource(url: client.url(with: Paths.getSplashscreen()))
+        ImageSource(url: try? accountAccess.splashURL())
     }
 
     @MainActor
     func updateServerInfo() async throws {
+        let access = accountAccess
+        let publicInfo = try await access.publicInfo().value
+        try access.checkBinding()
         let servers = StoredValues[.Server.servers]
         guard let currentServer = servers.first(where: { $0.id == id }) else { return }
-
-        let publicInfo = try await getPublicSystemInfo()
         let updatedName = publicInfo.serverName ?? currentServer.name
 
         let updatedServer = ServerState(
@@ -105,5 +104,14 @@ extension ServerState {
 
         StoredValues[.Server.servers] = servers.map { $0.id == id ? updatedServer : $0 }
         StoredValues[.Server.publicInfo(id: currentServer.id)] = publicInfo
+    }
+}
+
+@MainActor
+extension ServerState {
+    var accountAccess: AccountAccessClient {
+        let transport = client
+        let url = transport.configuration.url
+        return AccountAccessClient(transport: transport, expectedServerID: id, isCurrent: { effectiveServerURL == url })
     }
 }

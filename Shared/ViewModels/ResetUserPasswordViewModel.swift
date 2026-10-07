@@ -47,10 +47,9 @@ final class ResetUserPasswordViewModel: ViewModel {
 
     @Function(\Action.Cases.reset)
     private func _reset(_ current: String, _ new: String) async throws {
-        let body = UpdateUserPassword(currentPw: current, newPw: new)
-        let request = Paths.updateUserPassword(userID: userID, body)
-
-        try await send(request)
+        let access = try requireUserSession().accountAccess
+        try await access.resetPassword(userID: userID, current: current, new: new)
+        try access.checkBinding()
 
         events.send(.success)
     }

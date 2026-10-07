@@ -16,6 +16,7 @@ import Nuke
 import SwiftfinCollections
 import SwiftfinFilters
 import SwiftfinImages
+import SwiftfinItemMetadata
 import SwiftfinLocalization
 import SwiftfinNowPlaying
 import SwiftfinRecordingTimers
@@ -262,13 +263,8 @@ extension BaseItemDto {
     ) async throws -> BaseItemDto? {
         guard type == .program else { return nil }
 
-        var parameters = Paths.GetItemsParameters()
-        parameters.ids = program.channelID.flatMap { [$0] }
-
-        let request = Paths.getItems(parameters: parameters)
-        let response = try await userSession.client.send(request)
-
-        return response.value.items?.first
+        guard let channelID = program.channelID, !channelID.isEmpty else { return nil }
+        return try await userSession.mediaCatalog.channel(id: channelID)
     }
 
     var runtime: Duration? {
@@ -468,22 +464,15 @@ extension BaseItemDto {
                     return .init(chapterInfo: chapter)
                 }
 
-                let parameters = Paths.GetItemImageParameters(
-                    maxWidth: 500,
-                    quality: 90,
-                    tag: imageTag,
-                    imageIndex: i
-                )
-
-                let request = Paths.getItemImage(
+                let imageURL = ItemImageURLPolicy.url(
+                    using: userSession.client,
                     itemID: id ?? "",
-                    imageType: ImageType.chapter.rawValue,
-                    parameters: parameters
+                    type: ImageType.chapter.rawValue,
+                    index: i,
+                    tag: imageTag,
+                    maxWidth: 500,
+                    quality: 90
                 )
-
-                let imageURL = userSession
-                    .client
-                    .url(with: request)
 
                 return .init(
                     chapterInfo: chapter,
@@ -626,17 +615,18 @@ extension BaseItemDto {
             throw ErrorMessage(L10n.unknownError)
         }
 
-        let request = Paths.getItem(itemID: id, userID: userSession.user.id)
-        let response = try await userSession.client.send(request, delegate: taskDelegate)
+        let metadata = userSession.itemMetadata
+        let item = try await metadata.item(id: id, delegate: taskDelegate)
+        try metadata.checkBinding()
 
         // A check against `id` would typically be done, but a plugin
         // may have provided `self` or the response item and may not
         // be invariant over `id`.
 
         if sendNotification {
-            Notifications[.itemMetadataDidChange].post(response.value)
+            Notifications[.itemMetadataDidChange].post(item)
         }
 
-        return response.value
+        return item
     }
 }

@@ -13,6 +13,7 @@ import Get
 import JellyfinAPI
 import SwiftfinImages
 import SwiftfinLocalization
+import SwiftfinUserMediaState
 import SwiftUI
 
 extension BaseItemDto: Poster {
@@ -220,6 +221,8 @@ private struct BaseItemDtoPosterContextMenu: View {
 
     @State
     private var item: BaseItemDto
+    @State
+    private var mediaMutations = UserMediaMutationSequence()
 
     init(item: BaseItemDto) {
         self.item = item
@@ -265,71 +268,40 @@ private struct BaseItemDtoPosterContextMenu: View {
 
     @MainActor
     private func toggleIsPlayed() async {
-        let beforeIsPlayed = item.userData?.isPlayed ?? false
-
-        item.userData?.isPlayed = !beforeIsPlayed
-        do {
-            try await setIsPlayed(!beforeIsPlayed)
-        } catch {
-            item.userData?.isPlayed = beforeIsPlayed
-        }
+        await toggleMediaState(.played)
     }
 
     @MainActor
     private func toggleIsFavorite() async {
-        let beforeIsFavorite = item.userData?.isFavorite ?? false
+        await toggleMediaState(.favorite)
+    }
 
-        item.userData?.isFavorite = !beforeIsFavorite
+    @MainActor
+    private func toggleMediaState(_ field: UserMediaStateField) async {
+        guard let itemID = item.id, let session = Container.shared.currentUserSession() else { return }
+        let client = session.mediaState
+        let ticket = mediaMutations.begin(itemID: itemID, field: field)
+        let previous = field == .played ? item.userData?.isPlayed ?? false : item.userData?.isFavorite ?? false
+        if field == .played {
+            item.userData?.isPlayed = !previous
+        } else {
+            item.userData?.isFavorite = !previous
+        }
         do {
-            try await setIsFavorite(!beforeIsFavorite)
+            let response = try await client.set(field, value: !previous, itemID: itemID)
+            try client.checkBinding()
+            guard mediaMutations.accepts(ticket, currentItemID: item.id) else { return }
+            let data = UserMediaStatePolicy.merge(response, into: item.userData, field: field)
+            item.userData = data
+            Notifications[.itemUserDataDidChange].post(data)
+            Notifications[.itemShouldRefreshMetadata].post(itemID)
         } catch {
-            item.userData?.isFavorite = beforeIsFavorite
+            guard mediaMutations.accepts(ticket, currentItemID: item.id), (try? client.checkBinding()) != nil else { return }
+            if field == .played {
+                item.userData?.isPlayed = previous
+            } else {
+                item.userData?.isFavorite = previous
+            }
         }
-    }
-
-    private func setIsPlayed(_ isPlayed: Bool) async throws {
-        guard let itemID = item.id,
-              let userSession = Container.shared.currentUserSession()
-        else { return }
-
-        let request: Request<UserItemDataDto> = if isPlayed {
-            Paths.markPlayedItem(
-                itemID: itemID,
-                userID: userSession.user.id
-            )
-        } else {
-            Paths.markUnplayedItem(
-                itemID: itemID,
-                userID: userSession.user.id
-            )
-        }
-
-        let response = try await userSession.client.send(request)
-        item.userData = response.value
-        Notifications[.itemUserDataDidChange].post(response.value)
-        Notifications[.itemShouldRefreshMetadata].post(itemID)
-    }
-
-    private func setIsFavorite(_ isFavorite: Bool) async throws {
-        guard let itemID = item.id,
-              let userSession = Container.shared.currentUserSession()
-        else { return }
-
-        let request: Request<UserItemDataDto> = if isFavorite {
-            Paths.markFavoriteItem(
-                itemID: itemID,
-                userID: userSession.user.id
-            )
-        } else {
-            Paths.unmarkFavoriteItem(
-                itemID: itemID,
-                userID: userSession.user.id
-            )
-        }
-
-        let response = try await userSession.client.send(request)
-        item.userData = response.value
-        Notifications[.itemUserDataDidChange].post(response.value)
-        Notifications[.itemShouldRefreshMetadata].post(itemID)
     }
 }

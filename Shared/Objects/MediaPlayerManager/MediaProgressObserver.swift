@@ -8,185 +8,134 @@
 
 import Combine
 import Defaults
+import FactoryKit
 import Foundation
 import JellyfinAPI
+import SwiftfinAsyncStreams
+import SwiftfinNetworking
+import SwiftfinPlaybackReporting
 
-// TODO: respond properly to end of playback
-//       - when item changes
-// TODO: only send stop on manager stop, not per-item
-
-class MediaProgressObserver: ViewModel, MediaPlayerObserver {
+/// Platform subscriptions feed one shared serialized reporting queue. Every
+/// playback report retains the connection captured when this observer is made.
+@MainActor
+final class MediaProgressObserver: ViewModel, MediaPlayerObserver {
+    private static var lastReporter: PlaybackReportQueue<PlaybackStateInfo>?
+    private let transport: JellyfinTransport?
+    private let timer = PokeIntervalTimer()
+    private var reportClient: PlaybackReportingClient?
+    private var reporter: PlaybackReportQueue<PlaybackStateInfo>?
+    private var lastSnapshot: PlaybackStateInfo?
+    private var ended = false
+    private weak var item: MediaPlayerItem?
+    private var lastPlaybackRequestStatus: MediaPlayerManager.PlaybackRequestStatus = .playing
+    private var subscriptions = Set<AnyCancellable>()
 
     weak var manager: MediaPlayerManager? {
         didSet {
+            subscriptions.removeAll()
             if let manager {
                 setup(with: manager)
+            } else {
+                endPlaybackSession()
+                timer.stop()
             }
         }
     }
-
-    private let timer = PokeIntervalTimer()
-    private var hasSentStart = false
-    private var item: MediaPlayerItem?
-    private var lastPlaybackRequestStatus: MediaPlayerManager.PlaybackRequestStatus = .playing
 
     init(item: MediaPlayerItem) {
         self.item = item
+        self.transport = Container.shared.currentUserSession()?.client
         super.init()
+        configureReportClient(for: item)
+    }
+
+    private func configureReportClient(for item: MediaPlayerItem?) {
+        guard let item, let id = item.baseItem.id, let transport else { reportClient = nil
+            return
+        }
+        reportClient = PlaybackReportingClient(sender: transport, identity: .init(
+            itemID: id, mediaSourceID: item.mediaSource.id, liveStreamID: item.mediaSource.liveStreamID,
+            playSessionID: item.playSessionID, sessionID: item.playSessionID
+        ))
+    }
+
+    private func snapshot() -> PlaybackStateInfo? {
+        guard let item, let reportClient else { return nil }
+        return reportClient.identity.snapshot(
+            positionTicks: manager?.seconds.ticks,
+            audio: item.selectedAudioStreamIndex,
+            subtitle: item.selectedSubtitleStreamIndex,
+            isPaused: lastPlaybackRequestStatus == .paused ? true : nil
+        )
     }
 
     private func sendReport() {
-        guard let item else { return }
-
-        switch lastPlaybackRequestStatus {
-        case .playing:
-            if hasSentStart {
-                sendProgressReport(for: item, seconds: manager?.seconds)
-            } else {
-                sendStartReport(for: item, seconds: manager?.seconds)
+        #if DEBUG
+        guard Defaults[.sendProgressReports] else { return }
+        #endif
+        guard !ended, let snapshot = snapshot(), let reportClient else { return }
+        lastSnapshot = snapshot
+        if let reporter {
+            reporter.update(snapshot)
+        } else {
+            let logger = self.logger
+            let reporter = PlaybackReportQueue(initial: snapshot, after: Self.lastReporter) { event in
+                do { try await reportClient.send(event.kind, snapshot: event.snapshot) }
+                catch { logger.warning("Playback report failed")
+                    throw error
+                }
             }
-        case .paused:
-            sendProgressReport(for: item, seconds: manager?.seconds, isPaused: true)
+            self.reporter = reporter
+            Self.lastReporter = reporter
         }
-    }
-
-    private func setup(with manager: MediaPlayerManager) {
-        cancellables = []
-
-        timer.sink { [weak self] in
-            self?.sendReport()
-            self?.timer.poke()
-        }
-        .store(in: &cancellables)
-
-        manager.actions
-            .sink { [weak self] in self?.didReceive(action: $0) }
-            .store(in: &cancellables)
-
-        manager.$playbackItem
-            .sink { [weak self] in self?.playbackItemDidChange($0) }
-            .store(in: &cancellables)
-
-        manager.$playbackRequestStatus
-            .sink { [weak self] in self?.playbackRequestStatusDidChange($0) }
-            .store(in: &cancellables)
-
-        Notifications[.applicationWillTerminate]
-            .publisher
-            .sink { [weak self] _ in self?.endPlaybackSession() }
-            .store(in: &cancellables)
     }
 
     private func endPlaybackSession() {
-        guard let item else { return }
-        sendStopReport(for: item, seconds: manager?.seconds)
+        guard !ended else { return }
+        ended = true
+        timer.stop()
+        subscriptions.removeAll()
+        if let snapshot = snapshot() ?? lastSnapshot {
+            reporter?.finish(snapshot)
+        }
+        reporter = nil
+        lastSnapshot = nil
     }
 
     private func playbackItemDidChange(_ newItem: MediaPlayerItem?) {
         timer.poke()
+        guard newItem !== item else { return }
+        endPlaybackSession()
+    }
 
-        if let item, newItem !== item {
-            endPlaybackSession()
-            self.item = newItem
-            self.hasSentStart = false
+    private func playbackRequestStatusDidChange(_ status: MediaPlayerManager.PlaybackRequestStatus) {
+        lastPlaybackRequestStatus = status
+        timer.poke()
+        if reporter != nil {
             sendReport()
         }
     }
 
-    private func playbackRequestStatusDidChange(_ newStatus: MediaPlayerManager.PlaybackRequestStatus) {
-        timer.poke()
-        lastPlaybackRequestStatus = newStatus
-    }
-
-    // TODO: respond to error
-    // TODO: respond properly to ended
-    private func didReceive(action: MediaPlayerManager._Action) {
-        switch action {
-        case .stop:
-            endPlaybackSession()
-            timer.stop()
-            cancellables = []
-            item = nil
-        default: ()
-        }
-    }
-
-    private func sendStartReport(for item: MediaPlayerItem, seconds: Duration?) {
-
-        #if DEBUG
-        guard Defaults[.sendProgressReports] else { return }
-        #endif
-
-        Task<Void, Never> {
-            do {
-                var info = PlaybackStateInfo()
-                info.audioStreamIndex = item.selectedAudioStreamIndex
-                info.itemID = item.baseItem.id
-                info.liveStreamID = item.mediaSource.liveStreamID
-                info.mediaSourceID = item.mediaSource.id
-                info.playSessionID = item.playSessionID
-                info.positionTicks = seconds?.ticks
-                info.sessionID = item.playSessionID
-                info.subtitleStreamIndex = item.selectedSubtitleStreamIndex
-
-                let request = Paths.reportPlaybackStart(info)
-                try await send(request)
-
-                self.hasSentStart = true
-            } catch {
-                logger.warning("Playback start report failed")
+    private func setup(with manager: MediaPlayerManager) {
+        guard !ended else { return }
+        timer.sink { [weak self] in self?.sendReport()
+            self?.timer.poke()
+        }.store(in: &subscriptions)
+        manager.actions.sink { [weak self] action in
+            switch action {
+            case .stop, .error:
+                self?.endPlaybackSession()
+                self?.timer.stop()
+                self?.subscriptions.removeAll()
+                self?.item = nil
+            default: break
             }
-        }
-    }
-
-    private func sendStopReport(for item: MediaPlayerItem, seconds: Duration?) {
-
-        #if DEBUG
-        guard Defaults[.sendProgressReports] else { return }
-        #endif
-
-        Task<Void, Never> {
-            do {
-                var info = PlaybackStopInfo()
-                info.itemID = item.baseItem.id
-                info.liveStreamID = item.mediaSource.liveStreamID
-                info.mediaSourceID = item.mediaSource.id
-                info.playSessionID = item.playSessionID
-                info.positionTicks = seconds?.ticks
-                info.sessionID = item.playSessionID
-
-                let request = Paths.reportPlaybackStopped(info)
-                try await send(request)
-            } catch {
-                logger.warning("Playback report failed")
-            }
-        }
-    }
-
-    private func sendProgressReport(for item: MediaPlayerItem, seconds: Duration?, isPaused: Bool = false) {
-
-        #if DEBUG
-        guard Defaults[.sendProgressReports] else { return }
-        #endif
-
-        Task<Void, Never> {
-            do {
-                var info = PlaybackStateInfo()
-                info.audioStreamIndex = item.selectedAudioStreamIndex
-                info.isPaused = isPaused
-                info.itemID = item.baseItem.id
-                info.liveStreamID = item.mediaSource.liveStreamID
-                info.mediaSourceID = item.mediaSource.id
-                info.playSessionID = item.playSessionID
-                info.positionTicks = seconds?.ticks
-                info.sessionID = item.playSessionID
-                info.subtitleStreamIndex = item.selectedSubtitleStreamIndex
-
-                let request = Paths.reportPlaybackProgress(info)
-                try await send(request)
-            } catch {
-                logger.warning("Playback report failed")
-            }
-        }
+        }.store(in: &subscriptions)
+        manager.$playbackItem.sink { [weak self] in self?.playbackItemDidChange($0) }.store(in: &subscriptions)
+        manager.$playbackRequestStatus.sink { [weak self] in self?.playbackRequestStatusDidChange($0) }.store(in: &subscriptions)
+        Notifications[.applicationWillTerminate].publisher.sink { [weak self] _ in
+            self?.endPlaybackSession()
+            self?.timer.stop()
+        }.store(in: &subscriptions)
     }
 }

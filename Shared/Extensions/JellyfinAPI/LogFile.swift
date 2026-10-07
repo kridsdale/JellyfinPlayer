@@ -9,14 +9,14 @@
 import FactoryKit
 import Foundation
 import JellyfinAPI
+import SwiftfinServerOperations
 
 extension LogFile {
 
     @MainActor
     var url: URL? {
         guard let client = Container.shared.currentUserSession()?.client else { return nil }
-        let request = Paths.getLogFile(name: name)
-        return client.url(with: request, queryAPIKey: true)
+        return ServerDiagnosticURLPolicy.logURL(name: name, using: client)
     }
 
     var type: ServerLogType {

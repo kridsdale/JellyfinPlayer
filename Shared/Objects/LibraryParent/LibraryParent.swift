@@ -21,9 +21,6 @@ protocol LibraryParent: Displayable, Hashable, Identifiable<String?> {
     /// When using filters, this is used to determine the initial
     /// set of supported types and then
     var supportedItemTypes: [BaseItemKind] { get }
-
-    /// Modifies the parameters for the items request per this library parent.
-    func setParentParameters(_ parameters: Paths.GetItemsParameters) -> Paths.GetItemsParameters
 }
 
 extension LibraryParent {
@@ -36,29 +33,6 @@ extension LibraryParent {
         default:
             BaseItemKind.supportedCases
         }
-    }
-
-    func setParentParameters(_ parameters: Paths.GetItemsParameters) -> Paths.GetItemsParameters {
-
-        guard let id else { return parameters }
-
-        var parameters = parameters
-        parameters.includeItemTypes = supportedItemTypes
-
-        switch libraryType {
-        case .boxSet, .collectionFolder, .userView:
-            parameters.parentID = id
-        case .folder:
-            parameters.parentID = id
-            parameters.isRecursive = nil
-        case .person:
-            parameters.personIDs = [id]
-        case .studio:
-            parameters.studioIDs = [id]
-        default: ()
-        }
-
-        return parameters
     }
 
     var pagingLibraryID: String {

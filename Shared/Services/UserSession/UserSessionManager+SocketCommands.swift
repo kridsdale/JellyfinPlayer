@@ -205,10 +205,10 @@ extension UserSessionManager {
     private func playTrailers(itemID: String, userSession: UserSession) {
         Task { @MainActor in
             do {
-                let request = Paths.getLocalTrailers(itemID: itemID, userID: userSession.user.id)
-                let response = try await userSession.client.send(request)
-
-                if let trailerID = response.value.first?.id {
+                let catalog = userSession.mediaCatalog
+                let trailers = try await catalog.localTrailers(itemID: itemID)
+                try catalog.checkBinding()
+                if let trailerID = trailers.first?.id {
                     playItem(id: trailerID, userSession: userSession)
                     return
                 }

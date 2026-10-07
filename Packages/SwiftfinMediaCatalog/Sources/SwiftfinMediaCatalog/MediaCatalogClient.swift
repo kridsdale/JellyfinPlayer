@@ -242,6 +242,17 @@ public struct AdjacentEpisodes: Sendable {
 }
 
 public extension MediaCatalogClient {
+    func channel(id: String) async throws -> BaseItemDto? {
+        try checkBinding()
+        guard !id.isEmpty else { return nil }
+        var parameters = Paths.GetItemsParameters()
+        parameters.userID = userID
+        parameters.limit = 1
+        parameters.ids = [id]
+        let items = try await read(Paths.getItems(parameters: parameters)).items ?? []
+        return items.first { $0.id == id }
+    }
+
     func item(id: String) async throws -> BaseItemDto {
         try await read(Paths.getItem(itemID: id, userID: userID))
     }

@@ -7,10 +7,13 @@
 //
 
 import FactoryKit
+import SwiftfinAccountAccess
 import SwiftfinItemMetadata
 import SwiftfinMediaCatalog
 import SwiftfinNetworking
 import SwiftfinPlaybackPreparation
+import SwiftfinUserAdministration
+import SwiftfinUserMediaState
 
 extension UserSession {
     var itemMetadata: ItemMetadataClient {
@@ -48,5 +51,45 @@ extension UserSession {
             return manager.currentSession === self && self.client === client
         })
         return PlaybackPreparationClient(executor: executor, urls: client, userID: user.id)
+    }
+}
+
+extension UserSession {
+    var mediaState: UserMediaStateClient {
+        let client = self.client
+        if let cached = mediaStateOwner, cached.transport === client {
+            return cached.owner
+        }
+        let manager = Container.shared.userSessionManager()
+        let executor = AuthenticatedRequestExecutor(sender: client, isCurrent: { [weak self, weak client, weak manager] in
+            guard let self, let client, let manager else { return false }
+            return manager.currentSession === self && self.client === client
+        })
+        let owner = UserMediaStateClient(executor: executor, userID: user.id)
+        mediaStateOwner = (client, owner)
+        return owner
+    }
+}
+
+extension UserSession {
+    var accountAccess: AccountAccessClient {
+        let client = self.client
+        let manager = Container.shared.userSessionManager()
+        return AccountAccessClient(transport: client, expectedServerID: server.id, isCurrent: { [weak self, weak client, weak manager] in
+            guard let self, let client, let manager else { return false }
+            return manager.currentSession === self && self.client === client
+        })
+    }
+}
+
+extension UserSession {
+    var userAdministration: UserAdministrationClient {
+        let client = self.client
+        let manager = Container.shared.userSessionManager()
+        let executor = AuthenticatedRequestExecutor(sender: client, isCurrent: { [weak self, weak client, weak manager] in
+            guard let self, let client, let manager else { return false }
+            return manager.currentSession === self && self.client === client
+        })
+        return UserAdministrationClient(executor: executor, currentUserID: user.id)
     }
 }

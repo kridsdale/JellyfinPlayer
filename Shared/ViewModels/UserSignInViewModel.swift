@@ -13,6 +13,7 @@ import Get
 import JellyfinAPI
 import Logging
 import OrderedCollections
+import SwiftfinAccountAccess
 import SwiftfinAccountModels
 import SwiftfinCollections
 import SwiftfinLocalization
@@ -109,13 +110,12 @@ final class UserSignInViewModel: ObservableObject {
 
     @Function(\Action.Cases.getPublicData)
     private func _getPublicData() async throws {
-        async let isQuickConnectEnabled = try retrieveIsQuickConnectEnabled()
-        async let publicUsers = try retrievePublicUsers()
-        async let serverDisclaimer = try retrieveServerDisclaimer()
-
-        self.isQuickConnectEnabled = try await isQuickConnectEnabled
-        self.publicUsers = try await publicUsers
-        self.serverDisclaimer = try await serverDisclaimer
+        let client = server.accountAccess
+        let options = try await client.loginOptions()
+        try client.checkBinding()
+        self.isQuickConnectEnabled = options.quickConnectEnabled
+        self.publicUsers = options.users
+        self.serverDisclaimer = options.disclaimer
     }
 
     @Function(\Action.Cases.signIn)
@@ -131,16 +131,12 @@ final class UserSignInViewModel: ObservableObject {
             .trimmingCharacters(in: .whitespacesAndNewlines)
             .trimmingCharacters(in: .objectReplacement)
 
-        let response = try await server.client.authenticate(username: username, password: password)
+        let response = try await server.accountAccess.signIn(username: username, password: password)
 
-        guard let accessToken = response.accessToken,
-              let userData = response.user,
-              let id = userData.id,
-              let username = userData.name
-        else {
-            logger.critical("Missing user data from network call")
-            throw ErrorMessage(L10n.unknownError)
-        }
+        let accessToken = response.accessToken
+        let userData = response.user
+        let id = response.userID
+        let authenticatedUsername = response.username
 
         if let existingUser = existingUser(id: id) {
             events.send(.existingUser(((existingUser, accessToken), userData)))
@@ -148,7 +144,7 @@ final class UserSignInViewModel: ObservableObject {
             let newUserState = UserState(
                 id: id,
                 serverID: server.id,
-                username: username
+                username: authenticatedUsername
             )
 
             events.send(.connected(((newUserState, accessToken), userData)))
@@ -159,16 +155,12 @@ final class UserSignInViewModel: ObservableObject {
     private func _signInQuickConnect(
         _ secret: String
     ) async throws {
-        let response = try await server.client.authenticate(quickConnectSecret: secret)
+        let response = try await server.accountAccess.signIn(quickConnectSecret: secret)
 
-        guard let accessToken = response.accessToken,
-              let userData = response.user,
-              let id = userData.id,
-              let username = userData.name
-        else {
-            logger.error("Missing user data from network call")
-            throw ErrorMessage(L10n.unknownError)
-        }
+        let accessToken = response.accessToken
+        let userData = response.user
+        let id = response.userID
+        let username = response.username
 
         if let existingUser = existingUser(id: id) {
             events.send(.existingUser(((existingUser, accessToken), userData)))
@@ -272,29 +264,5 @@ final class UserSignInViewModel: ObservableObject {
         }
 
         events.send(.saved(user.state.state))
-    }
-
-    private func retrievePublicUsers() async throws -> [UserDto] {
-        let request = Paths.getPublicUsers
-        let response = try await server.client.send(request)
-
-        return response.value
-    }
-
-    private func retrieveServerDisclaimer() async throws -> String? {
-        let request = Paths.getBrandingOptions
-        let response = try await server.client.send(request)
-
-        guard let disclaimer = response.value.loginDisclaimer, disclaimer.isNotEmpty else { return nil }
-
-        return disclaimer
-    }
-
-    private func retrieveIsQuickConnectEnabled() async throws -> Bool {
-        let request = Paths.getQuickConnectEnabled
-        let response = try await server.client.send(request)
-
-        let isEnabled = try? JSONDecoder().decode(Bool.self, from: response.value)
-        return isEnabled ?? false
     }
 }

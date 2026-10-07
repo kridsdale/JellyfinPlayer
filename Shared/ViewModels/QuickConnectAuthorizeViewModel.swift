@@ -53,11 +53,9 @@ final class QuickConnectAuthorizeViewModel: ViewModel {
             throw ErrorMessage(L10n.unknownError)
         }
 
-        let request = Paths.authorizeQuickConnect(code: code, userID: userID)
-        let response = try await send(request)
-
-        let decoder = JSONDecoder()
-        let isAuthorized = (try? decoder.decode(Bool.self, from: response.value)) ?? false
+        let access = try requireUserSession().accountAccess
+        let isAuthorized = try await access.authorizeQuickConnect(code: code, userID: userID)
+        try access.checkBinding()
 
         guard isAuthorized else {
             throw ErrorMessage("Authorization unsuccessful")
