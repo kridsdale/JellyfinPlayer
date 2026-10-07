@@ -11,11 +11,13 @@
       "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinUIState"
+      ],
       "path": "Shared/Components/AlternateLayoutView.swift",
-      "reason": "",
+      "reason": "Complete body reviewed: hides a supplied layout and overlays caller-built content, optionally publishing measured frame/safe-area geometry through local SwiftUI state. All three initializer adaptations and the visibility/measurement branches are presentation; no catalog, storage, transport or resource lifecycle is implemented.",
       "sha256": "26b0e2cd894af753d5e51b1c1cf1bcd8de66d35455ae7c325007756993c1d974",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -74,11 +76,13 @@
       "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinCollections"
+      ],
       "path": "Shared/Components/CenteredLazyVGrid.swift",
-      "reason": "",
+      "reason": "Complete body reviewed: enumerated stable IDs, measured element size and positive-column last-row offsets center SwiftUI grid presentation. Data are supplied by the caller; no library query or account/global mutation occurs. This classification preserves existing column-input assumptions and does not claim invalid zero/negative columns were exercised.",
       "sha256": "d414bbbaf26b54f9d5b6a2f9c21c9ad324152d62e4b968bca917bcf5a2b394a9",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -211,16 +215,18 @@
     {
       "owners": [],
       "path": "Shared/Components/EqualWidthVStack.swift",
-      "reason": "",
+      "reason": "Complete body reviewed: variadic SwiftUI child traversal measures a local maximum width, maps horizontal alignment to frame alignment and composes equal-width focus sections. This is layout state rather than domain or resource ownership; existing underscore SwiftUI representation remains an explicit framework presentation dependency.",
       "sha256": "fa198663cc46c863fb32a2ae30c49dfdd1c7bf863134306be6f2f0e5e41fd957",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinLocalization"
+      ],
       "path": "Shared/Components/ErrorView.swift",
-      "reason": "",
+      "reason": "Complete body reviewed: selects supplied error icon/text/recovery suggestion, reads display accent and exposes a Retry button through the environment refresh closure. The button-created task invokes the supplied action; underlying request cancellation/recovery belongs to that action owner. No retry policy, network request or state persistence is duplicated.",
       "sha256": "ea210910734c322edce000a3fe4299f257b3d79b483c7e0b42b5f53f827e6412",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -253,11 +259,13 @@
       "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinLocalization"
+      ],
       "path": "Shared/Components/FormItemSection.swift",
-      "reason": "",
+      "reason": "Complete body reviewed: iOS poster/title/subtitle/year layout and tvOS labeled fields project the supplied Poster/DTO into a media form. Metadata reads/writes are absent; casting/selecting optional display fields is presentation. Poster/DTO provider bodies are not approved by this classification.",
       "sha256": "aaa75676281191f78469c89f0d880cd45302554106afa405dd8de86469f76561",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -344,11 +352,13 @@
       "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinCollections"
+      ],
       "path": "Shared/Components/Localization/CulturePicker.swift",
-      "reason": "",
+      "reason": "Complete body reviewed: composes a supplied culture paging model, maps two/three-letter ISO bindings to selected DTOs, chooses the tvOS menu presentation and triggers initial refresh. Request/paging implementation remains with its providers; no transport or locale registry is implemented here. The documented offline None behavior is preserved rather than claimed fixed.",
       "sha256": "c91cec64b0b6e16c6b1ad3fcf2b8f324c475c6f95e9443f010261da4eb0b72cd",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -360,9 +370,9 @@
     {
       "owners": [],
       "path": "Shared/Components/MarkedList.swift",
-      "reason": "",
+      "reason": "Complete body reviewed: supplied marker/content builders, variadic child indices and measured marker/content geometry create an indented SwiftUI marked list. Hidden/layout and offset behavior remains presentation; the existing text-clipping TODO is not asserted resolved or runtime-tested.",
       "sha256": "d3f60c5f15df5274982370b79ec1b0b36015aff18fcd61a6ef8bf51cd33d5284",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -410,18 +420,30 @@
       "status": "pending"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinPlaybackProfiles",
+        "SwiftfinFormatting",
+        "SwiftfinTime",
+        "SwiftfinUIState",
+        "SwiftfinValues",
+        "SwiftfinLocalization"
+      ],
       "path": "Shared/Components/Pickers/JumpIntervalPicker.swift",
-      "reason": "",
+      "reason": "Complete body reviewed: maps installed MediaJumpInterval values into picker tags, formats labels and presents a custom-seconds alert with 1...600 UI bounds and static-value normalization. Existing owners supply interval/value/format/binding operations; this view owns no preference serialization, playback command or duration model.",
       "sha256": "79e4b95e937d42dabd4d928ced12f02a5091f97df379455c59ad3625519b1081",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinPlaybackProfiles",
+        "SwiftfinUIState",
+        "SwiftfinValues",
+        "SwiftfinLocalization"
+      ],
       "path": "Shared/Components/Pickers/PlaybackSpeedPicker.swift",
-      "reason": "",
+      "reason": "Complete body reviewed: maps supplied PlaybackSpeed values to menu tags, handles the custom-value alert, clamps UI entry to 0.1...10 and normalizes matching static selections. Playback/value owners retain representations and commands; this is local picker state and supplied Binding editing, with installed sentinel behavior preserved.",
       "sha256": "05c47e830686e9d6cdd1d0834aa511f9d7f56b0f6b91fabf619f51d05407bb98",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -433,16 +455,16 @@
     {
       "owners": [],
       "path": "Shared/Components/PosterButton.swift",
-      "reason": "",
+      "reason": "Complete body reviewed: composes supplied poster image/label/overlay, transition namespace, preview size, accessibility and tvOS focus/context-menu state. Invokes only the caller action with the namespace; it does not implement item fetching, player lifecycle or server mutations. The provider/context-menu bodies remain separately reviewed responsibilities.",
       "sha256": "9be3c9cf9f1561545c308904561837cffa2e9e38e28369166c8c4fba9fdb812b",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
       "path": "Shared/Components/PosterHStack.swift",
-      "reason": "",
+      "reason": "Complete body reviewed: chooses platform/idiom/display-size row geometry and composes supplied poster elements with CollectionHStack, insets, spacing and caller navigation action. All selection/query/library ownership stays outside this presentation adapter; the external layout framework is used directly as a UI dependency.",
       "sha256": "7ff85009527a57cd2e1423c49088bdcbbd0e46289a68e49d0b8d75d6254b513f",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -452,11 +474,14 @@
       "status": "pending"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinImages",
+        "SwiftfinValues"
+      ],
       "path": "Shared/Components/PosterImage.swift",
-      "reason": "",
+      "reason": "Complete body reviewed: projects a supplied Poster into image sources, chooses blurhash/system placeholders, invokes supplied image transforms and wraps ImageView with poster styling. Retains the supplied/default Nuke pipeline as composition rather than implementing native cache/request lifecycle; its copy builder only replaces that view value. ImageView, Poster and pipeline startup contracts remain separate.",
       "sha256": "3d317ce14bea1e9f2374a962878f84a64104412bdea79af6f77735bc212387ab",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -501,11 +526,13 @@
       "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinLocalization"
+      ],
       "path": "Shared/Components/SeeMoreText.swift",
-      "reason": "",
+      "reason": "Complete body reviewed: compares locally measured full/constrained text height, masks and overlays a localized see-more label, and publishes truncation through a supplied Binding. The algorithm is visual text layout; no reusable data parsing, persistence, transport or playback policy is embedded.",
       "sha256": "0f55cda92a995786e4b02ca18eca2d6f14002fd331a4fc58400736380f603d44",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -515,25 +542,28 @@
       "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinCollections",
+        "SwiftfinUIState"
+      ],
       "path": "Shared/Components/SelectorView.swift",
-      "reason": "",
+      "reason": "Complete body reviewed: maps supplied single/multiple bindings through PublishedBox, toggles view selection and composes caller labels/check marks. Existing UIState/Collections owners supply observation and set mutation. Single-selection setter relies on the nonempty set created by its UI branch; no catalog authorization, ordered persistence or selection-domain service is implemented.",
       "sha256": "e95818d471dcb202b2e6bd1309a9834895d3b2dade55cc9ee2ea4522181bad64",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
       "path": "Shared/Components/SeparatorHStack.swift",
-      "reason": "",
+      "reason": "Complete body reviewed: evaluates caller content/separator builders, traverses variadic SwiftUI children and inserts a separator between adjacent child identities in a zero-spacing HStack. Entire responsibility is presentation composition, with no settings, service or external resource lifecycle.",
       "sha256": "72f8571f216b0e9b388b394cd57647dae03c307e12358503a5b9b76c72f1b9f8",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
       "path": "Shared/Components/SeparatorVStack.swift",
-      "reason": "",
+      "reason": "Complete body reviewed: supplied alignment/content/separator values and variadic child identity traversal compose a zero-spacing VStack with no trailing separator. This is layout behavior; no domain, state storage or asynchronous ownership is duplicated.",
       "sha256": "30c986aabd6fb84d5c9d3ac7ede65f0f04f2c85b8ee98f6d49943a4cedea8aff",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -573,9 +603,9 @@
     {
       "owners": [],
       "path": "Shared/Components/SystemImageContentView.swift",
-      "reason": "",
+      "reason": "Complete body reviewed: caller ratios scale supplied content into measured layout bounds; relative/system image wrappers choose resizable fit and fallback circle styling. ContainerRelativeView and both image views implement only SwiftUI sizing and symbol presentation.",
       "sha256": "4fb3d8144853c587d44d1dae7ac78044faf59a8da3d500bf85ffa89e5670d223",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -585,18 +615,24 @@
       "status": "pending"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinImages",
+        "SwiftfinLocalization"
+      ],
       "path": "Shared/Components/UserProfileImage/UserProfileHeroImage.swift",
-      "reason": "",
+      "reason": "Complete body reviewed: projects supplied user/source into profile-edit presentation, selects local/poster pipeline by current user identity and invokes supplied update/delete callbacks from a confirmation dialog. Accent/current-session access chooses view appearance/composition; no credential, image mutation request or native pipeline lifecycle is implemented.",
       "sha256": "b074c337630f2e5b9daf03c3f2f80950d290ab55c8efeb418811006b323ffacd",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinImages",
+        "SwiftfinUIState"
+      ],
       "path": "Shared/Components/UserProfileImage/UserProfileImage.swift",
-      "reason": "",
+      "reason": "Complete body reviewed: filters supplied profile-change notifications by user ID, composes image/placeholder/failure visuals and dims editing/disabled/unselected state. Circular clipping/border/shadow and supplied pipeline are view composition; notification and image resource implementations remain owned elsewhere. Actual UI notification/redraw delivery remains held.",
       "sha256": "62a3044fd77157974d5475f0912d60e4a5391f4cdd28a0cbdfd8423cb67869de",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -608,9 +644,9 @@
     {
       "owners": [],
       "path": "Shared/Components/WithBlurNavigationBar.swift",
-      "reason": "",
+      "reason": "Complete body reviewed: platform representable composes a hosting controller; appearance/disappearance changes navigation-bar title/background/shadow and restores the established defaults, with a local disappearance guard. Native UIKit navigation appearance is intentionally platform presentation; no domain/transport/player resource is owned. Shared-controller visual restoration requires held GUI acceptance.",
       "sha256": "1058a7fea1acff0529b8afd870295d56b13b4d7e14b6ae75a45e1d2688d996e3",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [
@@ -872,11 +908,17 @@
       "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinImages",
+        "SwiftfinItemMetadata",
+        "SwiftfinCollections",
+        "SwiftfinValues",
+        "SwiftfinText"
+      ],
       "path": "Shared/Extensions/JellyfinAPI/BaseItemDto/BaseItemDto+Images.swift",
-      "reason": "",
+      "reason": "Complete body reviewed: synchronous main-actor composition chooses DTO image/backdrop/screenshot tags, captures the current session, native display scale and supplied image options, then delegates URL construction to ItemImageURLPolicy and builds an ImageSource with a visual blurhash fallback. It owns no asynchronous request/cache/transport lifecycle. Current-session/native-trait selection remains app composition; the bound URL owner is separately reviewed.",
       "sha256": "317231e51b6f81ace70e7ab4f0ab0ae5a6773b90fcb369d89a67e52474eb8e39",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -1040,18 +1082,25 @@
       "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinLocalization"
+      ],
       "path": "Shared/Extensions/JellyfinAPI/ImageType.swift",
-      "reason": "",
+      "reason": "Complete body reviewed: exhaustive SDK image-kind switches produce localized labels/help text and select portrait/square/landscape poster presentation for item kinds. All values are display projections; request/source/image processing implementations remain outside this extension.",
       "sha256": "11e71ff3196a068231b8e112fa398ea332de025e47abe319ad21d80415e6ec82",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinFilters",
+        "SwiftfinCollections",
+        "SwiftfinLocalization",
+        "SwiftfinText"
+      ],
       "path": "Shared/Extensions/JellyfinAPI/ItemFilter+ItemTrait.swift",
-      "reason": "",
+      "reason": "Complete body and actual ItemFilter protocol reviewed: aliases the SDK enum for app spelling and adapts its raw value/reconstruction to the app-owned Displayable UI-choice/type-erasure protocol, then supplies localized supported trait menu choices. The protocol is not a Filters library/query protocol; Filters already owns immutable AnyItemFilter and query evaluation. Repeated raw-value witnesses match the existing app protocol defaults and trusted-choice force-unwrap contract; invalid unknown choices are not claimed repaired or tested. No request, persisted representation or filter-evaluation implementation is duplicated here.",
       "sha256": "bb5a50cb84de94be31788bf2de30124e6e0de05ee4b9f6402dcf398e0221e529",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -1089,11 +1138,18 @@
       "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinPlaybackProfiles",
+        "SwiftfinMediaTracks",
+        "SwiftfinCollections",
+        "SwiftfinFormatting",
+        "SwiftfinText",
+        "SwiftfinLocalization"
+      ],
       "path": "Shared/Extensions/JellyfinAPI/MediaSourceInfo.swift",
-      "reason": "",
+      "reason": "Complete body reviewed: display fallback and CoreTransferable/TextTransferable retroactive adaptation assemble localized source/stream inspection text. supportedBitrates delegates the complete decision to PlaybackBitrate.available with stream/source facts. Transfer representation/writer and immutable values remain with existing owners; no new file/request/player implementation is present. Stream transfer bodies are separately reviewed.",
       "sha256": "b2e947a13c4273e4627647fe18c57cfc937f968e37e0c55300670a66c51c2f05",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -1117,11 +1173,13 @@
       "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinText"
+      ],
       "path": "Shared/Extensions/JellyfinAPI/NameGuidPair.swift",
-      "reason": "",
+      "reason": "Complete body reviewed: NameIDPair gets display fallback, UI LibraryParent studio spelling and a LibraryElement adapter returning an editing/selected row with caller action. These supplied-value display/navigation-protocol conformances remain app composition; they do not construct catalog requests or implement persisted studio/domain identity ownership.",
       "sha256": "684e8d379fd6293b61751580833fd95ec9a9e802fc18cba80e78dd643a04b3f4",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -1131,11 +1189,14 @@
       "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinLocalization",
+        "SwiftfinCollections"
+      ],
       "path": "Shared/Extensions/JellyfinAPI/PersonKind.swift",
-      "reason": "",
+      "reason": "Complete body reviewed: exhaustive SDK person-kind localized display labels and the actor/director/writer/producer supported menu choices adapt display/selection protocols. This list is UI choice policy rather than a server capability/auth rule; no data request, metadata mutation or resource lifecycle is implemented.",
       "sha256": "5a0ca7cde00f2b9d314f4ed2ab3bc2875bd8a84d6d6e9b5e20ed7fbf8e8a975a",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -1154,18 +1215,24 @@
       "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinLocalization"
+      ],
       "path": "Shared/Extensions/JellyfinAPI/PlaystateCommand.swift",
-      "reason": "",
+      "reason": "Complete body reviewed: exhaustive SDK play-state switches select localized action labels and system symbols for stop/pause/unpause/track/seek/rewind/fast-forward/play-pause presentation. It interprets no remote execution payload and invokes no native player/transport command; command interpretation remains with its owner.",
       "sha256": "61f527af54298d7a66a47a394696d409dfdc8bc0b418769029aa11ab50a9b6fb",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinImages",
+        "SwiftfinLocalization",
+        "SwiftfinText"
+      ],
       "path": "Shared/Extensions/JellyfinAPI/RemoteImageInfo.swift",
-      "reason": "",
+      "reason": "Complete body reviewed: process-local DTO hash identity, supplied URL-to-ImageSource projections and Poster conformance choose thumbnail/full source order, provider/language labels and image placeholders. It starts no request, mutates no native resource and implements no image pipeline lifecycle. Existing hash identity behavior and framework rendering acceptance are not changed or newly proved.",
       "sha256": "560e4bb03af2236a612c5bc4c89933e2d7e7520624ac27eaa102dc0f287304c7",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -5580,9 +5647,9 @@
   "summary": {
     "applicationSwiftFiles": 665,
     "classification": {
-      "pending": 288,
+      "pending": 260,
       "source-reviewed-mixed": 12,
-      "source-reviewed-retained": 365
+      "source-reviewed-retained": 393
     },
     "currentAPIReviews": 32,
     "runtimeAcceptance": "held by human; no simulator/server testing"

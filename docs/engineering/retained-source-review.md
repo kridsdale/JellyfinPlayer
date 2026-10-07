@@ -1,6 +1,6 @@
 # Retained application responsibility review
 
-The application is intended to retain composition and platform presentation. This is a source-reviewed ledger, not an automatic approval of files based on their folder, filename or import count. The full-client refactor remains active. Live simulator/server activity is held by the human. Current ledger:365 retained, 12 mixed and 288 pending among 665 app files;32 scoped interface reviews.
+The application is intended to retain composition and platform presentation. This is a source-reviewed ledger, not an automatic approval of files based on their folder, filename or import count. The full-client refactor remains active. Live simulator/server activity is held by the human. Current ledger:393 retained, 12 mixed and 260 pending among 665 app files;32 scoped interface reviews.
 
 ## Reviewed boundaries at the date/program checkpoint
 
@@ -218,3 +218,13 @@ The ledger now contains 665 hashed app files:365 retained, 12 mixed and 288 pend
 Native sweep 59 passes 870 contracts (841 Swift Testing and 29 XCTest), eight generator checks and three helper suites. The final cancellation adapter changes only app source; library/test/helper hashes are identical to that native run. Unchanged owned macro inputs retain 18 passing contracts. Boundary 53 and analyzer 35 pass. Compile-only tvOS Debug 129, tvOS Release 54 and iOS Release 73 pass without owned Swift/generated-macro diagnostics. Audit 465 verifies 1,242 frozen inputs, both original forty-revision SDK graphs and clean tracked checkouts, paid-team/signing/persistence settings, five protected local files and equal cancellation-restored progress; Debug cloud transport remains NO.
 
 Simulator automation, installation, launches, playback and server-facing diagnostics remain stopped until explicit human resumption. Cancelled acceptance 79 remains cancelled. Synthetic contracts and compilation do not establish current GUI debounce, macro background-state lifetime, authentication or playback acceptance. Full items 1/2 remain active; physical-device/live CloudKit and separately managed server/release gates remain deferred.
+
+## Twenty-eight further presentation and DTO adapters (2026-10-07, offline)
+
+Twenty-eight complete unchanged bodies (2,350 lines) are now individually classified with exact source hashes and specific retention reasons. They include measured/variadic layouts, retry and form presentation, culture and playback-value pickers, poster/focus/image wrappers, truncation/selection, profile-image notification presentation, native navigation-bar appearance and eight DTO display/image/transfer/choice adapters. Each invokes supplied actions or existing data/resource owners; underlying provider bodies are not approved by their UI callers.
+
+Reading the actual app ItemFilter protocol corrected the provisional trait finding: it extends Displayable to support UI choice/type erasure; it is not a reusable query protocol. Its raw-value witnesses preserve the existing trusted-choice contract. Filters already owns AnyItemFilter and query evaluation, so no extra package or migration is justified for this display adapter.
+
+The ledger now records 665 app files:393 retained, 12 mixed and 260 pending, with 32 scoped interface/consumer reviews. No compiler input changed after identification checkpoint129/54/73:the same 1,242 hashes retain native59's870 contracts, macro18, boundary53/analyzer35 and three clean compile-only builds. These classifications establish source ownership, not correctness for every unsupported input or actual native layout/focus/notification lifetime. Existing TODOs and native visual acceptance remain open where recorded.
+
+Simulator automation, installation, launches, playback and server-facing diagnostics remain stopped until explicit human resumption. The full items1/2 source/API/actor and whole-graph acceptance goal remains active. Physical-device/live CloudKit and separate server/release gates stay deferred.

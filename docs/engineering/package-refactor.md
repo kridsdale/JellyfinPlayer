@@ -2,7 +2,7 @@
 
 Active goal: complete the minimal-responsibility package refactor and remaining Swift 6 compatibility warnings. This document records scope and evidence, not a narrower replacement objective.
 
-Latest offline evidence:53 libraries, 870 native contracts, clean compile-only Debug129/tvOS Release54/iOS Release73;665 app sources with365 retained,12 mixed,288 pending and32 scoped API reviews. Full source/API/actor and held runtime acceptance remain required.
+Latest offline evidence:53 libraries, 870 native contracts, clean compile-only Debug129/tvOS Release54/iOS Release73;665 app sources with393 retained,12 mixed,260 pending and32 scoped API reviews. Full source/API/actor and held runtime acceptance remain required.
 
 ## Initial source map
 
@@ -738,3 +738,13 @@ Native sweep 59 passes 870 contracts (841 Swift Testing and 29 XCTest), eight ge
 Simulator automation, installation, launches, playback and server-facing diagnostics remain stopped until explicit human resumption. Cancelled acceptance 79 remains cancelled. Synthetic contracts and compilation do not establish current GUI debounce, macro background-state lifetime, authentication or playback acceptance. Full items 1/2 remain active; physical-device/live CloudKit and separately managed server/release gates remain deferred.
 
 Earlier attempts remain separate evidence:Gate460 emitted a weak-variable warning; Metadata460 used the wrong SDK initializer argument order, and Metadata461 used an incorrect GET route fixture. Corrected Gate462 and Metadata462 passed cleanly before whole native59. Debug128/Release53/iOS72 passed before the final app cancellation-adapter correction; only129/54/73 compile that final adapter.
+
+## Twenty-eight further presentation and DTO adapters (2026-10-07, offline)
+
+Twenty-eight complete unchanged bodies (2,350 lines) are now individually classified with exact source hashes and specific retention reasons. They include measured/variadic layouts, retry and form presentation, culture and playback-value pickers, poster/focus/image wrappers, truncation/selection, profile-image notification presentation, native navigation-bar appearance and eight DTO display/image/transfer/choice adapters. Each invokes supplied actions or existing data/resource owners; underlying provider bodies are not approved by their UI callers.
+
+Reading the actual app ItemFilter protocol corrected the provisional trait finding: it extends Displayable to support UI choice/type erasure; it is not a reusable query protocol. Its raw-value witnesses preserve the existing trusted-choice contract. Filters already owns AnyItemFilter and query evaluation, so no extra package or migration is justified for this display adapter.
+
+The ledger now records 665 app files:393 retained, 12 mixed and 260 pending, with 32 scoped interface/consumer reviews. No compiler input changed after identification checkpoint129/54/73:the same 1,242 hashes retain native59's870 contracts, macro18, boundary53/analyzer35 and three clean compile-only builds. These classifications establish source ownership, not correctness for every unsupported input or actual native layout/focus/notification lifetime. Existing TODOs and native visual acceptance remain open where recorded.
+
+Simulator automation, installation, launches, playback and server-facing diagnostics remain stopped until explicit human resumption. The full items1/2 source/API/actor and whole-graph acceptance goal remains active. Physical-device/live CloudKit and separate server/release gates stay deferred.
