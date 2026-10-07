@@ -62,8 +62,7 @@ final class APIKeysViewModel: ViewModel {
     @Function(\Action.Cases.create)
     private func _create(_ name: String) async throws {
         let operations = try requireServerOperations()
-        try await operations.createKey(name: name)
-        if let keys = try await operations.keys() {
+        if let keys = try await operations.createKeyAndReload(name: name) {
             apiKeys = keys
         }
         events.send(.createdKey)
@@ -73,10 +72,9 @@ final class APIKeysViewModel: ViewModel {
     private func _replace(_ key: AuthenticationInfo) async throws {
         guard let name = key.appName, let token = key.accessToken else { throw ErrorMessage(L10n.unknownError) }
         let operations = try requireServerOperations()
-        try await operations.revokeKey(token: token)
-        apiKeys.removeFirst(equalTo: key)
-        try await operations.createKey(name: name)
-        if let keys = try await operations.keys() {
+        if let keys = try await operations.replaceKey(name: name, token: token, didRevoke: { [weak self] in
+            self?.apiKeys.removeFirst(equalTo: key)
+        }) {
             apiKeys = keys
         }
         events.send(.createdKey)

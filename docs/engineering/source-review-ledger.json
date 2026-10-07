@@ -2976,9 +2976,9 @@
         "SwiftfinServerOperations"
       ],
       "path": "Shared/ViewModels/AdminDashboard/APIKeysViewModel.swift",
-      "reason": "Mixed: app action sequences revoke/create/reload of a replacement API key, with intermediate UI removal after revocation. Move reusable compound command ownership into ServerOperations while preserving the observable partial-failure ordering, exact captured transport, UI receipt and cancellation/binding checks. Current simple command delegates do not establish that composition complete.",
-      "sha256": "6e0fc6920a30fb5dfa77a0e0cd53605d213b46e77ccadd736ad799ed67d2c2e8",
-      "status": "source-reviewed-mixed"
+      "reason": "Complete screen body reviewed: action transitions, displayed key rows, missing-field error, revoked-row removal and success event stay in presentation. Create/reload and revoke/acknowledge/create/reload now belong to one captured ServerOperationsClient. Nil lists preserve presentation; partial-failure acknowledgement, cancellation and binding replacement have synthetic contracts. No real key operation was performed.",
+      "sha256": "af7ffbfbe8c763e05b940a291ac0e89727a7d03de8e7bf20085c145f3dfc569b",
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [
@@ -3023,9 +3023,9 @@
         "SwiftfinAsyncStreams"
       ],
       "path": "Shared/ViewModels/AdminDashboard/Sessions/ActiveSessionsViewModel.swift",
-      "reason": "Mixed: row observer identity and filters are presentation, but initial-session socket delivery queues a weak-self MainActor task with no explicit account/binding generation in the receipt. A native upstream lease alone does not prove queued obsolete updates are rejected. Review root replacement, subscription retirement and queued publication with synthetic account-switch/cancellation contracts before retaining this body.",
-      "sha256": "9687a29c9d130ca571dca3c75feae2a71be224ff036def54456e04df1f276f47",
-      "status": "source-reviewed-mixed"
+      "reason": "Complete screen body reviewed: account roots and connection notifications compose a ScopedPublisher using exact root/transport identities and weak current-binding/UI callbacks. Nil roots cancel and clear displayed rows; changed roots/transports retire old receipts; duplicate identity preserves the subscription. Environment pause/filter rules and existing SessionViewModel row reuse remain unchanged. Source uses the emitted @Published session because the callback precedes its setter; receipt validation occurs after main-actor scheduling. Actual GUI/socket acceptance remains held.",
+      "sha256": "0f39c934f63b7802f84af50d48a598e16ab42324216456126e72ef2cc99fecf6",
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [
@@ -3051,9 +3051,9 @@
         "SwiftfinAsyncStreams"
       ],
       "path": "Shared/ViewModels/AdminDashboard/Tasks/ServerTasksViewModel.swift",
-      "reason": "Mixed: category grouping/sorting and observer reuse are UI, but session-to-stream compactMap drops nil roots instead of explicitly switching to an empty lease, and queued MainActor updates lack a captured generation. Review logout/root switching, pending receipts and subscription cancellation before classifying account-scoped stream lifetime complete.",
-      "sha256": "f6e628602a5c3852282f142444065a0e5d421fa49d20d388c255740752f45847",
-      "status": "source-reviewed-mixed"
+      "reason": "Complete screen body reviewed: nil account roots explicitly cancel instead of disappearing through compactMap. Exact account/transport scope and weak publication hooks compose the AsyncStreams owner; old queued receipts cannot update rows after replacement. Existing observer update/group/sort/removal and restart/shutdown adapters remain unchanged. Those commands were not run, and live socket/GUI acceptance remains held.",
+      "sha256": "f5d73bab9196af08f30f9ebc4bb033633b29bc2c7f44af9dd419c9d6f65355ac",
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [
@@ -5195,19 +5195,45 @@
         "internal TextExportFile.write(title:body:directory:)"
       ],
       "sha256": "009f7b4f90134531d1945dff8c37c1317f1cf5a89e1bd249a337591d8f17c72c"
+    },
+    {
+      "path": "Packages/SwiftfinAsyncStreams/Sources/SwiftfinAsyncStreams/ScopedPublisher.swift",
+      "reason": "Actor-owned subscription/generation, private Combine token and weak queued receipts; source identity and currentness are supplied by app composition. No account, SDK, settings or application globals enter the owner. Raw sink creation is explicitly nonisolated; checked-Sendable values enter an explicit main-actor delivery. Retirement/factory/subscription/currentness reentry checks protect newer scopes; same identity reuses its subscription. Twelve native contracts include logout, A-B-A, weak owner/UI lifetime and real foreign-queue emission. Native scheduling is internally injectable; GUI socket acceptance remains held.",
+      "reviewedConsumers": [
+        "Shared/ViewModels/AdminDashboard/Sessions/ActiveSessionsViewModel.swift",
+        "Shared/ViewModels/AdminDashboard/Tasks/ServerTasksViewModel.swift"
+      ],
+      "reviewedInterfaces": [
+        "init()",
+        "replace(scope:makePublisher:isCurrent:receive:)",
+        "cancel()",
+        "internal scheduling/publication/isolated teardown"
+      ],
+      "sha256": "ecdb1b974976584e10e4a1d8084508d39ed52f26caa121fc8274eeff2558b258"
+    },
+    {
+      "path": "Packages/SwiftfinServerOperations/Sources/SwiftfinServerOperations/ServerOperationsClient.swift",
+      "reason": "Scoped API review of compound key operations and the whole captured-client body: neither credentials nor SDK clients escape the feature owner. The synchronous main-actor revocation receipt preserves intermediate UI removal, then the executor revalidates cancellation/binding before creation/reload. Missing list remains nil; errors stop subsequent requests. New create/reload sequencing is shared by replacement. Ten new synthetic contracts cover exact routes/methods/name, sorting, nil lists, partial failures, expired binding and cancellation. All other existing operation implementations retain their original source bodies. No household server operation was executed.",
+      "reviewedConsumers": [
+        "Shared/ViewModels/AdminDashboard/APIKeysViewModel.swift"
+      ],
+      "reviewedInterfaces": [
+        "createKeyAndReload(name:)",
+        "replaceKey(name:token:didRevoke:)"
+      ],
+      "sha256": "30b249c9ae8db3da0ebb615acbfdac10da137aad05092d51a37d9d5c2cc299c2"
     }
   ],
   "limits": "This ledger records bodies explicitly reviewed, with exact current hashes; earlier prose or lexical inventory is not automatically promoted. Pending and mixed entries prevent whole-source completion. Retained UI algorithms have specific presentation reasons, not folder/import-based blanket approval. API entries do not classify the rest of the public graph. Source review and offline tests do not satisfy held runtime acceptance.",
   "schemaVersion": 1,
-  "scope": "All current app Swift files; complete-body classifications and twenty-one scoped interface/internal lifecycle/consumer reviews. No server/media/simulator data.",
+  "scope": "All current app Swift files; complete-body classifications and twenty-three scoped interface/internal lifecycle/consumer reviews. No server/media/simulator testing.",
   "summary": {
     "applicationSwiftFiles": 666,
     "classification": {
       "pending": 408,
-      "source-reviewed-mixed": 3,
-      "source-reviewed-retained": 255
+      "source-reviewed-retained": 258
     },
-    "currentAPIReviews": 21,
+    "currentAPIReviews": 23,
     "runtimeAcceptance": "held by human; no simulator/server testing"
   }
 }

@@ -56,19 +56,44 @@ final class ServerTasksViewModel: ViewModel {
     @Published
     var tasks: OrderedDictionary<String, [ServerTaskViewModel]> = [:]
 
+    private let taskUpdates = ScopedPublisher<[ObjectIdentifier], [TaskInfo]>()
+
     override init() {
         super.init()
 
         Container.shared.userSessionManager()
             .$currentSession
-            .compactMap { $0?.serverSocketManager.scheduledTasks(interval: .seconds(2)) }
-            .switchToLatest()
-            .sink { [weak self] tasks in
-                Task { @MainActor in
-                    self?.updateTasks(tasks)
-                }
+            .sink { [weak self] session in self?.bindUpdates(to: session) }
+            .store(in: &cancellables)
+
+        Notifications[.didChangeServerConnection]
+            .publisher
+            .sink { [weak self] _ in
+                self?.bindUpdates(to: Container.shared.userSessionManager().currentSession)
             }
             .store(in: &cancellables)
+    }
+
+    private func bindUpdates(to session: UserSession?) {
+        guard let session else {
+            taskUpdates.cancel()
+            tasks = [:]
+            return
+        }
+        let client = session.client
+        let manager = Container.shared.userSessionManager()
+        let changed = taskUpdates.replace(
+            scope: [ObjectIdentifier(session), ObjectIdentifier(client)],
+            makePublisher: { session.serverSocketManager.scheduledTasks(interval: .seconds(2)) },
+            isCurrent: { [weak session, weak client, weak manager] in
+                guard let session, let client, let manager else { return false }
+                return manager.currentSession === session && session.client === client
+            },
+            receive: { [weak self] values in self?.updateTasks(values) }
+        )
+        if changed {
+            tasks = [:]
+        }
     }
 
     private func updateTasks(_ updatedTasks: [TaskInfo]) {

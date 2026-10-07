@@ -71,18 +71,44 @@ final class ActiveSessionsViewModel: ViewModel {
     @Published
     private(set) var sessions: OrderedDictionary<String, SessionViewModel> = [:]
 
+    private let sessionUpdates = ScopedPublisher<[ObjectIdentifier], [SessionInfoDto]>()
+
     override init() {
         super.init()
 
-        userSession?
-            .serverSocketManager
-            .sessions()
-            .sink { [weak self] sessions in
-                Task { @MainActor in
-                    self?.updateSessions(sessions)
-                }
+        Container.shared.userSessionManager()
+            .$currentSession
+            .sink { [weak self] session in self?.bindUpdates(to: session) }
+            .store(in: &cancellables)
+
+        Notifications[.didChangeServerConnection]
+            .publisher
+            .sink { [weak self] _ in
+                self?.bindUpdates(to: Container.shared.userSessionManager().currentSession)
             }
             .store(in: &cancellables)
+    }
+
+    private func bindUpdates(to session: UserSession?) {
+        guard let session else {
+            sessionUpdates.cancel()
+            sessions = [:]
+            return
+        }
+        let client = session.client
+        let manager = Container.shared.userSessionManager()
+        let changed = sessionUpdates.replace(
+            scope: [ObjectIdentifier(session), ObjectIdentifier(client)],
+            makePublisher: { session.serverSocketManager.sessions() },
+            isCurrent: { [weak session, weak client, weak manager] in
+                guard let session, let client, let manager else { return false }
+                return manager.currentSession === session && session.client === client
+            },
+            receive: { [weak self] values in self?.updateSessions(values) }
+        )
+        if changed {
+            sessions = [:]
+        }
     }
 
     @Function(\Action.Cases.refresh)

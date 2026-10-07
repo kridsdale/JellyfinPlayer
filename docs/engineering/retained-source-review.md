@@ -1,6 +1,6 @@
 # Retained application responsibility review
 
-The application is intended to retain composition and platform presentation. This is a source-reviewed ledger, not an automatic approval of files based on their folder, filename or import count. The full-client refactor remains active. Live simulator/server activity is held by the human. Current ledger: 255 retained, three mixed and 408 pending among 666 app files; twenty-one scoped interface reviews.
+The application is intended to retain composition and platform presentation. This is a source-reviewed ledger, not an automatic approval of files based on their folder, filename or import count. The full-client refactor remains active. Live simulator/server activity is held by the human. Current ledger: 258 retained and 408 pending among 666 app files; twenty-three scoped interface reviews.
 
 ## Reviewed boundaries at the date/program checkpoint
 
@@ -146,3 +146,9 @@ The prior nine mixed entries are resolved into existing owners. The app blurhash
 All twelve administrative view-model bodies were read, totaling 1,186 lines. Nine are retained main-actor screen/action/observer composition with specific reasons in the ledger. APIKeysViewModel remains mixed because replacement revoke/create/reload sequencing and intermediate partial-failure UI ordering still live in the app. ActiveSessionsViewModel queues socket receipts without an explicit account generation; ServerTasksViewModel also drops nil session roots with compactMap and queues updates without such a guard. Native upstream retirement alone does not prove queued stale receipts rejected. These three need owned sequencing/lease contracts and scoped integration before completion.
 
 The authoritative hashed ledger records 255 retained, three mixed and 408 pending among 666 app Swift files, plus twenty-one scoped interface/consumer reviews. Native53, compile-only121/47/66 and preservation402 pass; source review does not substitute for held GUI, socket/account switching, native callbacks, sharing cleanup or playback acceptance. The original goal remains active.
+
+## Account-scoped administrative screens (2026-10-07, offline)
+
+The three previously mixed complete bodies now retain presentation/composition. APIKeysViewModel delegates compound creation and replacement to ServerOperationsClient, retaining its missing-field error, local revoked-row removal, nil-list behavior and success event. All other command bodies remain unchanged. ActiveSessionsViewModel and ServerTasksViewModel supply emitted account roots and captured transport identity to ScopedPublisher, along with weak current-binding and UI receipts. The emitted value is used because @Published publishes before setting currentSession. Logout explicitly cancels; changed account/connection clears old rows. Pause/filter, ordered observers, category sorting and existing refresh/command bodies are unchanged.
+
+ScopedPublisher privately owns source cancellation, queued generations, executor entry and reentrant retirement. It has no SDK, account/container or settings dependency. Twelve native contracts verify lifetime and ordering, including foreign Combine emission. Ten key-operation contracts verify exact routes/methods/name, sorting, nil results, partial failures and cancellation/expired-account boundaries. The original nil-root subscription defect has separate failing reproduction evidence. The ledger records 258 retained/408 pending and 23 scoped API reviews; this does not approve the pending files or establish actual socket/GUI acceptance. Live testing remains held.

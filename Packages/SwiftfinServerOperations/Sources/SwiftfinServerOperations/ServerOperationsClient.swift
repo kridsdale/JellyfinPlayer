@@ -47,8 +47,26 @@ public final class ServerOperationsClient {
         try await executor.complete(Paths.createKey(app: name))
     }
 
+    /// A creation and its refreshed list use the same captured account binding.
+    public func createKeyAndReload(name: String) async throws -> [AuthenticationInfo]? {
+        try await createKey(name: name)
+        return try await keys()
+    }
+
     public func revokeKey(token: String) async throws {
         try await executor.complete(Paths.revokeKey(key: token))
+    }
+
+    /// Revocation is acknowledged before the UI removes its old row. Later
+    /// failures retain that acknowledgement, and every step uses one binding.
+    public func replaceKey(
+        name: String,
+        token: String,
+        didRevoke: @MainActor () -> Void
+    ) async throws -> [AuthenticationInfo]? {
+        try await revokeKey(token: token)
+        didRevoke()
+        return try await createKeyAndReload(name: name)
     }
 
     public func devices() async throws -> [DeviceInfoDto]? {
