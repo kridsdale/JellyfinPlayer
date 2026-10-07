@@ -83,6 +83,13 @@ final class UserSessionManager: ObservableObject {
 
     let logger = Logger.swiftfin()
 
+    private struct MetadataRefreshID: Hashable, Sendable {
+        let serverID: String
+        let userID: String
+        let url: URL
+    }
+
+    private let metadataRefresh = SessionMetadataRefresh<MetadataRefreshID>()
     private let playerSelection = UIObjectSelection<MediaPlayerManager>()
     var mediaPlayerManager: MediaPlayerManager? {
         playerSelection.current
@@ -134,15 +141,18 @@ final class UserSessionManager: ObservableObject {
     @MainActor
     func signIn(userID: String) async throws {
         Defaults[.lastSignedInUserID] = .signedIn(userID: userID)
-        try await updateCurrentSession(with: resolveStoredSession())
-
-        Task {
-            await refreshServerInformationIfNeeded(reason: .explicitSignIn)
+        let session = try resolveStoredSession()
+        await updateCurrentSession(with: session)
+        try Task.checkCancellation()
+        guard currentSession === session else { throw CancellationError() }
+        if let session {
+            refreshServerInformationIfNeeded(reason: .explicitSignIn, session: session)
         }
     }
 
     @MainActor
     func signOut(reason: SignOutReason) async {
+        metadataRefresh.cancel()
         guard currentSession != nil else { return }
 
         Defaults[.lastSignedInUserID] = .signedOut
@@ -219,8 +229,8 @@ final class UserSessionManager: ObservableObject {
     func appWillEnterForeground() async {
         await refreshCurrentSession()
 
-        Task {
-            await refreshServerInformationIfNeeded(reason: .stale)
+        if let session = currentSession {
+            refreshServerInformationIfNeeded(reason: .stale, session: session)
         }
 
         guard currentSession != nil else { return }
@@ -269,27 +279,34 @@ final class UserSessionManager: ObservableObject {
     }
 
     @MainActor
-    private func refreshServerInformationIfNeeded(reason: ServerInformationRefreshReason) async {
-        guard let currentSession else { return }
-
-        switch reason {
-        case .explicitSignIn:
-            break
-        case .stale:
-            guard Defaults[.lastServerInformationRefreshDate].isStale(with: .hours(24)) else { return }
-        }
-
-        do {
-            try await currentSession.server.updateServerInfo()
-            try await currentSession.user.updateUserData(server: currentSession.server)
-
-            Defaults[.lastServerInformationRefreshDate] = Date.now
-        } catch {
-            logger.error(
-                "Unable to refresh server and user information",
-                metadata: ["error": .string(error.localizedDescription)]
-            )
-        }
+    private func refreshServerInformationIfNeeded(reason: ServerInformationRefreshReason, session: UserSession) {
+        let client = session.client
+        let server = session.server
+        let user = session.user
+        let scope = MetadataRefreshID(serverID: server.id, userID: user.id, url: client.configuration.url)
+        metadataRefresh.request(
+            scope: scope,
+            force: reason == .explicitSignIn,
+            isCurrent: { [weak self, weak session, weak client] in
+                guard let self, let session, let client else { return false }
+                return currentSession === session && session.client === client
+            },
+            operation: { checkpoint in
+                try await server.updateServerInfo(validate: checkpoint)
+                try checkpoint()
+                try await user.updateUserData(server: server, validate: checkpoint)
+            },
+            didRefresh: { date in
+                // Preserve the installed legacy stamp; scheduling uses scoped freshness.
+                Defaults[.lastServerInformationRefreshDate] = date
+            },
+            didFail: { [weak self] error in
+                self?.logger.error(
+                    "Unable to refresh server and user information",
+                    metadata: ["error": .string(error.localizedDescription)]
+                )
+            }
+        )
     }
 
     private func setupObservations() {
@@ -320,6 +337,7 @@ final class UserSessionManager: ObservableObject {
 
     private lazy var sessionCoordinator = ActiveSessionCoordinator<UserSession> { [weak self] session, identityChanged in
         guard let self else { return }
+        metadataRefresh.cancel()
         currentSession = session
         Container.shared.currentUserSession.reset()
         if identityChanged {
@@ -331,6 +349,7 @@ final class UserSessionManager: ObservableObject {
 
     @MainActor
     private func updateCurrentSession(with newSession: UserSession?) async {
+        metadataRefresh.cancel()
         await sessionCoordinator.replace(with: newSession)
     }
 

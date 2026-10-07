@@ -63,7 +63,7 @@ POLICIES = {
     "SwiftfinCollections": ({}, {"Foundation", "OrderedCollections"}),
     "SwiftfinPlaybackProfiles": ({"SwiftfinCollections"}, {"Foundation", "JellyfinAPI"}),
     "SwiftfinImages": ({}, {"Foundation", "Nuke", "CryptoKit", "os"}),
-    "SwiftfinSessions": ({}, {"Foundation"}),
+    "SwiftfinSessions": ({"SwiftfinAsyncStreams"}, {"Foundation"}),
     "SwiftfinNetworking": ({}, {"Foundation", "Get", "JellyfinAPI"}),
     "SwiftfinAsyncStreams": ({}, {"Foundation", "Combine", "os"}),
     "SwiftfinConnections": ({"SwiftfinAccountModels"}, {"Foundation"}),

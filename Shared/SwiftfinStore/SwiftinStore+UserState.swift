@@ -99,10 +99,12 @@ extension UserState {
     }
 
     @MainActor
-    func updateUserData(server: ServerState) async throws {
+    func updateUserData(server: ServerState, validate: @MainActor @Sendable () throws -> Void = {}) async throws {
+        try validate()
         let access = accountAccess(server: server)
         let userData = try await access.currentUser(expectedUserID: id)
         try access.checkBinding()
+        try validate()
         try Container.shared.localAccountStore().updateUserMetadata(userID: id, serverID: server.id, data: userData)
     }
 

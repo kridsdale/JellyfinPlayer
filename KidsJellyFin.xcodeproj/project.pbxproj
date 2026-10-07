@@ -294,6 +294,8 @@
 		3302B766D8710E604EED1315 /* Packages/SwiftfinUIState/Tests/SwiftfinUIStateTests/UIObjectSelectionContracts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 774065EDAE7C8A4A5294FC5B /* Packages/SwiftfinUIState/Tests/SwiftfinUIStateTests/UIObjectSelectionContracts.swift */; };
 		31298D52DB921D1210C6441B /* Packages/SwiftfinAccountStore/Tests/SwiftfinAccountStoreTests/AccountMetadataContracts.swift in Sources */ = {isa = PBXBuildFile; fileRef = B18A3CF523D844894F026A8A /* Packages/SwiftfinAccountStore/Tests/SwiftfinAccountStoreTests/AccountMetadataContracts.swift */; };
 		751C2100B67F5179EFB22230 /* SwiftfinAccountStore in Frameworks */ = {isa = PBXBuildFile; productRef = 9FB1D70736E18D99CC796DC9 /* SwiftfinAccountStore */; };
+		BA7E4868E9665A343AADFE7A /* Packages/SwiftfinSessions/Tests/SwiftfinSessionsTests/SessionMetadataRefreshContracts.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECA6EBB61C613049B02C41DB /* Packages/SwiftfinSessions/Tests/SwiftfinSessionsTests/SessionMetadataRefreshContracts.swift */; };
+		78175867F93C7EFE667B43E3 /* SwiftfinSessions in Frameworks */ = {isa = PBXBuildFile; productRef = E232BDED1C5CD65386196349 /* SwiftfinSessions */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -415,6 +417,7 @@
 		7011DDA1E828C2914C565701 /* Packages/SwiftfinNetworking/Tests/SwiftfinNetworkingTests/RequestBodyRedactionContracts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Packages/SwiftfinNetworking/Tests/SwiftfinNetworkingTests/RequestBodyRedactionContracts.swift; sourceTree = SOURCE_ROOT; };
 		774065EDAE7C8A4A5294FC5B /* Packages/SwiftfinUIState/Tests/SwiftfinUIStateTests/UIObjectSelectionContracts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Packages/SwiftfinUIState/Tests/SwiftfinUIStateTests/UIObjectSelectionContracts.swift; sourceTree = SOURCE_ROOT; };
 		B18A3CF523D844894F026A8A /* Packages/SwiftfinAccountStore/Tests/SwiftfinAccountStoreTests/AccountMetadataContracts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Packages/SwiftfinAccountStore/Tests/SwiftfinAccountStoreTests/AccountMetadataContracts.swift; sourceTree = SOURCE_ROOT; };
+		ECA6EBB61C613049B02C41DB /* Packages/SwiftfinSessions/Tests/SwiftfinSessionsTests/SessionMetadataRefreshContracts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Packages/SwiftfinSessions/Tests/SwiftfinSessionsTests/SessionMetadataRefreshContracts.swift; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -705,6 +708,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A958ECBFF86DDC354534BF9C /* SwiftfinUIState in Frameworks */,
+				78175867F93C7EFE667B43E3 /* SwiftfinSessions in Frameworks */,
 				751C2100B67F5179EFB22230 /* SwiftfinAccountStore in Frameworks */,
 				2C2A54F9A60D32DB50AEF5E1 /* SwiftfinPermissions in Frameworks */,
 				3C41CB85E45C4E2E602771A6 /* SwiftfinImageProcessing in Frameworks */,
@@ -765,6 +769,7 @@
 				91E50DA2DBFE11433CA5B297 /* Packages/SwiftfinAccountAccess/Tests/SwiftfinAccountAccessTests/LocalAccessPolicyContracts.swift */,
 				0D398FB4A311E02B078B7F6C /* Packages/SwiftfinNativePlayback/Tests/SwiftfinNativePlaybackTests/HardwareReaderContracts.swift */,
 				E48C3FE91DA20460FB967687 /* Packages/SwiftfinImageProcessing/Tests/SwiftfinImageProcessingTests/SVGRenderStateContracts.swift */,
+				ECA6EBB61C613049B02C41DB /* Packages/SwiftfinSessions/Tests/SwiftfinSessionsTests/SessionMetadataRefreshContracts.swift */,
 				B18A3CF523D844894F026A8A /* Packages/SwiftfinAccountStore/Tests/SwiftfinAccountStoreTests/AccountMetadataContracts.swift */,
 				774065EDAE7C8A4A5294FC5B /* Packages/SwiftfinUIState/Tests/SwiftfinUIStateTests/UIObjectSelectionContracts.swift */,
 				7011DDA1E828C2914C565701 /* Packages/SwiftfinNetworking/Tests/SwiftfinNetworkingTests/RequestBodyRedactionContracts.swift */,
@@ -1134,6 +1139,7 @@
 			name = KidsUITests;
 			packageProductDependencies = (
 				ACD5D2AE6007E64B13128421 /* SwiftfinUIState */,
+				E232BDED1C5CD65386196349 /* SwiftfinSessions */,
 				9FB1D70736E18D99CC796DC9 /* SwiftfinAccountStore */,
 				8DBD184AC84412E1AB85DFBD /* SwiftfinPermissions */,
 				2DEBB5E5F9986330C3E97B32 /* SwiftfinImageProcessing */,
@@ -1549,6 +1555,7 @@
 				FA3FDEE8F4465249CADCA3B6 /* Packages/SwiftfinAccountAccess/Tests/SwiftfinAccountAccessTests/LocalAccessPolicyContracts.swift in Sources */,
 				F592A228D472773A384D26B6 /* Packages/SwiftfinNativePlayback/Tests/SwiftfinNativePlaybackTests/HardwareReaderContracts.swift in Sources */,
 				95F5CDA646C98074444086D4 /* Packages/SwiftfinImageProcessing/Tests/SwiftfinImageProcessingTests/SVGRenderStateContracts.swift in Sources */,
+				BA7E4868E9665A343AADFE7A /* Packages/SwiftfinSessions/Tests/SwiftfinSessionsTests/SessionMetadataRefreshContracts.swift in Sources */,
 				31298D52DB921D1210C6441B /* Packages/SwiftfinAccountStore/Tests/SwiftfinAccountStoreTests/AccountMetadataContracts.swift in Sources */,
 				3302B766D8710E604EED1315 /* Packages/SwiftfinUIState/Tests/SwiftfinUIStateTests/UIObjectSelectionContracts.swift in Sources */,
 				87BAD62D16FCCFB5BA93CB45 /* Packages/SwiftfinNetworking/Tests/SwiftfinNetworkingTests/RequestBodyRedactionContracts.swift in Sources */,
@@ -2927,6 +2934,7 @@
 			productName = SwiftfinStoredValues;
 		};
 		9FB1D70736E18D99CC796DC9 /* SwiftfinAccountStore */ = {isa = XCSwiftPackageProductDependency; package = DA8559318BE0E97308E68DB1 /* XCLocalSwiftPackageReference "Packages/SwiftfinAccountStore" */; productName = SwiftfinAccountStore; };
+		E232BDED1C5CD65386196349 /* SwiftfinSessions */ = {isa = XCSwiftPackageProductDependency; package = DA87EA2E6E1125F208E61607 /* XCLocalSwiftPackageReference "Packages/SwiftfinSessions" */; productName = SwiftfinSessions; };
 /* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 5377CBE9263B596A003A4E83 /* Project object */;

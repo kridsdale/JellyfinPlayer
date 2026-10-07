@@ -1639,11 +1639,13 @@
       "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinCollections"
+      ],
       "path": "Shared/Objects/ContentGroup/PillGroup.swift",
-      "reason": "",
+      "reason": "Retains supplied labels, buttons, router action, horizontal layout, platform sizes and accessibility presentation. It does not implement catalog/transport/queue policy.",
       "sha256": "8e8afdc73c962aac7e6149f9da9cac05e60fe4a91e632b3a67e2b0f2c9bebf94",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -2325,11 +2327,13 @@
       "status": "pending"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinUIState"
+      ],
       "path": "Shared/Objects/MediaPlayerManager/Supplements/Components/MediaPlayerQueue.swift",
-      "reason": "",
+      "reason": "Retains main-actor application queue/presentation protocol and type erasure, weak manager and current-value Combine projections. Adjacency, item preparation/order and native player implementation are outside this port; actual callbacks remain held.",
       "sha256": "5b96be16a85675cb320d13dfc45080681bd5ed8c0420a404a2324f0a956657ae",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -2810,11 +2814,14 @@
       "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinCollections",
+        "SwiftfinMacros"
+      ],
       "path": "Shared/Objects/WithViewContext.swift",
-      "reason": "",
+      "reason": "Retains application SwiftUI context option set, environment/property wrapper and insertion/removal modifiers. The context describes presentation only; collection operations and macro implementation stay owned.",
       "sha256": "cc6ca406b8519ad949348543724003c0f96ede0537649dd979a2ec5f7abccc63",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [
@@ -2981,8 +2988,8 @@
         "SwiftfinAsyncStreams"
       ],
       "path": "Shared/Services/UserSession/UserSessionManager.swift",
-      "reason": "Complete updated body reviewed. Player publication now synchronously composes UIObjectSelection with source-tagged retirement; stopActivePlayback cannot clear a newer manager, and account identity change explicitly clears selection. App preference/auth-prompt/navigation choices remain composition. Still unresolved: deep-link authentication and sign-in/foreground refresh across awaits need request-generation/account identity audit; the shared global freshness timestamp may suppress a different account's refresh. These outstanding operation scopes prevent whole-body retention.",
-      "sha256": "cc9d1711436a782d53138b5b44174fd26c3244ddbd4181e53f16607227bb79cf",
+      "reason": "Mixed: scoped metadata freshness/lifetime now delegates to SessionMetadataRefresh with exact weak session/transport identity and explicit pre-commit checkpoints; captured sign-in scheduling replaces delayed current-account selection. Selection and bound SDK socket/metadata operations delegate. Deep-link authentication, sign-in/sign-out and foreground inter-await intent sequencing still require a higher-level operation audit; this entry does not approve them.",
+      "sha256": "5c610929741562f88510bb8a29d5ded1db1a5245a2f43e4cb67ebb6c6722b7aa",
       "status": "source-reviewed-mixed"
     },
     {
@@ -3020,8 +3027,8 @@
         "SwiftfinAccountAccess"
       ],
       "path": "Shared/SwiftfinStore/SwiftfinStore+ServerState.swift",
-      "reason": "Complete body reviewed: connection/account settings and metadata-cache commits delegate to AccountStore; public-info/URLs use captured AccountAccess and recheck binding immediately before synchronous local metadata merge. SDK version comparison, splash presentation and Factory composition remain app adapters. Installed publicInfo address/defaults format and record-before-cache ordering are preserved. No live transport acceptance is claimed.",
-      "sha256": "d34b25e043290fbee6c07c17e7eb169f0d2eae1b0b25ec2333810ab5e960f5fd",
+      "reason": "Complete body reviewed: connection/account settings and metadata-cache commits delegate to AccountStore; public-info/URLs use captured AccountAccess and recheck binding immediately before synchronous local metadata merge. SDK version comparison, splash presentation and Factory composition remain app adapters. Installed publicInfo address/defaults format and record-before-cache ordering are preserved. No live transport acceptance is claimed. Refresh now accepts an explicit main-actor Sendable validation checkpoint before the read and after captured binding verification immediately before local metadata commit.",
+      "sha256": "5cae5866e06906dc328081550e8a1326a0996b430e4d16b60692e5bc8c17ce98",
       "status": "source-reviewed-retained"
     },
     {
@@ -3030,8 +3037,8 @@
         "SwiftfinAccountAccess"
       ],
       "path": "Shared/SwiftfinStore/SwiftinStore+UserState.swift",
-      "reason": "Complete body reviewed: credential/PIN/policy/delete and metadata commits delegate to AccountStore. Captured URL/token AccountAccess is now shared by the fetch and explicitly rechecked after await before synchronous commit; mismatched DTO/current-record server IDs are rejected by the store. Current-user settings/profile-image composition remains in the app. No real credential/store/server access occurred.",
-      "sha256": "f1b0b5f55504457fabff9e609feb38bca5d7e8a969ef6a75fa7983fa854c0283",
+      "reason": "Complete body reviewed: credential/PIN/policy/delete and metadata commits delegate to AccountStore. Captured URL/token AccountAccess is now shared by the fetch and explicitly rechecked after await before synchronous commit; mismatched DTO/current-record server IDs are rejected by the store. Current-user settings/profile-image composition remains in the app. No real credential/store/server access occurred. Refresh now accepts an explicit main-actor Sendable validation checkpoint before the read and after captured binding verification immediately before local metadata commit.",
+      "sha256": "98ed2f9c54e108a8f52704624fbcae170f34b66333e84ead12d0b3493be453d9",
       "status": "source-reviewed-retained"
     },
     {
@@ -3148,11 +3155,13 @@
       "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinAsyncStreams"
+      ],
       "path": "Shared/ViewModels/BaseFetchViewModel.swift",
-      "reason": "",
+      "reason": "Mixed: generic Stateful refresh assigns value directly after awaiting its overridable reader. The explicit cancellation/publication relevance contract still needs macro/action lifecycle review or an owned guard. No concrete stale-result defect is claimed from this source inspection alone.",
       "sha256": "38c3bfae59b08b63ee7a2d2ea336f5e56350867a4c360d180138ba427c413455",
-      "status": "pending"
+      "status": "source-reviewed-mixed"
     },
     {
       "owners": [],
@@ -3169,18 +3178,23 @@
       "status": "pending"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinMediaCatalog"
+      ],
       "path": "Shared/ViewModels/ContentGroupViewModel/DefaultContentGroupProvider.swift",
-      "reason": "",
+      "reason": "Retains application home layout choices from platform/settings: resume/next-up/recent/recommended/latest groups. Captures catalog/exclusions, awaits homeViews and checks binding before constructing groups; query and membership policies remain owned.",
       "sha256": "10337cc1803b7ca708bc69c7797fe042f71c445b948a67da98036c05640973c2",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinMediaCatalog",
+        "SwiftfinFilters"
+      ],
       "path": "Shared/ViewModels/ContentGroupViewModel/ItemTypeContentGroupProvider.swift",
-      "reason": "",
+      "reason": "Retains parent/title/poster/library presentation composition for selected filters. Item-type grouping delegates to MediaCatalogPolicy; no transport or membership algorithm remains.",
       "sha256": "c4fb50e0a7a6cd55c09c96610636a94e06552dc12b184ee5ef4d5138f048c9f3",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -3190,11 +3204,14 @@
       "status": "pending"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinFilters",
+        "SwiftfinMediaCatalog"
+      ],
       "path": "Shared/ViewModels/ContentGroupViewModel/SearchContentGroupProvider.swift",
-      "reason": "",
+      "reason": "Retains selected filters and platform group/title/type/people browser composition. It delegates catalog queries and grouping policy through supplied library models and ItemType provider.",
       "sha256": "77748c8c9fda8495ac0ed50d6c1923200347817dcb121fb2d12922328cc787bb",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -3204,11 +3221,13 @@
       "status": "pending"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinFilters"
+      ],
       "path": "Shared/ViewModels/FilterViewModel.swift",
-      "reason": "",
+      "reason": "Retains static/current UI selection and reset. Captures the query-filter owner and parent/types, awaits modern then legacy results, and checks binding before each ordered UI merge. Query/decoding policy stays owned.",
       "sha256": "2609fea6056813dfd2e0b0492fd9943b6f80ebbc5ea80875193b6d1e1b8c0b74",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -3218,32 +3237,43 @@
       "status": "pending"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinUserAdministration",
+        "SwiftfinImages",
+        "SwiftfinImageProcessing"
+      ],
       "path": "Shared/ViewModels/ImageViewModel/UserImageViewModel.swift",
-      "reason": "",
+      "reason": "Retains selected-user Stateful presentation, existing UIImage encoding adapter and three application avatar sizes. Captured administration owner uploads/deletes; image pipeline owns cache removal, with account/user checks before and after cleanup and before notification. Platform eviction/GUI acceptance remains held.",
       "sha256": "7cdbc9a429ee506e9fa38a31ab1764dd5ed3244ff62e125bc6bacc95c82806cf",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinAsyncStreams",
+        "SwiftfinItemMetadata"
+      ],
       "path": "Shared/ViewModels/ItemAdministration/IdentifyItemViewModel.swift",
-      "reason": "",
+      "reason": "Mixed: debounced query/action composition publishes awaited identity results directly. Query generation, queued cancellation/result relevance and apply/reload/event sequencing need explicit owned contracts and macro review. Source inspection alone does not prove a concrete runtime defect.",
       "sha256": "f20dfeb76baa3b0372d1ba127d9e4eaab723c4a949c73079bb5a6c384d789ee2",
-      "status": "pending"
+      "status": "source-reviewed-mixed"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinItemMetadata"
+      ],
       "path": "Shared/ViewModels/ItemAdministration/ItemEditorViewModel/GenreComponentEditor.swift",
-      "reason": "",
+      "reason": "Retains genre labels, input/name projections and editor conformance; append/remove/replace and matching reads delegate to ItemMetadataPolicy/Client.",
       "sha256": "878f08ba703c3e17a60c4f922d1f16b3defd5c3e2fb88ffc27d52c3ba03693a8",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinItemMetadata"
+      ],
       "path": "Shared/ViewModels/ItemAdministration/ItemEditorViewModel/ItemComponentEditor.swift",
-      "reason": "",
+      "reason": "Retains main-actor presentation/editor port and UI input fields. Name matching delegates to MetadataPolicy; nil identity and empty didAdd remain specialization defaults, without transport implementation.",
       "sha256": "6a6e2ba7efaceca69327939b70125b1818b9f6bda361d8e931f0abd347c0a9a9",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -3260,25 +3290,31 @@
       "status": "pending"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinItemMetadata"
+      ],
       "path": "Shared/ViewModels/ItemAdministration/ItemEditorViewModel/PeopleComponentEditor.swift",
-      "reason": "",
+      "reason": "Retains localized labels and optional ID/name projections. Person construction, mutations and search delegate to MetadataPolicy/Client; no account or transport implementation remains.",
       "sha256": "66ab34fcc3c0a3d388ac9523611182947401f39cfae6df78169551dc3ad9c98d",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinItemMetadata"
+      ],
       "path": "Shared/ViewModels/ItemAdministration/ItemEditorViewModel/StudioComponentEditor.swift",
-      "reason": "",
+      "reason": "Retains localized labels, optional ID/name mapping and simple input DTO construction; mutation and search policy belong to MetadataPolicy/Client.",
       "sha256": "8547e865edce08c665275311fddd17d74a177cfa9e027ac129b2c1bcf4f94cd0",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinItemMetadata"
+      ],
       "path": "Shared/ViewModels/ItemAdministration/ItemEditorViewModel/TagComponentEditor.swift",
-      "reason": "",
+      "reason": "Retains labels and input mapping while composing MetadataTagSearchStore. Tag mutation/search/add delegate; existing advisory try? add failure remains unchanged.",
       "sha256": "78dc036a7bc95c4893c469ddbb96c382f62c5bf47ed530d0528745461acdfd71",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -3288,25 +3324,32 @@
       "status": "pending"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinImages",
+        "SwiftfinMediaCatalog"
+      ],
       "path": "Shared/ViewModels/ItemAdministration/RemoteImageInfoViewModel.swift",
-      "reason": "",
+      "reason": "Retains main-actor screen composition of the supplied remote image and provider paging models; refresh forwards to both. No query, transport or pagination implementation is present.",
       "sha256": "8d4826ed7c14fa0a9650f1a6d88c1f2ce8d48dcdfef0a14144f8e558493ab20e",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinAccountStore"
+      ],
       "path": "Shared/ViewModels/LocalUserSecurityViewModel.swift",
-      "reason": "",
+      "reason": "Mixed: directly reads and compares the local PIN and sequences credential write/removal before policy and hint writes. Coherent local-security validation/settings sequencing must move to AccountStore while preserving missing-PIN acceptance for old-PIN verification, credential-first partial failure and app-localized errors.",
       "sha256": "72337e80dae10242fdb8da5bf34f1001d9dfe2229fcaaeeb5666a4e47d22fcbf",
-      "status": "pending"
+      "status": "source-reviewed-mixed"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinAccountAccess"
+      ],
       "path": "Shared/ViewModels/QuickConnectAuthorizeViewModel.swift",
-      "reason": "",
+      "reason": "Retains Stateful UI transitions, missing user-ID/localized error and Boolean authorization result handling. Captured AccountAccess performs authorization and rechecks binding before the UI event.",
       "sha256": "45723a693cd3c607960521664a18dfe427884ec1bc6c8b9f18fcfbf911860a95",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -3316,11 +3359,13 @@
       "status": "pending"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinAccountAccess"
+      ],
       "path": "Shared/ViewModels/ResetUserPasswordViewModel.swift",
-      "reason": "",
+      "reason": "Retains Stateful presentation transitions and success event. Captures AccountAccess, awaits reset and checks its binding before publication; request construction/authentication live in the owner.",
       "sha256": "353cba96e624b629e32ddd352b2f0417de6bc5974d314d74884b3b4b420ea93e",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -3330,11 +3375,13 @@
       "status": "pending"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinAccountStore"
+      ],
       "path": "Shared/ViewModels/SelectUserViewModel.swift",
-      "reason": "",
+      "reason": "Mixed: retains app account grouping/sorting and owner deletion, but local PIN read/comparison duplicates admission policy before signedIn publication. Move coherent PIN validation to AccountStore, preserving missing-PIN denial, read errors and localized UI text.",
       "sha256": "cf6bc8e80c07727dfebd780983804065ee473876e99e9ebf3f319a514f1bbf8c",
-      "status": "pending"
+      "status": "source-reviewed-mixed"
     },
     {
       "owners": [],
@@ -5378,19 +5425,36 @@
         "updateUserMetadata(userID:serverID:data:)"
       ],
       "sha256": "e25dbdc4701281dfa8db6d0ab19a17921b9044d3ab131cddc32e97eb29434921"
+    },
+    {
+      "path": "Packages/SwiftfinSessions/Sources/SwiftfinSessions/SessionMetadataRefresh.swift",
+      "sha256": "cebadfb475bb9ddad2ab14ef8d1b8d7655601d8160e76b196d2e5e50a74094c8",
+      "reviewedInterfaces": [
+        "SessionMetadataRefresh.init(maximumAge:capacity:now:)",
+        "SessionMetadataRefresh.request(scope:force:isCurrent:operation:didRefresh:didFail:)",
+        "SessionMetadataRefresh.Checkpoint",
+        "SessionMetadataRefresh.cancel()",
+        "isolated deinit"
+      ],
+      "reviewedConsumers": [
+        "Shared/Services/UserSession/UserSessionManager.swift",
+        "Shared/SwiftfinStore/SwiftfinStore+ServerState.swift",
+        "Shared/SwiftfinStore/SwiftinStore+UserState.swift"
+      ],
+      "reason": "Bounded process-local freshness keyed by immutable account/binding IDs, main-actor Sendable clock/currentness/checkpoint/operation/receipts, one private LatestRequest and weak owner lifetime. Cancellation/replacement/coalescing/reentry reject obsolete effects only when operations checkpoint before commits; no transaction/undo or public task handles. Fourteen synthetic contracts include separately reproduced expiry/coalescing failures. Adds the one-way Sessions to AsyncStreams edge without native resource/SDK/credential/global dependencies. Full session intent sequencing remains outside this API."
     }
   ],
   "limits": "This ledger records bodies explicitly reviewed, with exact current hashes; earlier prose or lexical inventory is not automatically promoted. Pending and mixed entries prevent whole-source completion. Retained UI algorithms have specific presentation reasons, not folder/import-based blanket approval. API entries do not classify the rest of the public graph. Source review and offline tests do not satisfy held runtime acceptance.",
   "schemaVersion": 1,
-  "scope": "All current app Swift files; complete-body classifications and twenty-six scoped interface/internal lifecycle/consumer reviews. No simulator/server testing.",
+  "scope": "All current app Swift files; complete-body classifications and scoped public/internal lifecycle/consumer reviews. No simulator/server testing.",
   "summary": {
     "applicationSwiftFiles": 666,
     "classification": {
-      "pending": 348,
-      "source-reviewed-mixed": 2,
-      "source-reviewed-retained": 316
+      "pending": 328,
+      "source-reviewed-mixed": 6,
+      "source-reviewed-retained": 332
     },
-    "currentAPIReviews": 29,
+    "currentAPIReviews": 30,
     "runtimeAcceptance": "held by human; no simulator/server testing"
   }
 }

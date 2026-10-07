@@ -87,10 +87,12 @@ extension ServerState {
     }
 
     @MainActor
-    func updateServerInfo() async throws {
+    func updateServerInfo(validate: @MainActor @Sendable () throws -> Void = {}) async throws {
+        try validate()
         let access = accountAccess
         let publicInfo = try await access.publicInfo().value
         try access.checkBinding()
+        try validate()
         try Container.shared.localAccountStore().updateServerMetadata(serverID: id, info: publicInfo)
     }
 }

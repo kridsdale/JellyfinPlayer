@@ -1,6 +1,6 @@
 # Retained application responsibility review
 
-The application is intended to retain composition and platform presentation. This is a source-reviewed ledger, not an automatic approval of files based on their folder, filename or import count. The full-client refactor remains active. Live simulator/server activity is held by the human. Current ledger: 316 retained, two mixed and 348 pending among 666 app files; twenty-nine scoped interface reviews.
+The application is intended to retain composition and platform presentation. This is a source-reviewed ledger, not an automatic approval of files based on their folder, filename or import count. The full-client refactor remains active. Live simulator/server activity is held by the human. Current ledger:332 retained, six mixed and328 pending among666 app files;30 scoped interface reviews.
 
 ## Reviewed boundaries at the date/program checkpoint
 
@@ -174,3 +174,21 @@ Native sweep **56** passes **831** contracts (**802** Swift Testing and **29** X
 Accepted preservation audit **434** verifies **1,237** frozen inputs, both original forty-revision SDK graphs and clean tracked checkouts, paid-team/signing/persistence configuration, all five protected local files and equal cancellation-restored progress. Simulator cloud transport remains NO. Metadata426's no-write assertion confused registered defaults with persistent data; it now checks persistent domains. Debug124's missing test-runner link was fixed by explicitly linking AccountStore. The import-only boundary expectation was revised to permit storage types while rejecting request APIs. Audit433's method-range selector was corrected. Failed attempts remain recorded.
 
 **Simulator automation, installation, launches, playback and server-facing diagnostics remain stopped until the human explicitly resumes them.** No live acceptance or server account/catalog/configuration/RAID change occurred. The ledger is **316 retained / 2 mixed / 348 pending / 29 scoped API reviews** among666 app sources. Full items1/2 remain active; physical-device/live CloudKit and independently managed server/release gates remain separate.
+
+
+## Further model/provider source review (2026-10-07, offline)
+
+Twenty complete sources were read and individually classified. Sixteen retain editor labels/input projections, supplied paging/group composition, view context/pill presentation, the main-actor queue port/type erasure and bound password/Quick Connect/filter/image operations. Four explicit mixed entries remain: LocalUserSecurityViewModel and SelectUserViewModel duplicate local PIN/security sequencing; BaseFetchViewModel needs an explicit post-await publication/macro lifecycle contract; IdentifyItemViewModel needs query generation and apply/reload/event sequencing review. These findings do not establish runtime defects without further evidence. The ledger records exact hashes and reasons for every body.
+
+
+## Scoped session metadata refresh (2026-10-07, offline)
+
+The existing Sessions library now owns SessionMetadataRefresh, using the existing AsyncStreams LatestRequest. This adds one one-way local edge, Sessions to AsyncStreams, and keeps the graph at53 libraries. Success freshness is process-local, bounded and keyed by immutable server/user/URL values; the old unscoped timestamp no longer controls scheduling. The compatibility timestamp is still written after success. Restart resets freshness deliberately, since a historic global stamp cannot identify the account it covered.
+
+The main-actor API coalesces a current scope, supports forced refresh and owns cancellation/replacement/weak lifetime. Sendable clock, currentness and pre-commit checkpoints guard obsolete noncooperating returns and reentrant callbacks. Fourteen synthetic contracts cover strict age/rollback, per-account isolation, capacity, partial failure, owner release, A-B-A, coalescing and cancellation reentry. Already committed effects are not undone; callers must checkpoint immediately before subsequent local effects.
+
+UserSessionManager captures the exact session/transport before scheduling and cancels refresh at session-replacement entry and publication. Server/user adapters validate before their reads and after bound-reader verification immediately before AccountStore commit. Higher-level deep-link/auth/sign-in/foreground intent sequencing remains mixed and unapproved.
+
+Native sweep57 passes845 contracts (816 Swift Testing and29 XCTest), eight generator checks and three runtime helpers. Unchanged macro inputs retain18 passing contracts. All53 library boundaries and35 analyzer tests pass. Compile-only tvOS Debug126, tvOS Release51 and iOS Release70 pass without owned Swift/generated-macro diagnostics. Preservation audit449 verifies1,239 frozen inputs, both original forty-revision SDK graphs and clean tracked checkouts, paid-team/signing/persistence settings, all five protected local files and equal cancellation-restored progress. Debug cloud transport stays NO. The expiry441 and reentrant-coalescing443 failures remain separate evidence covered by passing regressions.
+
+Live simulator automation, installation, launches, playback and server-facing diagnostics remain stopped until explicit human resumption. These checks establish synthetic contracts and compilation, not current GUI/account-switch/playback acceptance. The hashed ledger contains666 app files:332 retained, six mixed and328 pending, plus30 scoped interface/consumer reviews. Full items1/2 remain active; physical-device/live CloudKit and separate server/release gates stay deferred.
