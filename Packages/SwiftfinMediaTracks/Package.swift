@@ -20,7 +20,8 @@ let package = Package(
                 "SwiftfinMediaTracks",
                 .product(name: "JellyfinAPI", package: "jellyfin-sdk-swift"),
                 .product(name: "SwiftfinPlaybackProfiles", package: "SwiftfinPlaybackProfiles")
-            ]
+            ],
+            resources: [.process("Fixtures")]
         )
     ]
 )

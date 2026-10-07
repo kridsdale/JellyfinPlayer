@@ -240,6 +240,10 @@
 		784AC8A8FF6AFB6B01E90E4F /* SwiftfinText in Frameworks */ = {isa = PBXBuildFile; productRef = 10C1FDCADC4525095D1A9E9C /* SwiftfinText */; };
 		D684D5375131BE33B753D0FE /* SwiftfinText in Frameworks */ = {isa = PBXBuildFile; productRef = C69C50DFE46E94EC60F3CD4C /* SwiftfinText */; };
 		14D0F1402BBB0F912BFE3017 /* SwiftfinText in Frameworks */ = {isa = PBXBuildFile; productRef = 285167D352EDB9CCB20D6DA7 /* SwiftfinText */; };
+		08871F7EFE7C1ADC154B6CFB /* SwiftfinMPV in Frameworks */ = {isa = PBXBuildFile; productRef = D870297AB87FD8D3700F5261 /* SwiftfinMPV */; };
+		F57984C16D455B286CD02025 /* SwiftfinMPV in Frameworks */ = {isa = PBXBuildFile; productRef = 142376011BCE7D7D0FCDB0E0 /* SwiftfinMPV */; };
+		3CE6706575AF3851ED4B254B /* SwiftfinMPV in Frameworks */ = {isa = PBXBuildFile; productRef = BD1DCFC9C12AAA76AFFF59BF /* SwiftfinMPV */; };
+		EAFACE31A890F2080C7D45CB /* Packages/SwiftfinMPV/Tests/SwiftfinMPVTests/MPVOwnershipContracts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65DF727592561962027DDB5C /* Packages/SwiftfinMPV/Tests/SwiftfinMPVTests/MPVOwnershipContracts.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -318,6 +322,7 @@
 		28510D4F0B186699FCA83EC2 /* Packages/SwiftfinNativePlayback/Tests/SwiftfinNativePlaybackTests/NativePlaybackOwnershipTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Packages/SwiftfinNativePlayback/Tests/SwiftfinNativePlaybackTests/NativePlaybackOwnershipTests.swift; sourceTree = SOURCE_ROOT; };
 		B259F009BA51116BBCA37584 /* Packages/SwiftfinPlaybackPreviews/Tests/SwiftfinPlaybackPreviewsTests/PreviewImageOwnershipTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Packages/SwiftfinPlaybackPreviews/Tests/SwiftfinPlaybackPreviewsTests/PreviewImageOwnershipTests.swift; sourceTree = SOURCE_ROOT; };
 		8FC51BB19F54274D6C4D12E5 /* Packages/SwiftfinScrolling/Tests/SwiftfinScrollingTests/ScrollOwnershipTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Packages/SwiftfinScrolling/Tests/SwiftfinScrollingTests/ScrollOwnershipTests.swift; sourceTree = SOURCE_ROOT; };
+		65DF727592561962027DDB5C /* Packages/SwiftfinMPV/Tests/SwiftfinMPVTests/MPVOwnershipContracts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Packages/SwiftfinMPV/Tests/SwiftfinMPVTests/MPVOwnershipContracts.swift; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -389,6 +394,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				08871F7EFE7C1ADC154B6CFB /* SwiftfinMPV in Frameworks */,
 				D684D5375131BE33B753D0FE /* SwiftfinText in Frameworks */,
 				9427E0BD770A8A3B71620DCA /* SwiftfinValues in Frameworks */,
 				FA818DD93B0372254A3FE417 /* SwiftfinFormatting in Frameworks */,
@@ -487,6 +493,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F57984C16D455B286CD02025 /* SwiftfinMPV in Frameworks */,
 				14D0F1402BBB0F912BFE3017 /* SwiftfinText in Frameworks */,
 				A7CA1AADF76F1A2CAECAE9FB /* SwiftfinValues in Frameworks */,
 				868B641DFE48408E571882CF /* SwiftfinFormatting in Frameworks */,
@@ -603,6 +610,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3CE6706575AF3851ED4B254B /* SwiftfinMPV in Frameworks */,
 				784AC8A8FF6AFB6B01E90E4F /* SwiftfinText in Frameworks */,
 				52D556368A4EE98A61E9E62E /* SwiftfinValues in Frameworks */,
 				E8B07FBB6A644D88831CE7F5 /* SwiftfinFormatting in Frameworks */,
@@ -642,6 +650,7 @@
 		5377CBE8263B596A003A4E83 = {
 			isa = PBXGroup;
 			children = (
+				65DF727592561962027DDB5C /* Packages/SwiftfinMPV/Tests/SwiftfinMPVTests/MPVOwnershipContracts.swift */,
 				DA720139CB0BFEEF09533532 /* Package ownership tests */,
 				DA84B7BC48E747D776DF2E92 /* KidsNativeTests */,
 				CAFE00000000000000000112 /* KidsUITests */,
@@ -763,6 +772,7 @@
 			);
 			name = "KidsJellyFin tvOS";
 			packageProductDependencies = (
+				D870297AB87FD8D3700F5261 /* SwiftfinMPV */,
 				C69C50DFE46E94EC60F3CD4C /* SwiftfinText */,
 				12AC6B27B7B5880922AF5EC3 /* SwiftfinValues */,
 				7AEF0D63196DBFE5441C8F8C /* SwiftfinFormatting */,
@@ -866,6 +876,7 @@
 			);
 			name = "KidsJellyFin iOS";
 			packageProductDependencies = (
+				142376011BCE7D7D0FCDB0E0 /* SwiftfinMPV */,
 				285167D352EDB9CCB20D6DA7 /* SwiftfinText */,
 				5464F2F8C32AE3E31665C72E /* SwiftfinValues */,
 				DA75D58E356ECCB0D0D58BAD /* SwiftfinFormatting */,
@@ -978,6 +989,7 @@
 			);
 			name = KidsUITests;
 			packageProductDependencies = (
+				BD1DCFC9C12AAA76AFFF59BF /* SwiftfinMPV */,
 				10C1FDCADC4525095D1A9E9C /* SwiftfinText */,
 				97C7ACBC0538EF68A6D6E161 /* SwiftfinValues */,
 				2803661419434D52A6C243C6 /* SwiftfinFormatting */,
@@ -1123,6 +1135,7 @@
 			);
 			mainGroup = 5377CBE8263B596A003A4E83;
 			packageReferences = (
+				64A5CA823973250C3F5A99E8 /* XCLocalSwiftPackageReference "Packages/SwiftfinMPV" */,
 				241C4499C30B5F3968156386 /* XCLocalSwiftPackageReference "Packages/SwiftfinText" */,
 				3E17695B9EE6F43B3562B1ED /* XCLocalSwiftPackageReference "Packages/SwiftfinValues" */,
 				5CD4F122976CF6A8C4DDCDC9 /* XCLocalSwiftPackageReference "Packages/SwiftfinFormatting" */,
@@ -1369,6 +1382,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EAFACE31A890F2080C7D45CB /* Packages/SwiftfinMPV/Tests/SwiftfinMPVTests/MPVOwnershipContracts.swift in Sources */,
 				DA724636470934D4EC40CB32 /* PreferencesView/Tests/PreferencesViewTests/PreferencesOwnershipTests.swift in Sources */,
 				DA72C8525D258A13BEEED0D5 /* Packages/KidsArtworkUI/Tests/KidsArtworkUITests/KidsArtworkBoundaryTests.swift in Sources */,
 				DA7611111111111111111111 /* Packages/SwiftfinNowPlaying/Tests/SwiftfinNowPlayingTests/NowPlayingArtworkOwnershipTests.swift in Sources */,
@@ -1898,6 +1912,7 @@
 		5CD4F122976CF6A8C4DDCDC9 /* XCLocalSwiftPackageReference "Packages/SwiftfinFormatting" */ = {isa = XCLocalSwiftPackageReference; relativePath = Packages/SwiftfinFormatting; };
 		3E17695B9EE6F43B3562B1ED /* XCLocalSwiftPackageReference "Packages/SwiftfinValues" */ = {isa = XCLocalSwiftPackageReference; relativePath = Packages/SwiftfinValues; };
 		241C4499C30B5F3968156386 /* XCLocalSwiftPackageReference "Packages/SwiftfinText" */ = {isa = XCLocalSwiftPackageReference; relativePath = Packages/SwiftfinText; };
+		64A5CA823973250C3F5A99E8 /* XCLocalSwiftPackageReference "Packages/SwiftfinMPV" */ = {isa = XCLocalSwiftPackageReference; relativePath = Packages/SwiftfinMPV; };
 /* End XCLocalSwiftPackageReference section */
 
 /* Begin XCRemoteSwiftPackageReference section */
@@ -2714,6 +2729,9 @@
 		10C1FDCADC4525095D1A9E9C /* SwiftfinText */ = {isa = XCSwiftPackageProductDependency; package = 241C4499C30B5F3968156386 /* XCLocalSwiftPackageReference "Packages/SwiftfinText" */; productName = SwiftfinText; };
 		C69C50DFE46E94EC60F3CD4C /* SwiftfinText */ = {isa = XCSwiftPackageProductDependency; package = 241C4499C30B5F3968156386 /* XCLocalSwiftPackageReference "Packages/SwiftfinText" */; productName = SwiftfinText; };
 		285167D352EDB9CCB20D6DA7 /* SwiftfinText */ = {isa = XCSwiftPackageProductDependency; package = 241C4499C30B5F3968156386 /* XCLocalSwiftPackageReference "Packages/SwiftfinText" */; productName = SwiftfinText; };
+		D870297AB87FD8D3700F5261 /* SwiftfinMPV */ = {isa = XCSwiftPackageProductDependency; package = 64A5CA823973250C3F5A99E8 /* XCLocalSwiftPackageReference "Packages/SwiftfinMPV" */; productName = SwiftfinMPV; };
+		142376011BCE7D7D0FCDB0E0 /* SwiftfinMPV */ = {isa = XCSwiftPackageProductDependency; package = 64A5CA823973250C3F5A99E8 /* XCLocalSwiftPackageReference "Packages/SwiftfinMPV" */; productName = SwiftfinMPV; };
+		BD1DCFC9C12AAA76AFFF59BF /* SwiftfinMPV */ = {isa = XCSwiftPackageProductDependency; package = 64A5CA823973250C3F5A99E8 /* XCLocalSwiftPackageReference "Packages/SwiftfinMPV" */; productName = SwiftfinMPV; };
 /* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 5377CBE9263B596A003A4E83 /* Project object */;

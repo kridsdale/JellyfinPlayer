@@ -142,6 +142,13 @@ class PackageBoundariesTests(unittest.TestCase):
                 self.assertTrue(MODULE.validate_source("SwiftfinText", "import " + module, edges, frameworks))
         self.assertNotIn("SwiftfinText", MODULE.EXTERNAL_POLICIES)
 
+    def test_mpv_owner_cannot_access_application_accounts_settings_or_catalog(self):
+        edges, frameworks = MODULE.POLICIES["SwiftfinMPV"]
+        self.assertEqual(set(edges), set())
+        for module in ["JellyfinAPI", "SwiftfinMediaTracks", "FactoryKit", "Defaults", "CoreStore", "SwiftfinCredentials", "KidsCatalog", "Pulse"]:
+            with self.subTest(module=module):
+                self.assertTrue(MODULE.validate_source("SwiftfinMPV", "import " + module, edges, frameworks))
+
 
 if __name__ == "__main__":
     unittest.main()

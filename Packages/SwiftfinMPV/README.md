@@ -1,0 +1,11 @@
+# SwiftfinMPV
+
+Owns the pinned MPVUI 0.1.1 player, renderer, typed transport/track commands, native state/metadata observation, sidecar load attempts and semantic-caption reader lifecycle. No Jellyfin DTO, account, session, Defaults, app manager, global factory or catalog dependency enters this owner.
+
+The host supplies an already authorized immutable request and render identity. Every open also creates an independent operation identity, so callbacks from a prior open are rejected even when the render identity and URL are reused. Stop/deinit cancel observations and caption readers; Stop clears the exposed source/request and suppresses inactive commands. The renderer checks current identity before asking the engine for a surface. Observation's unannotated callback queues a checked main-actor task before reading committed native state; old scheduled tasks are rejected before rearming.
+
+The public boundary exposes checked Sendable values and an opaque renderer. The sole SDK interoperability value is MPVUI's immutable, checked Sendable semantic-caption snapshot, used by the application's caption-style/placement view. Raw players/tracks, command strings and SDK callbacks are internal. Relative seek and track commands read current native metadata with an exact active-source guard instead of depending on queued frame publication. Request/frame/failure descriptions redact payloads. Controller/engine/presentation are main-actor owners; metadata projections can run independently.
+
+App composition retains fresh item/account authorization, approved immutable URL/sidecars, settings/resume/queue policy, MediaTracks reconciliation and caption styling. MediaTracks consumes primitive native-track projections and imports no backend. Sidecar tags/order and one attempt per unmapped index are preserved; failed attachments cannot shift remaining tags.
+
+Native tests inject a fake engine and immutable SDK metadata/caption values. They open no files, URLs, system audio or server streams. These tests and compile-only platform checks do not establish decoding/GPU rendering. The pinned SDK does not expose an awaited public renderer shutdown; Stop and surface retirement use its existing public lifecycle, and actual render/output release remains a runtime acceptance item. No dependency source is patched.

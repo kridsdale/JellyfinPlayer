@@ -1,0 +1,1557 @@
+{
+  "cases" : [
+    {
+      "expected" : [
+        {
+          "player" : -1
+        },
+        {
+          "player" : 85,
+          "query" : -2
+        },
+        {
+          "player" : -1,
+          "query" : -1
+        },
+        {
+          "query" : 0
+        },
+        {
+          "query" : 1
+        },
+        {
+          "query" : 2
+        },
+        {
+          "player" : 10,
+          "query" : 4
+        },
+        {
+          "player" : 3,
+          "query" : 9
+        },
+        {
+          "player" : 5,
+          "query" : 12
+        },
+        {
+          "player" : 2,
+          "query" : 15
+        },
+        {
+          "query" : 22
+        },
+        {
+          "player" : 80,
+          "query" : 25
+        },
+        {
+          "query" : 26
+        },
+        {
+          "query" : 27
+        },
+        {
+          "player" : 84,
+          "query" : 28
+        },
+        {
+          "query" : 111
+        }
+      ],
+      "name" : "direct unordered streams nil slots native order and sidecar tags",
+      "selected" : 15,
+      "streams" : [
+        {
+          "Index" : 15,
+          "IsExternal" : false,
+          "IsTextSubtitleStream" : false,
+          "Type" : "Audio"
+        },
+        {
+          "Index" : 12,
+          "IsExternal" : false,
+          "IsTextSubtitleStream" : false,
+          "Type" : "Subtitle"
+        },
+        {
+          "IsExternal" : false,
+          "IsTextSubtitleStream" : false,
+          "Type" : "Audio"
+        },
+        {
+          "Index" : 9,
+          "IsTextSubtitleStream" : false,
+          "Type" : "Audio"
+        },
+        {
+          "Index" : 4,
+          "IsExternal" : false,
+          "IsTextSubtitleStream" : false,
+          "Type" : "Subtitle"
+        },
+        {
+          "Index" : 1,
+          "IsExternal" : false,
+          "IsTextSubtitleStream" : false,
+          "Type" : "Video"
+        },
+        {
+          "Index" : 22,
+          "IsExternal" : true,
+          "IsTextSubtitleStream" : false,
+          "Type" : "Audio"
+        },
+        {
+          "DeliveryMethod" : "External",
+          "DeliveryUrl" : "\/sidecar",
+          "Index" : 25,
+          "IsExternal" : true,
+          "IsTextSubtitleStream" : true,
+          "Type" : "Subtitle"
+        },
+        {
+          "DeliveryUrl" : "\/image",
+          "Index" : 26,
+          "IsExternal" : true,
+          "IsTextSubtitleStream" : false,
+          "Type" : "Subtitle"
+        },
+        {
+          "DeliveryMethod" : "External",
+          "Index" : 27,
+          "IsExternal" : true,
+          "IsTextSubtitleStream" : true,
+          "Type" : "Subtitle"
+        },
+        {
+          "DeliveryMethod" : "External",
+          "DeliveryUrl" : "",
+          "Index" : 28,
+          "IsExternal" : true,
+          "IsTextSubtitleStream" : true,
+          "Type" : "Subtitle"
+        },
+        {
+          "DeliveryMethod" : "External",
+          "DeliveryUrl" : "\/negative",
+          "Index" : -2,
+          "IsExternal" : true,
+          "IsTextSubtitleStream" : true,
+          "Type" : "Subtitle"
+        },
+        {
+          "DeliveryMethod" : "External",
+          "DeliveryUrl" : "\/sentinel",
+          "Index" : -1,
+          "IsExternal" : true,
+          "IsTextSubtitleStream" : true,
+          "Type" : "Subtitle"
+        }
+      ],
+      "tracks" : [
+        {
+          "isExternal" : false,
+          "mpvID" : 10,
+          "type" : "subtitle"
+        },
+        {
+          "isExternal" : false,
+          "mpvID" : 7,
+          "type" : "audio"
+        },
+        {
+          "isExternal" : false,
+          "mpvID" : 99,
+          "type" : "video"
+        },
+        {
+          "isExternal" : false,
+          "mpvID" : 3,
+          "type" : "audio"
+        },
+        {
+          "isExternal" : false,
+          "mpvID" : 5,
+          "type" : "subtitle"
+        },
+        {
+          "isExternal" : false,
+          "mpvID" : 2,
+          "type" : "audio"
+        },
+        {
+          "isExternal" : true,
+          "mpvID" : 80,
+          "title" : "swiftfin-subtitle-25",
+          "type" : "subtitle"
+        },
+        {
+          "isExternal" : false,
+          "mpvID" : 81,
+          "title" : "swiftfin-subtitle-26",
+          "type" : "subtitle"
+        },
+        {
+          "isExternal" : true,
+          "mpvID" : 82,
+          "title" : "swiftfin-subtitle-27",
+          "type" : "subtitle"
+        },
+        {
+          "isExternal" : true,
+          "mpvID" : 83,
+          "title" : "swiftfin-subtitle-25",
+          "type" : "audio"
+        },
+        {
+          "isExternal" : true,
+          "mpvID" : 84,
+          "title" : "swiftfin-subtitle-28",
+          "type" : "subtitle"
+        },
+        {
+          "isExternal" : true,
+          "mpvID" : 85,
+          "title" : "swiftfin-subtitle--2",
+          "type" : "subtitle"
+        },
+        {
+          "isExternal" : true,
+          "mpvID" : 86,
+          "title" : "swiftfin-subtitle--1",
+          "type" : "subtitle"
+        }
+      ],
+      "transcode" : false
+    },
+    {
+      "expected" : [
+        {
+          "player" : -1
+        },
+        {
+          "player" : 85,
+          "query" : -2
+        },
+        {
+          "player" : -1,
+          "query" : -1
+        },
+        {
+          "query" : 0
+        },
+        {
+          "query" : 1
+        },
+        {
+          "query" : 2
+        },
+        {
+          "query" : 4
+        },
+        {
+          "query" : 9
+        },
+        {
+          "query" : 12
+        },
+        {
+          "query" : 15
+        },
+        {
+          "query" : 22
+        },
+        {
+          "player" : 80,
+          "query" : 25
+        },
+        {
+          "query" : 26
+        },
+        {
+          "query" : 27
+        },
+        {
+          "player" : 84,
+          "query" : 28
+        },
+        {
+          "player" : 7,
+          "query" : 111
+        }
+      ],
+      "name" : "transcode maps chosen index even when DTO index is absent",
+      "selected" : 111,
+      "streams" : [
+        {
+          "Index" : 15,
+          "IsExternal" : false,
+          "IsTextSubtitleStream" : false,
+          "Type" : "Audio"
+        },
+        {
+          "Index" : 12,
+          "IsExternal" : false,
+          "IsTextSubtitleStream" : false,
+          "Type" : "Subtitle"
+        },
+        {
+          "IsExternal" : false,
+          "IsTextSubtitleStream" : false,
+          "Type" : "Audio"
+        },
+        {
+          "Index" : 9,
+          "IsTextSubtitleStream" : false,
+          "Type" : "Audio"
+        },
+        {
+          "Index" : 4,
+          "IsExternal" : false,
+          "IsTextSubtitleStream" : false,
+          "Type" : "Subtitle"
+        },
+        {
+          "Index" : 1,
+          "IsExternal" : false,
+          "IsTextSubtitleStream" : false,
+          "Type" : "Video"
+        },
+        {
+          "Index" : 22,
+          "IsExternal" : true,
+          "IsTextSubtitleStream" : false,
+          "Type" : "Audio"
+        },
+        {
+          "DeliveryMethod" : "External",
+          "DeliveryUrl" : "\/sidecar",
+          "Index" : 25,
+          "IsExternal" : true,
+          "IsTextSubtitleStream" : true,
+          "Type" : "Subtitle"
+        },
+        {
+          "DeliveryUrl" : "\/image",
+          "Index" : 26,
+          "IsExternal" : true,
+          "IsTextSubtitleStream" : false,
+          "Type" : "Subtitle"
+        },
+        {
+          "DeliveryMethod" : "External",
+          "Index" : 27,
+          "IsExternal" : true,
+          "IsTextSubtitleStream" : true,
+          "Type" : "Subtitle"
+        },
+        {
+          "DeliveryMethod" : "External",
+          "DeliveryUrl" : "",
+          "Index" : 28,
+          "IsExternal" : true,
+          "IsTextSubtitleStream" : true,
+          "Type" : "Subtitle"
+        },
+        {
+          "DeliveryMethod" : "External",
+          "DeliveryUrl" : "\/negative",
+          "Index" : -2,
+          "IsExternal" : true,
+          "IsTextSubtitleStream" : true,
+          "Type" : "Subtitle"
+        },
+        {
+          "DeliveryMethod" : "External",
+          "DeliveryUrl" : "\/sentinel",
+          "Index" : -1,
+          "IsExternal" : true,
+          "IsTextSubtitleStream" : true,
+          "Type" : "Subtitle"
+        }
+      ],
+      "tracks" : [
+        {
+          "isExternal" : false,
+          "mpvID" : 10,
+          "type" : "subtitle"
+        },
+        {
+          "isExternal" : false,
+          "mpvID" : 7,
+          "type" : "audio"
+        },
+        {
+          "isExternal" : false,
+          "mpvID" : 99,
+          "type" : "video"
+        },
+        {
+          "isExternal" : false,
+          "mpvID" : 3,
+          "type" : "audio"
+        },
+        {
+          "isExternal" : false,
+          "mpvID" : 5,
+          "type" : "subtitle"
+        },
+        {
+          "isExternal" : false,
+          "mpvID" : 2,
+          "type" : "audio"
+        },
+        {
+          "isExternal" : true,
+          "mpvID" : 80,
+          "title" : "swiftfin-subtitle-25",
+          "type" : "subtitle"
+        },
+        {
+          "isExternal" : false,
+          "mpvID" : 81,
+          "title" : "swiftfin-subtitle-26",
+          "type" : "subtitle"
+        },
+        {
+          "isExternal" : true,
+          "mpvID" : 82,
+          "title" : "swiftfin-subtitle-27",
+          "type" : "subtitle"
+        },
+        {
+          "isExternal" : true,
+          "mpvID" : 83,
+          "title" : "swiftfin-subtitle-25",
+          "type" : "audio"
+        },
+        {
+          "isExternal" : true,
+          "mpvID" : 84,
+          "title" : "swiftfin-subtitle-28",
+          "type" : "subtitle"
+        },
+        {
+          "isExternal" : true,
+          "mpvID" : 85,
+          "title" : "swiftfin-subtitle--2",
+          "type" : "subtitle"
+        },
+        {
+          "isExternal" : true,
+          "mpvID" : 86,
+          "title" : "swiftfin-subtitle--1",
+          "type" : "subtitle"
+        }
+      ],
+      "transcode" : true
+    },
+    {
+      "expected" : [
+        {
+          "player" : -1
+        },
+        {
+          "player" : 85,
+          "query" : -2
+        },
+        {
+          "player" : -1,
+          "query" : -1
+        },
+        {
+          "query" : 0
+        },
+        {
+          "query" : 1
+        },
+        {
+          "query" : 2
+        },
+        {
+          "query" : 4
+        },
+        {
+          "query" : 9
+        },
+        {
+          "query" : 12
+        },
+        {
+          "query" : 15
+        },
+        {
+          "query" : 22
+        },
+        {
+          "player" : 80,
+          "query" : 25
+        },
+        {
+          "query" : 26
+        },
+        {
+          "query" : 27
+        },
+        {
+          "player" : 84,
+          "query" : 28
+        },
+        {
+          "query" : 111
+        }
+      ],
+      "name" : "transcode no selection",
+      "streams" : [
+        {
+          "Index" : 15,
+          "IsExternal" : false,
+          "IsTextSubtitleStream" : false,
+          "Type" : "Audio"
+        },
+        {
+          "Index" : 12,
+          "IsExternal" : false,
+          "IsTextSubtitleStream" : false,
+          "Type" : "Subtitle"
+        },
+        {
+          "IsExternal" : false,
+          "IsTextSubtitleStream" : false,
+          "Type" : "Audio"
+        },
+        {
+          "Index" : 9,
+          "IsTextSubtitleStream" : false,
+          "Type" : "Audio"
+        },
+        {
+          "Index" : 4,
+          "IsExternal" : false,
+          "IsTextSubtitleStream" : false,
+          "Type" : "Subtitle"
+        },
+        {
+          "Index" : 1,
+          "IsExternal" : false,
+          "IsTextSubtitleStream" : false,
+          "Type" : "Video"
+        },
+        {
+          "Index" : 22,
+          "IsExternal" : true,
+          "IsTextSubtitleStream" : false,
+          "Type" : "Audio"
+        },
+        {
+          "DeliveryMethod" : "External",
+          "DeliveryUrl" : "\/sidecar",
+          "Index" : 25,
+          "IsExternal" : true,
+          "IsTextSubtitleStream" : true,
+          "Type" : "Subtitle"
+        },
+        {
+          "DeliveryUrl" : "\/image",
+          "Index" : 26,
+          "IsExternal" : true,
+          "IsTextSubtitleStream" : false,
+          "Type" : "Subtitle"
+        },
+        {
+          "DeliveryMethod" : "External",
+          "Index" : 27,
+          "IsExternal" : true,
+          "IsTextSubtitleStream" : true,
+          "Type" : "Subtitle"
+        },
+        {
+          "DeliveryMethod" : "External",
+          "DeliveryUrl" : "",
+          "Index" : 28,
+          "IsExternal" : true,
+          "IsTextSubtitleStream" : true,
+          "Type" : "Subtitle"
+        },
+        {
+          "DeliveryMethod" : "External",
+          "DeliveryUrl" : "\/negative",
+          "Index" : -2,
+          "IsExternal" : true,
+          "IsTextSubtitleStream" : true,
+          "Type" : "Subtitle"
+        },
+        {
+          "DeliveryMethod" : "External",
+          "DeliveryUrl" : "\/sentinel",
+          "Index" : -1,
+          "IsExternal" : true,
+          "IsTextSubtitleStream" : true,
+          "Type" : "Subtitle"
+        }
+      ],
+      "tracks" : [
+        {
+          "isExternal" : false,
+          "mpvID" : 10,
+          "type" : "subtitle"
+        },
+        {
+          "isExternal" : false,
+          "mpvID" : 7,
+          "type" : "audio"
+        },
+        {
+          "isExternal" : false,
+          "mpvID" : 99,
+          "type" : "video"
+        },
+        {
+          "isExternal" : false,
+          "mpvID" : 3,
+          "type" : "audio"
+        },
+        {
+          "isExternal" : false,
+          "mpvID" : 5,
+          "type" : "subtitle"
+        },
+        {
+          "isExternal" : false,
+          "mpvID" : 2,
+          "type" : "audio"
+        },
+        {
+          "isExternal" : true,
+          "mpvID" : 80,
+          "title" : "swiftfin-subtitle-25",
+          "type" : "subtitle"
+        },
+        {
+          "isExternal" : false,
+          "mpvID" : 81,
+          "title" : "swiftfin-subtitle-26",
+          "type" : "subtitle"
+        },
+        {
+          "isExternal" : true,
+          "mpvID" : 82,
+          "title" : "swiftfin-subtitle-27",
+          "type" : "subtitle"
+        },
+        {
+          "isExternal" : true,
+          "mpvID" : 83,
+          "title" : "swiftfin-subtitle-25",
+          "type" : "audio"
+        },
+        {
+          "isExternal" : true,
+          "mpvID" : 84,
+          "title" : "swiftfin-subtitle-28",
+          "type" : "subtitle"
+        },
+        {
+          "isExternal" : true,
+          "mpvID" : 85,
+          "title" : "swiftfin-subtitle--2",
+          "type" : "subtitle"
+        },
+        {
+          "isExternal" : true,
+          "mpvID" : 86,
+          "title" : "swiftfin-subtitle--1",
+          "type" : "subtitle"
+        }
+      ],
+      "transcode" : true
+    },
+    {
+      "expected" : [
+        {
+          "player" : -1
+        },
+        {
+          "player" : 85,
+          "query" : -2
+        },
+        {
+          "player" : -1,
+          "query" : -1
+        },
+        {
+          "player" : 7,
+          "query" : 0
+        },
+        {
+          "query" : 1
+        },
+        {
+          "query" : 2
+        },
+        {
+          "query" : 4
+        },
+        {
+          "query" : 9
+        },
+        {
+          "query" : 12
+        },
+        {
+          "query" : 15
+        },
+        {
+          "query" : 22
+        },
+        {
+          "player" : 80,
+          "query" : 25
+        },
+        {
+          "query" : 26
+        },
+        {
+          "query" : 27
+        },
+        {
+          "player" : 84,
+          "query" : 28
+        },
+        {
+          "query" : 111
+        }
+      ],
+      "name" : "transcode preserves selected zero",
+      "selected" : 0,
+      "streams" : [
+        {
+          "Index" : 15,
+          "IsExternal" : false,
+          "IsTextSubtitleStream" : false,
+          "Type" : "Audio"
+        },
+        {
+          "Index" : 12,
+          "IsExternal" : false,
+          "IsTextSubtitleStream" : false,
+          "Type" : "Subtitle"
+        },
+        {
+          "IsExternal" : false,
+          "IsTextSubtitleStream" : false,
+          "Type" : "Audio"
+        },
+        {
+          "Index" : 9,
+          "IsTextSubtitleStream" : false,
+          "Type" : "Audio"
+        },
+        {
+          "Index" : 4,
+          "IsExternal" : false,
+          "IsTextSubtitleStream" : false,
+          "Type" : "Subtitle"
+        },
+        {
+          "Index" : 1,
+          "IsExternal" : false,
+          "IsTextSubtitleStream" : false,
+          "Type" : "Video"
+        },
+        {
+          "Index" : 22,
+          "IsExternal" : true,
+          "IsTextSubtitleStream" : false,
+          "Type" : "Audio"
+        },
+        {
+          "DeliveryMethod" : "External",
+          "DeliveryUrl" : "\/sidecar",
+          "Index" : 25,
+          "IsExternal" : true,
+          "IsTextSubtitleStream" : true,
+          "Type" : "Subtitle"
+        },
+        {
+          "DeliveryUrl" : "\/image",
+          "Index" : 26,
+          "IsExternal" : true,
+          "IsTextSubtitleStream" : false,
+          "Type" : "Subtitle"
+        },
+        {
+          "DeliveryMethod" : "External",
+          "Index" : 27,
+          "IsExternal" : true,
+          "IsTextSubtitleStream" : true,
+          "Type" : "Subtitle"
+        },
+        {
+          "DeliveryMethod" : "External",
+          "DeliveryUrl" : "",
+          "Index" : 28,
+          "IsExternal" : true,
+          "IsTextSubtitleStream" : true,
+          "Type" : "Subtitle"
+        },
+        {
+          "DeliveryMethod" : "External",
+          "DeliveryUrl" : "\/negative",
+          "Index" : -2,
+          "IsExternal" : true,
+          "IsTextSubtitleStream" : true,
+          "Type" : "Subtitle"
+        },
+        {
+          "DeliveryMethod" : "External",
+          "DeliveryUrl" : "\/sentinel",
+          "Index" : -1,
+          "IsExternal" : true,
+          "IsTextSubtitleStream" : true,
+          "Type" : "Subtitle"
+        }
+      ],
+      "tracks" : [
+        {
+          "isExternal" : false,
+          "mpvID" : 10,
+          "type" : "subtitle"
+        },
+        {
+          "isExternal" : false,
+          "mpvID" : 7,
+          "type" : "audio"
+        },
+        {
+          "isExternal" : false,
+          "mpvID" : 99,
+          "type" : "video"
+        },
+        {
+          "isExternal" : false,
+          "mpvID" : 3,
+          "type" : "audio"
+        },
+        {
+          "isExternal" : false,
+          "mpvID" : 5,
+          "type" : "subtitle"
+        },
+        {
+          "isExternal" : false,
+          "mpvID" : 2,
+          "type" : "audio"
+        },
+        {
+          "isExternal" : true,
+          "mpvID" : 80,
+          "title" : "swiftfin-subtitle-25",
+          "type" : "subtitle"
+        },
+        {
+          "isExternal" : false,
+          "mpvID" : 81,
+          "title" : "swiftfin-subtitle-26",
+          "type" : "subtitle"
+        },
+        {
+          "isExternal" : true,
+          "mpvID" : 82,
+          "title" : "swiftfin-subtitle-27",
+          "type" : "subtitle"
+        },
+        {
+          "isExternal" : true,
+          "mpvID" : 83,
+          "title" : "swiftfin-subtitle-25",
+          "type" : "audio"
+        },
+        {
+          "isExternal" : true,
+          "mpvID" : 84,
+          "title" : "swiftfin-subtitle-28",
+          "type" : "subtitle"
+        },
+        {
+          "isExternal" : true,
+          "mpvID" : 85,
+          "title" : "swiftfin-subtitle--2",
+          "type" : "subtitle"
+        },
+        {
+          "isExternal" : true,
+          "mpvID" : 86,
+          "title" : "swiftfin-subtitle--1",
+          "type" : "subtitle"
+        }
+      ],
+      "transcode" : true
+    },
+    {
+      "expected" : [
+        {
+          "player" : -1
+        },
+        {
+          "query" : -2
+        },
+        {
+          "player" : -1,
+          "query" : -1
+        },
+        {
+          "query" : 0
+        },
+        {
+          "query" : 1
+        },
+        {
+          "query" : 2
+        },
+        {
+          "query" : 4
+        },
+        {
+          "query" : 9
+        },
+        {
+          "query" : 12
+        },
+        {
+          "query" : 15
+        },
+        {
+          "query" : 22
+        },
+        {
+          "query" : 25
+        },
+        {
+          "query" : 26
+        },
+        {
+          "query" : 27
+        },
+        {
+          "query" : 28
+        },
+        {
+          "query" : 111
+        }
+      ],
+      "name" : "empty native tracks",
+      "selected" : 15,
+      "streams" : [
+        {
+          "Index" : 15,
+          "IsExternal" : false,
+          "IsTextSubtitleStream" : false,
+          "Type" : "Audio"
+        },
+        {
+          "Index" : 12,
+          "IsExternal" : false,
+          "IsTextSubtitleStream" : false,
+          "Type" : "Subtitle"
+        },
+        {
+          "IsExternal" : false,
+          "IsTextSubtitleStream" : false,
+          "Type" : "Audio"
+        },
+        {
+          "Index" : 9,
+          "IsTextSubtitleStream" : false,
+          "Type" : "Audio"
+        },
+        {
+          "Index" : 4,
+          "IsExternal" : false,
+          "IsTextSubtitleStream" : false,
+          "Type" : "Subtitle"
+        },
+        {
+          "Index" : 1,
+          "IsExternal" : false,
+          "IsTextSubtitleStream" : false,
+          "Type" : "Video"
+        },
+        {
+          "Index" : 22,
+          "IsExternal" : true,
+          "IsTextSubtitleStream" : false,
+          "Type" : "Audio"
+        },
+        {
+          "DeliveryMethod" : "External",
+          "DeliveryUrl" : "\/sidecar",
+          "Index" : 25,
+          "IsExternal" : true,
+          "IsTextSubtitleStream" : true,
+          "Type" : "Subtitle"
+        },
+        {
+          "DeliveryUrl" : "\/image",
+          "Index" : 26,
+          "IsExternal" : true,
+          "IsTextSubtitleStream" : false,
+          "Type" : "Subtitle"
+        },
+        {
+          "DeliveryMethod" : "External",
+          "Index" : 27,
+          "IsExternal" : true,
+          "IsTextSubtitleStream" : true,
+          "Type" : "Subtitle"
+        },
+        {
+          "DeliveryMethod" : "External",
+          "DeliveryUrl" : "",
+          "Index" : 28,
+          "IsExternal" : true,
+          "IsTextSubtitleStream" : true,
+          "Type" : "Subtitle"
+        },
+        {
+          "DeliveryMethod" : "External",
+          "DeliveryUrl" : "\/negative",
+          "Index" : -2,
+          "IsExternal" : true,
+          "IsTextSubtitleStream" : true,
+          "Type" : "Subtitle"
+        },
+        {
+          "DeliveryMethod" : "External",
+          "DeliveryUrl" : "\/sentinel",
+          "Index" : -1,
+          "IsExternal" : true,
+          "IsTextSubtitleStream" : true,
+          "Type" : "Subtitle"
+        }
+      ],
+      "tracks" : [
+
+      ],
+      "transcode" : false
+    },
+    {
+      "expected" : [
+        {
+          "player" : -1
+        },
+        {
+          "query" : -2
+        },
+        {
+          "player" : -1,
+          "query" : -1
+        },
+        {
+          "query" : 0
+        },
+        {
+          "query" : 1
+        },
+        {
+          "query" : 2
+        },
+        {
+          "query" : 4
+        },
+        {
+          "query" : 9
+        },
+        {
+          "query" : 12
+        },
+        {
+          "query" : 15
+        },
+        {
+          "query" : 22
+        },
+        {
+          "query" : 25
+        },
+        {
+          "query" : 26
+        },
+        {
+          "query" : 27
+        },
+        {
+          "query" : 28
+        },
+        {
+          "query" : 111
+        }
+      ],
+      "name" : "empty server streams",
+      "streams" : [
+
+      ],
+      "tracks" : [
+        {
+          "isExternal" : false,
+          "mpvID" : 10,
+          "type" : "subtitle"
+        },
+        {
+          "isExternal" : false,
+          "mpvID" : 7,
+          "type" : "audio"
+        },
+        {
+          "isExternal" : false,
+          "mpvID" : 99,
+          "type" : "video"
+        },
+        {
+          "isExternal" : false,
+          "mpvID" : 3,
+          "type" : "audio"
+        },
+        {
+          "isExternal" : false,
+          "mpvID" : 5,
+          "type" : "subtitle"
+        },
+        {
+          "isExternal" : false,
+          "mpvID" : 2,
+          "type" : "audio"
+        },
+        {
+          "isExternal" : true,
+          "mpvID" : 80,
+          "title" : "swiftfin-subtitle-25",
+          "type" : "subtitle"
+        },
+        {
+          "isExternal" : false,
+          "mpvID" : 81,
+          "title" : "swiftfin-subtitle-26",
+          "type" : "subtitle"
+        },
+        {
+          "isExternal" : true,
+          "mpvID" : 82,
+          "title" : "swiftfin-subtitle-27",
+          "type" : "subtitle"
+        },
+        {
+          "isExternal" : true,
+          "mpvID" : 83,
+          "title" : "swiftfin-subtitle-25",
+          "type" : "audio"
+        },
+        {
+          "isExternal" : true,
+          "mpvID" : 84,
+          "title" : "swiftfin-subtitle-28",
+          "type" : "subtitle"
+        },
+        {
+          "isExternal" : true,
+          "mpvID" : 85,
+          "title" : "swiftfin-subtitle--2",
+          "type" : "subtitle"
+        },
+        {
+          "isExternal" : true,
+          "mpvID" : 86,
+          "title" : "swiftfin-subtitle--1",
+          "type" : "subtitle"
+        }
+      ],
+      "transcode" : false
+    },
+    {
+      "expected" : [
+        {
+          "player" : -1
+        },
+        {
+          "query" : -2
+        },
+        {
+          "player" : -1,
+          "query" : -1
+        },
+        {
+          "query" : 0
+        },
+        {
+          "query" : 1
+        },
+        {
+          "query" : 2
+        },
+        {
+          "player" : 10,
+          "query" : 4
+        },
+        {
+          "query" : 9
+        },
+        {
+          "query" : 12
+        },
+        {
+          "query" : 15
+        },
+        {
+          "query" : 22
+        },
+        {
+          "query" : 25
+        },
+        {
+          "query" : 26
+        },
+        {
+          "query" : 27
+        },
+        {
+          "query" : 28
+        },
+        {
+          "query" : 111
+        }
+      ],
+      "name" : "truncated native arrays",
+      "streams" : [
+        {
+          "Index" : 15,
+          "IsExternal" : false,
+          "IsTextSubtitleStream" : false,
+          "Type" : "Audio"
+        },
+        {
+          "Index" : 12,
+          "IsExternal" : false,
+          "IsTextSubtitleStream" : false,
+          "Type" : "Subtitle"
+        },
+        {
+          "IsExternal" : false,
+          "IsTextSubtitleStream" : false,
+          "Type" : "Audio"
+        },
+        {
+          "Index" : 9,
+          "IsTextSubtitleStream" : false,
+          "Type" : "Audio"
+        },
+        {
+          "Index" : 4,
+          "IsExternal" : false,
+          "IsTextSubtitleStream" : false,
+          "Type" : "Subtitle"
+        },
+        {
+          "Index" : 1,
+          "IsExternal" : false,
+          "IsTextSubtitleStream" : false,
+          "Type" : "Video"
+        },
+        {
+          "Index" : 22,
+          "IsExternal" : true,
+          "IsTextSubtitleStream" : false,
+          "Type" : "Audio"
+        },
+        {
+          "DeliveryMethod" : "External",
+          "DeliveryUrl" : "\/sidecar",
+          "Index" : 25,
+          "IsExternal" : true,
+          "IsTextSubtitleStream" : true,
+          "Type" : "Subtitle"
+        },
+        {
+          "DeliveryUrl" : "\/image",
+          "Index" : 26,
+          "IsExternal" : true,
+          "IsTextSubtitleStream" : false,
+          "Type" : "Subtitle"
+        },
+        {
+          "DeliveryMethod" : "External",
+          "Index" : 27,
+          "IsExternal" : true,
+          "IsTextSubtitleStream" : true,
+          "Type" : "Subtitle"
+        },
+        {
+          "DeliveryMethod" : "External",
+          "DeliveryUrl" : "",
+          "Index" : 28,
+          "IsExternal" : true,
+          "IsTextSubtitleStream" : true,
+          "Type" : "Subtitle"
+        },
+        {
+          "DeliveryMethod" : "External",
+          "DeliveryUrl" : "\/negative",
+          "Index" : -2,
+          "IsExternal" : true,
+          "IsTextSubtitleStream" : true,
+          "Type" : "Subtitle"
+        },
+        {
+          "DeliveryMethod" : "External",
+          "DeliveryUrl" : "\/sentinel",
+          "Index" : -1,
+          "IsExternal" : true,
+          "IsTextSubtitleStream" : true,
+          "Type" : "Subtitle"
+        }
+      ],
+      "tracks" : [
+        {
+          "isExternal" : false,
+          "mpvID" : 10,
+          "type" : "subtitle"
+        },
+        {
+          "isExternal" : false,
+          "mpvID" : 7,
+          "type" : "audio"
+        }
+      ],
+      "transcode" : false
+    },
+    {
+      "expected" : [
+        {
+          "player" : -1
+        },
+        {
+          "query" : -2
+        },
+        {
+          "player" : -1,
+          "query" : -1
+        },
+        {
+          "query" : 0
+        },
+        {
+          "query" : 1
+        },
+        {
+          "query" : 2
+        },
+        {
+          "query" : 4
+        },
+        {
+          "player" : 3,
+          "query" : 9
+        },
+        {
+          "query" : 12
+        },
+        {
+          "query" : 15
+        },
+        {
+          "query" : 22
+        },
+        {
+          "query" : 25
+        },
+        {
+          "query" : 26
+        },
+        {
+          "query" : 27
+        },
+        {
+          "query" : 28
+        },
+        {
+          "query" : 111
+        }
+      ],
+      "name" : "duplicate global indexes retain last zipped mapping",
+      "streams" : [
+        {
+          "Index" : 9,
+          "IsExternal" : false,
+          "IsTextSubtitleStream" : false,
+          "Type" : "Audio"
+        },
+        {
+          "Index" : 9,
+          "IsExternal" : false,
+          "IsTextSubtitleStream" : false,
+          "Type" : "Audio"
+        }
+      ],
+      "tracks" : [
+        {
+          "isExternal" : false,
+          "mpvID" : 10,
+          "type" : "subtitle"
+        },
+        {
+          "isExternal" : false,
+          "mpvID" : 7,
+          "type" : "audio"
+        },
+        {
+          "isExternal" : false,
+          "mpvID" : 99,
+          "type" : "video"
+        },
+        {
+          "isExternal" : false,
+          "mpvID" : 3,
+          "type" : "audio"
+        },
+        {
+          "isExternal" : false,
+          "mpvID" : 5,
+          "type" : "subtitle"
+        },
+        {
+          "isExternal" : false,
+          "mpvID" : 2,
+          "type" : "audio"
+        },
+        {
+          "isExternal" : true,
+          "mpvID" : 80,
+          "title" : "swiftfin-subtitle-25",
+          "type" : "subtitle"
+        },
+        {
+          "isExternal" : false,
+          "mpvID" : 81,
+          "title" : "swiftfin-subtitle-26",
+          "type" : "subtitle"
+        },
+        {
+          "isExternal" : true,
+          "mpvID" : 82,
+          "title" : "swiftfin-subtitle-27",
+          "type" : "subtitle"
+        },
+        {
+          "isExternal" : true,
+          "mpvID" : 83,
+          "title" : "swiftfin-subtitle-25",
+          "type" : "audio"
+        },
+        {
+          "isExternal" : true,
+          "mpvID" : 84,
+          "title" : "swiftfin-subtitle-28",
+          "type" : "subtitle"
+        },
+        {
+          "isExternal" : true,
+          "mpvID" : 85,
+          "title" : "swiftfin-subtitle--2",
+          "type" : "subtitle"
+        },
+        {
+          "isExternal" : true,
+          "mpvID" : 86,
+          "title" : "swiftfin-subtitle--1",
+          "type" : "subtitle"
+        }
+      ],
+      "transcode" : false
+    },
+    {
+      "expected" : [
+        {
+          "player" : -1
+        },
+        {
+          "query" : -2
+        },
+        {
+          "player" : -1,
+          "query" : -1
+        },
+        {
+          "query" : 0
+        },
+        {
+          "player" : 1,
+          "query" : 1
+        },
+        {
+          "player" : 1,
+          "query" : 2
+        },
+        {
+          "query" : 4
+        },
+        {
+          "query" : 9
+        },
+        {
+          "query" : 12
+        },
+        {
+          "query" : 15
+        },
+        {
+          "query" : 22
+        },
+        {
+          "query" : 25
+        },
+        {
+          "query" : 26
+        },
+        {
+          "query" : 27
+        },
+        {
+          "query" : 28
+        },
+        {
+          "query" : 111
+        }
+      ],
+      "name" : "same native IDs across categories",
+      "streams" : [
+        {
+          "Index" : 1,
+          "IsExternal" : false,
+          "IsTextSubtitleStream" : false,
+          "Type" : "Audio"
+        },
+        {
+          "Index" : 2,
+          "IsExternal" : false,
+          "IsTextSubtitleStream" : false,
+          "Type" : "Subtitle"
+        }
+      ],
+      "tracks" : [
+        {
+          "isExternal" : false,
+          "mpvID" : 1,
+          "type" : "audio"
+        },
+        {
+          "isExternal" : false,
+          "mpvID" : 1,
+          "type" : "subtitle"
+        }
+      ],
+      "transcode" : false
+    }
+  ],
+  "originalCommit" : "ed99a83e12c26a4213beb73f7a9ff2f99eb7da97",
+  "originalSourceSHA256" : "319ac1ceeaaf978c2ef98b0b9ca1dae325dbd42b26e9e8ed0c61e5e12d050308"
+}

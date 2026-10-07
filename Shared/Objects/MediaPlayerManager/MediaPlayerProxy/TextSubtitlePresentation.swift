@@ -6,42 +6,5 @@
 // Copyright (c) 2026 Jellyfin & Jellyfin Contributors
 //
 
-import Foundation
-import MPVUI
-import Observation
-
-// TODO: TextSubtitleProvider protocol for players, or take stream directly
-
-@MainActor
-@Observable
-final class TextSubtitlePresentation {
-
-    private(set) var snapshot = TextSubtitleSnapshot()
-
-    @ObservationIgnored
-    private var observationID: UUID?
-
-    func observe(_ player: MPVPlayer, load: () -> Void) async {
-        let id = UUID()
-        observationID = id
-        let subtitles = player.textSubtitleStream()
-        snapshot = TextSubtitleSnapshot()
-        load()
-
-        defer {
-            if observationID == id {
-                clear()
-            }
-        }
-
-        for await snapshot in subtitles {
-            guard !Task.isCancelled, observationID == id else { return }
-            self.snapshot = snapshot
-        }
-    }
-
-    func clear() {
-        observationID = nil
-        snapshot = TextSubtitleSnapshot()
-    }
-}
+// Caption observation, generation and reader cancellation are owned by SwiftfinMPV.
+import SwiftfinMPV

@@ -12,6 +12,7 @@ import subprocess
 
 # Explicit responsibilities, not a permission derived from whatever code happens to import.
 EXTERNAL_POLICIES = {
+    "SwiftfinMPV": [("mpvui", "https://github.com/LePips/MPVUI", "0.1.1")],
     "SwiftfinCollections": [("swift-collections", "https://github.com/apple/swift-collections.git", "1.6.0")],
     "SwiftfinAccountAccess": [("jellyfin-sdk-swift", "https://github.com/jellyfin/jellyfin-sdk-swift.git", "3.2.0"), ("get", "https://github.com/kean/Get", "2.2.1")],
     "SwiftfinUserMediaState": [("jellyfin-sdk-swift", "https://github.com/jellyfin/jellyfin-sdk-swift.git", "3.2.0"), ("get", "https://github.com/kean/Get", "2.2.1")],
@@ -35,6 +36,7 @@ EXTERNAL_POLICIES = {
     ],
 }
 POLICIES = {
+    "SwiftfinMPV": ({}, {"Foundation", "MPVUI", "Observation", "SwiftUI"}),
     "SwiftfinText": ({}, {"Foundation", "CryptoKit"}),
     "SwiftfinValues": ({}, {"Foundation"}),
     "SwiftfinTime": ({}, {"Foundation"}),
