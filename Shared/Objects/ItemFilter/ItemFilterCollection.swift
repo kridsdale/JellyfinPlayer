@@ -8,6 +8,7 @@
 
 import JellyfinAPI
 import SwiftfinCollections
+import SwiftfinMediaCatalog
 import SwiftfinStoredValues
 
 struct ItemFilterCollection: Hashable, Storable {
@@ -104,5 +105,25 @@ struct ItemFilterCollection: Hashable, Storable {
         }
 
         return result
+    }
+}
+
+extension ItemFilterCollection {
+    var catalogSnapshot: CatalogFilters {
+        CatalogFilters(
+            audioLanguages: audioLanguages.map(\.value),
+            categories: categories.compactMap { MediaProgramCategory(rawValue: $0.rawValue) },
+            genres: genres.map(\.value),
+            itemTypes: itemTypes,
+            letter: letter.first?.value,
+            officialRatings: officialRatings.map(\.value),
+            sortBy: sortBy,
+            sortOrder: sortOrder,
+            subtitleLanguages: subtitleLanguages.map(\.value),
+            tags: tags.map(\.value),
+            traits: traits,
+            years: years.map(\.value),
+            query: query
+        )
     }
 }

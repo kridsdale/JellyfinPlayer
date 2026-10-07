@@ -10,9 +10,12 @@ import Foundation
 import JellyfinAPI
 import SwiftfinCollections
 import SwiftfinLocalization
+import SwiftfinMediaCatalog
 import SwiftUI
 
 struct ScheduledRecordingsLibrary: BaseItemKindLibrary {
+
+    let hasNextPage = false
 
     let libraryItemTypes: [BaseItemKind] = [.program]
     let parent: TitledLibraryParent = .init(
@@ -24,15 +27,7 @@ struct ScheduledRecordingsLibrary: BaseItemKindLibrary {
         environment: Empty,
         pageState: LibraryPageState
     ) async throws -> [BaseItemDto] {
-        guard pageState.pageOffset == 0 else { return [] }
-
-        let request = Paths.getTimers()
-        let response = try await pageState.client.send(request)
-
-        return (response.value.items ?? [])
-            .filter(\.isScheduledRecording)
-            .sorted(using: \.startDate)
-            .compactMap(\.programInfo)
+        try await pageState.readMedia(.scheduledRecordings).items
     }
 
     func makeLibraryBody(

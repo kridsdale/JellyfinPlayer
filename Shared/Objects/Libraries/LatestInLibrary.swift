@@ -8,8 +8,11 @@
 
 import JellyfinAPI
 import SwiftfinLocalization
+import SwiftfinMediaCatalog
 
 struct LatestInLibrary: BaseItemKindLibrary {
+
+    let hasNextPage = false
 
     let libraryItemTypes: [BaseItemKind]
     let parent: TitledLibraryParent
@@ -26,16 +29,6 @@ struct LatestInLibrary: BaseItemKindLibrary {
         environment: Empty,
         pageState: LibraryPageState
     ) async throws -> [BaseItemDto] {
-        var parameters = Paths.GetLatestMediaParameters()
-        parameters.enableUserData = true
-        parameters.fields = PosterSubtitleField.itemFields
-        parameters.limit = pageState.pageSize
-        parameters.parentID = parent.id
-        parameters.userID = pageState.userID
-
-        let request = Paths.getLatestMedia(parameters: parameters)
-        let response = try await pageState.client.send(request)
-
-        return response.value
+        try await pageState.readMedia(.latest(parentID: parent.id)).items
     }
 }

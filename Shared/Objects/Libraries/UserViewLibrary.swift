@@ -12,6 +12,7 @@ import JellyfinAPI
 import SwiftfinCollections
 import SwiftfinImages
 import SwiftfinLocalization
+import SwiftfinMediaCatalog
 import SwiftUI
 
 private let userViewLibraryListImageWidth: CGFloat = 110
@@ -33,29 +34,8 @@ struct UserViewLibrary: PagingLibrary {
         pageState: LibraryPageState
     ) async throws -> [UserViewLibraryElement] {
         guard pageState.pageOffset == 0 else { return [] }
-
-        let parameters = Paths.GetUserViewsParameters(userID: pageState.userID)
-        let request = Paths.getUserViews(parameters: parameters)
-
-        async let userViews = pageState.client.send(request)
-        async let currentUser = pageState.client.send(Paths.getCurrentUser)
-
-        let excludedLibraryIDs = try await currentUser.value.configuration?.myMediaExcludes ?? []
-        let elements = try await (userViews.value.items ?? [])
-            .coalesced(property: \.collectionType, with: .folders)
-            .intersecting(CollectionType.supportedCases, using: \.collectionType)
-            .subtracting(excludedLibraryIDs, using: \.id)
-            .map { item in
-                if item.type == .userView, item.collectionType == .folders {
-                    return item.mutating(\.type, with: .folder)
-                }
-
-                return item
-            }
-            .map(UserViewLibraryElement.userView)
-
-        return elements
-            .prepending(.favorites, if: Defaults[.Customization.Library.showFavorites])
+        let items = try await pageState.mediaCatalog.userViews()
+        return items.map(UserViewLibraryElement.userView).prepending(.favorites, if: Defaults[.Customization.Library.showFavorites])
     }
 }
 
@@ -205,9 +185,8 @@ private struct UserViewLibraryGridElement: View {
                 .posterStyle(.landscape)
                 .matchedTransitionSource(id: "item", in: namespace)
         }
-        .onFirstAppear(perform: setImageSources)
-        .onChange(of: useRandomImage) {
-            setImageSources()
+        .task(id: UserViewArtworkRequest(element: element, random: useRandomImage)) {
+            await setImageSources()
         }
         .buttonStyle(.card)
     }
@@ -234,10 +213,10 @@ private struct UserViewLibraryGridElement: View {
         }
     }
 
-    private func setImageSources() {
-        Task { @MainActor in
-            imageSources = await element.libraryImageSources(useRandomImage: useRandomImage)
-        }
+    private func setImageSources() async {
+        let sources = await element.libraryImageSources(useRandomImage: useRandomImage)
+        guard !Task.isCancelled else { return }
+        imageSources = sources
     }
 }
 
@@ -274,9 +253,8 @@ private struct UserViewLibraryListElement: View {
         #if !os(tvOS)
         .matchedTransitionSource(id: "item", in: namespace)
         #endif
-        .onFirstAppear(perform: setImageSources)
-        .onChange(of: useRandomImage) {
-            setImageSources()
+        .task(id: UserViewArtworkRequest(element: element, random: useRandomImage)) {
+            await setImageSources()
         }
     }
 
@@ -300,11 +278,16 @@ private struct UserViewLibraryListElement: View {
         .frame(width: userViewLibraryListImageWidth)
     }
 
-    private func setImageSources() {
-        Task { @MainActor in
-            imageSources = await element.libraryImageSources(useRandomImage: useRandomImage)
-        }
+    private func setImageSources() async {
+        let sources = await element.libraryImageSources(useRandomImage: useRandomImage)
+        guard !Task.isCancelled else { return }
+        imageSources = sources
     }
+}
+
+private struct UserViewArtworkRequest: Hashable {
+    let element: UserViewLibraryElement
+    let random: Bool
 }
 
 private extension UserViewLibraryElement {
@@ -325,38 +308,29 @@ private extension UserViewLibraryElement {
 
     @MainActor
     func randomItemImageSources() async throws -> [ImageSource] {
-        guard let userSession = Container.shared.currentUserSession() else {
-            throw UserSessionError.missingCurrentSession
-        }
-
-        var parentID: String?
-        var filters: [ItemTrait]?
-        var includeItemTypes: [BaseItemKind] = BaseItemKind.supportedCases
-
+        let manager = Container.shared.userSessionManager()
+        guard let session = manager.currentSession else { throw UserSessionError.missingCurrentSession }
+        let client = session.client
+        let catalog = MediaCatalogClient(reader: client, userID: session.user.id)
+        let parentID: String?
+        let favorites: Bool
+        let types: [BaseItemKind]
         switch self {
         case .favorites:
-            filters = [.isFavorite]
+            parentID = nil
+            favorites = true
+            types = BaseItemKind.supportedCases
         case let .userView(item):
-            if item.collectionType == .livetv {
-                includeItemTypes = [.tvProgram, .liveTvProgram]
-            } else {
-                parentID = item.id
-            }
+            parentID = item.collectionType == .livetv ? nil : item.id
+            favorites = false
+            types = item.collectionType == .livetv ? [.tvProgram, .liveTvProgram] : BaseItemKind.supportedCases
         }
-
-        var parameters = Paths.GetItemsParameters()
-        parameters.filters = filters
-        parameters.includeItemTypes = includeItemTypes
-        parameters.isRecursive = true
-        parameters.limit = 3
-        parameters.parentID = parentID
-        parameters.sortBy = [.random]
-        parameters.userID = userSession.user.id
-
-        let request = Paths.getItems(parameters: parameters)
-        let response = try await userSession.client.send(request)
-
-        return (response.value.items ?? [])
-            .flatMap { $0.imageSources(for: .landscape, size: .custom(width: 200)) }
+        let page = try await catalog.page(
+            .artworkSample(parentID: parentID, itemTypes: types, favorites: favorites),
+            at: CatalogPageRequest(offset: 0, limit: 3)
+        )
+        try Task.checkCancellation()
+        guard manager.currentSession === session, session.client === client else { throw CancellationError() }
+        return page.items.flatMap { $0.imageSources(for: .landscape, size: .custom(width: 200)) }
     }
 }

@@ -8,6 +8,7 @@
 
 import JellyfinAPI
 import SwiftfinLocalization
+import SwiftfinMediaCatalog
 
 struct RecordingsLibrary: BaseItemKindLibrary {
 
@@ -21,17 +22,6 @@ struct RecordingsLibrary: BaseItemKindLibrary {
         environment: Empty,
         pageState: LibraryPageState
     ) async throws -> [BaseItemDto] {
-        var parameters = Paths.GetRecordingsParameters()
-        parameters.fields = PosterSubtitleField.itemFields
-        parameters.userID = pageState.userID
-        parameters.startIndex = pageState.pageOffset
-        parameters.limit = pageState.pageSize
-        parameters.enableUserData = true
-        parameters.isInProgress = false
-
-        let request = Paths.getRecordings(parameters: parameters)
-        let response = try await pageState.client.send(request)
-
-        return response.value.items ?? []
+        try await pageState.readMedia(.recordings).items
     }
 }

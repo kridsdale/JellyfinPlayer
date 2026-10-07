@@ -11,6 +11,7 @@ import Defaults
 import JellyfinAPI
 import SwiftfinCollections
 import SwiftfinLocalization
+import SwiftfinMediaCatalog
 import SwiftfinPaging
 import SwiftfinStoredValues
 import SwiftUI
@@ -112,38 +113,14 @@ struct ItemLibrary: PagingLibrary, SearchablePagingLibrary, WithRandomElementLib
     }
 
     func retrievePageResult(environment: Environment, pageState: LibraryPageState) async throws -> PagingPage<BaseItemDto> {
-        var parameters = attachPage(
-            to: attachFilters(
-                to: makeBaseItemParameters(environment: environment),
-                using: environment.filters
-            ),
-            pageState: pageState
-        )
-        parameters.userID = pageState.userID
-
-        let request = Paths.getItems(parameters: parameters)
-        let response = try await pageState.client.send(request)
-
-        let rows = response.value.items ?? []
-        return PagingPage(items: normalize(rows), consumedCount: rows.count)
+        try await pageState.mediaPageResult(.items(catalogQuery(environment: environment)))
     }
 
     func retrieveRandomElement(
         environment: Environment,
         pageState: LibraryPageState
     ) async throws -> BaseItemDto? {
-        var parameters = attachFilters(
-            to: makeBaseItemParameters(environment: environment),
-            using: environment.filters
-        )
-        parameters.limit = 1
-        parameters.sortBy = [.random]
-        parameters.userID = pageState.userID
-
-        let request = Paths.getItems(parameters: parameters)
-        let response = try await pageState.client.send(request)
-
-        return response.value.items?.first
+        try await pageState.readMedia(.items(catalogQuery(environment: environment), mode: .random)).items.first
     }
 
     func retrieveSearchPage(
@@ -159,115 +136,20 @@ struct ItemLibrary: PagingLibrary, SearchablePagingLibrary, WithRandomElementLib
         environment: Environment,
         pageState: LibraryPageState
     ) async throws -> PagingPage<BaseItemDto> {
-        var parameters = attachPage(
-            to: attachFilters(
-                to: makeBaseItemParameters(environment: environment),
-                using: environment.filters
-            ),
-            pageState: pageState
+        try await pageState.mediaPageResult(.items(
+            catalogQuery(environment: environment),
+            mode: .search(query: query, staticQuery: filterViewModel.staticFilters.query)
+        ))
+    }
+
+    private func catalogQuery(environment: Environment) -> CatalogItemQuery {
+        CatalogItemQuery(
+            parentID: parent.id,
+            parentType: parent.libraryType,
+            collectionType: parent.collectionType,
+            groupingID: environment.grouping?.id,
+            filters: environment.filters.catalogSnapshot
         )
-        parameters.searchTerm = filterViewModel.staticFilters.query ?? query
-        parameters.userID = pageState.userID
-
-        let request = Paths.getItems(parameters: parameters)
-        let response = try await pageState.client.send(request)
-
-        let rows = response.value.items ?? []
-        return PagingPage(items: normalize(rows), consumedCount: rows.count)
-    }
-
-    private func makeBaseItemParameters(environment: Environment) -> Paths.GetItemsParameters {
-        var parameters = Paths.GetItemsParameters()
-        parameters.enableUserData = true
-        parameters.fields = PosterSubtitleField.itemFields
-        parameters.includeItemTypes = parent.supportedItemTypes(for: environment.grouping)
-        parameters.isRecursive = parent.isRecursiveCollection(for: environment.grouping)
-        parameters.sortBy = [.name]
-        parameters.sortOrder = [.ascending]
-
-        guard let parentID = parent.id else { return parameters }
-
-        switch parent.libraryType {
-        case .folder:
-            parameters.parentID = parentID
-            parameters.isRecursive = nil
-        case .person:
-            parameters.personIDs = [parentID]
-        case .studio:
-            parameters.studioIDs = [parentID]
-        default:
-            parameters.parentID = parentID
-        }
-
-        return parameters
-    }
-
-    private func normalize(_ items: [BaseItemDto]) -> [BaseItemDto] {
-        items
-            .filter { item in
-                if let collectionType = item.collectionType {
-                    return CollectionType.supportedCases.contains(collectionType)
-                }
-
-                return true
-            }
-            .map { item in
-                if parent.libraryType == .folder, item.type == .collectionFolder {
-                    return item.mutating(\.type, with: .folder)
-                }
-
-                return item
-            }
-    }
-
-    private func attachFilters(
-        to parameters: Paths.GetItemsParameters,
-        using filters: ItemFilterCollection
-    ) -> Paths.GetItemsParameters {
-        var parameters = parameters
-        parameters.audioLanguages = filters.audioLanguages.map(\.value)
-        parameters.filters = filters.traits
-        parameters.genres = filters.genres.map(\.value)
-        parameters.officialRatings = filters.officialRatings.map(\.value)
-        parameters.sortBy = filters.sortBy
-        parameters.sortOrder = filters.sortOrder
-        parameters.subtitleLanguages = filters.subtitleLanguages.map(\.value)
-        parameters.tags = filters.tags.map(\.value)
-        parameters.years = filters.years.compactMap { Int($0.value) }
-
-        parameters.isMovie = filters.categories.contains(.movies) ? true : nil
-        parameters.isSeries = filters.categories.contains(.series) ? true : nil
-        parameters.isNews = filters.categories.contains(.news) ? true : nil
-        parameters.isKids = filters.categories.contains(.kids) ? true : nil
-        parameters.isSports = filters.categories.contains(.sports) ? true : nil
-
-        if let query = filters.query {
-            parameters.searchTerm = query
-        }
-
-        if filters.itemTypes.isNotEmpty {
-            parameters.includeItemTypes = filters.itemTypes
-        }
-
-        if let letter = filters.letter.first {
-            if letter.value == "#" {
-                parameters.nameLessThan = "A"
-            } else {
-                parameters.nameStartsWith = letter.value
-            }
-        }
-
-        return parameters
-    }
-
-    private func attachPage(
-        to parameters: Paths.GetItemsParameters,
-        pageState: LibraryPageState
-    ) -> Paths.GetItemsParameters {
-        var parameters = parameters
-        parameters.limit = pageState.pageSize
-        parameters.startIndex = pageState.pageOffset
-        return parameters
     }
 }
 

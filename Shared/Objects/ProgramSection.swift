@@ -7,14 +7,11 @@
 //
 
 import SwiftfinLocalization
+import SwiftfinMediaCatalog
 
-enum ProgramSection: String, CaseIterable, Displayable {
+typealias ProgramSection = MediaProgramCategory
 
-    case kids
-    case movies
-    case news
-    case series
-    case sports
+extension MediaProgramCategory: Displayable {
 
     var displayTitle: String {
         switch self {

@@ -7,6 +7,7 @@
 //
 
 import JellyfinAPI
+import SwiftfinMediaCatalog
 import SwiftfinNetworking
 import SwiftfinPaging
 import SwiftUI
@@ -23,6 +24,19 @@ struct LibraryPageState {
         self.pageSize = pageSize
         self.client = client
         self.userID = userID
+    }
+
+    var mediaCatalog: MediaCatalogClient {
+        MediaCatalogClient(reader: client, userID: userID)
+    }
+
+    func readMedia(_ query: MediaCatalogQuery) async throws -> CatalogPage {
+        try await mediaCatalog.page(query, at: CatalogPageRequest(offset: pageOffset, limit: pageSize))
+    }
+
+    func mediaPageResult(_ query: MediaCatalogQuery) async throws -> PagingPage<BaseItemDto> {
+        let page = try await readMedia(query)
+        return PagingPage(items: page.items, consumedCount: page.consumedCount)
     }
 
     init(pageOffset: Int, pageSize: Int, userSession: UserSession) {

@@ -8,6 +8,7 @@
 
 import JellyfinAPI
 import SwiftfinLocalization
+import SwiftfinMediaCatalog
 
 struct PeopleLibrary: BaseItemKindLibrary {
 
@@ -31,13 +32,6 @@ struct PeopleLibrary: BaseItemKindLibrary {
         environment: Environment,
         pageState: LibraryPageState
     ) async throws -> [BaseItemDto] {
-        var parameters = Paths.GetPersonsParameters()
-        parameters.limit = pageState.pageSize
-        parameters.searchTerm = environment.query
-
-        let request = Paths.getPersons(parameters: parameters)
-        let response = try await pageState.client.send(request)
-
-        return response.value.items ?? []
+        try await pageState.readMedia(.people(query: environment.query)).items
     }
 }

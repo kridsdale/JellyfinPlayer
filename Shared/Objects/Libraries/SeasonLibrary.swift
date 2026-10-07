@@ -9,6 +9,7 @@
 import Defaults
 import JellyfinAPI
 import SwiftfinLocalization
+import SwiftfinMediaCatalog
 
 struct SeasonViewModelLibrary: PagingLibrary {
 
@@ -34,6 +35,8 @@ struct SeasonViewModelLibrary: PagingLibrary {
 
 struct SeasonLibrary: BaseItemKindLibrary {
 
+    let hasNextPage = false
+
     let libraryItemTypes: [BaseItemKind] = [.season]
     let parent: BaseItemDto
 
@@ -41,18 +44,8 @@ struct SeasonLibrary: BaseItemKindLibrary {
         environment: Empty,
         pageState: LibraryPageState
     ) async throws -> [BaseItemDto] {
-        guard let seriesID = parent.id else {
-            throw ErrorMessage(L10n.unknownError)
-        }
-
-        var parameters = Paths.GetSeasonsParameters()
-        parameters.fields = PosterSubtitleField.itemFields
-        parameters.isMissing = Defaults[.Customization.shouldShowMissingSeasons] ? nil : false
-        parameters.userID = pageState.userID
-
-        let request = Paths.getSeasons(seriesID: seriesID, parameters: parameters)
-        let response = try await pageState.client.send(request)
-
-        return response.value.items ?? []
+        guard let seriesID = parent.id else { throw ErrorMessage(L10n.unknownError) }
+        return try await pageState.readMedia(.seasons(seriesID: seriesID, showMissing: Defaults[.Customization.shouldShowMissingSeasons]))
+            .items
     }
 }

@@ -1,0 +1,214 @@
+//
+// Swiftfin is subject to the terms of the Mozilla Public
+// License, v2.0. If a copy of the MPL was not distributed with this
+// file, you can obtain one at https://mozilla.org/MPL/2.0/.
+//
+// Copyright (c) 2026 Jellyfin & Jellyfin Contributors
+//
+
+import Foundation
+import Get
+import JellyfinAPI
+import SwiftfinCollections
+import SwiftfinNetworking
+
+@MainActor
+public protocol MediaCatalogReading {
+    func read<Value: Decodable & Sendable>(_ request: Request<Value>) async throws -> Value
+}
+
+extension JellyfinTransport: MediaCatalogReading {
+    public func read<Value: Decodable & Sendable>(_ request: Request<Value>) async throws -> Value {
+        guard request.method == .get else { throw MediaCatalogError.nonReadRequest }
+        return try await send(request).value
+    }
+}
+
+/// Composition injects one exact transport/user pair; it is never replaced in flight.
+@MainActor
+public final class MediaCatalogClient {
+    private let reader: any MediaCatalogReading
+    private let userID: String
+    private let now: @MainActor @Sendable () -> Date
+    public init(reader: any MediaCatalogReading, userID: String, now: @escaping @MainActor @Sendable () -> Date = { .now }) {
+        self.reader = reader
+        self.userID = userID
+        self.now = now
+    }
+
+    private func read<Value: Decodable & Sendable>(_ request: Request<Value>) async throws -> Value {
+        try Task.checkCancellation()
+        guard request.method == .get else { throw MediaCatalogError.nonReadRequest }
+        do {
+            let result = try await reader.read(request)
+            try Task.checkCancellation()
+            return result
+        } catch {
+            try Task.checkCancellation()
+            throw error
+        }
+    }
+
+    public func userViews() async throws -> [BaseItemDto] {
+        async let views = read(Paths.getUserViews(parameters: .init(userID: userID)))
+        async let user = read(Paths.getCurrentUser)
+        return try await MediaCatalogPolicy.normalizeViews(views.items ?? [], excludedIDs: user.configuration?.myMediaExcludes ?? [])
+    }
+
+    public func page(_ query: MediaCatalogQuery, at page: CatalogPageRequest) async throws -> CatalogPage {
+        try Task.checkCancellation()
+        if !query.supportsPagination && page.offset != 0 {
+            return CatalogPage(items: [])
+        }
+        switch query {
+        case let .items(input, mode):
+            let p = MediaCatalogPolicy.itemParameters(input, userID: userID, page: page, mode: mode)
+            let rows = try await read(Paths.getItems(parameters: p)).items ?? []
+            if case .random = mode {
+                return CatalogPage(items: rows)
+            }
+            return MediaCatalogPolicy.normalize(rows, parentType: input.parentType)
+        case .recent:
+            var p = Paths.GetItemsParameters()
+            p.enableUserData = true
+            p.fields = MediaCatalogPolicy.itemFields
+            p.includeItemTypes = [.movie, .series]
+            p.isRecursive = true
+            p.limit = page.limit
+            p.startIndex = page.offset
+            p.sortBy = [.dateCreated]
+            p.sortOrder = [.descending]
+            p.userID = userID
+            return try await CatalogPage(items: read(Paths.getItems(parameters: p)).items ?? [])
+        case let .latest(parentID):
+            var p = Paths.GetLatestMediaParameters()
+            p.enableUserData = true
+            p.fields = MediaCatalogPolicy.itemFields
+            p.limit = page.limit
+            p.parentID = parentID
+            p.userID = userID
+            return try await CatalogPage(items: read(Paths.getLatestMedia(parameters: p)))
+        case let .nextUp(rewatching, maximumAge, now):
+            var p = Paths.GetNextUpParameters()
+            p.enableRewatching = rewatching
+            p.enableUserData = true
+            p.fields = MediaCatalogPolicy.itemFields
+            p.limit = page.limit
+            p.startIndex = page.offset
+            if maximumAge.isFinite && maximumAge > 0 {
+                p.nextUpDateCutoff = now.addingTimeInterval(-maximumAge)
+            }
+            return try await CatalogPage(items: read(Paths.getNextUp(parameters: p)).items ?? [])
+        case let .resume(mediaTypes):
+            var p = Paths.GetResumeItemsParameters()
+            p.enableUserData = true
+            p.fields = MediaCatalogPolicy.itemFields
+            p.limit = page.limit
+            p.startIndex = page.offset
+            p.mediaTypes = mediaTypes
+            p.userID = userID
+            return try await CatalogPage(items: read(Paths.getResumeItems(parameters: p)).items ?? [])
+        case .recordings:
+            var p = Paths.GetRecordingsParameters()
+            p.fields = MediaCatalogPolicy.itemFields
+            p.userID = userID
+            p.startIndex = page.offset
+            p.limit = page.limit
+            p.enableUserData = true
+            p.isInProgress = false
+            return try await CatalogPage(items: read(Paths.getRecordings(parameters: p)).items ?? [])
+        case let .programs(category):
+            var p = Paths.GetLiveTvProgramsParameters()
+            p.fields = [.channelInfo]
+            p.hasAired = false
+            p.limit = page.limit
+            p.startIndex = page.offset
+            p.userID = userID
+            p.isKids = category == .kids
+            p.isMovie = category == .movies
+            p.isNews = category == .news
+            p.isSeries = category == .series
+            p.isSports = category == .sports
+            return try await CatalogPage(items: read(Paths.getLiveTvPrograms(parameters: p)).items ?? [])
+        case .recommendedPrograms:
+            var p = Paths.GetRecommendedProgramsParameters()
+            p.fields = [.channelInfo]
+            p.isAiring = true
+            p.limit = page.limit
+            p.startIndex = page.offset
+            p.userID = userID
+            return try await CatalogPage(items: read(Paths.getRecommendedPrograms(parameters: p)).items ?? [])
+        case let .people(query):
+            var p = Paths.GetPersonsParameters()
+            p.limit = page.limit
+            p.startIndex = page.offset
+            p.searchTerm = query
+            return try await CatalogPage(items: read(Paths.getPersons(parameters: p)).items ?? [])
+        case .genres:
+            var p = Paths.GetGenresParameters()
+            p.limit = page.limit
+            p.startIndex = page.offset
+            return try await CatalogPage(items: read(Paths.getGenres(parameters: p)).items ?? [])
+        case .channels:
+            var p = Paths.GetLiveTvChannelsParameters()
+            p.limit = page.limit
+            p.startIndex = page.offset
+            p.userID = userID
+            return try await CatalogPage(items: read(Paths.getLiveTvChannels(parameters: p)).items ?? [])
+        case let .channelSchedule(channelID, from):
+            var p = Paths.GetLiveTvProgramsParameters()
+            p.channelIDs = [channelID].compactMap(\.self)
+            p.fields = [.channelInfo]
+            p.limit = page.limit
+            p.minEndDate = from
+            p.sortBy = [.startDate]
+            p.startIndex = page.offset
+            p.userID = userID
+            return try await CatalogPage(items: read(Paths.getLiveTvPrograms(parameters: p)).items ?? [])
+        case let .seasons(seriesID, showMissing):
+            var p = Paths.GetSeasonsParameters()
+            p.fields = MediaCatalogPolicy.itemFields
+            p.isMissing = showMissing ? nil : false
+            p.userID = userID
+            return try await CatalogPage(items: read(Paths.getSeasons(seriesID: seriesID, parameters: p)).items ?? [])
+        case let .episodes(seasonID, showMissing):
+            var p = Paths.GetEpisodesParameters()
+            p.enableUserData = true
+            p.fields = MediaCatalogPolicy.itemFields + [.overview]
+            p.isMissing = showMissing ? nil : false
+            p.seasonID = seasonID
+            p.userID = userID
+            return try await CatalogPage(items: read(Paths.getEpisodes(seriesID: seasonID, parameters: p)).items ?? [])
+        case let .additionalParts(id): return try await CatalogPage(items: read(Paths.getAdditionalPart(itemID: id)).items ?? [])
+        case let .specialFeatures(id): return try await CatalogPage(items: read(Paths.getSpecialFeatures(itemID: id)))
+        case let .localTrailers(id): return try await CatalogPage(items: read(Paths.getLocalTrailers(itemID: id, userID: userID)))
+        case let .similar(id, type):
+            var p = Paths.GetSimilarItemsParameters()
+            p.fields = MediaCatalogPolicy.itemFields
+            p.limit = page.limit
+            p.userID = userID
+            if let type, [.liveTvProgram, .program, .tvProgram].contains(type) {
+                p.fields = MediaCatalogPolicy.itemFields + [.channelInfo]
+            }
+            return try await CatalogPage(items: read(Paths.getSimilarItems(itemID: id, parameters: p)).items ?? [])
+        case .scheduledRecordings:
+            let timers = try await read(Paths.getTimers()).items ?? []
+            let responseTime = now()
+            let items = timers.filter { MediaCatalogPolicy.isScheduled($0, now: responseTime) }.sorted(using: \.startDate)
+                .compactMap(\.programInfo)
+            return CatalogPage(items: items, consumedCount: timers.count)
+        case let .artworkSample(parentID, itemTypes, favorites):
+            var p = Paths.GetItemsParameters()
+            p.filters = favorites ? [.isFavorite] : nil
+            p.includeItemTypes = itemTypes
+            p.isRecursive = true
+            p.limit = 3
+            p.parentID = parentID
+            p.sortBy = [.random]
+            p.userID = userID
+            return try await CatalogPage(items: read(Paths.getItems(parameters: p)).items ?? [])
+        }
+    }
+}
+
+public enum MediaCatalogError: Error, Sendable { case nonReadRequest }

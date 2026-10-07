@@ -8,6 +8,7 @@
 
 import JellyfinAPI
 import SwiftfinLocalization
+import SwiftfinMediaCatalog
 
 struct EPGChannelsLibrary: BaseItemKindLibrary {
 
@@ -22,14 +23,6 @@ struct EPGChannelsLibrary: BaseItemKindLibrary {
         environment: Empty,
         pageState: LibraryPageState
     ) async throws -> [BaseItemDto] {
-        var parameters = Paths.GetLiveTvChannelsParameters()
-        parameters.limit = pageState.pageSize
-        parameters.startIndex = pageState.pageOffset
-        parameters.userID = pageState.userID
-
-        let request = Paths.getLiveTvChannels(parameters: parameters)
-        let response = try await pageState.client.send(request)
-
-        return response.value.items ?? []
+        try await pageState.readMedia(.channels).items
     }
 }

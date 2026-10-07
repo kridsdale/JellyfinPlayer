@@ -11,6 +11,8 @@ import SwiftfinLocalization
 
 struct ServerUsersLibrary: PagingLibrary {
 
+    let hasNextPage = false
+
     let parent = TitledLibraryParent(displayTitle: L10n.users, id: "server-users")
 
     func retrievePage(

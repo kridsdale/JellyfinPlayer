@@ -7,6 +7,7 @@
 //
 
 import JellyfinAPI
+import SwiftfinMediaCatalog
 
 struct LocalTrailerLibrary: BaseItemKindLibrary {
 
@@ -23,13 +24,6 @@ struct LocalTrailerLibrary: BaseItemKindLibrary {
         pageState: LibraryPageState
     ) async throws -> [BaseItemDto] {
         guard let itemID = parent.id else { return [] }
-
-        let request = Paths.getLocalTrailers(
-            itemID: itemID,
-            userID: pageState.userID
-        )
-        let response = try await pageState.client.send(request)
-
-        return response.value
+        return try await pageState.readMedia(.localTrailers(itemID: itemID)).items
     }
 }

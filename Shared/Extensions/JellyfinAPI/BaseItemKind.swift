@@ -9,6 +9,7 @@
 import JellyfinAPI
 import SwiftfinCollections
 import SwiftfinLocalization
+import SwiftfinMediaCatalog
 
 extension BaseItemKind: @retroactive SupportedCaseIterable {
 
@@ -20,13 +21,7 @@ extension BaseItemKind: @retroactive SupportedCaseIterable {
     /// like `LibararyParent` may have additional supported
     /// cases for querying a library.
     public static var supportedCases: [BaseItemKind] {
-        [
-            .boxSet,
-            .movie,
-            .musicVideo,
-            .series,
-            .video,
-        ]
+        MediaCatalogPolicy.defaultItemTypes
     }
 }
 

@@ -8,6 +8,7 @@
 
 import JellyfinAPI
 import SwiftfinLocalization
+import SwiftfinMediaCatalog
 
 struct GenresLibrary: BaseItemKindLibrary {
 
@@ -18,13 +19,6 @@ struct GenresLibrary: BaseItemKindLibrary {
         environment: Empty,
         pageState: LibraryPageState
     ) async throws -> [BaseItemDto] {
-        var parameters = Paths.GetGenresParameters()
-        parameters.limit = pageState.pageSize
-        parameters.startIndex = pageState.pageOffset
-
-        let request = Paths.getGenres(parameters: parameters)
-        let response = try await pageState.client.send(request)
-
-        return response.value.items ?? []
+        try await pageState.readMedia(.genres).items
     }
 }

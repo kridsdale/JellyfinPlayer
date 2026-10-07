@@ -8,6 +8,7 @@
 
 import JellyfinAPI
 import SwiftfinLocalization
+import SwiftfinMediaCatalog
 
 struct RecommendedProgramsLibrary: BaseItemKindLibrary {
 
@@ -18,15 +19,6 @@ struct RecommendedProgramsLibrary: BaseItemKindLibrary {
         environment: Empty,
         pageState: LibraryPageState
     ) async throws -> [BaseItemDto] {
-        var parameters = Paths.GetRecommendedProgramsParameters()
-        parameters.fields = [.channelInfo]
-        parameters.isAiring = true
-        parameters.limit = pageState.pageSize
-        parameters.userID = pageState.userID
-
-        let request = Paths.getRecommendedPrograms(parameters: parameters)
-        let response = try await pageState.client.send(request)
-
-        return response.value.items ?? []
+        try await pageState.readMedia(.recommendedPrograms).items
     }
 }

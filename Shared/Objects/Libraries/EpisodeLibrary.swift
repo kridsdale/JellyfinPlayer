@@ -9,6 +9,7 @@
 import Defaults
 import JellyfinAPI
 import SwiftfinLocalization
+import SwiftfinMediaCatalog
 
 struct EpisodeLibrary: BaseItemKindLibrary {
 
@@ -24,23 +25,8 @@ struct EpisodeLibrary: BaseItemKindLibrary {
         environment: Empty,
         pageState: LibraryPageState
     ) async throws -> [BaseItemDto] {
-        guard let seasonID = parent.id else {
-            throw ErrorMessage(L10n.unknownError)
-        }
-
-        var parameters = Paths.GetEpisodesParameters()
-        parameters.enableUserData = true
-        parameters.fields = PosterSubtitleField.itemFields + [.overview]
-        parameters.isMissing = Defaults[.Customization.shouldShowMissingEpisodes] ? nil : false
-        parameters.seasonID = seasonID
-        parameters.userID = pageState.userID
-
-        let request = Paths.getEpisodes(
-            seriesID: seasonID,
-            parameters: parameters
-        )
-        let response = try await pageState.client.send(request)
-
-        return response.value.items ?? []
+        guard let seasonID = parent.id else { throw ErrorMessage(L10n.unknownError) }
+        return try await pageState.readMedia(.episodes(seasonID: seasonID, showMissing: Defaults[.Customization.shouldShowMissingEpisodes]))
+            .items
     }
 }

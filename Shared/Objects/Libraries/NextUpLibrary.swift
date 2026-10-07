@@ -10,6 +10,7 @@ import Defaults
 import Foundation
 import JellyfinAPI
 import SwiftfinLocalization
+import SwiftfinMediaCatalog
 
 struct NextUpLibrary: BaseItemKindLibrary {
 
@@ -30,21 +31,7 @@ struct NextUpLibrary: BaseItemKindLibrary {
         environment: Environment,
         pageState: LibraryPageState
     ) async throws -> [BaseItemDto] {
-        var parameters = Paths.GetNextUpParameters()
-        parameters.enableRewatching = environment.enableRewatching
-        parameters.enableUserData = true
-        parameters.fields = PosterSubtitleField.itemFields
-        parameters.limit = pageState.pageSize
-        parameters.startIndex = pageState.pageOffset
-
-        if environment.maxNextUp > 0 {
-            parameters.nextUpDateCutoff = Date.now.addingTimeInterval(-environment.maxNextUp)
-        }
-
-        let request = Paths.getNextUp(parameters: parameters)
-        let response = try await pageState.client.send(request)
-
-        return response.value.items ?? []
+        try await pageState.readMedia(.nextUp(rewatching: environment.enableRewatching, maximumAge: environment.maxNextUp, now: .now)).items
     }
 
     func onItemUserDataChanged(

@@ -8,18 +8,11 @@
 
 import Foundation
 import JellyfinAPI
+import SwiftfinMediaCatalog
 
 extension TimerInfoDto {
 
     var isScheduledRecording: Bool {
-        switch status {
-        case .inProgress:
-            // Post-padding can keep a recording active after its program ends.
-            true
-        case .cancelled, .completed, .error:
-            false
-        default:
-            (endDate ?? .distantFuture) > .now
-        }
+        MediaCatalogPolicy.isScheduled(self, now: .now)
     }
 }

@@ -9,6 +9,7 @@
 import JellyfinAPI
 import SwiftfinCollections
 import SwiftfinLocalization
+import SwiftfinMediaCatalog
 import SwiftfinStoredValues
 
 extension BaseItemDto: LibraryParent {
@@ -41,30 +42,7 @@ extension BaseItemDto: LibraryParent {
     }
 
     func supportedItemTypes(for grouping: Grouping?) -> [BaseItemKind] {
-        switch (collectionType, libraryType) {
-        case (_, .folder):
-            BaseItemKind.supportedCases
-                .appending([.folder, .collectionFolder])
-        case (_, .channel), (_, .liveTvChannel), (_, .tvChannel):
-            [.liveTvProgram]
-        case (.movies, _):
-            [.movie]
-        case (.tvshows, _):
-            switch grouping {
-            case .episodes:
-                [.episode]
-            case .seasons:
-                [.season]
-            default:
-                [.series]
-            }
-        case (.music, _):
-            [.audio, .musicAlbum, .musicArtist]
-        case (.boxsets, _):
-            BaseItemKind.supportedCases
-        default:
-            BaseItemKind.supportedCases
-        }
+        MediaCatalogPolicy.itemTypes(parentType: libraryType, collectionType: collectionType, groupingID: grouping?.id)
     }
 
     var isRecursiveCollection: Bool {
@@ -72,12 +50,6 @@ extension BaseItemDto: LibraryParent {
     }
 
     func isRecursiveCollection(for grouping: Grouping?) -> Bool {
-        guard let collectionType, libraryType != .userView else { return true }
-
-        if grouping == .episodes || grouping == .seasons {
-            return true
-        }
-
-        return ![.tvshows, .boxsets].contains(collectionType)
+        MediaCatalogPolicy.isRecursive(parentType: libraryType, collectionType: collectionType, groupingID: grouping?.id)
     }
 }

@@ -8,8 +8,11 @@
 
 import JellyfinAPI
 import SwiftfinLocalization
+import SwiftfinMediaCatalog
 
 struct SpecialFeaturesLibrary: BaseItemKindLibrary {
+
+    let hasNextPage = false
 
     let itemID: String
     let libraryItemTypes: [BaseItemKind] = [.video]
@@ -19,9 +22,6 @@ struct SpecialFeaturesLibrary: BaseItemKindLibrary {
         environment: Empty,
         pageState: LibraryPageState
     ) async throws -> [BaseItemDto] {
-        let request = Paths.getSpecialFeatures(itemID: itemID)
-        let response = try await pageState.client.send(request)
-
-        return response.value
+        try await pageState.readMedia(.specialFeatures(itemID: itemID)).items
     }
 }

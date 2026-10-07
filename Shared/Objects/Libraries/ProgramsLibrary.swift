@@ -7,6 +7,7 @@
 //
 
 import JellyfinAPI
+import SwiftfinMediaCatalog
 
 struct ProgramsLibrary: BaseItemKindLibrary {
 
@@ -26,22 +27,6 @@ struct ProgramsLibrary: BaseItemKindLibrary {
         environment: Empty,
         pageState: LibraryPageState
     ) async throws -> [BaseItemDto] {
-        var parameters = Paths.GetLiveTvProgramsParameters()
-        parameters.fields = [.channelInfo]
-        parameters.hasAired = false
-        parameters.limit = pageState.pageSize
-        parameters.startIndex = pageState.pageOffset
-        parameters.userID = pageState.userID
-
-        parameters.isKids = section == .kids
-        parameters.isMovie = section == .movies
-        parameters.isNews = section == .news
-        parameters.isSeries = section == .series
-        parameters.isSports = section == .sports
-
-        let request = Paths.getLiveTvPrograms(parameters: parameters)
-        let response = try await pageState.client.send(request)
-
-        return response.value.items ?? []
+        try await pageState.readMedia(.programs(category: section)).items
     }
 }

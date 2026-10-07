@@ -8,6 +8,7 @@
 
 import JellyfinAPI
 import SwiftfinLocalization
+import SwiftfinMediaCatalog
 
 struct RecentlyAddedLibrary: BaseItemKindLibrary {
 
@@ -18,20 +19,6 @@ struct RecentlyAddedLibrary: BaseItemKindLibrary {
         environment: Empty,
         pageState: LibraryPageState
     ) async throws -> [BaseItemDto] {
-        var parameters = Paths.GetItemsParameters()
-        parameters.enableUserData = true
-        parameters.fields = PosterSubtitleField.itemFields
-        parameters.includeItemTypes = [.movie, .series]
-        parameters.isRecursive = true
-        parameters.limit = pageState.pageSize
-        parameters.sortBy = [.dateCreated]
-        parameters.sortOrder = [.descending]
-        parameters.startIndex = pageState.pageOffset
-        parameters.userID = pageState.userID
-
-        let request = Paths.getItems(parameters: parameters)
-        let response = try await pageState.client.send(request)
-
-        return response.value.items ?? []
+        try await pageState.readMedia(.recent).items
     }
 }

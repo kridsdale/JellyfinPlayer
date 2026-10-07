@@ -8,8 +8,11 @@
 
 import JellyfinAPI
 import SwiftfinLocalization
+import SwiftfinMediaCatalog
 
 struct SimilarItemsLibrary: PagingLibrary {
+
+    let hasNextPage = false
 
     let itemID: String
     let parent: TitledLibraryParent = .init(displayTitle: L10n.recommended, id: "similar-items")
@@ -25,21 +28,6 @@ struct SimilarItemsLibrary: PagingLibrary {
         environment: Empty,
         pageState: LibraryPageState
     ) async throws -> [BaseItemDto] {
-        var parameters = Paths.GetSimilarItemsParameters()
-        parameters.fields = PosterSubtitleField.itemFields
-        parameters.limit = pageState.pageSize
-        parameters.userID = pageState.userID
-
-        if let itemType, [.liveTvProgram, .program, .tvProgram].contains(itemType) {
-            parameters.fields = PosterSubtitleField.itemFields + [.channelInfo]
-        }
-
-        let request = Paths.getSimilarItems(
-            itemID: itemID,
-            parameters: parameters
-        )
-        let response = try await pageState.client.send(request)
-
-        return response.value.items ?? []
+        try await pageState.readMedia(.similar(itemID: itemID, itemType: itemType)).items
     }
 }

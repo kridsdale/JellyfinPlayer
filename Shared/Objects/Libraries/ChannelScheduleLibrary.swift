@@ -7,6 +7,7 @@
 //
 
 import JellyfinAPI
+import SwiftfinMediaCatalog
 import SwiftUI
 
 struct ChannelScheduleLibrary: BaseItemKindLibrary {
@@ -30,18 +31,6 @@ struct ChannelScheduleLibrary: BaseItemKindLibrary {
         environment: Empty,
         pageState: LibraryPageState
     ) async throws -> [BaseItemDto] {
-        var parameters = Paths.GetLiveTvProgramsParameters()
-        parameters.channelIDs = [channelID].compactMap(\.self)
-        parameters.fields = [.channelInfo]
-        parameters.limit = pageState.pageSize
-        parameters.minEndDate = startDate
-        parameters.sortBy = [.startDate]
-        parameters.startIndex = pageState.pageOffset
-        parameters.userID = pageState.userID
-
-        let request = Paths.getLiveTvPrograms(parameters: parameters)
-        let response = try await pageState.client.send(request)
-
-        return response.value.items ?? []
+        try await pageState.readMedia(.channelSchedule(channelID: channelID, from: startDate)).items
     }
 }

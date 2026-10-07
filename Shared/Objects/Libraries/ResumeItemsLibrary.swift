@@ -8,6 +8,7 @@
 
 import JellyfinAPI
 import SwiftfinLocalization
+import SwiftfinMediaCatalog
 
 struct ResumeItemsLibrary: BaseItemKindLibrary {
 
@@ -26,18 +27,7 @@ struct ResumeItemsLibrary: BaseItemKindLibrary {
         environment: Empty,
         pageState: LibraryPageState
     ) async throws -> [BaseItemDto] {
-        var parameters = Paths.GetResumeItemsParameters()
-        parameters.enableUserData = true
-        parameters.fields = PosterSubtitleField.itemFields
-        parameters.limit = pageState.pageSize
-        parameters.mediaTypes = mediaTypes
-        parameters.startIndex = pageState.pageOffset
-        parameters.userID = pageState.userID
-
-        let request = Paths.getResumeItems(parameters: parameters)
-        let response = try await pageState.client.send(request)
-
-        return response.value.items ?? []
+        try await pageState.readMedia(.resume(mediaTypes: mediaTypes)).items
     }
 
     func onItemUserDataChanged(

@@ -8,6 +8,7 @@
 
 import JellyfinAPI
 import SwiftfinLocalization
+import SwiftfinMediaCatalog
 import SwiftfinStoredValues
 
 enum PosterSubtitleField: String, CaseIterable, Displayable, Storable {
@@ -23,7 +24,7 @@ enum PosterSubtitleField: String, CaseIterable, Displayable, Storable {
     case year
 
     // Fetch these with poster collections so changing labels needs no per-item requests.
-    static let itemFields: [ItemFields] = [.mediaStreams, .genres, .studios]
+    static let itemFields: [ItemFields] = MediaCatalogPolicy.itemFields
 
     var displayTitle: String {
         switch self {

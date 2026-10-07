@@ -198,6 +198,9 @@
 		AE0B7C4A216FC849EEA40009 /* SwiftfinPaging in Frameworks */ = {isa = PBXBuildFile; productRef = 6DCEBE0929377E0D43DA106E /* SwiftfinPaging */; };
 		BE2264B77B8FF59E5A3A9D5D /* SwiftfinPaging in Frameworks */ = {isa = PBXBuildFile; productRef = 8D88C751D05B5B1D93DB546E /* SwiftfinPaging */; };
 		A9900C4CA9C73A727627CF82 /* SwiftfinPaging in Frameworks */ = {isa = PBXBuildFile; productRef = CCDD816FAB75FA5BEB09ED5F /* SwiftfinPaging */; };
+		705484BB3635CD20D608AD93 /* SwiftfinMediaCatalog in Frameworks */ = {isa = PBXBuildFile; productRef = 4F9DCBA9F5601F61895C8C75 /* SwiftfinMediaCatalog */; };
+		B8F8A2FDBAF8BF121FBA90CA /* SwiftfinMediaCatalog in Frameworks */ = {isa = PBXBuildFile; productRef = 5FFC8E9D6EFFB910623177AF /* SwiftfinMediaCatalog */; };
+		9071260A6FD33E6DE3B4A6B7 /* SwiftfinMediaCatalog in Frameworks */ = {isa = PBXBuildFile; productRef = 6E7684C2D36936212B2C1AA3 /* SwiftfinMediaCatalog */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -361,6 +364,7 @@
 				DA8534E2CBAF211E21B93A4F /* SwiftfinAccountStore in Frameworks */,
 				DA7479CE8BBE925A4CB50B23 /* SwiftfinVLC in Frameworks */,
 				B160F17A4BFFE9E09BEBCA3D /* SwiftfinNativePlayback in Frameworks */,
+				705484BB3635CD20D608AD93 /* SwiftfinMediaCatalog in Frameworks */,
 				AE0B7C4A216FC849EEA40009 /* SwiftfinPaging in Frameworks */,
 				994C4E3536432A23C38B40E2 /* SwiftfinScrolling in Frameworks */,
 				5BC459F852B817F623C33A49 /* SwiftfinPlaybackPreviews in Frameworks */,
@@ -445,6 +449,7 @@
 				DA85C488D0639DE2D5DD0291 /* SwiftfinAccountStore in Frameworks */,
 				DA74F752D7B8ED416F8A4BAE /* SwiftfinVLC in Frameworks */,
 				246CC0E409441B542A3DAB1D /* SwiftfinNativePlayback in Frameworks */,
+				B8F8A2FDBAF8BF121FBA90CA /* SwiftfinMediaCatalog in Frameworks */,
 				BE2264B77B8FF59E5A3A9D5D /* SwiftfinPaging in Frameworks */,
 				940898099C12D5E7BA85F7D6 /* SwiftfinScrolling in Frameworks */,
 				EF8E9B1B64F2B5BD786596F6 /* SwiftfinPlaybackPreviews in Frameworks */,
@@ -537,6 +542,7 @@
 				DA7633333333333333333333 /* SwiftfinNowPlaying in Frameworks */,
 				DA7533333333333333333333 /* SwiftfinVLC in Frameworks */,
 				2B9BE4A6AA5D252423818E2A /* SwiftfinNativePlayback in Frameworks */,
+				9071260A6FD33E6DE3B4A6B7 /* SwiftfinMediaCatalog in Frameworks */,
 				A9900C4CA9C73A727627CF82 /* SwiftfinPaging in Frameworks */,
 				DD8DE7AE2895111AE2416E7D /* SwiftfinScrolling in Frameworks */,
 				4742F2D11991DDD89E7CBDE6 /* SwiftfinPlaybackPreviews in Frameworks */,
@@ -693,6 +699,7 @@
 				DA85215CF7803CE8718791AB /* SwiftfinAccountStore */,
 				DA7480B1A70AC52FD32A0559 /* SwiftfinVLC */,
 				5753521C1A7580999D5235E5 /* SwiftfinNativePlayback */,
+				4F9DCBA9F5601F61895C8C75 /* SwiftfinMediaCatalog */,
 				6DCEBE0929377E0D43DA106E /* SwiftfinPaging */,
 				E957B765EFFD8CB2C75C0070 /* SwiftfinScrolling */,
 				6B2D0E9739138A7A75F3ACD6 /* SwiftfinPlaybackPreviews */,
@@ -782,6 +789,7 @@
 				DA85A4CA802D048AD0D10631 /* SwiftfinAccountStore */,
 				DA742865472AB5F74FB73C53 /* SwiftfinVLC */,
 				544FE2F4BB5ACB5E733C92A4 /* SwiftfinNativePlayback */,
+				5FFC8E9D6EFFB910623177AF /* SwiftfinMediaCatalog */,
 				8D88C751D05B5B1D93DB546E /* SwiftfinPaging */,
 				0681AE432455258E31E22D1B /* SwiftfinScrolling */,
 				51F67DF4A4DB131FA73F3034 /* SwiftfinPlaybackPreviews */,
@@ -870,6 +878,7 @@
 				DA68B7480EC88B7F22D0A475 /* KidsApplication */,
 				DA90FCD363F78629E3FBA0AA /* SwiftfinImages */,
 				87F4686850832DF83F70C280 /* SwiftfinNativePlayback */,
+				6E7684C2D36936212B2C1AA3 /* SwiftfinMediaCatalog */,
 				CCDD816FAB75FA5BEB09ED5F /* SwiftfinPaging */,
 				34DB11CDB29F908BB57B1105 /* SwiftfinScrolling */,
 				208361B242D44119B04063F1 /* SwiftfinPlaybackPreviews */,
@@ -998,6 +1007,7 @@
 			mainGroup = 5377CBE8263B596A003A4E83;
 			packageReferences = (
 				61842BA512B458F6FFA2C51A /* XCLocalSwiftPackageReference "Packages/SwiftfinNativePlayback" */,
+				D6B801DB045FB5362A749DB3 /* XCLocalSwiftPackageReference "Packages/SwiftfinMediaCatalog" */,
 				7EB614D7281E31B80C2368ED /* XCLocalSwiftPackageReference "Packages/SwiftfinPaging" */,
 				0AEBED44A63E017F2A20040E /* XCLocalSwiftPackageReference "Packages/SwiftfinScrolling" */,
 				8E99F62DD45B71CFB2B4C0E3 /* XCLocalSwiftPackageReference "Packages/SwiftfinPlaybackPreviews" */,
@@ -1744,6 +1754,7 @@
 		8E99F62DD45B71CFB2B4C0E3 /* XCLocalSwiftPackageReference "Packages/SwiftfinPlaybackPreviews" */ = {isa = XCLocalSwiftPackageReference; relativePath = Packages/SwiftfinPlaybackPreviews; };
 		0AEBED44A63E017F2A20040E /* XCLocalSwiftPackageReference "Packages/SwiftfinScrolling" */ = {isa = XCLocalSwiftPackageReference; relativePath = Packages/SwiftfinScrolling; };
 		7EB614D7281E31B80C2368ED /* XCLocalSwiftPackageReference "Packages/SwiftfinPaging" */ = {isa = XCLocalSwiftPackageReference; relativePath = Packages/SwiftfinPaging; };
+		D6B801DB045FB5362A749DB3 /* XCLocalSwiftPackageReference "Packages/SwiftfinMediaCatalog" */ = {isa = XCLocalSwiftPackageReference; relativePath = Packages/SwiftfinMediaCatalog; };
 /* End XCLocalSwiftPackageReference section */
 
 /* Begin XCRemoteSwiftPackageReference section */
@@ -2518,6 +2529,9 @@
 		6DCEBE0929377E0D43DA106E /* SwiftfinPaging */ = {isa = XCSwiftPackageProductDependency; package = 7EB614D7281E31B80C2368ED /* XCLocalSwiftPackageReference "Packages/SwiftfinPaging" */; productName = SwiftfinPaging; };
 		8D88C751D05B5B1D93DB546E /* SwiftfinPaging */ = {isa = XCSwiftPackageProductDependency; package = 7EB614D7281E31B80C2368ED /* XCLocalSwiftPackageReference "Packages/SwiftfinPaging" */; productName = SwiftfinPaging; };
 		CCDD816FAB75FA5BEB09ED5F /* SwiftfinPaging */ = {isa = XCSwiftPackageProductDependency; package = 7EB614D7281E31B80C2368ED /* XCLocalSwiftPackageReference "Packages/SwiftfinPaging" */; productName = SwiftfinPaging; };
+		4F9DCBA9F5601F61895C8C75 /* SwiftfinMediaCatalog */ = {isa = XCSwiftPackageProductDependency; package = D6B801DB045FB5362A749DB3 /* XCLocalSwiftPackageReference "Packages/SwiftfinMediaCatalog" */; productName = SwiftfinMediaCatalog; };
+		5FFC8E9D6EFFB910623177AF /* SwiftfinMediaCatalog */ = {isa = XCSwiftPackageProductDependency; package = D6B801DB045FB5362A749DB3 /* XCLocalSwiftPackageReference "Packages/SwiftfinMediaCatalog" */; productName = SwiftfinMediaCatalog; };
+		6E7684C2D36936212B2C1AA3 /* SwiftfinMediaCatalog */ = {isa = XCSwiftPackageProductDependency; package = D6B801DB045FB5362A749DB3 /* XCLocalSwiftPackageReference "Packages/SwiftfinMediaCatalog" */; productName = SwiftfinMediaCatalog; };
 /* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 5377CBE9263B596A003A4E83 /* Project object */;

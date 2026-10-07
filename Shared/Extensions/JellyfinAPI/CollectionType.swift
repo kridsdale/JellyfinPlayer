@@ -9,18 +9,11 @@
 import Foundation
 import JellyfinAPI
 import SwiftfinCollections
+import SwiftfinMediaCatalog
 
 extension CollectionType: @retroactive SupportedCaseIterable {
 
     public static var supportedCases: [CollectionType] {
-        [
-            .boxsets,
-            .folders,
-            .homevideos,
-            .movies,
-            .musicvideos,
-            .tvshows,
-            .livetv,
-        ]
+        MediaCatalogPolicy.supportedCollectionTypes
     }
 }
