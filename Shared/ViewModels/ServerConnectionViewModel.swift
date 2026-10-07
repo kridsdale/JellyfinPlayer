@@ -13,6 +13,7 @@ import Foundation
 import SwiftfinAccountModels
 import SwiftfinAsyncStreams
 import SwiftfinConnectivity
+import SwiftfinText
 
 @MainActor
 final class ServerConnectionViewModel: ViewModel {

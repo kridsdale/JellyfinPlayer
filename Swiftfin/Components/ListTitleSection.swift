@@ -8,6 +8,7 @@
 
 import Defaults
 import SwiftfinLocalization
+import SwiftfinText
 import SwiftUI
 
 // TODO: image

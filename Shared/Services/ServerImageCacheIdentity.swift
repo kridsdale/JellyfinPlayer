@@ -11,6 +11,7 @@ import Foundation
 import SwiftfinAccountModels
 import SwiftfinImages
 import SwiftfinStoredValues
+import SwiftfinText
 
 @MainActor
 enum ServerImageCacheIdentity {

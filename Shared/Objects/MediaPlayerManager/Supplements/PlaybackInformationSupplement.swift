@@ -15,6 +15,7 @@ import SwiftfinCollections
 import SwiftfinFormatting
 import SwiftfinLocalization
 import SwiftfinMediaTracks
+import SwiftfinText
 import SwiftUI
 
 // TODO: have proxies be a `PlaybackInformationProvider`

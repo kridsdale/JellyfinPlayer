@@ -6,6 +6,7 @@
 // Copyright (c) 2026 Jellyfin & Jellyfin Contributors
 //
 
+import CasePaths
 import Combine
 import FactoryKit
 import Foundation
@@ -13,12 +14,14 @@ import Get
 import JellyfinAPI
 import Logging
 import OrderedCollections
+import StatefulMacros
 import SwiftfinAccountAccess
 import SwiftfinAccountModels
 import SwiftfinAccountStore
 import SwiftfinCollections
 import SwiftfinLocalization
 import SwiftfinStoredValues
+import SwiftfinText
 import SwiftUI
 
 // TODO: instead of just signing in duplicate user, send event for alert

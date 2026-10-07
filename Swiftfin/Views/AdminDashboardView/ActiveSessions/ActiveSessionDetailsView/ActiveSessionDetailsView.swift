@@ -10,6 +10,7 @@ import Foundation
 import JellyfinAPI
 import SwiftfinCollections
 import SwiftfinLocalization
+import SwiftfinText
 import SwiftUI
 
 struct ActiveSessionDetailsView: View {

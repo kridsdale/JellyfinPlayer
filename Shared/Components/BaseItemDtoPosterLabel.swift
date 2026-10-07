@@ -7,6 +7,7 @@
 //
 
 import JellyfinAPI
+import SwiftfinText
 import SwiftUI
 
 struct BaseItemDtoPosterLabel: View {

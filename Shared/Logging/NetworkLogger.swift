@@ -9,6 +9,7 @@
 import Foundation
 import JellyfinAPI
 import Pulse
+import SwiftfinText
 
 private let redactedMessage = "<Redacted by Swiftfin>"
 

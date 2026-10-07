@@ -6,11 +6,13 @@
 // Copyright (c) 2026 Jellyfin & Jellyfin Contributors
 //
 
+import CasePaths
 import Combine
 import Foundation
 import Get
 import JellyfinAPI
 import OrderedCollections
+import StatefulMacros
 import SwiftfinAsyncStreams
 import SwiftfinCollections
 import SwiftfinItemMetadata

@@ -9,6 +9,7 @@
 import JellyfinAPI
 import SwiftfinLocalization
 import SwiftfinScrolling
+import SwiftfinText
 import SwiftUI
 @_spi(Advanced) import SwiftUIIntrospect
 

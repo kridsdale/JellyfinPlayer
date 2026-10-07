@@ -8,6 +8,7 @@
 
 import JellyfinAPI
 import SwiftfinCollections
+import SwiftfinText
 import SwiftUI
 
 extension IdentifyItemView {

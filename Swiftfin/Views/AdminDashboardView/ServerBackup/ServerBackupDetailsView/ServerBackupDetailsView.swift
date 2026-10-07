@@ -6,6 +6,7 @@
 // Copyright (c) 2026 Jellyfin & Jellyfin Contributors
 //
 
+import CasePaths
 import Engine
 import FactoryKit
 import JellyfinAPI

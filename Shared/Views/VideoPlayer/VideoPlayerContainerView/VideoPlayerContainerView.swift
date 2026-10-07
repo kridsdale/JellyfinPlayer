@@ -11,6 +11,7 @@ import Defaults
 import Logging
 import MediaPlayer
 import SwiftfinAsyncStreams
+import SwiftfinUIState
 import SwiftfinValues
 import SwiftUI
 
@@ -946,6 +947,6 @@ extension VideoPlayer.UIVideoPlayerContainerViewController {
         }
     }
 
-    typealias OnPressEvent = EventPublisher<PressEvent>
+    typealias OnPressEvent = UIEventPublisher<PressEvent>
 }
 #endif

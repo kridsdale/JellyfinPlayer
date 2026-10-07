@@ -6,6 +6,7 @@
 // Copyright (c) 2026 Jellyfin & Jellyfin Contributors
 //
 
+import CasePaths
 import Combine
 import Defaults
 import FactoryKit
@@ -16,6 +17,7 @@ import SwiftfinCollections
 import SwiftfinFormatting
 import SwiftfinMediaTracks
 import SwiftfinPlaybackPreparation
+import SwiftfinText
 import SwiftfinTime
 import SwiftfinUIState
 #if os(tvOS)

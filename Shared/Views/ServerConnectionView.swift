@@ -9,6 +9,7 @@
 import Defaults
 import SwiftfinAccountModels
 import SwiftfinLocalization
+import SwiftfinText
 import SwiftUI
 
 struct ServerConnectionView: View {

@@ -12,6 +12,7 @@ import SwiftfinCollections
 import SwiftfinFilters
 import SwiftfinFormatting
 import SwiftfinLocalization
+import SwiftfinText
 
 extension ItemSortBy: Displayable, @retroactive SupportedCaseIterable {
 

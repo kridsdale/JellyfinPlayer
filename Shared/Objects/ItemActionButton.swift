@@ -9,6 +9,7 @@
 import SwiftfinCollections
 import SwiftfinLocalization
 import SwiftfinStoredValues
+import SwiftfinText
 import SwiftUI
 
 enum ItemActionButton: String, CaseIterable, Displayable, Equatable, Identifiable, Storable, SystemImageable {

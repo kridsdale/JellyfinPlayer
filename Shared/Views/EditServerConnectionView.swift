@@ -10,6 +10,7 @@ import SwiftfinAccountModels
 import SwiftfinCollections
 import SwiftfinConnectivity
 import SwiftfinLocalization
+import SwiftfinText
 import SwiftUI
 #if os(iOS)
 import UIKit

@@ -11,6 +11,7 @@ import Nuke
 import NukeUI
 import SwiftfinCollections
 import SwiftfinImages
+import SwiftfinText
 import SwiftfinValues
 import SwiftUI
 

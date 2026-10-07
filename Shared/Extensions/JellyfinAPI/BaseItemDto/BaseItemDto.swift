@@ -20,6 +20,7 @@ import SwiftfinItemMetadata
 import SwiftfinLocalization
 import SwiftfinNowPlaying
 import SwiftfinRecordingTimers
+import SwiftfinText
 import SwiftfinTime
 import SwiftfinValues
 import SwiftUI

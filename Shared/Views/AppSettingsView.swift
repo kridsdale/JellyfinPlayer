@@ -10,6 +10,7 @@ import Defaults
 import SwiftfinCollections
 import SwiftfinLocalization
 import SwiftfinStoredValuesUI
+import SwiftfinText
 import SwiftUI
 
 // TODO: move sign out-stuff into super user when implemented

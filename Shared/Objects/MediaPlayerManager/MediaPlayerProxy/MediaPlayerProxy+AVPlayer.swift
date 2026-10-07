@@ -12,6 +12,7 @@ import Foundation
 import JellyfinAPI
 import SwiftfinFormatting
 import SwiftfinNativePlayback
+import SwiftfinText
 import SwiftfinTime
 import SwiftfinUIState
 import SwiftUI

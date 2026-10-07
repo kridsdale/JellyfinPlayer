@@ -10,6 +10,7 @@ import Foundation
 import JellyfinAPI
 import SwiftfinImages
 import SwiftfinLocalization
+import SwiftfinText
 import SwiftUI
 
 extension RemoteImageInfo: @retroactive Identifiable {

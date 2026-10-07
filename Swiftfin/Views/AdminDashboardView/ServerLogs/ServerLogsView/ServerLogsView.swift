@@ -9,6 +9,7 @@
 import JellyfinAPI
 import SwiftfinCollections
 import SwiftfinLocalization
+import SwiftfinText
 import SwiftUI
 
 // TODO: download to device?

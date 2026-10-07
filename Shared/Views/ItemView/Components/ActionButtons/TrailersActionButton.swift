@@ -11,6 +11,7 @@ import Logging
 import SwiftfinCollections
 import SwiftfinLocalization
 import SwiftfinStoredValuesUI
+import SwiftfinText
 import SwiftUI
 
 extension ItemActionButtons {

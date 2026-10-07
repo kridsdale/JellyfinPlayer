@@ -11,6 +11,7 @@ import JellyfinAPI
 import SwiftfinCollections
 import SwiftfinLocalization
 import SwiftfinMediaTracks
+import SwiftfinText
 import SwiftUI
 
 extension ItemActionButtons {

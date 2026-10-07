@@ -13,6 +13,7 @@ import SwiftfinCollections
 import SwiftfinImages
 import SwiftfinLocalization
 import SwiftfinMediaCatalog
+import SwiftfinText
 import SwiftUI
 
 private let userViewLibraryListImageWidth: CGFloat = 110

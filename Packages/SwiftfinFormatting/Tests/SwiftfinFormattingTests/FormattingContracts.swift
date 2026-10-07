@@ -56,11 +56,11 @@ struct FormattingContracts {
     }
 
     @Test
-    func `empty text editor preserves whitespace and only maps empty to nil`() throws {
+    func `empty text editor preserves whitespace and only maps empty to nil`() {
         let style = NilIfEmptyStringFormatStyle()
         #expect(style.format(nil) == "" && style.format(" ") == " ")
-        #expect(try style.parseStrategy.parse("") == nil)
-        #expect(try style.parseStrategy.parse(" ") == " ")
+        #expect(style.parseStrategy.parse("") == nil)
+        #expect(style.parseStrategy.parse(" ") == " ")
         #expect(VerbatimFormatStyle<Int>().format(42) == "42")
     }
 

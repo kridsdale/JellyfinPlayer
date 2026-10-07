@@ -12,6 +12,7 @@ import SwiftfinCollections
 import SwiftfinLocalization
 import SwiftfinPlaybackProfiles
 import SwiftfinStoredValuesUI
+import SwiftfinText
 import SwiftUI
 
 struct CustomDeviceProfilesView: View {

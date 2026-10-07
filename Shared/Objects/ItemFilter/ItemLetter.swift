@@ -8,6 +8,7 @@
 
 import SwiftfinCollections
 import SwiftfinFilters
+import SwiftfinText
 import UIKit
 
 extension ItemLetter: Displayable, ItemFilter {

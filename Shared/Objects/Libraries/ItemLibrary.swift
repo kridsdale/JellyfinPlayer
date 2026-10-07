@@ -15,6 +15,7 @@ import SwiftfinLocalization
 import SwiftfinMediaCatalog
 import SwiftfinPaging
 import SwiftfinStoredValues
+import SwiftfinText
 import SwiftfinValues
 import SwiftUI
 

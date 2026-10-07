@@ -9,6 +9,7 @@
 import FactoryKit
 import Logging
 import SwiftfinCollections
+import SwiftfinText
 
 extension Logger {
 

@@ -11,6 +11,7 @@ import SwiftfinCollections
 import SwiftfinFormatting
 import SwiftfinLocalization
 import SwiftfinMediaCatalog
+import SwiftfinText
 
 extension BaseItemKind: @retroactive SupportedCaseIterable {
 

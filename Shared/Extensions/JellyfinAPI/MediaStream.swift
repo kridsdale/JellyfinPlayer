@@ -12,6 +12,7 @@ import JellyfinAPI
 import SwiftfinCollections
 import SwiftfinFormatting
 import SwiftfinLocalization
+import SwiftfinText
 
 extension MediaStream {
 

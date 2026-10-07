@@ -9,6 +9,7 @@
 import OrderedCollections
 import SwiftfinCollections
 import SwiftfinLocalization
+import SwiftfinText
 import SwiftUI
 
 struct AppPermissionsView: View {

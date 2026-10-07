@@ -11,6 +11,7 @@ import JellyfinAPI
 import SwiftfinImages
 import SwiftfinItemMetadata
 import SwiftfinNetworking
+import SwiftfinText
 
 extension ImageInfo: @retroactive Identifiable {
 

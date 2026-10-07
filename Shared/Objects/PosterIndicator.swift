@@ -21,4 +21,5 @@ struct PosterIndicator: Hashable, Storable {
     }
 }
 
+import SwiftfinMacros
 import SwiftfinStoredValues

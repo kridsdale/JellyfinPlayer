@@ -8,6 +8,7 @@
 
 import JellyfinAPI
 import SwiftfinLocalization
+import SwiftfinText
 import SwiftUI
 
 extension SeriesEpisodeContentGroup {

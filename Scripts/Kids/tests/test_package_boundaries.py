@@ -134,6 +134,14 @@ class PackageBoundariesTests(unittest.TestCase):
                 self.assertTrue(MODULE.validate_source("SwiftfinConnections", "import " + module, edges, frameworks))
         self.assertNotIn("SwiftfinConnections", MODULE.EXTERNAL_POLICIES)
 
+    def test_text_owner_has_no_ui_storage_transport_or_external_dependency(self):
+        edges, frameworks = MODULE.POLICIES["SwiftfinText"]
+        self.assertEqual(set(edges), set())
+        for module in ["SwiftUI", "UIKit", "JellyfinAPI", "SwiftfinNetworking", "Defaults", "CoreStore", "FactoryKit", "Algorithms"]:
+            with self.subTest(module=module):
+                self.assertTrue(MODULE.validate_source("SwiftfinText", "import " + module, edges, frameworks))
+        self.assertNotIn("SwiftfinText", MODULE.EXTERNAL_POLICIES)
+
 
 if __name__ == "__main__":
     unittest.main()

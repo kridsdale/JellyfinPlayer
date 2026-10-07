@@ -18,4 +18,5 @@ struct PosterConfiguration: Hashable, Storable, WithDefaultValue {
     static let `default` = PosterConfiguration()
 }
 
+import SwiftfinMacros
 import SwiftfinStoredValues

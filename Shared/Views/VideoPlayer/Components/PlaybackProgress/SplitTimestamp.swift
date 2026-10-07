@@ -8,6 +8,7 @@
 
 import Defaults
 import SwiftfinFormatting
+import SwiftfinText
 import SwiftfinUIState
 import SwiftfinValues
 import SwiftUI

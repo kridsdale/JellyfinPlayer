@@ -7,6 +7,7 @@
 //
 
 import SwiftfinLocalization
+import SwiftfinText
 import SwiftUI
 
 extension ConnectToServerView {

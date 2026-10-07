@@ -6,29 +6,4 @@
 // Copyright (c) 2026 Jellyfin & Jellyfin Contributors
 //
 
-import Foundation
-
-#if os(iOS)
-extension FileManager {
-
-    var availableStorage: Int {
-        let availableStorage: Int64
-
-        let fileURL = URL(fileURLWithPath: NSHomeDirectory() as String)
-
-        do {
-            let values = try fileURL.resourceValues(forKeys: [.volumeAvailableCapacityForImportantUsageKey])
-
-            if let capacity = values.volumeAvailableCapacityForImportantUsage {
-                availableStorage = capacity
-            } else {
-                availableStorage = -1
-            }
-        } catch {
-            availableStorage = -1
-        }
-
-        return Int(availableStorage)
-    }
-}
-#endif
+// Unused inherited helpers removed after whole-checkout consumer review.

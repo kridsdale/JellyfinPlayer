@@ -9,6 +9,7 @@
 import SwiftfinCollections
 import SwiftfinLocalization
 import SwiftfinMediaTracks
+import SwiftfinText
 import SwiftUI
 
 extension VideoPlayer.PlaybackControls.Toolbar.ActionButtons {

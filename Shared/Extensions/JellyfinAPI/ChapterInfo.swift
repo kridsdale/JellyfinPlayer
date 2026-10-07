@@ -11,6 +11,7 @@ import JellyfinAPI
 import SwiftfinFormatting
 import SwiftfinImages
 import SwiftfinLocalization
+import SwiftfinText
 import SwiftfinTime
 import SwiftUI
 

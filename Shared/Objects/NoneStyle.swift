@@ -8,6 +8,7 @@
 
 import SwiftfinCollections
 import SwiftfinLocalization
+import SwiftfinText
 
 enum NoneStyle: Displayable {
 

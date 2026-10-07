@@ -12,6 +12,7 @@ import JellyfinAPI
 import SwiftfinCollections
 import SwiftfinImages
 import SwiftfinItemMetadata
+import SwiftfinText
 import SwiftfinValues
 import UIKit
 

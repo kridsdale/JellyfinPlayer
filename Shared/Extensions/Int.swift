@@ -6,91 +6,10 @@
 // Copyright (c) 2026 Jellyfin & Jellyfin Contributors
 //
 
-import Foundation
-import SwiftfinCollections
-import SwiftfinTime
+import SwiftfinFormatting
 
-// TODO: replace all with formatters or use Duration
+// Integer value conversion and time display belong to their focused owners.
+import SwiftfinValues
 
-extension FixedWidthInteger {
-
-    var timeLabel: String {
-        let hours = self / 3600
-        let minutes = (self % 3600) / 60
-        let seconds = self % 3600 % 60
-
-        let hourText = hours > 0 ? String(hours).appending(":") : ""
-        let minutesText = hours > 0 ? String(minutes).leftPad(maxWidth: 2, with: "0").appending(":") : String(minutes)
-            .appending(":")
-        let secondsText = String(seconds).leftPad(maxWidth: 2, with: "0")
-
-        return hourText
-            .appending(minutesText)
-            .appending(secondsText)
-    }
-}
-
-extension Int {
-
-    /// Label if the current value represents milliseconds
-    var millisecondLabel: String {
-        let isNegative = self < 0
-        let value = abs(self)
-        let seconds = "\(value / 1000)"
-        let milliseconds = "\(value % 1000)".first ?? "0"
-
-        return seconds
-            .appending(".")
-            .appending(milliseconds)
-            .appending("s")
-            .prepending("-", if: isNegative)
-    }
-
-    /// Label if the current value represents seconds
-    var secondLabel: String {
-        let isNegative = self < 0
-        let value = abs(self)
-        let seconds = "\(value)"
-
-        return seconds
-            .appending("s")
-            .prepending("-", if: isNegative)
-    }
-
-    init?(_ source: CGFloat?) {
-        if let source {
-            self.init(source)
-        } else {
-            return nil
-        }
-    }
-}
-
-struct MilliseondFormatter: FormatStyle {
-
-    func format(_ value: Int) -> String {
-        let isNegative = value < 0
-        let value = abs(value)
-        let seconds = "\(value / 1000)"
-        let milliseconds = "\(value % 1000)".first ?? "0"
-
-        return seconds
-            .appending(".")
-            .appending(milliseconds)
-            .appending("s")
-            .prepending("-", if: isNegative)
-    }
-}
-
-struct SecondFormatter: FormatStyle {
-
-    func format(_ value: Int) -> String {
-        let isNegative = value < 0
-        let value = abs(value)
-        let seconds = "\(value)"
-
-        return seconds
-            .appending("s")
-            .prepending("-", if: isNegative)
-    }
-}
+// Retain the existing UI spelling at composition call sites.
+typealias SecondFormatter = SecondLabelFormatStyle

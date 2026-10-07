@@ -6,13 +6,4 @@
 // Copyright (c) 2026 Jellyfin & Jellyfin Contributors
 //
 
-import Foundation
-import SwiftfinCollections
-
-extension URLResponse {
-
-    var mimeSubtype: String? {
-        guard let subtype = mimeType?.split(separator: "/")[safe: 1] else { return nil }
-        return String(subtype)
-    }
-}
+// Unused inherited helpers removed after whole-checkout consumer review.

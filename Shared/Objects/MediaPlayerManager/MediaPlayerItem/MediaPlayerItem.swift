@@ -12,6 +12,7 @@ import SwiftfinMediaTracks
 import SwiftfinPlaybackPreparation
 import SwiftfinPlaybackPreviews
 import SwiftfinPlaybackProfiles
+import SwiftfinText
 import SwiftUI
 
 // TODO: get preview image for current manager seconds?

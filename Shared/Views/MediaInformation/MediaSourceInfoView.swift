@@ -10,6 +10,7 @@ import JellyfinAPI
 import SwiftfinCollections
 import SwiftfinLocalization
 import SwiftfinMediaTracks
+import SwiftfinText
 import SwiftUI
 
 struct MediaSourceInfoView: PlatformView {

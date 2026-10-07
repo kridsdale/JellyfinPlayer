@@ -12,6 +12,7 @@ import Foundation
 import JellyfinAPI
 import SwiftfinAsyncStreams
 import SwiftfinCollections
+import SwiftfinText
 import SwiftfinTime
 import UIKit
 

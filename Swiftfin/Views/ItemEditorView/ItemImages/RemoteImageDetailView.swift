@@ -6,9 +6,11 @@
 // Copyright (c) 2026 Jellyfin & Jellyfin Contributors
 //
 
+import CasePaths
 import JellyfinAPI
 import SwiftfinCollections
 import SwiftfinLocalization
+import SwiftfinText
 import SwiftUI
 
 struct RemoteImageDetailView: View {

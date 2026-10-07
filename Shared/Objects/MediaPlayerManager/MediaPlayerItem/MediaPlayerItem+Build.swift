@@ -18,6 +18,7 @@ import SwiftfinPlaybackPreparation
 import SwiftfinPlaybackPreviews
 import SwiftfinPlaybackProfiles
 import SwiftfinStoredValues
+import SwiftfinText
 #if os(tvOS)
 import KidsDiagnostics
 #endif

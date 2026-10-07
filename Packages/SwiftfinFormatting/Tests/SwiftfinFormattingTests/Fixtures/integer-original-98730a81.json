@@ -1,0 +1,171 @@
+{
+  "clock" : [
+    {
+      "text" : "0:00",
+      "value" : 0
+    },
+    {
+      "text" : "0:01",
+      "value" : 1
+    },
+    {
+      "text" : "0:09",
+      "value" : 9
+    },
+    {
+      "text" : "0:59",
+      "value" : 59
+    },
+    {
+      "text" : "1:00",
+      "value" : 60
+    },
+    {
+      "text" : "1:01",
+      "value" : 61
+    },
+    {
+      "text" : "59:59",
+      "value" : 3599
+    },
+    {
+      "text" : "1:00:00",
+      "value" : 3600
+    },
+    {
+      "text" : "1:00:01",
+      "value" : 3601
+    },
+    {
+      "text" : "23:59:59",
+      "value" : 86399
+    },
+    {
+      "text" : "24:00:00",
+      "value" : 86400
+    },
+    {
+      "text" : "0:-1",
+      "value" : -1
+    },
+    {
+      "text" : "-1:00",
+      "value" : -60
+    },
+    {
+      "text" : "-1:-1",
+      "value" : -61
+    },
+    {
+      "text" : "0:00",
+      "value" : -3600
+    },
+    {
+      "text" : "2562047788015215:30:07",
+      "value" : 9223372036854775807
+    }
+  ],
+  "labels" : [
+    {
+      "milliseconds" : "0.0s",
+      "seconds" : "0s",
+      "value" : 0
+    },
+    {
+      "milliseconds" : "0.1s",
+      "seconds" : "1s",
+      "value" : 1
+    },
+    {
+      "milliseconds" : "0.9s",
+      "seconds" : "9s",
+      "value" : 9
+    },
+    {
+      "milliseconds" : "0.1s",
+      "seconds" : "10s",
+      "value" : 10
+    },
+    {
+      "milliseconds" : "0.9s",
+      "seconds" : "99s",
+      "value" : 99
+    },
+    {
+      "milliseconds" : "0.1s",
+      "seconds" : "100s",
+      "value" : 100
+    },
+    {
+      "milliseconds" : "0.9s",
+      "seconds" : "999s",
+      "value" : 999
+    },
+    {
+      "milliseconds" : "1.0s",
+      "seconds" : "1000s",
+      "value" : 1000
+    },
+    {
+      "milliseconds" : "1.1s",
+      "seconds" : "1001s",
+      "value" : 1001
+    },
+    {
+      "milliseconds" : "1.1s",
+      "seconds" : "1010s",
+      "value" : 1010
+    },
+    {
+      "milliseconds" : "1.1s",
+      "seconds" : "1100s",
+      "value" : 1100
+    },
+    {
+      "milliseconds" : "1.2s",
+      "seconds" : "1234s",
+      "value" : 1234
+    },
+    {
+      "milliseconds" : "-0.1s",
+      "seconds" : "-1s",
+      "value" : -1
+    },
+    {
+      "milliseconds" : "-0.1s",
+      "seconds" : "-10s",
+      "value" : -10
+    },
+    {
+      "milliseconds" : "-0.9s",
+      "seconds" : "-99s",
+      "value" : -99
+    },
+    {
+      "milliseconds" : "-0.1s",
+      "seconds" : "-100s",
+      "value" : -100
+    },
+    {
+      "milliseconds" : "-0.9s",
+      "seconds" : "-999s",
+      "value" : -999
+    },
+    {
+      "milliseconds" : "-1.0s",
+      "seconds" : "-1000s",
+      "value" : -1000
+    },
+    {
+      "milliseconds" : "-1.2s",
+      "seconds" : "-1234s",
+      "value" : -1234
+    },
+    {
+      "milliseconds" : "9223372036854775.8s",
+      "seconds" : "9223372036854775807s",
+      "value" : 9223372036854775807
+    }
+  ],
+  "sourceCommit" : "98730a817b51a255f2370e3f5e7b53999c392d7d"
+}

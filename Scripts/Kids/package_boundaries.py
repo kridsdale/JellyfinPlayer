@@ -35,6 +35,7 @@ EXTERNAL_POLICIES = {
     ],
 }
 POLICIES = {
+    "SwiftfinText": ({}, {"Foundation", "CryptoKit"}),
     "SwiftfinValues": ({}, {"Foundation"}),
     "SwiftfinTime": ({}, {"Foundation"}),
     "SwiftfinFormatting": ({"SwiftfinValues", "SwiftfinLocalization"}, {"Foundation"}),

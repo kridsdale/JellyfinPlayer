@@ -16,6 +16,7 @@ import SwiftfinAccountStore
 import SwiftfinImages
 import SwiftfinNetworking
 import SwiftfinStoredValues
+import SwiftfinText
 
 @MainActor
 extension ServerState {

@@ -13,6 +13,7 @@ import SwiftfinFormatting
 import SwiftfinLocalization
 import SwiftfinMediaTracks
 import SwiftfinPlaybackProfiles
+import SwiftfinText
 
 extension MediaSourceInfo: Displayable {
 

@@ -9,6 +9,7 @@
 import JellyfinAPI
 import SwiftfinCollections
 import SwiftfinLocalization
+import SwiftfinText
 import SwiftUI
 
 struct ItemElementSearchView<Editor: ItemComponentEditor>: View {

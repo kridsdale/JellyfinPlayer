@@ -6,12 +6,14 @@
 // Copyright (c) 2026 Jellyfin & Jellyfin Contributors
 //
 
+import CasePaths
 import CollectionVGrid
 import Defaults
 import FactoryKit
 import JellyfinAPI
 import SwiftfinAccountModels
 import SwiftfinLocalization
+import SwiftfinText
 import SwiftUI
 
 struct UserSignInView: View {

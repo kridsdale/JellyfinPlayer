@@ -6,9 +6,11 @@
 // Copyright (c) 2026 Jellyfin & Jellyfin Contributors
 //
 
+import CasePaths
 import JellyfinAPI
 import SwiftfinImages
 import SwiftfinLocalization
+import SwiftfinText
 import SwiftUI
 
 struct ItemImageDetailView: View {

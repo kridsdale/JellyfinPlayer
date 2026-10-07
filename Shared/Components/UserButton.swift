@@ -10,6 +10,7 @@ import Defaults
 import JellyfinAPI
 import SwiftfinLocalization
 import SwiftfinNetworking
+import SwiftfinText
 import SwiftUI
 
 struct UserButton: View {

@@ -6,18 +6,4 @@
 // Copyright (c) 2026 Jellyfin & Jellyfin Contributors
 //
 
-import Foundation
-
-extension URLComponents {
-
-    func addingQueryItem(key: String, value: String?) -> Self {
-        var copy = self
-
-        if copy.queryItems == nil {
-            copy.queryItems = []
-        }
-
-        copy.queryItems?.append(.init(name: key, value: value))
-        return copy
-    }
-}
+// Unused inherited helpers removed after whole-checkout consumer review.

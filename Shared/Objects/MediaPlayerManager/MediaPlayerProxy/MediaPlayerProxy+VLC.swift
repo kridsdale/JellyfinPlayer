@@ -12,6 +12,7 @@ import JellyfinAPI
 import KidsDiagnostics
 import SwiftfinFormatting
 import SwiftfinMediaTracks
+import SwiftfinText
 import SwiftfinTime
 import SwiftfinUIState
 import SwiftfinVLC

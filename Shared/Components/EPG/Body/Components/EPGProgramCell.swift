@@ -9,6 +9,7 @@
 import Combine
 import JellyfinAPI
 import SwiftfinLocalization
+import SwiftfinText
 import SwiftfinTime
 import SwiftfinValues
 import SwiftUI

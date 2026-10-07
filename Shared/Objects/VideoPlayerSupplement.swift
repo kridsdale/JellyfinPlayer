@@ -9,6 +9,7 @@
 import SwiftfinCollections
 import SwiftfinLocalization
 import SwiftfinStoredValues
+import SwiftfinText
 
 enum VideoPlayerSupplement: String, CaseIterable, Displayable, Equatable, Identifiable, Storable, SystemImageable, SupportedCaseIterable {
 

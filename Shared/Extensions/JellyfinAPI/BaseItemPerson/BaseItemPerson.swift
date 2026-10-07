@@ -8,6 +8,7 @@
 
 import Foundation
 import JellyfinAPI
+import SwiftfinText
 import UIKit
 
 extension BaseItemPerson: Displayable {

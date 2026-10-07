@@ -7,6 +7,7 @@
 //
 
 import SwiftfinCollections
+import SwiftfinMacros
 import SwiftUI
 
 protocol WithViewContext {

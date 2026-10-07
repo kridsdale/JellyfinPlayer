@@ -11,6 +11,7 @@ import JellyfinAPI
 import SwiftfinCollections
 import SwiftfinFilters
 import SwiftfinLocalization
+import SwiftfinText
 
 /// Aliased so the name `ItemFilter` can be repurposed.
 ///

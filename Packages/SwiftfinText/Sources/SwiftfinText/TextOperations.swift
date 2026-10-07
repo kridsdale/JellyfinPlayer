@@ -1,0 +1,195 @@
+//
+// Swiftfin is subject to the terms of the Mozilla Public
+// License, v2.0. If a copy of the MPL was not distributed with this
+// file, you can obtain one at https://mozilla.org/MPL/2.0/.
+//
+// Copyright (c) 2026 Jellyfin & Jellyfin Contributors
+//
+
+import CryptoKit
+import Foundation
+
+public extension String {
+
+    static let alphanumeric = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+
+    static func + (lhs: String, rhs: Character) -> String {
+        lhs.appending(rhs)
+    }
+
+    func appending(_ element: String) -> String {
+        self + element
+    }
+
+    func appending(_ element: String.Element) -> String {
+        self + String(element)
+    }
+
+    func appending(_ element: @autoclosure () -> String, if condition: Bool) -> String {
+        if condition {
+            self + element()
+        } else {
+            self
+        }
+    }
+
+    func prepending(_ element: String) -> String {
+        element + self
+    }
+
+    func removingFirst(if condition: Bool) -> String {
+        if condition {
+            var copy = self
+            copy.removeFirst()
+            return copy
+        } else {
+            return self
+        }
+    }
+
+    func prepending(_ element: String, if condition: Bool) -> String {
+        if condition {
+            element + self
+        } else {
+            self
+        }
+    }
+
+    func removeRegexMatches(pattern: String, replaceWith: String = "") -> String {
+        do {
+            let regex = try NSRegularExpression(pattern: pattern, options: .caseInsensitive)
+            let range = NSRange(location: 0, length: utf16.count)
+            return regex.stringByReplacingMatches(in: self, options: [], range: range, withTemplate: replaceWith)
+        } catch { return self }
+    }
+
+    func leftPad(maxWidth width: Int, with character: Character) -> String {
+        guard count < width else { return self }
+
+        let padding = String(repeating: character, count: width - count)
+        return padding + self
+    }
+
+    var initials: String {
+        split(separator: Self.space)
+            .compactMap(\.first)
+            .reduce(Self.empty, +)
+    }
+
+    /// --
+    static let emptyDash = "--"
+    /// --:--
+    static let emptyRuntime = "--:--"
+    /// ""
+    static let empty = ""
+    /// " "
+    static let space = " "
+
+    static let tab = "\u{0009}"
+    /// —
+    static let emDash = "\u{2014}"
+    /// –
+    static let enDash = "\u{2013}"
+    /// -
+    static let hyphen = "\u{002D}"
+    /// ...
+    static let ellipsis = "\u{2026}"
+    /// •
+    static let bullet = "\u{2022}"
+    /// x
+    static let multiply = "\u{00D7}"
+
+    /// A x B
+    func multiply(by value: String) -> String {
+        "\(self) \(Self.multiply) \(value)"
+    }
+
+    var shortFileName: String {
+        (split(separator: "/").last?.description ?? self)
+            .replacingOccurrences(of: ".swift", with: "")
+    }
+
+    static func random(count: Int) -> String {
+        guard count > 0 else { return "" }
+        return (0 ..< count)
+            .compactMap { _ in Self.alphanumeric.randomElement() }
+            .map(String.init)
+            .joined()
+    }
+
+    static func random(count range: Range<Int>) -> String {
+        guard !range.isEmpty else { return "" }
+        return random(count: Int.random(in: range))
+    }
+
+    /// Preserves legacy matching-tail removal, including partially matching suffixes.
+    func trimmingSuffix(_ suffix: String) -> String {
+
+        guard suffix.count <= count else { return self }
+
+        var s = self
+        var suffix = suffix
+
+        while s.last == suffix.last {
+            guard !s.isEmpty else { break }
+            s.removeLast()
+            suffix.removeLast()
+        }
+
+        return s
+    }
+
+    var sha1: String? {
+        guard let input = data(using: .utf8) else { return nil }
+        return Insecure.SHA1.hash(data: input)
+            .reduce(into: "") { partialResult, byte in
+                partialResult += String(format: "%02x", byte)
+            }
+    }
+
+    var base64: String? {
+        guard let input = data(using: .utf8) else { return nil }
+        return input.base64EncodedString()
+    }
+
+    var url: URL? {
+        URL(string: self)
+    }
+
+    var nilIfBlank: String? {
+        let trimmed = trimmingCharacters(in: .whitespacesAndNewlines)
+        return trimmed.isEmpty ? nil : trimmed
+    }
+}
+
+public extension String? {
+
+    /// Splits a delimited raw value string into typed components
+    func components<T: RawRepresentable>(
+        of type: T.Type,
+        separator: Character = ","
+    ) -> [T] where T.RawValue == String {
+        self?.split(separator: separator)
+            .compactMap { T(rawValue: String($0)) } ?? []
+    }
+}
+
+public extension CharacterSet {
+
+    // Character that appears on tvOS with voice input
+    static let objectReplacement: CharacterSet = .init(charactersIn: "\u{fffc}")
+}
+
+public extension StringProtocol {
+
+    func trimmingCharacters(in string: String) -> String {
+        trimmingCharacters(in: CharacterSet(charactersIn: string))
+    }
+}
+
+public extension URL {
+    init?(string: String?) {
+        guard let string else { return nil }
+        self.init(string: string)
+    }
+}

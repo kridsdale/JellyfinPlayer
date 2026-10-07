@@ -8,6 +8,7 @@
 
 import Foundation
 import JellyfinAPI
+import SwiftfinText
 import SwiftUI
 
 extension NameIDPair: Displayable {

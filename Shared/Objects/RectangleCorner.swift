@@ -6,6 +6,8 @@
 // Copyright (c) 2026 Jellyfin & Jellyfin Contributors
 //
 
+import SwiftfinMacros
+
 @OptionSet<Int>
 struct RectangleCorner {
 

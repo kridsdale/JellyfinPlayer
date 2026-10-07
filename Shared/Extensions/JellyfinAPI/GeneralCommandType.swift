@@ -7,6 +7,7 @@
 //
 
 import JellyfinAPI
+import SwiftfinText
 import SwiftUI
 
 extension GeneralCommandType: Displayable, SystemImageable {

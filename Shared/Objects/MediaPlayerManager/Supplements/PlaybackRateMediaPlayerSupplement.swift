@@ -7,6 +7,7 @@
 //
 
 import SwiftfinFormatting
+import SwiftfinText
 import SwiftUI
 
 // TODO: POC of a "guest" supplement, finish

@@ -6,10 +6,12 @@
 // Copyright (c) 2026 Jellyfin & Jellyfin Contributors
 //
 
+import CasePaths
 import CollectionVGrid
 import Defaults
 import SwiftfinLocalization
 import SwiftfinStoredValuesUI
+import SwiftfinText
 import SwiftUI
 @_spi(Advanced) import SwiftUIIntrospect
 

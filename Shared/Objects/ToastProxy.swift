@@ -7,6 +7,7 @@
 //
 
 import Combine
+import SwiftfinText
 import SwiftUI
 
 @MainActor
