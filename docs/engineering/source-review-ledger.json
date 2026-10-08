@@ -5843,19 +5843,23 @@
     },
     {
       "path": "Packages/SwiftfinMediaCatalog/Sources/SwiftfinMediaCatalog/LibraryCatalogPolicy.swift",
-      "reason": "Checked Sendable query classification and ordered media-kind projection. Existing catalog read owner enforces exact user/transport binding; app captures current manager/session/client and view identity. Adds reviewed generic-parent and extra-kind policies over immutable DTO enum values. Generic channel parents retain default types, unlike the existing DTO collection override. No lookup/settings/authentication or SDK client escapes.",
+      "reason": "LibraryCatalogPolicy.swift: complete current source body and emitted public declarations read. Read-only generic catalog requests retain exact user/query/filter/sort/paging parameters and captured account binding. DTO state consumes explicit clock inputs; program windows, stable block IDs, deduplication, cursor overflow checks and atomic guide snapshot application remain value decisions. This generic catalog is not child authorization; KidsCatalog/KidsDomain remain responsible for curated restrictions. No file, playback or server mutation API is added. Consumer entries are scoped reviewed boundaries; remaining whole-graph/runtime acceptance is required.",
       "reviewedConsumers": [
         "Shared/Extensions/JellyfinAPI/SpecialFeatureType.swift",
         "Shared/Objects/Libraries/ResumeItemsLibrary.swift",
         "Shared/Objects/Libraries/UserViewLibrary.swift",
-        "Shared/Objects/LibraryParent/LibraryParent.swift"
+        "Shared/Objects/LibraryParent/LibraryParent.swift",
+        "Shared/Services/UserSession/UserSession+ItemMetadata.swift",
+        "Shared/ViewModels/EPGViewModel.swift"
       ],
       "reviewedInterfaces": [
-        "LibraryArtworkScope",
-        "MediaCatalogPolicy.libraryItemTypes(for:)",
-        "MediaCatalogPolicy.artworkQuery(for:)",
-        "MediaCatalogPolicy.libraryParentItemTypes(for:)",
-        "MediaCatalogPolicy.isVideoExtra(_:)"
+        "case favorites",
+        "case userView(BaseItemDto)",
+        "enum LibraryArtworkScope",
+        "static func artworkQuery(for scope: LibraryArtworkScope) -> MediaCatalogQuery",
+        "static func isVideoExtra(_ type: ExtraType) -> Bool",
+        "static func libraryItemTypes(for mediaTypes: [MediaType]) -> [BaseItemKind]",
+        "static func libraryParentItemTypes(for kind: BaseItemKind?) -> [BaseItemKind]"
       ],
       "sha256": "4dd8a257c3a25039f083b4d0aadffe51cab0c7a228c726a32ee6fbcf7e345572"
     },
@@ -6154,12 +6158,19 @@
     },
     {
       "path": "Packages/SwiftfinNetworking/Sources/SwiftfinNetworking/JellyfinRequestBodyRedactor.swift",
-      "reason": "Pure local DTO redaction accepts host-selected text. Exact final path match, original SDK omission/encoding, all three password-update fields and cleared reset flag are preserved. Unsupported/malformed bodies retain original bytes; no logger/transport/store is allocated. Six synthetic contracts use no real credentials and establish value behavior, not actual Pulse ingestion.",
+      "reason": "JellyfinRequestBodyRedactor.swift: complete current source body and emitted public declarations read. The main-actor owner privately constructs SDK clients from explicit identity, URL, token and session policy. Authenticated executor guards captured binding around awaited I/O. URL/authentication ports expose values; authenticating never rebinds the captured transport. Discovery implementation was read, not executed. Socket worker, subscriptions, source factory and diagnostic callbacks have generation/identity guards; retirement state is committed before native callbacks, orphan leases cancel, and dictionaries hold no modifying access across callbacks. Transport cache publication is rejected after reentrant replacement/invalidation. Redaction covers the supported authentication payloads, not arbitrary unknown bodies. Consumer entries are scoped reviewed boundaries; remaining whole-graph/runtime acceptance is required.",
       "reviewedConsumers": [
-        "Shared/Logging/NetworkLogger.swift"
+        "Shared/Logging/NetworkLogger.swift",
+        "Shared/Services/UserSession/UserSession.swift",
+        "Shared/Services/UserSession/UserSession+ItemMetadata.swift",
+        "Shared/Services/ServerSocketManager.swift",
+        "Shared/Extensions/JellyfinAPI/JellyfinClient.swift",
+        "Packages/SwiftfinNetworking/Tests/SwiftfinNetworkingTests/SocketContracts.swift",
+        "Packages/SwiftfinNetworking/Tests/SwiftfinNetworkingTests/TransportContracts.swift"
       ],
       "reviewedInterfaces": [
-        "body(at:body:replacement:)"
+        "enum JellyfinRequestBodyRedactor",
+        "static func body(at url: URL, body: Data, replacement: String) -> Data?"
       ],
       "sha256": "dbd4eb79338a94d873fe55ac1ee7b897d34a839bbd18cc847efd65c07e73e431"
     },
@@ -6430,28 +6441,59 @@
     },
     {
       "path": "Packages/SwiftfinMediaCatalog/Sources/SwiftfinMediaCatalog/CatalogItemState.swift",
-      "reason": "Scoped pure value projection review: immutable SDK item and explicit captured Date, nested program interval priority, installed whole-second visual label precision and separate spoken remaining-duration rules. Explicit media eligibility controls nonlive phase/count output. Checked opposite-sign tick subtraction returns nil on overflow rather than trapping. Seven native contracts cover date/tick boundaries, nesting, invalid values, permission/phase precedence and independent-executor transfer. Existing transport APIs are outside this scoped entry.",
+      "reason": "CatalogItemState.swift: complete current source body and emitted public declarations read. Read-only generic catalog requests retain exact user/query/filter/sort/paging parameters and captured account binding. DTO state consumes explicit clock inputs; program windows, stable block IDs, deduplication, cursor overflow checks and atomic guide snapshot application remain value decisions. This generic catalog is not child authorization; KidsCatalog/KidsDomain remain responsible for curated restrictions. No file, playback or server mutation API is added. Consumer entries are scoped reviewed boundaries; remaining whole-graph/runtime acceptance is required.",
       "reviewedConsumers": [
         "Shared/Extensions/JellyfinAPI/BaseItemDto/BaseItemDto.swift",
-        "Shared/Extensions/JellyfinAPI/BaseItemDto/BaseItemDto+PosterAccessibility.swift"
+        "Shared/Extensions/JellyfinAPI/BaseItemDto/BaseItemDto+PosterAccessibility.swift",
+        "Shared/Services/UserSession/UserSession+ItemMetadata.swift",
+        "Shared/ViewModels/EPGViewModel.swift"
       ],
       "reviewedInterfaces": [
-        "progressLabelInterval",
-        "playbackState(canBePlayed:)"
+        "func playbackState(canBePlayed: Bool) -> CatalogPlaybackState",
+        "func presentsPlayButton(permitted: Bool) -> Bool",
+        "func programProgress(relativeTo instant: Date) -> Double?",
+        "init(_ item: BaseItemDto, at now: Date)",
+        "struct CatalogItemState",
+        "var hasAired: Bool { get }",
+        "var isAiring: Bool { get }",
+        "var isLiveStream: Bool { get }",
+        "var isMissing: Bool { get }",
+        "var isPlayable: Bool { get }",
+        "var isRecording: Bool { get }",
+        "var isUnaired: Bool { get }",
+        "var parentRootID: String? { get }",
+        "var parentTitle: String? { get }",
+        "var programDuration: TimeInterval? { get }",
+        "var programProgress: Double? { get }",
+        "var progressLabelInterval: TimeInterval? { get }",
+        "var progressPercentage: Double? { get }",
+        "var runtime: Duration? { get }",
+        "var startSeconds: Duration? { get }"
       ],
       "sha256": "1ef09f2e46dfc2838f44988be3680b7877d355b0a09621b05f97863317aeafbe"
     },
     {
       "path": "Packages/SwiftfinMediaCatalog/Sources/SwiftfinMediaCatalog/CatalogPlaybackState.swift",
-      "reason": "Small immutable Sendable/Equatable result; all fields read-only and initialization internal to catalog owner. No localized string, formatter, settings/account handle or UI actor requirement. Consumer maps exactly one optional phase then remaining duration/count into installed localized spoken order.",
+      "reason": "CatalogPlaybackState.swift: complete current source body and emitted public declarations read. Read-only generic catalog requests retain exact user/query/filter/sort/paging parameters and captured account binding. DTO state consumes explicit clock inputs; program windows, stable block IDs, deduplication, cursor overflow checks and atomic guide snapshot application remain value decisions. This generic catalog is not child authorization; KidsCatalog/KidsDomain remain responsible for curated restrictions. No file, playback or server mutation API is added. Consumer entries are scoped reviewed boundaries; remaining whole-graph/runtime acceptance is required.",
       "reviewedConsumers": [
-        "Shared/Extensions/JellyfinAPI/BaseItemDto/BaseItemDto+PosterAccessibility.swift"
+        "Shared/Extensions/JellyfinAPI/BaseItemDto/BaseItemDto+PosterAccessibility.swift",
+        "Shared/Services/UserSession/UserSession+ItemMetadata.swift",
+        "Shared/ViewModels/EPGViewModel.swift"
       ],
       "reviewedInterfaces": [
-        "CatalogPlaybackState.Phase",
-        "phase",
-        "remainingDuration",
-        "unplayedCount"
+        "case ended",
+        "case inProgress",
+        "case live",
+        "case missing",
+        "case played",
+        "case rewatching",
+        "case unaired",
+        "case unplayed",
+        "enum Phase",
+        "let phase: CatalogPlaybackState.Phase?",
+        "let remainingDuration: Duration?",
+        "let unplayedCount: Int?",
+        "struct CatalogPlaybackState"
       ],
       "sha256": "e81e95aa401438fed987d8ae67feec652e15fca70174bb8b1129d736dfba2d99"
     },
@@ -6634,16 +6676,36 @@
     },
     {
       "path": "Packages/SwiftfinMediaCatalog/Sources/SwiftfinMediaCatalog/GuideCatalog.swift",
-      "reason": "Full new guide owner body reviewed: explicit clock/calendar, inherited half-hour/day/minimum-span rules; raw-row cursor/eligibility/deduplication; exact captured catalog and caller relevance before/after reads/errors; original per-channel ProgramBlock mapping; one immutable snapshot merge/revision. No UI, app global, native query or write belongs to this API. Six deterministic regressions pass within the73-test catalog package.",
+      "reason": "GuideCatalog.swift: complete current source body and emitted public declarations read. Read-only generic catalog requests retain exact user/query/filter/sort/paging parameters and captured account binding. DTO state consumes explicit clock inputs; program windows, stable block IDs, deduplication, cursor overflow checks and atomic guide snapshot application remain value decisions. This generic catalog is not child authorization; KidsCatalog/KidsDomain remain responsible for curated restrictions. No file, playback or server mutation API is added. Consumer entries are scoped reviewed boundaries; remaining whole-graph/runtime acceptance is required.",
       "reviewedConsumers": [
         "Shared/ViewModels/EPGViewModel.swift",
-        "Packages/SwiftfinMediaCatalog/Tests/SwiftfinMediaCatalogTests/GuideCatalogContracts.swift"
+        "Packages/SwiftfinMediaCatalog/Tests/SwiftfinMediaCatalogTests/GuideCatalogContracts.swift",
+        "Shared/Services/UserSession/UserSession+ItemMetadata.swift"
       ],
       "reviewedInterfaces": [
-        "GuideTimeline",
-        "GuidePage",
-        "GuideSnapshot.applying(_:startDate:replacing:)",
-        "guidePage(offset:limit:startDate:endDate:excluding:validate:)"
+        "@MainActor func guidePage(offset: Int, limit: Int, startDate: Date, endDate: Date, excluding channelIDs: Set<String> = [], validate: @MainActor @Sendable () throws -> Void = {}) async throws -> GuidePage",
+        "case invalidCursor",
+        "enum GuideReadError",
+        "func applying(_ page: GuidePage, startDate: Date, replacing: Bool) -> GuideSnapshot",
+        "func availableDates(at now: Date) -> [Date]",
+        "func defaultStartDate(at now: Date) -> Date",
+        "func endDate(startingAt start: Date) -> Date",
+        "func needsRebase(start: Date, now: Date) -> Bool",
+        "func refreshedStartDate(_ start: Date, now: Date) -> Date",
+        "func selectedStartDate(_ date: Date, now: Date) -> Date",
+        "init(minimumInterval: TimeInterval = 12 * 60 * 60, calendar: Calendar = .current)",
+        "init(startDate: Date)",
+        "let calendar: Calendar",
+        "let channels: [BaseItemDto]",
+        "let hasNextPage: Bool",
+        "let minimumInterval: TimeInterval",
+        "let nextOffset: Int",
+        "let programs: [String : [ProgramBlock]]",
+        "let revision: Int",
+        "let startDate: Date",
+        "struct GuidePage",
+        "struct GuideSnapshot",
+        "struct GuideTimeline"
       ],
       "sha256": "45921fb672ccf7e9f77eaeadfb962a32f8580814c668570ef1493d3fba4258ad"
     },
@@ -6664,15 +6726,24 @@
     },
     {
       "path": "Packages/SwiftfinMediaCatalog/Sources/SwiftfinMediaCatalog/ProgramBlocks.swift",
-      "reason": "Complete existing block grouping and strict airing body reviewed; only synthesized equality is added for atomic committed guide display. Installed channel/program/date identity, clamping, short-program chunking and ordering remain. Existing grouping/airing contracts plus new guide grouping tests pass; no schema or dependency is changed.",
+      "reason": "ProgramBlocks.swift: complete current source body and emitted public declarations read. Read-only generic catalog requests retain exact user/query/filter/sort/paging parameters and captured account binding. DTO state consumes explicit clock inputs; program windows, stable block IDs, deduplication, cursor overflow checks and atomic guide snapshot application remain value decisions. This generic catalog is not child authorization; KidsCatalog/KidsDomain remain responsible for curated restrictions. No file, playback or server mutation API is added. Consumer entries are scoped reviewed boundaries; remaining whole-graph/runtime acceptance is required.",
       "reviewedConsumers": [
         "Packages/SwiftfinMediaCatalog/Sources/SwiftfinMediaCatalog/GuideCatalog.swift",
-        "Shared/ViewModels/EPGViewModel.swift"
+        "Shared/ViewModels/EPGViewModel.swift",
+        "Shared/Services/UserSession/UserSession+ItemMetadata.swift"
       ],
       "reviewedInterfaces": [
-        "ProgramBlock Equatable/Sendable",
-        "programBlocks(startDate:endDate:)",
-        "isAiring(at:)"
+        "func isAiring(at date: Date) -> Bool",
+        "func programBlocks(startDate: Date, endDate: Date) -> [ProgramBlock]",
+        "let channelID: String?",
+        "let end: Date",
+        "let id: ProgramBlock.ID",
+        "let programIDs: [String?]",
+        "let programs: [BaseItemDto]",
+        "let start: Date",
+        "struct ID",
+        "struct ProgramBlock",
+        "var isGroup: Bool { get }"
       ],
       "sha256": "c6599bba0108fb6fcfdf73330feee323d9bf34229b8ed3034e1022e11ce4f3c2"
     },
@@ -6819,18 +6890,30 @@
     },
     {
       "path": "Packages/SwiftfinPlaybackProfiles/Sources/SwiftfinPlaybackProfiles/PlaybackOptions.swift",
-      "sha256": "b36687e93e43a3e8f801f2eff16d69b81e11d53b24eeb6c9b2d7d240b62bcc9b",
-      "reason": "Complete immutable selection API reviewed: checked Sendable source DTO, optional audio/subtitle indices and explicit requested bitrate are value snapshots. Typed selection retains all original policy branches; source choices reset both source-specific tracks even on reselection, while other choices preserve unrelated payloads. No settings, native hardware/player, account/session, network or UI dependency. The public API retains the existing SDK DTO interoperability boundary without transfer of live transport objects. Original switch equality and multi-step/native cross-executor regressions verify behavior.",
-      "reviewedInterfaces": [
-        "PlaybackOptions",
-        "Selection",
-        "init(mediaSource:audioStreamIndex:subtitleStreamIndex:requestedBitrate:)",
-        "selecting(_:)"
-      ],
+      "reason": "PlaybackOptions.swift: complete current source body and emitted public declarations read. Pure codec/profile/selection policy owns checked value snapshots, raw identities, CSV/builders and native/VLC/mpv capability tables. DeviceProfile build consumes explicit settings and capability values; it does not query hardware, defaults, credentials or perform requests. Custom add/replace, subtitle matching, source bitrate caps and media-source selection resets retain installed semantics. App adapters own localized labels, UTType, defaults and capability acquisition. Consumer entries are scoped reviewed boundaries; remaining whole-graph/runtime acceptance is required.",
       "reviewedConsumers": [
         "Shared/Views/ItemContentGroupView/ItemContentGroupProvider.swift",
-        "Shared/Views/ItemView/Components/ActionButtons/PlaybackActionButton.swift"
-      ]
+        "Shared/Views/ItemView/Components/ActionButtons/PlaybackActionButton.swift",
+        "Shared/Extensions/JellyfinAPI/DeviceProfile.swift",
+        "Shared/Objects/PlaybackCapabilities.swift",
+        "Shared/Objects/PlaybackProfileAdapters.swift",
+        "Shared/Objects/MediaPlayerManager/MediaPlayerItem/MediaPlayerItem+Build.swift"
+      ],
+      "reviewedInterfaces": [
+        "case audioStreamIndex(Int?)",
+        "case bitrate(PlaybackBitrate)",
+        "case mediaSource(MediaSourceInfo?)",
+        "case subtitleStreamIndex(Int?)",
+        "enum Selection",
+        "func selecting(_ selection: PlaybackOptions.Selection) -> PlaybackOptions",
+        "init(mediaSource: MediaSourceInfo? = nil, audioStreamIndex: Int? = nil, subtitleStreamIndex: Int? = nil, requestedBitrate: PlaybackBitrate)",
+        "let audioStreamIndex: Int?",
+        "let mediaSource: MediaSourceInfo?",
+        "let requestedBitrate: PlaybackBitrate",
+        "let subtitleStreamIndex: Int?",
+        "struct PlaybackOptions"
+      ],
+      "sha256": "b36687e93e43a3e8f801f2eff16d69b81e11d53b24eeb6c9b2d7d240b62bcc9b"
     },
     {
       "path": "Packages/SwiftfinItemMetadata/Sources/SwiftfinItemMetadata/ItemMetadataPolicy.swift",
@@ -8198,6 +8281,855 @@
         "typealias Output = Value"
       ],
       "sha256": "5897dcc6c360e65b9af2004df4703ec420d19f6fd7a4312073a9ef8e90eb1c25"
+    },
+    {
+      "path": "Packages/SwiftfinPlaybackProfiles/Sources/SwiftfinPlaybackProfiles/AudoCodec.swift",
+      "reason": "AudoCodec.swift: complete current source body and emitted public declarations read. Pure codec/profile/selection policy owns checked value snapshots, raw identities, CSV/builders and native/VLC/mpv capability tables. DeviceProfile build consumes explicit settings and capability values; it does not query hardware, defaults, credentials or perform requests. Custom add/replace, subtitle matching, source bitrate caps and media-source selection resets retain installed semantics. App adapters own localized labels, UTType, defaults and capability acquisition. Consumer entries are scoped reviewed boundaries; remaining whole-graph/runtime acceptance is required.",
+      "reviewedConsumers": [
+        "Shared/Extensions/JellyfinAPI/DeviceProfile.swift",
+        "Shared/Objects/PlaybackCapabilities.swift",
+        "Shared/Objects/PlaybackProfileAdapters.swift",
+        "Shared/Objects/MediaPlayerManager/MediaPlayerItem/MediaPlayerItem+Build.swift"
+      ],
+      "reviewedInterfaces": [
+        "case aac",
+        "case ac3",
+        "case alac",
+        "case amr_nb",
+        "case amr_wb",
+        "case dts",
+        "case dts_hd",
+        "case eac3",
+        "case flac",
+        "case mlp",
+        "case mp1",
+        "case mp2",
+        "case mp3",
+        "case nellymoser",
+        "case opus",
+        "case pcm_alaw",
+        "case pcm_bluray",
+        "case pcm_dvd",
+        "case pcm_mulaw",
+        "case pcm_s16be",
+        "case pcm_s16le",
+        "case pcm_s24be",
+        "case pcm_s24le",
+        "case pcm_u8",
+        "case speex",
+        "case truehd",
+        "case vorbis",
+        "case wavpack",
+        "case wmalossless",
+        "case wmapro",
+        "case wmav1",
+        "case wmav2",
+        "enum AudioCodec"
+      ],
+      "sha256": "70f3e6a9b326ceb8279a8ee2176f7384616114ce77af5679403332a1b7d50c6f"
+    },
+    {
+      "path": "Packages/SwiftfinPlaybackProfiles/Sources/SwiftfinPlaybackProfiles/CodecProfile.swift",
+      "reason": "CodecProfile.swift: complete current source body and emitted public declarations read. Pure codec/profile/selection policy owns checked value snapshots, raw identities, CSV/builders and native/VLC/mpv capability tables. DeviceProfile build consumes explicit settings and capability values; it does not query hardware, defaults, credentials or perform requests. Custom add/replace, subtitle matching, source bitrate caps and media-source selection resets retain installed semantics. App adapters own localized labels, UTType, defaults and capability acquisition. Consumer entries are scoped reviewed boundaries; remaining whole-graph/runtime acceptance is required.",
+      "reviewedConsumers": [
+        "Shared/Extensions/JellyfinAPI/DeviceProfile.swift",
+        "Shared/Objects/PlaybackCapabilities.swift",
+        "Shared/Objects/PlaybackProfileAdapters.swift",
+        "Shared/Objects/MediaPlayerManager/MediaPlayerItem/MediaPlayerItem+Build.swift"
+      ],
+      "reviewedInterfaces": [
+        "init(codec: String? = nil, container: String? = nil, type: CodecType? = nil, @ArrayBuilder<ProfileCondition> applyConditions: () -> [ProfileCondition] = { [] }, @ArrayBuilder<ProfileCondition> conditions: () -> [ProfileCondition] = { [] })"
+      ],
+      "sha256": "29fb981dbed4c954ddcbb1ba86e41d43b67dc6d9dd25c4fcdc6ea296e18c0d5e"
+    },
+    {
+      "path": "Packages/SwiftfinPlaybackProfiles/Sources/SwiftfinPlaybackProfiles/CustomDeviceProfileAction.swift",
+      "reason": "CustomDeviceProfileAction.swift: complete current source body and emitted public declarations read. Pure codec/profile/selection policy owns checked value snapshots, raw identities, CSV/builders and native/VLC/mpv capability tables. DeviceProfile build consumes explicit settings and capability values; it does not query hardware, defaults, credentials or perform requests. Custom add/replace, subtitle matching, source bitrate caps and media-source selection resets retain installed semantics. App adapters own localized labels, UTType, defaults and capability acquisition. Consumer entries are scoped reviewed boundaries; remaining whole-graph/runtime acceptance is required.",
+      "reviewedConsumers": [
+        "Shared/Extensions/JellyfinAPI/DeviceProfile.swift",
+        "Shared/Objects/PlaybackCapabilities.swift",
+        "Shared/Objects/PlaybackProfileAdapters.swift",
+        "Shared/Objects/MediaPlayerManager/MediaPlayerItem/MediaPlayerItem+Build.swift"
+      ],
+      "reviewedInterfaces": [
+        "case add",
+        "case replace",
+        "enum CustomDeviceProfileAction"
+      ],
+      "sha256": "cf5c74bb41b6d12283ccbde28bb2dea98d43bb18cf496eac0d40f7b80cbc3f4a"
+    },
+    {
+      "path": "Packages/SwiftfinPlaybackProfiles/Sources/SwiftfinPlaybackProfiles/DeviceProfile.swift",
+      "reason": "DeviceProfile.swift: complete current source body and emitted public declarations read. Pure codec/profile/selection policy owns checked value snapshots, raw identities, CSV/builders and native/VLC/mpv capability tables. DeviceProfile build consumes explicit settings and capability values; it does not query hardware, defaults, credentials or perform requests. Custom add/replace, subtitle matching, source bitrate caps and media-source selection resets retain installed semantics. App adapters own localized labels, UTType, defaults and capability acquisition. Consumer entries are scoped reviewed boundaries; remaining whole-graph/runtime acceptance is required.",
+      "reviewedConsumers": [
+        "Shared/Extensions/JellyfinAPI/DeviceProfile.swift",
+        "Shared/Objects/PlaybackCapabilities.swift",
+        "Shared/Objects/PlaybackProfileAdapters.swift",
+        "Shared/Objects/MediaPlayerManager/MediaPlayerItem/MediaPlayerItem+Build.swift"
+      ],
+      "reviewedInterfaces": [
+        "func canPlay(subtitleFormat: String?, method: SubtitleDeliveryMethod) -> Bool",
+        "func canPlay(type: DlnaProfileType, audioCodec: String?, container: String?) -> Bool",
+        "func canPlay(type: DlnaProfileType, videoCodec: String?, container: String?) -> Bool",
+        "static func build(for videoPlayer: VideoPlayerType, compatibilityMode: PlaybackCompatibility, maxBitrate: Int? = nil, maxResolution: PlaybackResolution = .max, settings: PlaybackProfileSettings, capabilities: PlaybackCapabilitySnapshot) -> DeviceProfile"
+      ],
+      "sha256": "97433d9e23855dd6b649c238ae32f0894e5f3c81afc8e17eb00b01d0ed337bb4"
+    },
+    {
+      "path": "Packages/SwiftfinPlaybackProfiles/Sources/SwiftfinPlaybackProfiles/DirectPlayProfile.swift",
+      "reason": "DirectPlayProfile.swift: complete current source body and emitted public declarations read. Pure codec/profile/selection policy owns checked value snapshots, raw identities, CSV/builders and native/VLC/mpv capability tables. DeviceProfile build consumes explicit settings and capability values; it does not query hardware, defaults, credentials or perform requests. Custom add/replace, subtitle matching, source bitrate caps and media-source selection resets retain installed semantics. App adapters own localized labels, UTType, defaults and capability acquisition. Consumer entries are scoped reviewed boundaries; remaining whole-graph/runtime acceptance is required.",
+      "reviewedConsumers": [
+        "Shared/Extensions/JellyfinAPI/DeviceProfile.swift",
+        "Shared/Objects/PlaybackCapabilities.swift",
+        "Shared/Objects/PlaybackProfileAdapters.swift",
+        "Shared/Objects/MediaPlayerManager/MediaPlayerItem/MediaPlayerItem+Build.swift"
+      ],
+      "reviewedInterfaces": [
+        "init(type: DlnaProfileType, @ArrayBuilder<AudioCodec> audioCodecs: () -> [AudioCodec] = { [] }, @ArrayBuilder<VideoCodec> videoCodecs: () -> [VideoCodec] = { [] }, @ArrayBuilder<MediaContainer> containers: () -> [MediaContainer] = { [] })",
+        "init(type: DlnaProfileType, audioCodecs: [AudioCodec], videoCodecs: [VideoCodec], containers: [MediaContainer])"
+      ],
+      "sha256": "f24ce5febfed622599833a980fe75ec7ef691bb2ddf06410c4713d4876a65ee5"
+    },
+    {
+      "path": "Packages/SwiftfinPlaybackProfiles/Sources/SwiftfinPlaybackProfiles/H264Profile.swift",
+      "reason": "H264Profile.swift: complete current source body and emitted public declarations read. Pure codec/profile/selection policy owns checked value snapshots, raw identities, CSV/builders and native/VLC/mpv capability tables. DeviceProfile build consumes explicit settings and capability values; it does not query hardware, defaults, credentials or perform requests. Custom add/replace, subtitle matching, source bitrate caps and media-source selection resets retain installed semantics. App adapters own localized labels, UTType, defaults and capability acquisition. Consumer entries are scoped reviewed boundaries; remaining whole-graph/runtime acceptance is required.",
+      "reviewedConsumers": [
+        "Shared/Extensions/JellyfinAPI/DeviceProfile.swift",
+        "Shared/Objects/PlaybackCapabilities.swift",
+        "Shared/Objects/PlaybackProfileAdapters.swift",
+        "Shared/Objects/MediaPlayerManager/MediaPlayerItem/MediaPlayerItem+Build.swift"
+      ],
+      "reviewedInterfaces": [
+        "case baseline",
+        "case constrainedBaseline",
+        "case high",
+        "case high10",
+        "case high422",
+        "case high444",
+        "case main",
+        "enum H264Profile"
+      ],
+      "sha256": "b9ef923058e55b54cdfb4aeb4b8b86ff67b66fed6dfbbaf49480b316e3b0e998"
+    },
+    {
+      "path": "Packages/SwiftfinPlaybackProfiles/Sources/SwiftfinPlaybackProfiles/HEVCProfile.swift",
+      "reason": "HEVCProfile.swift: complete current source body and emitted public declarations read. Pure codec/profile/selection policy owns checked value snapshots, raw identities, CSV/builders and native/VLC/mpv capability tables. DeviceProfile build consumes explicit settings and capability values; it does not query hardware, defaults, credentials or perform requests. Custom add/replace, subtitle matching, source bitrate caps and media-source selection resets retain installed semantics. App adapters own localized labels, UTType, defaults and capability acquisition. Consumer entries are scoped reviewed boundaries; remaining whole-graph/runtime acceptance is required.",
+      "reviewedConsumers": [
+        "Shared/Extensions/JellyfinAPI/DeviceProfile.swift",
+        "Shared/Objects/PlaybackCapabilities.swift",
+        "Shared/Objects/PlaybackProfileAdapters.swift",
+        "Shared/Objects/MediaPlayerManager/MediaPlayerItem/MediaPlayerItem+Build.swift"
+      ],
+      "reviewedInterfaces": [
+        "case main",
+        "case main10",
+        "case main12",
+        "case mainStill",
+        "case rext",
+        "enum HEVCProfile"
+      ],
+      "sha256": "2c377642aa89046920f49f2f924a2799ad1e7c7211f4e07729df5f5ca4511fef"
+    },
+    {
+      "path": "Packages/SwiftfinPlaybackProfiles/Sources/SwiftfinPlaybackProfiles/MediaContainer.swift",
+      "reason": "MediaContainer.swift: complete current source body and emitted public declarations read. Pure codec/profile/selection policy owns checked value snapshots, raw identities, CSV/builders and native/VLC/mpv capability tables. DeviceProfile build consumes explicit settings and capability values; it does not query hardware, defaults, credentials or perform requests. Custom add/replace, subtitle matching, source bitrate caps and media-source selection resets retain installed semantics. App adapters own localized labels, UTType, defaults and capability acquisition. Consumer entries are scoped reviewed boundaries; remaining whole-graph/runtime acceptance is required.",
+      "reviewedConsumers": [
+        "Shared/Extensions/JellyfinAPI/DeviceProfile.swift",
+        "Shared/Objects/PlaybackCapabilities.swift",
+        "Shared/Objects/PlaybackProfileAdapters.swift",
+        "Shared/Objects/MediaPlayerManager/MediaPlayerItem/MediaPlayerItem+Build.swift"
+      ],
+      "reviewedInterfaces": [
+        "case avi",
+        "case flv",
+        "case m4v",
+        "case mkv",
+        "case mov",
+        "case mp4",
+        "case mpegts",
+        "case threeG2",
+        "case threeGP",
+        "case ts",
+        "case webm",
+        "enum MediaContainer"
+      ],
+      "sha256": "37490a8a526df09c1c4dc43b27f91eac186bc36c3e69cbce77b75e4ba57b0b62"
+    },
+    {
+      "path": "Packages/SwiftfinPlaybackProfiles/Sources/SwiftfinPlaybackProfiles/MediaJumpInterval.swift",
+      "reason": "MediaJumpInterval.swift: complete current source body and emitted public declarations read. Pure codec/profile/selection policy owns checked value snapshots, raw identities, CSV/builders and native/VLC/mpv capability tables. DeviceProfile build consumes explicit settings and capability values; it does not query hardware, defaults, credentials or perform requests. Custom add/replace, subtitle matching, source bitrate caps and media-source selection resets retain installed semantics. App adapters own localized labels, UTType, defaults and capability acquisition. Consumer entries are scoped reviewed boundaries; remaining whole-graph/runtime acceptance is required.",
+      "reviewedConsumers": [
+        "Shared/Extensions/JellyfinAPI/DeviceProfile.swift",
+        "Shared/Objects/PlaybackCapabilities.swift",
+        "Shared/Objects/PlaybackProfileAdapters.swift",
+        "Shared/Objects/MediaPlayerManager/MediaPlayerItem/MediaPlayerItem+Build.swift"
+      ],
+      "reviewedInterfaces": [
+        "case custom(interval: Duration)",
+        "case fifteen",
+        "case five",
+        "case ten",
+        "case thirty",
+        "enum MediaJumpInterval",
+        "init(rawValue: Duration)",
+        "static var allCases: [MediaJumpInterval] { get }",
+        "typealias RawValue = Duration",
+        "var rawValue: Duration { get }"
+      ],
+      "sha256": "76638f1b1cf7cb7594b270d8377aeb2afd65ff3c1a717aada05c7ea9ae16a7f2"
+    },
+    {
+      "path": "Packages/SwiftfinPlaybackProfiles/Sources/SwiftfinPlaybackProfiles/NativeProfiles.swift",
+      "reason": "NativeProfiles.swift: complete current source body and emitted public declarations read. Pure codec/profile/selection policy owns checked value snapshots, raw identities, CSV/builders and native/VLC/mpv capability tables. DeviceProfile build consumes explicit settings and capability values; it does not query hardware, defaults, credentials or perform requests. Custom add/replace, subtitle matching, source bitrate caps and media-source selection resets retain installed semantics. App adapters own localized labels, UTType, defaults and capability acquisition. Consumer entries are scoped reviewed boundaries; remaining whole-graph/runtime acceptance is required.",
+      "reviewedConsumers": [
+        "Shared/Extensions/JellyfinAPI/DeviceProfile.swift",
+        "Shared/Objects/PlaybackCapabilities.swift",
+        "Shared/Objects/PlaybackProfileAdapters.swift",
+        "Shared/Objects/MediaPlayerManager/MediaPlayerItem/MediaPlayerItem+Build.swift"
+      ],
+      "reviewedInterfaces": [],
+      "sha256": "d4a36142f3362f07e5ec474582ec03e725d9c292c5acdaa512fc3744d6f09f4c"
+    },
+    {
+      "path": "Packages/SwiftfinPlaybackProfiles/Sources/SwiftfinPlaybackProfiles/PlaybackBitrate.swift",
+      "reason": "PlaybackBitrate.swift: complete current source body and emitted public declarations read. Pure codec/profile/selection policy owns checked value snapshots, raw identities, CSV/builders and native/VLC/mpv capability tables. DeviceProfile build consumes explicit settings and capability values; it does not query hardware, defaults, credentials or perform requests. Custom add/replace, subtitle matching, source bitrate caps and media-source selection resets retain installed semantics. App adapters own localized labels, UTType, defaults and capability acquisition. Consumer entries are scoped reviewed boundaries; remaining whole-graph/runtime acceptance is required.",
+      "reviewedConsumers": [
+        "Shared/Extensions/JellyfinAPI/DeviceProfile.swift",
+        "Shared/Objects/PlaybackCapabilities.swift",
+        "Shared/Objects/PlaybackProfileAdapters.swift",
+        "Shared/Objects/MediaPlayerManager/MediaPlayerItem/MediaPlayerItem+Build.swift"
+      ],
+      "reviewedInterfaces": [
+        "case auto",
+        "case kbps128",
+        "case kbps1500",
+        "case kbps192",
+        "case kbps256",
+        "case kbps320",
+        "case kbps420",
+        "case kbps64",
+        "case kbps720",
+        "case kbps96",
+        "case max",
+        "case mbps1",
+        "case mbps10",
+        "case mbps120",
+        "case mbps15",
+        "case mbps2",
+        "case mbps20",
+        "case mbps3",
+        "case mbps4",
+        "case mbps40",
+        "case mbps6",
+        "case mbps60",
+        "case mbps8",
+        "case mbps80",
+        "enum PlaybackBitrate",
+        "init(for bitrate: Int, in bitrates: [PlaybackBitrate] = PlaybackBitrate.allCases)",
+        "static func available(hasVideo: Bool, hasAudio: Bool, sourceBitrate: Int?) -> [PlaybackBitrate]",
+        "static let audioBitrates: [PlaybackBitrate]",
+        "static let videoBitrates: [PlaybackBitrate]"
+      ],
+      "sha256": "63b2a6a1b01bd147d62d6c61700ecc348a67ad4809cb813c98197591c002878f"
+    },
+    {
+      "path": "Packages/SwiftfinPlaybackProfiles/Sources/SwiftfinPlaybackProfiles/PlaybackBitrateTestSize.swift",
+      "reason": "PlaybackBitrateTestSize.swift: complete current source body and emitted public declarations read. Pure codec/profile/selection policy owns checked value snapshots, raw identities, CSV/builders and native/VLC/mpv capability tables. DeviceProfile build consumes explicit settings and capability values; it does not query hardware, defaults, credentials or perform requests. Custom add/replace, subtitle matching, source bitrate caps and media-source selection resets retain installed semantics. App adapters own localized labels, UTType, defaults and capability acquisition. Consumer entries are scoped reviewed boundaries; remaining whole-graph/runtime acceptance is required.",
+      "reviewedConsumers": [
+        "Shared/Extensions/JellyfinAPI/DeviceProfile.swift",
+        "Shared/Objects/PlaybackCapabilities.swift",
+        "Shared/Objects/PlaybackProfileAdapters.swift",
+        "Shared/Objects/MediaPlayerManager/MediaPlayerItem/MediaPlayerItem+Build.swift"
+      ],
+      "reviewedInterfaces": [
+        "case larger",
+        "case largest",
+        "case regular",
+        "case smaller",
+        "case smallest",
+        "enum PlaybackBitrateTestSize"
+      ],
+      "sha256": "f42d0af989adcab852c120a6063a0928bbe3ba01088756fae85d8e251d81fe6e"
+    },
+    {
+      "path": "Packages/SwiftfinPlaybackProfiles/Sources/SwiftfinPlaybackProfiles/PlaybackCompatibility+Video.swift",
+      "reason": "PlaybackCompatibility+Video.swift: complete current source body and emitted public declarations read. Pure codec/profile/selection policy owns checked value snapshots, raw identities, CSV/builders and native/VLC/mpv capability tables. DeviceProfile build consumes explicit settings and capability values; it does not query hardware, defaults, credentials or perform requests. Custom add/replace, subtitle matching, source bitrate caps and media-source selection resets retain installed semantics. App adapters own localized labels, UTType, defaults and capability acquisition. Consumer entries are scoped reviewed boundaries; remaining whole-graph/runtime acceptance is required.",
+      "reviewedConsumers": [
+        "Shared/Extensions/JellyfinAPI/DeviceProfile.swift",
+        "Shared/Objects/PlaybackCapabilities.swift",
+        "Shared/Objects/PlaybackProfileAdapters.swift",
+        "Shared/Objects/MediaPlayerManager/MediaPlayerItem/MediaPlayerItem+Build.swift"
+      ],
+      "reviewedInterfaces": [],
+      "sha256": "352b899e20d56de1f5b3d8d27fa9aec2ee9cdd005b7404807e7d811d58dcbedc"
+    },
+    {
+      "path": "Packages/SwiftfinPlaybackProfiles/Sources/SwiftfinPlaybackProfiles/PlaybackCompatibility.swift",
+      "reason": "PlaybackCompatibility.swift: complete current source body and emitted public declarations read. Pure codec/profile/selection policy owns checked value snapshots, raw identities, CSV/builders and native/VLC/mpv capability tables. DeviceProfile build consumes explicit settings and capability values; it does not query hardware, defaults, credentials or perform requests. Custom add/replace, subtitle matching, source bitrate caps and media-source selection resets retain installed semantics. App adapters own localized labels, UTType, defaults and capability acquisition. Consumer entries are scoped reviewed boundaries; remaining whole-graph/runtime acceptance is required.",
+      "reviewedConsumers": [
+        "Shared/Extensions/JellyfinAPI/DeviceProfile.swift",
+        "Shared/Objects/PlaybackCapabilities.swift",
+        "Shared/Objects/PlaybackProfileAdapters.swift",
+        "Shared/Objects/MediaPlayerManager/MediaPlayerItem/MediaPlayerItem+Build.swift"
+      ],
+      "reviewedInterfaces": [
+        "case auto",
+        "case custom",
+        "case directPlay",
+        "case mostCompatible",
+        "enum PlaybackCompatibility"
+      ],
+      "sha256": "9d1239fc6784eedca13cacccbdfc087706e083a552471cf2c8c62e458c02587b"
+    },
+    {
+      "path": "Packages/SwiftfinPlaybackProfiles/Sources/SwiftfinPlaybackProfiles/PlaybackDeviceProfile.swift",
+      "reason": "PlaybackDeviceProfile.swift: complete current source body and emitted public declarations read. Pure codec/profile/selection policy owns checked value snapshots, raw identities, CSV/builders and native/VLC/mpv capability tables. DeviceProfile build consumes explicit settings and capability values; it does not query hardware, defaults, credentials or perform requests. Custom add/replace, subtitle matching, source bitrate caps and media-source selection resets retain installed semantics. App adapters own localized labels, UTType, defaults and capability acquisition. Consumer entries are scoped reviewed boundaries; remaining whole-graph/runtime acceptance is required.",
+      "reviewedConsumers": [
+        "Shared/Extensions/JellyfinAPI/DeviceProfile.swift",
+        "Shared/Objects/PlaybackCapabilities.swift",
+        "Shared/Objects/PlaybackProfileAdapters.swift",
+        "Shared/Objects/MediaPlayerManager/MediaPlayerItem/MediaPlayerItem+Build.swift"
+      ],
+      "reviewedInterfaces": [
+        "init(type: DlnaProfileType, useAsTranscodingProfile: Bool = false, audio: [AudioCodec] = [], video: [VideoCodec] = [], container: [MediaContainer] = [])",
+        "let type: DlnaProfileType",
+        "struct CustomDeviceProfile",
+        "var audio: [AudioCodec]",
+        "var container: [MediaContainer]",
+        "var directPlayProfile: DirectPlayProfile { get }",
+        "var transcodingProfile: TranscodingProfile { get }",
+        "var useAsTranscodingProfile: Bool",
+        "var video: [VideoCodec]"
+      ],
+      "sha256": "46a827f909a22d028ce2b2620534a3531c8dd0abeb38eed426c08077b072ca4f"
+    },
+    {
+      "path": "Packages/SwiftfinPlaybackProfiles/Sources/SwiftfinPlaybackProfiles/PlaybackProfileInputs.swift",
+      "reason": "PlaybackProfileInputs.swift: complete current source body and emitted public declarations read. Pure codec/profile/selection policy owns checked value snapshots, raw identities, CSV/builders and native/VLC/mpv capability tables. DeviceProfile build consumes explicit settings and capability values; it does not query hardware, defaults, credentials or perform requests. Custom add/replace, subtitle matching, source bitrate caps and media-source selection resets retain installed semantics. App adapters own localized labels, UTType, defaults and capability acquisition. Consumer entries are scoped reviewed boundaries; remaining whole-graph/runtime acceptance is required.",
+      "reviewedConsumers": [
+        "Shared/Extensions/JellyfinAPI/DeviceProfile.swift",
+        "Shared/Objects/PlaybackCapabilities.swift",
+        "Shared/Objects/PlaybackProfileAdapters.swift",
+        "Shared/Objects/MediaPlayerManager/MediaPlayerItem/MediaPlayerItem+Build.swift"
+      ],
+      "reviewedInterfaces": [
+        "init(forceSubtitleBurnIn: Bool = false, customAction: CustomDeviceProfileAction = .add, customProfiles: [CustomDeviceProfile] = [])",
+        "init(supportsAV1: Bool = false, supportsHEVC: Bool = false, supportsVP9: Bool = false, supportsHLG: Bool = false, supportsHDR10: Bool = false, supportsDolbyVision: Bool = false, hdrEnabled: Bool = false)",
+        "let customAction: CustomDeviceProfileAction",
+        "let customProfiles: [CustomDeviceProfile]",
+        "let forceSubtitleBurnIn: Bool",
+        "let hdrEnabled: Bool",
+        "let supportsAV1: Bool",
+        "let supportsDolbyVision: Bool",
+        "let supportsHDR10: Bool",
+        "let supportsHEVC: Bool",
+        "let supportsHLG: Bool",
+        "let supportsVP9: Bool",
+        "struct PlaybackCapabilitySnapshot",
+        "struct PlaybackProfileSettings"
+      ],
+      "sha256": "517bf00931d4ab095b9cc5c579ca5b87c975fa203ced29568ec4728dd9423057"
+    },
+    {
+      "path": "Packages/SwiftfinPlaybackProfiles/Sources/SwiftfinPlaybackProfiles/PlaybackResolution.swift",
+      "reason": "PlaybackResolution.swift: complete current source body and emitted public declarations read. Pure codec/profile/selection policy owns checked value snapshots, raw identities, CSV/builders and native/VLC/mpv capability tables. DeviceProfile build consumes explicit settings and capability values; it does not query hardware, defaults, credentials or perform requests. Custom add/replace, subtitle matching, source bitrate caps and media-source selection resets retain installed semantics. App adapters own localized labels, UTType, defaults and capability acquisition. Consumer entries are scoped reviewed boundaries; remaining whole-graph/runtime acceptance is required.",
+      "reviewedConsumers": [
+        "Shared/Extensions/JellyfinAPI/DeviceProfile.swift",
+        "Shared/Objects/PlaybackCapabilities.swift",
+        "Shared/Objects/PlaybackProfileAdapters.swift",
+        "Shared/Objects/MediaPlayerManager/MediaPlayerItem/MediaPlayerItem+Build.swift"
+      ],
+      "reviewedInterfaces": [
+        "case max",
+        "case p1080",
+        "case p1440",
+        "case p2160",
+        "case p240",
+        "case p360",
+        "case p480",
+        "case p720",
+        "enum PlaybackResolution",
+        "var codecProfile: CodecProfile? { get }"
+      ],
+      "sha256": "618a6c27ae1976a9c5eeb337ee2246a3e8b0b9fd7ab16124593cc597775d73a0"
+    },
+    {
+      "path": "Packages/SwiftfinPlaybackProfiles/Sources/SwiftfinPlaybackProfiles/PlaybackSpeed.swift",
+      "reason": "PlaybackSpeed.swift: complete current source body and emitted public declarations read. Pure codec/profile/selection policy owns checked value snapshots, raw identities, CSV/builders and native/VLC/mpv capability tables. DeviceProfile build consumes explicit settings and capability values; it does not query hardware, defaults, credentials or perform requests. Custom add/replace, subtitle matching, source bitrate caps and media-source selection resets retain installed semantics. App adapters own localized labels, UTType, defaults and capability acquisition. Consumer entries are scoped reviewed boundaries; remaining whole-graph/runtime acceptance is required.",
+      "reviewedConsumers": [
+        "Shared/Extensions/JellyfinAPI/DeviceProfile.swift",
+        "Shared/Objects/PlaybackCapabilities.swift",
+        "Shared/Objects/PlaybackProfileAdapters.swift",
+        "Shared/Objects/MediaPlayerManager/MediaPlayerItem/MediaPlayerItem+Build.swift"
+      ],
+      "reviewedInterfaces": [
+        "case custom(Float)",
+        "case half",
+        "case one",
+        "case oneHalf",
+        "case oneQuarter",
+        "case oneThreeQuarter",
+        "case quarter",
+        "case threeQuarter",
+        "case two",
+        "enum PlaybackSpeed",
+        "init(rawValue: Float)",
+        "static var allCases: [PlaybackSpeed] { get }",
+        "typealias RawValue = Float",
+        "var rawValue: Float { get }"
+      ],
+      "sha256": "f7402eed97c5378245c2185f0afee89da4f55c7beae21fdc90bc4b27689f5777"
+    },
+    {
+      "path": "Packages/SwiftfinPlaybackProfiles/Sources/SwiftfinPlaybackProfiles/PlayerProfiles.swift",
+      "reason": "PlayerProfiles.swift: complete current source body and emitted public declarations read. Pure codec/profile/selection policy owns checked value snapshots, raw identities, CSV/builders and native/VLC/mpv capability tables. DeviceProfile build consumes explicit settings and capability values; it does not query hardware, defaults, credentials or perform requests. Custom add/replace, subtitle matching, source bitrate caps and media-source selection resets retain installed semantics. App adapters own localized labels, UTType, defaults and capability acquisition. Consumer entries are scoped reviewed boundaries; remaining whole-graph/runtime acceptance is required.",
+      "reviewedConsumers": [
+        "Shared/Extensions/JellyfinAPI/DeviceProfile.swift",
+        "Shared/Objects/PlaybackCapabilities.swift",
+        "Shared/Objects/PlaybackProfileAdapters.swift",
+        "Shared/Objects/MediaPlayerManager/MediaPlayerItem/MediaPlayerItem+Build.swift"
+      ],
+      "reviewedInterfaces": [
+        "func codecProfiles(capabilities: PlaybackCapabilitySnapshot) -> [CodecProfile]",
+        "func directPlayProfiles(capabilities: PlaybackCapabilitySnapshot) -> [DirectPlayProfile]",
+        "func transcodingProfiles(capabilities: PlaybackCapabilitySnapshot) -> [TranscodingProfile]",
+        "var subtitleProfiles: [SubtitleProfile] { get }"
+      ],
+      "sha256": "8294ac053f63e5214b639bd44c495ab7660973a3324fb8d7894bf3b9e8bdf7e6"
+    },
+    {
+      "path": "Packages/SwiftfinPlaybackProfiles/Sources/SwiftfinPlaybackProfiles/ProfileCondition.swift",
+      "reason": "ProfileCondition.swift: complete current source body and emitted public declarations read. Pure codec/profile/selection policy owns checked value snapshots, raw identities, CSV/builders and native/VLC/mpv capability tables. DeviceProfile build consumes explicit settings and capability values; it does not query hardware, defaults, credentials or perform requests. Custom add/replace, subtitle matching, source bitrate caps and media-source selection resets retain installed semantics. App adapters own localized labels, UTType, defaults and capability acquisition. Consumer entries are scoped reviewed boundaries; remaining whole-graph/runtime acceptance is required.",
+      "reviewedConsumers": [
+        "Shared/Extensions/JellyfinAPI/DeviceProfile.swift",
+        "Shared/Objects/PlaybackCapabilities.swift",
+        "Shared/Objects/PlaybackProfileAdapters.swift",
+        "Shared/Objects/MediaPlayerManager/MediaPlayerItem/MediaPlayerItem+Build.swift"
+      ],
+      "reviewedInterfaces": [
+        "init(condition: ProfileConditionType? = nil, isRequired: Bool? = nil, property: ProfileConditionValue? = nil, @ArrayBuilder<String> value: () -> [String])"
+      ],
+      "sha256": "4f6a53dbd54679ecbdde668c0e12815c5f2a34328d0c51d96e3091f9e272465b"
+    },
+    {
+      "path": "Packages/SwiftfinPlaybackProfiles/Sources/SwiftfinPlaybackProfiles/ProfileConditions.swift",
+      "reason": "ProfileConditions.swift: complete current source body and emitted public declarations read. Pure codec/profile/selection policy owns checked value snapshots, raw identities, CSV/builders and native/VLC/mpv capability tables. DeviceProfile build consumes explicit settings and capability values; it does not query hardware, defaults, credentials or perform requests. Custom add/replace, subtitle matching, source bitrate caps and media-source selection resets retain installed semantics. App adapters own localized labels, UTType, defaults and capability acquisition. Consumer entries are scoped reviewed boundaries; remaining whole-graph/runtime acceptance is required.",
+      "reviewedConsumers": [
+        "Shared/Extensions/JellyfinAPI/DeviceProfile.swift",
+        "Shared/Objects/PlaybackCapabilities.swift",
+        "Shared/Objects/PlaybackProfileAdapters.swift",
+        "Shared/Objects/MediaPlayerManager/MediaPlayerItem/MediaPlayerItem+Build.swift"
+      ],
+      "reviewedInterfaces": [],
+      "sha256": "da96279e6ba5f595ff0dd2d97e7219b11c71b29d7acd3395618908b7a16c513d"
+    },
+    {
+      "path": "Packages/SwiftfinPlaybackProfiles/Sources/SwiftfinPlaybackProfiles/SubtitleFormat.swift",
+      "reason": "SubtitleFormat.swift: complete current source body and emitted public declarations read. Pure codec/profile/selection policy owns checked value snapshots, raw identities, CSV/builders and native/VLC/mpv capability tables. DeviceProfile build consumes explicit settings and capability values; it does not query hardware, defaults, credentials or perform requests. Custom add/replace, subtitle matching, source bitrate caps and media-source selection resets retain installed semantics. App adapters own localized labels, UTType, defaults and capability acquisition. Consumer entries are scoped reviewed boundaries; remaining whole-graph/runtime acceptance is required.",
+      "reviewedConsumers": [
+        "Shared/Extensions/JellyfinAPI/DeviceProfile.swift",
+        "Shared/Objects/PlaybackCapabilities.swift",
+        "Shared/Objects/PlaybackProfileAdapters.swift",
+        "Shared/Objects/MediaPlayerManager/MediaPlayerItem/MediaPlayerItem+Build.swift"
+      ],
+      "reviewedInterfaces": [
+        "case ass",
+        "case cc_dec",
+        "case dvbsub",
+        "case dvdsub",
+        "case libzvbi_teletextdec",
+        "case mov_text",
+        "case mpl2",
+        "case pgssub",
+        "case pjs",
+        "case realtext",
+        "case sami",
+        "case ssa",
+        "case subrip",
+        "case subviewer",
+        "case subviewer1",
+        "case text",
+        "case ttml",
+        "case vplayer",
+        "case vtt",
+        "case xsub",
+        "enum SubtitleFormat",
+        "init?(url: URL)",
+        "var fileExtension: String { get }",
+        "var isText: Bool { get }"
+      ],
+      "sha256": "b12be201fd24efa2cbbbbecab7e80e805a50aedc36755af2a12ceba573b21612"
+    },
+    {
+      "path": "Packages/SwiftfinPlaybackProfiles/Sources/SwiftfinPlaybackProfiles/SubtitleProfile.swift",
+      "reason": "SubtitleProfile.swift: complete current source body and emitted public declarations read. Pure codec/profile/selection policy owns checked value snapshots, raw identities, CSV/builders and native/VLC/mpv capability tables. DeviceProfile build consumes explicit settings and capability values; it does not query hardware, defaults, credentials or perform requests. Custom add/replace, subtitle matching, source bitrate caps and media-source selection resets retain installed semantics. App adapters own localized labels, UTType, defaults and capability acquisition. Consumer entries are scoped reviewed boundaries; remaining whole-graph/runtime acceptance is required.",
+      "reviewedConsumers": [
+        "Shared/Extensions/JellyfinAPI/DeviceProfile.swift",
+        "Shared/Objects/PlaybackCapabilities.swift",
+        "Shared/Objects/PlaybackProfileAdapters.swift",
+        "Shared/Objects/MediaPlayerManager/MediaPlayerItem/MediaPlayerItem+Build.swift"
+      ],
+      "reviewedInterfaces": [
+        "static func build(method: SubtitleDeliveryMethod, @ArrayBuilder<SubtitleFormat> containers: () -> [SubtitleFormat]) -> [SubtitleProfile]"
+      ],
+      "sha256": "a5bedb44738e0c261ac10f6e5610e16c956d55891d6dc7cb2bf8f12d9cd66a72"
+    },
+    {
+      "path": "Packages/SwiftfinPlaybackProfiles/Sources/SwiftfinPlaybackProfiles/TranscodingProfile.swift",
+      "reason": "TranscodingProfile.swift: complete current source body and emitted public declarations read. Pure codec/profile/selection policy owns checked value snapshots, raw identities, CSV/builders and native/VLC/mpv capability tables. DeviceProfile build consumes explicit settings and capability values; it does not query hardware, defaults, credentials or perform requests. Custom add/replace, subtitle matching, source bitrate caps and media-source selection resets retain installed semantics. App adapters own localized labels, UTType, defaults and capability acquisition. Consumer entries are scoped reviewed boundaries; remaining whole-graph/runtime acceptance is required.",
+      "reviewedConsumers": [
+        "Shared/Extensions/JellyfinAPI/DeviceProfile.swift",
+        "Shared/Objects/PlaybackCapabilities.swift",
+        "Shared/Objects/PlaybackProfileAdapters.swift",
+        "Shared/Objects/MediaPlayerManager/MediaPlayerItem/MediaPlayerItem+Build.swift"
+      ],
+      "reviewedInterfaces": [
+        "init(isBreakOnNonKeyFrames: Bool? = nil, conditions: [ProfileCondition]? = nil, context: EncodingContext? = nil, isCopyTimestamps: Bool? = nil, enableAudioVbrEncoding: Bool? = nil, enableMpegtsM2TsMode: Bool? = nil, enableSubtitlesInManifest: Bool? = nil, isEstimateContentLength: Bool? = nil, maxAudioChannels: String? = nil, minSegments: Int? = nil, protocol: MediaStreamProtocol? = nil, segmentLength: Int? = nil, transcodeSeekInfo: TranscodeSeekInfo? = nil, type: DlnaProfileType? = nil, @ArrayBuilder<AudioCodec> audioCodecs: () -> [AudioCodec] = { [] }, @ArrayBuilder<VideoCodec> videoCodecs: () -> [VideoCodec] = { [] }, @ArrayBuilder<MediaContainer> containers: () -> [MediaContainer] = { [] })"
+      ],
+      "sha256": "befd08eb550ac277b814ed620eab4ede0d681a9aea76990dc40ee6c7985171dd"
+    },
+    {
+      "path": "Packages/SwiftfinPlaybackProfiles/Sources/SwiftfinPlaybackProfiles/VLCProfiles.swift",
+      "reason": "VLCProfiles.swift: complete current source body and emitted public declarations read. Pure codec/profile/selection policy owns checked value snapshots, raw identities, CSV/builders and native/VLC/mpv capability tables. DeviceProfile build consumes explicit settings and capability values; it does not query hardware, defaults, credentials or perform requests. Custom add/replace, subtitle matching, source bitrate caps and media-source selection resets retain installed semantics. App adapters own localized labels, UTType, defaults and capability acquisition. Consumer entries are scoped reviewed boundaries; remaining whole-graph/runtime acceptance is required.",
+      "reviewedConsumers": [
+        "Shared/Extensions/JellyfinAPI/DeviceProfile.swift",
+        "Shared/Objects/PlaybackCapabilities.swift",
+        "Shared/Objects/PlaybackProfileAdapters.swift",
+        "Shared/Objects/MediaPlayerManager/MediaPlayerItem/MediaPlayerItem+Build.swift"
+      ],
+      "reviewedInterfaces": [],
+      "sha256": "5daab196124adf36f37104d92b5e924ff865f0308df17ee72a1c173f4764130f"
+    },
+    {
+      "path": "Packages/SwiftfinPlaybackProfiles/Sources/SwiftfinPlaybackProfiles/VideoCodec.swift",
+      "reason": "VideoCodec.swift: complete current source body and emitted public declarations read. Pure codec/profile/selection policy owns checked value snapshots, raw identities, CSV/builders and native/VLC/mpv capability tables. DeviceProfile build consumes explicit settings and capability values; it does not query hardware, defaults, credentials or perform requests. Custom add/replace, subtitle matching, source bitrate caps and media-source selection resets retain installed semantics. App adapters own localized labels, UTType, defaults and capability acquisition. Consumer entries are scoped reviewed boundaries; remaining whole-graph/runtime acceptance is required.",
+      "reviewedConsumers": [
+        "Shared/Extensions/JellyfinAPI/DeviceProfile.swift",
+        "Shared/Objects/PlaybackCapabilities.swift",
+        "Shared/Objects/PlaybackProfileAdapters.swift",
+        "Shared/Objects/MediaPlayerManager/MediaPlayerItem/MediaPlayerItem+Build.swift"
+      ],
+      "reviewedInterfaces": [
+        "case av1",
+        "case dirac",
+        "case dv",
+        "case ffv1",
+        "case flv1",
+        "case h261",
+        "case h263",
+        "case h264",
+        "case hevc",
+        "case mjpeg",
+        "case mpeg1video",
+        "case mpeg2video",
+        "case mpeg4",
+        "case msmpeg4v1",
+        "case msmpeg4v2",
+        "case msmpeg4v3",
+        "case prores",
+        "case theora",
+        "case vc1",
+        "case vp8",
+        "case vp9",
+        "case vvc",
+        "case wmv1",
+        "case wmv2",
+        "case wmv3",
+        "enum VideoCodec"
+      ],
+      "sha256": "e18e00d1b3ffb4490f94dd2b8090cdf73c8e4c8473ccafe5189edf035bfdd2a7"
+    },
+    {
+      "path": "Packages/SwiftfinPlaybackProfiles/Sources/SwiftfinPlaybackProfiles/VideoPlayerType.swift",
+      "reason": "VideoPlayerType.swift: complete current source body and emitted public declarations read. Pure codec/profile/selection policy owns checked value snapshots, raw identities, CSV/builders and native/VLC/mpv capability tables. DeviceProfile build consumes explicit settings and capability values; it does not query hardware, defaults, credentials or perform requests. Custom add/replace, subtitle matching, source bitrate caps and media-source selection resets retain installed semantics. App adapters own localized labels, UTType, defaults and capability acquisition. Consumer entries are scoped reviewed boundaries; remaining whole-graph/runtime acceptance is required.",
+      "reviewedConsumers": [
+        "Shared/Extensions/JellyfinAPI/DeviceProfile.swift",
+        "Shared/Objects/PlaybackCapabilities.swift",
+        "Shared/Objects/PlaybackProfileAdapters.swift",
+        "Shared/Objects/MediaPlayerManager/MediaPlayerItem/MediaPlayerItem+Build.swift"
+      ],
+      "reviewedInterfaces": [
+        "case mpv",
+        "case native",
+        "case vlc",
+        "enum VideoPlayerType"
+      ],
+      "sha256": "cc2697b9d2509adf5c35d6c9049770a96abaa5f70e0006b4054be18ce678007a"
+    },
+    {
+      "path": "Packages/SwiftfinNetworking/Sources/SwiftfinNetworking/AccountTransportCache.swift",
+      "reason": "AccountTransportCache.swift: complete current source body and emitted public declarations read. The main-actor owner privately constructs SDK clients from explicit identity, URL, token and session policy. Authenticated executor guards captured binding around awaited I/O. URL/authentication ports expose values; authenticating never rebinds the captured transport. Discovery implementation was read, not executed. Socket worker, subscriptions, source factory and diagnostic callbacks have generation/identity guards; retirement state is committed before native callbacks, orphan leases cancel, and dictionaries hold no modifying access across callbacks. Transport cache publication is rejected after reentrant replacement/invalidation. Redaction covers the supported authentication payloads, not arbitrary unknown bodies. Consumer entries are scoped reviewed boundaries; remaining whole-graph/runtime acceptance is required.",
+      "reviewedConsumers": [
+        "Shared/Services/UserSession/UserSession.swift",
+        "Shared/Services/UserSession/UserSession+ItemMetadata.swift",
+        "Shared/Services/ServerSocketManager.swift",
+        "Shared/Extensions/JellyfinAPI/JellyfinClient.swift",
+        "Shared/Logging/NetworkLogger.swift",
+        "Packages/SwiftfinNetworking/Tests/SwiftfinNetworkingTests/SocketContracts.swift",
+        "Packages/SwiftfinNetworking/Tests/SwiftfinNetworkingTests/TransportContracts.swift"
+      ],
+      "reviewedInterfaces": [
+        "@MainActor final class AccountTransportCache",
+        "@MainActor func client(url: URL, serverID: String, userID: String, accessToken: String) -> JellyfinTransport",
+        "@MainActor func invalidate()",
+        "@MainActor init(make: @escaping @MainActor @Sendable (URL, String) -> JellyfinTransport)",
+        "nonisolated var description: String { get }"
+      ],
+      "sha256": "3fc8a7eb7d0f2337ac2a389e344c0c6291035e07bbd0be044a269622165605c4"
+    },
+    {
+      "path": "Packages/SwiftfinNetworking/Sources/SwiftfinNetworking/AuthenticatedRequestExecutor.swift",
+      "reason": "AuthenticatedRequestExecutor.swift: complete current source body and emitted public declarations read. The main-actor owner privately constructs SDK clients from explicit identity, URL, token and session policy. Authenticated executor guards captured binding around awaited I/O. URL/authentication ports expose values; authenticating never rebinds the captured transport. Discovery implementation was read, not executed. Socket worker, subscriptions, source factory and diagnostic callbacks have generation/identity guards; retirement state is committed before native callbacks, orphan leases cancel, and dictionaries hold no modifying access across callbacks. Transport cache publication is rejected after reentrant replacement/invalidation. Redaction covers the supported authentication payloads, not arbitrary unknown bodies. Consumer entries are scoped reviewed boundaries; remaining whole-graph/runtime acceptance is required.",
+      "reviewedConsumers": [
+        "Shared/Services/UserSession/UserSession.swift",
+        "Shared/Services/UserSession/UserSession+ItemMetadata.swift",
+        "Shared/Services/ServerSocketManager.swift",
+        "Shared/Extensions/JellyfinAPI/JellyfinClient.swift",
+        "Shared/Logging/NetworkLogger.swift",
+        "Packages/SwiftfinNetworking/Tests/SwiftfinNetworkingTests/SocketContracts.swift",
+        "Packages/SwiftfinNetworking/Tests/SwiftfinNetworkingTests/TransportContracts.swift"
+      ],
+      "reviewedInterfaces": [
+        "@MainActor final class AuthenticatedRequestExecutor",
+        "@MainActor func checkBinding() throws",
+        "@MainActor func complete(_ request: Request<Void>) async throws",
+        "@MainActor func complete(_ request: Request<Void>, delegate: (any URLSessionDataDelegate)?) async throws",
+        "@MainActor func response<Value>(for request: Request<Value>) async throws -> JellyfinResponse<Value> where Value : Decodable, Value : Sendable",
+        "@MainActor func value<Value>(for request: Request<Value>) async throws -> Value where Value : Decodable, Value : Sendable",
+        "@MainActor func value<Value>(for request: Request<Value>, delegate: (any URLSessionDataDelegate)?) async throws -> Value where Value : Decodable, Value : Sendable",
+        "@MainActor init(sender: any JellyfinRequestSending, isCurrent: @escaping @MainActor @Sendable () -> Bool = { true })",
+        "@MainActor protocol JellyfinRequestSending",
+        "init(value: Value, responseURL: URL? = nil)",
+        "let responseURL: URL?",
+        "let value: Value",
+        "struct JellyfinResponse<Value> where Value : Sendable"
+      ],
+      "sha256": "d3153325668c8175c7095035201c55fc1da3b599515a0404485fd14b1427b8ae"
+    },
+    {
+      "path": "Packages/SwiftfinNetworking/Sources/SwiftfinNetworking/JellyfinAccessPorts.swift",
+      "reason": "JellyfinAccessPorts.swift: complete current source body and emitted public declarations read. The main-actor owner privately constructs SDK clients from explicit identity, URL, token and session policy. Authenticated executor guards captured binding around awaited I/O. URL/authentication ports expose values; authenticating never rebinds the captured transport. Discovery implementation was read, not executed. Socket worker, subscriptions, source factory and diagnostic callbacks have generation/identity guards; retirement state is committed before native callbacks, orphan leases cancel, and dictionaries hold no modifying access across callbacks. Transport cache publication is rejected after reentrant replacement/invalidation. Redaction covers the supported authentication payloads, not arbitrary unknown bodies. Consumer entries are scoped reviewed boundaries; remaining whole-graph/runtime acceptance is required.",
+      "reviewedConsumers": [
+        "Shared/Services/UserSession/UserSession.swift",
+        "Shared/Services/UserSession/UserSession+ItemMetadata.swift",
+        "Shared/Services/ServerSocketManager.swift",
+        "Shared/Extensions/JellyfinAPI/JellyfinClient.swift",
+        "Shared/Logging/NetworkLogger.swift",
+        "Packages/SwiftfinNetworking/Tests/SwiftfinNetworkingTests/SocketContracts.swift",
+        "Packages/SwiftfinNetworking/Tests/SwiftfinNetworkingTests/TransportContracts.swift"
+      ],
+      "reviewedInterfaces": [
+        "@MainActor func authenticate(quickConnectSecret: String) async throws -> AuthenticationResult",
+        "@MainActor func authenticate(username: String, password: String) async throws -> AuthenticationResult",
+        "@MainActor func url(path: String) -> URL?",
+        "@MainActor func url(with request: Request<some Any>, queryAPIKey: Bool) -> URL?",
+        "@MainActor protocol JellyfinAuthenticating",
+        "@MainActor protocol JellyfinURLResolving"
+      ],
+      "sha256": "6c36dc24114ed79a7737735002d6f891a8248e42d362071058bff52524cf7ead"
+    },
+    {
+      "path": "Packages/SwiftfinNetworking/Sources/SwiftfinNetworking/JellyfinSocketController.swift",
+      "reason": "JellyfinSocketController.swift: complete current source body and emitted public declarations read. The main-actor owner privately constructs SDK clients from explicit identity, URL, token and session policy. Authenticated executor guards captured binding around awaited I/O. URL/authentication ports expose values; authenticating never rebinds the captured transport. Discovery implementation was read, not executed. Socket worker, subscriptions, source factory and diagnostic callbacks have generation/identity guards; retirement state is committed before native callbacks, orphan leases cancel, and dictionaries hold no modifying access across callbacks. Transport cache publication is rejected after reentrant replacement/invalidation. Redaction covers the supported authentication payloads, not arbitrary unknown bodies. Consumer entries are scoped reviewed boundaries; remaining whole-graph/runtime acceptance is required.",
+      "reviewedConsumers": [
+        "Shared/Services/UserSession/UserSession.swift",
+        "Shared/Services/UserSession/UserSession+ItemMetadata.swift",
+        "Shared/Services/ServerSocketManager.swift",
+        "Shared/Extensions/JellyfinAPI/JellyfinClient.swift",
+        "Shared/Logging/NetworkLogger.swift",
+        "Packages/SwiftfinNetworking/Tests/SwiftfinNetworkingTests/SocketContracts.swift",
+        "Packages/SwiftfinNetworking/Tests/SwiftfinNetworkingTests/TransportContracts.swift"
+      ],
+      "reviewedInterfaces": [
+        "@MainActor convenience init(client: @escaping @MainActor @Sendable () -> JellyfinTransport?, diagnostic: @escaping @MainActor @Sendable (String) -> Void = { _ in })",
+        "@MainActor final class JellyfinSocketController",
+        "@MainActor func activityLog(delay: Duration = .seconds(0), interval: Duration = .seconds(5)) -> AsyncStream<[ActivityLogEntry]>",
+        "@MainActor func commands() -> AsyncStream<ServerSocketCommand>",
+        "@MainActor func connectionStates() -> AsyncStream<Bool>",
+        "@MainActor func reconnect()",
+        "@MainActor func scheduledTasks(delay: Duration = .seconds(0), interval: Duration = .seconds(5)) -> AsyncStream<[TaskInfo]>",
+        "@MainActor func sessions(delay: Duration = .seconds(2), interval: Duration = .seconds(2)) -> AsyncStream<[SessionInfoDto]>",
+        "@MainActor func start()",
+        "@MainActor func stop()",
+        "case general(GeneralCommand)",
+        "case play(PlayRequest)",
+        "case playstate(PlaystateRequest)",
+        "enum ServerSocketCommand"
+      ],
+      "sha256": "135e6abb5832be24076bbdc3f0281f810d1e8053277eec2cd0d5a98114aa6059"
+    },
+    {
+      "path": "Packages/SwiftfinNetworking/Sources/SwiftfinNetworking/JellyfinTransport.swift",
+      "reason": "JellyfinTransport.swift: complete current source body and emitted public declarations read. The main-actor owner privately constructs SDK clients from explicit identity, URL, token and session policy. Authenticated executor guards captured binding around awaited I/O. URL/authentication ports expose values; authenticating never rebinds the captured transport. Discovery implementation was read, not executed. Socket worker, subscriptions, source factory and diagnostic callbacks have generation/identity guards; retirement state is committed before native callbacks, orphan leases cancel, and dictionaries hold no modifying access across callbacks. Transport cache publication is rejected after reentrant replacement/invalidation. Redaction covers the supported authentication payloads, not arbitrary unknown bodies. Consumer entries are scoped reviewed boundaries; remaining whole-graph/runtime acceptance is required.",
+      "reviewedConsumers": [
+        "Shared/Services/UserSession/UserSession.swift",
+        "Shared/Services/UserSession/UserSession+ItemMetadata.swift",
+        "Shared/Services/ServerSocketManager.swift",
+        "Shared/Extensions/JellyfinAPI/JellyfinClient.swift",
+        "Shared/Logging/NetworkLogger.swift",
+        "Packages/SwiftfinNetworking/Tests/SwiftfinNetworkingTests/SocketContracts.swift",
+        "Packages/SwiftfinNetworking/Tests/SwiftfinNetworkingTests/TransportContracts.swift"
+      ],
+      "reviewedInterfaces": [
+        "@MainActor final class JellyfinTransport",
+        "@MainActor func authenticate(quickConnectSecret: String) async throws -> AuthenticationResult",
+        "@MainActor func authenticate(username: String, password: String) async throws -> AuthenticationResult",
+        "@MainActor func send<Value>(_ request: Request<Value>, delegate: (any URLSessionDataDelegate)? = nil, configure: (@Sendable (inout URLRequest) throws -> Void)? = nil) async throws -> Response<Value> where Value : Decodable, Value : Sendable",
+        "@MainActor func url(path: String) -> URL?",
+        "@MainActor func url(with request: Request<some Any>, queryAPIKey: Bool = false) -> URL?",
+        "@MainActor init(url: URL, accessToken: String? = nil, identity: TransportClientIdentity, policy: TransportSessionPolicy = .standard, sessionDelegate: (any URLSessionDelegate)? = nil, sessionConfiguration: URLSessionConfiguration? = nil)",
+        "@MainActor static func discover() -> AsyncThrowingStream<JellyfinTransport.DiscoveredServer, any Error>",
+        "@MainActor var version: JellyfinClient.Version { get }",
+        "@discardableResult @MainActor func send(_ request: Request<Void>, delegate: (any URLSessionDataDelegate)? = nil, configure: (@Sendable (inout URLRequest) throws -> Void)? = nil) async throws -> Response<Void>",
+        "case connectionProbe",
+        "case standard",
+        "case systemDefault",
+        "enum TransportSessionPolicy",
+        "func makeConfiguration() -> URLSessionConfiguration",
+        "init(platform: String, deviceName: String, vendorID: String, version: String, locale: Locale = .current)",
+        "let client: String",
+        "let deviceID: String",
+        "let deviceName: String",
+        "let id: String",
+        "let name: String",
+        "let url: URL",
+        "let version: String",
+        "nonisolated let configuration: TransportConfiguration",
+        "nonisolated var description: String { get }",
+        "struct DiscoveredServer",
+        "struct TransportClientIdentity",
+        "struct TransportConfiguration"
+      ],
+      "sha256": "ebf7c3aaea9b9239924e7a2af7231e0cd5af5538a5186b0dec7c43601d046ac0"
+    },
+    {
+      "path": "Packages/SwiftfinMediaCatalog/Sources/SwiftfinMediaCatalog/CatalogValues.swift",
+      "reason": "CatalogValues.swift: complete current source body and emitted public declarations read. Read-only generic catalog requests retain exact user/query/filter/sort/paging parameters and captured account binding. DTO state consumes explicit clock inputs; program windows, stable block IDs, deduplication, cursor overflow checks and atomic guide snapshot application remain value decisions. This generic catalog is not child authorization; KidsCatalog/KidsDomain remain responsible for curated restrictions. No file, playback or server mutation API is added. Consumer entries are scoped reviewed boundaries; remaining whole-graph/runtime acceptance is required.",
+      "reviewedConsumers": [
+        "Shared/Services/UserSession/UserSession+ItemMetadata.swift",
+        "Shared/ViewModels/EPGViewModel.swift"
+      ],
+      "reviewedInterfaces": [
+        "case additionalParts(itemID: String)",
+        "case artworkSample(parentID: String?, itemTypes: [BaseItemKind], favorites: Bool)",
+        "case browse",
+        "case channelSchedule(channelID: String?, from: Date)",
+        "case channels",
+        "case episodes(seasonID: String, showMissing: Bool)",
+        "case genres",
+        "case items(CatalogItemQuery, mode: CatalogItemMode = .browse)",
+        "case kids",
+        "case latest(parentID: String?)",
+        "case localTrailers(itemID: String)",
+        "case movies",
+        "case news",
+        "case nextUp(rewatching: Bool, maximumAge: TimeInterval, now: Date)",
+        "case people(query: String?)",
+        "case programs(category: MediaProgramCategory)",
+        "case random",
+        "case recent",
+        "case recommendedPrograms",
+        "case recordings",
+        "case resume(mediaTypes: [MediaType])",
+        "case scheduledRecordings",
+        "case search(query: String, staticQuery: String?)",
+        "case seasons(seriesID: String, showMissing: Bool)",
+        "case series",
+        "case similar(itemID: String, itemType: BaseItemKind?)",
+        "case specialFeatures(itemID: String)",
+        "case sports",
+        "enum CatalogItemMode",
+        "enum MediaCatalogQuery",
+        "enum MediaProgramCategory",
+        "init(audioLanguages: [String] = [], categories: [MediaProgramCategory] = [], genres: [String] = [], itemTypes: [BaseItemKind] = [], letter: String? = nil, officialRatings: [String] = [], sortBy: [ItemSortBy] = [.sortName], sortOrder: [SortOrder] = [.ascending], subtitleLanguages: [String] = [], tags: [String] = [], traits: [ItemFilter] = [], years: [String] = [], query: String? = nil)",
+        "init(items: [BaseItemDto], consumedCount: Int? = nil)",
+        "init(offset: Int, limit: Int)",
+        "init(parentID: String?, parentType: BaseItemKind?, collectionType: CollectionType?, groupingID: String? = nil, filters: CatalogFilters = .init())",
+        "let audioLanguages: [String]",
+        "let categories: [MediaProgramCategory]",
+        "let collectionType: CollectionType?",
+        "let consumedCount: Int",
+        "let filters: CatalogFilters",
+        "let genres: [String]",
+        "let groupingID: String?",
+        "let itemTypes: [BaseItemKind]",
+        "let items: [BaseItemDto]",
+        "let letter: String?",
+        "let limit: Int",
+        "let officialRatings: [String]",
+        "let offset: Int",
+        "let parentID: String?",
+        "let parentType: BaseItemKind?",
+        "let query: String?",
+        "let sortBy: [ItemSortBy]",
+        "let sortOrder: [SortOrder]",
+        "let subtitleLanguages: [String]",
+        "let tags: [String]",
+        "let traits: [ItemFilter]",
+        "let years: [String]",
+        "struct CatalogFilters",
+        "struct CatalogItemQuery",
+        "struct CatalogPage",
+        "struct CatalogPageRequest",
+        "var supportsPagination: Bool { get }"
+      ],
+      "sha256": "21c912729cedc24e72dd184ad8c7ce78fc4a204c9e622c65a741e1191981d6e5"
+    },
+    {
+      "path": "Packages/SwiftfinMediaCatalog/Sources/SwiftfinMediaCatalog/MediaCatalogClient.swift",
+      "reason": "MediaCatalogClient.swift: complete current source body and emitted public declarations read. Read-only generic catalog requests retain exact user/query/filter/sort/paging parameters and captured account binding. DTO state consumes explicit clock inputs; program windows, stable block IDs, deduplication, cursor overflow checks and atomic guide snapshot application remain value decisions. This generic catalog is not child authorization; KidsCatalog/KidsDomain remain responsible for curated restrictions. No file, playback or server mutation API is added. Consumer entries are scoped reviewed boundaries; remaining whole-graph/runtime acceptance is required.",
+      "reviewedConsumers": [
+        "Shared/Services/UserSession/UserSession+ItemMetadata.swift",
+        "Shared/ViewModels/EPGViewModel.swift"
+      ],
+      "reviewedInterfaces": [
+        "@MainActor final class MediaCatalogClient",
+        "@MainActor func adjacentEpisodes(for item: BaseItemDto) async throws -> AdjacentEpisodes",
+        "@MainActor func channel(id: String) async throws -> BaseItemDto?",
+        "@MainActor func checkBinding() throws",
+        "@MainActor func homeViews(excludedIDs: [String]) async throws -> [BaseItemDto]",
+        "@MainActor func item(id: String) async throws -> BaseItemDto",
+        "@MainActor func localTrailers(itemID: String) async throws -> [BaseItemDto]",
+        "@MainActor func page(_ query: MediaCatalogQuery, at page: CatalogPageRequest) async throws -> CatalogPage",
+        "@MainActor func playbackSelection(for item: BaseItemDto) async throws -> BaseItemDto?",
+        "@MainActor func programs(channelIDs: [String], startDate: Date, endDate: Date) async throws -> [BaseItemDto]",
+        "@MainActor func randomBackdrop(for item: BaseItemDto) async throws -> BaseItemDto?",
+        "@MainActor func read<Value>(_ request: Request<Value>) async throws -> Value where Value : Decodable, Value : Sendable",
+        "@MainActor func suggestions(fields: [ItemFields]) async throws -> [BaseItemDto]",
+        "@MainActor func userViews() async throws -> [BaseItemDto]",
+        "@MainActor init(reader: any MediaCatalogReading, userID: String, now: @escaping @MainActor @Sendable () -> Date = { .now }, isCurrent: @escaping @MainActor @Sendable () -> Bool = { true })",
+        "@MainActor protocol MediaCatalogReading",
+        "case nonReadRequest",
+        "enum MediaCatalogError",
+        "init(previous: BaseItemDto?, next: BaseItemDto?)",
+        "let next: BaseItemDto?",
+        "let previous: BaseItemDto?",
+        "static func resolve(_ items: [BaseItemDto], currentID: String) -> AdjacentEpisodes",
+        "struct AdjacentEpisodes"
+      ],
+      "sha256": "476b7bd140ea936bf6f6544f7a2a34c931b449b121e03e70306677a908dec0c9"
+    },
+    {
+      "path": "Packages/SwiftfinMediaCatalog/Sources/SwiftfinMediaCatalog/MediaCatalogPolicy.swift",
+      "reason": "MediaCatalogPolicy.swift: complete current source body and emitted public declarations read. Read-only generic catalog requests retain exact user/query/filter/sort/paging parameters and captured account binding. DTO state consumes explicit clock inputs; program windows, stable block IDs, deduplication, cursor overflow checks and atomic guide snapshot application remain value decisions. This generic catalog is not child authorization; KidsCatalog/KidsDomain remain responsible for curated restrictions. No file, playback or server mutation API is added. Consumer entries are scoped reviewed boundaries; remaining whole-graph/runtime acceptance is required.",
+      "reviewedConsumers": [
+        "Shared/Services/UserSession/UserSession+ItemMetadata.swift",
+        "Shared/ViewModels/EPGViewModel.swift"
+      ],
+      "reviewedInterfaces": [
+        "enum MediaCatalogPolicy",
+        "static func groupedItemTypes(for kind: BaseItemKind) -> [BaseItemKind]",
+        "static func isRecursive(parentType: BaseItemKind?, collectionType: CollectionType?, groupingID: String?) -> Bool",
+        "static func isScheduled(_ timer: TimerInfoDto, now: Date) -> Bool",
+        "static func itemParameters(_ query: CatalogItemQuery, userID: String, page: CatalogPageRequest, mode: CatalogItemMode) -> Paths.GetItemsParameters",
+        "static func itemTypes(parentType: BaseItemKind?, collectionType: CollectionType?, groupingID: String?) -> [BaseItemKind]",
+        "static func normalize(_ rows: [BaseItemDto], parentType: BaseItemKind?) -> CatalogPage",
+        "static func normalizeViews(_ rows: [BaseItemDto], excludedIDs: [String]) -> [BaseItemDto]",
+        "static let defaultItemTypes: [BaseItemKind]",
+        "static let itemFields: [ItemFields]",
+        "static let supportedCollectionTypes: [CollectionType]"
+      ],
+      "sha256": "e7215c21a86322f75b846d9e03d494aec03b764bb824303754397d5a3af845b7"
     }
   ],
   "limits": "This ledger records bodies explicitly reviewed, with exact current hashes; earlier prose or lexical inventory is not automatically promoted. Pending and mixed entries prevent whole-source completion. Retained UI algorithms have specific presentation reasons, not folder/import-based blanket approval. API entries do not classify the rest of the public graph. Source review and offline tests do not satisfy held runtime acceptance.",
@@ -8208,7 +9140,7 @@
     "classification": {
       "source-reviewed-retained": 664
     },
-    "currentAPIReviews": 133,
+    "currentAPIReviews": 168,
     "runtimeAcceptance": "held by human; no simulator/server testing"
   },
   "packageReviews": [
@@ -8422,6 +9354,66 @@
         {
           "file": "SwiftfinUIState@SwiftUICore.symbols.json",
           "sha256": "25eadc307468eb788fbe07d2f15458023e1720642b0384dfb0c988f9cc15c8f5"
+        }
+      ],
+      "sourceReview": "complete current source and public declarations",
+      "consumerReview": "scoped listed boundaries; remaining whole-graph review required",
+      "runtimeAcceptance": "held by human"
+    },
+    {
+      "module": "SwiftfinPlaybackProfiles",
+      "manifestSHA256": "2f158fec94063c15cb707b5beee08d3c1fd1c41f6b4ce99ebd47aed4ce0a1e60",
+      "sourceBodiesRead": 28,
+      "compilerPublicSymbols": 253,
+      "compilerPlatform": "macOS14; both app platform compilations are separate evidence",
+      "compilerGraphs": [
+        {
+          "file": "SwiftfinPlaybackProfiles.symbols.json",
+          "sha256": "4f753e3386cadfe745f631d0e15a8583a90c514841b1212c249f4c592b4779cb"
+        },
+        {
+          "file": "SwiftfinPlaybackProfiles@JellyfinAPI.symbols.json",
+          "sha256": "e78a1107c745eb0ce81e69a19b3adca8620ef98de43675e66978c9ef434be4b2"
+        }
+      ],
+      "sourceReview": "complete current source and public declarations",
+      "consumerReview": "scoped listed boundaries; remaining whole-graph review required",
+      "runtimeAcceptance": "held by human"
+    },
+    {
+      "module": "SwiftfinNetworking",
+      "manifestSHA256": "59310ee1f2271e58051f8cddf53948fc44c8d1086c0c52af7392b5f01be01762",
+      "sourceBodiesRead": 6,
+      "compilerPublicSymbols": 86,
+      "compilerPlatform": "macOS14; both app platform compilations are separate evidence",
+      "compilerGraphs": [
+        {
+          "file": "SwiftfinNetworking.symbols.json",
+          "sha256": "cb30e0e029dc489114a170f14972917ba381059baad886338883f4a1b0a5ae15"
+        }
+      ],
+      "sourceReview": "complete current source and public declarations",
+      "consumerReview": "scoped listed boundaries; remaining whole-graph review required",
+      "runtimeAcceptance": "held by human"
+    },
+    {
+      "module": "SwiftfinMediaCatalog",
+      "manifestSHA256": "2c40da7f185b20d3d500e2103def658c3eb2b86cd45d094b53db1ae63f8a105e",
+      "sourceBodiesRead": 8,
+      "compilerPublicSymbols": 178,
+      "compilerPlatform": "macOS14; both app platform compilations are separate evidence",
+      "compilerGraphs": [
+        {
+          "file": "SwiftfinMediaCatalog.symbols.json",
+          "sha256": "d096a640f79065b00c4ce2d5524880c2839d33e8a0b74b665c935090d60e9341"
+        },
+        {
+          "file": "SwiftfinMediaCatalog@Swift.symbols.json",
+          "sha256": "3c1203aca75f0d0f916513b05c78f506e51f5c1b86593e0ba4629308189311c2"
+        },
+        {
+          "file": "SwiftfinMediaCatalog@SwiftfinNetworking.symbols.json",
+          "sha256": "b1f50a05083ff8fef0703827cd6334bc6963cae844b871840b9ec72fc4430fab"
         }
       ],
       "sourceReview": "complete current source and public declarations",

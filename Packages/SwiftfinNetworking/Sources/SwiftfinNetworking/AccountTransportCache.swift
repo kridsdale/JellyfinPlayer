@@ -20,6 +20,7 @@ public final class AccountTransportCache: CustomStringConvertible {
         let accessToken: String
     }
 
+    private var generation = UUID()
     private var binding: Binding?
     private var cached: JellyfinTransport?
     private let make: @MainActor (URL, String) -> JellyfinTransport
@@ -29,17 +30,22 @@ public final class AccountTransportCache: CustomStringConvertible {
     }
 
     public func client(url: URL, serverID: String, userID: String, accessToken: String) -> JellyfinTransport {
+        let attempt = UUID()
+        generation = attempt
         let next = Binding(url: url, serverID: serverID, userID: userID, accessToken: accessToken)
         if binding == next, let cached {
             return cached
         }
         let client = make(url, accessToken)
+        // A reentrant request or invalidation owns later cache publication.
+        guard generation == attempt else { return client }
         binding = next
         cached = client
         return client
     }
 
     public func invalidate() {
+        generation = UUID()
         binding = nil
         cached = nil
     }

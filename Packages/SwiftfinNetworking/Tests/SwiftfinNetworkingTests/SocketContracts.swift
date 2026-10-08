@@ -35,6 +35,8 @@ private final class Driver: SocketSessionDriver {
     var leases: [Lease] = []
     var disconnects = 0
     var finishOnDisconnect = true
+    var onSubscribe: (@MainActor () -> Void)?
+    var onDisconnect: (@MainActor () -> Void)?
     init() {
         (events, continuation) = AsyncThrowingStream.makeStream()
     }
@@ -42,11 +44,17 @@ private final class Driver: SocketSessionDriver {
     func subscribe(_ topic: JellyfinSocket.Subscription, delay: Duration, interval: Duration) -> any SocketSubscriptionLease {
         let lease = Lease(topic: topic, delay: delay, interval: interval)
         leases.append(lease)
+        let action = onSubscribe
+        onSubscribe = nil
+        action?()
         return lease
     }
 
     func disconnect() {
         disconnects += 1
+        let action = onDisconnect
+        onDisconnect = nil
+        action?()
         if finishOnDisconnect {
             continuation.finish()
         }
@@ -61,14 +69,19 @@ private final class Driver: SocketSessionDriver {
 private final class Factory {
     let drivers: [Driver]
     var requests = 0
+    var onNext: (@MainActor () -> Void)?
     init(_ drivers: [Driver]) {
         self.drivers = drivers
     }
 
     func next() -> (any SocketSessionDriver)? {
         guard requests < drivers.count else { return nil }
-        defer { requests += 1 }
-        return drivers[requests]
+        let driver = drivers[requests]
+        requests += 1
+        let action = onNext
+        onNext = nil
+        action?()
+        return driver
     }
 }
 
@@ -273,5 +286,68 @@ struct SocketContracts {
         #expect(commands == [.pause, .unpause])
         consumer.cancel()
         controller.stop()
+    }
+
+    @Test(arguments: [false, true])
+    func `a source created across stop or replacement is retired before subscription`(_ restart: Bool) async {
+        let first = Driver()
+        let second = Driver()
+        let factory = Factory([first, second])
+        let controller = JellyfinSocketController(sessionFactory: { factory.next() })
+        let stream = controller.sessions()
+        let consumer = Task { for await _ in stream {} }
+        factory.onNext = { [weak controller] in
+            if restart {
+                controller?.start()
+            } else {
+                controller?.stop()
+            }
+        }
+        controller.start()
+        await until { factory.requests == (restart ? 2 : 1) }
+        #expect(first.disconnects == 1 && first.leases.isEmpty)
+        #expect(second.disconnects == 0)
+        consumer.cancel()
+        controller.stop()
+        first.continuation.finish()
+        second.continuation.finish()
+    }
+
+    @Test
+    func `stop during subscription creation cancels its unpublished claim`() async {
+        let driver = Driver()
+        let factory = Factory([driver])
+        let controller = JellyfinSocketController(sessionFactory: { factory.next() })
+        let stream = controller.sessions()
+        let consumer = Task { for await _ in stream {} }
+        driver.onSubscribe = { [weak controller] in controller?.stop() }
+        controller.start()
+        await until { factory.requests == 1 }
+        #expect(driver.leases.count == 1 && driver.leases.first?.cancelled == true)
+        #expect(driver.disconnects == 1)
+        consumer.cancel()
+        controller.stop()
+    }
+
+    @Test
+    func `a replacement started during old teardown owns the only new worker`() async {
+        let first = Driver()
+        let second = Driver()
+        let unwanted = Driver()
+        let factory = Factory([first, second, unwanted])
+        let controller = JellyfinSocketController(sessionFactory: { factory.next() })
+        controller.start()
+        await until { factory.requests == 1 }
+        first.onDisconnect = { [weak controller] in controller?.start() }
+        controller.start()
+        await until { factory.requests >= 2 }
+        for _ in 0 ..< 20 {
+            await Task.yield()
+        }
+        #expect(factory.requests == 2)
+        controller.stop()
+        first.continuation.finish()
+        second.continuation.finish()
+        unwanted.continuation.finish()
     }
 }

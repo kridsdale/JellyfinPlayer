@@ -251,4 +251,33 @@ struct TransportContracts {
         #expect(requests.allSatisfy { $0.value(forHTTPHeaderField: "Authorization")?.contains("initial-token") == true })
         #expect(requests.allSatisfy { $0.value(forHTTPHeaderField: "Authorization")?.contains("returned-token") == false })
     }
+
+    @Test(arguments: [false, true])
+    func `factory reentry cannot republish an invalidated or replacement cache`(_ replace: Bool) throws {
+        let url = try #require(URL(string: "https://unit.example.test/base"))
+        var builds = 0
+        var action: (@MainActor () -> Void)?
+        var replacement: JellyfinTransport?
+        let cache = AccountTransportCache { url, token in
+            builds += 1
+            let current = action
+            action = nil
+            current?()
+            return JellyfinTransport(url: url, accessToken: token, identity: identity)
+        }
+        action = { [weak cache] in
+            if replace {
+                replacement = cache?.client(url: url, serverID: "server", userID: "kid", accessToken: "new-token")
+            } else {
+                cache?.invalidate()
+            }
+        }
+        let original = cache.client(url: url, serverID: "server", userID: "kid", accessToken: "old-token")
+        let current = cache.client(url: url, serverID: "server", userID: "kid", accessToken: replace ? "new-token" : "old-token")
+        #expect(builds == 2 && original !== current)
+        if replace {
+            #expect(current === replacement)
+        }
+        cache.invalidate()
+    }
 }

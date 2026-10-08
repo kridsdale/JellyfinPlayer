@@ -45,3 +45,18 @@ Text exports now confine server-provided titles to one filename component. The o
 UIKit-only NowPlayingArtwork was read directly and compiles in both app targets; it is absent from the macOS graph. Public numerical helpers retain normal representability/nonzero-divisor preconditions. Formatters use presentation clock/calendar/locale and locally created native formatters. UI wrappers own actor-confined values rather than claiming arbitrary elements are Sendable. Permission driver/reply bodies were read without invoking native capability checks or prompts. Media-track policy remains a captured value decision; no player handle or request work moves into it. Now Playing native publication and command delivery remain held.
 
 The file-effect regression uses a generated temporary workspace containing an export directory and a sibling sentinel. Before repair the title ../sentinel replaced that sibling; afterward the sibling is unchanged and the export remains inside its chosen directory. Separate coverage verifies slash, absolute-looking title, NUL, Unicode and literal percent sequences; existing UTF8/empty/atomic replacement/failure fixtures still pass. No household file or RAID path is used by these tests.
+
+
+## Transport, playback profiles and generic catalog (2026-10-07)
+
+Socket subscription now survives synchronous callback retirement without a Swift exclusivity crash, and transport factories cannot overwrite a newer cache binding. Four new test declarations exercise six stop/replacement cases; all 46 networking contracts pass. PlaybackProfiles, Networking and MediaCatalog complete source/public declaration reviews add 42 source bodies with scoped consumers. tvOS Debug and iOS Release compile without owned Swift/generated-macro diagnostics. The graph remains 53 libraries with all 664 app sources classified and 168 scoped interface entries covering 166 of 250 package sources. Remaining graph review and held runtime acceptance are required; items 1/2 stay active.
+
+| Module | Complete source bodies | macOS public symbols |
+| --- | ---: | ---: |
+| SwiftfinPlaybackProfiles | 28 | 253 |
+| SwiftfinNetworking | 6 | 86 |
+| SwiftfinMediaCatalog | 8 | 178 |
+
+The before-fix fake-driver run terminated with a Swift exclusivity conflict when native subscription synchronously stopped the controller. Separate factory-reentry cache cases produced three failed expectations. Retirement now detaches the old worker, wake stream, native driver and leases before invoking callbacks; generation and driver identity reject stale source/lease publication, including replacement initiated during disconnect. Both socket and account cache public signatures remain unchanged.
+
+Profile tables/builders are pure policy over captured settings/capability values; app composition owns localization, stored settings and hardware snapshots. Generic catalog policy preserves read requests and account checks; it does not replace the child catalog authorization boundary. SDK construction, discovery and native callbacks were read as source; no discovery, hardware, credential or permission query was executed. Compiler symbols are interface evidence, not runtime proof. Simulator/server activity and final whole-graph acceptance remain held.

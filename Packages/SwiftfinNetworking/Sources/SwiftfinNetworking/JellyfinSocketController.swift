@@ -108,10 +108,11 @@ public final class JellyfinSocketController {
     }
 
     public func start() {
+        let attempt = generation &+ 1
         stop()
+        guard generation == attempt else { return }
         let (stream, continuation) = AsyncStream<Void>.makeStream(bufferingPolicy: .bufferingNewest(1))
         wake = continuation
-        let attempt = generation
         let delay = backoff
         worker = Task { [weak self] in
             await Self.run(owner: { [weak self] in self }, generation: attempt, wake: stream, backoff: delay)
@@ -120,24 +121,40 @@ public final class JellyfinSocketController {
 
     public func stop() {
         generation &+= 1
-        worker?.cancel()
+        let oldWorker = worker
+        let oldWake = wake
+        let oldSession = session
+        let oldClaims = detachClaims()
         worker = nil
-        wake?.finish()
         wake = nil
-        session?.disconnect()
         session = nil
-        for id in listeners.keys {
-            listeners[id]?.token?.cancel()
-            listeners[id]?.token = nil
-        }
         reconnectRequested = false
         setConnected(false)
+        // Publish retirement before native callbacks can install a replacement.
+        oldWorker?.cancel()
+        oldWake?.finish()
+        oldSession?.disconnect()
+        for claim in oldClaims {
+            claim.cancel()
+        }
     }
 
     public func reconnect() {
+        let attempt = generation
+        let current = session
+        let signal = wake
         reconnectRequested = true
-        session?.disconnect()
-        wake?.yield()
+        current?.disconnect()
+        guard generation == attempt else { return }
+        signal?.yield()
+    }
+
+    private func detachClaims() -> [any SocketSubscriptionLease] {
+        let claims = listeners.values.compactMap(\.token)
+        for id in Array(listeners.keys) {
+            listeners[id]?.token = nil
+        }
+        return claims
     }
 
     public func connectionStates() -> AsyncStream<Bool> {
@@ -209,7 +226,13 @@ public final class JellyfinSocketController {
             continuation.yield(initial)
         }
         if let topic, let session {
-            listeners[id]?.token = session.subscribe(topic, delay: delay, interval: interval)
+            let attempt = generation
+            let token = session.subscribe(topic, delay: delay, interval: interval)
+            if generation == attempt, self.session === session, listeners[id] != nil {
+                listeners[id]?.token = token
+            } else {
+                token.cancel()
+            }
         } else if topic != nil {
             wake?.yield()
         }
@@ -220,7 +243,8 @@ public final class JellyfinSocketController {
     }
 
     private func removeListener(_ id: UUID) {
-        listeners.removeValue(forKey: id)?.token?.cancel()
+        let retired = listeners.removeValue(forKey: id)
+        retired?.token?.cancel()
     }
 
     private func emit(_ payload: Payload) {
@@ -234,14 +258,42 @@ public final class JellyfinSocketController {
         emit(.connection(value))
     }
 
+    private func owns(_ attempt: UInt64, driver: any SocketSessionDriver) -> Bool {
+        generation == attempt && session === driver && !Task.isCancelled
+    }
+
+    private func retireIfOwned(_ attempt: UInt64, driver: any SocketSessionDriver) {
+        guard generation == attempt, session === driver else { return }
+        stop()
+    }
+
     private func begin(_ attempt: UInt64) -> (any SocketSessionDriver)? {
         guard generation == attempt, !Task.isCancelled, let next = sessionFactory() else { return nil }
+        guard generation == attempt, !Task.isCancelled else {
+            next.disconnect()
+            return nil
+        }
         session = next
-        for id in listeners.keys {
-            guard let listener = listeners[id], let topic = listener.topic else { continue }
-            listeners[id]?.token = next.subscribe(topic, delay: listener.delay, interval: listener.interval)
+        let registrations = listeners
+        for (id, listener) in registrations {
+            guard let topic = listener.topic, listeners[id] != nil else { continue }
+            let token = next.subscribe(topic, delay: listener.delay, interval: listener.interval)
+            guard owns(attempt, driver: next) else {
+                token.cancel()
+                retireIfOwned(attempt, driver: next)
+                return nil
+            }
+            if listeners[id] != nil {
+                listeners[id]?.token = token
+            } else {
+                token.cancel()
+            }
         }
         diagnostic("Socket connecting")
+        guard owns(attempt, driver: next) else {
+            retireIfOwned(attempt, driver: next)
+            return nil
+        }
         return next
     }
 
@@ -274,19 +326,20 @@ public final class JellyfinSocketController {
             default: break
             }
         }
-        return true
+        return generation == attempt && !Task.isCancelled
     }
 
     private func ended(_ attempt: UInt64, refused: Bool) -> Next {
         guard generation == attempt, !Task.isCancelled else { return .end }
         session = nil
-        for id in listeners.keys {
-            listeners[id]?.token?.cancel()
-            listeners[id]?.token = nil
-        }
+        let oldClaims = detachClaims()
         setConnected(false)
         let explicit = reconnectRequested
         reconnectRequested = false
+        for claim in oldClaims {
+            claim.cancel()
+        }
+        guard generation == attempt, !Task.isCancelled else { return .end }
         if explicit {
             return .wake
         }
