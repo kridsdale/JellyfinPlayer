@@ -53,7 +53,11 @@ struct RemoteImageSearchView: View {
         self._remoteImageInfoViewModel = StateObject(
             wrappedValue: .init(
                 itemID: viewModel.item.id ?? "unknown",
-                imageType: imageType
+                imageType: imageType,
+                validate: { [weak viewModel] in
+                    guard let viewModel else { throw CancellationError() }
+                    try viewModel.checkBinding()
+                }
             )
         )
     }

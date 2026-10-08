@@ -15,19 +15,25 @@ final class RemoteImageInfoViewModel: ObservableObject {
     var remoteImageLibrary: PagingLibraryViewModel<RemoteImageLibrary>
     let remoteImageProvidersLibrary: PagingLibraryViewModel<RemoteImageProvidersLibrary>
 
-    init(itemID: String, imageType: ImageType) {
+    private let validate: @MainActor @Sendable () throws -> Void
+
+    init(itemID: String, imageType: ImageType, validate: @escaping @MainActor @Sendable () throws -> Void = {}) {
+        self.validate = validate
         self.remoteImageLibrary = .init(
             library: .init(
                 imageType: imageType,
                 itemID: itemID
-            )
+            ),
+            validate: validate
         )
         self.remoteImageProvidersLibrary = .init(
-            library: .init(itemID: itemID)
+            library: .init(itemID: itemID),
+            validate: validate
         )
     }
 
     func refresh() {
+        guard (try? validate()) != nil else { return }
         remoteImageLibrary.refresh()
         remoteImageProvidersLibrary.refresh()
     }

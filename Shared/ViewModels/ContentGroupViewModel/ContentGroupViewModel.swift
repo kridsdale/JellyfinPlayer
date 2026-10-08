@@ -21,6 +21,7 @@ final class ContentGroupViewModel<Provider: ContentGroupProvider>: ViewModel {
     @CasePathable
     enum Action {
         case refresh
+        case refreshScoped(Request)
 
         var transition: Transition {
             .to(.refreshing, then: .content)
@@ -75,33 +76,69 @@ final class ContentGroupViewModel<Provider: ContentGroupProvider>: ViewModel {
         refresh()
     }
 
+    struct Request: Sendable {
+        let makeGroups: @MainActor @Sendable () async throws -> [any ContentGroup]
+        let validate: ContentRefreshOperation.Checkpoint
+    }
+
+    private func request(validate: @escaping ContentRefreshOperation.Checkpoint = {}) -> Request {
+        let provider = provider
+        let environment = provider.environment
+        return Request(makeGroups: { try await provider.makeGroups(environment: environment) }, validate: validate)
+    }
+
+    func invalidateRefresh() {
+        refreshCoordinator.cancel()
+        groups = []
+    }
+
+    func refreshForScope(validate: @escaping ContentRefreshOperation.Checkpoint) async {
+        guard (try? validate()) != nil else { return }
+        await refreshScoped(request(validate: validate))
+    }
+
     @Function(\Action.Cases.refresh)
     private func _refresh() async throws {
+        try await perform(request())
+    }
+
+    @Function(\Action.Cases.refreshScoped)
+    private func _refreshScoped(_ request: Request) async throws {
+        try await perform(request)
+    }
+
+    private func perform(_ request: Request) async throws {
+        try request.validate()
         let inBackground = StateTask.isBackground
         if !inBackground {
             groups = []
         }
+        try request.validate()
         let updated = try await refreshCoordinator.refresh(
             inBackground: inBackground,
-            makeGroups: { [weak self] in
-                guard let self else { throw CancellationError() }
-                return try await provider.makeGroups(environment: provider.environment)
-            },
+            validate: request.validate,
+            makeGroups: request.makeGroups,
             operations: { groups, background in
                 groups.map { group in
                     let model = group.viewModel
-                    return ContentRefreshOperation(identity: ObjectIdentifier(model as AnyObject)) {
+                    return ContentRefreshOperation(identity: ObjectIdentifier(model as AnyObject), scopedRefresh: { validate in
+                        try validate()
+                        if let scoped = model as? any WithRefreshScope {
+                            try scoped.bindRefreshScope(validate)
+                        }
+                        try validate()
                         if background {
                             await model.background.refresh()
                         } else {
                             await model.refresh()
                         }
-                    }
+                        try validate()
+                    })
                 }
             },
             shouldResolve: { $0._shouldBeResolved }
         )
-        try Task.checkCancellation()
+        try request.validate()
         groups = updated
     }
 }

@@ -163,4 +163,175 @@ struct ContentRefreshTests {
         gate.finish()
         await #expect(throws: CancellationError.self) { try await task.value }
     }
+
+    @Test
+    func `rejected queued caller cannot retire current candidates`() async throws {
+        let c = ContentRefreshCoordinator<RefreshOwner>()
+        let gate = RefreshGate(), owner = RefreshOwner()
+        let current = Task { try await c.refresh(inBackground: false, makeGroups: { await gate.wait()
+            return [owner]
+        }, operations: operations, shouldResolve: { $0.resolved }) }
+        await settle { gate.continuation != nil }
+        await #expect(throws: CancellationError.self) {
+            try await c.refresh(
+                inBackground: false,
+                validate: { throw CancellationError() },
+                makeGroups: { Issue.record("Rejected caller read groups")
+                    return []
+                },
+                operations: operations,
+                shouldResolve: { $0.resolved }
+            )
+        }
+        gate.finish()
+        let result = try await current.value
+        #expect(result.first === owner && owner.full == 1)
+    }
+
+    @Test
+    func `retired caller converts delayed ordinary read failure to cancellation`() async {
+        let c = ContentRefreshCoordinator<RefreshOwner>()
+        let gate = RefreshGate(), flag = RefreshScopeFlag()
+        c.markChanged()
+        let task = Task { try await c.refresh(inBackground: false, validate: { try flag.check() }, makeGroups: { await gate.wait()
+            throw RefreshFailure.offline
+        }, operations: operations, shouldResolve: { $0.resolved }) }
+        await settle { gate.continuation != nil }
+        flag.current = false
+        gate.finish()
+        await #expect(throws: CancellationError.self) { try await task.value }
+        #expect(c.hasPendingChanges)
+    }
+
+    @Test
+    func `operation builder reentry retires workers before reads`() async {
+        let c = ContentRefreshCoordinator<RefreshOwner>(), owner = RefreshOwner()
+        c.markChanged()
+        await #expect(throws: CancellationError.self) { try await c.refresh(
+            inBackground: false,
+            makeGroups: { [owner] },
+            operations: { groups, background in
+                c.cancel()
+                return operations(groups, background)
+            },
+            shouldResolve: { $0.resolved }
+        ) }
+        #expect(owner.full == 0 && c.hasPendingChanges)
+    }
+
+    @Test
+    func `resolution reentry cannot consume change signal or commit candidates`() async {
+        let c = ContentRefreshCoordinator<RefreshOwner>(), owner = RefreshOwner()
+        c.markChanged()
+        await #expect(throws: CancellationError.self) { try await c.refresh(
+            inBackground: false,
+            makeGroups: { [owner] },
+            operations: operations,
+            shouldResolve: { _ in c.cancel()
+                return true
+            }
+        ) }
+        #expect(c.hasPendingChanges && owner.full == 1)
+        let background = try? await c.refresh(
+            inBackground: true,
+            makeGroups: { [] },
+            operations: operations,
+            shouldResolve: { $0.resolved }
+        )
+        #expect(background?.isEmpty == true && owner.background == 0)
+    }
+
+    @Test
+    func `nested independently scheduled page rejects retired parent before publication`() async {
+        let c = ContentRefreshCoordinator<RefreshOwner>(), owner = RefreshOwner()
+        let gate = RefreshGate(), flag = RefreshScopeFlag()
+        var nested: Task<Void, any Error>?
+        let task = Task { try await c.refresh(
+            inBackground: false,
+            validate: { try flag.check() },
+            makeGroups: { [owner] },
+            operations: { groups, _ in groups.map { owner in
+                ContentRefreshOperation(identity: ObjectIdentifier(owner), scopedRefresh: { validate in
+                    let worker = Task { @MainActor in
+                        await gate.wait()
+                        try validate()
+                        owner.full += 1
+                    }
+                    nested = worker
+                    try await worker.value
+                })
+            } },
+            shouldResolve: { $0.resolved }
+        ) }
+        await settle { gate.continuation != nil }
+        flag.current = false
+        gate.finish()
+        await #expect(throws: CancellationError.self) { try await task.value }
+        await #expect(throws: CancellationError.self) { try await nested?.value }
+        #expect(owner.full == 0)
+    }
+
+    @Test
+    func `completed refresh scope permits pagination until newer parent admission`() async throws {
+        let c = ContentRefreshCoordinator<RefreshOwner>(), owner = RefreshOwner()
+        var checkpoint: ContentRefreshOperation.Checkpoint?
+        _ = try await c.refresh(inBackground: false, makeGroups: { [owner] }, operations: { groups, _ in groups.map { owner in
+            ContentRefreshOperation(identity: ObjectIdentifier(owner), scopedRefresh: { validate in checkpoint = validate
+                try validate()
+                owner.full += 1
+            })
+        } }, shouldResolve: { $0.resolved })
+        try checkpoint?()
+        _ = try await c.refresh(inBackground: false, makeGroups: { [] }, operations: operations, shouldResolve: { $0.resolved })
+        #expect(throws: CancellationError.self) { try checkpoint?() }
+    }
+
+    @Test
+    func `ordinary worker failure retires accepted child checkpoint and preserves pending signal`() async {
+        let c = ContentRefreshCoordinator<RefreshOwner>(), owner = RefreshOwner()
+        var checkpoint: ContentRefreshOperation.Checkpoint?
+        c.markChanged()
+        await #expect(throws: RefreshFailure.self) { try await c.refresh(
+            inBackground: false,
+            makeGroups: { [owner] },
+            operations: { groups, _ in groups.map { owner in
+                ContentRefreshOperation(identity: ObjectIdentifier(owner), scopedRefresh: { validate in checkpoint = validate
+                    throw RefreshFailure.offline
+                })
+            } },
+            shouldResolve: { $0.resolved }
+        ) }
+        #expect(c.hasPendingChanges)
+        #expect(throws: CancellationError.self) { try checkpoint?() }
+    }
+
+    @Test
+    func `cancelled queued task cannot retire accepted refresh`() async throws {
+        let c = ContentRefreshCoordinator<RefreshOwner>(), owner = RefreshOwner()
+        let gate = RefreshGate(), queuedGate = RefreshGate()
+        let accepted = Task { try await c.refresh(inBackground: false, makeGroups: { await gate.wait()
+            return [owner]
+        }, operations: operations, shouldResolve: { $0.resolved }) }
+        await settle { gate.continuation != nil }
+        let queued = Task { await queuedGate.wait()
+            return try await c.refresh(inBackground: false, makeGroups: { [] }, operations: operations, shouldResolve: { $0.resolved })
+        }
+        await settle { queuedGate.continuation != nil }
+        queued.cancel()
+        queuedGate.finish()
+        await #expect(throws: CancellationError.self) { try await queued.value }
+        gate.finish()
+        let result = try await accepted.value
+        #expect(result.first === owner)
+    }
+}
+
+@MainActor
+private final class RefreshScopeFlag {
+    var current = true
+    func check() throws {
+        if !current {
+            throw CancellationError()
+        }
+    }
 }

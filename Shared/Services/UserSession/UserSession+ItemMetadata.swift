@@ -26,7 +26,8 @@ extension UserSession {
         return ItemMetadataClient(
             executor: executor,
             userID: user.id,
-            bindingID: .init(transport: ObjectIdentifier(client), userID: user.id)
+            bindingID: .init(transport: ObjectIdentifier(client), userID: user.id),
+            urls: client
         )
     }
 }

@@ -157,9 +157,9 @@
     {
       "owners": [],
       "path": "Shared/Components/EPG/Body/Components/EPGProgramCell.swift",
-      "reason": "",
+      "reason": "Complete body reviewed: Native focus/color/sticky-cell layout and localized program/time labels consume immutable ProgramBlock values; scroll geometry uses Values and grouping remains in MediaCatalog.",
       "sha256": "2edf2048d155c48f6912b737a0b4fc9b873bb85dd6118ff0d8ca2b4e3d37fa60",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [
@@ -865,9 +865,9 @@
     {
       "owners": [],
       "path": "Shared/Extensions/EdgeInsets.swift",
-      "reason": "",
+      "reason": "Complete body reviewed: SwiftUI/UIKit inset conversions and arithmetic, device-selected edge gaps and platform item spacing are native layout values.",
       "sha256": "8a4f52705c5b9a1c70d38f319840ad4163c0e1d0eb62d68b6334c77f18e021cc",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -1055,9 +1055,9 @@
     {
       "owners": [],
       "path": "Shared/Extensions/JellyfinAPI/ChapterInfo.swift",
-      "reason": "",
+      "reason": "Complete body reviewed: Chapter poster wrapper stores supplied image source, localized labels/accessibility/overlay/crop and time display. Tick conversion delegates to Time; no preview request/cache lives here.",
       "sha256": "4d0380126ebbdefd57bf0d9dec4d5cf4723ca6342266de828619d2e3974912a4",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -1209,9 +1209,9 @@
     {
       "owners": [],
       "path": "Shared/Extensions/JellyfinAPI/MediaStream.swift",
-      "reason": "",
+      "reason": "Complete body reviewed: SDK stream fields are mapped to localized media-information labels and CoreTransferable text groups; transfer formatting delegates to existing formatting/text owners. No stream selection, decoder or URL request is implemented.",
       "sha256": "688cdea63a66d131412ac4f3cc3f4b545136ab10aee5ba60e7b296578021f546",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -1373,9 +1373,9 @@
     {
       "owners": [],
       "path": "Shared/Extensions/JellyfinAPI/TranscodeReason.swift",
-      "reason": "",
+      "reason": "Complete body reviewed: Exhaustive localized reason titles and audio/video/subtitle/container symbols are display protocol adapters only.",
       "sha256": "66c2ecef4af334877402763f61b8b43ea4c431059f09abbd44c1870cea8dc011",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -1401,9 +1401,9 @@
     {
       "owners": [],
       "path": "Shared/Extensions/LabelStyle/AttributeBadgeLabelStyle.swift",
-      "reason": "",
+      "reason": "Complete body reviewed: Fill/outline badge masks, typography, padding and icon/title layout are native label styles.",
       "sha256": "78e2734378144a79ef216ba9b020c66011d8c07e9c54e328d0ded5f1513c62b1",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -1436,16 +1436,16 @@
     {
       "owners": [],
       "path": "Shared/Extensions/Picker.swift",
-      "reason": "",
+      "reason": "Complete body reviewed: Generic optional/required/supported/source picker contents and tags adapt Displayable values to native SwiftUI selection bindings.",
       "sha256": "c9bd792c6fc90a8068983c369bf28bbb00f812667e16c330de3174b52fe7087f",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
       "path": "Shared/Extensions/ProgressViewStyle/CapsuleProgressViewStyle.swift",
-      "reason": "",
+      "reason": "Complete body reviewed: Tracked finite geometry, clamped drawing widths, secondary progress and tick placement implement a SwiftUI progress style, using the existing Values clamp.",
       "sha256": "81261c05ada085c8dfab84746bf03a8b7fb4a2066a1618ba899ca7cb8f94c46f",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -1485,9 +1485,9 @@
     {
       "owners": [],
       "path": "Shared/Extensions/String.swift",
-      "reason": "",
+      "reason": "Complete body reviewed: String display/identity and editable list-button styling remain UI protocol composition; text transformations are already delegated to Text.",
       "sha256": "9060e515c6689dae27ac598086c8bd4b579bb96cb657004e772da6295b1f6fc5",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [
@@ -1508,9 +1508,9 @@
     {
       "owners": [],
       "path": "Shared/Extensions/UIDevice.swift",
-      "reason": "",
+      "reason": "Complete body reviewed: Native device idiom/orientation, vendor ID, safe-area/platform/glass capability and haptic adapters remain app hardware/UI composition. Definitions were inspected; no native capability or identifier query was invoked.",
       "sha256": "5f8b20afa41b28de25b6026cc309f82a22cec66b6770bc9845780ec6c001fd46",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -1972,9 +1972,9 @@
     {
       "owners": [],
       "path": "Shared/Objects/ItemFilter/ItemFilterType.swift",
-      "reason": "",
+      "reason": "Complete body reviewed: Localized labels/symbols and selector-group key paths/setter closures adapt the owned filter values to the app FilterViewModel and selector UI.",
       "sha256": "0df4ea7203e00e4526a39fe08578cfb62bc9bbedb300bf8f9549f7884773bbbd",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -2007,9 +2007,9 @@
     {
       "owners": [],
       "path": "Shared/Objects/ItemFilter/ItemSortBy.swift",
-      "reason": "",
+      "reason": "Complete body reviewed: Localized ordering labels, supported picker order and raw-value ItemFilter adaptation remain app selection composition. The existing force-unwrapped conversion presumes valid AnyItemFilter values; this review does not establish malformed-value safety.",
       "sha256": "505b0e0c741d8655cef396b4cf3117186c85735555c6e6a7915c3dab66b16250",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -2658,11 +2658,13 @@
       "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinPaging"
+      ],
       "path": "Shared/Objects/PagingLibrary/PagingLibraryViewModel.swift",
-      "reason": "",
-      "sha256": "46ad3b57d78d94fd80704844c6fe82ef019567da0e9efcb1ab155c20c2f40d30",
-      "status": "pending"
+      "reason": "Complete generic adapter body reviewed. Native settings/library/session composition and UI/notification publication delegate paging, deduplication and monotonic scheduling to Paging. An optional construction/parent checkpoint is validated before transport capture and retained in every source-currentness closure. Parent refresh scope is attached before independently scheduled macro actions. Environment/account/connection changes invalidate the paging owner; explicit query/source snapshots and original session/client checks surround reads. This is compile/offline evidence, not a live macro/navigation result.",
+      "sha256": "5856bfa73f36e666735abdeaae4033d5cfae0778709044c584b414dcb6a19328",
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -2998,10 +3000,12 @@
       "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinPaging"
+      ],
       "path": "Shared/Objects/WithRefresh.swift",
-      "reason": "Main-actor UI composition protocol with sync/async refresh and optional Empty background default; defines no scheduling, fetching or refresh algorithm.",
-      "sha256": "b1ad1faee028ea99a99f4450ed5e97d0c857e8f3fc2bb0103c63827e5d80cb25",
+      "reason": "Native refresh protocol plus a parent-checkpoint adapter contract; no worker or generation implementation remains.",
+      "sha256": "08a365ba510d6bd309f0bcbae3e7bc8a56f0762d921227f444711110f7ef6ec5",
       "status": "source-reviewed-retained"
     },
     {
@@ -3135,17 +3139,12 @@
     },
     {
       "owners": [
-        "SwiftfinAccountAccess",
         "SwiftfinItemMetadata",
-        "SwiftfinMediaCatalog",
-        "SwiftfinNetworking",
-        "SwiftfinPlaybackPreparation",
-        "SwiftfinUserAdministration",
-        "SwiftfinUserMediaState"
+        "SwiftfinNetworking"
       ],
       "path": "Shared/Services/UserSession/UserSession+ItemMetadata.swift",
-      "reason": "Complete changed feature-composition body reviewed. Feature owners capture one transport/user and weak root/client/manager checks. One UserConfigurationUpdates owner is reused across settings and Auto Play, keyed by exact transport identity; replacement cancels obsolete work and transfers its retained tail so new writes cannot overtake an accepted predecessor. No RPC or configuration scheduling implementation remains here.",
-      "sha256": "9ba8caa5fb7ff62ae62dd462c4cd9870f29303c7f5133e708412355e767ffe4d",
+      "reason": "Original-session factories compose exact clients/executors and weak session/transport checks. Metadata now captures the same native transport as a private URL resolver; other account/media/playback factories retain their original owned behavior.",
+      "sha256": "b9ed7dc36d63781406ed99571265b6dc29fe8b08714c104ba02939ac60415012",
       "status": "source-reviewed-retained"
     },
     {
@@ -3369,12 +3368,11 @@
     },
     {
       "owners": [
-        "SwiftfinPaging",
-        "SwiftfinAsyncStreams"
+        "SwiftfinPaging"
       ],
       "path": "Shared/ViewModels/ContentGroupViewModel/ContentGroupViewModel.swift",
-      "reason": "Retains main-actor Stateful screen transitions, group presentation and notification-derived dirty signals. ContentRefreshCoordinator owns candidate generation, change epochs, unique refresh workers and resolution; app supplies provider/model ports and checks cancellation before group assignment. Complete coordinator body was reviewed for generation checks around awaits. Actual nested macro/UI lifecycle remains held.",
-      "sha256": "923e6dc6815943bc11e6adca6d6d73bca51c7e8bab0692e03d23d7ae5601f530",
+      "reason": "Complete native refresh adapter reviewed. Scoped requests capture provider/environment before macro scheduling; the owner supplies a retained epoch/caller checkpoint to child paging models before refresh. Native metadata notifications, UI state and display-group publication remain app composition, with caller checks around effects.",
+      "sha256": "c5b0cd8a017fc65e876fba8f4590e80701492cb679e847c943195899d62b97bd",
       "status": "source-reviewed-retained"
     },
     {
@@ -3432,20 +3430,19 @@
         "SwiftfinFilters"
       ],
       "path": "Shared/ViewModels/FilterViewModel.swift",
-      "reason": "Retains static/current UI selection and reset. Captures the query-filter owner and parent/types, awaits modern then legacy results, and checks binding before each ordered UI merge. Query/decoding policy stays owned.",
-      "sha256": "2609fea6056813dfd2e0b0492fd9943b6f80ebbc5ea80875193b6d1e1b8c0b74",
+      "reason": "Complete filter adapter reviewed. The original query-filter client is captured at construction; native current/static filter selections and published option sets compose owned modern/legacy read stages. A queued macro cannot adopt a replacement account.",
+      "sha256": "6693fd6055121c01edecc21d80d61bf63c090ce4eeade1abaf7ee00de9c2028b",
       "status": "source-reviewed-retained"
     },
     {
       "owners": [
-        "SwiftfinAsyncStreams",
-        "SwiftfinImageProcessing",
         "SwiftfinItemMetadata",
-        "SwiftfinUIState"
+        "SwiftfinImages",
+        "SwiftfinAsyncStreams"
       ],
       "path": "Shared/ViewModels/ImageViewModel/ItemImageViewModel.swift",
-      "reason": "Complete current image adapter reviewed. Initialization binds the original account/item editor; synchronous entry captures an operation checkpoint before macro scheduling. Platform UIImage/file decoding and security-scope handling remain app ports. The library owns upload/remote/delete then reload, including deletion partial item publication before image reload failure. Committed DTO/image presentation and exact receipt checks surround notification and event effects. No late requireItemMetadata or app-owned RPC/reload sequence remains; runtime acceptance is held.",
-      "sha256": "dfd27cabb9ab2aca93d33faa95aa017b80b3feaaac3e3c8ad4cecd57346662b4",
+      "reason": "Complete image editor platform adapter reviewed. Original editor/item identity guards both commands and derived resource URLs; URL resolution delegates to the editor owner and rechecks current item/binding before ImageSource publication. Native UIImage/file security-scope conversion, state/event/notification delivery remain app composition.",
+      "sha256": "de969b34a15a59ebdf0b141ed5c6b7f828d694bf0d0cd36ce1cb8b03fe8b3c15",
       "status": "source-reviewed-retained"
     },
     {
@@ -3551,12 +3548,11 @@
     },
     {
       "owners": [
-        "SwiftfinImages",
-        "SwiftfinMediaCatalog"
+        "SwiftfinPaging"
       ],
       "path": "Shared/ViewModels/ItemAdministration/RemoteImageInfoViewModel.swift",
-      "reason": "Retains main-actor screen composition of the supplied remote image and provider paging models; refresh forwards to both. No query, transport or pagination implementation is present.",
-      "sha256": "8d4826ed7c14fa0a9650f1a6d88c1f2ce8d48dcdfef0a14144f8e558493ab20e",
+      "reason": "Original parent validation is supplied to both image and provider paging adapters at construction and checked before refresh. The app composes these models; query and worker lifecycle remain owned.",
+      "sha256": "ff44a497d2e381d1595db465de4f7f67ede600ce10b44fddcdf4d03d609c4583",
       "status": "source-reviewed-retained"
     },
     {
@@ -3600,13 +3596,14 @@
     {
       "owners": [
         "SwiftfinPaging",
+        "SwiftfinAsyncStreams",
         "SwiftfinMediaCatalog",
-        "SwiftfinAsyncStreams"
+        "SwiftfinFilters"
       ],
       "path": "Shared/ViewModels/SearchViewModel.swift",
-      "reason": "Mixed: search/filter UI and bound suggestions reads are composed, but delayed filter intents reread mutable filters and invoke a separately tasked nested content refresh. Parent cancellation alone does not establish child publication retirement. Explicit input/generation and nested request lifetime need owner contracts before full classification.",
-      "sha256": "bd8b8dd7f57553e458e486ebb2ae19602d62c6f994fe697138fb9be8e148fa17",
-      "status": "source-reviewed-mixed"
+      "reason": "Complete search adapter reviewed. Emitted filters and original catalog are captured before debounce or reentrant group publication. Each filter intent immediately invalidates old parent/child results; delayed macro calls retain that receipt and immutable filters. Suggestions use a separate receipt and original catalog. Native Combine scheduling/state/UI publication remain in the app; nested paging/coalescing ownership remains in existing libraries.",
+      "sha256": "6c9c6e6f5ba324ddfb6c25bae22a0e8ac49603ade8d0809fad21ef00f5f22a2d",
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [
@@ -3704,9 +3701,9 @@
     {
       "owners": [],
       "path": "Shared/Views/ContentGroupView.swift",
-      "reason": "",
+      "reason": "Complete body reviewed: Native content/error/empty/loading and focus/safe-area presentation, group preferences, refresh/stale/foreground hooks and scroll-to-top compose the scoped refresh adapter.",
       "sha256": "419f7f0a89b3bb6a40eef02623473521387a73e68ed9d20aa3b9cb35bb2741b5",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [
@@ -3903,9 +3900,9 @@
     {
       "owners": [],
       "path": "Shared/Views/ItemView/Components/Headers/CompactSimpleHeaderContentGroup.swift",
-      "reason": "",
+      "reason": "Complete body reviewed: Compact/person-specific native poster/title/metadata/action/attribute layout composes the item provider and existing stored-value wrapper.",
       "sha256": "3398ac3a1cc830beacc1b12f545544aa830cc22d527bb224a402b4da727f59e5",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -3917,9 +3914,9 @@
     {
       "owners": [],
       "path": "Shared/Views/ItemView/Components/Headers/RegularSimpleHeaderContentGroup.swift",
-      "reason": "",
+      "reason": "Complete body reviewed: Regular native item header assembles poster layout, localized parent/metadata, action bar and stored display attributes; no catalog/persistence implementation is present.",
       "sha256": "172fb59a6a29ecd7486c9324f106314690db2807ca1ae4991971d63bfc54754a",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [
@@ -3963,9 +3960,9 @@
     {
       "owners": [],
       "path": "Shared/Views/ItemView/Components/PlayButton.swift",
-      "reason": "",
+      "reason": "Complete body reviewed: Play/from-beginning UI intent, selected native item-provider and inherited episode-queue route composition stay in the app. This inherited button does not change the separate Kids queue-nil path.",
       "sha256": "4b5428e87c6c7824546368036d3f5d8a6d519f51279660ea7e2c801af9a48d5c",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [
@@ -3979,9 +3976,9 @@
     {
       "owners": [],
       "path": "Shared/Views/ItemView/Components/ScrollViews/ContentGroupScrollView.swift",
-      "reason": "",
+      "reason": "Complete body reviewed: Focus-aware backdrop item choice, native poster presentation, masks/material and safe-area/group scroll layout are UI composition. Current-account poster adaptation remains separate; no original-item account-affinity guarantee is inferred from this view.",
       "sha256": "f78f658cae309ea2ae329e181aaaa417fa196546842b61a077d861214e23d162",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -4026,9 +4023,9 @@
     {
       "owners": [],
       "path": "Shared/Views/SearchView.swift",
-      "reason": "",
+      "reason": "Complete body reviewed: Native searchable text/focus/filter drawer, suggestions/no-results/loading and supplied content groups compose the scoped SearchViewModel. No search worker/paging implementation is retained in the view.",
       "sha256": "36ac49266b5b4ccdaefcf52308f05a5d53bffd114aa76818074e135459034e4d",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [
@@ -4051,9 +4048,9 @@
     {
       "owners": [],
       "path": "Shared/Views/SelectUserView/Components/SelectUserView+GridView.swift",
-      "reason": "",
+      "reason": "Complete body reviewed: Platform user grids, editing/selected-user bindings and supplied account/delete callbacks are native UI layout, with set toggling delegated to Collections.",
       "sha256": "746e878e9d5084f43326795c05f9ececfb90fe32caf8597b6ee2308709f3d026",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -4084,9 +4081,9 @@
     {
       "owners": [],
       "path": "Shared/Views/SelectUserView/Components/Toolbar/Components/ServerMenu.swift",
-      "reason": "",
+      "reason": "Complete body reviewed: Stored server picker preference, add/edit routes, selected server labels and adaptive capsule presentation remain account-selection UI.",
       "sha256": "fce74f8279dbaf50697efbcd463d0ad3697ddfd25d1decef9e53a06abb04944f",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -4513,11 +4510,13 @@
       "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinAsyncStreams"
+      ],
       "path": "Swiftfin/Extensions/View/Modifiers/PhotoPickerModifier.swift",
-      "reason": "",
-      "sha256": "cbda279c8eb9efe0bde24870bf42c26df93432d1ab0b4767d0f67d08bd079f07",
-      "status": "pending"
+      "reason": "Complete PhotosUI/crop modifier body reviewed. Native selected image/item, decoding and crop presentation stay platform UI; the existing request gate retires late selection callbacks on replacement, crop dismissal, clearing and disappearance. No native photo query was executed.",
+      "sha256": "a0534cee0947f915f567cd18ad0f4d69dbbc5937804017d144f787ea7c642a14",
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -4529,9 +4528,9 @@
     {
       "owners": [],
       "path": "Swiftfin/Extensions/View/View-iOS.swift",
-      "reason": "",
+      "reason": "Complete body reviewed: iOS navigation/drawer/photo-picker modifier factories and native list-cell corner introspection are platform View adapters.",
       "sha256": "03f2478d46844125576b9360e66c8c219dfe628c8f992ffd7c9e98b00f66e452",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -4543,9 +4542,9 @@
     {
       "owners": [],
       "path": "Swiftfin/Views/AdminDashboardView/APIKeyView/Components/APIKeysRow.swift",
-      "reason": "",
+      "reason": "Complete body reviewed: API-key display/share presentation, replace/delete confirmation and supplied action closures are platform UI; no key request or credential persistence is implemented.",
       "sha256": "2d08dd20b0c6db937be3f9091c34d83fa164d936f292ab80c737efda7687ed5d",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -4564,9 +4563,9 @@
     {
       "owners": [],
       "path": "Swiftfin/Views/AdminDashboardView/ActiveSessions/ActiveSessionsView/Components/ActiveSessionProgressSection.swift",
-      "reason": "",
+      "reason": "Complete body reviewed: Playback/transcode gauges, pause/play symbols, transcode-reason icons and tick-runtime labels present supplied DTO values; no decoder/session lifecycle is owned.",
       "sha256": "928f12040647249372e45fd9635e256e944a0544b6c774d47ad055c3e81ba71e",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -4604,44 +4603,46 @@
     {
       "owners": [],
       "path": "Swiftfin/Views/AdminDashboardView/ServerActivity/ServerActivityDetailsView/ServerActivityDetailsView.swift",
-      "reason": "",
+      "reason": "Complete body reviewed: Activity item/user details, localized severity/type/date and navigation compose a scoped detail model; no request implementation is present.",
       "sha256": "93627a1e3e9609ae01140fa3a04feaba3ed5490c4581fb1d1f407c3080f09ae2",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
       "path": "Swiftfin/Views/AdminDashboardView/ServerActivity/ServerActivityFilterView/ServerActivityFilterView.swift",
-      "reason": "",
+      "reason": "Complete body reviewed: Graphical date input, local draft, calendar start-of-day UI selection, reset/save enablement and environment binding remain native filter presentation.",
       "sha256": "16890282eb572e1b9e1bff2617107e3f1161908d7322a93c62bc21149394c5ea",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinAccountAccess"
+      ],
       "path": "Swiftfin/Views/AdminDashboardView/ServerActivity/ServerActivityView/Components/ServerActivityEntry.swift",
-      "reason": "",
+      "reason": "Complete row reviewed: activity labels/layout/callback are presentation, but its user profile image combines an old detail-model user DTO with ambient viewModel.userSession.client. The resource transport has not been bound to the original activity/account. Keep this explicit for the next account-resource integration; no avatar was loaded.",
       "sha256": "d84d910cdbbf7af130e79bffe3670e6c86c2dea0576033813ea5f45852310f70",
-      "status": "pending"
+      "status": "source-reviewed-mixed"
     },
     {
       "owners": [],
       "path": "Swiftfin/Views/AdminDashboardView/ServerActivity/ServerActivityView/ServerActivityView.swift",
-      "reason": "",
+      "reason": "Complete body reviewed: Native activity/user paging composition, environment filter bindings, row/detail routes and loading/empty/progress UI remain presentation. The separate avatar row is explicitly mixed until its account binding is corrected.",
       "sha256": "541d958b1f2cf03a55169ecaf9625219128642b934c41ca26453489bb4a35bd7",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
       "path": "Swiftfin/Views/AdminDashboardView/ServerBackup/CreateServerBackupView/CreateServerBackupView.swift",
-      "reason": "",
+      "reason": "Complete body reviewed: Local backup-option toggles, any-selected save eligibility, native confirmation/haptic and the bound view-model create command are UI composition.",
       "sha256": "e41899b31eab1aa4892a9350b7d0055caac29209781bc5024e4eca09f18983ea",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
       "path": "Swiftfin/Views/AdminDashboardView/ServerBackup/ServerBackupDetailsView/ServerBackupDetailsView.swift",
-      "reason": "",
+      "reason": "Complete body reviewed: Backup filename/date/options presentation and native restore confirmation/result alert remain UI; restore delegates to the existing bound model and explicit sign-out composes the session manager. No restoration was executed.",
       "sha256": "17a1b4740faf059103fe29e0aa1a7508b190c4bd3c7a3d79e586411feb8815d3",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [
@@ -4655,9 +4656,9 @@
     {
       "owners": [],
       "path": "Swiftfin/Views/AdminDashboardView/ServerBackup/ServerBackupView/ServerBackupView.swift",
-      "reason": "",
+      "reason": "Complete body reviewed: Backup list/empty/loading/error presentation, documentation link, creation/detail routes, refresh and create-event feedback stay platform presentation.",
       "sha256": "4c35c600792d2d053ff93d4100d89180def8a92a008fad3ffdf8ac23fce460e4",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [
@@ -4671,37 +4672,37 @@
     {
       "owners": [],
       "path": "Swiftfin/Views/AdminDashboardView/ServerDevices/DeviceDetailsView/DeviceDetailsView.swift",
-      "reason": "",
+      "reason": "Complete body reviewed: Native optional custom-name draft, capability/user sections, save eligibility and bound device-update callback remain device administration UI.",
       "sha256": "1021afd486157ff7497a385f3f117be921573f1f827bf24fbdccbec9d671aeb9",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
       "path": "Swiftfin/Views/AdminDashboardView/ServerDevices/DevicesView/Components/DeviceRow.swift",
-      "reason": "",
+      "reason": "Complete body reviewed: Native device icon/color, selection checkbox, current-date last-seen display and supplied row/delete closures remain list presentation.",
       "sha256": "6554c59e989f44dd6cea99bc71e8874d0661d1bcd5c0e2b77059a9bf9efee02d",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
       "path": "Swiftfin/Views/AdminDashboardView/ServerDevices/DevicesView/DevicesView.swift",
-      "reason": "",
+      "reason": "Complete body reviewed: Local edit/selection/confirmation state, native device list/error/progress and bound delete/detail callbacks remain presentation. The device-name/self-delete comparison uses ambient configuration only for UI; the owner protects actual device deletion.",
       "sha256": "83120d811dac96dc0ec17f0b5bbdc25170b94034e3b978655c16d1d188d53559",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
       "path": "Swiftfin/Views/AdminDashboardView/ServerLogs/ServerLogsView/ServerLogsView.swift",
-      "reason": "",
+      "reason": "Complete body reviewed: Native typed filter picker, scoped log refresh and supplied log URL opening remain diagnostics presentation; log URL construction remains owned by ServerOperations.",
       "sha256": "5a3ee21abeea09685d411698ec8032002d01ade30255463f28388f02999cd0a0",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
       "path": "Swiftfin/Views/AdminDashboardView/ServerTasks/Components/ServerTaskRow.swift",
-      "reason": "",
+      "reason": "Complete body reviewed: Localized last-run/status labels, current-date-driven relative time, gauge and task-detail route are presentation of the already-owned server task model.",
       "sha256": "6116bbf6978dd46c3198ac13cd2a9a069be6a8fa46e80ae0ed8d5b615686a86c",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -4727,9 +4728,9 @@
     {
       "owners": [],
       "path": "Swiftfin/Views/AdminDashboardView/ServerTasks/ServerTasksView.swift",
-      "reason": "",
+      "reason": "Complete body reviewed: Native task-category list, process-control confirmations, route rows and refresh/error/loading compose bound server-operation models. No restart or shutdown was executed.",
       "sha256": "4c0d366400a60da63b8e1933b926ac511a44c3055b2fb24fbce60083b310cd6c",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -4755,9 +4756,9 @@
     {
       "owners": [],
       "path": "Swiftfin/Views/AdminDashboardView/ServerUsers/ServerUserSettings/ServerUserAccessSchedule/EditAccessScheduleView/Components/EditAccessScheduleRow.swift",
-      "reason": "",
+      "reason": "Complete body reviewed: Schedule row selection/delete closures, day labels and Calendar/DateFormatter conversion of existing fractional-hour values remain localized native row presentation. Existing finite-hour assumptions are not declared validated here.",
       "sha256": "2af86e2151598509498a7ba54858f94261e217a29151bd27978cfc2c3eca0be9",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -4797,9 +4798,9 @@
     {
       "owners": [],
       "path": "Swiftfin/Views/AdminDashboardView/ServerUsers/ServerUserSettings/ServerUserLiveTVAccessView/ServerUserLiveTVAccessView.swift",
-      "reason": "",
+      "reason": "Complete body reviewed: Live-TV permission toggles, local policy draft, save comparison, refresh/progress and bound update feedback remain native administration UI. The inherited missing-policy precondition remains explicit.",
       "sha256": "0b3f1fa69658288fa8b56910b7c03d63f4cdf33ff4f32d59602a1f1445c22a38",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -4818,9 +4819,9 @@
     {
       "owners": [],
       "path": "Swiftfin/Views/AdminDashboardView/ServerUsers/ServerUserSettings/ServerUserPermissionsView/Components/Sections/ExternalAccessSection.swift",
-      "reason": "",
+      "reason": "Complete body reviewed: Remote-access toggles and bitrate policy/custom-Mbps input bind a local policy draft; value choices and formatting use existing owners, while save/request ownership remains outside the section.",
       "sha256": "3937b0c99c5e87095e0ef20ff2436daf1800a1122c4e9c16d8acdfbae45df4f0",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [
@@ -4857,9 +4858,9 @@
     {
       "owners": [],
       "path": "Swiftfin/Views/AdminDashboardView/ServerUsers/ServerUserSettings/ServerUserPermissionsView/Components/Sections/SessionsSection.swift",
-      "reason": "",
+      "reason": "Complete body reviewed: Localized account lockout/session choice descriptions, draft-policy bindings, custom input alerts and UI bounds remain native policy input; server authorization and mutation stay in UserAdministration.",
       "sha256": "6b453070fe0d3fdef74505d8d1808c9246614ac2e262059eb4fe46a050262f32",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [
@@ -4883,9 +4884,9 @@
     {
       "owners": [],
       "path": "Swiftfin/Views/AdminDashboardView/ServerUsers/ServerUserSettings/ServerUserPermissionsView/ServerUserPermissionsView.swift",
-      "reason": "",
+      "reason": "Complete body reviewed: Composes native permission sections and local policy draft, with bound save/refresh/event/error presentation. The inherited nonnil-policy precondition is preserved.",
       "sha256": "6352df1dac735ad42ebfb6a7ae9946c1aad98372feccfa61182bb5c049edf92e",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -4958,20 +4959,22 @@
     {
       "owners": [
         "SwiftfinItemMetadata",
-        "SwiftfinImages",
-        "SwiftfinNetworking"
+        "SwiftfinImages"
       ],
       "path": "Swiftfin/Views/ItemEditorView/ItemImages/ItemImageDetailView.swift",
-      "reason": "Mixed: image detail UI derives an old model item ID with viewModel.userSession from the ambient current account to build an authenticated resource URL. ImageInfo/ItemImageURLPolicy accept an explicit transport, but the caller has not bound that transport to the item/editor origin. Retain native display/link/delete presentation and replace this ambient resource binding in the next integration pass. No URL was loaded or native delete command executed.",
-      "sha256": "a38cb81b4863c147335451860d41da89643bd71e74c8d1e0d068aeba20a7a093",
-      "status": "source-reviewed-mixed"
+      "reason": "Complete image detail body reviewed. Display/open-link source now comes from the original item editor instead of an ambient account. Native dimension/index labels, delete confirmation, route/haptic/progress/error presentation remain UI.",
+      "sha256": "0e39cad31a3fd462130ede44f9e7eb769b55cd8d5a7fe79554df8d1758016de4",
+      "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinItemMetadata",
+        "SwiftfinImages"
+      ],
       "path": "Swiftfin/Views/ItemEditorView/ItemImages/ItemImagesView.swift",
-      "reason": "",
-      "sha256": "f737d1b99676a71699ed66bd8587e0de0c7747519a40ccae208ad9d082bc5ea5",
-      "status": "pending"
+      "reason": "Complete image gallery body reviewed. Original-editor image sources replace ambient-session URL assembly and the forced item-ID unwrap; native type/menu/gallery, file/photo input and bound upload/delete events remain UI.",
+      "sha256": "c1902ca815fb5f9365bab027ee2018582ecc93d8c7d45e2362b841c686b95312",
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [
@@ -4985,11 +4988,14 @@
       "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinPaging",
+        "SwiftfinItemMetadata"
+      ],
       "path": "Swiftfin/Views/ItemEditorView/ItemImages/RemoteImageSearchView.swift",
-      "reason": "",
-      "sha256": "5df6c8cb1042d8412f24a3043898ab550e2c8152d04e747ff1412129a5eb6748",
-      "status": "pending"
+      "reason": "Complete remote image UI body reviewed. Parent editor validity is passed into both independently scheduled image/provider page models; native layout, language/provider environment controls, poster routes and supplied edit feedback remain presentation.",
+      "sha256": "9b63610980f2aa961ff5e32776386bd17d5a6c51137815d9b8e1e0500a4574b2",
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [
@@ -5335,9 +5341,9 @@
     {
       "owners": [],
       "path": "Swiftfin tvOS/Components/ExternalTrailerURL.swift",
-      "reason": "",
+      "reason": "Complete body reviewed: Platform inter-app trailer scheme registry, URL projection and UIApplication canOpenURL adapter remain native application composition. Existing host-substring matching is preserved; this does not approve it as strict host validation.",
       "sha256": "ab2ab5db8e9933c4b218988be939affdc62d44c8ce76b52753f66830e24163b7",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -5372,9 +5378,9 @@
     {
       "owners": [],
       "path": "Swiftfin tvOS/Components/SplitLoginWindowView.swift",
-      "reason": "",
+      "reason": "Complete body reviewed: Native two-column login layout, progress toolbar and supplied background ImageSource presentation retain no network/account implementation.",
       "sha256": "ff085529e2de942341c4b00feb011a02bcff5106c6e9d0fe79e4cc6d4977181b",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -5926,25 +5932,25 @@
     },
     {
       "path": "Packages/SwiftfinItemMetadata/Sources/SwiftfinItemMetadata/ItemMetadataClient.swift",
-      "reason": "Scoped compound method review: captured executor/item/user, POST apply then GET reload, binding and caller checkpoint before stages and before return. Seven fake-sender contracts verify actual pinned SDK routes/body/userId query, stage ordering, partial failures, expired binding, caller cancellation and throwing checkpoints. Existing single-step methods are byte-identical; effects already accepted remotely are not undone, and concurrent accepted applies are not claimed transactional or serialized. App notification/event composition remains outside the method.",
+      "reason": "Scoped compound method review: captured executor/item/user, POST apply then GET reload, binding and caller checkpoint before stages and before return. Seven fake-sender contracts verify actual pinned SDK routes/body/userId query, stage ordering, partial failures, expired binding, caller cancellation and throwing checkpoints. Existing single-step methods are byte-identical; effects already accepted remotely are not undone, and concurrent accepted applies are not claimed transactional or serialized. App notification/event composition remains outside the method. At the scoped-search/image checkpoint the reviewed compound method body remains byte-identical; only the separately reviewed private URL resolver/initializer and imageURL API are added.",
       "reviewedConsumers": [
         "Shared/ViewModels/ItemAdministration/IdentifyItemViewModel.swift"
       ],
       "reviewedInterfaces": [
         "applyIdentityAndReload(itemID:result:validate:)"
       ],
-      "sha256": "5fc94886d6d7fe04560c81b4b2640b740963ca12bfe1b3b848d3aa46acc2fa62"
+      "sha256": "f4e216b519287ddcf13a0af2d7aaf5f6c6f47a1eeb10b5944c39993cac8047b3"
     },
     {
       "path": "Packages/SwiftfinItemMetadata/Sources/SwiftfinItemMetadata/ItemMetadataClient.swift",
-      "reason": "Scoped compound update/reload method reviewed: one captured executor/user/item request sequence, existing updatePayload normalization, binding and main-actor Sendable caller checkpoint before both stages and return. Seven fake-sender contracts cover pinned POST/GET routes/userId/body, no mutation of input value, trickplay omission, stage failures, expired binding, caller cancellation and checkpoint failures. All pre-existing client methods/manifests remain byte-identical. Accepted remote updates cannot be undone and concurrent writes are not claimed transactional or serialized; UI publication/advisory callbacks remain outside the owner.",
+      "reason": "Scoped compound update/reload method reviewed: one captured executor/user/item request sequence, existing updatePayload normalization, binding and main-actor Sendable caller checkpoint before both stages and return. Seven fake-sender contracts cover pinned POST/GET routes/userId/body, no mutation of input value, trickplay omission, stage failures, expired binding, caller cancellation and checkpoint failures. All pre-existing client methods/manifests remain byte-identical. Accepted remote updates cannot be undone and concurrent writes are not claimed transactional or serialized; UI publication/advisory callbacks remain outside the owner. At the scoped-search/image checkpoint the reviewed compound method body remains byte-identical; only the separately reviewed private URL resolver/initializer and imageURL API are added.",
       "reviewedConsumers": [
         "Shared/ViewModels/ItemAdministration/ItemEditorViewModel/ItemComponentEditorViewModel.swift"
       ],
       "reviewedInterfaces": [
         "updateAndReload(itemID:item:validate:)"
       ],
-      "sha256": "5fc94886d6d7fe04560c81b4b2640b740963ca12bfe1b3b848d3aa46acc2fa62"
+      "sha256": "f4e216b519287ddcf13a0af2d7aaf5f6c6f47a1eeb10b5944c39993cac8047b3"
     },
     {
       "path": "Packages/KidsAccounts/Sources/KidsAccounts/ParentPINAuthorization.swift",
@@ -6154,7 +6160,7 @@
     },
     {
       "path": "Packages/SwiftfinItemMetadata/Sources/SwiftfinItemMetadata/ItemMetadataEditor.swift",
-      "reason": "Complete MainActor fixed-client/item workflow owner and public API reviewed. A nonempty item ID and original binding are captured before scheduling. Per-editor mutation tails retain noncooperative accepted predecessors; cancellation and caller/binding checks protect every follow-up and error path. Reads drain the captured predecessor, reloads validate returned item identity, metadata refresh preserves started callback and injected five-second settling delay, and image delete preserves partial item receipt before image reload. Subtitle search uses immutable optional-language/perfect-match query; subtitle deletion retains descending order and indexed failure. Twelve new synthetic regressions cover these contracts and sibling/payload semantics. Native file/UIImage/platform notification ownership is excluded. No global edit transaction, metadata write rollback, server/RAID action or runtime acceptance is claimed.",
+      "reason": "Complete MainActor fixed-client/item workflow owner and public API reviewed. A nonempty item ID and original binding are captured before scheduling. Per-editor mutation tails retain noncooperative accepted predecessors; cancellation and caller/binding checks protect every follow-up and error path. Reads drain the captured predecessor, reloads validate returned item identity, metadata refresh preserves started callback and injected five-second settling delay, and image delete preserves partial item receipt before image reload. Subtitle search uses immutable optional-language/perfect-match query; subtitle deletion retains descending order and indexed failure. Twelve new synthetic regressions cover these contracts and sibling/payload semantics. Native file/UIImage/platform notification ownership is excluded. No global edit transaction, metadata write rollback, server/RAID action or runtime acceptance is claimed. Original-item image URL resolution is now reviewed: binding/caller checks surround a privately captured resolver, including reentrant retirement; four synthetic URL regressions pass.",
       "reviewedConsumers": [
         "Shared/ViewModels/ImageViewModel/ItemImageViewModel.swift",
         "Shared/ViewModels/ItemAdministration/ItemEditorViewModel/ItemEditorViewModel.swift",
@@ -6178,26 +6184,33 @@
         "editImage(_:validate:reloadedItem:)",
         "searchSubtitles(_:validate:)",
         "editSubtitles(_:validate:)",
-        "ItemMetadataClient.makeEditor(itemID:)"
+        "ItemMetadataClient.makeEditor(itemID:)",
+        "imageURL(_:validate:)"
       ],
-      "sha256": "df821a04c7a33378cd6d20f23fd31232c5197ae11cb6874710cfb8d3000aa948"
+      "sha256": "f91683a916aa36e4819166730098116f6711617a9c4532884df1784723a0b453"
     },
     {
       "path": "Packages/SwiftfinAccountStore/Sources/SwiftfinAccountStore/UserAdmissionSnapshot.swift",
-      "reviewedInterfaces": [
-        "UserAdmissionMode",
-        "opaque UserAdmissionSnapshot"
-      ],
+      "reason": "Immutable Sendable admission receipt has internal initializer/fields and store-instance identity, endpoint, local record and policy. No token, PIN, hint or native result is retained; the store rejects foreign-instance receipt use.",
       "reviewedConsumers": [
         "Shared/ViewModels/UserSignInViewModel.swift",
         "Shared/ViewModels/ConnectToServerViewModel.swift",
         "Shared/ViewModels/ServerConnectionViewModel.swift"
       ],
-      "reason": "Immutable Sendable admission receipt has internal initializer/fields and store-instance identity, endpoint, local record and policy. No token, PIN, hint or native result is retained; the store rejects foreign-instance receipt use.",
+      "reviewedInterfaces": [
+        "UserAdmissionMode",
+        "opaque UserAdmissionSnapshot"
+      ],
       "sha256": "86900f904c6287b70bd272cc8084c717abe48b0102339deac4301a33e9667707"
     },
     {
       "path": "Packages/SwiftfinAccountStore/Sources/SwiftfinAccountStore/ConnectionCatalogEditing.swift",
+      "reason": "Main-actor catalog owner captures exact original inventory/active/policy/server plus internal store identity. Edits canonicalize priorities, guard active/last deletion, require exact activation/permutation and recheck between accepted effects. Caller checkpoint must describe external intent/account, not compare the pre-edit catalog after the owner has updated it. Nontransactional accepted writes remain; no network or global session is resolved.",
+      "reviewedConsumers": [
+        "Shared/ViewModels/ServerConnectionViewModel.swift",
+        "Packages/SwiftfinAccountStore/Sources/SwiftfinAccountStore/LocalAccountStore.swift",
+        "Packages/SwiftfinAccountStore/Tests/SwiftfinAccountStoreTests/AccountAdmissionContracts.swift"
+      ],
       "reviewedInterfaces": [
         "ConnectionCatalogSnapshot",
         "ConnectionCatalogEdit",
@@ -6205,74 +6218,73 @@
         "validateConnectionCatalog(_:)",
         "editConnections(_:snapshot:validate:)"
       ],
-      "reviewedConsumers": [
-        "Shared/ViewModels/ServerConnectionViewModel.swift",
-        "Packages/SwiftfinAccountStore/Sources/SwiftfinAccountStore/LocalAccountStore.swift",
-        "Packages/SwiftfinAccountStore/Tests/SwiftfinAccountStoreTests/AccountAdmissionContracts.swift"
-      ],
-      "reason": "Main-actor catalog owner captures exact original inventory/active/policy/server plus internal store identity. Edits canonicalize priorities, guard active/last deletion, require exact activation/permutation and recheck between accepted effects. Caller checkpoint must describe external intent/account, not compare the pre-edit catalog after the owner has updated it. Nontransactional accepted writes remain; no network or global session is resolved.",
       "sha256": "29ad2de54decc03f474f0c2990615f48a5705aedb79b15bf8cc3f25caa756b83"
     },
     {
       "path": "Packages/SwiftfinAccountModels/Sources/SwiftfinAccountModels/ServerConnection.swift",
+      "reason": "TestState string-valued cases now synthesize equality for committed observable UI publication. Full model body retains installed Codable IDs/interface/SSID/priority and normalization/order semantics; no key/schema/dependency change. Synthetic connection catalogs and both platform compilations cover affected consumers.",
+      "reviewedConsumers": [
+        "Shared/ViewModels/ServerConnectionViewModel.swift",
+        "Packages/SwiftfinAccountStore/Sources/SwiftfinAccountStore/ConnectionCatalogEditing.swift"
+      ],
       "reviewedInterfaces": [
         "ServerConnection.TestState Equatable/Sendable",
         "ordered(_:preservingOrder:)",
         "normalizedURL(_:)"
       ],
-      "reviewedConsumers": [
-        "Shared/ViewModels/ServerConnectionViewModel.swift",
-        "Packages/SwiftfinAccountStore/Sources/SwiftfinAccountStore/ConnectionCatalogEditing.swift"
-      ],
-      "reason": "TestState string-valued cases now synthesize equality for committed observable UI publication. Full model body retains installed Codable IDs/interface/SSID/priority and normalization/order semantics; no key/schema/dependency change. Synthetic connection catalogs and both platform compilations cover affected consumers.",
       "sha256": "a71274ec43922d1faae852024022b26efa6a778f307d673b6161870ff61fe987"
     },
     {
       "path": "Packages/SwiftfinMediaCatalog/Sources/SwiftfinMediaCatalog/GuideCatalog.swift",
+      "reason": "Full new guide owner body reviewed: explicit clock/calendar, inherited half-hour/day/minimum-span rules; raw-row cursor/eligibility/deduplication; exact captured catalog and caller relevance before/after reads/errors; original per-channel ProgramBlock mapping; one immutable snapshot merge/revision. No UI, app global, native query or write belongs to this API. Six deterministic regressions pass within the73-test catalog package.",
+      "reviewedConsumers": [
+        "Shared/ViewModels/EPGViewModel.swift",
+        "Packages/SwiftfinMediaCatalog/Tests/SwiftfinMediaCatalogTests/GuideCatalogContracts.swift"
+      ],
       "reviewedInterfaces": [
         "GuideTimeline",
         "GuidePage",
         "GuideSnapshot.applying(_:startDate:replacing:)",
         "guidePage(offset:limit:startDate:endDate:excluding:validate:)"
       ],
-      "reviewedConsumers": [
-        "Shared/ViewModels/EPGViewModel.swift",
-        "Packages/SwiftfinMediaCatalog/Tests/SwiftfinMediaCatalogTests/GuideCatalogContracts.swift"
-      ],
-      "reason": "Full new guide owner body reviewed: explicit clock/calendar, inherited half-hour/day/minimum-span rules; raw-row cursor/eligibility/deduplication; exact captured catalog and caller relevance before/after reads/errors; original per-channel ProgramBlock mapping; one immutable snapshot merge/revision. No UI, app global, native query or write belongs to this API. Six deterministic regressions pass within the73-test catalog package.",
       "sha256": "45921fb672ccf7e9f77eaeadfb962a32f8580814c668570ef1493d3fba4258ad"
     },
     {
       "path": "Packages/SwiftfinRecordingTimers/Sources/SwiftfinRecordingTimers/RecordingTimerEditor.swift",
+      "reason": "Full new editor body reviewed: captured client; serial accepted predecessor drain; cancellation-safe job tail; initial toggle snapshot publication; no-op/missing-ID behavior; accepted command receipt before reload; relevance checks around publication/callbacks and errors. Native notification/local record globals remain caller ports. Six new regressions pass within19 timer tests. Scope does not approve all unrelated controller/native lifetimes.",
+      "reviewedConsumers": [
+        "Shared/ViewModels/RecordingTimerViewModel.swift",
+        "Packages/SwiftfinRecordingTimers/Tests/SwiftfinRecordingTimersTests/RecordingTimerTests.swift"
+      ],
       "reviewedInterfaces": [
         "RecordingTimerEdit",
         "RecordingTimerEditor.checkBinding()",
         "refresh(validate:publish:)",
         "edit(_:validate:publish:changed:)"
       ],
-      "reviewedConsumers": [
-        "Shared/ViewModels/RecordingTimerViewModel.swift",
-        "Packages/SwiftfinRecordingTimers/Tests/SwiftfinRecordingTimersTests/RecordingTimerTests.swift"
-      ],
-      "reason": "Full new editor body reviewed: captured client; serial accepted predecessor drain; cancellation-safe job tail; initial toggle snapshot publication; no-op/missing-ID behavior; accepted command receipt before reload; relevance checks around publication/callbacks and errors. Native notification/local record globals remain caller ports. Six new regressions pass within19 timer tests. Scope does not approve all unrelated controller/native lifetimes.",
       "sha256": "4d0d214cf1ee1a5d5fb30fe0f38e439d4bf21ea7f3c626806a58f124fb4b57ff"
     },
     {
       "path": "Packages/SwiftfinMediaCatalog/Sources/SwiftfinMediaCatalog/ProgramBlocks.swift",
+      "reason": "Complete existing block grouping and strict airing body reviewed; only synthesized equality is added for atomic committed guide display. Installed channel/program/date identity, clamping, short-program chunking and ordering remain. Existing grouping/airing contracts plus new guide grouping tests pass; no schema or dependency is changed.",
+      "reviewedConsumers": [
+        "Packages/SwiftfinMediaCatalog/Sources/SwiftfinMediaCatalog/GuideCatalog.swift",
+        "Shared/ViewModels/EPGViewModel.swift"
+      ],
       "reviewedInterfaces": [
         "ProgramBlock Equatable/Sendable",
         "programBlocks(startDate:endDate:)",
         "isAiring(at:)"
       ],
-      "reviewedConsumers": [
-        "Packages/SwiftfinMediaCatalog/Sources/SwiftfinMediaCatalog/GuideCatalog.swift",
-        "Shared/ViewModels/EPGViewModel.swift"
-      ],
-      "reason": "Complete existing block grouping and strict airing body reviewed; only synthesized equality is added for atomic committed guide display. Installed channel/program/date identity, clamping, short-program chunking and ordering remain. Existing grouping/airing contracts plus new guide grouping tests pass; no schema or dependency is changed.",
       "sha256": "c6599bba0108fb6fcfdf73330feee323d9bf34229b8ed3034e1022e11ce4f3c2"
     },
     {
       "path": "Packages/SwiftfinRecordingTimers/Sources/SwiftfinRecordingTimers/RecordingTimersClient.swift",
+      "reason": "Complete captured recording-client body reviewed as the editor port: account/user/item and permission/time closure; program/timer/series resolution; scheduled filtering and fresh template/permission checks; exact submitted update routes/payloads. Only snapshot equality is added in this batch; inherited policy/DTO behavior is retained and covered by original+new19 synthetic contracts. Real server capability/auth acceptance remains held.",
+      "reviewedConsumers": [
+        "Packages/SwiftfinRecordingTimers/Sources/SwiftfinRecordingTimers/RecordingTimerEditor.swift",
+        "Shared/ViewModels/RecordingTimerViewModel.swift"
+      ],
       "reviewedInterfaces": [
         "RecordingTimerSnapshot Equatable/Sendable",
         "snapshot()",
@@ -6281,12 +6293,43 @@
         "update(_: TimerInfoDto)",
         "update(_: SeriesTimerInfoDto)"
       ],
-      "reviewedConsumers": [
-        "Packages/SwiftfinRecordingTimers/Sources/SwiftfinRecordingTimers/RecordingTimerEditor.swift",
-        "Shared/ViewModels/RecordingTimerViewModel.swift"
-      ],
-      "reason": "Complete captured recording-client body reviewed as the editor port: account/user/item and permission/time closure; program/timer/series resolution; scheduled filtering and fresh template/permission checks; exact submitted update routes/payloads. Only snapshot equality is added in this batch; inherited policy/DTO behavior is retained and covered by original+new19 synthetic contracts. Real server capability/auth acceptance remains held.",
       "sha256": "ac58b16d067086b228e32de629ab8dc74c653e7f3def7e8ae63f3245db149c4f"
+    },
+    {
+      "path": "Packages/SwiftfinPaging/Sources/SwiftfinPaging/ContentRefreshCoordinator.swift",
+      "reason": "Complete fixed-actor refresh owner/API reviewed. Admission checks precede generation replacement; nested workers retain an escaping parent/epoch checkpoint through publication and later pages. Explicit actor hops retain compiler-checked Sendable closures without unchecked isolation. Group-builder/resolution reentry and stale errors are checked before candidate/change-signal commit; current ordinary failures retire the accepted child scope. Cancellation retirement checks the exact epoch before mutation. All34 paging contracts pass, including8 new adversarial scoped-refresh tests. No runtime macro/client acceptance is inferred.",
+      "reviewedConsumers": [
+        "Shared/ViewModels/ContentGroupViewModel/ContentGroupViewModel.swift",
+        "Shared/Objects/PagingLibrary/PagingLibraryViewModel.swift"
+      ],
+      "reviewedInterfaces": [
+        "ContentRefreshOperation.Checkpoint",
+        "ContentRefreshOperation.init(identity:refresh:)",
+        "ContentRefreshOperation.init(identity:scopedRefresh:)",
+        "ContentRefreshOperation.identity",
+        "ContentRefreshOperation.refresh",
+        "ContentRefreshCoordinator.init()",
+        "hasPendingChanges",
+        "markChanged()",
+        "shouldRefresh(sinceLastDisappear:staleThreshold:)",
+        "cancel()",
+        "refresh(inBackground:validate:makeGroups:operations:shouldResolve:)"
+      ],
+      "sha256": "1d29a640321727ee36e1e16e4da5e89d01ed6d048916fdd3ac67541e991a4f9c"
+    },
+    {
+      "path": "Packages/SwiftfinItemMetadata/Sources/SwiftfinItemMetadata/ItemMetadataClient.swift",
+      "reason": "Scoped resource API and constructor reviewed. URL resolving captures a private optional explicit port alongside the original executor/user/transport identity; nil has no current-account fallback. Image type/index/tag and the pinned no-query-key policy are preserved. Binding checks before and after resolver reentry reject retired resource results without a network request. Four fake-resolver contracts pass; existing compound apply/update bodies are verified byte-identical. Native loading/opening stays outside the owner.",
+      "reviewedConsumers": [
+        "Shared/Services/UserSession/UserSession+ItemMetadata.swift",
+        "Packages/SwiftfinItemMetadata/Sources/SwiftfinItemMetadata/ItemMetadataEditor.swift",
+        "Shared/ViewModels/ImageViewModel/ItemImageViewModel.swift"
+      ],
+      "reviewedInterfaces": [
+        "ItemMetadataClient.init(executor:userID:bindingID:urls:)",
+        "imageURL(itemID:image:)"
+      ],
+      "sha256": "f4e216b519287ddcf13a0af2d7aaf5f6c6f47a1eeb10b5944c39993cac8047b3"
     }
   ],
   "limits": "This ledger records bodies explicitly reviewed, with exact current hashes; earlier prose or lexical inventory is not automatically promoted. Pending and mixed entries prevent whole-source completion. Retained UI algorithms have specific presentation reasons, not folder/import-based blanket approval. API entries do not classify the rest of the public graph. Source review and offline tests do not satisfy held runtime acceptance.",
@@ -6295,11 +6338,11 @@
   "summary": {
     "applicationSwiftFiles": 665,
     "classification": {
-      "pending": 181,
-      "source-reviewed-mixed": 3,
-      "source-reviewed-retained": 481
+      "pending": 134,
+      "source-reviewed-mixed": 2,
+      "source-reviewed-retained": 529
     },
-    "currentAPIReviews": 54,
+    "currentAPIReviews": 56,
     "runtimeAcceptance": "held by human; no simulator/server testing"
   }
 }

@@ -13,6 +13,7 @@ import Foundation
 import JellyfinAPI
 import StatefulMacros
 import SwiftfinAsyncStreams
+import SwiftfinImages
 import SwiftfinItemMetadata
 import SwiftfinLocalization
 import SwiftfinUIState
@@ -70,6 +71,17 @@ final class ItemImageViewModel: ViewModel {
         self.item = item
         editor = try? Container.shared.currentUserSession()?.itemMetadata.makeEditor(itemID: item.id ?? "")
         super.init()
+    }
+
+    func checkBinding() throws {
+        guard let editor, item.id == editor.itemID else { throw CancellationError() }
+        try editor.checkBinding()
+    }
+
+    func imageSource(_ image: ImageInfo) -> ImageSource? {
+        guard let editor, (try? checkBinding()) != nil,
+              let url = try? editor.imageURL(image), (try? checkBinding()) != nil else { return nil }
+        return ImageSource(url: url)
     }
 
     func refresh() {

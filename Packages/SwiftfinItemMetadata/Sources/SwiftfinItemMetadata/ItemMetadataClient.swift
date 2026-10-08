@@ -15,15 +15,37 @@ import SwiftfinNetworking
 public final class ItemMetadataClient {
     private let executor: AuthenticatedRequestExecutor
     private let userID: String
+    private let urls: (any JellyfinURLResolving)?
     public let bindingID: MetadataBindingID
-    public init(executor: AuthenticatedRequestExecutor, userID: String, bindingID: MetadataBindingID) {
+    public init(
+        executor: AuthenticatedRequestExecutor,
+        userID: String,
+        bindingID: MetadataBindingID,
+        urls: (any JellyfinURLResolving)? = nil
+    ) {
         self.executor = executor
         self.userID = userID
+        self.urls = urls
         self.bindingID = bindingID
     }
 
     public func checkBinding() throws {
         try executor.checkBinding()
+    }
+
+    /// Resolves through the originally supplied transport and rechecks reentrant resolvers.
+    public func imageURL(itemID: String, image: ImageInfo) throws -> URL? {
+        try checkBinding()
+        guard let urls else { return nil }
+        let url = ItemImageURLPolicy.url(
+            using: urls,
+            itemID: itemID,
+            type: image.imageType?.rawValue ?? "",
+            index: image.imageIndex,
+            tag: image.imageTag
+        )
+        try checkBinding()
+        return url
     }
 
     public func item(id: String, delegate: (any URLSessionDataDelegate)? = nil) async throws -> BaseItemDto {

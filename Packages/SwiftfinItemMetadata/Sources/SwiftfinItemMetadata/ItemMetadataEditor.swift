@@ -113,6 +113,13 @@ public final class ItemMetadataEditor {
         return value
     }
 
+    public func imageURL(_ image: ImageInfo, validate: Checkpoint = {}) throws -> URL? {
+        try check(validate)
+        let url = try client.imageURL(itemID: itemID, image: image)
+        try check(validate)
+        return url
+    }
+
     public func images(validate: @escaping Checkpoint = {}) async throws -> [ImageType: [ImageInfo]] {
         let pending = tail
         await pending?.value

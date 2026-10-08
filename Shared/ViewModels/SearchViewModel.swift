@@ -12,42 +12,42 @@ import Foundation
 import JellyfinAPI
 import StatefulMacros
 import SwiftfinAsyncStreams
+import SwiftfinFilters
+import SwiftfinMediaCatalog
 import SwiftfinText
 import SwiftUI
 
 @MainActor
 @Stateful
 final class SearchViewModel: ViewModel {
+    struct Request: Sendable {
+        let filters: ItemFilterCollection
+        let validate: AsyncOperationGate.Checkpoint
+    }
 
     @CasePathable
     enum Action {
-        case getSuggestions
-        case search(query: String)
-        case _actuallySearch
-
+        case beginSearch(Request)
+        case performSearch(Request)
+        case performSuggestions(Request)
         var transition: Transition {
             switch self {
-            case .getSuggestions:
-                .none
-            case let .search(query):
-                query.isEmpty ? .to(.initial) : .to(.searching)
-            case ._actuallySearch:
-                .to(.searching, then: .initial)
-                    .onRepeat(.cancel)
+            case let .beginSearch(request):
+                request.filters.hasQueryableFilters ? .to(.searching) : .to(.initial)
+            case .performSearch:
+                .to(.searching, then: .initial).onRepeat(.cancel)
+            case .performSuggestions: .none
             }
         }
     }
 
-    enum State {
-        case error
-        case initial
-        case searching
-    }
-
+    enum State { case error, initial, searching }
     @Published
     private(set) var suggestions: [BaseItemDto] = []
-
     let itemContentGroupViewModel: ContentGroupViewModel<SearchContentGroupProvider>
+    private var catalog: MediaCatalogClient?
+    private let searches = AsyncOperationGate()
+    private let suggestionReads = AsyncOperationGate()
 
     var filterViewModel: FilterViewModel {
         itemContentGroupViewModel.provider.filterViewModel
@@ -66,48 +66,78 @@ final class SearchViewModel: ViewModel {
     }
 
     override init() {
-        self.itemContentGroupViewModel = .init(provider: .init())
-
+        itemContentGroupViewModel = .init(provider: .init())
         super.init()
-
+        catalog = try? requireMediaCatalog()
         observeFilters()
+    }
+
+    private func request(filters: ItemFilterCollection, gate: AsyncOperationGate) -> Request? {
+        guard let catalog, !Task.isCancelled, (try? catalog.checkBinding()) != nil else { return nil }
+        let checkpoint = gate.begin()
+        return Request(filters: filters, validate: {
+            try checkpoint()
+            try catalog.checkBinding()
+            try checkpoint()
+        })
     }
 
     private func observeFilters() {
         filterViewModel.$currentFilters
+            .map { [weak self] filters -> Request? in
+                guard let self else { return nil }
+                // Capture the emitted value before debounce and retire all old pages now.
+                guard let request = self.request(filters: filters, gate: self.searches) else {
+                    self.searches.cancel()
+                    self.itemContentGroupViewModel.invalidateRefresh()
+                    return nil
+                }
+                self.itemContentGroupViewModel.invalidateRefresh()
+                guard (try? request.validate()) != nil else { return nil }
+                self.beginSearch(request)
+                return request
+            }
             .debounce(for: 0.5, scheduler: RunLoop.main)
-            .sink { [weak self] _ in
-                self?._actuallySearch()
+            .sink { [weak self] request in
+                guard let request, request.filters.hasQueryableFilters, (try? request.validate()) != nil else { return }
+                self?.performSearch(request)
             }
             .store(in: &cancellables)
     }
 
-    @Function(\Action.Cases.search)
-    private func _search(_ query: String) async throws {
+    func search(query: String) {
         filterViewModel.currentFilters.query = query.nilIfBlank
+    }
 
+    @Function(\Action.Cases.beginSearch)
+    private func _beginSearch(_ request: Request) async throws {
+        try request.validate()
         await cancel()
     }
 
-    @Function(\Action.Cases._actuallySearch)
-    private func __actuallySearch() async throws {
-
-        guard canSearch else { return }
-
-        let filters = filterViewModel.currentFilters
-
-        itemContentGroupViewModel.provider.environment.filters = filters
-
-        await itemContentGroupViewModel.refresh()
+    @Function(\Action.Cases.performSearch)
+    private func _performSearch(_ request: Request) async throws {
+        try request.validate()
+        itemContentGroupViewModel.provider.environment.filters = request.filters
+        try request.validate()
+        await itemContentGroupViewModel.refreshForScope(validate: request.validate)
+        try request.validate()
     }
 
-    @Function(\Action.Cases.getSuggestions)
-    private func _getSuggestions() async throws {
-        let catalog = try requireMediaCatalog()
+    func getSuggestions() {
+        if let request = request(filters: filterViewModel.currentFilters, gate: suggestionReads) {
+            performSuggestions(request)
+        }
+    }
+
+    @Function(\Action.Cases.performSuggestions)
+    private func _performSuggestions(_ request: Request) async throws {
+        guard let catalog else { throw CancellationError() }
+        try request.validate()
         await filterViewModel.getQueryFilters()
-        try catalog.checkBinding()
+        try request.validate()
         let result = try await catalog.suggestions(fields: PosterSubtitleField.itemFields)
-        try catalog.checkBinding()
+        try request.validate()
         suggestions = result
     }
 }

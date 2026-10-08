@@ -1,6 +1,6 @@
 # Retained application responsibility review
 
-The application is intended to retain composition and platform presentation. This is a source-reviewed ledger, not an automatic approval of files based on their folder, filename or import count. The full-client refactor remains active. Live simulator/server activity is held by the human. Current ledger:440 retained,7 mixed and218 pending among665 app files;47 scoped interface reviews.
+The application is intended to retain composition and platform presentation. This is a source-reviewed ledger, not an automatic approval of files based on their folder, filename or import count. The full-client refactor remains active. Live simulator/server activity is held by the human. Current ledger:529 retained,2 mixed and134 pending among665 app files;56 scoped interface reviews.
 
 ## Reviewed boundaries at the date/program checkpoint
 
@@ -266,3 +266,14 @@ EPGViewModel and RecordingTimerViewModel now retain platform composition only; g
 Sixteen complete unchanged UI bodies were read. Fifteen retain native guide layout/button/scroll composition and metadata/identification/refresh/subtitle/image/form draft presentation. Input bounds, DatePicker text conversion and existing UI input assumptions remain presentation behavior, not globally approved server normalization. Native visual/focus/importer and existing unsupported-input limitations are explicitly unproven.
 
 ItemImageDetailView is mixed: it combines a model item ID with current ambient userSession/client when creating the image URL. The explicit ImageInfo/ItemImageURLPolicy helper body was checked; the unsafe account choice belongs to its caller and needs binding to the original item/editor. No resource was loaded and no native command executed. Current ledger:665 sources,481 retained/3 mixed/181 pending,54 scoped interfaces. All92 affected native contracts (12 new), both final compile-only builds and53 boundaries pass. Full source/API/actor/bootstrap and whole-graph acceptance remain required; simulator/server/RAID actions stay stopped.
+
+
+## Scoped search and original-item image checkpoint (2026-10-07, offline)
+
+Search captures emitted filters/original account before debounce and before reentrant display effects. Filter discovery retains its original client. Content refresh owns caller/epoch gates, staged groups, deduplicated workers and successful change receipts; nested macro-scheduled paging models retain that gate in their source binding. Rejected queued work cannot retire newer work, and builder/resolution reentry or late failures cannot publish obsolete groups. Existing main/background UI refresh APIs remain intact.
+
+ItemMetadata owns optional captured image URL resolution and rechecks original binding after resolver reentry. Image details/gallery and remote image/provider pages now borrow the original item editor binding; native ImageSource/photo/file/crop presentation remains in the app. Photo selection borrows the existing async gate to reject late completion after replacement, dismissal or disappearance.
+
+All113 affected native contracts pass, including12 new regressions. Both final compile-only platform builds pass without owned Swift/generated-macro diagnostics, and53 boundaries pass. Initial native actor/escaping-checkpoint failures and initial app macro-name/image-initializer failures remain recorded; corrected evidence is not a simulator execution result. No server account/catalog/configuration, native credential/capability query, simulator installation/launch or RAID access occurred.
+
+Forty-two additional complete unchanged UI/SDK-presentation bodies are reviewed in the exact-hash ledger. It also records the newly mixed server-activity avatar: its old user DTO still uses an ambient current-session transport. UserSessionManager retains the other mixed classification for inherited launch/deep-link/foreground/sign-in/sign-out sequencing. The529 retained,2 mixed and134 pending entries and56 scoped API reviews do not complete the full source/public API/actor/bootstrap audit or held whole-graph runtime acceptance.

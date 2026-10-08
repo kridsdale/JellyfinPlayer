@@ -24,3 +24,9 @@ extension WithRefresh where Background == Empty {
         set {}
     }
 }
+
+/// Platform adapters bind independently scheduled pages to their parent intent.
+@MainActor
+protocol WithRefreshScope {
+    func bindRefreshScope(_ validate: @escaping @MainActor @Sendable () throws -> Void) throws
+}

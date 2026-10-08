@@ -8,17 +8,32 @@
 
 import Foundation
 import Get
+import JellyfinAPI
 import SwiftfinItemMetadata
 import SwiftfinNetworking
 import Testing
 
 @MainActor
-private final class URLPort: JellyfinURLResolving {
+private final class URLPort: JellyfinURLResolving, JellyfinRequestSending {
+    var current = true
+    var onResolve: @MainActor () -> Void = {}
+    var requestCount = 0
+    func value<Value: Decodable & Sendable>(for request: Request<Value>) async throws -> Value {
+        requestCount += 1
+        throw CancellationError()
+    }
+
+    func complete(_ request: Request<Void>) async throws {
+        requestCount += 1
+        throw CancellationError()
+    }
+
     var paths: [String] = []
     var flags: [Bool] = []
     var query: [String: String] = [:]
     var result = URL(string: "https://fixture.example/image")
     func url(with request: Request<some Any>, queryAPIKey: Bool) -> URL? {
+        onResolve()
         paths.append(request.url?.path ?? "")
         flags.append(queryAPIKey)
         query = Dictionary(uniqueKeysWithValues: (request.query ?? []).compactMap { k, v in v.map { (k, $0) } })
@@ -56,4 +71,50 @@ func `image URL nil resolver and optional fields remain nil`() {
     #expect(ItemImageURLPolicy.url(using: urls, itemID: "item", type: "Chapter") == nil)
     #expect(urls.query.isEmpty)
     #expect(urls.flags == [false])
+}
+
+@MainActor
+private func boundImageClient(_ urls: URLPort, includesURLs: Bool = true) -> ItemMetadataClient {
+    .init(
+        executor: .init(sender: urls, isCurrent: { urls.current }),
+        userID: "original-user",
+        bindingID: .init(transport: ObjectIdentifier(urls), userID: "original-user"),
+        urls: includesURLs ? urls : nil
+    )
+}
+
+@Test @MainActor
+func `editor image URL uses original item resolver index tag without any request`() throws {
+    let urls = URLPort()
+    let editor = try boundImageClient(urls).makeEditor(itemID: "original-item")
+    let image = ImageInfo(imageIndex: 3, imageTag: "original-tag", imageType: .backdrop)
+    let result = try editor.imageURL(image)
+    #expect(result == urls.result)
+    #expect(urls.paths == ["/Items/original-item/Images/Backdrop"])
+    #expect(urls.query == ["imageIndex": "3", "tag": "original-tag"])
+    #expect(urls.flags == [false] && urls.requestCount == 0)
+}
+
+@Test @MainActor
+func `retired editor binding rejects URL before invoking resolver`() throws {
+    let urls = URLPort(), editor = try boundImageClient(urls).makeEditor(itemID: "item")
+    urls.current = false
+    #expect(throws: CancellationError.self) { try editor.imageURL(.init(imageType: .primary)) }
+    #expect(urls.paths.isEmpty && urls.requestCount == 0)
+}
+
+@Test @MainActor
+func `resolver account reentry rejects obsolete URL after resolution`() throws {
+    let urls = URLPort(), editor = try boundImageClient(urls).makeEditor(itemID: "item")
+    urls.onResolve = { urls.current = false }
+    #expect(throws: CancellationError.self) { try editor.imageURL(.init(imageType: .primary)) }
+    #expect(urls.paths.count == 1 && urls.requestCount == 0)
+}
+
+@Test @MainActor
+func `missing resolver and retired caller neither infer another account nor perform reads`() throws {
+    let urls = URLPort(), editor = try boundImageClient(urls, includesURLs: false).makeEditor(itemID: "item")
+    #expect(try editor.imageURL(.init(imageType: .primary)) == nil)
+    #expect(throws: CancellationError.self) { try editor.imageURL(.init(imageType: .primary), validate: { throw CancellationError() }) }
+    #expect(urls.paths.isEmpty && urls.requestCount == 0)
 }

@@ -1,6 +1,6 @@
 # Current engineering goal disposition
 
-The latest offline pass extracts guide paging/calendar/snapshot rules and serial recording-timer edit/reload workflows into existing MediaCatalog/RecordingTimers libraries. Original-account request gates and atomic committed display state guard queued reads and reentrant UI callbacks. All73 catalog and19 timer native contracts pass, including12 new regressions, and53 library boundaries pass. Final tvOS Debug compile-for-testing and iOS Release builds pass without owned Swift/generated-macro diagnostics. Fifteen additional complete UI bodies are retained; image detail is explicitly mixed because its resource URL uses an ambient account with an old item ID. The665-source ledger has481 retained,3 mixed and181 pending, with54 scoped API reviews. Full source/API/actor/bootstrap and held runtime acceptance remain required; items1/2 stay active.
+Scoped search and original-item image integration now pass:34 paging+79 metadata native contracts, including12 new regressions;53 package boundaries;tvOS Debug compile-for-testing and iOS Release with no owned Swift/generated-macro diagnostics. The665-source ledger has529 retained,2 mixed and134 pending, with56 scoped API reviews. Full source/API/actor/bootstrap and held runtime acceptance remain required; items1/2 stay active.
 
 The table below records the candidate checkpoint from 2026-10-05. The active goal on 2026-10-06 is full-client package extraction and Swift 6 completion; see [current package evidence](package-refactor.md). It remains active.
 

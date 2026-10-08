@@ -204,26 +204,21 @@ struct ItemImagesView: View {
 
     @ViewBuilder
     private func imageButton(imageInfo: ImageInfo) -> some View {
-        if let userSession = viewModel.userSession {
+        if let imageSource = viewModel.imageSource(imageInfo) {
             Button {
                 router.route(to: .itemImageDetail(viewModel: viewModel, imageInfo: imageInfo))
             } label: {
                 ZStack {
                     Color.secondarySystemFill
 
-                    ImageView(
-                        imageInfo.itemImageSource(
-                            itemID: viewModel.item.id!,
-                            client: userSession.client
-                        )
-                    )
-                    .placeholder { _ in
-                        Image(systemName: "photo")
-                    }
-                    .failure {
-                        Image(systemName: "photo")
-                    }
-                    .pipeline(.Swiftfin.other)
+                    ImageView(imageSource)
+                        .placeholder { _ in
+                            Image(systemName: "photo")
+                        }
+                        .failure {
+                            Image(systemName: "photo")
+                        }
+                        .pipeline(.Swiftfin.other)
                 }
                 .posterStyle(posterType)
                 .subtleShadow()

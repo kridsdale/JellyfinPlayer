@@ -8,6 +8,7 @@
 
 import Mantis
 import PhotosUI
+import SwiftfinAsyncStreams
 import SwiftUI
 
 struct PhotoPickerModifier: ViewModifier {
@@ -19,6 +20,9 @@ struct PhotoPickerModifier: ViewModifier {
     private var selectedImage: UIImage?
     @State
     private var selectedItem: PhotosPickerItem?
+
+    @State
+    private var imageReads = AsyncOperationGate()
 
     let isSaving: Bool
     let cropShape: Mantis.CropShapeType
@@ -35,10 +39,12 @@ struct PhotoPickerModifier: ViewModifier {
             .onChange(of: selectedItem) {
                 loadImage(from: selectedItem)
             }
+            .onDisappear { imageReads.cancel() }
             .sheet(isPresented: Binding<Bool>(
                 get: { selectedImage != nil },
                 set: {
                     if !$0 {
+                        imageReads.cancel()
                         selectedImage = nil
                         selectedItem = nil
                     }
@@ -64,14 +70,17 @@ struct PhotoPickerModifier: ViewModifier {
 
     @MainActor
     private func loadImage(from item: PhotosPickerItem?) {
+        imageReads.cancel()
         guard let item else {
             selectedImage = nil
             return
         }
 
+        let validate = imageReads.begin()
         Task {
             if let data = try? await item.loadTransferable(type: Data.self),
-               let image = UIImage(data: data)
+               let image = UIImage(data: data),
+               (try? validate()) != nil
             {
                 selectedImage = image
             }
@@ -79,6 +88,7 @@ struct PhotoPickerModifier: ViewModifier {
     }
 
     private func clearSelection() {
+        imageReads.cancel()
         selectedImage = nil
         selectedItem = nil
         isPresented = false

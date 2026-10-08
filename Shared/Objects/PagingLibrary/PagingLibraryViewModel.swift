@@ -23,7 +23,7 @@ let defaultPagingLibraryPageSize = 50
 
 @MainActor
 @Stateful(conformances: [WithRefresh.self])
-class PagingLibraryViewModel<Library: PagingLibrary>: ViewModel, Identifiable {
+class PagingLibraryViewModel<Library: PagingLibrary>: ViewModel, Identifiable, WithRefreshScope {
 
     typealias Background = _BackgroundActions
     typealias Element = Library.Element
@@ -99,6 +99,14 @@ class PagingLibraryViewModel<Library: PagingLibrary>: ViewModel, Identifiable {
     private var sourceIdentity = UUID()
     private var sourceSession: UserSession?
     private var sourceClient: JellyfinTransport?
+    private var refreshScope: ContentRefreshOperation.Checkpoint = {}
+
+    func bindRefreshScope(_ validate: @escaping ContentRefreshOperation.Checkpoint) throws {
+        try validate()
+        refreshScope = validate
+        invalidatePaging()
+        try validate()
+    }
 
     nonisolated let id: String
 
@@ -122,7 +130,8 @@ class PagingLibraryViewModel<Library: PagingLibrary>: ViewModel, Identifiable {
         library as? any SearchablePagingLibrary<Element, Environment>
     }
 
-    init(library: Library, pageSize: Int = defaultPagingLibraryPageSize) {
+    init(library: Library, pageSize: Int = defaultPagingLibraryPageSize, validate: @escaping ContentRefreshOperation.Checkpoint = {}) {
+        self.refreshScope = validate
         self.elements = IdentifiedArray([], uniquingIDsWith: { existing, _ in existing })
         self.environment = library.environment ?? .default
         self.searchElements = IdentifiedArray([], uniquingIDsWith: { existing, _ in existing })
@@ -248,6 +257,8 @@ class PagingLibraryViewModel<Library: PagingLibrary>: ViewModel, Identifiable {
 
     /// Bind once before suspension; request adapters cannot reread a replacement transport.
     private func makeSource() throws -> PagingSource<Element> {
+        let refreshScope = refreshScope
+        try refreshScope()
         let manager = Container.shared.userSessionManager()
         guard let session = manager.currentSession else { throw UserSessionError.missingCurrentSession }
         let client = session.client
@@ -256,6 +267,7 @@ class PagingLibraryViewModel<Library: PagingLibrary>: ViewModel, Identifiable {
             sourceSession = session
             sourceClient = client
         }
+        try refreshScope()
         let identity = sourceIdentity
         let environment = environment
         let library = library
@@ -284,7 +296,7 @@ class PagingLibraryViewModel<Library: PagingLibrary>: ViewModel, Identifiable {
             nil
         }
         return PagingSource(identity: identity, canPage: library.hasNextPage, isCurrent: { [weak self, weak session] in
-            guard let self, let session else { return false }
+            guard let self, let session, (try? refreshScope()) != nil else { return false }
             return sourceIdentity == identity && manager.currentSession === session && session.client === client
         }, load: { request in
             try await library.retrievePageResult(environment: environment, pageState: state(request))

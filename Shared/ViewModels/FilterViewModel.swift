@@ -48,6 +48,7 @@ final class FilterViewModel: ViewModel {
     let staticFilters: ItemFilterCollection
 
     private let parent: (any LibraryParent)?
+    private var queryFilters: QueryFiltersClient?
 
     var hasActiveFilters: Bool {
         staticFilters.union(currentFilters) != staticFilters
@@ -69,6 +70,7 @@ final class FilterViewModel: ViewModel {
         self.staticFilters = staticFilters
 
         super.init()
+        queryFilters = try? requireQueryFilters()
     }
 
     func isFilterSelected(type: ItemFilterType) -> Bool {
@@ -84,7 +86,8 @@ final class FilterViewModel: ViewModel {
 
     @Function(\Action.Cases.getQueryFilters)
     private func _getQueryFilters() async throws {
-        let filters = try requireQueryFilters()
+        guard let filters = queryFilters else { throw CancellationError() }
+        try filters.checkBinding()
         let parentID = parent?.id
         let requestedTypes = itemTypes
         let modern = try await filters.modern(parentID: parentID, itemTypes: requestedTypes)
