@@ -1017,8 +1017,8 @@
         "SwiftfinUserMediaState"
       ],
       "path": "Shared/Extensions/JellyfinAPI/BaseItemDto/BaseItemDto+Poster.swift",
-      "reason": "Complete307-line poster body reviewed. Display-type/context selects ordered image fallbacks, transform/crop and localized symbol/title/menu composition. Exact URL construction delegates to Images/ItemMetadata; user-media commands use one captured client, per-field mutation tickets and owner merge policy, with guarded optimistic UI completion/rollback. Poster environment, routes, menu effects and fallback ordering stay platform presentation.",
-      "sha256": "2e3669f0282f2b7f9ff2bd5c15e37284cdf84e9e3002f431085a4f88c35e9c0f",
+      "reason": "Complete current poster body reviewed. Display-type/context selects ordered image fallbacks, transform/crop and localized symbol/title/menu composition. Exact URL construction delegates to Images/ItemMetadata; user-media commands use one captured client, per-field mutation tickets and owner merge policy, with guarded optimistic UI completion/rollback. Poster environment, routes, menu effects and fallback ordering stay platform presentation. Current mutation checkpoints also reject supersession after optimistic publication and before/between request-result and notification effects; existing retained UI classification is unchanged.",
+      "sha256": "559d5dd342583ee132f99c8a4303bf1b6ac6590bffbd5a49b6d9903d8dee6b70",
       "status": "source-reviewed-retained"
     },
     {
@@ -3897,8 +3897,8 @@
         "SwiftfinPlaybackProfiles"
       ],
       "path": "Shared/Views/ItemContentGroupView/ItemContentGroupProvider.swift",
-      "reason": "Complete current provider re-reviewed: native localized group/routing composition and captured catalog/media-state adapters remain in the app. The selection enum and all media-source/audio/subtitle/bitrate transition policy now belong to immutable PlaybackOptions in the existing profile owner; app captures choices and supplies the resulting fields to its native provider factory. Original four-branch behavior matches exactly, including source-change resets and nil/disabled choices. Optimistic authority/merge stays with UserMediaState. No catalog/player/server operation was executed.",
-      "sha256": "369443e102031304716ff579b5c85f6a9f6a9fb4556543183c8377f433586e14",
+      "reason": "Complete current provider re-reviewed: native localized group/routing composition and captured catalog/media-state adapters remain in the app. The selection enum and all media-source/audio/subtitle/bitrate transition policy now belong to immutable PlaybackOptions in the existing profile owner; app captures choices and supplies the resulting fields to its native provider factory. Original four-branch behavior matches exactly, including source-change resets and nil/disabled choices. Optimistic authority/merge stays with UserMediaState. No catalog/player/server operation was executed. Current mutation checkpoints also reject supersession after optimistic publication and before/between request-result and notification effects; existing retained UI classification is unchanged.",
+      "sha256": "6d7e2d3b26cf7dbec5016a8426f82e6a8ad153839e894428caff70624b1424b6",
       "status": "source-reviewed-retained"
     },
     {
@@ -5789,13 +5789,15 @@
   "interfaceReviews": [
     {
       "path": "Packages/SwiftfinTime/Sources/SwiftfinTime/DateStaleness.swift",
-      "reason": "Explicit clock/value inputs; no scheduling, settings or app globals. Strict less-than and greater-than boundaries remain distinct.",
+      "reason": "DateStaleness.swift: complete current source body and public interface audit. Dependency-free Duration/Date values preserve installed 100-nanosecond tick truncation, floating/integer conversions, calendar behavior and strict stale/recent boundaries. Existing representability/overflow preconditions and future-date/clock-rollback semantics remain unchanged; no scheduler or clock singleton is added. Listed consumers are scoped reviewed boundaries; whole-graph/runtime acceptance remains required.",
       "reviewedConsumers": [
-        "Shared/Objects/MediaPlayerManager/Supplements/EPGSupplement.swift"
+        "Shared/Objects/MediaPlayerManager/Supplements/EPGSupplement.swift",
+        "Shared/Objects/MediaPlayerManager/MediaProgressObserver.swift",
+        "Swiftfin tvOS/Kids/KidsMediaProgressObserver.swift"
       ],
       "reviewedInterfaces": [
-        "Date.isRecent(with:comparedTo:)",
-        "Date.isStale(with:comparedTo:)"
+        "func isRecent(with interval: Duration, comparedTo now: Date = .now) -> Bool",
+        "func isStale(with interval: Duration, comparedTo now: Date = .now) -> Bool"
       ],
       "sha256": "997f8e628aa2093eea3707a38b76b77e2b1aab33684b9f37283ed9401c8b6d4f"
     },
@@ -5814,30 +5816,49 @@
     },
     {
       "path": "Packages/SwiftfinServerOperations/Sources/SwiftfinServerOperations/ServerOperationsPolicy.swift",
-      "reason": "Immutable DTO selection with explicit device/item and preserved order/payload; no session-manager lookup or subscription construction. Other policy members source-reviewed in the same file; their full consumer audit remains open. Adds scoped immutable trigger construction with the same four encoded DTO defaults. One-hour ticks remain 36,000,000,000 without adding a Time dependency. Construction does not update schedules or send commands. Complete current policy body re-read; sessionControls additionally owns remote-session display availability with explicit user ID/other-user permission and preserved independent message support. Existing policies remain unchanged. This scoped addition does not establish the final full API/consumer audit.",
+      "reason": "ServerOperationsPolicy.swift: complete current source body and public interface audit. Typed server administration, diagnostics, key/device/task/session controls share one captured authenticated executor and preserve current-device exclusion and acknowledged partial effects. Pure policies own filtering, sorting and trigger/session selection. Credential-bearing log URLs remain an explicitly sensitive download boundary; no server operation was executed by this review. Listed consumers are scoped reviewed boundaries; whole-graph/runtime acceptance remains required.",
       "reviewedConsumers": [
         "Shared/Extensions/JellyfinAPI/TaskTriggerInfo.swift",
         "Shared/Objects/MediaPlayerManager/Supplements/PlaybackInformationSupplement.swift",
-        "Swiftfin/Views/AdminDashboardView/ActiveSessions/ActiveSessionDetailsView/ActiveSessionDetailsView.swift"
+        "Swiftfin/Views/AdminDashboardView/ActiveSessions/ActiveSessionDetailsView/ActiveSessionDetailsView.swift",
+        "Shared/ViewModels/ViewModel.swift",
+        "Shared/ViewModels/AdminDashboard/Sessions/SessionViewModel.swift"
       ],
       "reviewedInterfaces": [
-        "ServerOperationsPolicy.playbackSession(in:deviceID:itemID:)",
-        "ServerOperationsPolicy.defaultTrigger(type:)",
-        "ServerOperationsPolicy.sessionControls(for:userID:mayControlOtherUsers:)"
+        "case active",
+        "case all",
+        "case inactive",
+        "enum ServerOperationsPolicy",
+        "enum ServerSessionFilter",
+        "static func defaultTrigger(type: TaskTriggerInfoType) -> TaskTriggerInfo",
+        "static func playbackSession(in values: [SessionInfoDto], deviceID: String?, itemID: String) -> SessionInfoDto?",
+        "static func removedTaskIDs(existing: [String], incoming: [TaskInfo]) -> Set<String>",
+        "static func sessionControls(for session: SessionInfoDto, userID: String?, mayControlOtherUsers: Bool) -> (canControl: Bool, canControlPlayback: Bool, canSendMessage: Bool)",
+        "static func sessionPrecedes(_ lhs: SessionInfoDto, _ rhs: SessionInfoDto, now: Date) -> Bool",
+        "static func sessions(_ values: [SessionInfoDto], activeWithinSeconds: Int?, filter: ServerSessionFilter, now: Date) -> [SessionInfoDto]",
+        "static func sortedDevices(_ values: [DeviceInfoDto]) -> [DeviceInfoDto]",
+        "static func sortedKeys(_ values: [AuthenticationInfo]) -> [AuthenticationInfo]",
+        "static func triggers(removing trigger: TaskTriggerInfo, from values: [TaskTriggerInfo]) -> [TaskTriggerInfo]"
       ],
       "sha256": "15651a3382252db04215eea8c50c9fc34bd5748a0466e923ff376e7e2b5f9d27"
     },
     {
       "path": "Packages/SwiftfinUserMediaState/Sources/SwiftfinUserMediaState/LibraryMembershipChange.swift",
-      "reason": "Immutable action output and explicit DTO/loaded inputs. No view model, scheduler, settings/global lookup, or new production dependency. App computes current loaded identity and executes the action.",
+      "reason": "LibraryMembershipChange.swift: complete current source body and public interface audit. One account owner serializes played/favorite commands, checks returned item identity and rejects obsolete transport work. Per-field mutation tickets and selective DTO merge preserve newer optimistic state; the app callers now check those tickets after optimistic publication and before/between subsequent effects. Membership/eligibility decisions remain value-only and do not change media or Kids progress schema. Listed consumers are scoped reviewed boundaries; whole-graph/runtime acceptance remains required.",
       "reviewedConsumers": [
         "Shared/Objects/Libraries/NextUpLibrary.swift",
-        "Shared/Objects/Libraries/ResumeItemsLibrary.swift"
+        "Shared/Objects/Libraries/ResumeItemsLibrary.swift",
+        "Shared/Services/UserSession/UserSession+ItemMetadata.swift",
+        "Shared/Views/ItemContentGroupView/ItemContentGroupProvider.swift",
+        "Shared/Extensions/JellyfinAPI/BaseItemDto/BaseItemDto+Poster.swift"
       ],
       "reviewedInterfaces": [
-        "LibraryMembershipChange",
-        "UserMediaStatePolicy.nextUpChange(for:isLoaded:)",
-        "UserMediaStatePolicy.resumeChange(for:isLoaded:)"
+        "case none",
+        "case refresh(minimumInterval: TimeInterval)",
+        "case remove(itemID: String)",
+        "enum LibraryMembershipChange",
+        "static func nextUpChange(for data: UserItemDataDto, isLoaded: Bool) -> LibraryMembershipChange",
+        "static func resumeChange(for data: UserItemDataDto, isLoaded: Bool) -> LibraryMembershipChange"
       ],
       "sha256": "fb9ee7d0488d7b539200db37f616e7d0f1c58c44aa987e464979cffad3714a52"
     },
@@ -5865,7 +5886,7 @@
     },
     {
       "path": "Packages/SwiftfinAccountAccess/Sources/SwiftfinAccountAccess/EvaluatedLocalUserAccessPolicy.swift",
-      "reason": "Immutable raw prompt result and Sendable marker retain existing dynamic casts/value construction. No storage/credentials/validation authority is inferred from construction. Full PIN-specific consumer bodies inspected; stored-PIN comparisons and save/hint projection are unchanged. Width uses original extended-grapheme count without numeric/trim normalization.",
+      "reason": "EvaluatedLocalUserAccessPolicy.swift: complete current source body and public interface audit. Captured authentication/request/URL ports own public information, exact returned server/user identity, login options and per-flow Quick Connect polling. Cancellation and binding checks surround suspension and injected callbacks; redirect reconstruction strips credential/query/fragment fields. Credential storage, native authentication and UI admission remain scoped app composition. Listed consumers are scoped reviewed boundaries; whole-graph/runtime acceptance remains required.",
       "reviewedConsumers": [
         "Shared/Components/WithLocalUserAuthentication.swift",
         "Shared/Objects/Empty.swift",
@@ -5873,12 +5894,22 @@
         "Shared/ViewModels/UserSignInViewModel.swift",
         "Shared/Views/UserSignInView.swift",
         "Shared/Views/SelectUserView/SelectUserView.swift",
-        "Shared/Views/SettingsView/LocalUserSettings/LocalUserSecurityView.swift"
+        "Shared/Views/SettingsView/LocalUserSettings/LocalUserSecurityView.swift",
+        "Shared/Views/QuickConnectView.swift",
+        "Shared/SwiftfinStore/SwiftfinStore+ServerState.swift",
+        "Shared/SwiftfinStore/SwiftinStore+UserState.swift",
+        "Shared/Services/UserSession/UserSession+ItemMetadata.swift",
+        "Shared/Services/ServerConnectionManager.swift",
+        "Swiftfin tvOS/App/KidsAccountAdapter.swift"
       ],
       "reviewedInterfaces": [
-        "EvaluatedLocalUserAccessPolicy",
-        "PinEvaluatedUserAccessPolicy.init(pin:pinHint:)",
-        "LocalAccessPINPolicy.isValid(_:)"
+        "enum LocalAccessPINPolicy",
+        "init(pin: String, pinHint: String?)",
+        "let pin: String",
+        "let pinHint: String?",
+        "protocol EvaluatedLocalUserAccessPolicy : Sendable",
+        "static func isValid(_ pin: String) -> Bool",
+        "struct PinEvaluatedUserAccessPolicy"
       ],
       "sha256": "e1fbf41c0f50a359b27521a71fb56668f2df95a8c7548b45d50c49070d720ea8"
     },
@@ -6014,39 +6045,51 @@
     },
     {
       "path": "Packages/SwiftfinScrolling/Sources/SwiftfinScrolling/ScrollOffsetLease.swift",
-      "reason": "Internal main-actor borrowed-target lease holds only weak target identity, generation and retirement/receipt closures. Same target replaces receipt without registration; replacement/disconnect/final release revoke callbacks. Native fake ports cover subscription and retirement reentry, including a fail-before/pass-after cleanup overwrite regression. No native scroll handle is exposed publicly.",
+      "reason": "ScrollOffsetLease.swift: complete current source body and public interface audit. Main-actor borrowed UIKit observations use weak targets, revision-bound delivery, isolated retirement and finite pure centering geometry. Normal KVO delivery stays synchronous under recursion guards and foreign delivery reads on the UI actor. EPG synchronization now checks its observation generation before each follower update, stopping a captured loop after reentrant disconnect/replacement; native delegates are not replaced. Listed consumers are scoped reviewed boundaries; whole-graph/runtime acceptance remains required.",
       "reviewedConsumers": [
-        "Packages/SwiftfinScrolling/Sources/SwiftfinScrolling/ScrollOffsetObserver.swift"
+        "Packages/SwiftfinScrolling/Sources/SwiftfinScrolling/ScrollOffsetObserver.swift",
+        "Shared/Extensions/ViewExtensions/Modifiers/ScrollViewOffsetModifier.swift"
       ],
-      "reviewedInterfaces": [
-        "internal connect(_:receive:subscribe:)",
-        "internal disconnect()",
-        "isolated deinit"
-      ],
+      "reviewedInterfaces": [],
       "sha256": "9cbe4be25f0f4717c03300e8de490594d701df6d2419f9e06f7fbe442199c9cd"
     },
     {
       "path": "Packages/SwiftfinScrolling/Sources/SwiftfinScrolling/ScrollOffsetObserver.swift",
-      "reason": "Main-actor UIKit adapter borrows UIScrollView for registration but privately retains/invalidate its KVO token. A nonisolated checked-Sendable callback captures only an actor receipt and hops foreign delivery to read current geometry on the owner; it never transfers the callback SDK object. It does not change delegates. Platform contracts are compile-only while runtime activity is held.",
+      "reason": "ScrollOffsetObserver.swift: complete current source body and public interface audit. Main-actor borrowed UIKit observations use weak targets, revision-bound delivery, isolated retirement and finite pure centering geometry. Normal KVO delivery stays synchronous under recursion guards and foreign delivery reads on the UI actor. EPG synchronization now checks its observation generation before each follower update, stopping a captured loop after reentrant disconnect/replacement; native delegates are not replaced. Listed consumers are scoped reviewed boundaries; whole-graph/runtime acceptance remains required.",
       "reviewedConsumers": [
         "Shared/Extensions/ViewExtensions/Modifiers/ScrollViewOffsetModifier.swift"
       ],
       "reviewedInterfaces": [
-        "init()",
-        "connect(_:onChange:)",
-        "disconnect()"
+        "@MainActor final class ScrollOffsetObserver",
+        "@MainActor func connect(_ scrollView: UIScrollView, onChange: @escaping @MainActor @Sendable (CGFloat) -> Void)",
+        "@MainActor func disconnect()",
+        "@MainActor init()"
       ],
       "sha256": "943b9d035dc9b59bc58edebfb460eced5feb651898c8bd622ea1e7ee90000c16"
     },
     {
       "path": "Packages/SwiftfinTime/Sources/SwiftfinTime/DurationValues.swift",
-      "reason": "Scoped tick-scale interface review: integer-only truncation toward zero preserves all captured optional/signed/extreme SDK projections. Time imports no SDK. Unrelated duration helpers are not classified by this entry.",
+      "reason": "DurationValues.swift: complete current source body and public interface audit. Dependency-free Duration/Date values preserve installed 100-nanosecond tick truncation, floating/integer conversions, calendar behavior and strict stale/recent boundaries. Existing representability/overflow preconditions and future-date/clock-rollback semantics remain unchanged; no scheduler or clock singleton is added. Listed consumers are scoped reviewed boundaries; whole-graph/runtime acceptance remains required.",
       "reviewedConsumers": [
-        "Shared/Extensions/JellyfinAPI/PlayerStateInfo.swift"
+        "Shared/Extensions/JellyfinAPI/PlayerStateInfo.swift",
+        "Shared/Objects/MediaPlayerManager/MediaProgressObserver.swift",
+        "Swiftfin tvOS/Kids/KidsMediaProgressObserver.swift"
       ],
       "reviewedInterfaces": [
-        "Duration.ticks(_:)",
-        "Duration.wholeSeconds(ticks:)"
+        "func abs(_ d: Duration) -> Duration",
+        "static func hours(_ hours: some BinaryFloatingPoint) -> Duration",
+        "static func hours(_ hours: some BinaryInteger) -> Duration",
+        "static func minutes(_ minutes: some BinaryFloatingPoint) -> Duration",
+        "static func minutes(_ minutes: some BinaryInteger) -> Duration",
+        "static func ticks(_ ticks: Int) -> Duration",
+        "static func timeOfDay(_ date: Date) -> Duration",
+        "static func wholeSeconds(ticks: Int) -> Int",
+        "var hours: Double { get }",
+        "var microseconds: Int64 { get }",
+        "var minutes: Double { get }",
+        "var seconds: Double { get }",
+        "var ticks: Int { get }",
+        "var timeOfDayDate: Date { get }"
       ],
       "sha256": "3ea3a02284305a3860b95eb2501796978719b238166593bd4417d86b34373264"
     },
@@ -6078,31 +6121,39 @@
     },
     {
       "path": "Packages/SwiftfinServerOperations/Sources/SwiftfinServerOperations/ServerLogKind.swift",
-      "reason": "Immutable Sendable filename classification preserves nonfailable RawRepresentable initializer semantics, including raw enum strings being classified as other. App owns icons/titles; no log file read or network operation occurs in this value.",
+      "reason": "ServerLogKind.swift: complete current source body and public interface audit. Typed server administration, diagnostics, key/device/task/session controls share one captured authenticated executor and preserve current-device exclusion and acknowledged partial effects. Pure policies own filtering, sorting and trigger/session selection. Credential-bearing log URLs remain an explicitly sensitive download boundary; no server operation was executed by this review. Listed consumers are scoped reviewed boundaries; whole-graph/runtime acceptance remains required.",
       "reviewedConsumers": [
         "Shared/Objects/ServerLogType.swift",
-        "Shared/Extensions/JellyfinAPI/LogFile.swift"
+        "Shared/Extensions/JellyfinAPI/LogFile.swift",
+        "Shared/ViewModels/ViewModel.swift",
+        "Shared/ViewModels/AdminDashboard/Sessions/SessionViewModel.swift"
       ],
       "reviewedInterfaces": [
-        "ServerLogKind.allCases",
-        "rawValue",
-        "init(rawValue:)"
+        "case directStream",
+        "case other",
+        "case remux",
+        "case system",
+        "case transcode",
+        "enum ServerLogKind",
+        "init(rawValue: String)"
       ],
       "sha256": "4fea26b84e2c7656daf4dfaa7641ea0eec91b2e71111130704b70744a32eb879"
     },
     {
       "path": "Packages/SwiftfinScrolling/Sources/SwiftfinScrolling/VisibleScrollOffsetState.swift",
-      "reason": "Main-actor owner privately retains a CurrentValueSubject and publishes immutable CGFloat values. Scoped reads, sticky-label subscription and two native coordinator updates remain unchanged; full coordinator body remains pending. Native contracts cover captured threshold/nonfinite traces, cancellation/current replay and foreign task hopping.",
+      "reason": "VisibleScrollOffsetState.swift: complete current source body and public interface audit. Main-actor borrowed UIKit observations use weak targets, revision-bound delivery, isolated retirement and finite pure centering geometry. Normal KVO delivery stays synchronous under recursion guards and foreign delivery reads on the UI actor. EPG synchronization now checks its observation generation before each follower update, stopping a captured loop after reentrant disconnect/replacement; native delegates are not replaced. Listed consumers are scoped reviewed boundaries; whole-graph/runtime acceptance remains required.",
       "reviewedConsumers": [
         "Shared/Components/EPG/Body/Components/EPGScrollState.swift",
         "Shared/Components/EPG/Body/Components/EPGProgramCell.swift",
-        "Shared/Components/EPG/Body/EPGCollectionView.swift"
+        "Shared/Components/EPG/Body/EPGCollectionView.swift",
+        "Shared/Extensions/ViewExtensions/Modifiers/ScrollViewOffsetModifier.swift"
       ],
       "reviewedInterfaces": [
-        "init()",
-        "visibleLeadingOffset",
-        "visibleLeadingOffsetPublisher",
-        "update(visibleLeadingOffset:)"
+        "@MainActor final class VisibleScrollOffsetState",
+        "@MainActor func update(visibleLeadingOffset: CGFloat)",
+        "@MainActor init()",
+        "@MainActor var visibleLeadingOffset: CGFloat { get }",
+        "@MainActor var visibleLeadingOffsetPublisher: AnyPublisher<CGFloat, Never> { get }"
       ],
       "sha256": "1a16714868e08380a4f2bd2242239661868ced0cd7f5b214e813d295fed6b52a"
     },
@@ -6145,15 +6196,42 @@
     },
     {
       "path": "Packages/SwiftfinServerOperations/Sources/SwiftfinServerOperations/ServerOperationsClient.swift",
-      "reason": "The small main-actor checkBinding method forwards existing executor authority for caller UI publication checkpoints; all server request construction remains private to this owner. No additional request, SDK object escape or server action.",
+      "reason": "ServerOperationsClient.swift: complete current source body and public interface audit. Typed server administration, diagnostics, key/device/task/session controls share one captured authenticated executor and preserve current-device exclusion and acknowledged partial effects. Pure policies own filtering, sorting and trigger/session selection. Credential-bearing log URLs remain an explicitly sensitive download boundary; no server operation was executed by this review. Listed consumers are scoped reviewed boundaries; whole-graph/runtime acceptance remains required.",
       "reviewedConsumers": [
         "Shared/ViewModels/AdminDashboard/APIKeysViewModel.swift",
-        "Shared/ViewModels/AdminDashboard/ServerActivityDetailViewModel.swift"
+        "Shared/ViewModels/AdminDashboard/ServerActivityDetailViewModel.swift",
+        "Shared/ViewModels/ViewModel.swift",
+        "Shared/ViewModels/AdminDashboard/Sessions/SessionViewModel.swift"
       ],
       "reviewedInterfaces": [
-        "createKeyAndReload(name:)",
-        "replaceKey(name:token:didRevoke:)",
-        "checkBinding()"
+        "@MainActor final class ServerOperationsClient",
+        "@MainActor func activity(offset: Int, limit: Int, hasUserID: Bool?, minimumDate: Date?) async throws -> [ActivityLogEntry]",
+        "@MainActor func activityItem(id: String) async throws -> BaseItemDto",
+        "@MainActor func backups() async throws -> [BackupManifestDto]",
+        "@MainActor func checkBinding() throws",
+        "@MainActor func createBackup(options: BackupOptionsDto) async throws -> BackupManifestDto",
+        "@MainActor func createKey(name: String) async throws",
+        "@MainActor func createKeyAndReload(name: String) async throws -> [AuthenticationInfo]?",
+        "@MainActor func devices() async throws -> [DeviceInfoDto]?",
+        "@MainActor func general(sessionID: String, command: GeneralCommandType) async throws",
+        "@MainActor func keys() async throws -> [AuthenticationInfo]?",
+        "@MainActor func logs() async throws -> [LogFile]",
+        "@MainActor func message(sessionID: String, command: MessageCommand) async throws",
+        "@MainActor func play(sessionID: String, command: PlayCommand, itemIDs: [String], position: Int?, mediaSourceID: String?, audioIndex: Int?, subtitleIndex: Int?, startIndex: Int?) async throws",
+        "@MainActor func playstate(sessionID: String, command: PlaystateCommand, position: Int?) async throws",
+        "@MainActor func replaceKey(name: String, token: String, didRevoke: @MainActor @Sendable () -> Void) async throws -> [AuthenticationInfo]?",
+        "@MainActor func restart() async throws",
+        "@MainActor func restoreBackup(path: String) async throws",
+        "@MainActor func revokeKey(token: String) async throws",
+        "@MainActor func sessions(activeWithinSeconds: Int?) async throws -> [SessionInfoDto]",
+        "@MainActor func shutdown() async throws",
+        "@MainActor func startTask(id: String) async throws",
+        "@MainActor func stopTask(id: String) async throws",
+        "@MainActor func tasks() async throws -> [TaskInfo]",
+        "@MainActor func updateDevice(id: String, options: DeviceOptionsDto) async throws",
+        "@MainActor func updateTriggers(id: String, triggers: [TaskTriggerInfo]) async throws",
+        "@MainActor init(executor: AuthenticatedRequestExecutor, deviceID: String)",
+        "@discardableResult @MainActor func deleteDevices(ids: Set<String>) async throws -> Set<String>"
       ],
       "sha256": "7d92a5520a11e1e22557a9538cdf88077acbbf02ae10f189cf4cd353442d99ed"
     },
@@ -6318,18 +6396,19 @@
     },
     {
       "path": "Packages/SwiftfinSessions/Sources/SwiftfinSessions/SessionMetadataRefresh.swift",
-      "reason": "Bounded process-local freshness keyed by immutable account/binding IDs, main-actor Sendable clock/currentness/checkpoint/operation/receipts, one private LatestRequest and weak owner lifetime. Cancellation/replacement/coalescing/reentry reject obsolete effects only when operations checkpoint before commits; no transaction/undo or public task handles. Fourteen synthetic contracts include separately reproduced expiry/coalescing failures. Adds the one-way Sessions to AsyncStreams edge without native resource/SDK/credential/global dependencies. Full session intent sequencing remains outside this API.",
+      "reason": "SessionMetadataRefresh.swift: complete current source body and public interface audit. Main-actor lifecycle resources and selection/refresh owners detach retired state before callbacks, check generation around suspension/publication, and stop only resources belonging to their own attempt. Explicit intent supersedes restoration; scoped freshness does not trust the legacy global stamp. Accepted host effects are not represented as reversible transactions. Listed consumers are scoped reviewed boundaries; whole-graph/runtime acceptance remains required.",
       "reviewedConsumers": [
         "Shared/Services/UserSession/UserSessionManager.swift",
         "Shared/SwiftfinStore/SwiftfinStore+ServerState.swift",
-        "Shared/SwiftfinStore/SwiftinStore+UserState.swift"
+        "Shared/SwiftfinStore/SwiftinStore+UserState.swift",
+        "Shared/Services/UserSession/UserSession.swift"
       ],
       "reviewedInterfaces": [
-        "SessionMetadataRefresh.init(maximumAge:capacity:now:)",
-        "SessionMetadataRefresh.request(scope:force:isCurrent:operation:didRefresh:didFail:)",
-        "SessionMetadataRefresh.Checkpoint",
-        "SessionMetadataRefresh.cancel()",
-        "isolated deinit"
+        "@MainActor final class SessionMetadataRefresh<Scope> where Scope : Hashable, Scope : Sendable",
+        "@MainActor func cancel()",
+        "@MainActor init(maximumAge: TimeInterval = 24 * 60 * 60, capacity: Int = 16, now: @escaping @MainActor @Sendable () -> Date = { .now })",
+        "@discardableResult @MainActor func request(scope: Scope, force: Bool = false, isCurrent: @escaping @MainActor @Sendable () -> Bool, operation: @escaping @MainActor @Sendable (@escaping SessionMetadataRefresh<Scope>.Checkpoint) async throws -> Void, didRefresh: @escaping @MainActor @Sendable (Date) -> Void = { _ in }, didFail: @escaping @MainActor @Sendable (any Error) -> Void = { _ in }) -> Bool",
+        "typealias Checkpoint = @MainActor @Sendable () throws -> Void"
       ],
       "sha256": "cebadfb475bb9ddad2ab14ef8d1b8d7655601d8160e76b196d2e5e50a74094c8"
     },
@@ -6455,17 +6534,32 @@
     },
     {
       "path": "Packages/SwiftfinSessions/Sources/SwiftfinSessions/SessionLifecycle.swift",
-      "reason": "Checked scoped publication adds a borrowed escaping main-actor Sendable checkpoint between host effects, while preserving the existing two-argument publisher adapter. Account identity is Hashable over exact server/user. Active-session preflight/resource cleanup behavior remains; publication effects are not transactional rollback.",
+      "reason": "SessionLifecycle.swift: complete current source body and public interface audit. Main-actor lifecycle resources and selection/refresh owners detach retired state before callbacks, check generation around suspension/publication, and stop only resources belonging to their own attempt. Explicit intent supersedes restoration; scoped freshness does not trust the legacy global stamp. Accepted host effects are not represented as reversible transactions. Listed consumers are scoped reviewed boundaries; whole-graph/runtime acceptance remains required.",
       "reviewedConsumers": [
         "Shared/Services/UserSession/UserSessionManager.swift",
-        "Shared/Coordinators/Root/UserSessionRootView.swift"
+        "Shared/Coordinators/Root/UserSessionRootView.swift",
+        "Shared/Services/UserSession/UserSession.swift"
       ],
       "reviewedInterfaces": [
-        "ActiveSessionCoordinator.replace(with:validate:)",
-        "ActiveSessionCoordinator.stop()",
-        "AccountSessionIdentity",
-        "ActiveSessionCoordinator.init(publishScoped:)",
-        "replace(with:validate:)"
+        "@MainActor final class ActiveSessionCoordinator<Session> where Session : AccountSessionLifecycle",
+        "@MainActor final class SessionLifecycle",
+        "@MainActor func prepare() async",
+        "@MainActor func replace(with replacement: Session?) async",
+        "@MainActor func replace(with replacement: Session?, validate: @escaping ActiveSessionCoordinator<Session>.Checkpoint) async throws",
+        "@MainActor func start()",
+        "@MainActor func stop()",
+        "@MainActor init(publish: @escaping @MainActor @Sendable (Session?, Bool) -> Void)",
+        "@MainActor init(publishScoped: @escaping @MainActor @Sendable (Session?, Bool, ActiveSessionCoordinator<Session>.Checkpoint) throws -> Void)",
+        "@MainActor init(resources: [any SessionResource])",
+        "@MainActor protocol AccountSessionLifecycle : AnyObject",
+        "@MainActor protocol SessionResource : AnyObject",
+        "@MainActor var current: Session? { get }",
+        "@MainActor var sessionIdentity: AccountSessionIdentity { get }",
+        "init(serverID: String, userID: String)",
+        "let serverID: String",
+        "let userID: String",
+        "struct AccountSessionIdentity",
+        "typealias Checkpoint = @MainActor @Sendable () throws -> Void"
       ],
       "sha256": "47c442729df8ba57269237cf30c02d00d81d81d5f0b33d7b5bf5f943abd832dd"
     },
@@ -6612,50 +6706,74 @@
     },
     {
       "path": "Packages/SwiftfinUserAdministration/Sources/SwiftfinUserAdministration/UserAdministrationClient.swift",
-      "reason": "Scoped factory review: configuration writer binds an explicit selected user or defaults to immutable authenticated user; predecessor transfers only ordering, never account authority. Administrative target factory checks original executor before binding a nonempty immutable selected ID. Existing endpoint APIs are unchanged; complete original administration API review remains separate.",
+      "reason": "UserAdministrationClient.swift: complete current source body and public interface audit. User policy/profile/configuration commands retain an explicit selected target and captured account executor. Serial target writes read a fresh matching profile, shared configuration writers retain predecessors until actual completion, and per-intent callbacks reject stale/reentrant publication. Self-deletion exclusion and nontransactional accepted effects remain unchanged. Listed consumers are scoped reviewed boundaries; whole-graph/runtime acceptance remains required.",
       "reviewedConsumers": [
         "Shared/Services/UserSession/UserSession+ItemMetadata.swift",
-        "Shared/ViewModels/AdminDashboard/Users/ServerUserAdminViewModel.swift"
+        "Shared/ViewModels/AdminDashboard/Users/ServerUserAdminViewModel.swift",
+        "Shared/ViewModels/ViewModel.swift",
+        "Shared/Views/VideoPlayer/Components/Toolbar/ActionButtons/AutoPlayActionButton.swift"
       ],
       "reviewedInterfaces": [
-        "configurationUpdates(userID:after:)",
-        "target(userID:)"
+        "@MainActor final class UserAdministrationClient",
+        "@MainActor func checkBinding() throws",
+        "@MainActor func configurationUpdates(userID: String? = nil, after previous: UserConfigurationUpdates? = nil) -> UserConfigurationUpdates",
+        "@MainActor func create(name: String, password: String) async throws -> UserDto",
+        "@MainActor func deleteImage(userID: String) async throws",
+        "@MainActor func libraries(isHidden: Bool?) async throws -> [BaseItemDto]",
+        "@MainActor func target(userID: String) throws -> UserAdministrationTarget",
+        "@MainActor func updateConfiguration(id: String, configuration: UserConfiguration) async throws",
+        "@MainActor func updatePolicy(id: String, policy: UserPolicy) async throws",
+        "@MainActor func updateUser(id: String, user: UserDto) async throws",
+        "@MainActor func uploadImage(userID: String, data: Data, contentType: String) async throws",
+        "@MainActor func user(id: String) async throws -> UserDto",
+        "@MainActor func users(isHidden: Bool? = nil, isDisabled: Bool? = nil) async throws -> [UserDto]",
+        "@MainActor init(executor: AuthenticatedRequestExecutor, currentUserID: String)",
+        "@MainActor static func filterValue(_ enabled: Bool) -> Bool?",
+        "@MainActor static func sortedUsers(_ users: [UserDto]) -> [UserDto]",
+        "@discardableResult @MainActor func deleteUsers(ids: [String]) async throws -> Set<String>"
       ],
       "sha256": "8b374ce2648243b937214109b48ac2d62632124bb32a3dddcd6b71dd451be59a"
     },
     {
       "path": "Packages/SwiftfinUserAdministration/Sources/SwiftfinUserAdministration/UserConfigurationUpdates.swift",
-      "reason": "Complete MainActor writer and public API reviewed. Generalized account configuration owner retains fixed client/user, copied submitted DTO, synchronous guarded admission and latest UUID, drains accepted predecessors and coalesces queued intent. Current-only failure/completion callbacks are cleared before publication; cancellation retains the predecessor handle. Settings and Auto Play use the same session owner. Existing nine regressions remain plus shared-field/order and current-completion contracts; no remote rollback or transactional behavior with unrelated administrative API callers is claimed.",
+      "reason": "UserConfigurationUpdates.swift: complete current source body and public interface audit. User policy/profile/configuration commands retain an explicit selected target and captured account executor. Serial target writes read a fresh matching profile, shared configuration writers retain predecessors until actual completion, and per-intent callbacks reject stale/reentrant publication. Self-deletion exclusion and nontransactional accepted effects remain unchanged. Listed consumers are scoped reviewed boundaries; whole-graph/runtime acceptance remains required.",
       "reviewedConsumers": [
         "Shared/Services/UserSession/UserSession.swift",
         "Shared/Services/UserSession/UserSession+ItemMetadata.swift",
         "Shared/Views/VideoPlayer/Components/Toolbar/ActionButtons/AutoPlayActionButton.swift",
-        "Shared/ViewModels/AdminDashboard/Users/ServerUserAdminViewModel.swift"
+        "Shared/ViewModels/AdminDashboard/Users/ServerUserAdminViewModel.swift",
+        "Shared/ViewModels/ViewModel.swift"
       ],
       "reviewedInterfaces": [
-        "toggle(from:validate:willSubmit:failure:)",
-        "submit(_:validate:willSubmit:failure:completion:)",
-        "cancel()",
-        "waitUntilFinished()",
-        "Checkpoint",
-        "Failure"
+        "@MainActor final class UserConfigurationUpdates",
+        "@MainActor func cancel()",
+        "@MainActor func submit(_ updated: UserConfiguration, validate: @escaping UserConfigurationUpdates.Checkpoint = {}, willSubmit: @MainActor @Sendable (UserConfiguration) -> Void = { _ in }, failure: @escaping UserConfigurationUpdates.Failure = { _ in }, completion: @escaping @MainActor @Sendable () -> Void = {}) throws",
+        "@MainActor func waitUntilFinished() async",
+        "@discardableResult @MainActor func toggle(from configuration: UserConfiguration, validate: @escaping UserConfigurationUpdates.Checkpoint = {}, willSubmit: @MainActor @Sendable (UserConfiguration) -> Void = { _ in }, failure: @escaping UserConfigurationUpdates.Failure = { _ in }) throws -> Bool",
+        "typealias Checkpoint = @MainActor @Sendable () throws -> Void",
+        "typealias Failure = @MainActor @Sendable (any Error) -> Void"
       ],
       "sha256": "b3aa726adc56436a46e3c621bac3eedc12d6db9fed877ec0008422033de2bd3c"
     },
     {
       "path": "Packages/SwiftfinUserAdministration/Sources/SwiftfinUserAdministration/UserAdministrationTarget.swift",
-      "reason": "Complete immutable selected-user owner/API reviewed. Reads reject mismatched returned user identity. Serial write handles preserve an accepted noncooperative predecessor across cancellation; retired queued work checks cancellation/binding before I/O. Rename reads the latest selected profile only after preceding writes drain and verifies identity before sending the copied profile. Policy and rename never resolve new current-session authority. Five synthetic target regressions cover missing/retired admission, exact selected target, protected sibling profile, cancellation/order, account replacement and mismatched read identity. This owner does not change server permissions or media.",
+      "reason": "UserAdministrationTarget.swift: complete current source body and public interface audit. User policy/profile/configuration commands retain an explicit selected target and captured account executor. Serial target writes read a fresh matching profile, shared configuration writers retain predecessors until actual completion, and per-intent callbacks reject stale/reentrant publication. Self-deletion exclusion and nontransactional accepted effects remain unchanged. Listed consumers are scoped reviewed boundaries; whole-graph/runtime acceptance remains required.",
       "reviewedConsumers": [
-        "Shared/ViewModels/AdminDashboard/Users/ServerUserAdminViewModel.swift"
+        "Shared/ViewModels/AdminDashboard/Users/ServerUserAdminViewModel.swift",
+        "Shared/ViewModels/ViewModel.swift",
+        "Shared/Services/UserSession/UserSession+ItemMetadata.swift",
+        "Shared/Views/VideoPlayer/Components/Toolbar/ActionButtons/AutoPlayActionButton.swift"
       ],
       "reviewedInterfaces": [
-        "userID",
-        "TargetError",
-        "checkBinding()",
-        "user()",
-        "libraries(isHidden:)",
-        "updatePolicy(_:)",
-        "updateUsername(_:)"
+        "@MainActor final class UserAdministrationTarget",
+        "@MainActor func checkBinding() throws",
+        "@MainActor func libraries(isHidden: Bool?) async throws -> [BaseItemDto]",
+        "@MainActor func updatePolicy(_ policy: UserPolicy) async throws",
+        "@MainActor func updateUsername(_ username: String) async throws",
+        "@MainActor func user() async throws -> UserDto",
+        "@MainActor let userID: String",
+        "case missingUserID",
+        "enum TargetError"
       ],
       "sha256": "d53a941083b6dd3fd85cbd05de3ba60d29ffe58e4a9aa627ede6db4a504906b9"
     },
@@ -6815,16 +6933,25 @@
     },
     {
       "path": "Packages/SwiftfinRecordingTimers/Sources/SwiftfinRecordingTimers/RecordingTimerEditor.swift",
-      "reason": "Full new editor body reviewed: captured client; serial accepted predecessor drain; cancellation-safe job tail; initial toggle snapshot publication; no-op/missing-ID behavior; accepted command receipt before reload; relevance checks around publication/callbacks and errors. Native notification/local record globals remain caller ports. Six new regressions pass within19 timer tests. Scope does not approve all unrelated controller/native lifetimes.",
+      "reason": "RecordingTimerEditor.swift: complete current source body and public interface audit. A captured account/item editor owns serial command, refresh and reload order with checkpoints surrounding platform callbacks. Typed program/timer/default requests preserve missing-ID exclusions and permission/time checks before creation. Presentation, notifications and admission gates remain in the immutable item view model. Listed consumers are scoped reviewed boundaries; whole-graph/runtime acceptance remains required.",
       "reviewedConsumers": [
         "Shared/ViewModels/RecordingTimerViewModel.swift",
-        "Packages/SwiftfinRecordingTimers/Tests/SwiftfinRecordingTimersTests/RecordingTimerTests.swift"
+        "Packages/SwiftfinRecordingTimers/Tests/SwiftfinRecordingTimersTests/RecordingTimerTests.swift",
+        "Shared/ViewModels/ViewModel.swift"
       ],
       "reviewedInterfaces": [
-        "RecordingTimerEdit",
-        "RecordingTimerEditor.checkBinding()",
-        "refresh(validate:publish:)",
-        "edit(_:validate:publish:changed:)"
+        "@MainActor final class RecordingTimerEditor",
+        "@MainActor func checkBinding() throws",
+        "@MainActor func edit(_ edit: RecordingTimerEdit, validate: @escaping RecordingTimerEditor.Checkpoint = {}, publish: @escaping RecordingTimerEditor.Publish = { _ in }, changed: @escaping @MainActor @Sendable () throws -> Void = {}) async throws",
+        "@MainActor func refresh(validate: @escaping RecordingTimerEditor.Checkpoint = {}, publish: @escaping RecordingTimerEditor.Publish = { _ in }) async throws",
+        "@MainActor init(client: RecordingTimersClient)",
+        "case toggleRecording",
+        "case toggleSeriesRecording",
+        "case update(TimerInfoDto)",
+        "case updateSeries(SeriesTimerInfoDto)",
+        "enum RecordingTimerEdit",
+        "typealias Checkpoint = @MainActor @Sendable () throws -> Void",
+        "typealias Publish = @MainActor @Sendable (RecordingTimerSnapshot) throws -> Void"
       ],
       "sha256": "4d0d214cf1ee1a5d5fb30fe0f38e439d4bf21ea7f3c626806a58f124fb4b57ff"
     },
@@ -6853,18 +6980,28 @@
     },
     {
       "path": "Packages/SwiftfinRecordingTimers/Sources/SwiftfinRecordingTimers/RecordingTimersClient.swift",
-      "reason": "Complete captured recording-client body reviewed as the editor port: account/user/item and permission/time closure; program/timer/series resolution; scheduled filtering and fresh template/permission checks; exact submitted update routes/payloads. Only snapshot equality is added in this batch; inherited policy/DTO behavior is retained and covered by original+new19 synthetic contracts. Real server capability/auth acceptance remains held.",
+      "reason": "RecordingTimersClient.swift: complete current source body and public interface audit. A captured account/item editor owns serial command, refresh and reload order with checkpoints surrounding platform callbacks. Typed program/timer/default requests preserve missing-ID exclusions and permission/time checks before creation. Presentation, notifications and admission gates remain in the immutable item view model. Listed consumers are scoped reviewed boundaries; whole-graph/runtime acceptance remains required.",
       "reviewedConsumers": [
         "Packages/SwiftfinRecordingTimers/Sources/SwiftfinRecordingTimers/RecordingTimerEditor.swift",
-        "Shared/ViewModels/RecordingTimerViewModel.swift"
+        "Shared/ViewModels/RecordingTimerViewModel.swift",
+        "Shared/ViewModels/ViewModel.swift"
       ],
       "reviewedInterfaces": [
-        "RecordingTimerSnapshot Equatable/Sendable",
-        "snapshot()",
-        "toggleRecording(_:)",
-        "toggleSeriesRecording(_:)",
-        "update(_: TimerInfoDto)",
-        "update(_: SeriesTimerInfoDto)"
+        "@MainActor final class RecordingTimersClient",
+        "@MainActor func checkBinding() throws",
+        "@MainActor func snapshot() async throws -> RecordingTimerSnapshot",
+        "@MainActor func update(_ timer: SeriesTimerInfoDto) async throws",
+        "@MainActor func update(_ timer: TimerInfoDto) async throws",
+        "@MainActor init(executor: AuthenticatedRequestExecutor, userID: String, item: BaseItemDto, permission: @escaping @MainActor @Sendable () -> Bool, now: @escaping @MainActor @Sendable () -> Date = { .now })",
+        "@discardableResult @MainActor func toggleRecording(_ state: RecordingTimerSnapshot) async throws -> Bool",
+        "@discardableResult @MainActor func toggleSeriesRecording(_ state: RecordingTimerSnapshot) async throws -> Bool",
+        "enum RecordingTimerPolicy",
+        "init(program: BaseItemDto?, recordingTimer: TimerInfoDto?, seriesRecordingTimer: SeriesTimerInfoDto?)",
+        "let program: BaseItemDto?",
+        "let recordingTimer: TimerInfoDto?",
+        "let seriesRecordingTimer: SeriesTimerInfoDto?",
+        "static func canRecord(_ item: BaseItemDto, permitted: Bool, now: Date) -> Bool",
+        "struct RecordingTimerSnapshot"
       ],
       "sha256": "ac58b16d067086b228e32de629ab8dc74c653e7f3def7e8ae63f3245db149c4f"
     },
@@ -6906,37 +7043,75 @@
     },
     {
       "path": "Packages/SwiftfinSessions/Sources/SwiftfinSessions/SessionSelectionCoordinator.swift",
-      "reviewedInterfaces": [
-        "Priority",
-        "Request.check",
-        "Request.validating(_:)",
-        "init(sessions:)",
-        "begin(priority:validate:)",
-        "cancelPending(_:)",
-        "activate(_:with:prepare:willSelect:didSelect:)"
-      ],
+      "reason": "SessionSelectionCoordinator.swift: complete current source body and public interface audit. Main-actor lifecycle resources and selection/refresh owners detach retired state before callbacks, check generation around suspension/publication, and stop only resources belonging to their own attempt. Explicit intent supersedes restoration; scoped freshness does not trust the legacy global stamp. Accepted host effects are not represented as reversible transactions. Listed consumers are scoped reviewed boundaries; whole-graph/runtime acceptance remains required.",
       "reviewedConsumers": [
         "Shared/Services/UserSession/UserSessionManager.swift",
         "Shared/ViewModels/UserSignInViewModel.swift",
         "Shared/Views/UserSignInView.swift",
-        "Shared/Views/SelectUserView/SelectUserView.swift"
+        "Shared/Views/SelectUserView/SelectUserView.swift",
+        "Shared/Services/UserSession/UserSession.swift"
       ],
-      "reason": "Complete current actor/Sendable API reviewed: opaque owner/generation receipt captures selection before task/prompt scheduling, restoration is denied while explicit work is unfinished, staged validation adds account binding without replacing intent, and request checks surround prepare/persist/resource publication/routing. Matching queued cancellation releases restoration but cannot revoke executing activation through native host disappearance. Late ordinary errors are canceled when their request expires; replay/transfer are denied. Native prompt/settings/storage remain injected host effects and accepted effects are not rolled back.",
+      "reviewedInterfaces": [
+        "@MainActor final class SessionSelectionCoordinator<Session> where Session : AccountSessionLifecycle",
+        "@MainActor func activate(_ request: SessionSelectionCoordinator<Session>.Request, with session: Session?, prepare: @MainActor @Sendable (SessionSelectionCoordinator<Session>.Checkpoint) async throws -> Void = { _ in }, willSelect: @MainActor @Sendable (SessionSelectionCoordinator<Session>.Checkpoint) throws -> Void = { _ in }, didSelect: @MainActor @Sendable (SessionSelectionCoordinator<Session>.Checkpoint) throws -> Void = { _ in }) async throws",
+        "@MainActor func begin(priority: SessionSelectionCoordinator<Session>.Priority, validate: @escaping SessionSelectionCoordinator<Session>.Checkpoint = {}) throws -> SessionSelectionCoordinator<Session>.Request?",
+        "@MainActor func cancelPending(_ request: SessionSelectionCoordinator<Session>.Request)",
+        "@MainActor init(sessions: ActiveSessionCoordinator<Session>)",
+        "case explicit",
+        "case restoration",
+        "enum Priority",
+        "func validating(_ validate: @escaping SessionSelectionCoordinator<Session>.Checkpoint) -> SessionSelectionCoordinator<Session>.Request",
+        "let check: SessionSelectionCoordinator<Session>.Checkpoint",
+        "struct Request",
+        "typealias Checkpoint = AsyncOperationGate.Checkpoint"
+      ],
       "sha256": "df13bf5e6196952bfeb30a62dfe7755222573da649084dcc02710fda259a5cc2"
     },
     {
       "path": "Packages/SwiftfinAccountAccess/Sources/SwiftfinAccountAccess/AccountAccessClient.swift",
-      "reviewedInterfaces": [
-        "splashURL()",
-        "profileURL(userID:imageTag:)"
-      ],
+      "reason": "AccountAccessClient.swift: complete current source body and public interface audit. Captured authentication/request/URL ports own public information, exact returned server/user identity, login options and per-flow Quick Connect polling. Cancellation and binding checks surround suspension and injected callbacks; redirect reconstruction strips credential/query/fragment fields. Credential storage, native authentication and UI admission remain scoped app composition. Listed consumers are scoped reviewed boundaries; whole-graph/runtime acceptance remains required.",
       "reviewedConsumers": [
         "Shared/ViewModels/AdminDashboard/ServerActivityDetailViewModel.swift",
         "Swiftfin/Views/AdminDashboardView/ServerActivity/ServerActivityView/Components/ServerActivityEntry.swift",
         "Shared/ViewModels/AdminDashboard/Users/ServerUsersViewModel.swift",
-        "Swiftfin/Views/AdminDashboardView/ServerUsers/ServerUsersView/Components/ServerUsersRow.swift"
+        "Swiftfin/Views/AdminDashboardView/ServerUsers/ServerUsersView/Components/ServerUsersRow.swift",
+        "Shared/ViewModels/UserSignInViewModel.swift",
+        "Shared/Views/QuickConnectView.swift",
+        "Shared/SwiftfinStore/SwiftfinStore+ServerState.swift",
+        "Shared/SwiftfinStore/SwiftinStore+UserState.swift",
+        "Shared/Services/UserSession/UserSession+ItemMetadata.swift",
+        "Shared/Services/ServerConnectionManager.swift",
+        "Swiftfin tvOS/App/KidsAccountAdapter.swift"
       ],
-      "reason": "Scoped profile/splash construction checks captured account authority before and after resolver callbacks. The server-user list now passes original-client profile sources to its rows rather than combining DTOs with an ambient transport. No HTTP/image/key query executed; transport and existing native contracts are unchanged.",
+      "reviewedInterfaces": [
+        "@MainActor final class AccountAccessClient",
+        "@MainActor func authorizeQuickConnect(code: String, userID: String) async throws -> Bool",
+        "@MainActor func checkBinding() throws",
+        "@MainActor func currentUser(expectedUserID: String) async throws -> UserDto",
+        "@MainActor func loginOptions() async throws -> AccountLoginOptions",
+        "@MainActor func profileURL(userID: String, imageTag: String?) throws -> URL?",
+        "@MainActor func publicInfo(expectedServerID: String? = nil) async throws -> JellyfinResponse<PublicSystemInfo>",
+        "@MainActor func resetPassword(userID: String, current: String, new: String) async throws",
+        "@MainActor func signIn(quickConnectSecret: String) async throws -> AccountAuthentication",
+        "@MainActor func signIn(username: String, password: String, fallbackUsername: String? = nil) async throws -> AccountAuthentication",
+        "@MainActor func splashURL() throws -> URL?",
+        "@MainActor init(transport: any AccountAccessTransport, expectedServerID: String? = nil, isCurrent: @escaping @MainActor @Sendable () -> Bool = { true })",
+        "@MainActor protocol AccountAccessTransport : JellyfinAuthenticating, JellyfinRequestSending, JellyfinURLResolving",
+        "case invalidAuthentication",
+        "case serverIdentityChanged",
+        "case userIdentityChanged",
+        "enum AccountAccessError",
+        "init(_ result: AuthenticationResult, fallbackUsername: String? = nil) throws",
+        "let accessToken: String",
+        "let disclaimer: String?",
+        "let quickConnectEnabled: Bool",
+        "let user: UserDto",
+        "let userID: String",
+        "let username: String",
+        "let users: [UserDto]",
+        "struct AccountAuthentication",
+        "struct AccountLoginOptions"
+      ],
       "sha256": "b1c3ba744f6f8a9d64b52f7a7d08bb146ab9ebe7c08372831cb0293ab1066e65"
     },
     {
@@ -7149,15 +7324,15 @@
     },
     {
       "path": "Packages/KidsArtworkUI/Sources/KidsArtworkUI/KidsArtworkStore.swift",
-      "reason": "Complete main-actor pixel-store body read. Native images and flights stay private, with item/binding checks, shared receipts, byte-owner invalidation and bounded LRU retention. Main-queue memory warning delivery justifies the weak actor assertion; retention generation prevents cancelled memory pressure fills from repopulating cache. Async image preparation rechecks cancellation and validity. Current UIKit/cache execution remains held.",
+      "reason": "KidsArtworkStore.swift: complete current source body and public interface audit. Main-actor prepared-pixel retention is bound to exact catalog authorization and the caller account. Shared flights, TTL/byte/entry limits and retention generations preserve memory-pressure behavior; invalidation denies new/late images immediately and retires the byte cache asynchronously. UIKit pixels and SDK memory-warning subscriptions remain owned by the UI adapter. Listed consumers are scoped reviewed boundaries; whole-graph/runtime acceptance remains required.",
       "reviewedConsumers": [
         "Packages/KidsApplication/Sources/KidsApplication/KidsAppModel.swift"
       ],
       "reviewedInterfaces": [
-        "init(api:binding:)",
-        "init(cache:binding:)",
-        "image(for:binding:width:)",
-        "invalidate()"
+        "@MainActor convenience init(api: KidsAPI, binding: KidsBinding)",
+        "@MainActor final class KidsArtworkStore",
+        "@MainActor func image(for item: KidsItem, binding expected: KidsBinding, width: Int = 600) async throws -> UIImage",
+        "@MainActor func invalidate()"
       ],
       "sha256": "eda35fadc717371b2a98b56c1133ceb0014e480f8298b3c639b931091c390e6e"
     },
@@ -7185,30 +7360,34 @@
     },
     {
       "path": "Packages/SwiftfinScrolling/Sources/SwiftfinScrolling/EPGScrollProxy.swift",
-      "reason": "Complete MainActor native scroll owner read with EPG composition and platform contracts. Weak borrowed scroll targets and private KVO tokens are generation/member checked. Main-thread callbacks remain synchronous for recursion guards; foreign callbacks hop before reading current geometry, never transferring raw KVO objects. Disconnect invalidates both maps. Centering delegates to the pure owner. UIKit KVO tests are compile-only under the hold.",
+      "reason": "EPGScrollProxy.swift: complete current source body and public interface audit. Main-actor borrowed UIKit observations use weak targets, revision-bound delivery, isolated retirement and finite pure centering geometry. Normal KVO delivery stays synchronous under recursion guards and foreign delivery reads on the UI actor. EPG synchronization now checks its observation generation before each follower update, stopping a captured loop after reentrant disconnect/replacement; native delegates are not replaced. Listed consumers are scoped reviewed boundaries; whole-graph/runtime acceptance remains required.",
       "reviewedConsumers": [
-        "Shared/Views/EPGView/EPGContentView.swift"
+        "Shared/Views/EPGView/EPGContentView.swift",
+        "Shared/Extensions/ViewExtensions/Modifiers/ScrollViewOffsetModifier.swift"
       ],
       "reviewedInterfaces": [
-        "init()",
-        "registerContent(_:centeringOn:)",
-        "registerHorizontal(_:)",
-        "registerVertical(_:)",
-        "reset()",
-        "connect()",
-        "disconnect()",
-        "scrollTo(centering:)"
+        "@MainActor final class EPGScrollProxy",
+        "@MainActor func connect()",
+        "@MainActor func disconnect()",
+        "@MainActor func registerContent(_ scrollView: UIScrollView, centeringOn target: CGFloat?)",
+        "@MainActor func registerHorizontal(_ scrollView: UIScrollView)",
+        "@MainActor func registerVertical(_ scrollView: UIScrollView)",
+        "@MainActor func reset()",
+        "@MainActor func scrollTo(centering target: CGFloat)",
+        "@MainActor init()"
       ],
-      "sha256": "d1e2485ef625241c00f3542a655112ecf3b5b7c099775ebf514df55a04423b3c"
+      "sha256": "bd3f60fc298cd87d3366b968b23a0eab61bcc1f9d80def2bfcc6e17b46d6c6dc"
     },
     {
       "path": "Packages/SwiftfinScrolling/Sources/SwiftfinScrolling/ScrollCentering.swift",
-      "reason": "Complete stateless geometry API read. Finite inputs, positive viewport and content larger than viewport are required; output clamps the centered target to scrollable bounds. It has no native handle or global lookup.",
+      "reason": "ScrollCentering.swift: complete current source body and public interface audit. Main-actor borrowed UIKit observations use weak targets, revision-bound delivery, isolated retirement and finite pure centering geometry. Normal KVO delivery stays synchronous under recursion guards and foreign delivery reads on the UI actor. EPG synchronization now checks its observation generation before each follower update, stopping a captured loop after reentrant disconnect/replacement; native delegates are not replaced. Listed consumers are scoped reviewed boundaries; whole-graph/runtime acceptance remains required.",
       "reviewedConsumers": [
-        "Packages/SwiftfinScrolling/Sources/SwiftfinScrolling/EPGScrollProxy.swift"
+        "Packages/SwiftfinScrolling/Sources/SwiftfinScrolling/EPGScrollProxy.swift",
+        "Shared/Extensions/ViewExtensions/Modifiers/ScrollViewOffsetModifier.swift"
       ],
       "reviewedInterfaces": [
-        "offset(target:viewport:content:)"
+        "enum ScrollCentering",
+        "static func offset(target: CGFloat, viewport: CGFloat, content: CGFloat) -> CGFloat?"
       ],
       "sha256": "b246256b1d03a60a14ec7d3ad558ee8e2278d3a58df2a0ecd84f95949134b12c"
     },
@@ -9905,6 +10084,548 @@
         "var writerID: String { get set }"
       ],
       "sha256": "a2cedb4cb4a438334a2f3edaa511e85afc633e7c0ea7fe703009373c5e81b20a"
+    },
+    {
+      "path": "Packages/SwiftfinAccountAccess/Sources/SwiftfinAccountAccess/AccountConnectionPolicy.swift",
+      "reason": "AccountConnectionPolicy.swift: complete current source body and public interface audit. Captured authentication/request/URL ports own public information, exact returned server/user identity, login options and per-flow Quick Connect polling. Cancellation and binding checks surround suspension and injected callbacks; redirect reconstruction strips credential/query/fragment fields. Credential storage, native authentication and UI admission remain scoped app composition. Listed consumers are scoped reviewed boundaries; whole-graph/runtime acceptance remains required.",
+      "reviewedConsumers": [
+        "Shared/ViewModels/UserSignInViewModel.swift",
+        "Shared/Views/QuickConnectView.swift",
+        "Shared/SwiftfinStore/SwiftfinStore+ServerState.swift",
+        "Shared/SwiftfinStore/SwiftinStore+UserState.swift",
+        "Shared/Services/UserSession/UserSession+ItemMetadata.swift",
+        "Shared/Services/ServerConnectionManager.swift",
+        "Swiftfin tvOS/App/KidsAccountAdapter.swift"
+      ],
+      "reviewedInterfaces": [
+        "enum AccountConnectionPolicy",
+        "static func redirectedURL(initial: URL, response: URL?) -> URL"
+      ],
+      "sha256": "f8ac8e5a2eda30e3a126f46216311dd02009a7f0d852d2c71f6855e73ade48a5"
+    },
+    {
+      "path": "Packages/SwiftfinAccountAccess/Sources/SwiftfinAccountAccess/AccountQuickConnect.swift",
+      "reason": "AccountQuickConnect.swift: complete current source body and public interface audit. Captured authentication/request/URL ports own public information, exact returned server/user identity, login options and per-flow Quick Connect polling. Cancellation and binding checks surround suspension and injected callbacks; redirect reconstruction strips credential/query/fragment fields. Credential storage, native authentication and UI admission remain scoped app composition. Listed consumers are scoped reviewed boundaries; whole-graph/runtime acceptance remains required.",
+      "reviewedConsumers": [
+        "Shared/ViewModels/UserSignInViewModel.swift",
+        "Shared/Views/QuickConnectView.swift",
+        "Shared/SwiftfinStore/SwiftfinStore+ServerState.swift",
+        "Shared/SwiftfinStore/SwiftinStore+UserState.swift",
+        "Shared/Services/UserSession/UserSession+ItemMetadata.swift",
+        "Shared/Services/ServerConnectionManager.swift",
+        "Swiftfin tvOS/App/KidsAccountAdapter.swift"
+      ],
+      "reviewedInterfaces": [
+        "@MainActor func quickConnectEvents() -> AsyncThrowingStream<AccountQuickConnectEvent, any Error>",
+        "case authenticated(secret: String)",
+        "case maxPollingHit",
+        "case polling(code: String)",
+        "case retrievingCodeFailed",
+        "enum AccountQuickConnectError",
+        "enum AccountQuickConnectEvent"
+      ],
+      "sha256": "401b10769ef28a3722e21441de70c649423adcd170d174cb626486a7c8f28b81"
+    },
+    {
+      "path": "Packages/SwiftfinConnections/Sources/SwiftfinConnections/ServerConnectionResolver.swift",
+      "reason": "ServerConnectionResolver.swift: complete current source body and public interface audit. Exact server-ID probing consumes immutable endpoint/network snapshots and preserves interface/SSID priority. Cancellation propagates while individual unavailable candidates may fall through; resolution does not write settings or publish sessions. Listed consumers are scoped reviewed boundaries; whole-graph/runtime acceptance remains required.",
+      "reviewedConsumers": [
+        "Shared/Services/ServerConnectionManager.swift"
+      ],
+      "reviewedInterfaces": [
+        "@MainActor enum ServerConnectionResolver",
+        "@MainActor func serverID(at connection: ServerConnection, accessToken: String?) async throws -> String?",
+        "@MainActor protocol ServerConnectionProbing",
+        "@MainActor static func resolve(connections: [ServerConnection], accessToken: String?, expectedServerID: String, context: NetworkConnectionContext, probe: any ServerConnectionProbing) async throws -> ServerConnectionResolution",
+        "@MainActor static func test(connection: ServerConnection, accessToken: String?, expectedServerID: String, probe: any ServerConnectionProbing) async throws",
+        "case connected(ServerConnection)",
+        "case serverMismatch",
+        "case unreachable([ServerConnection])",
+        "enum ServerConnectionProbeError",
+        "enum ServerConnectionResolution"
+      ],
+      "sha256": "74df7d203de5a93524f92f4d2cedea252fb07031d14c2842060904546728db12"
+    },
+    {
+      "path": "Packages/SwiftfinConnectivity/Sources/SwiftfinConnectivity/NetworkConnectivity.swift",
+      "reason": "NetworkConnectivity.swift: complete current source body and public interface audit. Native Network and Wi-Fi implementations stay private to their owner. Receipt-time sequence assignment and lock-protected cancellation transfer only checked immutable snapshots; latest-generation SSID enrichment and weak tasks cannot publish retired paths. Session composition explicitly cancels its observation lease. Listed consumers are scoped reviewed boundaries; whole-graph/runtime acceptance remains required.",
+      "reviewedConsumers": [
+        "Shared/Services/ServerConnectionManager.swift"
+      ],
+      "reviewedInterfaces": [
+        "@MainActor static func current() async -> NetworkConnectionContext",
+        "enum NetworkConnectivity",
+        "static func currentWifiSSID() async -> String?"
+      ],
+      "sha256": "435fff37cf34566d505f01cd70eef75490f44482458291cd9f2d79044af618c9"
+    },
+    {
+      "path": "Packages/SwiftfinConnectivity/Sources/SwiftfinConnectivity/NetworkContextObservation.swift",
+      "reason": "NetworkContextObservation.swift: complete current source body and public interface audit. Native Network and Wi-Fi implementations stay private to their owner. Receipt-time sequence assignment and lock-protected cancellation transfer only checked immutable snapshots; latest-generation SSID enrichment and weak tasks cannot publish retired paths. Session composition explicitly cancels its observation lease. Listed consumers are scoped reviewed boundaries; whole-graph/runtime acceptance remains required.",
+      "reviewedConsumers": [
+        "Shared/Services/ServerConnectionManager.swift"
+      ],
+      "reviewedInterfaces": [
+        "@MainActor convenience init()",
+        "@MainActor final class NetworkContextObservation",
+        "@MainActor func cancel()",
+        "@MainActor let values: AsyncStream<NetworkConnectionContext>"
+      ],
+      "sha256": "30a99a6f7ddf5f9b003a19ca3a67952b1ab1c3484941ffe2a742e173bcf6a372"
+    },
+    {
+      "path": "Packages/SwiftfinConnectivity/Sources/SwiftfinConnectivity/NetworkPathDriver.swift",
+      "reason": "NetworkPathDriver.swift: complete current source body and public interface audit. Native Network and Wi-Fi implementations stay private to their owner. Receipt-time sequence assignment and lock-protected cancellation transfer only checked immutable snapshots; latest-generation SSID enrichment and weak tasks cannot publish retired paths. Session composition explicitly cancels its observation lease. Listed consumers are scoped reviewed boundaries; whole-graph/runtime acceptance remains required.",
+      "reviewedConsumers": [
+        "Shared/Services/ServerConnectionManager.swift"
+      ],
+      "reviewedInterfaces": [],
+      "sha256": "68fc12a273c1a179da9358c5a6e7127586573a2879fbadefe2e8cd770d564623"
+    },
+    {
+      "path": "Packages/SwiftfinServerOperations/Sources/SwiftfinServerOperations/ServerDiagnosticURLPolicy.swift",
+      "reason": "ServerDiagnosticURLPolicy.swift: complete current source body and public interface audit. Typed server administration, diagnostics, key/device/task/session controls share one captured authenticated executor and preserve current-device exclusion and acknowledged partial effects. Pure policies own filtering, sorting and trigger/session selection. Credential-bearing log URLs remain an explicitly sensitive download boundary; no server operation was executed by this review. Listed consumers are scoped reviewed boundaries; whole-graph/runtime acceptance remains required.",
+      "reviewedConsumers": [
+        "Shared/ViewModels/ViewModel.swift",
+        "Shared/ViewModels/AdminDashboard/Sessions/SessionViewModel.swift"
+      ],
+      "reviewedInterfaces": [
+        "@MainActor enum ServerDiagnosticURLPolicy",
+        "@MainActor static func logURL(name: String, using urls: any JellyfinURLResolving) -> URL?"
+      ],
+      "sha256": "9abc9069977a8b5d188a3d4ebaf665d6ab51ebc73f47f2e62d0d8ac964f1eda3"
+    },
+    {
+      "path": "Packages/SwiftfinUserMediaState/Sources/SwiftfinUserMediaState/UserMediaCapabilities.swift",
+      "reason": "UserMediaCapabilities.swift: complete current source body and public interface audit. One account owner serializes played/favorite commands, checks returned item identity and rejects obsolete transport work. Per-field mutation tickets and selective DTO merge preserve newer optimistic state; the app callers now check those tickets after optimistic publication and before/between subsequent effects. Membership/eligibility decisions remain value-only and do not change media or Kids progress schema. Listed consumers are scoped reviewed boundaries; whole-graph/runtime acceptance remains required.",
+      "reviewedConsumers": [
+        "Shared/Services/UserSession/UserSession+ItemMetadata.swift",
+        "Shared/Views/ItemContentGroupView/ItemContentGroupProvider.swift",
+        "Shared/Extensions/JellyfinAPI/BaseItemDto/BaseItemDto+Poster.swift"
+      ],
+      "reviewedInterfaces": [
+        "let canBeFavorited: Bool",
+        "let canBePlayed: Bool",
+        "static func capabilities(for kind: BaseItemKind?) -> UserMediaCapabilities",
+        "struct UserMediaCapabilities"
+      ],
+      "sha256": "4b28b9e94cc15958d4e1b1a68aace15663487de3fafd4bda989aba3e1c0c7242"
+    },
+    {
+      "path": "Packages/SwiftfinUserMediaState/Sources/SwiftfinUserMediaState/UserMediaStateClient.swift",
+      "reason": "UserMediaStateClient.swift: complete current source body and public interface audit. One account owner serializes played/favorite commands, checks returned item identity and rejects obsolete transport work. Per-field mutation tickets and selective DTO merge preserve newer optimistic state; the app callers now check those tickets after optimistic publication and before/between subsequent effects. Membership/eligibility decisions remain value-only and do not change media or Kids progress schema. Listed consumers are scoped reviewed boundaries; whole-graph/runtime acceptance remains required.",
+      "reviewedConsumers": [
+        "Shared/Services/UserSession/UserSession+ItemMetadata.swift",
+        "Shared/Views/ItemContentGroupView/ItemContentGroupProvider.swift",
+        "Shared/Extensions/JellyfinAPI/BaseItemDto/BaseItemDto+Poster.swift"
+      ],
+      "reviewedInterfaces": [
+        "@MainActor final class UserMediaMutationSequence",
+        "@MainActor final class UserMediaStateClient",
+        "@MainActor func accepts(_ ticket: UserMediaMutationSequence.Ticket, currentItemID: String?) -> Bool",
+        "@MainActor func begin(itemID: String, field: UserMediaStateField) -> UserMediaMutationSequence.Ticket",
+        "@MainActor func checkBinding() throws",
+        "@MainActor func invalidate()",
+        "@MainActor func set(_ field: UserMediaStateField, value: Bool, itemID: String) async throws -> UserItemDataDto",
+        "@MainActor init()",
+        "@MainActor init(executor: AuthenticatedRequestExecutor, userID: String)",
+        "case favorite",
+        "case itemIdentityChanged",
+        "case played",
+        "enum UserMediaStateError",
+        "enum UserMediaStateField",
+        "enum UserMediaStatePolicy",
+        "let field: UserMediaStateField",
+        "let itemID: String",
+        "static func merge(_ response: UserItemDataDto, into current: UserItemDataDto?, field: UserMediaStateField) -> UserItemDataDto",
+        "struct Ticket"
+      ],
+      "sha256": "46a04c374e1656095f7de11f521adfcccbe92e9a1423c8f054959cb57b39cf13"
+    },
+    {
+      "path": "Packages/SwiftfinPlaybackReporting/Sources/SwiftfinPlaybackReporting/PlaybackReportQueue.swift",
+      "reason": "PlaybackReportQueue.swift: complete current source body and public interface audit. Immutable playback identity and typed reports retain the original transport, including terminal cleanup after account replacement. Session queue ownership remains in AsyncStreams through a narrow alias; progress observers supply native playback snapshots and end on item replacement. No new global session lookup or server traffic was introduced. Listed consumers are scoped reviewed boundaries; whole-graph/runtime acceptance remains required.",
+      "reviewedConsumers": [
+        "Shared/Objects/MediaPlayerManager/MediaProgressObserver.swift",
+        "Swiftfin tvOS/Kids/KidsMediaProgressObserver.swift"
+      ],
+      "reviewedInterfaces": [
+        "typealias PlaybackReportQueue<Snapshot> = CoalescingSessionQueue<Snapshot> where Snapshot : Sendable"
+      ],
+      "sha256": "eeccaad6c63c5bf5a7dcab33caa661756f928105ecf2fab366b587a39b19b0b9"
+    },
+    {
+      "path": "Packages/SwiftfinPlaybackReporting/Sources/SwiftfinPlaybackReporting/PlaybackReportingClient.swift",
+      "reason": "PlaybackReportingClient.swift: complete current source body and public interface audit. Immutable playback identity and typed reports retain the original transport, including terminal cleanup after account replacement. Session queue ownership remains in AsyncStreams through a narrow alias; progress observers supply native playback snapshots and end on item replacement. No new global session lookup or server traffic was introduced. Listed consumers are scoped reviewed boundaries; whole-graph/runtime acceptance remains required.",
+      "reviewedConsumers": [
+        "Shared/Objects/MediaPlayerManager/MediaProgressObserver.swift",
+        "Swiftfin tvOS/Kids/KidsMediaProgressObserver.swift"
+      ],
+      "reviewedInterfaces": [
+        "@MainActor final class PlaybackReportingClient",
+        "@MainActor func send(_ kind: PlaybackReportQueue<PlaybackStateInfo>.Kind, snapshot: PlaybackStateInfo, delegate: (any URLSessionDataDelegate)? = nil) async throws",
+        "@MainActor init(sender: any JellyfinRequestSending, identity: PlaybackReportIdentity)",
+        "@MainActor let identity: PlaybackReportIdentity",
+        "case identityChanged",
+        "enum PlaybackReportingError",
+        "func accepts(_ snapshot: PlaybackStateInfo) -> Bool",
+        "func snapshot(positionTicks: Int?, audio: Int?, subtitle: Int?, isPaused: Bool? = nil) -> PlaybackStateInfo",
+        "init(itemID: String, mediaSourceID: String?, liveStreamID: String?, playSessionID: String, sessionID: String? = nil, canSeek: Bool? = nil, playMethod: PlayMethod? = nil)",
+        "let canSeek: Bool?",
+        "let itemID: String",
+        "let liveStreamID: String?",
+        "let mediaSourceID: String?",
+        "let playMethod: PlayMethod?",
+        "let playSessionID: String",
+        "let sessionID: String?",
+        "struct PlaybackReportIdentity"
+      ],
+      "sha256": "d331b7f7d1df68978936a221cce2f07d779ffd808ca067dfa1d5b0bda7738379"
+    },
+    {
+      "path": "Packages/KidsDiagnosticsUI/Sources/KidsDiagnosticsUI/KidsPresentationProbe.swift",
+      "reason": "KidsPresentationProbe.swift: complete current source body and public interface audit. A private UIKit display-link adapter reports one main-run-loop presentation opportunity and cancels on dismantling. It neither measures a GPU/photon fence nor adds network requests; native view/link ownership remains on MainActor. Listed consumers are scoped reviewed boundaries; whole-graph/runtime acceptance remains required.",
+      "reviewedConsumers": [
+        "Packages/KidsExperience/Sources/KidsExperience/KidsViews.swift"
+      ],
+      "reviewedInterfaces": [
+        "@MainActor func makeUIView(context: KidsPresentationProbe.Context) -> UIView",
+        "@MainActor func updateUIView(_ uiView: UIView, context: KidsPresentationProbe.Context)",
+        "@MainActor init(span: KidsPerformanceSpan, phase: KidsPerformancePhase)",
+        "@MainActor static func dismantleUIView(_ uiView: UIView, coordinator: ())",
+        "@MainActor struct KidsPresentationProbe"
+      ],
+      "sha256": "4632c2033f8de15afcb8a9be55a0d5e2faee1ea5407a5beb05e44f41510b4209"
+    },
+    {
+      "path": "Packages/SwiftfinAudioSession/Sources/SwiftfinAudioSession/PlaybackAudioSession.swift",
+      "reason": "PlaybackAudioSession.swift: complete current source body and public interface audit. Main-actor UUID leases serialize native activation/deactivation and terminal drain before changing process-wide audio state. Native AVFAudio APIs are private platform adapters; injected closures enable offline contracts without hardware calls. Newer owners prevent an old release from deactivating their session, and failed drains/deactivation retain the existing known-state behavior. Listed consumers are scoped reviewed boundaries; whole-graph/runtime acceptance remains required.",
+      "reviewedConsumers": [
+        "Shared/Objects/MediaPlayerManager/NowPlayable/NowPlayableObserver.swift"
+      ],
+      "reviewedInterfaces": [
+        "@MainActor convenience init()",
+        "@MainActor final class PlaybackAudioSession",
+        "@MainActor func acquire(_ owner: UUID) -> Task<Void, any Error>",
+        "@MainActor func release(_ owner: UUID, after drain: @escaping @MainActor @Sendable () async -> Bool = { true })",
+        "@MainActor func wasInterrupted()",
+        "@MainActor init(activate: @escaping @Sendable () async throws -> Void, deactivate: @escaping @Sendable () async throws -> Void)",
+        "@MainActor static let shared: PlaybackAudioSession"
+      ],
+      "sha256": "f5ad417765d6e15a7801eaada98fc9e0dddc83920ab216dc0a457758897c036c"
+    },
+    {
+      "path": "Packages/SwiftfinLocalization/Sources/SwiftfinLocalization/LocalizationResources.swift",
+      "reason": "LocalizationResources.swift: complete current source body and public interface audit. The immutable string namespace owns package resources and a deterministic, build-only generator. Complete generator/plugin bodies and all formatted signatures were read; every generated/member name and String-only declaration shape was checked against 964 original resource keys and 122 source proper nouns. Failed validation preserves generated output, installed fallbacks and supported format representations. Listed consumers are scoped reviewed boundaries; whole-graph/runtime acceptance remains required.",
+      "reviewedConsumers": [
+        "Packages/SwiftfinLocalization/Tools/LocalizationCodegen/main.swift",
+        "Packages/SwiftfinLocalization/Plugins/GenerateLocalizedStrings/GenerateLocalizedStrings.swift"
+      ],
+      "reviewedInterfaces": [],
+      "sha256": "3547e6b0bf0070881ef79f4410868ce5dd0cb7140d94d09087832139ddf56a2f"
+    },
+    {
+      "path": "Packages/SwiftfinLocalization/Sources/SwiftfinLocalization/ProperNouns.swift",
+      "reason": "ProperNouns.swift: complete current source body and public interface audit. The immutable string namespace owns package resources and a deterministic, build-only generator. Complete generator/plugin bodies and all formatted signatures were read; every generated/member name and String-only declaration shape was checked against 964 original resource keys and 122 source proper nouns. Failed validation preserves generated output, installed fallbacks and supported format representations. Listed consumers are scoped reviewed boundaries; whole-graph/runtime acceptance remains required.",
+      "reviewedConsumers": [
+        "Packages/SwiftfinLocalization/Tools/LocalizationCodegen/main.swift",
+        "Packages/SwiftfinLocalization/Plugins/GenerateLocalizedStrings/GenerateLocalizedStrings.swift"
+      ],
+      "reviewedInterfaces": [
+        "static let aac: String",
+        "static let ac3: String",
+        "static let alac: String",
+        "static let amrNB: String",
+        "static let amrWB: String",
+        "static let android: String",
+        "static let apple: String",
+        "static let ass: String",
+        "static let av1: String",
+        "static let avc: String",
+        "static let avi: String",
+        "static let chrome: String",
+        "static let dirac: String",
+        "static let dolbyVision: String",
+        "static let dts: String",
+        "static let dtsHD: String",
+        "static let dv: String",
+        "static let dvbSubtitle: String",
+        "static let dvbTeletext: String",
+        "static let dvdSubtitle: String",
+        "static let eac3: String",
+        "static let edge: String",
+        "static let edgeChromium: String",
+        "static let eia608: String",
+        "static let ffv1: String",
+        "static let finamp: String",
+        "static let firefox: String",
+        "static let flac: String",
+        "static let flv1: String",
+        "static let flv: String",
+        "static let h261: String",
+        "static let h263: String",
+        "static let h264: String",
+        "static let hdr10: String",
+        "static let hdr10Plus: String",
+        "static let hdr: String",
+        "static let hevc: String",
+        "static let hlg: String",
+        "static let homeAssistant: String",
+        "static let html5: String",
+        "static let iOS: String",
+        "static let iPadOS: String",
+        "static let internetExplorer: String",
+        "static let jellyfin: String",
+        "static let kodi: String",
+        "static let m4v: String",
+        "static let macOS: String",
+        "static let mjpeg: String",
+        "static let mkv: String",
+        "static let mlp2: String",
+        "static let mlp: String",
+        "static let mov: String",
+        "static let mp1: String",
+        "static let mp2: String",
+        "static let mp3: String",
+        "static let mp4: String",
+        "static let mpeg1Video: String",
+        "static let mpeg2Video: String",
+        "static let mpeg4: String",
+        "static let mpeg4TimedText: String",
+        "static let mpegTS: String",
+        "static let mpl2: String",
+        "static let msMpeg4V1: String",
+        "static let msMpeg4V2: String",
+        "static let msMpeg4V3: String",
+        "static let nal: String",
+        "static let nellymoser: String",
+        "static let opera: String",
+        "static let opus: String",
+        "static let pcmALAW: String",
+        "static let pcmBluray: String",
+        "static let pcmDVD: String",
+        "static let pcmMULAW: String",
+        "static let pcmS16BE: String",
+        "static let pcmS16LE: String",
+        "static let pcmS24BE: String",
+        "static let pcmS24LE: String",
+        "static let pcmU8: String",
+        "static let pgsSubtitle: String",
+        "static let phoenixSubtitle: String",
+        "static let playStation: String",
+        "static let proRes: String",
+        "static let realText: String",
+        "static let roku: String",
+        "static let safari: String",
+        "static let samsungTV: String",
+        "static let sdr: String",
+        "static let smi: String",
+        "static let speex: String",
+        "static let srt: String",
+        "static let ssa: String",
+        "static let subViewer1: String",
+        "static let subViewer: String",
+        "static let swiftfin: String",
+        "static let theora: String",
+        "static let threeG2: String",
+        "static let threeGP: String",
+        "static let trueHD: String",
+        "static let ts: String",
+        "static let ttml: String",
+        "static let tvOS: String",
+        "static let txt: String",
+        "static let vPlayer: String",
+        "static let vc1: String",
+        "static let vorbis: String",
+        "static let vp8: String",
+        "static let vp9: String",
+        "static let vvc: String",
+        "static let wavPack: String",
+        "static let webOS: String",
+        "static let webVTT: String",
+        "static let webm: String",
+        "static let windows: String",
+        "static let wmaLossless: String",
+        "static let wmaPro: String",
+        "static let wmaV1: String",
+        "static let wmaV2: String",
+        "static let wmv1: String",
+        "static let wmv2: String",
+        "static let wmv3: String",
+        "static let xbox: String",
+        "static let xsub: String"
+      ],
+      "sha256": "3cf07de830eeed67096e17a192222bdf62731b11517cd7ec5b77fdb92cdd2f24"
+    },
+    {
+      "path": "Packages/KidsDiagnostics/Sources/KidsDiagnostics/KidsPerformance.swift",
+      "reason": "KidsPerformance.swift: complete current source body and public interface audit. Checked Sendable recorder/span owners protect mutable state with native locks and move bounded JSON output to a serial utility queue. Fixed enums, numeric whitelists and finite values prevent arbitrary request/error/native strings from reaching diagnostics; TaskLocal and generated SDK witnesses were inspected. Per-task metrics observe existing requests only; native/hardware/permission queries and profiling launches were not executed. Listed consumers are scoped reviewed boundaries; whole-graph/runtime acceptance remains required.",
+      "reviewedConsumers": [
+        "Swiftfin tvOS/Kids/KidsMediaProgressObserver.swift"
+      ],
+      "reviewedInterfaces": [
+        "case actionsReady",
+        "case ancestors",
+        "case ancestry",
+        "case artwork",
+        "case artworkCache",
+        "case artworkPresented",
+        "case audioActivation",
+        "case audioDeactivation",
+        "case audioOutput",
+        "case authorize",
+        "case authorized",
+        "case av1",
+        "case avcodec",
+        "case avi",
+        "case begin",
+        "case bitrate",
+        "case browsePresented",
+        "case bufferDeadlockPrevented",
+        "case cancelled",
+        "case catalog",
+        "case catalogReady",
+        "case clock",
+        "case controllerReady",
+        "case converterRejected",
+        "case countdown",
+        "case decode",
+        "case decoder",
+        "case decoderRejected",
+        "case decoderUnavailable",
+        "case demux",
+        "case end",
+        "case episodeCache",
+        "case episodeList",
+        "case episodes",
+        "case failure",
+        "case firstClock",
+        "case firstDecode",
+        "case firstInput",
+        "case firstMoviesReady",
+        "case firstShowsReady",
+        "case firstVideoOutput",
+        "case grid",
+        "case h264",
+        "case hardwareProbeRejected",
+        "case hevc",
+        "case http",
+        "case imageConstructed",
+        "case imagePublished",
+        "case itemDetails",
+        "case itemSelected",
+        "case items",
+        "case launch",
+        "case libraries",
+        "case managerStart",
+        "case metadata",
+        "case missingDrawable",
+        "case movie",
+        "case movies",
+        "case moviesReady",
+        "case mpeg2",
+        "case mpeg4",
+        "case nativeDiagnostic",
+        "case network",
+        "case observationTimeout",
+        "case once",
+        "case ordered",
+        "case other",
+        "case playback",
+        "case playbackBegan",
+        "case playbackInfo",
+        "case playbackProgress",
+        "case playbackReport",
+        "case playbackStart",
+        "case playbackStop",
+        "case playerDrain",
+        "case playerError",
+        "case playerSurfacePresented",
+        "case policy",
+        "case prefetch",
+        "case provider",
+        "case providerReady",
+        "case response",
+        "case resumeSeek",
+        "case serverInfo",
+        "case shows",
+        "case showsReady",
+        "case shuffle",
+        "case storeLoad",
+        "case storeOpen",
+        "case storeSave",
+        "case success",
+        "case title",
+        "case titleSelected",
+        "case unknown",
+        "case userPolicy",
+        "case vc1",
+        "case videoOutput",
+        "case videoOutputRejected",
+        "case videotoolbox",
+        "case vlcBuffering",
+        "case vlcOpen",
+        "case vlcOpenReturned",
+        "case vlcOpening",
+        "case vlcPlaying",
+        "case vp8",
+        "case vp9",
+        "case window",
+        "case windowProviderRejected",
+        "enum KidsNativeDiagnostic",
+        "enum KidsNativeModule",
+        "enum KidsPerformance",
+        "enum KidsPerformanceCodec",
+        "enum KidsPerformanceEndpoint",
+        "enum KidsPerformanceOperation",
+        "enum KidsPerformanceOutcome",
+        "enum KidsPerformancePhase",
+        "enum KidsPerformanceVariant",
+        "final class KidsPerformanceRecorder",
+        "final class KidsPerformanceSpan",
+        "final class KidsPerformanceTaskDelegate",
+        "func begin(_ operation: KidsPerformanceOperation, variant: KidsPerformanceVariant = .unknown, endpoint: KidsPerformanceEndpoint? = nil, parent: KidsPerformanceSpan? = nil, values: [String : Double] = [:]) -> KidsPerformanceSpan?",
+        "func finish(_ outcome: KidsPerformanceOutcome = .success, values: [String : Double] = [:])",
+        "func finish(error: any Error)",
+        "func flush()",
+        "func mark(_ phase: KidsPerformancePhase, outcome: KidsPerformanceOutcome? = nil, values: [String : Double] = [:])",
+        "func once(_ phase: KidsPerformancePhase, values: [String : Double] = [:])",
+        "func urlSession(_ session: URLSession, task: URLSessionTask, didFinishCollecting metrics: URLSessionTaskMetrics)",
+        "init(_ name: String?)",
+        "init(enabled: Bool, directory: URL? = nil, maxBytes: Int = 8 * 1024 * 1024, sink: (@Sendable (KidsPerformanceEvent) -> Void)? = nil)",
+        "init(message: String)",
+        "init(rawValue: Int)",
+        "init(span: KidsPerformanceSpan)",
+        "let elapsedMS: Double",
+        "let enabled: Bool",
+        "let endpoint: KidsPerformanceEndpoint?",
+        "let fileURL: URL?",
+        "let id: String",
+        "let operation: KidsPerformanceOperation",
+        "let outcome: KidsPerformanceOutcome?",
+        "let parentID: String?",
+        "let phase: KidsPerformancePhase",
+        "let rawValue: Int",
+        "let runID: String",
+        "let traceID: String",
+        "let unixMS: Double",
+        "let uptimeMS: Double",
+        "let values: [String : Double]",
+        "let variant: KidsPerformanceVariant",
+        "static func begin(_ operation: KidsPerformanceOperation, variant: KidsPerformanceVariant = .unknown, endpoint: KidsPerformanceEndpoint? = nil, values: [String : Double] = [:]) -> KidsPerformanceSpan?",
+        "static let allocation: KidsNativeContext",
+        "static let codec: KidsNativeContext",
+        "static let format: KidsNativeContext",
+        "static let hardware: KidsNativeContext",
+        "static let launch: KidsPerformanceSpan?",
+        "static let output: KidsNativeContext",
+        "static let recorder: KidsPerformanceRecorder",
+        "static let timestamp: KidsNativeContext",
+        "static var current: KidsPerformanceSpan? { get }",
+        "struct KidsNativeContext",
+        "struct KidsPerformanceEvent"
+      ],
+      "sha256": "c9b50c3f5d3c4f1c3712c616d0fce9c41b77863ce113df2d2ace0704ef5d62fa"
     }
   ],
   "limits": "This ledger records bodies explicitly reviewed, with exact current hashes; earlier prose or lexical inventory is not automatically promoted. Pending and mixed entries prevent whole-source completion. Retained UI algorithms have specific presentation reasons, not folder/import-based blanket approval. API entries do not classify the rest of the public graph. Source review and offline tests do not satisfy held runtime acceptance.",
@@ -9915,7 +10636,7 @@
     "classification": {
       "source-reviewed-retained": 664
     },
-    "currentAPIReviews": 199,
+    "currentAPIReviews": 215,
     "runtimeAcceptance": "held by human; no simulator/server testing"
   },
   "packageReviews": [
@@ -10381,6 +11102,332 @@
         {
           "file": "KidsPersistence.symbols.json",
           "sha256": "7c5fa00c460cedad2625e9f7f16f67d22ad645ace6ff80cd5ceea4473354fb22"
+        }
+      ],
+      "sourceReview": "complete current source and public declarations",
+      "consumerReview": "scoped listed boundaries; remaining whole-graph review required",
+      "runtimeAcceptance": "held by human"
+    },
+    {
+      "module": "SwiftfinAccountAccess",
+      "manifestSHA256": "d48e3aab856702b1cadc75e9a2c9f9b1cf1e62967f8aed4592bca5bb6d361dcd",
+      "sourceBodiesRead": 4,
+      "compilerPublicSymbols": 43,
+      "compilerPlatform": "macOS14; app platform compilation separate",
+      "compilerGraphs": [
+        {
+          "file": "SwiftfinAccountAccess.symbols.json",
+          "sha256": "30c62be0b060eed9c8c8d443d27ff63bc19cc8c1522c8bb4e41b68a6580d3641"
+        },
+        {
+          "file": "SwiftfinAccountAccess@SwiftfinNetworking.symbols.json",
+          "sha256": "cd9051eae3646503c2f7df15240a46eb818c4b58df38a04f970f841c28dfe2bc"
+        }
+      ],
+      "sourceReview": "complete current source and public declarations",
+      "consumerReview": "scoped listed boundaries; remaining whole-graph review required",
+      "runtimeAcceptance": "held by human"
+    },
+    {
+      "module": "SwiftfinSessions",
+      "manifestSHA256": "396d71f34ae9c40be7611ee849aa3f5cb067bf53628473a876ae32ed3d20a522",
+      "sourceBodiesRead": 3,
+      "compilerPublicSymbols": 43,
+      "compilerPlatform": "macOS14; app platform compilation separate",
+      "compilerGraphs": [
+        {
+          "file": "SwiftfinSessions.symbols.json",
+          "sha256": "4097b1aae200d598d1406c2719c92a7978ba6c2acb777932243501a123e1c15c"
+        }
+      ],
+      "sourceReview": "complete current source and public declarations",
+      "consumerReview": "scoped listed boundaries; remaining whole-graph review required",
+      "runtimeAcceptance": "held by human"
+    },
+    {
+      "module": "SwiftfinConnections",
+      "manifestSHA256": "978e78c4c2458949f7ef187bb4711377019b2ceab1c0a567dc759ecb1082dde2",
+      "sourceBodiesRead": 1,
+      "compilerPublicSymbols": 10,
+      "compilerPlatform": "macOS14; app platform compilation separate",
+      "compilerGraphs": [
+        {
+          "file": "SwiftfinConnections.symbols.json",
+          "sha256": "81d3be9342b2d6f39376db0ba89786dde61d619d84a7bd69ee7141b651daaa20"
+        }
+      ],
+      "sourceReview": "complete current source and public declarations",
+      "consumerReview": "scoped listed boundaries; remaining whole-graph review required",
+      "runtimeAcceptance": "held by human"
+    },
+    {
+      "module": "SwiftfinConnectivity",
+      "manifestSHA256": "01960b1ba1448dd8055603635521db6ab8f58ef49c70fd30721911eedd5e2410",
+      "sourceBodiesRead": 3,
+      "compilerPublicSymbols": 7,
+      "compilerPlatform": "macOS14; app platform compilation separate",
+      "compilerGraphs": [
+        {
+          "file": "SwiftfinConnectivity.symbols.json",
+          "sha256": "b7e66e533db8941c62823ab019a032cda80ec878f11f220e336322b87b97ce8b"
+        }
+      ],
+      "sourceReview": "complete current source and public declarations",
+      "consumerReview": "scoped listed boundaries; remaining whole-graph review required",
+      "runtimeAcceptance": "held by human"
+    },
+    {
+      "module": "SwiftfinServerOperations",
+      "manifestSHA256": "b224d469f15b89c2f44ec59d5daccbe193a4d3e776da7db84127ba474ef73306",
+      "sourceBodiesRead": 4,
+      "compilerPublicSymbols": 52,
+      "compilerPlatform": "macOS14; app platform compilation separate",
+      "compilerGraphs": [
+        {
+          "file": "SwiftfinServerOperations.symbols.json",
+          "sha256": "c118ec452b2bb812dd7d3b7c5a7665efc801736938c51597a2135929dd548183"
+        }
+      ],
+      "sourceReview": "complete current source and public declarations",
+      "consumerReview": "scoped listed boundaries; remaining whole-graph review required",
+      "runtimeAcceptance": "held by human"
+    },
+    {
+      "module": "SwiftfinUserAdministration",
+      "manifestSHA256": "d2041ef6bdaf143156d7087aef16a7b66ea441d411c6888838cb0cfe1e1f4623",
+      "sourceBodiesRead": 3,
+      "compilerPublicSymbols": 33,
+      "compilerPlatform": "macOS14; app platform compilation separate",
+      "compilerGraphs": [
+        {
+          "file": "SwiftfinUserAdministration.symbols.json",
+          "sha256": "b2b59135274696fa4b7833bb003598cb8b26f6d3cd1dad1489c6f9edbe091f08"
+        }
+      ],
+      "sourceReview": "complete current source and public declarations",
+      "consumerReview": "scoped listed boundaries; remaining whole-graph review required",
+      "runtimeAcceptance": "held by human"
+    },
+    {
+      "module": "SwiftfinUserMediaState",
+      "manifestSHA256": "4eba561d39e07e56fac7640aaf3221392255bb071bb2bc1106b8acca2e348b24",
+      "sourceBodiesRead": 3,
+      "compilerPublicSymbols": 29,
+      "compilerPlatform": "macOS14; app platform compilation separate",
+      "compilerGraphs": [
+        {
+          "file": "SwiftfinUserMediaState.symbols.json",
+          "sha256": "58ce0a0f0dc4535fa2bd37dac09a04bbdc989a1651ed15eafd7afeea127ca707"
+        }
+      ],
+      "sourceReview": "complete current source and public declarations",
+      "consumerReview": "scoped listed boundaries; remaining whole-graph review required",
+      "runtimeAcceptance": "held by human"
+    },
+    {
+      "module": "SwiftfinRecordingTimers",
+      "manifestSHA256": "3b2f6c2117d852f74e1097b583287b8d8e0d38b3cbf58c84bc12e94433dfa31f",
+      "sourceBodiesRead": 2,
+      "compilerPublicSymbols": 27,
+      "compilerPlatform": "macOS14; app platform compilation separate",
+      "compilerGraphs": [
+        {
+          "file": "SwiftfinRecordingTimers.symbols.json",
+          "sha256": "b2177a2e8da0bbc532c9d26f09623c51a63b5f4f2c3bb7bed8840a7a1e944b81"
+        }
+      ],
+      "sourceReview": "complete current source and public declarations",
+      "consumerReview": "scoped listed boundaries; remaining whole-graph review required",
+      "runtimeAcceptance": "held by human"
+    },
+    {
+      "module": "SwiftfinTime",
+      "manifestSHA256": "9c9b1308c3aa45f35ae0923bb37ef334f0fc9122a8ebfd2857b2eb4314de4490",
+      "sourceBodiesRead": 2,
+      "compilerPublicSymbols": 16,
+      "compilerPlatform": "macOS14; app platform compilation separate",
+      "compilerGraphs": [
+        {
+          "file": "SwiftfinTime.symbols.json",
+          "sha256": "b36f12928893101acfdc6e1ce5146ba7b8b326b859064e314b64f5567b649eae"
+        },
+        {
+          "file": "SwiftfinTime@Foundation.symbols.json",
+          "sha256": "02d7e1f42a1946305449d63278713cef38ccb79b6080447cb9c5f8093fc921ad"
+        },
+        {
+          "file": "SwiftfinTime@Swift.symbols.json",
+          "sha256": "2a99e87b27839f57af66a7b25a72d6f5ce553e4e5994001684113abf0ffeed84"
+        }
+      ],
+      "sourceReview": "complete current source and public declarations",
+      "consumerReview": "scoped listed boundaries; remaining whole-graph review required",
+      "runtimeAcceptance": "held by human"
+    },
+    {
+      "module": "SwiftfinPlaybackReporting",
+      "manifestSHA256": "b1a6b07b8215b907f1e011e6692b58ad0723910288cd32cdbd79fab7a0d8422b",
+      "sourceBodiesRead": 2,
+      "compilerPublicSymbols": 18,
+      "compilerPlatform": "macOS14; app platform compilation separate",
+      "compilerGraphs": [
+        {
+          "file": "SwiftfinPlaybackReporting.symbols.json",
+          "sha256": "046a097d3fb0e88c97a19ee3f73248b9d470a4f5875a2d1721c0262309e79a92"
+        }
+      ],
+      "sourceReview": "complete current source and public declarations",
+      "consumerReview": "scoped listed boundaries; remaining whole-graph review required",
+      "runtimeAcceptance": "held by human"
+    },
+    {
+      "module": "KidsArtworkUI",
+      "manifestSHA256": "6977aff0df00a8d56bde3ec135075c4bf446aa688ec543eeac7b4ba1cf67cced",
+      "sourceBodiesRead": 1,
+      "compilerPublicSymbols": 4,
+      "compilerPlatform": "tvOS17 Simulator; platform-conditional SDK interfaces included",
+      "compilerGraphs": [
+        {
+          "file": "KidsArtworkUI.symbols.json",
+          "sha256": "5b919f971af779d4becd781cd2f7e31ae26f1e3d8d93c9538ce15120bdd0cfcc"
+        }
+      ],
+      "sourceReview": "complete current source and public declarations",
+      "consumerReview": "scoped listed boundaries; remaining whole-graph review required",
+      "runtimeAcceptance": "held by human"
+    },
+    {
+      "module": "KidsDiagnosticsUI",
+      "manifestSHA256": "ef19dc6a9d961b3bd04828c344e90162dc05ab0530c4b5b984372fd61355d9fd",
+      "sourceBodiesRead": 1,
+      "compilerPublicSymbols": 5,
+      "compilerPlatform": "tvOS17 Simulator; platform-conditional SDK interfaces included",
+      "compilerGraphs": [
+        {
+          "file": "KidsDiagnosticsUI.symbols.json",
+          "sha256": "7b6ca1d32b89e7afd8e6fc281725ef9cba2936f7748665de2eb0f7104a04ff81"
+        }
+      ],
+      "sourceReview": "complete current source and public declarations",
+      "consumerReview": "scoped listed boundaries; remaining whole-graph review required",
+      "runtimeAcceptance": "held by human"
+    },
+    {
+      "module": "SwiftfinAudioSession",
+      "manifestSHA256": "61cbdae2106bd3e280bae44e534a8ceef2a7ab68ae2a18d2b470419390e9ae50",
+      "sourceBodiesRead": 1,
+      "compilerPublicSymbols": 7,
+      "compilerPlatform": "tvOS17 Simulator; platform-conditional SDK interfaces included",
+      "compilerGraphs": [
+        {
+          "file": "SwiftfinAudioSession.symbols.json",
+          "sha256": "c474f8a168952cb2a207f2102c96bc88784acfd43ec2c3eb24ac14bc66a22b14"
+        }
+      ],
+      "sourceReview": "complete current source and public declarations",
+      "consumerReview": "scoped listed boundaries; remaining whole-graph review required",
+      "runtimeAcceptance": "held by human"
+    },
+    {
+      "module": "SwiftfinLocalization",
+      "manifestSHA256": "7ea4a835429bc778abcb3f9bf686ab21c2fc89a2e7ba47ba7f765909d0a7d3a4",
+      "sourceBodiesRead": 2,
+      "compilerPublicSymbols": 1087,
+      "compilerPlatform": "macOS14; app platform compilation separate",
+      "compilerGraphs": [
+        {
+          "file": "SwiftfinLocalization.symbols.json",
+          "sha256": "ecc757284c8188d0a637ff444c0ee3a0a331a6eeffd9eb9c751eb570f2437d68"
+        }
+      ],
+      "sourceReview": "complete current source and public declarations",
+      "consumerReview": "scoped listed boundaries; remaining whole-graph review required",
+      "runtimeAcceptance": "held by human",
+      "generatedAPIReview": {
+        "resourceKeys": 964,
+        "properNouns": 122,
+        "declarationShapes": {
+          "immutable String": 1045,
+          "formatted String function": 41
+        },
+        "completeKeyAndPublicMemberEquality": true,
+        "formattedSignaturesRead": {
+          "agesGroup": "static func agesGroup(_ p1: Any) -> String",
+          "airWithDate": "static func airWithDate(_ p1: UnsafePointer<CChar>) -> String",
+          "bitrateMaxDescription": "static func bitrateMaxDescription(_ p1: Any) -> String",
+          "columnsWithCount": "static func columnsWithCount(_ p1: Any) -> String",
+          "confirmDeleteServerAndUsers": "static func confirmDeleteServerAndUsers(_ p1: Any) -> String",
+          "createPinForUser": "static func createPinForUser(_ p1: Any) -> String",
+          "deleteDeviceSelfDeletion": "static func deleteDeviceSelfDeletion(_ p1: Any) -> String",
+          "deleteUserMultipleConfirmation": "static func deleteUserMultipleConfirmation(_ p1: Int) -> String",
+          "deleteUserSelfDeletion": "static func deleteUserSelfDeletion(_ p1: Any) -> String",
+          "deleteUserSingleConfirmation": "static func deleteUserSingleConfirmation(_ p1: Any) -> String",
+          "duplicateServerConnectionMessage": "static func duplicateServerConnectionMessage(_ p1: Any) -> String",
+          "duplicateUserSaved": "static func duplicateUserSaved(_ p1: Any) -> String",
+          "enterPinForUser": "static func enterPinForUser(_ p1: Any) -> String",
+          "episodeNumber": "static func episodeNumber(_ p1: Any) -> String",
+          "everyInterval": "static func everyInterval(_ p1: Any) -> String",
+          "failedDeletionAtIndexError": "static func failedDeletionAtIndexError(_ p1: Any, _ p2: Any) -> String",
+          "incorrectPinForUser": "static func incorrectPinForUser(_ p1: Any) -> String",
+          "itemAtItem": "static func itemAtItem(_ p1: Any, _ p2: Any) -> String",
+          "lastRunTime": "static func lastRunTime(_ p1: Any) -> String",
+          "latestWithString": "static func latestWithString(_ p1: Any) -> String",
+          "messageFrom": "static func messageFrom(_ p1: Any) -> String",
+          "permissionRequestError": "static func permissionRequestError(_ p1: Any, _ p2: Any) -> String",
+          "posterAccessibilityCommunityRating": "static func posterAccessibilityCommunityRating(_ p1: Any) -> String",
+          "posterAccessibilityDetail": "static func posterAccessibilityDetail(_ p1: Any, _ p2: Any) -> String",
+          "posterAccessibilityEndTime": "static func posterAccessibilityEndTime(_ p1: Any) -> String",
+          "posterAccessibilityEpisodeRange": "static func posterAccessibilityEpisodeRange(_ p1: Any, _ p2: Any) -> String",
+          "posterAccessibilityRemaining": "static func posterAccessibilityRemaining(_ p1: Any) -> String",
+          "posterAccessibilityRuntime": "static func posterAccessibilityRuntime(_ p1: Any) -> String",
+          "posterAccessibilitySeason": "static func posterAccessibilitySeason(_ p1: Any) -> String",
+          "posterAccessibilityStartTime": "static func posterAccessibilityStartTime(_ p1: Any) -> String",
+          "posterAccessibilityUnplayedCount": "static func posterAccessibilityUnplayedCount(_ p1: Any) -> String",
+          "posterCriticScore": "static func posterCriticScore(_ p1: Any) -> String",
+          "requireDeviceAuthForUser": "static func requireDeviceAuthForUser(_ p1: Any) -> String",
+          "seasonAndEpisode": "static func seasonAndEpisode(_ p1: Any, _ p2: Any) -> String",
+          "serverVersionWarning": "static func serverVersionWarning(_ p1: Any) -> String",
+          "signInToServer": "static func signInToServer(_ p1: UnsafePointer<CChar>) -> String",
+          "streamInfoWithMethod": "static func streamInfoWithMethod(_ p1: Any) -> String",
+          "timeLimitLabelWithValue": "static func timeLimitLabelWithValue(_ p1: Any) -> String",
+          "unableToOpenTrailerApp": "static func unableToOpenTrailerApp(_ p1: Any) -> String",
+          "withEnhancementLayer": "static func withEnhancementLayer(_ p1: Any) -> String",
+          "yearsOld": "static func yearsOld(_ p1: Any) -> String"
+        },
+        "generatorInputs": {
+          "Packages/SwiftfinLocalization/Sources/SwiftfinLocalization/Resources/en.lproj/Localizable.strings": "4f305abd2ac379f369d006d0bae67ee59032d5dbc29e8e4d2457ad8fb831643a",
+          "Packages/SwiftfinLocalization/Sources/SwiftfinLocalization/ProperNouns.swift": "3cf07de830eeed67096e17a192222bdf62731b11517cd7ec5b77fdb92cdd2f24",
+          "Packages/SwiftfinLocalization/Tools/LocalizationCodegen/main.swift": "8a41702284094f8d52052f419d5156d7a99630a2a9a122e11dc35de1af91d185",
+          "Packages/SwiftfinLocalization/Plugins/GenerateLocalizedStrings/GenerateLocalizedStrings.swift": "c464948494110f4cb82f7838acc0614895bfb5c38aac2653eab3130b8df08698"
+        }
+      }
+    },
+    {
+      "module": "SwiftfinScrolling",
+      "manifestSHA256": "2be3ae80730d57b75096019b4dd14c88699ffee4cc8e940d5b5aa2d46cd0e8f8",
+      "sourceBodiesRead": 5,
+      "compilerPublicSymbols": 20,
+      "compilerPlatform": "tvOS17 Simulator; platform-conditional SDK interfaces included",
+      "compilerGraphs": [
+        {
+          "file": "SwiftfinScrolling.symbols.json",
+          "sha256": "a602b2fcbd508d63039101e5bf7371c82d6ae529893508b1ea0db634e5085d38"
+        }
+      ],
+      "sourceReview": "complete current source and public declarations",
+      "consumerReview": "scoped listed boundaries; remaining whole-graph review required",
+      "runtimeAcceptance": "held by human"
+    },
+    {
+      "module": "KidsDiagnostics",
+      "manifestSHA256": "af9a842e89bcd0e2ecbc20de986ccc85d0b0b1796483c4aa08427bbb3997e09b",
+      "sourceBodiesRead": 1,
+      "compilerPublicSymbols": 182,
+      "compilerPlatform": "macOS14; app platform compilation separate",
+      "compilerGraphs": [
+        {
+          "file": "KidsDiagnostics.symbols.json",
+          "sha256": "2211fda3f99a67c0d7d3ab064b7f4d8963c800806dcd4cb230604cfd4e749bf4"
         }
       ],
       "sourceReview": "complete current source and public declarations",

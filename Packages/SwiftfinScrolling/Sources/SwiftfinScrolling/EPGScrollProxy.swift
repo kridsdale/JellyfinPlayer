@@ -161,9 +161,12 @@ public final class EPGScrollProxy: ObservableObject {
         isSyncingHorizontally = true
         defer { isSyncingHorizontally = false }
 
+        let generation = observationGeneration
         let scrollViews = horizontalObservations.keyEnumerator().allObjects as? [UIScrollView] ?? []
 
         for scrollView in scrollViews {
+            // A delegate callback can disconnect or replace these observations.
+            guard isConnected, observationGeneration == generation else { return }
             guard scrollView !== source,
                   abs(scrollView.contentOffset.x - source.contentOffset.x) > 0.5
             else { continue }
@@ -181,9 +184,12 @@ public final class EPGScrollProxy: ObservableObject {
         isSyncingVertically = true
         defer { isSyncingVertically = false }
 
+        let generation = observationGeneration
         let scrollViews = verticalObservations.keyEnumerator().allObjects as? [UIScrollView] ?? []
 
         for scrollView in scrollViews {
+            // A delegate callback can disconnect or replace these observations.
+            guard isConnected, observationGeneration == generation else { return }
             guard scrollView !== source,
                   abs(scrollView.contentOffset.y - source.contentOffset.y) > 0.5
             else { continue }

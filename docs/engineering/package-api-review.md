@@ -93,3 +93,31 @@ Local security edits now reject retirement during credential verification/effect
 The production security view model captures its original session and transport in the editor checkpoint. Before repair, fake credential callbacks could retire that checkpoint yet publish verification success, mutate policy/hint, or reenter a second commit. The repaired owner checks after reads/effects and between settings writes, rejects nested operations and retains retry after credential failure. A credential already accepted before retirement remains accepted; no rollback or cross-store transaction is claimed. Existing direct-store ordering and public signatures stay unchanged.
 
 Native database objects and Security dictionaries stay internal. Typed settings preserve installed keys and raw/JSON representations. Source-only exports omitted by symbol graphs were read directly; SwiftData generated model interoperability declarations were also reviewed. Existing schema version locks, CloudKit model/container, credential attributes, signing and saved progress are unchanged. The native tests use injected in-memory credentials, generated UUID defaults suites and temporary SQLite stores. No real credential query, actual cloud transport, simulator/server activity or RAID operation occurred.
+
+
+## Service lifetimes and platform publication (2026-10-07)
+
+Watched/favorite callers now check their original mutation receipt before submission and between UI notifications; retired EPG observer generations stop before another follower update. All 18 offline media-state contracts and both tvOS Debug/iOS Release compile gates pass without owned Swift/generated-macro diagnostics. Sixteen complete service/platform module reviews add 38 source bodies. The graph remains 53 libraries; 41 complete module reviews cover 198 source bodies, and 215 scoped interface entries cover 213 unique sources of 250. All 664 app sources remain classified. Twelve module reviews, whole-graph consumer closure and held runtime acceptance remain; items 1/2 stay active.
+
+| Module | Complete source bodies | Compiler public symbols | Platform |
+| --- | ---: | ---: | --- |
+| SwiftfinAccountAccess | 4 | 43 | macOS |
+| SwiftfinSessions | 3 | 43 | macOS |
+| SwiftfinConnections | 1 | 10 | macOS |
+| SwiftfinConnectivity | 3 | 7 | macOS |
+| SwiftfinServerOperations | 4 | 52 | macOS |
+| SwiftfinUserAdministration | 3 | 33 | macOS |
+| SwiftfinUserMediaState | 3 | 29 | macOS |
+| SwiftfinRecordingTimers | 2 | 27 | macOS |
+| SwiftfinTime | 2 | 16 | macOS |
+| SwiftfinPlaybackReporting | 2 | 18 | macOS |
+| KidsArtworkUI | 1 | 4 | tvOS Simulator |
+| KidsDiagnosticsUI | 1 | 5 | tvOS Simulator |
+| SwiftfinAudioSession | 1 | 7 | tvOS Simulator |
+| SwiftfinLocalization | 2 | 1087 | macOS |
+| SwiftfinScrolling | 5 | 20 | tvOS Simulator |
+| KidsDiagnostics | 1 | 182 | macOS |
+
+The two media-state callers validate account/field/item authority after optimistic publication, after the response and between notification effects. Scrolling checks the original observation generation before each borrowed follower update. These are source-backed callback fixes verified by platform compilation; the native media-state suite covers serial requests, binding retirement, per-field tickets and selective merge, not live UIKit callback execution. Simulator and server testing remain held.
+
+Localization owns the full generator/plugin bodies and exactly 1,086 public member names: 964 resource keys and 122 proper nouns. All 1,045 immutable String shapes and 41 formatted String signatures were audited against current inputs. UIKit/audio/display-link APIs were inspected from the tvOS compiler graph, avoiding a macOS-only interface claim for conditional code. Credential/schema/signing inputs, the original SDK revisions and saved playback progress remain unchanged. No RAID, server, hardware, actual credential or cloud operation was performed.

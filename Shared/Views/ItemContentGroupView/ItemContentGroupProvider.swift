@@ -278,16 +278,23 @@ final class ItemContentGroupProvider: ViewModel, ContentGroupProvider {
         } else {
             item.userData?.isFavorite = !previous
         }
-        do {
-            let response = try await client.set(field, value: !previous, itemID: itemID)
+        func checkMutation() throws {
             try client.checkBinding()
-            guard mediaMutations.accepts(ticket, currentItemID: item.id) else { return }
+            guard mediaMutations.accepts(ticket, currentItemID: item.id) else { throw CancellationError() }
+        }
+        do {
+            // Optimistic publication can synchronously admit a newer toggle.
+            try checkMutation()
+            let response = try await client.set(field, value: !previous, itemID: itemID)
+            try checkMutation()
             let data = UserMediaStatePolicy.merge(response, into: item.userData, field: field)
             item.userData = data
+            try checkMutation()
             Notifications[.itemUserDataDidChange].post(data)
+            try checkMutation()
             Notifications[.itemShouldRefreshMetadata].post(itemID)
         } catch {
-            guard mediaMutations.accepts(ticket, currentItemID: item.id), (try? client.checkBinding()) != nil else { return }
+            guard (try? checkMutation()) != nil else { return }
             if field == .played {
                 item.userData?.isPlayed = previous
             } else {
