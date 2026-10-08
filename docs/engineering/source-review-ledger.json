@@ -3417,13 +3417,15 @@
     },
     {
       "owners": [
+        "SwiftfinAsyncStreams",
+        "SwiftfinImageProcessing",
         "SwiftfinItemMetadata",
-        "SwiftfinImageProcessing"
+        "SwiftfinUIState"
       ],
       "path": "Shared/ViewModels/ImageViewModel/ItemImageViewModel.swift",
-      "reason": "Mixed: platform image/file selection remains UI composition and individual image commands/reads delegate, but upload/save/delete followed by item/images reload, partial notifications/events and overlapping-operation publication need coherent owner sequencing and checkpoints. Existing captured reader and item-ID checks do not complete that operation audit.",
-      "sha256": "50f371d6599753b120d3a883dd31f279e943ab5481f920d4270d9f22ad2c8750",
-      "status": "source-reviewed-mixed"
+      "reason": "Complete current image adapter reviewed. Initialization binds the original account/item editor; synchronous entry captures an operation checkpoint before macro scheduling. Platform UIImage/file decoding and security-scope handling remain app ports. The library owns upload/remote/delete then reload, including deletion partial item publication before image reload failure. Committed DTO/image presentation and exact receipt checks surround notification and event effects. No late requireItemMetadata or app-owned RPC/reload sequence remains; runtime acceptance is held.",
+      "sha256": "dfd27cabb9ab2aca93d33faa95aa017b80b3feaaac3e3c8ad4cecd57346662b4",
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [
@@ -3466,24 +3468,26 @@
     },
     {
       "owners": [
+        "SwiftfinAsyncStreams",
         "SwiftfinItemMetadata",
-        "SwiftfinAsyncStreams"
+        "SwiftfinUIState"
       ],
       "path": "Shared/ViewModels/ItemAdministration/ItemEditorViewModel/ItemComponentEditorViewModel.swift",
-      "reason": "Complete generic body and four editor ports reviewed: app retains Stateful/Combine UI, submitted query payload, 0.5-second RunLoop debounce, missing-ID error, item state, notification/event ordering and tag-cache advisory callback. AsyncStreams owns weak intent checkpoints; ItemMetadata owns captured update-then-reload. Exact task/operation/item/binding checks precede result/state/notification/event/advisory effects, with rechecks after synchronous publication; CancellationError quietly retires obsolete handlers while real data failures propagate. Equal queries remain new intents, and empty query clears only on current debounced delivery. Already accepted remote writes are not undone or serialized by these guards; actual macro/debounce/lifetime acceptance remains held. Cancelled input handlers return before submission instead of throwing into the pinned macro error path; actual-search/update cancellation handling remains quiet and genuine data failures still propagate.",
-      "sha256": "5db827b132c92d5b2db1c839564bcacfa83d5805203250e8189f913f07fc193f",
+      "reason": "Complete generic component adapter reconsidered and repaired. Captured original metadata client/item editor now owns authority for delayed search and serial update/reload; no requireItemMetadata at execution remains. Component ports retain UI intent/value adaptation and domain operations delegated by their existing editor implementations. Committed item/match presentation, query/update gates and exact checks surround notifications/events/tag-cache advisory feedback. Retired ordinary search errors are revalidated before reaching macro failure UI. Accepted writes are ordered within this editor; no cross-editor transaction or remote rollback is claimed.",
+      "sha256": "4246b9063993ee23f78327df4712da54c8776af773f69d6ed74adfc89a28cb02",
       "status": "source-reviewed-retained"
     },
     {
       "owners": [
+        "SwiftfinAsyncStreams",
         "SwiftfinItemMetadata",
         "SwiftfinTime",
-        "SwiftfinAsyncStreams"
+        "SwiftfinUIState"
       ],
       "path": "Shared/ViewModels/ItemAdministration/ItemEditorViewModel/ItemEditorViewModel.swift",
-      "reason": "Mixed: captured metadata commands are owned, but refresh-start notification then five-second delayed read, update/reload, item assignment and follow-up notification/event need coherent owner sequencing with operation/item checks. Existing binding/item-ID checks remain useful evidence, not full operation completion.",
-      "sha256": "145e79dc01afc0776a15e847c354c691eec01a20f1b5752c5a87911520416cdb",
-      "status": "source-reviewed-mixed"
+      "reason": "Complete current editor adapter reviewed. Immutable original account/item editor and synchronously admitted requests replace delayed current-session resolution. Library owns delete/update/read and metadata-refresh started/wait/reload sequencing, retaining the five-second settling period. App composes options, committed DTO presentation, partial started feedback, notifications and events with per-effect receipt checks. Existing awaited updateItem callers remain bound to the same editor. No direct SDK endpoint or app-owned settling delay remains.",
+      "sha256": "edcebd8e6fca4bfc36a796028517b896d6e9cc36a17b03029b944aea51034446",
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [
@@ -3514,14 +3518,15 @@
     },
     {
       "owners": [
+        "SwiftfinAsyncStreams",
         "SwiftfinItemMetadata",
         "SwiftfinPlaybackProfiles",
-        "SwiftfinAsyncStreams"
+        "SwiftfinUIState"
       ],
       "path": "Shared/ViewModels/ItemAdministration/ItemSubtitlesViewModel.swift",
-      "reason": "Mixed: language/perfect-match debounce drops the emitted language and rereads mutable language when queued work executes, and result assignment lacks a submitted-intent checkpoint. Download/upload/delete followed by snapshot/notification/events remain compound app sequencing. Preserve subtitle policy, indexed failure localization and platform file presentation while moving these owners.",
-      "sha256": "7c15af83946bacb92c3dd2ce970be527d9467a792d36f28e2f8fe9f87ff0d9e6",
-      "status": "source-reviewed-mixed"
+      "reason": "Complete current subtitle adapter reviewed. Original account/item is immutable; emitted language/perfect-match tuple is captured and invalidates older receipt before debounce, with deduplication before admission. Actual search never rereads mutable language. Upload language is captured at entry; native file/format decoding and localized indexed errors remain app ports. Owner supplies mutation/reload and current-only failure semantics; committed stream/results fields and per-effect gates protect publication/notification/events. Runtime macro/debounce interaction remains held.",
+      "sha256": "13791ad4546acdf7acc7d4dbba51d004d641023a19becdae65a24f4600ae2f5f",
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [
@@ -6054,6 +6059,36 @@
         "updateUsername(_:)"
       ],
       "sha256": "d53a941083b6dd3fd85cbd05de3ba60d29ffe58e4a9aa627ede6db4a504906b9"
+    },
+    {
+      "path": "Packages/SwiftfinItemMetadata/Sources/SwiftfinItemMetadata/ItemMetadataEditor.swift",
+      "reason": "Complete MainActor fixed-client/item workflow owner and public API reviewed. A nonempty item ID and original binding are captured before scheduling. Per-editor mutation tails retain noncooperative accepted predecessors; cancellation and caller/binding checks protect every follow-up and error path. Reads drain the captured predecessor, reloads validate returned item identity, metadata refresh preserves started callback and injected five-second settling delay, and image delete preserves partial item receipt before image reload. Subtitle search uses immutable optional-language/perfect-match query; subtitle deletion retains descending order and indexed failure. Twelve new synthetic regressions cover these contracts and sibling/payload semantics. Native file/UIImage/platform notification ownership is excluded. No global edit transaction, metadata write rollback, server/RAID action or runtime acceptance is claimed.",
+      "reviewedConsumers": [
+        "Shared/ViewModels/ImageViewModel/ItemImageViewModel.swift",
+        "Shared/ViewModels/ItemAdministration/ItemEditorViewModel/ItemEditorViewModel.swift",
+        "Shared/ViewModels/ItemAdministration/ItemSubtitlesViewModel.swift",
+        "Shared/ViewModels/ItemAdministration/ItemEditorViewModel/ItemComponentEditorViewModel.swift"
+      ],
+      "reviewedInterfaces": [
+        "MetadataSubtitleQuery",
+        "MetadataImageEdit",
+        "MetadataSubtitleEdit",
+        "ItemMetadataEditor.init(client:itemID:)",
+        "itemID",
+        "BindingError",
+        "Checkpoint",
+        "checkBinding()",
+        "item(validate:)",
+        "images(validate:)",
+        "deleteItem(validate:)",
+        "update(_:validate:)",
+        "refresh(options:validate:started:wait:)",
+        "editImage(_:validate:reloadedItem:)",
+        "searchSubtitles(_:validate:)",
+        "editSubtitles(_:validate:)",
+        "ItemMetadataClient.makeEditor(itemID:)"
+      ],
+      "sha256": "df821a04c7a33378cd6d20f23fd31232c5197ae11cb6874710cfb8d3000aa948"
     }
   ],
   "limits": "This ledger records bodies explicitly reviewed, with exact current hashes; earlier prose or lexical inventory is not automatically promoted. Pending and mixed entries prevent whole-source completion. Retained UI algorithms have specific presentation reasons, not folder/import-based blanket approval. API entries do not classify the rest of the public graph. Source review and offline tests do not satisfy held runtime acceptance.",
@@ -6063,10 +6098,10 @@
     "applicationSwiftFiles": 665,
     "classification": {
       "pending": 218,
-      "source-reviewed-mixed": 10,
-      "source-reviewed-retained": 437
+      "source-reviewed-mixed": 7,
+      "source-reviewed-retained": 440
     },
-    "currentAPIReviews": 46,
+    "currentAPIReviews": 47,
     "runtimeAcceptance": "held by human; no simulator/server testing"
   }
 }

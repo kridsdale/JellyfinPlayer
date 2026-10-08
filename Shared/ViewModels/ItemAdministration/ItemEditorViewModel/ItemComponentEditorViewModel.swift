@@ -8,12 +8,14 @@
 
 import CasePaths
 import Combine
+import FactoryKit
 import Foundation
 import JellyfinAPI
 import StatefulMacros
 import SwiftfinAsyncStreams
 import SwiftfinCollections
 import SwiftfinItemMetadata
+import SwiftfinUIState
 
 @MainActor
 @Stateful
@@ -60,12 +62,19 @@ class ItemComponentEditorViewModel<Editor: ItemComponentEditor>: ViewModel {
         case error
     }
 
-    @Published
-    private(set) var item: BaseItemDto
-    @Published
-    private(set) var matches: [Element] = []
+    @CommittedPublished
+    private(set) var item: BaseItemDto {
+        didSet { objectWillChange.send() }
+    }
+
+    @CommittedPublished
+    private(set) var matches: [Element] = [] {
+        didSet { objectWillChange.send() }
+    }
 
     let editor: Editor
+    private let boundMetadata: ItemMetadataClient?
+    private let boundItemEditor: ItemMetadataEditor?
     private let searchRequests: AsyncOperationGate
     private let updateRequests = AsyncOperationGate()
     private var searchQuery: CurrentValueSubject<SearchRequest, Never>
@@ -73,6 +82,9 @@ class ItemComponentEditorViewModel<Editor: ItemComponentEditor>: ViewModel {
     init(editor: Editor, item: BaseItemDto) {
         self.editor = editor
         self.item = item
+        let metadata = Container.shared.currentUserSession()?.itemMetadata
+        self.boundMetadata = metadata
+        self.boundItemEditor = try? metadata?.makeEditor(itemID: item.id ?? "")
         let requests = AsyncOperationGate()
         self.searchRequests = requests
         self.searchQuery = .init(.init(term: "", validate: requests.begin()))
@@ -85,6 +97,7 @@ class ItemComponentEditorViewModel<Editor: ItemComponentEditor>: ViewModel {
                 guard let self else { return }
                 do {
                     try request.validate()
+                    try metadataClient().checkBinding()
                     if request.term.isNotEmpty {
                         actuallySearch(request)
                     } else {
@@ -102,6 +115,7 @@ class ItemComponentEditorViewModel<Editor: ItemComponentEditor>: ViewModel {
     @Function(\Action.Cases.search)
     private func _search(_ searchTerm: String) async throws {
         guard !Task.isCancelled else { return }
+        try metadataClient().checkBinding()
         searchQuery.send(.init(term: searchTerm, validate: searchRequests.begin()))
         await cancel()
     }
@@ -110,13 +124,18 @@ class ItemComponentEditorViewModel<Editor: ItemComponentEditor>: ViewModel {
     private func _actuallySearch(_ request: SearchRequest) async throws {
         do {
             try request.validate()
-            let metadata = try requireItemMetadata()
+            let metadata = try metadataClient()
             let results = try await editor.search(request.term, metadata: metadata)
             try metadata.checkBinding()
             try request.validate()
             matches = results
-        } catch is CancellationError {
-            return
+        } catch {
+            try metadataClient().checkBinding()
+            try request.validate()
+            if error is CancellationError {
+                return
+            }
+            throw error
         }
     }
 
@@ -161,8 +180,9 @@ class ItemComponentEditorViewModel<Editor: ItemComponentEditor>: ViewModel {
             try checkpoint()
             guard self?.item.id == itemID else { throw CancellationError() }
         }
-        let metadata = try requireItemMetadata()
-        let updated = try await metadata.updateAndReload(itemID: itemID, item: newItem, validate: validate)
+        let metadata = try metadataClient()
+        guard let boundItemEditor, boundItemEditor.itemID == itemID else { throw CancellationError() }
+        let updated = try await boundItemEditor.update(newItem, validate: validate)
         try metadata.checkBinding()
         try validate()
         item = updated
@@ -176,5 +196,11 @@ class ItemComponentEditorViewModel<Editor: ItemComponentEditor>: ViewModel {
         try metadata.checkBinding()
         try validate()
         didApply?(metadata)
+    }
+
+    private func metadataClient() throws -> ItemMetadataClient {
+        guard let boundMetadata, let boundItemEditor, item.id == boundItemEditor.itemID else { throw CancellationError() }
+        try boundMetadata.checkBinding()
+        return boundMetadata
     }
 }

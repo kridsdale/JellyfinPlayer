@@ -2,7 +2,7 @@
 
 Active goal: complete the minimal-responsibility package refactor and remaining Swift 6 compatibility warnings. This document records scope and evidence, not a narrower replacement objective.
 
-Latest offline evidence:53 libraries;26 current affected UserAdministration contracts;665 app sources with437 retained,10 mixed,218 pending and46 scoped API reviews. Final tvOS Debug compile-for-testing and iOS Release builds pass without owned Swift/generated-macro diagnostics. Full source/API/actor and held runtime acceptance remain required.
+Latest offline evidence:53 libraries;75 current affected ItemMetadata contracts;665 app sources with440 retained,7 mixed,218 pending and47 scoped API reviews. Final tvOS Debug compile-for-testing and iOS Release builds pass without owned Swift/generated-macro diagnostics. Full source/API/actor and held runtime acceptance remain required.
 
 ## Initial source map
 
@@ -806,3 +806,9 @@ Final tvOS Debug compile-for-testing and iOS Release compile-only builds pass wi
 UserAdministrationTarget owns a fixed edited-user ID and bound authenticated client, matching-profile reads, policy writes and fresh-profile rename. Its serial predecessor handle survives cancellation until an accepted sender actually finishes. UserConfigurationUpdates owns general snapshot submission and the Auto Play transformation; the session composes one instance across settings and playback controls, keyed by transport. ServerUserAdminViewModel retains platform presentation, application-record adaptation and notifications with checkpoints between effects. VideoPlayerSettingsView retains controls and routes while submitting field edits against its captured account's current snapshot.
 
 Seven new native contracts extend the package to26 passing checks. Initial iOS compilation exposed an ErrorMessage-only binding mismatch; the existing generic error binding is restored. Runtime/server validation remains held, and the complete source/API/actor review remains unfinished. Next coherent domain work is the recorded image/item/subtitle mutation and reload sequencing; separate account-admission and EPG/search ownership gaps remain recorded.
+
+## Fixed-item edit workflow checkpoint
+
+ItemMetadataEditor owns the original client/item and mutation-plus-reload workflows in the existing ItemMetadata library. Its per-editor predecessor tail drains accepted noncooperative writes before successors; reads drain the admitted predecessor. Refresh retains its started callback and injected five-second wait. Image delete retains partial item publication before image-fetch failure; subtitle deletion retains descending indices/indexed failure. Wrong returned item IDs and retired ordinary errors become cancellation.
+
+Four application adapters retain native file/image/format decoding, localized errors, committed presentation and notifications/events, with checkpoints between effects. Entry captures account/item intent before macro scheduling; emitted subtitle language/perfect-match is captured before debounce, and upload language at submission. Component lookup/update now uses its original bound metadata owner. Twelve new contracts extend the package to75 passing tests. Initial platform compilation exposed generated event-type mismatches; private helpers now use the existing generated event type. Runtime/server validation remains held. Remaining mixed responsibility includes account admission/connection editing, EPG/search and recording timer orchestration; complete API/actor/source acceptance remains open.

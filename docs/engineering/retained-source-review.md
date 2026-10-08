@@ -1,6 +1,6 @@
 # Retained application responsibility review
 
-The application is intended to retain composition and platform presentation. This is a source-reviewed ledger, not an automatic approval of files based on their folder, filename or import count. The full-client refactor remains active. Live simulator/server activity is held by the human. Current ledger:437 retained,10 mixed and218 pending among665 app files;46 scoped interface reviews.
+The application is intended to retain composition and platform presentation. This is a source-reviewed ledger, not an automatic approval of files based on their folder, filename or import count. The full-client refactor remains active. Live simulator/server activity is held by the human. Current ledger:440 retained,7 mixed and218 pending among665 app files;47 scoped interface reviews.
 
 ## Reviewed boundaries at the date/program checkpoint
 
@@ -246,3 +246,7 @@ The final input-handler correction uses a quiet task-cancellation guard in both 
 ## Settings and selected-user administration checkpoint
 
 The two previously mixed settings/admin sources now retain explicit platform adapters. Fresh configuration edits and fixed selected-user commands are owned by the existing UserAdministration library. Application publication keeps committed DTO values and rechecks the bound account/intent between session-record, notification and event effects. Shared configuration submission prevents settings and Auto Play from overtaking accepted predecessors. Refresh does not replace an intervening local configuration intent. Scoped public reviews now include UserConfigurationUpdates, UserAdministrationTarget and their factories; the remaining public graph is not implicitly approved. All26 affected native contracts pass; no simulator or server action was run.
+
+## Image, item and subtitle edit checkpoint
+
+Four complete editor bodies retain platform composition. Original account/item bindings and submitted receipts replace delayed current-account authority. The existing ItemMetadata library owns serial edit/reload, refresh delay and partial image receipt behavior. Search retains its emitted language/perfect-match values before debounce; committed UI fields and receipt checks guard subsequent notifications/events. Twelve synthetic owner regressions pass within the75-test package. Generated event-type helper integration is repaired. This checkpoint does not validate live editor actions, server writes or held simulator behavior.

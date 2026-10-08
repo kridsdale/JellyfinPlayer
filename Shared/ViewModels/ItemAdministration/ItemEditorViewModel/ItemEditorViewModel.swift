@@ -8,137 +8,140 @@
 
 import CasePaths
 import Combine
+import FactoryKit
 import Foundation
 import JellyfinAPI
-import OrderedCollections
 import StatefulMacros
+import SwiftfinAsyncStreams
 import SwiftfinItemMetadata
-import SwiftfinTime
+import SwiftfinLocalization
+import SwiftfinUIState
 
 @MainActor
 @Stateful
 class ItemEditorViewModel: ViewModel {
-
     @CasePathable
     enum Action {
-
-        /// Generic Actions
-        case delete
-        case refreshItem(sendNotification: Bool)
-        case refreshMetadata(
-            metadataRefreshMode: MetadataRefreshMode,
-            imageRefreshMode: MetadataRefreshMode,
-            replaceMetadata: Bool,
-            replaceImages: Bool,
-            regenerateTrickplay: Bool
-        )
-        case update(BaseItemDto)
-
+        case performDelete(Request)
+        case performRead(Request, Bool)
+        case performRefresh(Request, MetadataRefreshOptions)
+        case performUpdate(Request, BaseItemDto)
         var transition: Transition {
-            switch self {
-            case .delete, .update, .refreshItem, .refreshMetadata:
-                .background(.updating)
-            }
+            .background(.updating)
         }
     }
 
-    enum BackgroundState {
-        case updating
+    enum BackgroundState { case updating }
+    enum Event { case deleted, metadataRefreshStarted, updated }
+    enum State { case initial, error }
+    @CommittedPublished
+    var item: BaseItemDto {
+        didSet { objectWillChange.send() }
     }
 
-    enum Event {
-        case deleted
-        case metadataRefreshStarted
-        case updated
+    struct Request: Sendable { let validate: AsyncOperationGate.Checkpoint }
+    private let editor: ItemMetadataEditor?
+    private let operations = AsyncOperationGate()
+
+    private func request(using gate: AsyncOperationGate? = nil) -> Request? {
+        guard let editor, item.id == editor.itemID, !Task.isCancelled,
+              (try? editor.checkBinding()) != nil else { return nil }
+        let check = (gate ?? operations).begin()
+        return Request(validate: { [weak self] in
+            try check()
+            try editor.checkBinding()
+            guard self?.item.id == editor.itemID else { throw CancellationError() }
+            try check()
+        })
     }
-
-    enum State {
-        case initial
-        case error
-    }
-
-    // MARK: - Published Properties
-
-    @Published
-    var item: BaseItemDto
-
-    // MARK: - Initialization
 
     init(item: BaseItemDto) {
         self.item = item
+        editor = try? Container.shared.currentUserSession()?.itemMetadata.makeEditor(itemID: item.id ?? "")
         super.init()
     }
 
-    // MARK: - Actions
+    func delete() {
+        if let request = request() {
+            performDelete(request)
+        }
+    }
 
-    @Function(\Action.Cases.delete)
-    private func _delete() async throws {
-        guard let itemID = item.id else { return }
-        try await requireItemMetadata().deleteItem(id: itemID)
-        Notifications[.didDeleteItem].post(itemID)
+    func refreshItem(sendNotification: Bool) {
+        if let request = request() {
+            performRead(request, sendNotification)
+        }
+    }
+
+    func update(_ item: BaseItemDto) {
+        if let request = request() {
+            performUpdate(request, item)
+        }
+    }
+
+    func refreshMetadata(
+        metadataRefreshMode: MetadataRefreshMode,
+        imageRefreshMode: MetadataRefreshMode,
+        replaceMetadata: Bool,
+        replaceImages: Bool,
+        regenerateTrickplay: Bool
+    ) {
+        guard let request = request() else { return }
+        performRefresh(request, .init(
+            metadataMode: metadataRefreshMode,
+            imageMode: imageRefreshMode,
+            replaceMetadata: replaceMetadata,
+            replaceImages: replaceImages,
+            regenerateTrickplay: regenerateTrickplay
+        ))
+    }
+
+    private func publish(_ updated: BaseItemDto, request: Request, notify: Bool = true) throws {
+        try request.validate()
+        item = updated
+        try request.validate()
+        if notify {
+            Notifications[.itemMetadataDidChange].post(updated)
+        }
+        try request.validate()
+        events.send(.updated)
+    }
+
+    @Function(\Action.Cases.performDelete)
+    private func _performDelete(_ request: Request) async throws {
+        guard let editor else { throw CancellationError() }
+        try await editor.deleteItem(validate: request.validate)
+        try request.validate()
+        Notifications[.didDeleteItem].post(editor.itemID)
+        try request.validate()
         events.send(.deleted)
     }
 
-    @Function(\Action.Cases.refreshMetadata)
-    private func _refreshMetadata(
-        _ metadataRefreshMode: MetadataRefreshMode,
-        _ imageRefreshMode: MetadataRefreshMode,
-        _ replaceMetadata: Bool,
-        _ replaceImages: Bool,
-        _ regenerateTrickplay: Bool
-    ) async throws {
-        guard let itemID = item.id else { return }
-        let metadata = try requireItemMetadata()
-        try await metadata.refresh(
-            itemID: itemID,
-            options: .init(
-                metadataMode: metadataRefreshMode,
-                imageMode: imageRefreshMode,
-                replaceMetadata: replaceMetadata,
-                replaceImages: replaceImages,
-                regenerateTrickplay: regenerateTrickplay
-            )
-        )
-        events.send(.metadataRefreshStarted)
-        try await Task.sleep(for: .seconds(5))
-        try metadata.checkBinding()
-        guard item.id == itemID else { throw CancellationError() }
-        let updated = try await metadata.item(id: itemID)
-        guard item.id == itemID else { throw CancellationError() }
-        item = updated
-        Notifications[.itemMetadataDidChange].post(updated)
-        events.send(.updated)
+    @Function(\Action.Cases.performRead)
+    private func _performRead(_ request: Request, _ notify: Bool) async throws {
+        guard let editor else { throw CancellationError() }
+        try await publish(editor.item(validate: request.validate), request: request, notify: notify)
     }
 
-    @Function(\Action.Cases.update)
-    private func _update(_ newItem: BaseItemDto) async throws {
-        try await updateItem(newItem)
+    @Function(\Action.Cases.performRefresh)
+    private func _performRefresh(_ request: Request, _ options: MetadataRefreshOptions) async throws {
+        guard let editor else { throw CancellationError() }
+        let updated = try await editor.refresh(options: options, validate: request.validate, started: { [weak self] in
+            guard let self, (try? request.validate()) != nil else { return }
+            events.send(.metadataRefreshStarted)
+        })
+        try publish(updated, request: request)
     }
 
-    @Function(\Action.Cases.refreshItem)
-    private func _refreshItem(_ isRefresh: Bool) async throws {
-        guard let itemID = item.id else { throw ErrorMessage("Item ID is missing") }
-        let updated = try await requireItemMetadata().item(id: itemID)
-        guard item.id == itemID else { throw CancellationError() }
-        item = updated
-        if isRefresh {
-            Notifications[.itemMetadataDidChange].post(updated)
-        }
-        events.send(.updated)
+    @Function(\Action.Cases.performUpdate)
+    private func _performUpdate(_ request: Request, _ item: BaseItemDto) async throws {
+        guard let editor else { throw CancellationError() }
+        try await publish(editor.update(item, validate: request.validate), request: request)
     }
 
-    // MARK: - Update Item
-
-    // TODO: call update(_:) instead
-
-    func updateItem(_ newItem: BaseItemDto) async throws {
-        guard let itemID = item.id else { return }
-        let metadata = try requireItemMetadata()
-        try await metadata.update(itemID: itemID, item: newItem)
-        let updated = try await metadata.item(id: itemID)
-        guard item.id == itemID else { throw CancellationError() }
-        item = updated
-        Notifications[.itemMetadataDidChange].post(updated)
-        events.send(.updated)
+    // Existing awaited callers retain the same fixed editor and admitted receipt.
+    func updateItem(_ item: BaseItemDto) async throws {
+        guard let request = request(), let editor else { throw CancellationError() }
+        try await publish(editor.update(item, validate: request.validate), request: request)
     }
 }
