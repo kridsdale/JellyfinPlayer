@@ -60,3 +60,17 @@ Socket subscription now survives synchronous callback retirement without a Swift
 The before-fix fake-driver run terminated with a Swift exclusivity conflict when native subscription synchronously stopped the controller. Separate factory-reentry cache cases produced three failed expectations. Retirement now detaches the old worker, wake stream, native driver and leases before invoking callbacks; generation and driver identity reject stale source/lease publication, including replacement initiated during disconnect. Both socket and account cache public signatures remain unchanged.
 
 Profile tables/builders are pure policy over captured settings/capability values; app composition owns localization, stored settings and hardware snapshots. Generic catalog policy preserves read requests and account checks; it does not replace the child catalog authorization boundary. SDK construction, discovery and native callbacks were read as source; no discovery, hardware, credential or permission query was executed. Compiler symbols are interface evidence, not runtime proof. Simulator/server activity and final whole-graph acceptance remain held.
+
+
+## Child domain, catalog, artwork and playback policy (2026-10-07)
+
+Transport callback reentry fixes are published as 7c5ad9bf; 46 networking contracts and both compile gates pass. Complete child domain/catalog/artwork/playback policy review adds ten unchanged source bodies and four compiler public interfaces. The graph remains 53 libraries; 18 complete module reviews cover 125 source bodies, and 177 scoped interface entries cover 175 unique sources of 250. All 664 app sources remain classified. Scoped call-site review is not complete consumer acceptance. Remaining whole-graph review and held runtime acceptance are required; items 1/2 stay active.
+
+| Module | Complete source bodies | macOS public symbols |
+| --- | ---: | ---: |
+| KidsDomain | 2 | 123 |
+| KidsCatalog | 2 | 31 |
+| KidsArtwork | 2 | 11 |
+| KidsPlayback | 4 | 13 |
+
+Catalog publication requires exact account/library preflight and per-item ancestry. Episode metadata and artwork pools bind the exact account/libraries, reject invalid values and retired generations, and do not authorize playback. Upper-layer scoped reads confirm only displayed verified rows reach artwork and native readiness requires pictures plus a post-resume clock. Child domain retains shuffle reservations, parent cursor retirement, session counts and explicit numbering review. All four modules and compiler inputs are unchanged; prior compile/native evidence is reused, and no new execution result is claimed. KidsAppModel source was inspected only at these call sites, so its complete review remains outstanding.

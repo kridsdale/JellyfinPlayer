@@ -1,6 +1,6 @@
 # Current engineering goal disposition
 
-Socket subscription now survives synchronous callback retirement without a Swift exclusivity crash, and transport factories cannot overwrite a newer cache binding. Four new test declarations exercise six stop/replacement cases; all 46 networking contracts pass. PlaybackProfiles, Networking and MediaCatalog complete source/public declaration reviews add 42 source bodies with scoped consumers. tvOS Debug and iOS Release compile without owned Swift/generated-macro diagnostics. The graph remains 53 libraries with all 664 app sources classified and 168 scoped interface entries covering 166 of 250 package sources. Remaining graph review and held runtime acceptance are required; items 1/2 stay active.
+Transport callback reentry fixes are published as 7c5ad9bf; 46 networking contracts and both compile gates pass. Complete child domain/catalog/artwork/playback policy review adds ten unchanged source bodies and four compiler public interfaces. The graph remains 53 libraries; 18 complete module reviews cover 125 source bodies, and 177 scoped interface entries cover 175 unique sources of 250. All 664 app sources remain classified. Scoped call-site review is not complete consumer acceptance. Remaining whole-graph review and held runtime acceptance are required; items 1/2 stay active.
 
 The table below records the candidate checkpoint from 2026-10-05. The active goal on 2026-10-06 is full-client package extraction and Swift 6 completion; see [current package evidence](package-refactor.md). It remains active.
 

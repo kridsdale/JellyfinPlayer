@@ -6426,16 +6426,19 @@
     },
     {
       "path": "Packages/KidsPlayback/Sources/KidsPlayback/PlaybackPositionPolicy.swift",
-      "reason": "Complete finite resume/tick and installed end-tolerance policies reviewed. Invalid/overflowing positions restart at zero; ordinary values keep seconds and truncate ticks. Four native contracts cover precision, invalid/boundary/representable maximum and early/exact/overrun end behavior. Missing runtime handling remains the caller Stop path; no decoder or persistence effect is owned here.",
+      "reason": "PlaybackPositionPolicy.swift: complete current source body and emitted public declarations read. Pure readiness requires decoded pictures and finite post-resume clock, not just native playing state. Bounded monotonic payload bitrate, checked seconds-to-ticks conversion and inherited one-second completion policy retain their explicit caller contracts. Reporting is a compatibility typealias to the shared owned serial queue. No native player, settings, credentials, file or catalog mutation is exposed. Listed consumers are scoped reviewed call sites; KidsAppModel and remaining graph/runtime review are not declared complete.",
       "reviewedConsumers": [
         "Swiftfin tvOS/App/KidsPlaybackAdapter.swift",
-        "Shared/Objects/MediaPlayerManager/MediaPlayerManager.swift"
+        "Shared/Objects/MediaPlayerManager/MediaPlayerManager.swift",
+        "Packages/KidsPlaybackSession/Sources/KidsPlaybackSession/KidsPlaybackController.swift"
       ],
       "reviewedInterfaces": [
-        "KidsPlaybackStartPosition.init(_)",
-        "seconds",
-        "ticks",
-        "PlaybackCompletionPolicy.acceptsEnd(position:runtime:)"
+        "enum PlaybackCompletionPolicy",
+        "init(_ position: Double)",
+        "let seconds: Double",
+        "let ticks: Int",
+        "static func acceptsEnd(position: Duration, runtime: Duration) -> Bool",
+        "struct KidsPlaybackStartPosition"
       ],
       "sha256": "311c59093bd766c84207d6a9d4629118850e147ecac5be107f37686f2adef6a1"
     },
@@ -9130,6 +9133,256 @@
         "static let supportedCollectionTypes: [CollectionType]"
       ],
       "sha256": "e7215c21a86322f75b846d9e03d494aec03b764bb824303754397d5a3af845b7"
+    },
+    {
+      "path": "Packages/KidsDomain/Sources/KidsDomain/KidsDomain.swift",
+      "reason": "KidsDomain.swift: complete current source body and emitted public declarations read. Complete checked-Sendable value policy retains exact two-library binding/account permissions, regular episode numbering/unique order, explicit missing-cursor selection, reservation-only shuffle, successful-start consumption, session limits, duplicate-end suppression, parent Set Next retirement and clock-injected gate timing. No settings, credentials, network, player or persistence effect is owned here; season/episode-zero review remains deferred. Listed consumers are scoped reviewed call sites; KidsAppModel and remaining graph/runtime review are not declared complete.",
+      "reviewedConsumers": [
+        "Packages/KidsCatalog/Sources/KidsCatalog/KidsAPI.swift",
+        "Packages/KidsCatalog/Sources/KidsCatalog/KidsEpisodeCache.swift",
+        "Packages/KidsArtwork/Sources/KidsArtwork/KidsArtworkCache.swift"
+      ],
+      "reviewedInterfaces": [
+        "@discardableResult mutating func finished(item: KidsItem, mode: KidsPlaybackMode, episodes: [KidsItem]) throws -> Bool",
+        "case ambiguousEpisodes",
+        "case denied",
+        "case episode",
+        "case invalidStateVersion",
+        "case missingCursor",
+        "case movie",
+        "case movies",
+        "case once",
+        "case ordered",
+        "case series",
+        "case shows",
+        "case shuffle",
+        "case unavailable",
+        "enum KidsCategory",
+        "enum KidsContractError",
+        "enum KidsEligibility",
+        "enum KidsPlaybackMode",
+        "enum Kind",
+        "func library(for category: KidsCategory) -> String",
+        "func mayAttempt(at now: Date) -> Bool",
+        "func missingSuccessor(showID: String, episodes: [KidsItem]) throws -> KidsItem?",
+        "func orderedNext(showID: String, episodes: [KidsItem]) throws -> (KidsItem, Double, Bool)",
+        "func permits(_ binding: KidsBinding) -> Bool",
+        "func unlocked(at now: Date) -> Bool",
+        "init()",
+        "init(administrator: Bool, allLibraries: Bool, deletion: Bool, enabledLibraries: Set<String>)",
+        "init(binding: KidsBinding)",
+        "init(id: String, name: String, kind: KidsItem.Kind, libraryID: String, seriesID: String? = nil, season: Int? = nil, episode: Int? = nil, runtime: Double? = nil, imageTag: String? = nil, imageOwnerID: String? = nil)",
+        "init(itemID: String? = nil, seconds: Double = 0, complete: Bool = false, season: Int? = nil, episode: Int? = nil, selectionID: String? = nil)",
+        "init(serverID: String, userID: String, showsID: String, moviesID: String)",
+        "init(showID: String, mode: KidsPlaybackMode, limit: Int)",
+        "mutating func attempt(correct: Bool, now: Date) -> Bool",
+        "mutating func began(item: KidsItem, mode: KidsPlaybackMode, showID: String) throws",
+        "mutating func checkpoint(item: KidsItem, mode: KidsPlaybackMode, seconds: Double)",
+        "mutating func endSession()",
+        "mutating func lock()",
+        "mutating func nextShuffle(showID: String, episodes: [KidsItem], randomOrder: [String]? = nil) throws -> KidsItem",
+        "mutating func setNext(_ item: KidsItem) throws",
+        "mutating func touch(at now: Date)",
+        "static func episodes(_ items: [KidsItem], showID: String, binding: KidsBinding) throws -> [KidsItem]",
+        "static func permits(_ item: KidsItem, binding: KidsBinding) -> Bool",
+        "struct KidsAccessPolicy",
+        "struct KidsBinding",
+        "struct KidsGate",
+        "struct KidsItem",
+        "struct KidsPreferences",
+        "struct KidsProgress",
+        "struct KidsSession",
+        "struct KidsShuffleBag",
+        "struct KidsState",
+        "var administrator: Bool",
+        "var allLibraries: Bool",
+        "var binding: KidsBinding",
+        "var blockedUntil: Date?",
+        "var complete: Bool",
+        "var completed: Int",
+        "var cycleID: String?",
+        "var deletion: Bool",
+        "var enabledLibraries: Set<String>",
+        "var episode: Int?",
+        "var episodeLimit: Int",
+        "var failures: Int",
+        "var id: String",
+        "var imageOwnerID: String?",
+        "var imageTag: String?",
+        "var isValid: Bool { get }",
+        "var itemID: String?",
+        "var kind: KidsItem.Kind",
+        "var last: String?",
+        "var libraryID: String",
+        "var libraryIDs: Set<String> { get }",
+        "var limit: Int",
+        "var mode: KidsPlaybackMode",
+        "var movies: [String : KidsProgress]",
+        "var moviesID: String",
+        "var name: String",
+        "var ordered: [String : KidsProgress]",
+        "var permitsAnother: Bool { get }",
+        "var preferences: KidsPreferences",
+        "var remaining: [String]",
+        "var runtime: Double?",
+        "var season: Int?",
+        "var seconds: Double",
+        "var selectionID: String?",
+        "var seriesID: String?",
+        "var serverID: String",
+        "var session: KidsSession?",
+        "var showID: String",
+        "var showsID: String",
+        "var shuffle: [String : KidsShuffleBag]",
+        "var spokenNavigation: Bool",
+        "var symbol: String { get }",
+        "var title: String { get }",
+        "var unlockedUntil: Date?",
+        "var userID: String",
+        "var version: Int"
+      ],
+      "sha256": "c1d61a4bacdf58b5825f47aec19a34f8d42ef36bbfdac5a0f651c0b857d42a59"
+    },
+    {
+      "path": "Packages/KidsDomain/Sources/KidsDomain/KidsErrors.swift",
+      "reason": "KidsErrors.swift: complete current source body and emitted public declarations read. Complete checked-Sendable value policy retains exact two-library binding/account permissions, regular episode numbering/unique order, explicit missing-cursor selection, reservation-only shuffle, successful-start consumption, session limits, duplicate-end suppression, parent Set Next retirement and clock-injected gate timing. No settings, credentials, network, player or persistence effect is owned here; season/episode-zero review remains deferred. Listed consumers are scoped reviewed call sites; KidsAppModel and remaining graph/runtime review are not declared complete.",
+      "reviewedConsumers": [
+        "Packages/KidsCatalog/Sources/KidsCatalog/KidsAPI.swift",
+        "Packages/KidsCatalog/Sources/KidsCatalog/KidsEpisodeCache.swift",
+        "Packages/KidsArtwork/Sources/KidsArtwork/KidsArtworkCache.swift"
+      ],
+      "reviewedInterfaces": [
+        "case authentication",
+        "case connection",
+        "case invalidResponse",
+        "case libraryChanged",
+        "case policy",
+        "case unavailable",
+        "enum KidsAPIError",
+        "var errorDescription: String? { get }"
+      ],
+      "sha256": "b70f9dd4ec20b5eabd8592aa647c862c7676be4039590ab2efc6713fac6d3eec"
+    },
+    {
+      "path": "Packages/KidsCatalog/Sources/KidsCatalog/KidsAPI.swift",
+      "reason": "KidsAPI.swift: complete current source body and emitted public declarations read. Complete native HTTP bootstrap accepts an explicit immutable URL/token and an ephemeral uncached URLSession; decoded response details remain private. Catalog preflight requires exact server/user/library IDs and non-admin/non-deleting exact folders. Every displayed catalog/episode row requires ancestry; bounded concurrency publishes stable verified prefixes. Episode pagination validates identifiers/duplicates and has a ceiling. API authorize performs fresh checks. Actor-owned episode cache binds exact account/library, regular episode values and source generation, shares bounded metadata flights and never authorizes a stream. No media scan, server write or SDK credential fallback occurs. Listed consumers are scoped reviewed call sites; KidsAppModel and remaining graph/runtime review are not declared complete.",
+      "reviewedConsumers": [
+        "Packages/KidsArtwork/Sources/KidsArtwork/KidsArtworkCache.swift",
+        "Packages/KidsApplication/Sources/KidsApplication/KidsAppModel.swift"
+      ],
+      "reviewedInterfaces": [
+        "@discardableResult func authorize(itemID: String, expectedKind: KidsItem.Kind, binding: KidsBinding) async throws -> KidsItem",
+        "func catalog(_ category: KidsCategory, binding: KidsBinding, receive: (@MainActor @Sendable ([KidsItem]) throws -> Void)? = nil) async throws -> [KidsItem]",
+        "func catalogs(first: KidsCategory = .shows, binding: KidsBinding, prepare: @MainActor @Sendable () throws -> Void = {}, receive: @escaping @MainActor @Sendable (KidsCategory, [KidsItem]) throws -> Void) async throws",
+        "func episodes(showID: String, binding: KidsBinding) async throws -> [KidsItem]",
+        "func imageRequest(for item: KidsItem, binding: KidsBinding, width: Int = 600) throws -> URLRequest",
+        "func libraries(userID: String) async throws -> [KidsLibrary]",
+        "func serverInfo() async throws -> KidsServerInfo",
+        "func validate(_ binding: KidsBinding) async throws",
+        "init(serverURL: URL, token: String, session: URLSession? = nil)",
+        "let collectionType: String?",
+        "let id: String",
+        "let items: [KidsLibrary]",
+        "let name: String",
+        "let serverURL: URL",
+        "let token: String",
+        "struct KidsAPI",
+        "struct KidsLibrary",
+        "struct KidsLibraryPage",
+        "struct KidsServerInfo"
+      ],
+      "sha256": "bdada94746d19c1117c6345a465235a2dd0beefb0be175f79b08546a5e4b148c"
+    },
+    {
+      "path": "Packages/KidsCatalog/Sources/KidsCatalog/KidsEpisodeCache.swift",
+      "reason": "KidsEpisodeCache.swift: complete current source body and emitted public declarations read. Complete native HTTP bootstrap accepts an explicit immutable URL/token and an ephemeral uncached URLSession; decoded response details remain private. Catalog preflight requires exact server/user/library IDs and non-admin/non-deleting exact folders. Every displayed catalog/episode row requires ancestry; bounded concurrency publishes stable verified prefixes. Episode pagination validates identifiers/duplicates and has a ceiling. API authorize performs fresh checks. Actor-owned episode cache binds exact account/library, regular episode values and source generation, shares bounded metadata flights and never authorizes a stream. No media scan, server write or SDK credential fallback occurs. Listed consumers are scoped reviewed call sites; KidsAppModel and remaining graph/runtime review are not declared complete.",
+      "reviewedConsumers": [
+        "Packages/KidsArtwork/Sources/KidsArtwork/KidsArtworkCache.swift",
+        "Packages/KidsApplication/Sources/KidsApplication/KidsAppModel.swift"
+      ],
+      "reviewedInterfaces": [
+        "actor KidsEpisodeCache",
+        "func episodes(for show: KidsItem, binding expected: KidsBinding) async throws -> [KidsItem]",
+        "func invalidate()",
+        "func prefetch(for show: KidsItem, binding expected: KidsBinding) async throws -> [KidsItem]?",
+        "init(api: KidsAPI, binding: KidsBinding)",
+        "init(binding: KidsBinding, lifetime: Duration = .seconds(300), capacity: Int = 12, fetch: @escaping KidsEpisodeCache.Fetch)",
+        "typealias Fetch = @Sendable (String) async throws -> [KidsItem]"
+      ],
+      "sha256": "dfda1dacf535219577e4753417d2605237ad08117318f2c54416fe6f5285644d"
+    },
+    {
+      "path": "Packages/KidsArtwork/Sources/KidsArtwork/KidsArtworkCache.swift",
+      "reason": "KidsArtworkCache.swift: complete current source body and emitted public declarations read. Complete account-bound byte cache validates eligibility, image owner/tag and width before hits, bounds retained bytes/entries, queued flights and four active requests, and retires generation-tagged loads. Memory pressure may release retention without revoking a visible shared load; old loads cannot refill it. Prefetch selects only the focused approved category and immediate artwork neighbors plus that show metadata; no stream request is made. UIKit pixels and displayed-catalog membership remain in reviewed upper layers. Listed consumers are scoped reviewed call sites; KidsAppModel and remaining graph/runtime review are not declared complete.",
+      "reviewedConsumers": [
+        "Packages/KidsArtworkUI/Sources/KidsArtworkUI/KidsArtworkStore.swift",
+        "Packages/KidsApplication/Sources/KidsApplication/KidsAppModel.swift"
+      ],
+      "reviewedInterfaces": [
+        "actor KidsArtworkCache",
+        "func data(for item: KidsItem, binding expected: KidsBinding, width: Int = 600) async throws -> Data",
+        "func invalidate()",
+        "func trimForMemoryPressure()",
+        "init(api: KidsAPI, binding: KidsBinding)",
+        "init(binding: KidsBinding, lifetime: Duration = .seconds(300), byteLimit: Int = 24 * 1024 * 1024, entryLimit: Int = 96, fetch: @escaping KidsArtworkCache.Fetch)",
+        "typealias Fetch = @Sendable (KidsItem, Int) async throws -> Data"
+      ],
+      "sha256": "ba7b7dab51bf49a664525d8778e639cd4bb1bd3f8c13e3a5ecadffcf297f8b8a"
+    },
+    {
+      "path": "Packages/KidsArtwork/Sources/KidsArtwork/KidsPrefetchPlan.swift",
+      "reason": "KidsPrefetchPlan.swift: complete current source body and emitted public declarations read. Complete account-bound byte cache validates eligibility, image owner/tag and width before hits, bounds retained bytes/entries, queued flights and four active requests, and retires generation-tagged loads. Memory pressure may release retention without revoking a visible shared load; old loads cannot refill it. Prefetch selects only the focused approved category and immediate artwork neighbors plus that show metadata; no stream request is made. UIKit pixels and displayed-catalog membership remain in reviewed upper layers. Listed consumers are scoped reviewed call sites; KidsAppModel and remaining graph/runtime review are not declared complete.",
+      "reviewedConsumers": [
+        "Packages/KidsArtworkUI/Sources/KidsArtworkUI/KidsArtworkStore.swift",
+        "Packages/KidsApplication/Sources/KidsApplication/KidsAppModel.swift"
+      ],
+      "reviewedInterfaces": [
+        "let artwork: [KidsItem]",
+        "let show: KidsItem?",
+        "static func make(focusedID: String?, category: KidsCategory, items: [KidsItem], binding: KidsBinding) -> KidsPrefetchPlan",
+        "struct KidsPrefetchPlan"
+      ],
+      "sha256": "906f749b2e362173bb7020479f4695cedb797df6ee0d254f781d849df77af0fb"
+    },
+    {
+      "path": "Packages/KidsPlayback/Sources/KidsPlayback/KidsPlaybackReadiness.swift",
+      "reason": "KidsPlaybackReadiness.swift: complete current source body and emitted public declarations read. Pure readiness requires decoded pictures and finite post-resume clock, not just native playing state. Bounded monotonic payload bitrate, checked seconds-to-ticks conversion and inherited one-second completion policy retain their explicit caller contracts. Reporting is a compatibility typealias to the shared owned serial queue. No native player, settings, credentials, file or catalog mutation is exposed. Listed consumers are scoped reviewed call sites; KidsAppModel and remaining graph/runtime review are not declared complete.",
+      "reviewedConsumers": [
+        "Packages/KidsPlaybackSession/Sources/KidsPlaybackSession/KidsPlaybackController.swift",
+        "Shared/Objects/MediaPlayerManager/MediaPlayerManager.swift"
+      ],
+      "reviewedInterfaces": [
+        "enum KidsPlaybackReadiness",
+        "static func permitsPresentation(playingOrPaused: Bool, buffering: Bool, preparing: Bool, resumePending: Bool, failedOrRecovering: Bool = false, requestedPosition: Double, clock: Double, displayedPictures: Int) -> Bool"
+      ],
+      "sha256": "208811ccbcf394fe06839d6461cb22aadaf0df7a7613b4cfa2483e1daafa803d"
+    },
+    {
+      "path": "Packages/KidsPlayback/Sources/KidsPlayback/KidsPlaybackReporter.swift",
+      "reason": "KidsPlaybackReporter.swift: complete current source body and emitted public declarations read. Pure readiness requires decoded pictures and finite post-resume clock, not just native playing state. Bounded monotonic payload bitrate, checked seconds-to-ticks conversion and inherited one-second completion policy retain their explicit caller contracts. Reporting is a compatibility typealias to the shared owned serial queue. No native player, settings, credentials, file or catalog mutation is exposed. Listed consumers are scoped reviewed call sites; KidsAppModel and remaining graph/runtime review are not declared complete.",
+      "reviewedConsumers": [
+        "Packages/KidsPlaybackSession/Sources/KidsPlaybackSession/KidsPlaybackController.swift",
+        "Shared/Objects/MediaPlayerManager/MediaPlayerManager.swift"
+      ],
+      "reviewedInterfaces": [
+        "typealias KidsPlaybackReporter<Snapshot> = CoalescingSessionQueue<Snapshot> where Snapshot : Sendable"
+      ],
+      "sha256": "239c73753692a17af1a2dafeff8c2531608d913a34046aceaa66731b82242450"
+    },
+    {
+      "path": "Packages/KidsPlayback/Sources/KidsPlayback/PlaybackBitrateMeasurement.swift",
+      "reason": "PlaybackBitrateMeasurement.swift: complete current source body and emitted public declarations read. Pure readiness requires decoded pictures and finite post-resume clock, not just native playing state. Bounded monotonic payload bitrate, checked seconds-to-ticks conversion and inherited one-second completion policy retain their explicit caller contracts. Reporting is a compatibility typealias to the shared owned serial queue. No native player, settings, credentials, file or catalog mutation is exposed. Listed consumers are scoped reviewed call sites; KidsAppModel and remaining graph/runtime review are not declared complete.",
+      "reviewedConsumers": [
+        "Packages/KidsPlaybackSession/Sources/KidsPlaybackSession/KidsPlaybackController.swift",
+        "Shared/Objects/MediaPlayerManager/MediaPlayerManager.swift"
+      ],
+      "reviewedInterfaces": [
+        "case invalidMeasurement",
+        "enum Failure",
+        "enum PlaybackBitrateMeasurement",
+        "static func estimate(bytes: Int, elapsed: Duration) throws -> Int"
+      ],
+      "sha256": "737417d242757061a9c6fefcfaa14b9cea1f9ccacc6f20595978e3fc2112171c"
     }
   ],
   "limits": "This ledger records bodies explicitly reviewed, with exact current hashes; earlier prose or lexical inventory is not automatically promoted. Pending and mixed entries prevent whole-source completion. Retained UI algorithms have specific presentation reasons, not folder/import-based blanket approval. API entries do not classify the rest of the public graph. Source review and offline tests do not satisfy held runtime acceptance.",
@@ -9140,7 +9393,7 @@
     "classification": {
       "source-reviewed-retained": 664
     },
-    "currentAPIReviews": 168,
+    "currentAPIReviews": 177,
     "runtimeAcceptance": "held by human; no simulator/server testing"
   },
   "packageReviews": [
@@ -9418,6 +9671,70 @@
       ],
       "sourceReview": "complete current source and public declarations",
       "consumerReview": "scoped listed boundaries; remaining whole-graph review required",
+      "runtimeAcceptance": "held by human"
+    },
+    {
+      "module": "KidsDomain",
+      "manifestSHA256": "50dbdf9599b9fa62a6e5630dae53f51266d2d2c0be3e4a4e9580297d127d302f",
+      "sourceBodiesRead": 2,
+      "compilerPublicSymbols": 123,
+      "compilerPlatform": "macOS14; app builds reused with unchanged inputs",
+      "compilerGraphs": [
+        {
+          "file": "KidsDomain.symbols.json",
+          "sha256": "20863c607361802343a2487f4856287bcb337f52029221b0247c7a3f540260c4"
+        }
+      ],
+      "sourceReview": "complete current source and public declarations",
+      "consumerReview": "scoped listed call sites; remaining whole-graph review required",
+      "runtimeAcceptance": "held by human"
+    },
+    {
+      "module": "KidsCatalog",
+      "manifestSHA256": "0a1e571535e672d06c3b2399a3f6f60dac540b40527fdf94657827d40648af0a",
+      "sourceBodiesRead": 2,
+      "compilerPublicSymbols": 31,
+      "compilerPlatform": "macOS14; app builds reused with unchanged inputs",
+      "compilerGraphs": [
+        {
+          "file": "KidsCatalog.symbols.json",
+          "sha256": "5c10b98b077230e604474cc8d47f23e100550ebd913a90e2267ee78e929adc9f"
+        }
+      ],
+      "sourceReview": "complete current source and public declarations",
+      "consumerReview": "scoped listed call sites; remaining whole-graph review required",
+      "runtimeAcceptance": "held by human"
+    },
+    {
+      "module": "KidsArtwork",
+      "manifestSHA256": "4ba885acdd679f9fd2d0900fe28f52f69d4434516a71c0c44dcecd46c3414598",
+      "sourceBodiesRead": 2,
+      "compilerPublicSymbols": 11,
+      "compilerPlatform": "macOS14; app builds reused with unchanged inputs",
+      "compilerGraphs": [
+        {
+          "file": "KidsArtwork.symbols.json",
+          "sha256": "f170b00d0cbab7f6d4da04d1387aed06fa2899c5c7432f86c08c074df0eadc6c"
+        }
+      ],
+      "sourceReview": "complete current source and public declarations",
+      "consumerReview": "scoped listed call sites; remaining whole-graph review required",
+      "runtimeAcceptance": "held by human"
+    },
+    {
+      "module": "KidsPlayback",
+      "manifestSHA256": "b8616019525c5d34ec6ed93e0eb761b89f987e36cba6209ca44fef27e22542fd",
+      "sourceBodiesRead": 4,
+      "compilerPublicSymbols": 13,
+      "compilerPlatform": "macOS14; app builds reused with unchanged inputs",
+      "compilerGraphs": [
+        {
+          "file": "KidsPlayback.symbols.json",
+          "sha256": "464b79c3f079218ca759f81475ae69050f274c2e26549bf172a2d0a743839dfe"
+        }
+      ],
+      "sourceReview": "complete current source and public declarations",
+      "consumerReview": "scoped listed call sites; remaining whole-graph review required",
       "runtimeAcceptance": "held by human"
     }
   ]
