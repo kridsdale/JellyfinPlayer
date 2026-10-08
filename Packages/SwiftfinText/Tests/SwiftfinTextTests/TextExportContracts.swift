@@ -92,4 +92,37 @@ struct TextExportContracts {
         } catch { #expect((error as NSError).domain == NSCocoaErrorDomain) }
         #expect(try Data(contentsOf: file) == Data("occupied".utf8))
     }
+
+    @Test
+    func `metadata title cannot replace a file outside the export directory`() throws {
+        let root = try directory()
+        defer { try? FileManager.default.removeItem(at: root) }
+        let exports = root.appending(path: "exports", directoryHint: .isDirectory)
+        try FileManager.default.createDirectory(at: exports, withIntermediateDirectories: true)
+        let sibling = root.appending(path: "sentinel.txt")
+        try Data("untouched".utf8).write(to: sibling)
+        let url = try TextExportFile.write(title: "../sentinel", body: "export", directory: exports)
+        #expect(url.deletingLastPathComponent().standardizedFileURL == exports.standardizedFileURL)
+        #expect(url.lastPathComponent == ".._sentinel.txt")
+        #expect(try Data(contentsOf: sibling) == Data("untouched".utf8))
+        #expect(try Data(contentsOf: url) == Data("export".utf8))
+    }
+
+    @Test
+    func `path separators and NUL become literal safe filename characters`() throws {
+        let root = try directory()
+        defer { try? FileManager.default.removeItem(at: root) }
+        for (title, filename) in [
+            ("nested/title", "nested_title.txt"),
+            ("/absolute", "_absolute.txt"),
+            ("nul\0title", "nul_title.txt"),
+            ("你好/é", "你好_é.txt"),
+            ("literal%2Ftitle", "literal%2Ftitle.txt")
+        ] {
+            let url = try TextExportFile.write(title: title, body: "bytes", directory: root)
+            #expect(url.deletingLastPathComponent().standardizedFileURL == root.standardizedFileURL)
+            #expect(url.lastPathComponent == filename)
+            #expect(try Data(contentsOf: url) == Data("bytes".utf8))
+        }
+    }
 }

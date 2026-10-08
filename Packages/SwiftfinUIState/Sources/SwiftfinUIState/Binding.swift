@@ -51,10 +51,6 @@ public extension Binding {
             set: { wrappedValue = Swift.max($0, minValue) }
         )
     }
-
-    func negate() -> Binding<Bool> where Value == Bool {
-        map(getter: { !$0 }, setter: { $0 })
-    }
 }
 
 @MainActor

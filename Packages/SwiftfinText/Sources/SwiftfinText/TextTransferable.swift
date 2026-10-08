@@ -28,7 +28,11 @@ public extension TextTransferable {
 
 enum TextExportFile {
     static func write(title: String, body: String, directory: URL = .temporaryDirectory) throws -> URL {
-        let url = directory.appending(path: title.appending(".txt"))
+        // Server-provided display titles become one filename component.
+        let filename = title.replacingOccurrences(of: "/", with: "_")
+            .replacingOccurrences(of: "\0", with: "_")
+            .appending(".txt")
+        let url = directory.appending(path: filename)
         try body.write(to: url, atomically: true, encoding: .utf8)
         return url
     }

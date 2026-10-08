@@ -5956,35 +5956,41 @@
     },
     {
       "path": "Packages/SwiftfinUIState/Sources/SwiftfinUIState/ViewLifetimeObserver.swift",
-      "reason": "Main-actor final-lifetime owner stores an actor-qualified callback and delivers exactly once at final release, including foreign executor release. App owns StateObject placement and manager composition; no SDK object or playback operation escapes. Synthetic native release contracts prove executor/lifetime only, not SwiftUI timing.",
+      "reason": "ViewLifetimeObserver.swift: complete current source body and macOS emitted declarations read. Complete bindings, wrappers, publishers, weak cancellable timers and selection/view lifetimes remain on MainActor. Arbitrary generic UI values are not claimed Sendable. Generation/source-tagged owners reject late delivery/retirement; current-date scheduling and final-release behavior have explicit owners. The unused inverse binding with asymmetric getter/setter was removed. Consumer entries are scoped reviewed boundaries; full remaining graph/runtime acceptance is required.",
       "reviewedConsumers": [
         "Shared/Extensions/ViewExtensions/Modifiers/OnFinalDisappearModifier.swift",
-        "Shared/Components/NativeVideoPlayer.swift"
+        "Shared/Components/NativeVideoPlayer.swift",
+        "Shared/Objects/MediaPlayerManager/NowPlayable/NowPlayableObserver.swift",
+        "Packages/SwiftfinUIState/Tests/SwiftfinUIStateTests"
       ],
       "reviewedInterfaces": [
-        "init(onEnd:)",
-        "isolated deinit"
+        "@MainActor final class ViewLifetimeObserver",
+        "@MainActor init(onEnd: @escaping @MainActor @Sendable () -> Void)"
       ],
       "sha256": "55cacf128a99a252cf33d66f0fbf19ad2979d248f2ba0b3d4cb0c952f4cdbd85"
     },
     {
       "path": "Packages/SwiftfinUIState/Sources/SwiftfinUIState/JumpProgressObserver.swift",
-      "reason": "Main-actor mutable UI aggregation with private direction/subscription and existing PokeIntervalTimer owner. Scoped gesture/key/container/scrubbing members use count/direction/reset and public timer expiry exactly as before; their complete unrelated bodies are not classified by this API entry. Captured traces, replacement expiry, external timer retention and explicit reset have native contracts.",
+      "reason": "JumpProgressObserver.swift: complete current source body and macOS emitted declarations read. Complete bindings, wrappers, publishers, weak cancellable timers and selection/view lifetimes remain on MainActor. Arbitrary generic UI values are not claimed Sendable. Generation/source-tagged owners reject late delivery/retirement; current-date scheduling and final-release behavior have explicit owners. The unused inverse binding with asymmetric getter/setter was removed. Consumer entries are scoped reviewed boundaries; full remaining graph/runtime acceptance is required.",
       "reviewedConsumers": [
         "Shared/Objects/JumpProgressObserver.swift",
         "Shared/Objects/VideoPlayerContainerState.swift",
         "Swiftfin/Views/VideoPlayer/Gestures/VideoPlayerContainerView+TapGesture.swift",
         "Swiftfin/Views/VideoPlayer/Gestures/VideoPlayerContainerView+PanGesture.swift",
         "Swiftfin/Views/VideoPlayer/VideoPlayer+KeyCommands.swift",
-        "Swiftfin tvOS/Views/VideoPlayer/PlaybackControls/Components/PlaybackControls+Scrubbing.swift"
+        "Swiftfin tvOS/Views/VideoPlayer/PlaybackControls/Components/PlaybackControls+Scrubbing.swift",
+        "Shared/Extensions/ViewExtensions/Modifiers/OnFinalDisappearModifier.swift",
+        "Shared/Objects/MediaPlayerManager/NowPlayable/NowPlayableObserver.swift",
+        "Packages/SwiftfinUIState/Tests/SwiftfinUIStateTests"
       ],
       "reviewedInterfaces": [
-        "init(interval:)",
-        "timer",
-        "jumps",
-        "reset()",
-        "jumpForward(interval:)",
-        "jumpBackward(interval:)"
+        "@MainActor convenience init(interval: TimeInterval = 2)",
+        "@MainActor final class JumpProgressObserver",
+        "@MainActor func jumpBackward(interval: TimeInterval? = nil)",
+        "@MainActor func jumpForward(interval: TimeInterval? = nil)",
+        "@MainActor func reset()",
+        "@MainActor let timer: PokeIntervalTimer",
+        "@MainActor var jumps: Int { get }"
       ],
       "sha256": "6360940d842b57f2fc9f88867b5028b17b4728b195734ee5fa84df588c04ec03"
     },
@@ -6084,19 +6090,21 @@
     },
     {
       "path": "Packages/SwiftfinText/Sources/SwiftfinText/TextTransferable.swift",
-      "reason": "Text owns plain-text CoreTransferable representation and exact title/body UTF-8 temporary export; writer is internal with an injected directory for isolated tests. App shares immutable DTO text through explicit retroactive conformances and retains ShareLink presentation. SentTransferredFile is the required framework representation value, not a public mutable file handle. Native tests use disposable synthetic text only; actual share-sheet/OS transfer cleanup remains held.",
+      "reason": "TextTransferable.swift: complete current source body and macOS emitted declarations read. String/URL/character helpers retain installed Unicode, raw-value and legacy suffix matching behavior. Hashes/random labels are value helpers, not account security. TextTransferable is the explicit file-effect boundary: server titles now replace slash/NUL before appending one filename in the chosen directory. Normal filenames, UTF8 bytes and atomic same-title replacement remain unchanged. Consumer entries are scoped reviewed boundaries; full remaining graph/runtime acceptance is required.",
       "reviewedConsumers": [
         "Shared/Objects/TextTransferable.swift",
         "Shared/Extensions/JellyfinAPI/AuthenticationInfo.swift",
         "Shared/Extensions/JellyfinAPI/MediaSourceInfo.swift",
-        "Shared/Extensions/JellyfinAPI/MediaStream.swift"
+        "Shared/Extensions/JellyfinAPI/MediaStream.swift",
+        "Packages/SwiftfinText/Tests/SwiftfinTextTests/TextExportContracts.swift"
       ],
       "reviewedInterfaces": [
-        "TextTransferable transferTitle/transferBody",
-        "transferRepresentation",
-        "internal TextExportFile.write(title:body:directory:)"
+        "protocol TextTransferable : Transferable",
+        "static var transferRepresentation: some TransferRepresentation { get }",
+        "var transferBody: String { get }",
+        "var transferTitle: String { get }"
       ],
-      "sha256": "009f7b4f90134531d1945dff8c37c1317f1cf5a89e1bd249a337591d8f17c72c"
+      "sha256": "716da6c1760d3a974fe60f3ba4d593affa6926d50cf68b8348247388007471ae"
     },
     {
       "path": "Packages/SwiftfinAsyncStreams/Sources/SwiftfinAsyncStreams/ScopedPublisher.swift",
@@ -6177,16 +6185,24 @@
     },
     {
       "path": "Packages/SwiftfinUIState/Sources/SwiftfinUIState/UIObjectSelection.swift",
-      "reason": "Main-actor generic selection uses reference identity, synchronous UI events and explicit account clear. Events are Sendable only for Sendable objects; current is publicly read-only. Four native contracts cover equal-value/different-object retirement, immediate send/cancellation, weak payload release, replacement and reopen. Native player lifecycle/task ownership is outside this interface; runtime is held.",
+      "reason": "UIObjectSelection.swift: complete current source body and macOS emitted declarations read. Complete bindings, wrappers, publishers, weak cancellable timers and selection/view lifetimes remain on MainActor. Arbitrary generic UI values are not claimed Sendable. Generation/source-tagged owners reject late delivery/retirement; current-date scheduling and final-release behavior have explicit owners. The unused inverse binding with asymmetric getter/setter was removed. Consumer entries are scoped reviewed boundaries; full remaining graph/runtime acceptance is required.",
       "reviewedConsumers": [
         "Shared/Services/UserSession/UserSessionManager.swift",
         "Shared/Objects/MediaPlayerManager/MediaPlayerManager.swift",
-        "Shared/Coordinators/Navigation/NavigationRoute/NavigationRoute+Media.swift"
+        "Shared/Coordinators/Navigation/NavigationRoute/NavigationRoute+Media.swift",
+        "Shared/Extensions/ViewExtensions/Modifiers/OnFinalDisappearModifier.swift",
+        "Shared/Objects/MediaPlayerManager/NowPlayable/NowPlayableObserver.swift",
+        "Packages/SwiftfinUIState/Tests/SwiftfinUIStateTests"
       ],
       "reviewedInterfaces": [
-        "UIObjectEvent.activated/retired",
-        "UIObjectSelection.init/current/apply/clear",
-        "conditional event Sendable"
+        "@MainActor final class UIObjectSelection<Object> where Object : AnyObject",
+        "@MainActor func apply(_ event: UIObjectEvent<Object>)",
+        "@MainActor func clear()",
+        "@MainActor init()",
+        "@MainActor var current: Object? { get }",
+        "case activated(Object)",
+        "case retired(Object)",
+        "enum UIObjectEvent<Object> where Object : AnyObject"
       ],
       "sha256": "b09c76cac80343cfb1ddee690273f6d73e37785d7d5848968a868f8deaba5822"
     },
@@ -6380,16 +6396,20 @@
     },
     {
       "path": "Packages/SwiftfinUIState/Sources/SwiftfinUIState/CommittedPublished.swift",
-      "reason": "Complete actor-qualified wrapper and closed UI-actor player consumers reviewed. Values commit before publication; current-value filtering discards an older emission after reentrant terminal assignment. Weak filter captures do not retain the value owner. Three native contracts verify stored-value reads, terminal reentry without assumed subscriber order and owner release; all26 UIState contracts pass. The publisher is explicitly a UI-actor composition API, not a foreign-executor bridge. Actual SwiftUI invalidation/native state observations remain held.",
+      "reason": "CommittedPublished.swift: complete current source body and macOS emitted declarations read. Complete bindings, wrappers, publishers, weak cancellable timers and selection/view lifetimes remain on MainActor. Arbitrary generic UI values are not claimed Sendable. Generation/source-tagged owners reject late delivery/retirement; current-date scheduling and final-release behavior have explicit owners. The unused inverse binding with asymmetric getter/setter was removed. Consumer entries are scoped reviewed boundaries; full remaining graph/runtime acceptance is required.",
       "reviewedConsumers": [
         "Shared/Objects/MediaPlayerManager/MediaPlayerManager.swift",
         "Shared/Objects/MediaPlayerManager/MediaPlayerProxy/MediaPlayerProxy+AVPlayer.swift",
-        "Swiftfin tvOS/App/KidsPlaybackAdapter.swift"
+        "Swiftfin tvOS/App/KidsPlaybackAdapter.swift",
+        "Shared/Extensions/ViewExtensions/Modifiers/OnFinalDisappearModifier.swift",
+        "Shared/Objects/MediaPlayerManager/NowPlayable/NowPlayableObserver.swift",
+        "Packages/SwiftfinUIState/Tests/SwiftfinUIStateTests"
       ],
       "reviewedInterfaces": [
-        "init(wrappedValue:)",
-        "wrappedValue",
-        "projectedValue"
+        "@MainActor @propertyWrapper final class CommittedPublished<Value> where Value : Equatable, Value : Sendable",
+        "@MainActor init(wrappedValue: Value)",
+        "@MainActor var projectedValue: AnyPublisher<Value, Never> { get }",
+        "@MainActor var wrappedValue: Value { get set }"
       ],
       "sha256": "96daedac653abc355236253dc031c881a7a7ef472e284d0d469ff98b869ec125"
     },
@@ -6437,16 +6457,28 @@
     },
     {
       "path": "Packages/SwiftfinMediaTracks/Sources/SwiftfinMediaTracks/MediaVideoQuality.swift",
-      "reason": "Small immutable Sendable/Equatable quality value from pinned SDK DTOs. Default video selection spans item/source streams before ordered first-video fallback; existing poster width-or-height cutoffs and Dolby-first/HDR fallback classification are preserved. Four synthetic native contracts cover cross-source ordering, every threshold, absent/malformed values and independent-executor use. Consumer provides only labels/localization; inherited generic stream-characteristic cutoffs remain distinct.",
+      "reason": "MediaVideoQuality.swift: complete current source body and macOS emitted declarations read. Public raw DTO projections preserve nil/external versus playback-policy filtering. Captured profile/mode values decide rebuilding; disabled tracks remain local. Native primitive tracks project into deterministic maps, including transcoding and sidecar IDs. No native player handle, server action or playback task crosses this value-policy owner. Consumer entries are scoped reviewed boundaries; full remaining graph/runtime acceptance is required.",
       "reviewedConsumers": [
-        "Shared/Extensions/JellyfinAPI/BaseItemDto/BaseItemDto+PosterSubtitle.swift"
+        "Shared/Extensions/JellyfinAPI/BaseItemDto/BaseItemDto+PosterSubtitle.swift",
+        "Shared/Objects/MediaPlayerManager/MediaPlayerItem/MediaPlayerItem.swift",
+        "Shared/Objects/MediaPlayerManager/MediaPlayerItem/MediaPlayerItem+Build.swift",
+        "Shared/Objects/MediaPlayerManager/MediaPlayerProxy/MediaPlayerProxy+MPV.swift"
       ],
       "reviewedInterfaces": [
-        "MediaVideoQuality.init(_:)",
-        "Resolution",
-        "resolution",
-        "Range",
-        "range"
+        "case dolbyVision",
+        "case hd1080",
+        "case hd1440",
+        "case hd720",
+        "case hdr",
+        "case sd",
+        "case uhd4K",
+        "case uhd8K",
+        "enum Range",
+        "enum Resolution",
+        "init(_ item: BaseItemDto)",
+        "let range: MediaVideoQuality.Range?",
+        "let resolution: MediaVideoQuality.Resolution?",
+        "struct MediaVideoQuality"
       ],
       "sha256": "3ab727714468d649642fd1f775a84ac599c21b135ad82433b3aeaeac137a4547"
     },
@@ -6734,34 +6766,55 @@
     },
     {
       "path": "Packages/SwiftfinNowPlaying/Sources/SwiftfinNowPlaying/NowPlayingController.swift",
-      "reviewedInterfaces": [
-        "init()",
-        "configure(_:handledByInterface:handler:)",
-        "clearCommands()",
-        "setMetadata(_:)",
-        "updatePlayback(playing:metadata:)",
-        "NowPlayingOutput",
-        "NowPlayingRegistry"
-      ],
+      "reason": "NowPlayingController.swift: complete current source body and macOS emitted declarations read. The complete main-actor process registry owns SDK command tokens and publication epochs, guarding reentrant installation/removal/read/write. Foreign callbacks immediately project checked numeric events and hop before effects; metadata/native artwork remain actor-owned. UIKit artwork captures only immutable SDK image. Real command center publication is held. Consumer entries are scoped reviewed boundaries; full remaining graph/runtime acceptance is required.",
       "reviewedConsumers": [
         "Shared/Objects/MediaPlayerManager/NowPlayable/NowPlayableObserver.swift",
         "Shared/Views/VideoPlayer/VideoPlayerContainerView/VideoPlayerContainerView.swift"
       ],
-      "reason": "Complete registry/controller and native output adapter reviewed: MainActor owns process metadata and exact SDK tokens; each configure captures a distinct owner/epoch lease. Replacement revokes authority before SDK callbacks, removes every captured old/orphan token and preserves newer enabled commands through reentry. Dynamic updates validate before reading and between metadata/play-state effects. Interface-handled commands acknowledge without forwarding twice. Immutable events are Sendable; native tokens/SDK callback objects stay internal. Already accepted SDK effects are not transactional rollback.",
+      "reviewedInterfaces": [
+        "@MainActor convenience init()",
+        "@MainActor final class NowPlayingController",
+        "@MainActor func clearCommands()",
+        "@MainActor func configure(_ commands: [NowPlayableCommand], handledByInterface: Set<NowPlayableCommand> = [], handler: @escaping @MainActor @Sendable (NowPlayableCommand, NowPlayableCommand.Event) -> MPRemoteCommandHandlerStatus)",
+        "@MainActor func setMetadata(_ metadata: NowPlayableStaticMetadata)",
+        "@MainActor func updatePlayback(playing: Bool, metadata: NowPlayableDynamicMetadata)"
+      ],
       "sha256": "6ebed3f6018256d33ea5361f25a21aa2349a6ae649213fd4ce4b7690535ff85b"
     },
     {
       "path": "Packages/SwiftfinNowPlaying/Sources/SwiftfinNowPlaying/NowPlayableCommand.swift",
-      "reviewedInterfaces": [
-        "NowPlayableCommand",
-        "Event.init(interval:positionTime:)",
-        "Event.isValid(for:)",
-        "addHandler(_:)"
-      ],
+      "reason": "NowPlayableCommand.swift: complete current source body and macOS emitted declarations read. The complete main-actor process registry owns SDK command tokens and publication epochs, guarding reentrant installation/removal/read/write. Foreign callbacks immediately project checked numeric events and hop before effects; metadata/native artwork remain actor-owned. UIKit artwork captures only immutable SDK image. Real command center publication is held. Consumer entries are scoped reviewed boundaries; full remaining graph/runtime acceptance is required.",
       "reviewedConsumers": [
         "Shared/Objects/MediaPlayerManager/NowPlayable/NowPlayableObserver.swift"
       ],
-      "reason": "Complete command DTO/adapter reviewed: immutable Sendable interval/position values are copied from raw native events on their SDK executor and validated before queued MainActor delivery; the registry rechecks epoch before effects. Native command mapping, preferred intervals and target installation stay internal. Native success acknowledges queued delivery rather than synchronous playback completion; unsupported command behavior remains defined by the supplied handler.",
+      "reviewedInterfaces": [
+        "case bookmark",
+        "case changePlaybackPosition",
+        "case changePlaybackRate",
+        "case changeRepeatMode",
+        "case changeShuffleMode",
+        "case disableLanguageOption",
+        "case dislike",
+        "case enableLanguageOption",
+        "case like",
+        "case nextTrack",
+        "case pause",
+        "case play",
+        "case previousTrack",
+        "case rating",
+        "case seekBackward",
+        "case seekForward",
+        "case skipBackward",
+        "case skipForward",
+        "case stop",
+        "case togglePausePlay",
+        "enum NowPlayableCommand",
+        "func isValid(for command: NowPlayableCommand) -> Bool",
+        "init(interval: Double? = nil, positionTime: Double? = nil)",
+        "let interval: Double?",
+        "let positionTime: Double?",
+        "struct Event"
+      ],
       "sha256": "14c2ee5a35002ceb62bc4d0d139c519c6557a6c57260f6259d63ed08d6821777"
     },
     {
@@ -7598,6 +7651,553 @@
         "func store(in set: inout Set<AnyCancellable>)"
       ],
       "sha256": "2c64471778972909d3e075d916b03e82d1077f989a31fc3add02b9c4deeaf7c9"
+    },
+    {
+      "path": "Packages/SwiftfinValues/Sources/SwiftfinValues/Comparable.swift",
+      "reason": "Comparable.swift: complete current source body and macOS emitted declarations read. All transformations are synchronous and retain no callbacks. Writable key-path projections can mutate referenced elements and are not deep copies. Integer/floating conversions and rounding retain standard finite/representable/nonzero-divisor preconditions; generic inputs gain no Sendable guarantee. Consumer entries are scoped reviewed boundaries; full remaining graph/runtime acceptance is required.",
+      "reviewedConsumers": [
+        "Packages/SwiftfinFormatting/Sources/SwiftfinFormatting/EditorFormats.swift",
+        "Packages/SwiftfinFormatting/Sources/SwiftfinFormatting/RelativeDateFormats.swift"
+      ],
+      "reviewedInterfaces": [
+        "func clamped(to range: ClosedRange<Self>) -> Self"
+      ],
+      "sha256": "44892ff533eb5a199aed0ce59fc05230b81669b3ee008f945ab345415fb5d51e"
+    },
+    {
+      "path": "Packages/SwiftfinValues/Sources/SwiftfinValues/Equatable.swift",
+      "reason": "Equatable.swift: complete current source body and macOS emitted declarations read. All transformations are synchronous and retain no callbacks. Writable key-path projections can mutate referenced elements and are not deep copies. Integer/floating conversions and rounding retain standard finite/representable/nonzero-divisor preconditions; generic inputs gain no Sendable guarantee. Consumer entries are scoped reviewed boundaries; full remaining graph/runtime acceptance is required.",
+      "reviewedConsumers": [
+        "Packages/SwiftfinFormatting/Sources/SwiftfinFormatting/EditorFormats.swift",
+        "Packages/SwiftfinFormatting/Sources/SwiftfinFormatting/RelativeDateFormats.swift"
+      ],
+      "reviewedInterfaces": [
+        "func mutating<Value>(_ keyPath: WritableKeyPath<Self, Value>, with newValue: Value) -> Self"
+      ],
+      "sha256": "1d0c03c9767ffdf7560396244abc6cfd6077f9a8f5c13354affbe91aeef2fd22"
+    },
+    {
+      "path": "Packages/SwiftfinValues/Sources/SwiftfinValues/IntegerConversion.swift",
+      "reason": "IntegerConversion.swift: complete current source body and macOS emitted declarations read. All transformations are synchronous and retain no callbacks. Writable key-path projections can mutate referenced elements and are not deep copies. Integer/floating conversions and rounding retain standard finite/representable/nonzero-divisor preconditions; generic inputs gain no Sendable guarantee. Consumer entries are scoped reviewed boundaries; full remaining graph/runtime acceptance is required.",
+      "reviewedConsumers": [
+        "Packages/SwiftfinFormatting/Sources/SwiftfinFormatting/EditorFormats.swift",
+        "Packages/SwiftfinFormatting/Sources/SwiftfinFormatting/RelativeDateFormats.swift"
+      ],
+      "reviewedInterfaces": [
+        "init?(_ source: CGFloat?)"
+      ],
+      "sha256": "e6303bd343735f23fc1a0a6e1adac3da900b03d1c849afeffab32da68509bf36"
+    },
+    {
+      "path": "Packages/SwiftfinValues/Sources/SwiftfinValues/ValueTransforms.swift",
+      "reason": "ValueTransforms.swift: complete current source body and macOS emitted declarations read. All transformations are synchronous and retain no callbacks. Writable key-path projections can mutate referenced elements and are not deep copies. Integer/floating conversions and rounding retain standard finite/representable/nonzero-divisor preconditions; generic inputs gain no Sendable guarantee. Consumer entries are scoped reviewed boundaries; full remaining graph/runtime acceptance is required.",
+      "reviewedConsumers": [
+        "Packages/SwiftfinFormatting/Sources/SwiftfinFormatting/EditorFormats.swift",
+        "Packages/SwiftfinFormatting/Sources/SwiftfinFormatting/RelativeDateFormats.swift"
+      ],
+      "reviewedInterfaces": [
+        "func clamp<T>(_ x: T, min y: T, max z: T) -> T where T : Comparable",
+        "func copy<P, Value>(_ p: P, modifying keyPath: WritableKeyPath<P, Value>, to newValue: Value) -> P",
+        "func round<T>(_ value: T, toNearest: T) -> T where T : BinaryFloatingPoint",
+        "func round<T>(_ value: T, toNearest: T) -> T where T : BinaryInteger",
+        "func with<V>(_ value: V, modify: @escaping (inout V) -> Void) -> V"
+      ],
+      "sha256": "49dd7f8256ede1dcb25fff73d4d99ab7fb75a9258d0b365f1c6387349b1df432"
+    },
+    {
+      "path": "Packages/SwiftfinText/Sources/SwiftfinText/TextOperations.swift",
+      "reason": "TextOperations.swift: complete current source body and macOS emitted declarations read. String/URL/character helpers retain installed Unicode, raw-value and legacy suffix matching behavior. Hashes/random labels are value helpers, not account security. TextTransferable is the explicit file-effect boundary: server titles now replace slash/NUL before appending one filename in the chosen directory. Normal filenames, UTF8 bytes and atomic same-title replacement remain unchanged. Consumer entries are scoped reviewed boundaries; full remaining graph/runtime acceptance is required.",
+      "reviewedConsumers": [
+        "Shared/Objects/TextTransferable.swift",
+        "Shared/Extensions/JellyfinAPI/MediaSourceInfo.swift",
+        "Shared/Extensions/JellyfinAPI/MediaStream.swift",
+        "Packages/SwiftfinText/Tests/SwiftfinTextTests/TextExportContracts.swift"
+      ],
+      "reviewedInterfaces": [
+        "func appending(_ element: @autoclosure () -> String, if condition: Bool) -> String",
+        "func appending(_ element: String) -> String",
+        "func appending(_ element: String.Element) -> String",
+        "func components<T>(of type: T.Type, separator: Character = \",\") -> [T] where T : RawRepresentable, T.RawValue == String",
+        "func leftPad(maxWidth width: Int, with character: Character) -> String",
+        "func multiply(by value: String) -> String",
+        "func prepending(_ element: String) -> String",
+        "func prepending(_ element: String, if condition: Bool) -> String",
+        "func removeRegexMatches(pattern: String, replaceWith: String = \"\") -> String",
+        "func removingFirst(if condition: Bool) -> String",
+        "func trimmingCharacters(in string: String) -> String",
+        "func trimmingSuffix(_ suffix: String) -> String",
+        "init?(string: String?)",
+        "static func + (lhs: String, rhs: Character) -> String",
+        "static func random(count range: Range<Int>) -> String",
+        "static func random(count: Int) -> String",
+        "static let alphanumeric: String",
+        "static let bullet: String",
+        "static let ellipsis: String",
+        "static let emDash: String",
+        "static let empty: String",
+        "static let emptyDash: String",
+        "static let emptyRuntime: String",
+        "static let enDash: String",
+        "static let hyphen: String",
+        "static let multiply: String",
+        "static let objectReplacement: CharacterSet",
+        "static let space: String",
+        "static let tab: String",
+        "var base64: String? { get }",
+        "var initials: String { get }",
+        "var nilIfBlank: String? { get }",
+        "var sha1: String? { get }",
+        "var shortFileName: String { get }",
+        "var url: URL? { get }"
+      ],
+      "sha256": "4ae5f2f5da109d3e85d4ebb7821f25b71c9075af72be11d95af278073c7aeb4c"
+    },
+    {
+      "path": "Packages/SwiftfinFormatting/Sources/SwiftfinFormatting/BitrateFormat.swift",
+      "reason": "BitrateFormat.swift: complete current source body and macOS emitted declarations read. Complete format/parse and protocol-factory surface retains installed labels, bit units, narrow integers, signed magnitudes, runtime threshold, optional/empty parsing and day conversion. Local formatters avoid shared mutable native instances. Wall clock, calendar and locale are presentation inputs; numerical formats retain their existing preconditions. Consumer entries are scoped reviewed boundaries; full remaining graph/runtime acceptance is required.",
+      "reviewedConsumers": [
+        "Shared/Extensions/JellyfinAPI/MediaSourceInfo.swift",
+        "Shared/Objects/MediaPlayerManager/NowPlayable/NowPlayableObserver.swift"
+      ],
+      "reviewedInterfaces": [
+        "func format(_ value: Int) -> String",
+        "init()",
+        "static var bitRate: IntBitRateFormatStyle { get }",
+        "struct IntBitRateFormatStyle"
+      ],
+      "sha256": "93d20b17093075bdbcadc461d7ec3721fe6b8a0f52ac25a021479fdc71063fc2"
+    },
+    {
+      "path": "Packages/SwiftfinFormatting/Sources/SwiftfinFormatting/EditorFormats.swift",
+      "reason": "EditorFormats.swift: complete current source body and macOS emitted declarations read. Complete format/parse and protocol-factory surface retains installed labels, bit units, narrow integers, signed magnitudes, runtime threshold, optional/empty parsing and day conversion. Local formatters avoid shared mutable native instances. Wall clock, calendar and locale are presentation inputs; numerical formats retain their existing preconditions. Consumer entries are scoped reviewed boundaries; full remaining graph/runtime acceptance is required.",
+      "reviewedConsumers": [
+        "Shared/Extensions/JellyfinAPI/MediaSourceInfo.swift",
+        "Shared/Objects/MediaPlayerManager/NowPlayable/NowPlayableObserver.swift"
+      ],
+      "reviewedInterfaces": [
+        "func format(_ value: Float) -> String",
+        "func format(_ value: String?) -> String",
+        "func format(_ value: TimeInterval) -> String",
+        "func format(_ value: Value) -> String",
+        "func parse(_ value: String) -> String?",
+        "func parse(_ value: String) throws -> TimeInterval",
+        "init()",
+        "init(precision: Int = 2)",
+        "init(range: ClosedRange<Int>)",
+        "let range: ClosedRange<Int>",
+        "static func dayInterval(range: ClosedRange<Int>) -> DayIntervalParseableFormatStyle",
+        "static func playbackRate(precision: Int) -> PlaybackRateStyle",
+        "static var nilIfEmptyString: NilIfEmptyStringFormatStyle { get }",
+        "static var playbackRate: PlaybackRateStyle { get }",
+        "struct DayIntervalParseStrategy",
+        "struct DayIntervalParseableFormatStyle",
+        "struct NilIfEmptyStringFormatStyle",
+        "struct NilIfEmptyStringParseStrategy",
+        "struct PlaybackRateStyle",
+        "struct VerbatimFormatStyle<Value> where Value : CustomStringConvertible",
+        "var parseStrategy: DayIntervalParseStrategy",
+        "var parseStrategy: NilIfEmptyStringParseStrategy"
+      ],
+      "sha256": "41ba000c9010a20635f72304b47cc7f76afc4c80583efcc1c86a184b03ecf6ad"
+    },
+    {
+      "path": "Packages/SwiftfinFormatting/Sources/SwiftfinFormatting/IntegerTimeFormats.swift",
+      "reason": "IntegerTimeFormats.swift: complete current source body and macOS emitted declarations read. Complete format/parse and protocol-factory surface retains installed labels, bit units, narrow integers, signed magnitudes, runtime threshold, optional/empty parsing and day conversion. Local formatters avoid shared mutable native instances. Wall clock, calendar and locale are presentation inputs; numerical formats retain their existing preconditions. Consumer entries are scoped reviewed boundaries; full remaining graph/runtime acceptance is required.",
+      "reviewedConsumers": [
+        "Shared/Extensions/JellyfinAPI/MediaSourceInfo.swift",
+        "Shared/Objects/MediaPlayerManager/NowPlayable/NowPlayableObserver.swift"
+      ],
+      "reviewedInterfaces": [
+        "func format(_ value: Int) -> String",
+        "init()",
+        "struct MillisecondLabelFormatStyle",
+        "struct SecondLabelFormatStyle",
+        "var millisecondLabel: String { get }",
+        "var secondLabel: String { get }",
+        "var timeLabel: String { get }"
+      ],
+      "sha256": "91953608d37935a0a7989fdead24ac9aeb5f42dba8cb3876d0a115226fdd025a"
+    },
+    {
+      "path": "Packages/SwiftfinFormatting/Sources/SwiftfinFormatting/RelativeDateFormats.swift",
+      "reason": "RelativeDateFormats.swift: complete current source body and macOS emitted declarations read. Complete format/parse and protocol-factory surface retains installed labels, bit units, narrow integers, signed magnitudes, runtime threshold, optional/empty parsing and day conversion. Local formatters avoid shared mutable native instances. Wall clock, calendar and locale are presentation inputs; numerical formats retain their existing preconditions. Consumer entries are scoped reviewed boundaries; full remaining graph/runtime acceptance is required.",
+      "reviewedConsumers": [
+        "Shared/Extensions/JellyfinAPI/MediaSourceInfo.swift",
+        "Shared/Objects/MediaPlayerManager/NowPlayable/NowPlayableObserver.swift"
+      ],
+      "reviewedInterfaces": [
+        "func death(_ date: Date?) -> AgeFormatStyle",
+        "func format(_ value: Date) -> String",
+        "func format(_ value: Date?) -> String",
+        "init()",
+        "static var age: AgeFormatStyle { get }",
+        "static var lastSeen: LastSeenFormatStyle { get }",
+        "struct AgeFormatStyle",
+        "struct LastSeenFormatStyle"
+      ],
+      "sha256": "2d4f70f6926c2440c6389362d668f9222bab5bfc83afae248c8fba438e93874f"
+    },
+    {
+      "path": "Packages/SwiftfinFormatting/Sources/SwiftfinFormatting/TimeFormats.swift",
+      "reason": "TimeFormats.swift: complete current source body and macOS emitted declarations read. Complete format/parse and protocol-factory surface retains installed labels, bit units, narrow integers, signed magnitudes, runtime threshold, optional/empty parsing and day conversion. Local formatters avoid shared mutable native instances. Wall clock, calendar and locale are presentation inputs; numerical formats retain their existing preconditions. Consumer entries are scoped reviewed boundaries; full remaining graph/runtime acceptance is required.",
+      "reviewedConsumers": [
+        "Shared/Extensions/JellyfinAPI/MediaSourceInfo.swift",
+        "Shared/Objects/MediaPlayerManager/NowPlayable/NowPlayableObserver.swift"
+      ],
+      "reviewedInterfaces": [
+        "func format(_ value: Duration) -> String",
+        "func format(_ value: TimeInterval) -> String",
+        "init()",
+        "static var hourMinuteAbbreviated: Duration.UnitsFormatStyle { get }",
+        "static var minuteSeconds: MinuteSecondsFormatStyle { get }",
+        "static var minuteSecondsAbbreviated: Duration.UnitsFormatStyle { get }",
+        "static var minuteSecondsNarrow: Duration.UnitsFormatStyle { get }",
+        "static var runtime: RuntimeFormatStyle { get }",
+        "struct MinuteSecondsFormatStyle",
+        "struct RuntimeFormatStyle"
+      ],
+      "sha256": "fa3d73eff8d28cbd35e6806317cba611d3bca2c85e9cfe3bcb1f2aa44227cafc"
+    },
+    {
+      "path": "Packages/SwiftfinPermissions/Sources/SwiftfinPermissions/DeviceAuthenticationPermission.swift",
+      "reason": "DeviceAuthenticationPermission.swift: complete current source body and macOS emitted declarations read. Public native capability/status/request adapters, platform exclusions and private drivers/reply state were read. Exactly-once checked continuation/cancellation uses a lock; native callbacks transfer checked values. Drivers retire on request completion/cancellation. No native permission, credential or hardware query is executed by this audit. Consumer entries are scoped reviewed boundaries; full remaining graph/runtime acceptance is required.",
+      "reviewedConsumers": [
+        "Shared/Services/Permissions/AppPermission+DeviceAuthentication.swift",
+        "Shared/Services/Permissions/AppPermission+Location.swift"
+      ],
+      "reviewedInterfaces": [
+        "@MainActor enum DeviceAuthenticationPermission",
+        "@MainActor static func request(reason: String) async throws -> PermissionStatus",
+        "@MainActor static var canRequest: Bool { get }",
+        "@MainActor static var status: PermissionStatus { get }"
+      ],
+      "sha256": "5fff5d12bd52cea5bd83e384cc407ec272169ef2cbffb9285c985a21db56faca"
+    },
+    {
+      "path": "Packages/SwiftfinPermissions/Sources/SwiftfinPermissions/LocationPermission.swift",
+      "reason": "LocationPermission.swift: complete current source body and macOS emitted declarations read. Public native capability/status/request adapters, platform exclusions and private drivers/reply state were read. Exactly-once checked continuation/cancellation uses a lock; native callbacks transfer checked values. Drivers retire on request completion/cancellation. No native permission, credential or hardware query is executed by this audit. Consumer entries are scoped reviewed boundaries; full remaining graph/runtime acceptance is required.",
+      "reviewedConsumers": [
+        "Shared/Services/Permissions/AppPermission+DeviceAuthentication.swift",
+        "Shared/Services/Permissions/AppPermission+Location.swift"
+      ],
+      "reviewedInterfaces": [
+        "@MainActor enum LocationPermission",
+        "@MainActor static func request() async throws -> PermissionStatus",
+        "@MainActor static var canRequest: Bool { get }",
+        "@MainActor static var status: PermissionStatus { get }"
+      ],
+      "sha256": "ccfb6dffb15404c53b5ffff05249a61e28e98a7c39c8a80971098b098d04dc06"
+    },
+    {
+      "path": "Packages/SwiftfinPermissions/Sources/SwiftfinPermissions/PermissionReply.swift",
+      "reason": "PermissionReply.swift: complete current source body and macOS emitted declarations read. Public native capability/status/request adapters, platform exclusions and private drivers/reply state were read. Exactly-once checked continuation/cancellation uses a lock; native callbacks transfer checked values. Drivers retire on request completion/cancellation. No native permission, credential or hardware query is executed by this audit. Consumer entries are scoped reviewed boundaries; full remaining graph/runtime acceptance is required.",
+      "reviewedConsumers": [
+        "Shared/Services/Permissions/AppPermission+DeviceAuthentication.swift",
+        "Shared/Services/Permissions/AppPermission+Location.swift"
+      ],
+      "reviewedInterfaces": [],
+      "sha256": "975c6e16e1e00ecf1796c74973ee581ff372c1cc4e21fec969988a29bb317498"
+    },
+    {
+      "path": "Packages/SwiftfinPermissions/Sources/SwiftfinPermissions/PermissionRequests.swift",
+      "reason": "PermissionRequests.swift: complete current source body and macOS emitted declarations read. Public native capability/status/request adapters, platform exclusions and private drivers/reply state were read. Exactly-once checked continuation/cancellation uses a lock; native callbacks transfer checked values. Drivers retire on request completion/cancellation. No native permission, credential or hardware query is executed by this audit. Consumer entries are scoped reviewed boundaries; full remaining graph/runtime acceptance is required.",
+      "reviewedConsumers": [
+        "Shared/Services/Permissions/AppPermission+DeviceAuthentication.swift",
+        "Shared/Services/Permissions/AppPermission+Location.swift"
+      ],
+      "reviewedInterfaces": [],
+      "sha256": "5d58371c8d5f9177aa9733802fffd6bb7f82ee3fdb8836c7a0b362ea171ebf29"
+    },
+    {
+      "path": "Packages/SwiftfinPermissions/Sources/SwiftfinPermissions/PermissionStatus.swift",
+      "reason": "PermissionStatus.swift: complete current source body and macOS emitted declarations read. Public native capability/status/request adapters, platform exclusions and private drivers/reply state were read. Exactly-once checked continuation/cancellation uses a lock; native callbacks transfer checked values. Drivers retire on request completion/cancellation. No native permission, credential or hardware query is executed by this audit. Consumer entries are scoped reviewed boundaries; full remaining graph/runtime acceptance is required.",
+      "reviewedConsumers": [
+        "Shared/Services/Permissions/AppPermission+DeviceAuthentication.swift",
+        "Shared/Services/Permissions/AppPermission+Location.swift"
+      ],
+      "reviewedInterfaces": [
+        "case authorized",
+        "case denied",
+        "case deviceAuthenticationUnavailable",
+        "case unknown",
+        "case unsupportedPlatform",
+        "enum PermissionRequestError",
+        "enum PermissionStatus"
+      ],
+      "sha256": "db73cf0e82d9b47f3542d910aac94429d9881cddbd28d56f19200cb892b8667d"
+    },
+    {
+      "path": "Packages/SwiftfinMediaTracks/Sources/SwiftfinMediaTracks/CategorizedTrackMapping.swift",
+      "reason": "CategorizedTrackMapping.swift: complete current source body and macOS emitted declarations read. Public raw DTO projections preserve nil/external versus playback-policy filtering. Captured profile/mode values decide rebuilding; disabled tracks remain local. Native primitive tracks project into deterministic maps, including transcoding and sidecar IDs. No native player handle, server action or playback task crosses this value-policy owner. Consumer entries are scoped reviewed boundaries; full remaining graph/runtime acceptance is required.",
+      "reviewedConsumers": [
+        "Shared/Objects/MediaPlayerManager/MediaPlayerItem/MediaPlayerItem.swift",
+        "Shared/Objects/MediaPlayerManager/MediaPlayerItem/MediaPlayerItem+Build.swift",
+        "Shared/Objects/MediaPlayerManager/MediaPlayerProxy/MediaPlayerProxy+MPV.swift"
+      ],
+      "reviewedInterfaces": [
+        "init(index: Int, type: MediaStreamType, title: String? = nil, external: Bool = false)",
+        "let external: Bool",
+        "let index: Int",
+        "let title: String?",
+        "let type: MediaStreamType",
+        "static func categorized(mediaStreams: [MediaStream], tracks: [CategorizedMediaTrack], isTranscoding: Bool, selectedAudioStreamIndex: Int?) -> MediaTrackIndexMap",
+        "struct CategorizedMediaTrack"
+      ],
+      "sha256": "bcd3aa5f856749f81a3231969a8f2c0c6a5d9a335e1367ac0bb7e6e2b328e5a3"
+    },
+    {
+      "path": "Packages/SwiftfinMediaTracks/Sources/SwiftfinMediaTracks/MediaSourceStreams.swift",
+      "reason": "MediaSourceStreams.swift: complete current source body and macOS emitted declarations read. Public raw DTO projections preserve nil/external versus playback-policy filtering. Captured profile/mode values decide rebuilding; disabled tracks remain local. Native primitive tracks project into deterministic maps, including transcoding and sidecar IDs. No native player handle, server action or playback task crosses this value-policy owner. Consumer entries are scoped reviewed boundaries; full remaining graph/runtime acceptance is required.",
+      "reviewedConsumers": [
+        "Shared/Objects/MediaPlayerManager/MediaPlayerItem/MediaPlayerItem.swift",
+        "Shared/Objects/MediaPlayerManager/MediaPlayerItem/MediaPlayerItem+Build.swift",
+        "Shared/Objects/MediaPlayerManager/MediaPlayerProxy/MediaPlayerProxy+MPV.swift"
+      ],
+      "reviewedInterfaces": [
+        "var audioStreams: [MediaStream]? { get }",
+        "var subtitleStreams: [MediaStream]? { get }",
+        "var videoStreams: [MediaStream]? { get }"
+      ],
+      "sha256": "68d3c387f0cc0629cb6e14b76ca8f971bd731c832dd992de34f73281cbbef001"
+    },
+    {
+      "path": "Packages/SwiftfinMediaTracks/Sources/SwiftfinMediaTracks/MediaStreamCharacteristics.swift",
+      "reason": "MediaStreamCharacteristics.swift: complete current source body and macOS emitted declarations read. Public raw DTO projections preserve nil/external versus playback-policy filtering. Captured profile/mode values decide rebuilding; disabled tracks remain local. Native primitive tracks project into deterministic maps, including transcoding and sidecar IDs. No native player handle, server action or playback task crosses this value-policy owner. Consumer entries are scoped reviewed boundaries; full remaining graph/runtime acceptance is required.",
+      "reviewedConsumers": [
+        "Shared/Objects/MediaPlayerManager/MediaPlayerItem/MediaPlayerItem.swift",
+        "Shared/Objects/MediaPlayerManager/MediaPlayerItem/MediaPlayerItem+Build.swift",
+        "Shared/Objects/MediaPlayerManager/MediaPlayerProxy/MediaPlayerProxy+MPV.swift"
+      ],
+      "reviewedInterfaces": [
+        "var has4KVideo: Bool { get }",
+        "var has51AudioChannelLayout: Bool { get }",
+        "var has71AudioChannelLayout: Bool { get }",
+        "var hasDolbyVision: Bool { get }",
+        "var hasHDRVideo: Bool { get }",
+        "var hasHDVideo: Bool { get }",
+        "var hasSubtitles: Bool { get }",
+        "var is4kVideo: Bool { get }",
+        "var is51AudioChannelLayout: Bool { get }",
+        "var is71AudioChannelLayout: Bool { get }",
+        "var isDolbyVision: Bool { get }",
+        "var isHDR: Bool { get }",
+        "var isHDVideo: Bool { get }",
+        "var sidecarSubtitles: [MediaStream] { get }"
+      ],
+      "sha256": "0211d3eead88bee850896a3bae88ea4e257ca90633eb30476da68cf9945affb6"
+    },
+    {
+      "path": "Packages/SwiftfinMediaTracks/Sources/SwiftfinMediaTracks/MediaStreamKindPolicy.swift",
+      "reason": "MediaStreamKindPolicy.swift: complete current source body and macOS emitted declarations read. Public raw DTO projections preserve nil/external versus playback-policy filtering. Captured profile/mode values decide rebuilding; disabled tracks remain local. Native primitive tracks project into deterministic maps, including transcoding and sidecar IDs. No native player handle, server action or playback task crosses this value-policy owner. Consumer entries are scoped reviewed boundaries; full remaining graph/runtime acceptance is required.",
+      "reviewedConsumers": [
+        "Shared/Objects/MediaPlayerManager/MediaPlayerItem/MediaPlayerItem.swift",
+        "Shared/Objects/MediaPlayerManager/MediaPlayerItem/MediaPlayerItem+Build.swift",
+        "Shared/Objects/MediaPlayerManager/MediaPlayerProxy/MediaPlayerProxy+MPV.swift"
+      ],
+      "reviewedInterfaces": [
+        "enum MediaStreamKindPolicy",
+        "static func streams(in streams: [MediaStream]?, matching kind: MediaStreamType) -> [MediaStream]"
+      ],
+      "sha256": "4d3f37f40c77d631bf203d39168709919f0799ce7b74725ae21ec4c2c84a688d"
+    },
+    {
+      "path": "Packages/SwiftfinMediaTracks/Sources/SwiftfinMediaTracks/MediaTrackIndexMap.swift",
+      "reason": "MediaTrackIndexMap.swift: complete current source body and macOS emitted declarations read. Public raw DTO projections preserve nil/external versus playback-policy filtering. Captured profile/mode values decide rebuilding; disabled tracks remain local. Native primitive tracks project into deterministic maps, including transcoding and sidecar IDs. No native player handle, server action or playback task crosses this value-policy owner. Consumer entries are scoped reviewed boundaries; full remaining graph/runtime acceptance is required.",
+      "reviewedConsumers": [
+        "Shared/Objects/MediaPlayerManager/MediaPlayerItem/MediaPlayerItem.swift",
+        "Shared/Objects/MediaPlayerManager/MediaPlayerItem/MediaPlayerItem+Build.swift",
+        "Shared/Objects/MediaPlayerManager/MediaPlayerProxy/MediaPlayerProxy+MPV.swift"
+      ],
+      "reviewedInterfaces": [
+        "func playerIndex(for jellyfinIndex: Int?) -> Int?",
+        "func resolvingSidecarSubtitles(_ sidecars: [(jellyfinIndex: Int, url: URL)], subtitleTracks: [(playerIndex: Int, id: String)]) -> MediaTrackIndexMap",
+        "init(_ playerIndexesByJellyfinIndex: [Int : Int] = [:])",
+        "mutating func setPlayerIndex(_ playerIndex: Int, for jellyfinIndex: Int)",
+        "static func build(from mediaStreams: [MediaStream], for playMethod: PlayMethod, selectedAudioStreamIndex: Int) -> MediaTrackIndexMap",
+        "struct MediaTrackIndexMap"
+      ],
+      "sha256": "7ab98b14ca7fa55a028e5e68fc0aaa3779f15db786b3b3ec3ca1962300254bbc"
+    },
+    {
+      "path": "Packages/SwiftfinMediaTracks/Sources/SwiftfinMediaTracks/MediaTrackPolicy.swift",
+      "reason": "MediaTrackPolicy.swift: complete current source body and macOS emitted declarations read. Public raw DTO projections preserve nil/external versus playback-policy filtering. Captured profile/mode values decide rebuilding; disabled tracks remain local. Native primitive tracks project into deterministic maps, including transcoding and sidecar IDs. No native player handle, server action or playback task crosses this value-policy owner. Consumer entries are scoped reviewed boundaries; full remaining graph/runtime acceptance is required.",
+      "reviewedConsumers": [
+        "Shared/Objects/MediaPlayerManager/MediaPlayerItem/MediaPlayerItem.swift",
+        "Shared/Objects/MediaPlayerManager/MediaPlayerItem/MediaPlayerItem+Build.swift",
+        "Shared/Objects/MediaPlayerManager/MediaPlayerProxy/MediaPlayerProxy+MPV.swift"
+      ],
+      "reviewedInterfaces": [
+        "func requiresRebuild(type: MediaStreamType, from oldIndex: Int?, to newIndex: Int?) -> Bool",
+        "init(mediaSource: MediaSourceInfo, deviceProfile: DeviceProfile, compatibility: PlaybackCompatibility, audioIndex: Int? = nil, subtitleIndex: Int? = nil)",
+        "let audioStreams: [MediaStream]",
+        "let initialIndexMap: MediaTrackIndexMap",
+        "let selectedAudioIndex: Int",
+        "let selectedSubtitleIndex: Int",
+        "let subtitleStreams: [MediaStream]",
+        "let videoStreams: [MediaStream]",
+        "struct MediaTrackPolicy"
+      ],
+      "sha256": "ca64f7bb3ed61023bfe190447e9fcf2d91dfccf5f9c4410d9168ca6552c2884f"
+    },
+    {
+      "path": "Packages/SwiftfinNowPlaying/Sources/SwiftfinNowPlaying/NowPlayableMetadata.swift",
+      "reason": "NowPlayableMetadata.swift: complete current source body and macOS emitted declarations read. The complete main-actor process registry owns SDK command tokens and publication epochs, guarding reentrant installation/removal/read/write. Foreign callbacks immediately project checked numeric events and hop before effects; metadata/native artwork remain actor-owned. UIKit artwork captures only immutable SDK image. Real command center publication is held. Consumer entries are scoped reviewed boundaries; full remaining graph/runtime acceptance is required.",
+      "reviewedConsumers": [
+        "Shared/Objects/MediaPlayerManager/NowPlayable/NowPlayableObserver.swift"
+      ],
+      "reviewedInterfaces": [
+        "@MainActor init(mediaType: MPNowPlayingInfoMediaType, isLiveStream: Bool = false, title: String, artist: String? = nil, artwork: MPMediaItemArtwork? = nil, albumArtist: String? = nil, albumTitle: String? = nil)",
+        "@MainActor init(rate: Float = 1, position: Duration, duration: Duration, currentLanguageOptions: [MPNowPlayingInfoLanguageOption] = [], availableLanguageOptionGroups: [MPNowPlayingInfoLanguageOptionGroup] = [])",
+        "@MainActor let albumArtist: String?",
+        "@MainActor let albumTitle: String?",
+        "@MainActor let artist: String?",
+        "@MainActor let artwork: MPMediaItemArtwork?",
+        "@MainActor let availableLanguageOptionGroups: [MPNowPlayingInfoLanguageOptionGroup]",
+        "@MainActor let currentLanguageOptions: [MPNowPlayingInfoLanguageOption]",
+        "@MainActor let duration: Duration",
+        "@MainActor let isLiveStream: Bool",
+        "@MainActor let mediaType: MPNowPlayingInfoMediaType",
+        "@MainActor let position: Duration",
+        "@MainActor let rate: Float",
+        "@MainActor let title: String",
+        "@MainActor struct NowPlayableDynamicMetadata",
+        "@MainActor struct NowPlayableStaticMetadata"
+      ],
+      "sha256": "46883f099a720b57b54d21add223e1ad75ed27c39484a4d3b64716817eae4b3f"
+    },
+    {
+      "path": "Packages/SwiftfinNowPlaying/Sources/SwiftfinNowPlaying/NowPlayingArtwork.swift",
+      "reason": "NowPlayingArtwork.swift: complete current source body and macOS emitted declarations read. The complete main-actor process registry owns SDK command tokens and publication epochs, guarding reentrant installation/removal/read/write. Foreign callbacks immediately project checked numeric events and hop before effects; metadata/native artwork remain actor-owned. UIKit artwork captures only immutable SDK image. Real command center publication is held. UIKit-only surface read directly; macOS graph does not emit it; platform compilation is separate evidence. Consumer entries are scoped reviewed boundaries; full remaining graph/runtime acceptance is required.",
+      "reviewedConsumers": [
+        "Shared/Objects/MediaPlayerManager/NowPlayable/NowPlayableObserver.swift"
+      ],
+      "reviewedInterfaces": [
+        "public enum NowPlayingArtwork",
+        "public static func make(_ image: UIImage) -> MPMediaItemArtwork"
+      ],
+      "sha256": "a5f3a46cf5bc524f14175b78e016090d59abe1f24db60724dc8d2c5dfef201b0"
+    },
+    {
+      "path": "Packages/SwiftfinUIState/Sources/SwiftfinUIState/Binding.swift",
+      "reason": "Binding.swift: complete current source body and macOS emitted declarations read. Complete bindings, wrappers, publishers, weak cancellable timers and selection/view lifetimes remain on MainActor. Arbitrary generic UI values are not claimed Sendable. Generation/source-tagged owners reject late delivery/retirement; current-date scheduling and final-release behavior have explicit owners. The unused inverse binding with asymmetric getter/setter was removed. Consumer entries are scoped reviewed boundaries; full remaining graph/runtime acceptance is required.",
+      "reviewedConsumers": [
+        "Shared/Extensions/ViewExtensions/Modifiers/OnFinalDisappearModifier.swift",
+        "Shared/Objects/MediaPlayerManager/NowPlayable/NowPlayableObserver.swift",
+        "Packages/SwiftfinUIState/Tests/SwiftfinUIStateTests"
+      ],
+      "reviewedInterfaces": [
+        "@MainActor func clamp(min: Value, max: Value) -> Binding<Value> where Value : Comparable",
+        "@MainActor func coalesce<T>(_ defaultValue: T) -> Binding<T> where Value == T?",
+        "@MainActor func contains(_ element: Value.Element) -> Binding<Bool>",
+        "@MainActor func contains<E>(_ value: E) -> Binding<Bool> where Value == [E], E : Equatable",
+        "@MainActor func map<V>(getter: @escaping (Value) -> V, setter: @escaping (V) -> Value) -> Binding<V>",
+        "@MainActor func min(_ minValue: Value) -> Binding<Value> where Value : Comparable"
+      ],
+      "sha256": "855b78caaf602b78a63be4796e34b20ba58bd8b08e1e954c5a6f05013a5dfa1c"
+    },
+    {
+      "path": "Packages/SwiftfinUIState/Sources/SwiftfinUIState/BoxedPublished.swift",
+      "reason": "BoxedPublished.swift: complete current source body and macOS emitted declarations read. Complete bindings, wrappers, publishers, weak cancellable timers and selection/view lifetimes remain on MainActor. Arbitrary generic UI values are not claimed Sendable. Generation/source-tagged owners reject late delivery/retirement; current-date scheduling and final-release behavior have explicit owners. The unused inverse binding with asymmetric getter/setter was removed. Consumer entries are scoped reviewed boundaries; full remaining graph/runtime acceptance is required.",
+      "reviewedConsumers": [
+        "Shared/Extensions/ViewExtensions/Modifiers/OnFinalDisappearModifier.swift",
+        "Shared/Objects/MediaPlayerManager/NowPlayable/NowPlayableObserver.swift",
+        "Packages/SwiftfinUIState/Tests/SwiftfinUIStateTests"
+      ],
+      "reviewedInterfaces": [
+        "@MainActor @propertyWrapper struct BoxedPublished<Value>",
+        "@MainActor init(wrappedValue: Value)",
+        "@MainActor var box: PublishedBox<Value> { get }",
+        "@MainActor var projectedValue: Published<Value>.Publisher { get }",
+        "@MainActor var wrappedValue: Value { get nonmutating set }"
+      ],
+      "sha256": "020cf3c1e9b50a04e58c829a989a14484f7b3f56f1bcf32f8f4c68cb91a31358"
+    },
+    {
+      "path": "Packages/SwiftfinUIState/Sources/SwiftfinUIState/CurrentDate.swift",
+      "reason": "CurrentDate.swift: complete current source body and macOS emitted declarations read. Complete bindings, wrappers, publishers, weak cancellable timers and selection/view lifetimes remain on MainActor. Arbitrary generic UI values are not claimed Sendable. Generation/source-tagged owners reject late delivery/retirement; current-date scheduling and final-release behavior have explicit owners. The unused inverse binding with asymmetric getter/setter was removed. Consumer entries are scoped reviewed boundaries; full remaining graph/runtime acceptance is required.",
+      "reviewedConsumers": [
+        "Shared/Extensions/ViewExtensions/Modifiers/OnFinalDisappearModifier.swift",
+        "Shared/Objects/MediaPlayerManager/NowPlayable/NowPlayableObserver.swift",
+        "Packages/SwiftfinUIState/Tests/SwiftfinUIStateTests"
+      ],
+      "reviewedInterfaces": [
+        "@MainActor @propertyWrapper struct CurrentDate",
+        "@MainActor init(interval: TimeInterval = 1)",
+        "@MainActor mutating func update()",
+        "@MainActor var projectedValue: Binding<Date> { get }",
+        "@MainActor var wrappedValue: Date { get }"
+      ],
+      "sha256": "7b8185ee134fc1fbb15c45a2a7640d4083e2e29e4852c0097a823fc09abafad8"
+    },
+    {
+      "path": "Packages/SwiftfinUIState/Sources/SwiftfinUIState/LazyState.swift",
+      "reason": "LazyState.swift: complete current source body and macOS emitted declarations read. Complete bindings, wrappers, publishers, weak cancellable timers and selection/view lifetimes remain on MainActor. Arbitrary generic UI values are not claimed Sendable. Generation/source-tagged owners reject late delivery/retirement; current-date scheduling and final-release behavior have explicit owners. The unused inverse binding with asymmetric getter/setter was removed. Consumer entries are scoped reviewed boundaries; full remaining graph/runtime acceptance is required.",
+      "reviewedConsumers": [
+        "Shared/Extensions/ViewExtensions/Modifiers/OnFinalDisappearModifier.swift",
+        "Shared/Objects/MediaPlayerManager/NowPlayable/NowPlayableObserver.swift",
+        "Packages/SwiftfinUIState/Tests/SwiftfinUIStateTests"
+      ],
+      "reviewedInterfaces": [
+        "@MainActor @propertyWrapper struct LazyState<Value>",
+        "@MainActor func update()",
+        "@MainActor init(wrappedValue thunk: @autoclosure @escaping () -> Value)",
+        "@MainActor var projectedValue: Binding<Value> { get }",
+        "@MainActor var wrappedValue: Value { get }"
+      ],
+      "sha256": "58ceeff6244ee53154952cfbe547ec5a8892846fa7b42a753e6a9577272b868c"
+    },
+    {
+      "path": "Packages/SwiftfinUIState/Sources/SwiftfinUIState/PokeIntervalTimer.swift",
+      "reason": "PokeIntervalTimer.swift: complete current source body and macOS emitted declarations read. Complete bindings, wrappers, publishers, weak cancellable timers and selection/view lifetimes remain on MainActor. Arbitrary generic UI values are not claimed Sendable. Generation/source-tagged owners reject late delivery/retirement; current-date scheduling and final-release behavior have explicit owners. The unused inverse binding with asymmetric getter/setter was removed. Consumer entries are scoped reviewed boundaries; full remaining graph/runtime acceptance is required.",
+      "reviewedConsumers": [
+        "Shared/Extensions/ViewExtensions/Modifiers/OnFinalDisappearModifier.swift",
+        "Shared/Objects/MediaPlayerManager/NowPlayable/NowPlayableObserver.swift",
+        "Packages/SwiftfinUIState/Tests/SwiftfinUIStateTests"
+      ],
+      "reviewedInterfaces": [
+        "@MainActor convenience init(defaultInterval: TimeInterval = 5)",
+        "@MainActor final class PokeIntervalTimer",
+        "@MainActor func poke(interval: TimeInterval? = nil)",
+        "@MainActor func receive<S>(subscriber: S) where S : Subscriber, S.Failure == Never, S.Input == ()",
+        "@MainActor func stop()",
+        "typealias Failure = Never",
+        "typealias Output = Void"
+      ],
+      "sha256": "dd3fdbc07948e125a2aca6b33b05eb572d8a5dbf0b663d05ece7068962b84169"
+    },
+    {
+      "path": "Packages/SwiftfinUIState/Sources/SwiftfinUIState/PublishedBox.swift",
+      "reason": "PublishedBox.swift: complete current source body and macOS emitted declarations read. Complete bindings, wrappers, publishers, weak cancellable timers and selection/view lifetimes remain on MainActor. Arbitrary generic UI values are not claimed Sendable. Generation/source-tagged owners reject late delivery/retirement; current-date scheduling and final-release behavior have explicit owners. The unused inverse binding with asymmetric getter/setter was removed. Consumer entries are scoped reviewed boundaries; full remaining graph/runtime acceptance is required.",
+      "reviewedConsumers": [
+        "Shared/Extensions/ViewExtensions/Modifiers/OnFinalDisappearModifier.swift",
+        "Shared/Objects/MediaPlayerManager/NowPlayable/NowPlayableObserver.swift",
+        "Packages/SwiftfinUIState/Tests/SwiftfinUIStateTests"
+      ],
+      "reviewedInterfaces": [
+        "@MainActor final class PublishedBox<Wrapped>",
+        "@MainActor init(initialValue: Wrapped)",
+        "@MainActor init(source: Binding<Wrapped>)",
+        "@Published @MainActor var value: Wrapped { get set }"
+      ],
+      "sha256": "bed4c89f4aadfdd369da1d8ca3e08a350168e5b3903ef5356d04109e8294b5be"
+    },
+    {
+      "path": "Packages/SwiftfinUIState/Sources/SwiftfinUIState/UIEventPublisher.swift",
+      "reason": "UIEventPublisher.swift: complete current source body and macOS emitted declarations read. Complete bindings, wrappers, publishers, weak cancellable timers and selection/view lifetimes remain on MainActor. Arbitrary generic UI values are not claimed Sendable. Generation/source-tagged owners reject late delivery/retirement; current-date scheduling and final-release behavior have explicit owners. The unused inverse binding with asymmetric getter/setter was removed. Consumer entries are scoped reviewed boundaries; full remaining graph/runtime acceptance is required.",
+      "reviewedConsumers": [
+        "Shared/Extensions/ViewExtensions/Modifiers/OnFinalDisappearModifier.swift",
+        "Shared/Objects/MediaPlayerManager/NowPlayable/NowPlayableObserver.swift",
+        "Packages/SwiftfinUIState/Tests/SwiftfinUIStateTests"
+      ],
+      "reviewedInterfaces": [
+        "@MainActor func receive<S>(subscriber: S) where Value == S.Input, S : Subscriber, S.Failure == Never",
+        "@MainActor func send(_ value: Value)",
+        "@MainActor struct UIEventPublisher<Value>",
+        "nonisolated init()",
+        "typealias Failure = Never",
+        "typealias Output = Value"
+      ],
+      "sha256": "5897dcc6c360e65b9af2004df4703ec420d19f6fd7a4312073a9ef8e90eb1c25"
     }
   ],
   "limits": "This ledger records bodies explicitly reviewed, with exact current hashes; earlier prose or lexical inventory is not automatically promoted. Pending and mixed entries prevent whole-source completion. Retained UI algorithms have specific presentation reasons, not folder/import-based blanket approval. API entries do not classify the rest of the public graph. Source review and offline tests do not satisfy held runtime acceptance.",
@@ -7608,7 +8208,7 @@
     "classification": {
       "source-reviewed-retained": 664
     },
-    "currentAPIReviews": 103,
+    "currentAPIReviews": 133,
     "runtimeAcceptance": "held by human; no simulator/server testing"
   },
   "packageReviews": [
@@ -7682,6 +8282,150 @@
       ],
       "sourceReview": "complete current source bodies and emitted public declarations",
       "consumerReview": "scoped listed call boundaries; full remaining graph review required",
+      "runtimeAcceptance": "held by human"
+    },
+    {
+      "module": "SwiftfinValues",
+      "manifestSHA256": "a532c871df6cb26e1dc0b1dac41f460621838fb3e67894631adfd1d0e4527701",
+      "sourceBodiesRead": 4,
+      "compilerPublicSymbols": 8,
+      "compilerPlatform": "macOS14; UIKit-only source reviewed directly and compiled in app targets",
+      "compilerGraphs": [
+        {
+          "file": "SwiftfinValues.symbols.json",
+          "sha256": "31de892504e8aa3cd5093b3fe2c8a45c2cdb7874424a1a126f79631404fa57fa"
+        },
+        {
+          "file": "SwiftfinValues@Swift.symbols.json",
+          "sha256": "5ab5eb5d18c5386d5f02358cd01708d1aaf0da1c3904c22faa528d9488c819da"
+        }
+      ],
+      "sourceReview": "complete current source and public declarations",
+      "consumerReview": "scoped listed boundaries; remaining whole-graph review required",
+      "runtimeAcceptance": "held by human"
+    },
+    {
+      "module": "SwiftfinText",
+      "manifestSHA256": "7fff2a4aadfefd1122fb0ba67ec12ff7fd503704335dfbe035fd8fd052a6d8fb",
+      "sourceBodiesRead": 2,
+      "compilerPublicSymbols": 39,
+      "compilerPlatform": "macOS14; UIKit-only source reviewed directly and compiled in app targets",
+      "compilerGraphs": [
+        {
+          "file": "SwiftfinText.symbols.json",
+          "sha256": "fd1bf90538f87122b2fb47beadaee0f4cb90914ae07dfda128fa6589411c4683"
+        },
+        {
+          "file": "SwiftfinText@Foundation.symbols.json",
+          "sha256": "349b37b53a9993e3ec54d0b4e0b6538c8585a5542e86873914e92ece647399e0"
+        },
+        {
+          "file": "SwiftfinText@Swift.symbols.json",
+          "sha256": "c33cb8a590191b93460945390b78be03db3efca7c220375df2290bc5185c647e"
+        }
+      ],
+      "sourceReview": "complete current source and public declarations",
+      "consumerReview": "scoped listed boundaries; remaining whole-graph review required",
+      "runtimeAcceptance": "held by human"
+    },
+    {
+      "module": "SwiftfinFormatting",
+      "manifestSHA256": "f31a14714519b1dd091f34b422c7d605fc50433935a87d2cc6d7fbecdb113f5d",
+      "sourceBodiesRead": 5,
+      "compilerPublicSymbols": 71,
+      "compilerPlatform": "macOS14; UIKit-only source reviewed directly and compiled in app targets",
+      "compilerGraphs": [
+        {
+          "file": "SwiftfinFormatting.symbols.json",
+          "sha256": "1af69fe55ffa4f149757822e690a73cca5193225e397284fae834cabd2d5da3e"
+        },
+        {
+          "file": "SwiftfinFormatting@Foundation.symbols.json",
+          "sha256": "f1c529495688137378f47e08c1dd6febf5bb6fc9d081e1ff581cf1209f774518"
+        },
+        {
+          "file": "SwiftfinFormatting@Swift.symbols.json",
+          "sha256": "666943f0d8171c30720b898f9b18889e9a9cd7f6826f55c487c41218d69b0d13"
+        }
+      ],
+      "sourceReview": "complete current source and public declarations",
+      "consumerReview": "scoped listed boundaries; remaining whole-graph review required",
+      "runtimeAcceptance": "held by human"
+    },
+    {
+      "module": "SwiftfinPermissions",
+      "manifestSHA256": "8415e0eca582b3ec367aec8af3d985b509c32b5c38371a325cf534a27eca1147",
+      "sourceBodiesRead": 5,
+      "compilerPublicSymbols": 15,
+      "compilerPlatform": "macOS14; UIKit-only source reviewed directly and compiled in app targets",
+      "compilerGraphs": [
+        {
+          "file": "SwiftfinPermissions.symbols.json",
+          "sha256": "6d2370b3c1f63aa9deafdc47006de9cafbd68e3fb420be9ac9bafc29ebc252f9"
+        }
+      ],
+      "sourceReview": "complete current source and public declarations",
+      "consumerReview": "scoped listed boundaries; remaining whole-graph review required",
+      "runtimeAcceptance": "held by human"
+    },
+    {
+      "module": "SwiftfinMediaTracks",
+      "manifestSHA256": "57810389407885c0946f47cdf1cf71aed0063d185ccb56df70778e5b1ae3cb8a",
+      "sourceBodiesRead": 7,
+      "compilerPublicSymbols": 56,
+      "compilerPlatform": "macOS14; UIKit-only source reviewed directly and compiled in app targets",
+      "compilerGraphs": [
+        {
+          "file": "SwiftfinMediaTracks.symbols.json",
+          "sha256": "a240b648a79ceda47ae97dfbd419ae12f953895856522711d3d8d549d0733cb7"
+        },
+        {
+          "file": "SwiftfinMediaTracks@JellyfinAPI.symbols.json",
+          "sha256": "deb5671ed0c5d6ff07217b32ee433547e1b02cab0c5da159de186b44aada2138"
+        },
+        {
+          "file": "SwiftfinMediaTracks@Swift.symbols.json",
+          "sha256": "59ec56d64936551975f19db872d20b82c92071057a55b17ea246e1e47e08901b"
+        }
+      ],
+      "sourceReview": "complete current source and public declarations",
+      "consumerReview": "scoped listed boundaries; remaining whole-graph review required",
+      "runtimeAcceptance": "held by human"
+    },
+    {
+      "module": "SwiftfinNowPlaying",
+      "manifestSHA256": "d58a53b562ba204bbfb95aa00f4e78e79ef04355344b78ed268591ef190f20c9",
+      "sourceBodiesRead": 4,
+      "compilerPublicSymbols": 48,
+      "compilerPlatform": "macOS14; UIKit-only source reviewed directly and compiled in app targets",
+      "compilerGraphs": [
+        {
+          "file": "SwiftfinNowPlaying.symbols.json",
+          "sha256": "76a7fcac5733ddae5b3ce82778f324c8151b4a82985ccc2bdfd742550d3c1915"
+        }
+      ],
+      "sourceReview": "complete current source and public declarations",
+      "consumerReview": "scoped listed boundaries; remaining whole-graph review required",
+      "runtimeAcceptance": "held by human"
+    },
+    {
+      "module": "SwiftfinUIState",
+      "manifestSHA256": "5f9e4c07b88d2280e2fe7c59d19ecd26342a2abc20920433e0b717f95b7cc89a",
+      "sourceBodiesRead": 11,
+      "compilerPublicSymbols": 60,
+      "compilerPlatform": "macOS14; UIKit-only source reviewed directly and compiled in app targets",
+      "compilerGraphs": [
+        {
+          "file": "SwiftfinUIState.symbols.json",
+          "sha256": "cbc89a0dd5fa0d28e86df804824e6965c4da918f7ff4a0f0a78506e610c48b7c"
+        },
+        {
+          "file": "SwiftfinUIState@SwiftUICore.symbols.json",
+          "sha256": "25eadc307468eb788fbe07d2f15458023e1720642b0384dfb0c988f9cc15c8f5"
+        }
+      ],
+      "sourceReview": "complete current source and public declarations",
+      "consumerReview": "scoped listed boundaries; remaining whole-graph review required",
       "runtimeAcceptance": "held by human"
     }
   ]
