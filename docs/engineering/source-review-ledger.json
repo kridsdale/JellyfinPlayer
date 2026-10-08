@@ -5948,13 +5948,27 @@
     },
     {
       "path": "Packages/SwiftfinStoredValues/Sources/SwiftfinStoredValues/Storable.swift",
-      "reason": "Storage owner adds the same existing raw-Codable Defaults bridge for the transferred account value. Original app suite/key declarations remain untouched; isolated-suite tests seed captured JSON strings and verify independent app keys. This scoped entry does not classify other existing conformances.",
+      "reason": "Storable.swift: complete current source body and emitted public declarations read. Complete actor-owned typed key/read/write/observation and Defaults bridges preserve installed key/suite/address and JSON-versus-raw enum representations. Empty keys return defaults without writes; tvOS uses Defaults and other platforms retain selected SQL/Defaults behavior. Existing nonthrowing settings failures remain. Observation loops use weak ownership; generic values and default closures stay on MainActor without arbitrary Sendable claims. Public underscore key namespace and retroactive conformance exports were read directly because the compiler graph omits some of those shapes. Listed consumers are scoped reviewed boundaries; remaining whole-graph/runtime acceptance is required.",
       "reviewedConsumers": [
         "Shared/Services/SwiftfinDefaults.swift",
-        "Shared/Objects/SelectUserServerSelection.swift"
+        "Shared/Objects/SelectUserServerSelection.swift",
+        "Shared/SwiftfinStore/StoredValue/StoredValues+Server.swift",
+        "Packages/SwiftfinAccountStore/Sources/SwiftfinAccountStore/AccountStorageKeys.swift",
+        "Packages/SwiftfinStoredValuesUI/Sources/SwiftfinStoredValuesUI/StoredValue.swift"
       ],
       "reviewedInterfaces": [
-        "ServerSelection Defaults.Serializable/Storable conformance"
+        "protocol Storable : Decodable, Encodable, Defaults.Serializable",
+        "source-declared retroactive Defaults/Storable conformances: extension Array: Storable where Element: Storable {}",
+        "source-declared retroactive Defaults/Storable conformances: extension Bool: Storable {}",
+        "source-declared retroactive Defaults/Storable conformances: extension Int: Storable {}",
+        "source-declared retroactive Defaults/Storable conformances: extension String: Storable {}",
+        "source-declared retroactive Defaults/Storable conformances: extension ServerAccountRecord: @retroactive Defaults.Serializable, Storable {}",
+        "source-declared retroactive Defaults/Storable conformances: extension UserAccountRecord: @retroactive Defaults.Serializable, Storable {}",
+        "source-declared retroactive Defaults/Storable conformances: extension LocalUserAccessPolicy: @retroactive Defaults.Serializable, Storable {}",
+        "source-declared retroactive Defaults/Storable conformances: extension ServerConnection: @retroactive Defaults.Serializable, Storable {}",
+        "source-declared retroactive Defaults/Storable conformances: extension ServerConnection.Interface: @retroactive Defaults.Serializable, Storable {}",
+        "source-declared retroactive Defaults/Storable conformances: extension UserSessionState: @retroactive Defaults.Serializable, Storable {}",
+        "source-declared retroactive Defaults/Storable conformances: extension ServerSelection: @retroactive Defaults.Serializable, Storable {}"
       ],
       "sha256": "69697f44063de631c5d91dfede2885b0cad151576fabf2e3df136ce0abf3fd7a"
     },
@@ -6219,21 +6233,32 @@
     },
     {
       "path": "Packages/SwiftfinAccountStore/Sources/SwiftfinAccountStore/AccountStorageKeys.swift",
-      "reason": "Metadata keys preserve exact name/field/owner and defaults versus SQL-with-tvOS-defaults destination. Explicit database injection is retained; raw legacy SDK JSON and Defaults bridge are tested using disposable stores. DTO Serializable/Storable conformances move with metadata persistence; no migration or server request.",
+      "reason": "AccountStorageKeys.swift: complete current source body and emitted public declarations read. Complete local record/key/DTO bridge, admission receipt, connection editing and security owner retain installed identity, ordering and nontransactional effects. Auth/admission and connection edits check exact original owner/inventory/policy/endpoint around external callbacks. Security verification now rechecks after credential reads; a busy guard rejects nested edits, and credential effects precede validated policy/hint writes. Failed credentials remain retryable; already accepted credential effects are not rolled back. Public signatures are unchanged and no server/media operation is owned. Listed consumers are scoped reviewed boundaries; remaining whole-graph/runtime acceptance is required.",
       "reviewedConsumers": [
         "Shared/SwiftfinStore/StoredValue/StoredValues+Server.swift",
-        "Shared/SwiftfinStore/StoredValue/StoredValues+User.swift"
+        "Shared/SwiftfinStore/StoredValue/StoredValues+User.swift",
+        "Shared/ViewModels/LocalUserSecurityViewModel.swift",
+        "Shared/Persistence/StorageComposition.swift",
+        "Swiftfin tvOS/App/KidsAccountAdapter.swift",
+        "Packages/SwiftfinAccountStore/Tests/SwiftfinAccountStoreTests/LocalSecurityContracts.swift"
       ],
       "reviewedInterfaces": [
-        "publicInfo(serverID:database:)",
-        "userData(userID:database:)",
-        "unchanged installed account/settings key inventory"
+        "@MainActor enum AccountStorageKeys",
+        "@MainActor static func accessPolicy(userID: String, database: SwiftfinDatabase = .shared) -> StoredValues.Key<LocalUserAccessPolicy>",
+        "@MainActor static func activeConnectionID(serverID: String, database: SwiftfinDatabase = .shared) -> StoredValues.Key<String>",
+        "@MainActor static func autoSwitchEnabled(serverID: String, database: SwiftfinDatabase = .shared) -> StoredValues.Key<Bool>",
+        "@MainActor static func connections(serverID: String, database: SwiftfinDatabase = .shared) -> StoredValues.Key<[ServerConnection]>",
+        "@MainActor static func pinHint(userID: String, database: SwiftfinDatabase = .shared) -> StoredValues.Key<String>",
+        "@MainActor static func publicInfo(serverID: String, database: SwiftfinDatabase = .shared) -> StoredValues.Key<PublicSystemInfo>",
+        "@MainActor static func servers(ownerID: String = \"swiftfinApp\", database: SwiftfinDatabase = .shared) -> StoredValues.Key<[ServerAccountRecord]>",
+        "@MainActor static func userData(userID: String, database: SwiftfinDatabase = .shared) -> StoredValues.Key<UserDto>",
+        "@MainActor static func users(ownerID: String = \"swiftfinApp\", database: SwiftfinDatabase = .shared) -> StoredValues.Key<[UserAccountRecord]>"
       ],
       "sha256": "a35bb780d5ab1c52b91f80de966cbb6e49006060c602cbbf5b64c60381e7160a"
     },
     {
       "path": "Packages/SwiftfinAccountStore/Sources/SwiftfinAccountStore/LocalAccountStore.swift",
-      "reason": "Two synchronous main-actor metadata commits read current inventories, preserve order/sibling/URL/membership fields and nil-name fallbacks, then write cached DTO after records. Missing records return false; mismatched identities throw before mutation, including explicit cross-server user payloads. Seven native contracts cover original JSON/destinations/current-record merge/missing/duplicates/mismatch/credential non-use. StoredValues retains nonthrowing storage failures; writes are not transactional. This review adds methods to the earlier scoped store audit, not blanket API approval. Local PIN comparison is exact String equality, with default missing denial and explicit security-editor missing acceptance. Credential read errors propagate. Security transitions write/remove only the requested user PIN before existing policy then hint setters; credential failures leave both settings unchanged. Nine synthetic credentials/isolated-storage contracts cover Unicode/empty/case/whitespace, scope, failure and ordering. The secure implementation, OS prompts, auth transport and localization stay outside the API. No credential sync, enumeration or native query is added. Additional scoped admission/registration review: store-instance-bound receipt carries no credentials; exact identity/policy/endpoint and caller checks guard credential-first nontransactional effects. Existing PIN replacement preserves prior metadata/policy/hint behavior. Single public-info registration refuses duplicate/reentrant removal; normalized connection add delegates to the guarded catalog owner. Synthetic contracts use isolated databases/credentials; no native credential, server or RAID operation was run.",
+      "reason": "LocalAccountStore.swift: complete current source body and emitted public declarations read. Complete local record/key/DTO bridge, admission receipt, connection editing and security owner retain installed identity, ordering and nontransactional effects. Auth/admission and connection edits check exact original owner/inventory/policy/endpoint around external callbacks. Security verification now rechecks after credential reads; a busy guard rejects nested edits, and credential effects precede validated policy/hint writes. Failed credentials remain retryable; already accepted credential effects are not rolled back. Public signatures are unchanged and no server/media operation is owned. Listed consumers are scoped reviewed boundaries; remaining whole-graph/runtime acceptance is required.",
       "reviewedConsumers": [
         "Shared/SwiftfinStore/SwiftfinStore+ServerState.swift",
         "Shared/SwiftfinStore/SwiftinStore+UserState.swift",
@@ -6243,19 +6268,53 @@
         "Shared/ViewModels/UserSignInViewModel.swift",
         "Shared/ViewModels/ConnectToServerViewModel.swift",
         "Shared/ViewModels/ServerConnectionViewModel.swift",
-        "Packages/SwiftfinAccountStore/Tests/SwiftfinAccountStoreTests/AccountAdmissionContracts.swift"
+        "Packages/SwiftfinAccountStore/Tests/SwiftfinAccountStoreTests/AccountAdmissionContracts.swift",
+        "Shared/Persistence/StorageComposition.swift",
+        "Swiftfin tvOS/App/KidsAccountAdapter.swift",
+        "Packages/SwiftfinAccountStore/Tests/SwiftfinAccountStoreTests/LocalSecurityContracts.swift"
       ],
       "reviewedInterfaces": [
-        "updateServerMetadata(serverID:info:)",
-        "updateUserMetadata(userID:serverID:data:)",
-        "matchesPIN(_:userID:allowMissing:)",
-        "setLocalSecurity(userID:policy:pin:hint:)",
-        "prepareUserAdmission(user:mode:endpoint:)",
-        "commitUserAdmission(_:data:accessToken:policy:pin:pinHint:validate:)",
-        "registerServer(_:info:validate:)",
-        "addConnection(url:serverID:validate:makeID:)"
+        "@MainActor final class LocalAccountStore",
+        "@MainActor func accessPolicy(userID: String) -> LocalUserAccessPolicy",
+        "@MainActor func accessToken(userID: String) throws -> String?",
+        "@MainActor func activeConnection(for server: ServerAccountRecord) -> ServerConnection?",
+        "@MainActor func addConnection(url: URL, serverID: String, validate: LocalAccountStore.Checkpoint = {}, makeID: () -> String = { UUID().uuidString }) throws -> ServerConnection",
+        "@MainActor func autoSwitchEnabled(serverID: String) -> Bool",
+        "@MainActor func commitUserAdmission(_ snapshot: UserAdmissionSnapshot, data: UserDto, accessToken: String, policy: LocalUserAccessPolicy, pin: String?, pinHint: String?, validate: LocalAccountStore.Checkpoint = {}) throws -> UserAccountRecord",
+        "@MainActor func connections(for server: ServerAccountRecord) -> [ServerConnection]",
+        "@MainActor func deleteServer(_ server: ServerAccountRecord) throws",
+        "@MainActor func deleteSettings(userID: String) throws",
+        "@MainActor func deleteUser(_ user: UserAccountRecord) throws",
+        "@MainActor func effectiveURL(for server: ServerAccountRecord) -> URL",
+        "@MainActor func hasConnection(url: URL, server: ServerAccountRecord) -> Bool",
+        "@MainActor func matchesPIN(_ candidate: String, userID: String, allowMissing: Bool = false) throws -> Bool",
+        "@MainActor func pin(userID: String) throws -> String?",
+        "@MainActor func pinHint(userID: String) -> String",
+        "@MainActor func prepareUserAdmission(user: UserAccountRecord, mode: UserAdmissionMode, endpoint: URL) throws -> UserAdmissionSnapshot",
+        "@MainActor func saveAuthenticatedAccount(_ server: ServerAccountRecord, user: UserAccountRecord, accessToken: String) throws",
+        "@MainActor func saveAuthenticatedUser(_ user: UserAccountRecord, accessToken: String, pin: String? = nil) throws",
+        "@MainActor func setAccessPolicy(_ policy: LocalUserAccessPolicy, userID: String)",
+        "@MainActor func setActiveConnection(_ connection: ServerConnection?, serverID: String)",
+        "@MainActor func setAutoSwitchEnabled(_ enabled: Bool, serverID: String)",
+        "@MainActor func setConnections(_ connections: [ServerConnection], serverID: String)",
+        "@MainActor func setLocalSecurity(userID: String, policy: LocalUserAccessPolicy, pin: String, hint: String) throws",
+        "@MainActor func setPINHint(_ hint: String, userID: String)",
+        "@MainActor func storeAccessToken(_ token: String, userID: String) throws",
+        "@MainActor func storePIN(_ pin: String, userID: String) throws",
+        "@MainActor init(credentials: any CredentialStore, currentURLName: String, database: SwiftfinDatabase = .shared, catalogOwnerID: String = \"swiftfinApp\")",
+        "@MainActor var servers: [ServerAccountRecord] { get set }",
+        "@MainActor var users: [UserAccountRecord] { get set }",
+        "@discardableResult @MainActor func ensureConnections(for server: ServerAccountRecord) -> [ServerConnection]",
+        "@discardableResult @MainActor func registerServer(_ server: ServerAccountRecord, info: PublicSystemInfo, validate: LocalAccountStore.Checkpoint = {}) throws -> Bool",
+        "@discardableResult @MainActor func updateServerMetadata(serverID: String, info: PublicSystemInfo) throws -> Bool",
+        "@discardableResult @MainActor func updateUserMetadata(userID: String, serverID: String, data: UserDto) throws -> Bool",
+        "case identityMismatch",
+        "case incorrectPIN",
+        "case invalidConnection",
+        "enum AccountStoreError",
+        "typealias Checkpoint = @MainActor @Sendable () throws -> Void"
       ],
-      "sha256": "91b661176a5cdae378948493ff0fbcc30f7f51c40208f6c0450fca7dc0be21c0"
+      "sha256": "643ee55df00cbd8da7d94f56676392ddf82e2fd969c481bad545d86b4968b002"
     },
     {
       "path": "Packages/SwiftfinSessions/Sources/SwiftfinSessions/SessionMetadataRefresh.swift",
@@ -6318,25 +6377,26 @@
     },
     {
       "path": "Packages/KidsAccounts/Sources/KidsAccounts/ParentPINAuthorization.swift",
-      "reason": "Complete parent-PIN policy body and throwing host read reviewed with its coordinator setup/unlock/signIn and parent-screen error branches. Missing, configured and failed reads remain distinct; unavailable storage routes to existing-PIN presentation and throws a credential-free availability error for actions, even for unlocked/recovery callers. Replacement validates numeric length and propagates write failure before coordinator authority is granted. Eight synthetic native contracts pass; two added UIKit coordinator regressions are compile-only under the human runtime hold. Same-account/library verification remains a caller requirement for recovery, and asynchronous admission/activation ownership remains unapproved.",
+      "reason": "ParentPINAuthorization.swift: complete current source body and emitted public declarations read. Complete account identity, admission, activation receipt, lifetime scope and parent-PIN authorization were read. Identity equality includes URL/server/user/token but excludes display name; descriptions redact credentials. Synchronous main-actor host publication permanently retires old leases; weak checkpoints retain no host or credentials. Preparation revokes previous authority, activation consumes it before suspension, and throwing credential reads cannot authorize parent setup. SDK authentication, session objects and secure implementation remain in scoped app composition. Listed consumers are scoped reviewed boundaries; remaining whole-graph/runtime acceptance is required.",
       "reviewedConsumers": [
         "Packages/KidsApplication/Sources/KidsApplication/KidsAppModel.swift",
         "Packages/KidsExperience/Sources/KidsExperience/KidsParentView.swift",
         "Swiftfin tvOS/App/KidsAccountAdapter.swift"
       ],
       "reviewedInterfaces": [
-        "KidsParentPINError",
-        "KidsAccountHost.parentPIN get throws",
-        "hasParentPIN",
-        "authorizeParentSetup(unlocked:recovering:)",
-        "matchesParentPIN(_:)",
-        "replaceParentPIN(_:unlocked:)"
+        "@MainActor func authorizeParentSetup(unlocked: Bool, recovering: Bool = false) throws",
+        "@MainActor func matchesParentPIN(_ pin: String) throws -> Bool",
+        "@MainActor func replaceParentPIN(_ pin: String, unlocked: Bool) throws",
+        "@MainActor var hasParentPIN: Bool { get }",
+        "case unavailable",
+        "enum KidsParentPINError",
+        "var errorDescription: String? { get }"
       ],
       "sha256": "bf14e672ed470e4ca456489992c525a6e614cff630a89192f226d3abdfc86412"
     },
     {
       "path": "Packages/KidsAccounts/Sources/KidsAccounts/KidsAccountHost.swift",
-      "reason": "Complete identity/host/activation body read with the real main-actor session adapter and all three fake host implementations. Identity equality/hash include URL/server/user/token and ignore display name; descriptions redact credentials. Synchronous main-actor publication is an explicit port requirement and holds in the current published-session projection. Prepared activation is consumed before suspension, with injected effect checkpoints. Actual credentials and native authentication are not accessed or accepted by compilation.",
+      "reason": "KidsAccountHost.swift: complete current source body and emitted public declarations read. Complete account identity, admission, activation receipt, lifetime scope and parent-PIN authorization were read. Identity equality includes URL/server/user/token but excludes display name; descriptions redact credentials. Synchronous main-actor host publication permanently retires old leases; weak checkpoints retain no host or credentials. Preparation revokes previous authority, activation consumes it before suspension, and throwing credential reads cannot authorize parent setup. SDK authentication, session objects and secure implementation remain in scoped app composition. Listed consumers are scoped reviewed boundaries; remaining whole-graph/runtime acceptance is required.",
       "reviewedConsumers": [
         "Packages/KidsApplication/Sources/KidsApplication/KidsAppModel.swift",
         "Swiftfin tvOS/App/KidsAccountAdapter.swift",
@@ -6344,29 +6404,52 @@
         "Packages/KidsAccounts/Sources/KidsAccounts/KidsAccountScope.swift"
       ],
       "reviewedInterfaces": [
-        "KidsAccountIdentity",
-        "KidsAccountCheckpoint",
-        "KidsAuthenticatedAccount",
-        "KidsAccountHost"
+        "@MainActor final class KidsAuthenticatedAccount",
+        "@MainActor func activate(binding: KidsBinding, validate: @escaping KidsAccountCheckpoint = { try Task.checkCancellation() }) async throws",
+        "@MainActor func authenticate(url: URL, serverID: String, serverName: String, username: String, password: String) async throws -> KidsAuthenticatedAccount",
+        "@MainActor func prepareActivation(binding: KidsBinding, validate: @escaping KidsAccountCheckpoint = { try Task.checkCancellation() }) throws",
+        "@MainActor func signOut(validate: @escaping KidsAccountCheckpoint) async throws",
+        "@MainActor func storeParentPIN(_ pin: String) throws",
+        "@MainActor init(identity: KidsAccountIdentity, credentialStorage: @escaping @MainActor @Sendable (KidsAccountCheckpoint) throws -> Void = { try $0() }, activation: @escaping @MainActor @Sendable (@escaping KidsAccountCheckpoint) async throws -> Void)",
+        "@MainActor let identity: KidsAccountIdentity",
+        "@MainActor protocol KidsAccountHost : AnyObject",
+        "@MainActor var currentIdentity: KidsAccountIdentity? { get }",
+        "@MainActor var identityChanges: AnyPublisher<KidsAccountIdentity?, Never> { get }",
+        "@MainActor var parentPIN: String? { get throws }",
+        "func hash(into hasher: inout Hasher)",
+        "func matches(_ binding: KidsBinding) -> Bool",
+        "init(serverURL: URL, serverID: String, serverName: String, userID: String, accessToken: String)",
+        "let accessToken: String",
+        "let serverID: String",
+        "let serverName: String",
+        "let serverURL: URL",
+        "let userID: String",
+        "static func == (lhs: KidsAccountIdentity, rhs: KidsAccountIdentity) -> Bool",
+        "struct KidsAccountIdentity",
+        "typealias KidsAccountCheckpoint = @MainActor @Sendable () throws -> Void",
+        "var debugDescription: String { get }",
+        "var description: String { get }"
       ],
       "sha256": "05f01e75bd8cc14b587912617243c0ca207599db8fa411a19b62ac8451e54f91"
     },
     {
       "path": "Packages/KidsAccounts/Sources/KidsAccounts/KidsAccountAdmission.swift",
-      "reason": "Complete existing admission owner and synchronous host signal contract read. One ticket governs each sign-in/out; identity changes latch rejection through ABA except its exact prepared activation/sign-out target. Weak checkpoints do not retain attempts. Existing owner-lifetime, credential reentry, one-shot activation and late logout fake contracts are included in the 31 passing account tests. It starts no tasks or IO. Real SDK publication remains held.",
+      "reason": "KidsAccountAdmission.swift: complete current source body and emitted public declarations read. Complete account identity, admission, activation receipt, lifetime scope and parent-PIN authorization were read. Identity equality includes URL/server/user/token but excludes display name; descriptions redact credentials. Synchronous main-actor host publication permanently retires old leases; weak checkpoints retain no host or credentials. Preparation revokes previous authority, activation consumes it before suspension, and throwing credential reads cannot authorize parent setup. SDK authentication, session objects and secure implementation remain in scoped app composition. Listed consumers are scoped reviewed boundaries; remaining whole-graph/runtime acceptance is required.",
       "reviewedConsumers": [
         "Packages/KidsApplication/Sources/KidsApplication/KidsAppModel.swift",
         "Swiftfin tvOS/App/KidsAccountAdapter.swift"
       ],
       "reviewedInterfaces": [
-        "init(host:)",
-        "begin()",
-        "cancel()",
-        "Attempt.checkpoint",
-        "Attempt.check()",
-        "Attempt.prepare(_:binding:)",
-        "Attempt.activate(_:binding:)",
-        "Attempt.signOut()"
+        "@MainActor final class Attempt",
+        "@MainActor final class KidsAccountAdmission",
+        "@MainActor func activate(_ account: KidsAuthenticatedAccount, binding: KidsBinding) async throws",
+        "@MainActor func begin() throws -> KidsAccountAdmission.Attempt",
+        "@MainActor func cancel()",
+        "@MainActor func check() throws",
+        "@MainActor func prepare(_ account: KidsAuthenticatedAccount, binding: KidsBinding) throws",
+        "@MainActor func signOut() async throws",
+        "@MainActor init(host: any KidsAccountHost)",
+        "@MainActor var checkpoint: KidsAccountCheckpoint { get }"
       ],
       "sha256": "29c76afbab141953d699c90e014fceda7df95dfe2f5ed360a48ebee4bf9a945a"
     },
@@ -6609,32 +6692,50 @@
     },
     {
       "path": "Packages/SwiftfinAccountStore/Sources/SwiftfinAccountStore/UserAdmissionSnapshot.swift",
-      "reason": "Immutable Sendable admission receipt has internal initializer/fields and store-instance identity, endpoint, local record and policy. No token, PIN, hint or native result is retained; the store rejects foreign-instance receipt use.",
+      "reason": "UserAdmissionSnapshot.swift: complete current source body and emitted public declarations read. Complete local record/key/DTO bridge, admission receipt, connection editing and security owner retain installed identity, ordering and nontransactional effects. Auth/admission and connection edits check exact original owner/inventory/policy/endpoint around external callbacks. Security verification now rechecks after credential reads; a busy guard rejects nested edits, and credential effects precede validated policy/hint writes. Failed credentials remain retryable; already accepted credential effects are not rolled back. Public signatures are unchanged and no server/media operation is owned. Listed consumers are scoped reviewed boundaries; remaining whole-graph/runtime acceptance is required.",
       "reviewedConsumers": [
         "Shared/ViewModels/UserSignInViewModel.swift",
         "Shared/ViewModels/ConnectToServerViewModel.swift",
-        "Shared/ViewModels/ServerConnectionViewModel.swift"
+        "Shared/ViewModels/ServerConnectionViewModel.swift",
+        "Shared/ViewModels/LocalUserSecurityViewModel.swift",
+        "Shared/Persistence/StorageComposition.swift",
+        "Swiftfin tvOS/App/KidsAccountAdapter.swift",
+        "Packages/SwiftfinAccountStore/Tests/SwiftfinAccountStoreTests/LocalSecurityContracts.swift"
       ],
       "reviewedInterfaces": [
-        "UserAdmissionMode",
-        "opaque UserAdmissionSnapshot"
+        "case existing(replaceAccessToken: Bool)",
+        "case new",
+        "enum UserAdmissionMode",
+        "struct UserAdmissionSnapshot"
       ],
       "sha256": "86900f904c6287b70bd272cc8084c717abe48b0102339deac4301a33e9667707"
     },
     {
       "path": "Packages/SwiftfinAccountStore/Sources/SwiftfinAccountStore/ConnectionCatalogEditing.swift",
-      "reason": "Main-actor catalog owner captures exact original inventory/active/policy/server plus internal store identity. Edits canonicalize priorities, guard active/last deletion, require exact activation/permutation and recheck between accepted effects. Caller checkpoint must describe external intent/account, not compare the pre-edit catalog after the owner has updated it. Nontransactional accepted writes remain; no network or global session is resolved.",
+      "reason": "ConnectionCatalogEditing.swift: complete current source body and emitted public declarations read. Complete local record/key/DTO bridge, admission receipt, connection editing and security owner retain installed identity, ordering and nontransactional effects. Auth/admission and connection edits check exact original owner/inventory/policy/endpoint around external callbacks. Security verification now rechecks after credential reads; a busy guard rejects nested edits, and credential effects precede validated policy/hint writes. Failed credentials remain retryable; already accepted credential effects are not rolled back. Public signatures are unchanged and no server/media operation is owned. Listed consumers are scoped reviewed boundaries; remaining whole-graph/runtime acceptance is required.",
       "reviewedConsumers": [
         "Shared/ViewModels/ServerConnectionViewModel.swift",
         "Packages/SwiftfinAccountStore/Sources/SwiftfinAccountStore/LocalAccountStore.swift",
-        "Packages/SwiftfinAccountStore/Tests/SwiftfinAccountStoreTests/AccountAdmissionContracts.swift"
+        "Packages/SwiftfinAccountStore/Tests/SwiftfinAccountStoreTests/AccountAdmissionContracts.swift",
+        "Shared/ViewModels/LocalUserSecurityViewModel.swift",
+        "Shared/Persistence/StorageComposition.swift",
+        "Swiftfin tvOS/App/KidsAccountAdapter.swift",
+        "Packages/SwiftfinAccountStore/Tests/SwiftfinAccountStoreTests/LocalSecurityContracts.swift"
       ],
       "reviewedInterfaces": [
-        "ConnectionCatalogSnapshot",
-        "ConnectionCatalogEdit",
-        "connectionCatalog(serverID:)",
-        "validateConnectionCatalog(_:)",
-        "editConnections(_:snapshot:validate:)"
+        "@MainActor func connectionCatalog(serverID: String) throws -> ConnectionCatalogSnapshot",
+        "@MainActor func validateConnectionCatalog(_ snapshot: ConnectionCatalogSnapshot) throws",
+        "@discardableResult @MainActor func editConnections(_ edit: ConnectionCatalogEdit, snapshot: ConnectionCatalogSnapshot, validate: LocalAccountStore.Checkpoint = {}) throws -> ConnectionCatalogSnapshot",
+        "case activate(ServerConnection)",
+        "case delete(String)",
+        "case reorder([String])",
+        "case upsert(ServerConnection)",
+        "enum ConnectionCatalogEdit",
+        "let active: ServerConnection?",
+        "let autoSwitchEnabled: Bool",
+        "let connections: [ServerConnection]",
+        "let server: ServerAccountRecord",
+        "struct ConnectionCatalogSnapshot"
       ],
       "sha256": "29ad2de54decc03f474f0c2990615f48a5705aedb79b15bf8cc3f25caa756b83"
     },
@@ -6931,19 +7032,22 @@
     },
     {
       "path": "Packages/SwiftfinAccountStore/Sources/SwiftfinAccountStore/LocalSecurityUpdate.swift",
-      "reason": "Complete MainActor bound security-edit API reviewed. Captures exact user/store/access policy and requires an injected checkpoint; validates cancellation/binding, exact old-PIN comparison and a second PIN check before existing credential-first nontransactional writes. Successful commit is single-use; credential failure is retryable. UI/native prompts and account globals remain outside. Six fake-credential regressions cover expiration, interleaved changes, sibling preservation, retry and cancellation.",
-      "reviewedInterfaces": [
-        "LocalSecurityUpdate",
-        "checkBinding()",
-        "check(oldPIN:)",
-        "commit(policy:pin:hint:)",
-        "LocalAccountStore.securityUpdate(userID:validate:)"
-      ],
+      "reason": "LocalSecurityUpdate.swift: complete current source body and emitted public declarations read. Complete local record/key/DTO bridge, admission receipt, connection editing and security owner retain installed identity, ordering and nontransactional effects. Auth/admission and connection edits check exact original owner/inventory/policy/endpoint around external callbacks. Security verification now rechecks after credential reads; a busy guard rejects nested edits, and credential effects precede validated policy/hint writes. Failed credentials remain retryable; already accepted credential effects are not rolled back. Public signatures are unchanged and no server/media operation is owned. Listed consumers are scoped reviewed boundaries; remaining whole-graph/runtime acceptance is required.",
       "reviewedConsumers": [
         "Shared/ViewModels/LocalUserSecurityViewModel.swift",
-        "Shared/Views/SettingsView/LocalUserSettings/LocalUserSecurityView.swift"
+        "Shared/Views/SettingsView/LocalUserSettings/LocalUserSecurityView.swift",
+        "Shared/Persistence/StorageComposition.swift",
+        "Swiftfin tvOS/App/KidsAccountAdapter.swift",
+        "Packages/SwiftfinAccountStore/Tests/SwiftfinAccountStoreTests/LocalSecurityContracts.swift"
       ],
-      "sha256": "3c958ee2e00896889d3a5013b27c7714d83b5b4b9ee948328a8c5a1e9d0758bd"
+      "reviewedInterfaces": [
+        "@MainActor final class LocalSecurityUpdate",
+        "@MainActor func check(oldPIN: String) throws -> Bool",
+        "@MainActor func checkBinding() throws",
+        "@MainActor func commit(policy: LocalUserAccessPolicy, pin: String, hint: String) throws",
+        "@MainActor func securityUpdate(userID: String, validate: @escaping LocalAccountStore.Checkpoint) throws -> LocalSecurityUpdate"
+      ],
+      "sha256": "e57fba17d22333bbfdabee62efe04fe5af392681b0f9b0d4f8c42567a6897ea0"
     },
     {
       "path": "Packages/SwiftfinAccountModels/Sources/SwiftfinAccountModels/ServerConnectionDraft.swift",
@@ -6977,15 +7081,18 @@
     },
     {
       "path": "Packages/KidsAccounts/Sources/KidsAccounts/KidsAccountScope.swift",
-      "reason": "Main-actor account lifetime owner consumes the documented synchronous identity port. Leases capture only UUID, initial publication consistency and weak owner, retaining no host or credentials. Duplicate/display-name changes preserve authority; URL/user/token/logout changes permanently revoke it through ABA. isCurrent supports valid final checkpoints in cancelled cleanup; check also rejects task cancellation. Six fake-host native regressions pass. No IO, new package or edge.",
+      "reason": "KidsAccountScope.swift: complete current source body and emitted public declarations read. Complete account identity, admission, activation receipt, lifetime scope and parent-PIN authorization were read. Identity equality includes URL/server/user/token but excludes display name; descriptions redact credentials. Synchronous main-actor host publication permanently retires old leases; weak checkpoints retain no host or credentials. Preparation revokes previous authority, activation consumes it before suspension, and throwing credential reads cannot authorize parent setup. SDK authentication, session objects and secure implementation remain in scoped app composition. Listed consumers are scoped reviewed boundaries; remaining whole-graph/runtime acceptance is required.",
       "reviewedConsumers": [
-        "Packages/KidsApplication/Sources/KidsApplication/KidsAppModel.swift"
+        "Packages/KidsApplication/Sources/KidsApplication/KidsAppModel.swift",
+        "Swiftfin tvOS/App/KidsAccountAdapter.swift"
       ],
       "reviewedInterfaces": [
-        "init(host:)",
-        "capture()",
-        "Lease.isCurrent",
-        "Lease.check()"
+        "@MainActor final class KidsAccountScope",
+        "@MainActor func capture() -> KidsAccountScope.Lease",
+        "@MainActor func check() throws",
+        "@MainActor init(host: any KidsAccountHost)",
+        "@MainActor struct Lease",
+        "@MainActor var isCurrent: Bool { get }"
       ],
       "sha256": "356243bc76311056d19103baeff5e227dc656a0307164a454277a8ae97434b21"
     },
@@ -7107,42 +7214,62 @@
     },
     {
       "path": "Packages/SwiftfinStorage/Sources/SwiftfinStorage/CoreStoreBootstrap.swift",
-      "reason": "Complete internal compatibility shim read. The sole owned preconcurrency import wraps exactly one native SDK global logger assignment. The MainActor startup gate is its only caller; first install or database construction closes replacement. This does not certify unowned third-party initialization.",
+      "reason": "CoreStoreBootstrap.swift: complete current source body and emitted public declarations read. Complete native CoreStore owner, V1/V2/V3 field/version-lock schemas, migration snapshots/encoded transactions and local SQLite replacement bodies were read. Native stack, schema objects and observations remain internal; public boundaries carry bytes, addresses, checked account records and actor-owned cancellation. Open rejects concurrent starts; live observer delivery checks weak ownership and active state. Startup-only native global logger installation remains isolated in the existing private compatibility file and freezes before database construction. No installed database or actual credential migration was opened by the audit. Listed consumers are scoped reviewed boundaries; remaining whole-graph/runtime acceptance is required.",
       "reviewedConsumers": [
-        "Packages/SwiftfinStorage/Sources/SwiftfinStorage/StorageLogging.swift"
+        "Packages/SwiftfinStorage/Sources/SwiftfinStorage/StorageLogging.swift",
+        "Shared/Persistence/StorageComposition.swift",
+        "Shared/App/SwiftfinApp+configure.swift",
+        "Packages/SwiftfinStoredValues/Sources/SwiftfinStoredValues/StoredValues.swift",
+        "Packages/SwiftfinStoredValues/Sources/SwiftfinStoredValues/StoredValueObservation.swift"
       ],
-      "reviewedInterfaces": [
-        "internal installLegacyCoreStoreLogger(_:)"
-      ],
+      "reviewedInterfaces": [],
       "sha256": "e9e7af4c52e7c66caa2997c8e321b8d8466e0ad20b18f301fe3a6e816c6492d0"
     },
     {
       "path": "Packages/SwiftfinStorage/Sources/SwiftfinStorage/StorageLogging.swift",
-      "reason": "Complete public log-value/bootstrap and private gate/native logger bodies read with injected-writer tests and app configure ordering. MainActor gate rejects repeated/late writes; native worker logger is checked Sendable and emits immutable entries through a Sendable closure. Assertions preserve lazy message evaluation. App entrypoints configure before storage composition. No SDK-global test mutation or runtime SDK initialization performed.",
+      "reason": "StorageLogging.swift: complete current source body and emitted public declarations read. Complete native CoreStore owner, V1/V2/V3 field/version-lock schemas, migration snapshots/encoded transactions and local SQLite replacement bodies were read. Native stack, schema objects and observations remain internal; public boundaries carry bytes, addresses, checked account records and actor-owned cancellation. Open rejects concurrent starts; live observer delivery checks weak ownership and active state. Startup-only native global logger installation remains isolated in the existing private compatibility file and freezes before database construction. No installed database or actual credential migration was opened by the audit. Listed consumers are scoped reviewed boundaries; remaining whole-graph/runtime acceptance is required.",
       "reviewedConsumers": [
         "Shared/App/SwiftfinApp+configure.swift",
-        "Packages/SwiftfinStorage/Sources/SwiftfinStorage/SwiftfinDatabase.swift"
+        "Packages/SwiftfinStorage/Sources/SwiftfinStorage/SwiftfinDatabase.swift",
+        "Shared/Persistence/StorageComposition.swift",
+        "Packages/SwiftfinStoredValues/Sources/SwiftfinStoredValues/StoredValues.swift",
+        "Packages/SwiftfinStoredValues/Sources/SwiftfinStoredValues/StoredValueObservation.swift"
       ],
       "reviewedInterfaces": [
-        "StorageLogLevel",
-        "StorageLogEntry",
-        "StorageLogging.bootstrap(_:)",
-        "internal startup gate and NativeStorageLogger"
+        "@MainActor enum StorageLogging",
+        "@discardableResult @MainActor static func bootstrap(_ emit: @escaping @Sendable (StorageLogEntry) -> Void) -> Bool",
+        "case critical",
+        "case debug",
+        "case trace",
+        "case warning",
+        "enum StorageLogLevel",
+        "let file: String",
+        "let function: String",
+        "let level: StorageLogLevel",
+        "let line: UInt",
+        "let message: String",
+        "struct StorageLogEntry"
       ],
       "sha256": "afa573d047259c6f3106f5838cd29343150ab96758630511b4055ba38174b5eb"
     },
     {
       "path": "Packages/SwiftfinStorage/Sources/SwiftfinStorage/SwiftfinDatabase.swift",
-      "reason": "Complete database actor/body/public surface read for SDK bootstrap and isolation. Construction freezes logger replacement before creating DataStack. The stack, store, open gates and migration objects stay private/internal on MainActor. Transaction bodies accept checked snapshots/bytes; immutable migrated account values and actor credential-storage callback form the public open boundary. Existing SQLite replacement semantics are retained, not newly claimed transactional. No household store or RAID action performed; schema/value API review remains separately required.",
+      "reason": "SwiftfinDatabase.swift: complete current source body and emitted public declarations read. Complete native CoreStore owner, V1/V2/V3 field/version-lock schemas, migration snapshots/encoded transactions and local SQLite replacement bodies were read. Native stack, schema objects and observations remain internal; public boundaries carry bytes, addresses, checked account records and actor-owned cancellation. Open rejects concurrent starts; live observer delivery checks weak ownership and active state. Startup-only native global logger installation remains isolated in the existing private compatibility file and freezes before database construction. No installed database or actual credential migration was opened by the audit. Listed consumers are scoped reviewed boundaries; remaining whole-graph/runtime acceptance is required.",
       "reviewedConsumers": [
         "Packages/SwiftfinStorage/Sources/SwiftfinStorage/StorageLogging.swift",
-        "Shared/App/SwiftfinApp+configure.swift"
+        "Shared/App/SwiftfinApp+configure.swift",
+        "Shared/Persistence/StorageComposition.swift",
+        "Packages/SwiftfinStoredValues/Sources/SwiftfinStoredValues/StoredValues.swift",
+        "Packages/SwiftfinStoredValues/Sources/SwiftfinStoredValues/StoredValueObservation.swift"
       ],
       "reviewedInterfaces": [
-        "init(fileURL:)",
-        "shared",
-        "MigratedAccounts",
-        "open(persistAccessToken:)"
+        "@MainActor final class SwiftfinDatabase",
+        "@MainActor func open(persistAccessToken: @escaping @MainActor @Sendable (String, String) throws -> Void) async throws -> SwiftfinDatabase.MigratedAccounts?",
+        "@MainActor init(fileURL: URL? = nil)",
+        "@MainActor static let shared: SwiftfinDatabase",
+        "let servers: [SwiftfinStore.State.Server]",
+        "let users: [SwiftfinStore.State.User]",
+        "struct MigratedAccounts"
       ],
       "sha256": "7da42d47a853d601879cf1817414c4a4b38b459e7064725f71488b8e7cfe251c"
     },
@@ -9383,6 +9510,401 @@
         "static func estimate(bytes: Int, elapsed: Duration) throws -> Int"
       ],
       "sha256": "737417d242757061a9c6fefcfaa14b9cea1f9ccacc6f20595978e3fc2112171c"
+    },
+    {
+      "path": "Packages/SwiftfinStorage/Sources/SwiftfinStorage/Schemas/SwiftfinStore+V1.swift",
+      "reason": "SwiftfinStore+V1.swift: complete current source body and emitted public declarations read. Complete native CoreStore owner, V1/V2/V3 field/version-lock schemas, migration snapshots/encoded transactions and local SQLite replacement bodies were read. Native stack, schema objects and observations remain internal; public boundaries carry bytes, addresses, checked account records and actor-owned cancellation. Open rejects concurrent starts; live observer delivery checks weak ownership and active state. Startup-only native global logger installation remains isolated in the existing private compatibility file and freezes before database construction. No installed database or actual credential migration was opened by the audit. Listed consumers are scoped reviewed boundaries; remaining whole-graph/runtime acceptance is required.",
+      "reviewedConsumers": [
+        "Shared/Persistence/StorageComposition.swift",
+        "Shared/App/SwiftfinApp+configure.swift",
+        "Packages/SwiftfinStoredValues/Sources/SwiftfinStoredValues/StoredValues.swift",
+        "Packages/SwiftfinStoredValues/Sources/SwiftfinStoredValues/StoredValueObservation.swift"
+      ],
+      "reviewedInterfaces": [],
+      "sha256": "fb3d410665a58369e8b5b97b9d7a796e8eeb3819d81732cb1675e580209ba874"
+    },
+    {
+      "path": "Packages/SwiftfinStorage/Sources/SwiftfinStorage/Schemas/SwiftfinStore+V2.swift",
+      "reason": "SwiftfinStore+V2.swift: complete current source body and emitted public declarations read. Complete native CoreStore owner, V1/V2/V3 field/version-lock schemas, migration snapshots/encoded transactions and local SQLite replacement bodies were read. Native stack, schema objects and observations remain internal; public boundaries carry bytes, addresses, checked account records and actor-owned cancellation. Open rejects concurrent starts; live observer delivery checks weak ownership and active state. Startup-only native global logger installation remains isolated in the existing private compatibility file and freezes before database construction. No installed database or actual credential migration was opened by the audit. Listed consumers are scoped reviewed boundaries; remaining whole-graph/runtime acceptance is required.",
+      "reviewedConsumers": [
+        "Shared/Persistence/StorageComposition.swift",
+        "Shared/App/SwiftfinApp+configure.swift",
+        "Packages/SwiftfinStoredValues/Sources/SwiftfinStoredValues/StoredValues.swift",
+        "Packages/SwiftfinStoredValues/Sources/SwiftfinStoredValues/StoredValueObservation.swift"
+      ],
+      "reviewedInterfaces": [],
+      "sha256": "1a288d97339d857e7d7f8b349bdc9126fc9dcf81b496d31c85e91b59d90225bd"
+    },
+    {
+      "path": "Packages/SwiftfinStorage/Sources/SwiftfinStorage/Schemas/SwiftfinStore+V3.swift",
+      "reason": "SwiftfinStore+V3.swift: complete current source body and emitted public declarations read. Complete native CoreStore owner, V1/V2/V3 field/version-lock schemas, migration snapshots/encoded transactions and local SQLite replacement bodies were read. Native stack, schema objects and observations remain internal; public boundaries carry bytes, addresses, checked account records and actor-owned cancellation. Open rejects concurrent starts; live observer delivery checks weak ownership and active state. Startup-only native global logger installation remains isolated in the existing private compatibility file and freezes before database construction. No installed database or actual credential migration was opened by the audit. Listed consumers are scoped reviewed boundaries; remaining whole-graph/runtime acceptance is required.",
+      "reviewedConsumers": [
+        "Shared/Persistence/StorageComposition.swift",
+        "Shared/App/SwiftfinApp+configure.swift",
+        "Packages/SwiftfinStoredValues/Sources/SwiftfinStoredValues/StoredValues.swift",
+        "Packages/SwiftfinStoredValues/Sources/SwiftfinStoredValues/StoredValueObservation.swift"
+      ],
+      "reviewedInterfaces": [],
+      "sha256": "78450cd048e7f7b7d40a12c93532988212fad36c98e1fa811e51ea1de1b44e54"
+    },
+    {
+      "path": "Packages/SwiftfinStorage/Sources/SwiftfinStorage/Schemas/V1AccessTokenModel.swift",
+      "reason": "V1AccessTokenModel.swift: complete current source body and emitted public declarations read. Complete native CoreStore owner, V1/V2/V3 field/version-lock schemas, migration snapshots/encoded transactions and local SQLite replacement bodies were read. Native stack, schema objects and observations remain internal; public boundaries carry bytes, addresses, checked account records and actor-owned cancellation. Open rejects concurrent starts; live observer delivery checks weak ownership and active state. Startup-only native global logger installation remains isolated in the existing private compatibility file and freezes before database construction. No installed database or actual credential migration was opened by the audit. Listed consumers are scoped reviewed boundaries; remaining whole-graph/runtime acceptance is required.",
+      "reviewedConsumers": [
+        "Shared/Persistence/StorageComposition.swift",
+        "Shared/App/SwiftfinApp+configure.swift",
+        "Packages/SwiftfinStoredValues/Sources/SwiftfinStoredValues/StoredValues.swift",
+        "Packages/SwiftfinStoredValues/Sources/SwiftfinStoredValues/StoredValueObservation.swift"
+      ],
+      "reviewedInterfaces": [],
+      "sha256": "2c54f87d43b4b7acf7e0a402d004565f7801ef92a143d27e3d5099c341997876"
+    },
+    {
+      "path": "Packages/SwiftfinStorage/Sources/SwiftfinStorage/Schemas/V1ServerModel.swift",
+      "reason": "V1ServerModel.swift: complete current source body and emitted public declarations read. Complete native CoreStore owner, V1/V2/V3 field/version-lock schemas, migration snapshots/encoded transactions and local SQLite replacement bodies were read. Native stack, schema objects and observations remain internal; public boundaries carry bytes, addresses, checked account records and actor-owned cancellation. Open rejects concurrent starts; live observer delivery checks weak ownership and active state. Startup-only native global logger installation remains isolated in the existing private compatibility file and freezes before database construction. No installed database or actual credential migration was opened by the audit. Listed consumers are scoped reviewed boundaries; remaining whole-graph/runtime acceptance is required.",
+      "reviewedConsumers": [
+        "Shared/Persistence/StorageComposition.swift",
+        "Shared/App/SwiftfinApp+configure.swift",
+        "Packages/SwiftfinStoredValues/Sources/SwiftfinStoredValues/StoredValues.swift",
+        "Packages/SwiftfinStoredValues/Sources/SwiftfinStoredValues/StoredValueObservation.swift"
+      ],
+      "reviewedInterfaces": [],
+      "sha256": "e326a3c62c3e63038dc1a615481285cb5569091e0c345d00a829d379a60edbb0"
+    },
+    {
+      "path": "Packages/SwiftfinStorage/Sources/SwiftfinStorage/Schemas/V1UserModel.swift",
+      "reason": "V1UserModel.swift: complete current source body and emitted public declarations read. Complete native CoreStore owner, V1/V2/V3 field/version-lock schemas, migration snapshots/encoded transactions and local SQLite replacement bodies were read. Native stack, schema objects and observations remain internal; public boundaries carry bytes, addresses, checked account records and actor-owned cancellation. Open rejects concurrent starts; live observer delivery checks weak ownership and active state. Startup-only native global logger installation remains isolated in the existing private compatibility file and freezes before database construction. No installed database or actual credential migration was opened by the audit. Listed consumers are scoped reviewed boundaries; remaining whole-graph/runtime acceptance is required.",
+      "reviewedConsumers": [
+        "Shared/Persistence/StorageComposition.swift",
+        "Shared/App/SwiftfinApp+configure.swift",
+        "Packages/SwiftfinStoredValues/Sources/SwiftfinStoredValues/StoredValues.swift",
+        "Packages/SwiftfinStoredValues/Sources/SwiftfinStoredValues/StoredValueObservation.swift"
+      ],
+      "reviewedInterfaces": [],
+      "sha256": "a5f568456c62fe3d71f6d63c6414f52065a4e9681bf35cca518d7b079dd0fa6a"
+    },
+    {
+      "path": "Packages/SwiftfinStorage/Sources/SwiftfinStorage/Schemas/V2AnyData.swift",
+      "reason": "V2AnyData.swift: complete current source body and emitted public declarations read. Complete native CoreStore owner, V1/V2/V3 field/version-lock schemas, migration snapshots/encoded transactions and local SQLite replacement bodies were read. Native stack, schema objects and observations remain internal; public boundaries carry bytes, addresses, checked account records and actor-owned cancellation. Open rejects concurrent starts; live observer delivery checks weak ownership and active state. Startup-only native global logger installation remains isolated in the existing private compatibility file and freezes before database construction. No installed database or actual credential migration was opened by the audit. Listed consumers are scoped reviewed boundaries; remaining whole-graph/runtime acceptance is required.",
+      "reviewedConsumers": [
+        "Shared/Persistence/StorageComposition.swift",
+        "Shared/App/SwiftfinApp+configure.swift",
+        "Packages/SwiftfinStoredValues/Sources/SwiftfinStoredValues/StoredValues.swift",
+        "Packages/SwiftfinStoredValues/Sources/SwiftfinStoredValues/StoredValueObservation.swift"
+      ],
+      "reviewedInterfaces": [],
+      "sha256": "2f6e0f98c477ef13b69ea4e0639fb8fb310033f61435c7163b017341fec84da0"
+    },
+    {
+      "path": "Packages/SwiftfinStorage/Sources/SwiftfinStorage/Schemas/V2ServerModel.swift",
+      "reason": "V2ServerModel.swift: complete current source body and emitted public declarations read. Complete native CoreStore owner, V1/V2/V3 field/version-lock schemas, migration snapshots/encoded transactions and local SQLite replacement bodies were read. Native stack, schema objects and observations remain internal; public boundaries carry bytes, addresses, checked account records and actor-owned cancellation. Open rejects concurrent starts; live observer delivery checks weak ownership and active state. Startup-only native global logger installation remains isolated in the existing private compatibility file and freezes before database construction. No installed database or actual credential migration was opened by the audit. Listed consumers are scoped reviewed boundaries; remaining whole-graph/runtime acceptance is required.",
+      "reviewedConsumers": [
+        "Shared/Persistence/StorageComposition.swift",
+        "Shared/App/SwiftfinApp+configure.swift",
+        "Packages/SwiftfinStoredValues/Sources/SwiftfinStoredValues/StoredValues.swift",
+        "Packages/SwiftfinStoredValues/Sources/SwiftfinStoredValues/StoredValueObservation.swift"
+      ],
+      "reviewedInterfaces": [],
+      "sha256": "265e4dcac06b1193f8a9d816cc826c45c662c0ac579bfba918c9fb3ff5fc30c4"
+    },
+    {
+      "path": "Packages/SwiftfinStorage/Sources/SwiftfinStorage/Schemas/V2UserModel.swift",
+      "reason": "V2UserModel.swift: complete current source body and emitted public declarations read. Complete native CoreStore owner, V1/V2/V3 field/version-lock schemas, migration snapshots/encoded transactions and local SQLite replacement bodies were read. Native stack, schema objects and observations remain internal; public boundaries carry bytes, addresses, checked account records and actor-owned cancellation. Open rejects concurrent starts; live observer delivery checks weak ownership and active state. Startup-only native global logger installation remains isolated in the existing private compatibility file and freezes before database construction. No installed database or actual credential migration was opened by the audit. Listed consumers are scoped reviewed boundaries; remaining whole-graph/runtime acceptance is required.",
+      "reviewedConsumers": [
+        "Shared/Persistence/StorageComposition.swift",
+        "Shared/App/SwiftfinApp+configure.swift",
+        "Packages/SwiftfinStoredValues/Sources/SwiftfinStoredValues/StoredValues.swift",
+        "Packages/SwiftfinStoredValues/Sources/SwiftfinStoredValues/StoredValueObservation.swift"
+      ],
+      "reviewedInterfaces": [],
+      "sha256": "ebf87c6c7bf535a52fc381fa258e0c699834ca96ca3877823d67fe50ad8913b2"
+    },
+    {
+      "path": "Packages/SwiftfinStorage/Sources/SwiftfinStorage/Schemas/V3AnyData.swift",
+      "reason": "V3AnyData.swift: complete current source body and emitted public declarations read. Complete native CoreStore owner, V1/V2/V3 field/version-lock schemas, migration snapshots/encoded transactions and local SQLite replacement bodies were read. Native stack, schema objects and observations remain internal; public boundaries carry bytes, addresses, checked account records and actor-owned cancellation. Open rejects concurrent starts; live observer delivery checks weak ownership and active state. Startup-only native global logger installation remains isolated in the existing private compatibility file and freezes before database construction. No installed database or actual credential migration was opened by the audit. Listed consumers are scoped reviewed boundaries; remaining whole-graph/runtime acceptance is required.",
+      "reviewedConsumers": [
+        "Shared/Persistence/StorageComposition.swift",
+        "Shared/App/SwiftfinApp+configure.swift",
+        "Packages/SwiftfinStoredValues/Sources/SwiftfinStoredValues/StoredValues.swift",
+        "Packages/SwiftfinStoredValues/Sources/SwiftfinStoredValues/StoredValueObservation.swift"
+      ],
+      "reviewedInterfaces": [],
+      "sha256": "d44408eb61557835ebf046c3a7f0be1be9f5181b84b1ad5601e8b9d348ae82a9"
+    },
+    {
+      "path": "Packages/SwiftfinStorage/Sources/SwiftfinStorage/StoredAccountRecords.swift",
+      "reason": "StoredAccountRecords.swift: complete current source body and emitted public declarations read. Complete native CoreStore owner, V1/V2/V3 field/version-lock schemas, migration snapshots/encoded transactions and local SQLite replacement bodies were read. Native stack, schema objects and observations remain internal; public boundaries carry bytes, addresses, checked account records and actor-owned cancellation. Open rejects concurrent starts; live observer delivery checks weak ownership and active state. Startup-only native global logger installation remains isolated in the existing private compatibility file and freezes before database construction. No installed database or actual credential migration was opened by the audit. Listed consumers are scoped reviewed boundaries; remaining whole-graph/runtime acceptance is required.",
+      "reviewedConsumers": [
+        "Shared/Persistence/StorageComposition.swift",
+        "Shared/App/SwiftfinApp+configure.swift",
+        "Packages/SwiftfinStoredValues/Sources/SwiftfinStoredValues/StoredValues.swift",
+        "Packages/SwiftfinStoredValues/Sources/SwiftfinStoredValues/StoredValueObservation.swift"
+      ],
+      "reviewedInterfaces": [
+        "enum State",
+        "enum SwiftfinStore",
+        "typealias Server = ServerAccountRecord",
+        "typealias User = UserAccountRecord"
+      ],
+      "sha256": "c4e9154f9c324efdbee5646d661a02c27e1a85aca1b1fe4bcab4c9f91d86cc28"
+    },
+    {
+      "path": "Packages/SwiftfinStorage/Sources/SwiftfinStorage/StoredData.swift",
+      "reason": "StoredData.swift: complete current source body and emitted public declarations read. Complete native CoreStore owner, V1/V2/V3 field/version-lock schemas, migration snapshots/encoded transactions and local SQLite replacement bodies were read. Native stack, schema objects and observations remain internal; public boundaries carry bytes, addresses, checked account records and actor-owned cancellation. Open rejects concurrent starts; live observer delivery checks weak ownership and active state. Startup-only native global logger installation remains isolated in the existing private compatibility file and freezes before database construction. No installed database or actual credential migration was opened by the audit. Listed consumers are scoped reviewed boundaries; remaining whole-graph/runtime acceptance is required.",
+      "reviewedConsumers": [
+        "Shared/Persistence/StorageComposition.swift",
+        "Shared/App/SwiftfinApp+configure.swift",
+        "Packages/SwiftfinStoredValues/Sources/SwiftfinStoredValues/StoredValues.swift",
+        "Packages/SwiftfinStoredValues/Sources/SwiftfinStoredValues/StoredValueObservation.swift"
+      ],
+      "reviewedInterfaces": [
+        "@MainActor final class StoredDataObservation",
+        "@MainActor func cancel()",
+        "@MainActor func delete(_ address: StoredDataAddress) throws",
+        "@MainActor func deleteAll(ownerID: String, field: String? = nil) throws",
+        "@MainActor func observe(_ address: StoredDataAddress, defaultData: Data, onChange: @escaping @MainActor @Sendable () -> Void) throws -> StoredDataObservation",
+        "@MainActor func read(_ address: StoredDataAddress) throws -> Data?",
+        "@MainActor func write(_ data: Data, at address: StoredDataAddress) throws",
+        "case notOpen",
+        "case observationUnavailable",
+        "case openingInProgress",
+        "enum StoredDataError",
+        "init(ownerID: String, field: String, key: String)",
+        "let field: String",
+        "let key: String",
+        "let ownerID: String",
+        "struct StoredDataAddress"
+      ],
+      "sha256": "97839e123bb61caedc0ccba9a85a7589d74f5c8e18a29ac8d6e2411a0431bce3"
+    },
+    {
+      "path": "Packages/SwiftfinStoredValues/Sources/SwiftfinStoredValues/PlaybackProfileStorage.swift",
+      "reason": "PlaybackProfileStorage.swift: complete current source body and emitted public declarations read. Complete actor-owned typed key/read/write/observation and Defaults bridges preserve installed key/suite/address and JSON-versus-raw enum representations. Empty keys return defaults without writes; tvOS uses Defaults and other platforms retain selected SQL/Defaults behavior. Existing nonthrowing settings failures remain. Observation loops use weak ownership; generic values and default closures stay on MainActor without arbitrary Sendable claims. Public underscore key namespace and retroactive conformance exports were read directly because the compiler graph omits some of those shapes. Listed consumers are scoped reviewed boundaries; remaining whole-graph/runtime acceptance is required.",
+      "reviewedConsumers": [
+        "Shared/SwiftfinStore/StoredValue/StoredValues+Server.swift",
+        "Packages/SwiftfinAccountStore/Sources/SwiftfinAccountStore/AccountStorageKeys.swift",
+        "Packages/SwiftfinStoredValuesUI/Sources/SwiftfinStoredValuesUI/StoredValue.swift"
+      ],
+      "reviewedInterfaces": [
+        "source-declared retroactive Defaults/Storable conformances: extension AudioCodec: @retroactive Defaults.Serializable, Storable {}",
+        "source-declared retroactive Defaults/Storable conformances: extension VideoCodec: @retroactive Defaults.Serializable, Storable {}",
+        "source-declared retroactive Defaults/Storable conformances: extension MediaContainer: @retroactive Defaults.Serializable, Storable {}",
+        "source-declared retroactive Defaults/Storable conformances: extension SubtitleFormat: @retroactive Defaults.Serializable, Storable {}",
+        "source-declared retroactive Defaults/Storable conformances: extension PlaybackResolution: @retroactive Defaults.Serializable, Storable {}",
+        "source-declared retroactive Defaults/Storable conformances: extension CustomDeviceProfile: @retroactive Defaults.Serializable, Storable {}",
+        "source-declared retroactive Defaults/Storable conformances: extension CustomDeviceProfileAction: @retroactive Defaults.Serializable, Storable {}",
+        "source-declared retroactive Defaults/Storable conformances: extension VideoPlayerType: @retroactive Defaults.Serializable, Storable {}",
+        "source-declared retroactive Defaults/Storable conformances: extension PlaybackCompatibility: @retroactive Defaults.Serializable, @retroactive Defaults.PreferRawRepresentable {}",
+        "source-declared retroactive Defaults/Storable conformances: extension PlaybackSpeed: @retroactive Defaults.Serializable, Storable {}",
+        "source-declared retroactive Defaults/Storable conformances: extension PlaybackBitrate: @retroactive Defaults.Serializable, Storable {}",
+        "source-declared retroactive Defaults/Storable conformances: extension MediaJumpInterval: @retroactive Defaults.Serializable, Storable {}",
+        "source-declared retroactive Defaults/Storable conformances: extension PlaybackBitrateTestSize: @retroactive Defaults.Serializable, @retroactive Defaults.PreferRawRepresentable {}"
+      ],
+      "sha256": "466edf60609d043369ecfa5d10df02733d2302ed8a0ab19d4fee69963f821dc3"
+    },
+    {
+      "path": "Packages/SwiftfinStoredValues/Sources/SwiftfinStoredValues/StoredValueObservation.swift",
+      "reason": "StoredValueObservation.swift: complete current source body and emitted public declarations read. Complete actor-owned typed key/read/write/observation and Defaults bridges preserve installed key/suite/address and JSON-versus-raw enum representations. Empty keys return defaults without writes; tvOS uses Defaults and other platforms retain selected SQL/Defaults behavior. Existing nonthrowing settings failures remain. Observation loops use weak ownership; generic values and default closures stay on MainActor without arbitrary Sendable claims. Public underscore key namespace and retroactive conformance exports were read directly because the compiler graph omits some of those shapes. Listed consumers are scoped reviewed boundaries; remaining whole-graph/runtime acceptance is required.",
+      "reviewedConsumers": [
+        "Shared/SwiftfinStore/StoredValue/StoredValues+Server.swift",
+        "Packages/SwiftfinAccountStore/Sources/SwiftfinAccountStore/AccountStorageKeys.swift",
+        "Packages/SwiftfinStoredValuesUI/Sources/SwiftfinStoredValuesUI/StoredValue.swift"
+      ],
+      "reviewedInterfaces": [
+        "@MainActor final class StoredValueObservation<Value> where Value : Storable",
+        "@MainActor init(_ key: StoredValues.Key<Value>)",
+        "@MainActor var value: Value { get set }"
+      ],
+      "sha256": "86ad8a3b6c5116906a68dc5533e5d84ade9dbb71ea67c080a0f17ea2c1da7ac2"
+    },
+    {
+      "path": "Packages/SwiftfinStoredValues/Sources/SwiftfinStoredValues/StoredValues.swift",
+      "reason": "StoredValues.swift: complete current source body and emitted public declarations read. Complete actor-owned typed key/read/write/observation and Defaults bridges preserve installed key/suite/address and JSON-versus-raw enum representations. Empty keys return defaults without writes; tvOS uses Defaults and other platforms retain selected SQL/Defaults behavior. Existing nonthrowing settings failures remain. Observation loops use weak ownership; generic values and default closures stay on MainActor without arbitrary Sendable claims. Public underscore key namespace and retroactive conformance exports were read directly because the compiler graph omits some of those shapes. Listed consumers are scoped reviewed boundaries; remaining whole-graph/runtime acceptance is required.",
+      "reviewedConsumers": [
+        "Shared/SwiftfinStore/StoredValue/StoredValues+Server.swift",
+        "Packages/SwiftfinAccountStore/Sources/SwiftfinAccountStore/AccountStorageKeys.swift",
+        "Packages/SwiftfinStoredValuesUI/Sources/SwiftfinStoredValuesUI/StoredValue.swift"
+      ],
+      "reviewedInterfaces": [
+        "@MainActor enum StoredValues",
+        "@MainActor final class Key<Value> where Value : Storable",
+        "@MainActor init(_ name: String, ownerID: String, field: String?, storage: StoredValues.Key<Value>.StorageDestination = .sql, default defaultValue: @autoclosure @escaping () -> Value, database: SwiftfinDatabase = .shared)",
+        "@MainActor init(always: @autoclosure @escaping () -> Value)",
+        "@MainActor let defaultValue: () -> Value",
+        "@MainActor let field: String?",
+        "@MainActor let name: String",
+        "@MainActor let ownerID: String",
+        "@MainActor let storage: StoredValues.Key<Value>.StorageDestination",
+        "@MainActor static subscript<Value>(key: StoredValues.Key<Value>) -> Value where Value : Storable { get set }",
+        "case defaults",
+        "case sql",
+        "enum StorageDestination",
+        "typealias Keys = StoredValues._AnyKey",
+        "public class StoredValues._AnyKey",
+        "public typealias StoredValues._AnyKey.Key = StoredValues.Key"
+      ],
+      "sha256": "5156a0e1cb9de2408bc5845d3a413034d4dfbe3ad974a50ff302467981808ff4"
+    },
+    {
+      "path": "Packages/SwiftfinStoredValuesUI/Sources/SwiftfinStoredValuesUI/StoredValue.swift",
+      "reason": "StoredValue.swift: complete current source body and emitted public declarations read. Complete MainActor DynamicProperty wrapper owns an observed settings object, publishes bindings and forwards SwiftUI update. It adds no storage representation, global session, SDK query or cross-actor generic value guarantee. Listed consumers are scoped reviewed boundaries; remaining whole-graph/runtime acceptance is required.",
+      "reviewedConsumers": [
+        "Packages/SwiftfinStoredValuesUI/Sources/SwiftfinStoredValuesUI/StoredValue.swift"
+      ],
+      "reviewedInterfaces": [
+        "@MainActor @propertyWrapper struct StoredValue<Value> where Value : Storable",
+        "@MainActor init(_ key: StoredValues.Key<Value>)",
+        "@MainActor let key: StoredValues.Key<Value>",
+        "@MainActor mutating func update()",
+        "@MainActor var projectedValue: Binding<Value> { get }",
+        "@MainActor var wrappedValue: Value { get nonmutating set }"
+      ],
+      "sha256": "eeb073d451465505a1464c2d1a906223559d5d59bac3557f501d65f6058eb5c2"
+    },
+    {
+      "path": "Packages/SwiftfinCredentials/Sources/SwiftfinCredentials/CredentialStore.swift",
+      "reason": "CredentialStore.swift: complete current source body and emitted public declarations read. Complete MainActor secure port and private Security driver preserve exact class/account-only queries and local unlocked accessibility. Replacement uses update-first, bounded duplicate-add retry and never deletes an existing credential on write failure. Typed read/write/remove errors expose status without secrets. No bulk/native query or sync/access-group customization crosses the interface. Real Keychain operations were not invoked. Listed consumers are scoped reviewed boundaries; remaining whole-graph/runtime acceptance is required.",
+      "reviewedConsumers": [
+        "Shared/Services/Keychain.swift",
+        "Shared/Persistence/StorageComposition.swift",
+        "Packages/SwiftfinAccountStore/Sources/SwiftfinAccountStore/LocalAccountStore.swift"
+      ],
+      "reviewedInterfaces": [
+        "@MainActor func read(_ key: CredentialKey) throws -> String?",
+        "@MainActor func remove(_ key: CredentialKey) throws",
+        "@MainActor func write(_ value: String, to key: CredentialKey) throws",
+        "@MainActor protocol CredentialStore : AnyObject",
+        "case accessToken(userID: String)",
+        "case invalidEncoding",
+        "case invalidUserID",
+        "case parentPIN",
+        "case read",
+        "case remove",
+        "case system(operation: CredentialStoreError.Operation, status: Int32)",
+        "case userPIN(userID: String)",
+        "case write",
+        "enum CredentialKey",
+        "enum CredentialStoreError",
+        "enum Operation"
+      ],
+      "sha256": "3e555b1d421d42de03317ba7c40149fa25ab2f240155832041b8d634f329a210"
+    },
+    {
+      "path": "Packages/SwiftfinCredentials/Sources/SwiftfinCredentials/KeychainCredentialStore.swift",
+      "reason": "KeychainCredentialStore.swift: complete current source body and emitted public declarations read. Complete MainActor secure port and private Security driver preserve exact class/account-only queries and local unlocked accessibility. Replacement uses update-first, bounded duplicate-add retry and never deletes an existing credential on write failure. Typed read/write/remove errors expose status without secrets. No bulk/native query or sync/access-group customization crosses the interface. Real Keychain operations were not invoked. Listed consumers are scoped reviewed boundaries; remaining whole-graph/runtime acceptance is required.",
+      "reviewedConsumers": [
+        "Shared/Services/Keychain.swift",
+        "Shared/Persistence/StorageComposition.swift",
+        "Packages/SwiftfinAccountStore/Sources/SwiftfinAccountStore/LocalAccountStore.swift"
+      ],
+      "reviewedInterfaces": [
+        "@MainActor convenience init()",
+        "@MainActor final class KeychainCredentialStore",
+        "@MainActor func read(_ key: CredentialKey) throws -> String?",
+        "@MainActor func remove(_ key: CredentialKey) throws",
+        "@MainActor func write(_ value: String, to key: CredentialKey) throws"
+      ],
+      "sha256": "6e2eeaef990f1442cbc8f30c6a22189a523999ef5d619eec1b65f68390b00575"
+    },
+    {
+      "path": "Packages/SwiftfinCredentials/Sources/SwiftfinCredentials/SecurityItemDriver.swift",
+      "reason": "SecurityItemDriver.swift: complete current source body and emitted public declarations read. Complete MainActor secure port and private Security driver preserve exact class/account-only queries and local unlocked accessibility. Replacement uses update-first, bounded duplicate-add retry and never deletes an existing credential on write failure. Typed read/write/remove errors expose status without secrets. No bulk/native query or sync/access-group customization crosses the interface. Real Keychain operations were not invoked. Listed consumers are scoped reviewed boundaries; remaining whole-graph/runtime acceptance is required.",
+      "reviewedConsumers": [
+        "Shared/Services/Keychain.swift",
+        "Shared/Persistence/StorageComposition.swift",
+        "Packages/SwiftfinAccountStore/Sources/SwiftfinAccountStore/LocalAccountStore.swift"
+      ],
+      "reviewedInterfaces": [],
+      "sha256": "74929d5814ab8bae92a32bfac89a093a77071c888f545d5d05e91e55ab9e86a6"
+    },
+    {
+      "path": "Packages/SwiftfinAccountStore/Sources/SwiftfinAccountStore/AccountMetadataStorage.swift",
+      "reason": "AccountMetadataStorage.swift: complete current source body and emitted public declarations read. Complete local record/key/DTO bridge, admission receipt, connection editing and security owner retain installed identity, ordering and nontransactional effects. Auth/admission and connection edits check exact original owner/inventory/policy/endpoint around external callbacks. Security verification now rechecks after credential reads; a busy guard rejects nested edits, and credential effects precede validated policy/hint writes. Failed credentials remain retryable; already accepted credential effects are not rolled back. Public signatures are unchanged and no server/media operation is owned. Listed consumers are scoped reviewed boundaries; remaining whole-graph/runtime acceptance is required.",
+      "reviewedConsumers": [
+        "Shared/ViewModels/LocalUserSecurityViewModel.swift",
+        "Shared/Persistence/StorageComposition.swift",
+        "Swiftfin tvOS/App/KidsAccountAdapter.swift",
+        "Packages/SwiftfinAccountStore/Tests/SwiftfinAccountStoreTests/LocalSecurityContracts.swift"
+      ],
+      "reviewedInterfaces": [
+        "source-declared retroactive Defaults/Storable conformances: extension PublicSystemInfo: @retroactive Defaults.Serializable, @retroactive Storable {}",
+        "source-declared retroactive Defaults/Storable conformances: extension UserDto: @retroactive Defaults.Serializable, @retroactive Storable {}"
+      ],
+      "sha256": "39d9d32f094086083ba840147570d22752bc19ea273c3e43d407d10ba1a0afae"
+    },
+    {
+      "path": "Packages/KidsPersistence/Sources/KidsPersistence/KidsStateFile.swift",
+      "reason": "KidsStateFile.swift: complete current source body and emitted public declarations read. Complete SwiftData schema/container/bootstrap, legacy JSON import, writer-owned payloads, namespace hashing, decode/resolve/merge/reset and SDK context mutation bodies were read. Private CloudKit transport belongs to the SDK; component revisions and reset generations preserve unrelated progress, parent cursor retirement and shuffle intersection. Legacy JSON remains a backup and migration receipts prevent resurrection. The SwiftData row exposes required model interoperability members; contexts/rows stay in the main-actor repository. Clock/revision representability preconditions and existing version/counter validation remain unchanged. Schema/container identifiers and actual cloud transport are not changed or exercised. Listed consumers are scoped reviewed boundaries; remaining whole-graph/runtime acceptance is required.",
+      "reviewedConsumers": [
+        "Packages/KidsApplication/Sources/KidsApplication/KidsAppModel.swift"
+      ],
+      "reviewedInterfaces": [
+        "enum KidsStateFile",
+        "static func load(from url: URL, binding: KidsBinding) throws -> KidsState",
+        "static func save(_ state: KidsState, to url: URL) throws"
+      ],
+      "sha256": "b06024b43ae2426e4c9cfb6cb03f3d6cde3da231eb0053d1747f5d0e7c21bbce"
+    },
+    {
+      "path": "Packages/KidsPersistence/Sources/KidsPersistence/KidsStateRepository.swift",
+      "reason": "KidsStateRepository.swift: complete current source body and emitted public declarations read. Complete SwiftData schema/container/bootstrap, legacy JSON import, writer-owned payloads, namespace hashing, decode/resolve/merge/reset and SDK context mutation bodies were read. Private CloudKit transport belongs to the SDK; component revisions and reset generations preserve unrelated progress, parent cursor retirement and shuffle intersection. Legacy JSON remains a backup and migration receipts prevent resurrection. The SwiftData row exposes required model interoperability members; contexts/rows stay in the main-actor repository. Clock/revision representability preconditions and existing version/counter validation remain unchanged. Schema/container identifiers and actual cloud transport are not changed or exercised. Listed consumers are scoped reviewed boundaries; remaining whole-graph/runtime acceptance is required.",
+      "reviewedConsumers": [
+        "Packages/KidsApplication/Sources/KidsApplication/KidsAppModel.swift"
+      ],
+      "reviewedInterfaces": [
+        "@MainActor final class KidsStateRepository",
+        "@MainActor func load(binding: KidsBinding, legacyURL: URL? = nil) throws -> KidsSyncSnapshot",
+        "@MainActor func reset(binding: KidsBinding) throws -> KidsSyncSnapshot",
+        "@MainActor init(container: ModelContainer, writerID: String, now: @escaping () -> Date = Date.init)",
+        "@MainActor let container: ModelContainer",
+        "@MainActor let writerID: String",
+        "@MainActor static func makeContainer(url: URL, cloud: Bool) throws -> ModelContainer",
+        "@MainActor static func namespace(for binding: KidsBinding) throws -> String",
+        "@MainActor static func resolve(_ entries: [KidsSyncEntry], binding: KidsBinding) throws -> KidsSyncSnapshot",
+        "@MainActor static let cloudContainerID: String",
+        "@discardableResult @MainActor func commit(_ desired: KidsState, since baseline: KidsSyncSnapshot, intent: KidsSyncWriteIntent = .edit, activeKey: String? = nil) throws -> KidsSyncSnapshot",
+        "case deleted",
+        "case edit",
+        "case episodeLimit(Int)",
+        "case migrated",
+        "case movie(KidsProgress)",
+        "case ordered(KidsProgress)",
+        "case playback",
+        "case reset(String)",
+        "case session(KidsSession)",
+        "case shuffle(KidsShuffleBag)",
+        "case spokenNavigation(Bool)",
+        "class var schemaMetadata: [Schema.PropertyMetadata] { get }",
+        "enum KidsSyncValue",
+        "enum KidsSyncWriteIntent",
+        "final class KidsCloudRow",
+        "init(backingData: any BackingData<KidsCloudRow>)",
+        "init(binding: KidsBinding, key: String, revision: KidsSyncRevision, resetID: String?, value: KidsSyncValue)",
+        "init(milliseconds: Int64, counter: Int, writerID: String)",
+        "init(namespace: String, key: String, writerID: String, payload: Data)",
+        "static func < (lhs: KidsSyncRevision, rhs: KidsSyncRevision) -> Bool",
+        "struct KidsSyncEntry",
+        "struct KidsSyncRevision",
+        "struct KidsSyncSnapshot",
+        "var binding: KidsBinding",
+        "var counter: Int",
+        "var entries: [String : KidsSyncEntry]",
+        "var invalidatesPlayback: Bool",
+        "var key: String",
+        "var key: String { get set }",
+        "var milliseconds: Int64",
+        "var namespace: String { get set }",
+        "var payload: Data { get set }",
+        "var persistentBackingData: any BackingData<KidsCloudRow> { get set }",
+        "var resetID: String?",
+        "var revision: KidsSyncRevision",
+        "var state: KidsState",
+        "var value: KidsSyncValue",
+        "var version: Int",
+        "var writerID: String",
+        "var writerID: String { get set }"
+      ],
+      "sha256": "a2cedb4cb4a438334a2f3edaa511e85afc633e7c0ea7fe703009373c5e81b20a"
     }
   ],
   "limits": "This ledger records bodies explicitly reviewed, with exact current hashes; earlier prose or lexical inventory is not automatically promoted. Pending and mixed entries prevent whole-source completion. Retained UI algorithms have specific presentation reasons, not folder/import-based blanket approval. API entries do not classify the rest of the public graph. Source review and offline tests do not satisfy held runtime acceptance.",
@@ -9393,7 +9915,7 @@
     "classification": {
       "source-reviewed-retained": 664
     },
-    "currentAPIReviews": 177,
+    "currentAPIReviews": 199,
     "runtimeAcceptance": "held by human; no simulator/server testing"
   },
   "packageReviews": [
@@ -9735,6 +10257,134 @@
       ],
       "sourceReview": "complete current source and public declarations",
       "consumerReview": "scoped listed call sites; remaining whole-graph review required",
+      "runtimeAcceptance": "held by human"
+    },
+    {
+      "module": "SwiftfinStorage",
+      "manifestSHA256": "d4e8699d9e1897aba4d267e058f1b4b89c30ba4e91ec1122496ffab67a7c7339",
+      "sourceBodiesRead": 15,
+      "compilerPublicSymbols": 40,
+      "compilerPlatform": "macOS14; underscore/conformance exports also read from source; app compilation separate",
+      "compilerGraphs": [
+        {
+          "file": "SwiftfinStorage.symbols.json",
+          "sha256": "67875f31728e75eda51d4a1d8a0a92eaaa249e831f3f82b90d2be880ec86a26d"
+        }
+      ],
+      "sourceReview": "complete current source and public declarations",
+      "consumerReview": "scoped listed boundaries; remaining whole-graph review required",
+      "runtimeAcceptance": "held by human"
+    },
+    {
+      "module": "SwiftfinStoredValues",
+      "manifestSHA256": "a532ef5db46692d7bc4119a53b18d562de229e9032ae1d86eb756d589281f20b",
+      "sourceBodiesRead": 4,
+      "compilerPublicSymbols": 18,
+      "compilerPlatform": "macOS14; underscore/conformance exports also read from source; app compilation separate",
+      "compilerGraphs": [
+        {
+          "file": "SwiftfinStoredValues.symbols.json",
+          "sha256": "5c5ae1c9a4b67379aeb98e972d7a74d542aa1b30d8aee85743ff8ace4028eabe"
+        },
+        {
+          "file": "SwiftfinStoredValues@Swift.symbols.json",
+          "sha256": "d6a461ac4afe8a1cb40c5178caac1233c9b036b8262e459d87a82845a12e67a8"
+        },
+        {
+          "file": "SwiftfinStoredValues@SwiftfinAccountModels.symbols.json",
+          "sha256": "70463190a3cce151050c02f9e6993ae13b9026624580be87f17f6afa007f9d1d"
+        },
+        {
+          "file": "SwiftfinStoredValues@SwiftfinPlaybackProfiles.symbols.json",
+          "sha256": "c115c97d517f4c027a96c567737a9990f2fe060dcabb23e358c3ed6973bf5f73"
+        }
+      ],
+      "sourceReview": "complete current source and public declarations",
+      "consumerReview": "scoped listed boundaries; remaining whole-graph review required",
+      "runtimeAcceptance": "held by human"
+    },
+    {
+      "module": "SwiftfinStoredValuesUI",
+      "manifestSHA256": "c65d2b85a3104925da28b240c17338a7c419c8ac51395fce0cb3b851f3868658",
+      "sourceBodiesRead": 1,
+      "compilerPublicSymbols": 6,
+      "compilerPlatform": "macOS14; underscore/conformance exports also read from source; app compilation separate",
+      "compilerGraphs": [
+        {
+          "file": "SwiftfinStoredValuesUI.symbols.json",
+          "sha256": "6973ded5cdf7b588534ad53ea7a428d1a552252f8741f1b1107208dabe5876bf"
+        }
+      ],
+      "sourceReview": "complete current source and public declarations",
+      "consumerReview": "scoped listed boundaries; remaining whole-graph review required",
+      "runtimeAcceptance": "held by human"
+    },
+    {
+      "module": "SwiftfinCredentials",
+      "manifestSHA256": "ee90cfab859c0dd19abdc3170826e13ead06d6f46a3e8172f8006f531feed189",
+      "sourceBodiesRead": 3,
+      "compilerPublicSymbols": 21,
+      "compilerPlatform": "macOS14; underscore/conformance exports also read from source; app compilation separate",
+      "compilerGraphs": [
+        {
+          "file": "SwiftfinCredentials.symbols.json",
+          "sha256": "e87e4fb01cc45e8ebcf705baca9b38a0833a27b59c07528ed87b08d080f0cbdb"
+        }
+      ],
+      "sourceReview": "complete current source and public declarations",
+      "consumerReview": "scoped listed boundaries; remaining whole-graph review required",
+      "runtimeAcceptance": "held by human"
+    },
+    {
+      "module": "SwiftfinAccountStore",
+      "manifestSHA256": "f77a8bab8b17b79897c591023acba81dcea0e72880e19dcab3e6981d43e4e5fa",
+      "sourceBodiesRead": 6,
+      "compilerPublicSymbols": 71,
+      "compilerPlatform": "macOS14; underscore/conformance exports also read from source; app compilation separate",
+      "compilerGraphs": [
+        {
+          "file": "SwiftfinAccountStore.symbols.json",
+          "sha256": "acee2668ebb13f7924ee24a96d227b30e0d37218552b0303982cb9c6cb676263"
+        },
+        {
+          "file": "SwiftfinAccountStore@JellyfinAPI.symbols.json",
+          "sha256": "c3f02ea254999785d49ab24d7239eb08cfda6dbe149072c6cc75ccbd9bea0244"
+        }
+      ],
+      "sourceReview": "complete current source and public declarations",
+      "consumerReview": "scoped listed boundaries; remaining whole-graph review required",
+      "runtimeAcceptance": "held by human"
+    },
+    {
+      "module": "KidsAccounts",
+      "manifestSHA256": "eca3148689b649c32f7a4c5781f20ea35569993e985eaaa3bc0efeaabe68cc5d",
+      "sourceBodiesRead": 4,
+      "compilerPublicSymbols": 48,
+      "compilerPlatform": "macOS14; underscore/conformance exports also read from source; app compilation separate",
+      "compilerGraphs": [
+        {
+          "file": "KidsAccounts.symbols.json",
+          "sha256": "b6d32fa04558999532c95430aa306364655dfd01ab6cd200b0409474aa5d86bd"
+        }
+      ],
+      "sourceReview": "complete current source and public declarations",
+      "consumerReview": "scoped listed boundaries; remaining whole-graph review required",
+      "runtimeAcceptance": "held by human"
+    },
+    {
+      "module": "KidsPersistence",
+      "manifestSHA256": "20193f453860e760b6ca00e8de162438f1720555bbb2c70be67feb3766fa9eaa",
+      "sourceBodiesRead": 2,
+      "compilerPublicSymbols": 58,
+      "compilerPlatform": "macOS14; underscore/conformance exports also read from source; app compilation separate",
+      "compilerGraphs": [
+        {
+          "file": "KidsPersistence.symbols.json",
+          "sha256": "7c5fa00c460cedad2625e9f7f16f67d22ad645ace6ff80cd5ceea4473354fb22"
+        }
+      ],
+      "sourceReview": "complete current source and public declarations",
+      "consumerReview": "scoped listed boundaries; remaining whole-graph review required",
       "runtimeAcceptance": "held by human"
     }
   ]

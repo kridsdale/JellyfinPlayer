@@ -23,9 +23,11 @@ private final class SecurityCredentials: CredentialStore {
     var removals: [CredentialKey] = []
     var failure: SecurityFailure?
     var willMutate: (@MainActor () -> Void)?
+    var willRead: (@MainActor () -> Void)?
 
     func read(_ key: CredentialKey) throws -> String? {
         reads.append(key)
+        willRead?()
         if failure == .read {
             throw SecurityFailure.read
         }
@@ -80,6 +82,7 @@ private final class SecurityFixture {
 
     func clean() {
         credentials.willMutate = nil
+        credentials.willRead = nil
         for id in [userID, siblingID] {
             UserDefaults(suiteName: id)?.removePersistentDomain(forName: id)
         }
@@ -323,5 +326,74 @@ struct LocalSecurityContracts {
         }
         #expect(f.credentials.reads.isEmpty && f.credentials.writes.isEmpty && f.credentials.removals.isEmpty)
         #expect(f.store.accessPolicy(userID: f.userID) == .none && f.store.pinHint(userID: f.userID).isEmpty)
+    }
+
+    @Test
+    func `retirement during PIN verification cannot publish success`() async throws {
+        let f = try await SecurityFixture()
+        defer { f.clean() }
+        f.store.setAccessPolicy(.requirePin, userID: f.userID)
+        f.credentials.values[.userPIN(userID: f.userID)] = "old"
+        let update = try f.store.securityUpdate(userID: f.userID) {
+            guard f.bindingCurrent else { throw CancellationError() }
+        }
+        f.credentials.willRead = { f.bindingCurrent = false }
+        #expect(throws: CancellationError.self) { try update.check(oldPIN: "old") }
+        #expect(f.credentials.writes.isEmpty && f.credentials.removals.isEmpty)
+    }
+
+    @Test
+    func `retirement during commit PIN recheck prevents every mutation`() async throws {
+        let f = try await SecurityFixture()
+        defer { f.clean() }
+        f.store.setAccessPolicy(.requirePin, userID: f.userID)
+        f.store.setPINHint("old hint", userID: f.userID)
+        f.credentials.values[.userPIN(userID: f.userID)] = "old"
+        let update = try f.store.securityUpdate(userID: f.userID) {
+            guard f.bindingCurrent else { throw CancellationError() }
+        }
+        #expect(try update.check(oldPIN: "old"))
+        f.credentials.willRead = { f.bindingCurrent = false }
+        #expect(throws: CancellationError.self) { try update.commit(policy: .none, pin: "", hint: "new hint") }
+        #expect(f.credentials.writes.isEmpty && f.credentials.removals.isEmpty)
+        #expect(f.credentials.values[.userPIN(userID: f.userID)] == "old")
+        #expect(f.store.accessPolicy(userID: f.userID) == .requirePin && f.store.pinHint(userID: f.userID) == "old hint")
+    }
+
+    @Test(arguments: [false, true])
+    func `retirement during credential effect prevents later settings writes`(_ replace: Bool) async throws {
+        let f = try await SecurityFixture()
+        defer { f.clean() }
+        f.store.setAccessPolicy(.requirePin, userID: f.userID)
+        f.store.setPINHint("old hint", userID: f.userID)
+        f.credentials.values[.userPIN(userID: f.userID)] = "old"
+        let update = try f.store.securityUpdate(userID: f.userID) {
+            guard f.bindingCurrent else { throw CancellationError() }
+        }
+        #expect(try update.check(oldPIN: "old"))
+        f.credentials.willMutate = { f.bindingCurrent = false }
+        #expect(throws: CancellationError.self) {
+            try update.commit(policy: replace ? .requirePin : .none, pin: "new", hint: "new hint")
+        }
+        // The credential effect already accepted by the port cannot be undone.
+        #expect(f.credentials.values[.userPIN(userID: f.userID)] == (replace ? "new" : nil))
+        #expect(f.store.accessPolicy(userID: f.userID) == .requirePin && f.store.pinHint(userID: f.userID) == "old hint")
+    }
+
+    @Test
+    func `reentrant commit is rejected while the owning edit finishes once`() async throws {
+        let f = try await SecurityFixture()
+        defer { f.clean() }
+        let update = try f.store.securityUpdate(userID: f.userID, validate: {})
+        var reentered = false
+        f.credentials.willMutate = {
+            guard !reentered else { return }
+            reentered = true
+            #expect(throws: CancellationError.self) { try update.commit(policy: .requirePin, pin: "nested", hint: "nested") }
+        }
+        try update.commit(policy: .requirePin, pin: "owning", hint: "owning")
+        #expect(reentered && f.credentials.writes.count == 1)
+        #expect(f.credentials.values[.userPIN(userID: f.userID)] == "owning")
+        #expect(f.store.pinHint(userID: f.userID) == "owning")
     }
 }

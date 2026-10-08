@@ -213,13 +213,19 @@ public final class LocalAccountStore {
     /// Preserves credential-first ordering and the installed nontransactional
     /// settings writes. A credential failure leaves both policy and hint unchanged.
     public func setLocalSecurity(userID: String, policy: LocalUserAccessPolicy, pin: String, hint: String) throws {
+        try writeLocalSecurityCredential(userID: userID, policy: policy, pin: pin)
+        setAccessPolicy(policy, userID: userID)
+        setPINHint(hint, userID: userID)
+    }
+
+    /// The bound editor checks relevance after this external credential effect
+    /// before publishing policy or hint. Already accepted credentials are retained.
+    func writeLocalSecurityCredential(userID: String, policy: LocalUserAccessPolicy, pin: String) throws {
         if policy == .requirePin {
             try storePIN(pin, userID: userID)
         } else {
             try credentials.remove(.userPIN(userID: userID))
         }
-        setAccessPolicy(policy, userID: userID)
-        setPINHint(hint, userID: userID)
     }
 
     public func deleteSettings(userID: String) throws {

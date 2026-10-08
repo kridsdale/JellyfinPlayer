@@ -1,6 +1,6 @@
 # Current engineering goal disposition
 
-Transport callback reentry fixes are published as 7c5ad9bf; 46 networking contracts and both compile gates pass. Complete child domain/catalog/artwork/playback policy review adds ten unchanged source bodies and four compiler public interfaces. The graph remains 53 libraries; 18 complete module reviews cover 125 source bodies, and 177 scoped interface entries cover 175 unique sources of 250. All 664 app sources remain classified. Scoped call-site review is not complete consumer acceptance. Remaining whole-graph review and held runtime acceptance are required; items 1/2 stay active.
+Local security edits now reject retirement during credential verification/effects and nested commits before further settings publication. Four new regressions reproduce eleven failures before repair; all 53 account-store contracts pass afterward. tvOS Debug and iOS Release compile without owned Swift/generated-macro diagnostics. Seven complete storage/account module reviews add 35 source bodies. The graph remains 53 libraries; 25 complete module reviews cover 160 source bodies, and 199 scoped interface entries cover 197 unique sources of 250. All 664 app sources remain classified. Remaining whole-graph/consumer review and held runtime acceptance are required; items 1/2 stay active.
 
 The table below records the candidate checkpoint from 2026-10-05. The active goal on 2026-10-06 is full-client package extraction and Swift 6 completion; see [current package evidence](package-refactor.md). It remains active.
 

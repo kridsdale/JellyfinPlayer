@@ -20,6 +20,7 @@ public final class LocalSecurityUpdate {
     private let validate: LocalAccountStore.Checkpoint
     private var verifiedPIN: String?
     private var committed = false
+    private var busy = false
 
     init(store: LocalAccountStore, userID: String, validate: @escaping LocalAccountStore.Checkpoint) {
         self.store = store
@@ -28,27 +29,49 @@ public final class LocalSecurityUpdate {
         self.validate = validate
     }
 
-    public func checkBinding() throws {
+    private func enter() throws {
+        guard !busy else { throw CancellationError() }
+        busy = true
+    }
+
+    private func checkCurrent(policy: LocalUserAccessPolicy) throws {
         try Task.checkCancellation()
         try validate()
-        guard !committed, store.accessPolicy(userID: userID) == originalPolicy else { throw CancellationError() }
+        guard !committed, store.accessPolicy(userID: userID) == policy else { throw CancellationError() }
+    }
+
+    public func checkBinding() throws {
+        try enter()
+        defer { busy = false }
+        try checkCurrent(policy: originalPolicy)
     }
 
     public func check(oldPIN: String) throws -> Bool {
-        try checkBinding()
+        try enter()
+        defer { busy = false }
+        try checkCurrent(policy: originalPolicy)
         let matches = try store.matchesPIN(oldPIN, userID: userID, allowMissing: true)
+        try checkCurrent(policy: originalPolicy)
         verifiedPIN = matches ? oldPIN : nil
         return matches
     }
 
     public func commit(policy: LocalUserAccessPolicy, pin: String, hint: String) throws {
-        try checkBinding()
+        try enter()
+        defer { busy = false }
+        try checkCurrent(policy: originalPolicy)
         if originalPolicy == .requirePin {
-            guard let verifiedPIN,
-                  try store.matchesPIN(verifiedPIN, userID: userID, allowMissing: true)
-            else { throw AccountStoreError.incorrectPIN }
+            guard let verifiedPIN else { throw AccountStoreError.incorrectPIN }
+            let matches = try store.matchesPIN(verifiedPIN, userID: userID, allowMissing: true)
+            try checkCurrent(policy: originalPolicy)
+            guard matches else { throw AccountStoreError.incorrectPIN }
         }
-        try store.setLocalSecurity(userID: userID, policy: policy, pin: pin, hint: hint)
+        try store.writeLocalSecurityCredential(userID: userID, policy: policy, pin: pin)
+        try checkCurrent(policy: originalPolicy)
+        store.setAccessPolicy(policy, userID: userID)
+        try checkCurrent(policy: policy)
+        store.setPINHint(hint, userID: userID)
+        try checkCurrent(policy: policy)
         committed = true
     }
 }

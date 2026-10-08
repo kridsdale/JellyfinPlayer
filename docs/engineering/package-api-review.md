@@ -74,3 +74,22 @@ Transport callback reentry fixes are published as 7c5ad9bf; 46 networking contra
 | KidsPlayback | 4 | 13 |
 
 Catalog publication requires exact account/library preflight and per-item ancestry. Episode metadata and artwork pools bind the exact account/libraries, reject invalid values and retired generations, and do not authorize playback. Upper-layer scoped reads confirm only displayed verified rows reach artwork and native readiness requires pictures plus a post-resume clock. Child domain retains shuffle reservations, parent cursor retirement, session counts and explicit numbering review. All four modules and compiler inputs are unchanged; prior compile/native evidence is reused, and no new execution result is claimed. KidsAppModel source was inspected only at these call sites, so its complete review remains outstanding.
+
+
+## Storage, settings, secure accounts and progress (2026-10-07)
+
+Local security edits now reject retirement during credential verification/effects and nested commits before further settings publication. Four new regressions reproduce eleven failures before repair; all 53 account-store contracts pass afterward. tvOS Debug and iOS Release compile without owned Swift/generated-macro diagnostics. Seven complete storage/account module reviews add 35 source bodies. The graph remains 53 libraries; 25 complete module reviews cover 160 source bodies, and 199 scoped interface entries cover 197 unique sources of 250. All 664 app sources remain classified. Remaining whole-graph/consumer review and held runtime acceptance are required; items 1/2 stay active.
+
+| Module | Complete source bodies | macOS public symbols |
+| --- | ---: | ---: |
+| SwiftfinStorage | 15 | 40 |
+| SwiftfinStoredValues | 4 | 18 |
+| SwiftfinStoredValuesUI | 1 | 6 |
+| SwiftfinCredentials | 3 | 21 |
+| SwiftfinAccountStore | 6 | 71 |
+| KidsAccounts | 4 | 48 |
+| KidsPersistence | 2 | 58 |
+
+The production security view model captures its original session and transport in the editor checkpoint. Before repair, fake credential callbacks could retire that checkpoint yet publish verification success, mutate policy/hint, or reenter a second commit. The repaired owner checks after reads/effects and between settings writes, rejects nested operations and retains retry after credential failure. A credential already accepted before retirement remains accepted; no rollback or cross-store transaction is claimed. Existing direct-store ordering and public signatures stay unchanged.
+
+Native database objects and Security dictionaries stay internal. Typed settings preserve installed keys and raw/JSON representations. Source-only exports omitted by symbol graphs were read directly; SwiftData generated model interoperability declarations were also reviewed. Existing schema version locks, CloudKit model/container, credential attributes, signing and saved progress are unchanged. The native tests use injected in-memory credentials, generated UUID defaults suites and temporary SQLite stores. No real credential query, actual cloud transport, simulator/server activity or RAID operation occurred.
