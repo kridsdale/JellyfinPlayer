@@ -28,7 +28,7 @@ public struct ServerConnection: Hashable, Identifiable, Codable, Sendable {
         }
     }
 
-    public enum TestState: Sendable {
+    public enum TestState: Equatable, Sendable {
         case idle
         case testing
         case success

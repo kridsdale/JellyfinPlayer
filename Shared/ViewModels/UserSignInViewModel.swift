@@ -10,246 +10,278 @@ import CasePaths
 import Combine
 import FactoryKit
 import Foundation
-import Get
 import JellyfinAPI
-import Logging
-import OrderedCollections
 import StatefulMacros
 import SwiftfinAccountAccess
 import SwiftfinAccountModels
 import SwiftfinAccountStore
-import SwiftfinCollections
+import SwiftfinAsyncStreams
 import SwiftfinLocalization
-import SwiftfinStoredValues
-import SwiftfinText
-import SwiftUI
-
-// TODO: instead of just signing in duplicate user, send event for alert
-//       to override existing user access token?
-//       - won't require deleting and re-signing in user for password changes
-//       - account for local device auth required
-// TODO: ignore NSURLErrorDomain Code=-999 cancelled error on sign in
-//       - need to make NSError wrappers anyways
+import SwiftfinUIState
 
 @MainActor
 @Stateful
 final class UserSignInViewModel: ObservableObject {
-
     typealias AccessPolicyPair = (policy: LocalUserAccessPolicy, evaluated: any EvaluatedLocalUserAccessPolicy)
     typealias UserStateDataPair = (state: (state: UserState, accessToken: String), data: UserDto)
-
+    typealias AuthenticationAction = (action: LocalUserAuthenticationAction, accessPolicy: LocalUserAccessPolicy, reason: String?)
     @MainActor
     struct EvaluatedPolicyMap {
         let action: @MainActor @Sendable (any EvaluatedLocalUserAccessPolicy) -> any EvaluatedLocalUserAccessPolicy
-
-        func callAsFunction(evaluatedPolicy: any EvaluatedLocalUserAccessPolicy) -> any EvaluatedLocalUserAccessPolicy {
+        func callAsFunction(evaluatedPolicy: any EvaluatedLocalUserAccessPolicy)
+        -> any EvaluatedLocalUserAccessPolicy {
             action(evaluatedPolicy)
         }
+    }
+
+    struct Request: Sendable {
+        let access: AccountAccessClient
+        let validate: AsyncOperationGate.Checkpoint
+    }
+
+    struct SaveRequest: Sendable {
+        let snapshot: UserAdmissionSnapshot
+        let validate: AsyncOperationGate.Checkpoint
+    }
+
+    private struct PendingAuthentication {
+        let user: UserStateDataPair
+        let validate: AsyncOperationGate.Checkpoint
     }
 
     @CasePathable
     enum Action {
         case cancel
         case error
-        case getPublicData
-        case signIn(username: String, password: String)
-        case signInQuickConnect(secret: String, access: AccountAccessClient)
-
-        case save(
-            user: UserStateDataPair,
-            authenticationAction: (action: LocalUserAuthenticationAction, accessPolicy: LocalUserAccessPolicy, reason: String?),
-            evaluatedPolicyMap: EvaluatedPolicyMap
-        )
-        case saveExisting(
-            user: UserStateDataPair,
-            replaceForAccessToken: Bool,
-            authenticationAction: (action: LocalUserAuthenticationAction, accessPolicy: LocalUserAccessPolicy, reason: String?),
-            evaluatedPolicyMap: EvaluatedPolicyMap
-        )
-
+        case runPublic(Request)
+        case runSignIn(Request, String, String)
+        case runQuick(Request, String, AccountAccessClient)
+        case runSave(SaveRequest, UserStateDataPair, AuthenticationAction, EvaluatedPolicyMap)
         var transition: Transition {
             switch self {
-            case .cancel:
-                .to(.initial)
-            case .error, .save, .saveExisting:
-                .none
-            case .getPublicData:
-                .background(.gettingPublicData)
-            case .signIn, .signInQuickConnect:
-                .loop(.signingIn)
+            case .cancel: .to(.initial)
+            case .error, .runSave: .none
+            case .runPublic: .background(.gettingPublicData)
+            case .runSignIn, .runQuick: .loop(.signingIn)
             }
         }
     }
 
-    enum BackgroundState {
-        case gettingPublicData
-    }
-
+    enum BackgroundState { case gettingPublicData }
     enum Event {
         case connected(UserStateDataPair)
         case existingUser(UserStateDataPair)
         case saved(UserState)
     }
 
-    enum State {
-        case initial
-        case signingIn
+    enum State { case initial, signingIn }
+    @CommittedPublished
+    private(set) var isQuickConnectEnabled = false {
+        didSet { objectWillChange.send() }
     }
 
-    @Published
-    private(set) var isQuickConnectEnabled = false
-    @Published
-    private(set) var publicUsers: [UserDto] = []
-    @Published
-    private(set) var serverDisclaimer: String? = nil
+    @CommittedPublished
+    private(set) var publicUsers: [UserDto] = [] {
+        didSet { objectWillChange.send() }
+    }
 
-    private let logger = Logger.swiftfin()
-    private var cancellables = Set<AnyCancellable>()
+    @CommittedPublished
+    private(set) var serverDisclaimer: String? = nil {
+        didSet { objectWillChange.send() }
+    }
 
     let server: ServerState
+    private let store: LocalAccountStore
+    private let originURL: URL
+    private let originSessionID: ObjectIdentifier?
+    private let reads = AsyncOperationGate()
+    private let logins = AsyncOperationGate()
+    private let saves = AsyncOperationGate()
+    private var pending: PendingAuthentication?
 
     init(server: ServerState) {
         self.server = server
+        store = Container.shared.localAccountStore()
+        originURL = server.effectiveServerURL
+        originSessionID = Container.shared.userSessionManager().currentSession.map(ObjectIdentifier.init)
     }
 
-    @Function(\Action.Cases.getPublicData)
-    private func _getPublicData() async throws {
-        let client = server.accountAccess
-        let options = try await client.loginOptions()
-        try client.checkBinding()
-        self.isQuickConnectEnabled = options.quickConnectEnabled
-        self.publicUsers = options.users
-        self.serverDisclaimer = options.disclaimer
+    private func checkOrigin() throws {
+        try Task.checkCancellation()
+        guard let current = store.servers.first(where: { $0.id == server.id }),
+              store.effectiveURL(for: current) == originURL,
+              Container.shared.userSessionManager().currentSession.map(ObjectIdentifier.init) == originSessionID
+        else { throw CancellationError() }
     }
 
-    @Function(\Action.Cases.signIn)
-    private func _signIn(
-        _ username: String,
-        _ password: String
-    ) async throws {
-        let username = username
-            .trimmingCharacters(in: .whitespacesAndNewlines)
-            .trimmingCharacters(in: .objectReplacement)
+    private func request(_ gate: AsyncOperationGate) -> Request? {
+        guard (try? checkOrigin()) != nil else { return nil }
+        let access = server.accountAccess
+        guard (try? access.checkBinding()) != nil else { return nil }
+        let receipt = gate.begin()
+        return Request(access: access, validate: { [weak self] in
+            try receipt()
+            guard let self else { throw CancellationError() }
+            try checkOrigin()
+            try access.checkBinding()
+            try receipt()
+        })
+    }
 
-        let password = password
-            .trimmingCharacters(in: .whitespacesAndNewlines)
-            .trimmingCharacters(in: .objectReplacement)
-
-        let response = try await server.accountAccess.signIn(username: username, password: password)
-
-        let accessToken = response.accessToken
-        let userData = response.user
-        let id = response.userID
-        let authenticatedUsername = response.username
-
-        if let existingUser = existingUser(id: id) {
-            events.send(.existingUser(((existingUser, accessToken), userData)))
-        } else {
-            let newUserState = UserState(
-                id: id,
-                serverID: server.id,
-                username: authenticatedUsername
-            )
-
-            events.send(.connected(((newUserState, accessToken), userData)))
+    func getPublicData() {
+        if let request = request(reads) {
+            runPublic(request)
         }
     }
 
-    @Function(\Action.Cases.signInQuickConnect)
-    private func _signInQuickConnect(
-        _ secret: String,
-        _ access: AccountAccessClient
-    ) async throws {
-        let response = try await access.signIn(quickConnectSecret: secret)
-        try access.checkBinding()
-
-        let accessToken = response.accessToken
-        let userData = response.user
-        let id = response.userID
-        let username = response.username
-
-        if let existingUser = existingUser(id: id) {
-            events.send(.existingUser(((existingUser, accessToken), userData)))
-        } else {
-            let newUserState = UserState(
-                id: id,
-                serverID: server.id,
-                username: username
-            )
-
-            events.send(.connected(((newUserState, accessToken), userData)))
-        }
+    func signIn(username: String, password: String) {
+        guard let request = request(logins) else { return }
+        saves.cancel()
+        pending = nil
+        runSignIn(request, username, password)
     }
 
-    private func existingUser(id: String) -> UserState? {
-        StoredValues[.User.users]
-            .first { $0.id == id }
+    func signInQuickConnect(secret: String, access: AccountAccessClient) {
+        guard let request = request(logins) else { return }
+        saves.cancel()
+        pending = nil
+        runQuick(request, secret, access)
     }
 
-    @Function(\Action.Cases.save)
-    private func _save(
-        _ user: UserStateDataPair,
-        _ authenticationAction: (action: LocalUserAuthenticationAction, accessPolicy: LocalUserAccessPolicy, reason: String?),
-        _ evaluatedPolicyMap: EvaluatedPolicyMap
-    ) async throws {
+    func signInQuickConnect(secret: String, access: AccountAccessClient) async {
+        guard let request = request(logins) else { return }
+        saves.cancel()
+        pending = nil
+        await runQuick(request, secret, access)
+    }
 
-        let accessPolicy = authenticationAction.accessPolicy
+    func save(user: UserStateDataPair, authenticationAction: AuthenticationAction, evaluatedPolicyMap: EvaluatedPolicyMap) {
+        admit(user, mode: .new, action: authenticationAction, map: evaluatedPolicyMap)
+    }
 
-        let evaluatedPolicy = try await evaluatedPolicyMap(
-            evaluatedPolicy: authenticationAction.action(
-                policy: accessPolicy,
-                reason: authenticationAction.reason
-            )
-        )
+    func saveExisting(
+        user: UserStateDataPair,
+        replaceForAccessToken: Bool,
+        authenticationAction: AuthenticationAction,
+        evaluatedPolicyMap: EvaluatedPolicyMap
+    ) {
+        admit(user, mode: .existing(replaceAccessToken: replaceForAccessToken), action: authenticationAction, map: evaluatedPolicyMap)
+    }
 
-        let userState = user.state.state
-
-        let savedUserState = userState
-        try Container.shared.localAccountStore().saveAuthenticatedUser(
-            savedUserState,
-            accessToken: user.state.accessToken,
-            pin: (evaluatedPolicy as? PinEvaluatedUserAccessPolicy)?.pin
-        )
-
-        savedUserState.accessPolicy = accessPolicy
-        savedUserState.data = user.data
-
-        if let evaluatedPinPolicy = evaluatedPolicy as? PinEvaluatedUserAccessPolicy {
-            if let pinHint = evaluatedPinPolicy.pinHint {
-                savedUserState.pinHint = pinHint
+    private func admit(_ user: UserStateDataPair, mode: UserAdmissionMode, action: AuthenticationAction, map: EvaluatedPolicyMap) {
+        guard let pending, pending.user.state.state == user.state.state,
+              pending.user.state.accessToken == user.state.accessToken, pending.user.data == user.data,
+              (try? pending.validate()) != nil else { return }
+        do {
+            let snapshot = try store.prepareUserAdmission(user: user.state.state, mode: mode, endpoint: originURL)
+            let receipt = saves.begin()
+            let check: AsyncOperationGate.Checkpoint = { [weak self] in
+                try receipt()
+                try pending.validate()
+                guard let self else { throw CancellationError() }
+                try checkOrigin()
+                try receipt()
             }
-        }
-
-        events.send(.saved(savedUserState))
+            runSave(.init(snapshot: snapshot, validate: check), user, action, map)
+        } catch { /* Invalid/stale local admission never reaches native authentication. */ }
     }
 
-    @Function(\Action.Cases.saveExisting)
-    private func _saveExisting(
+    @Function(\Action.Cases.cancel)
+    private func _cancel() async {
+        reads.cancel()
+        logins.cancel()
+        saves.cancel()
+        pending = nil
+    }
+
+    @Function(\Action.Cases.runPublic)
+    private func _runPublic(_ request: Request) async throws {
+        do {
+            try request.validate()
+            let options = try await request.access.loginOptions()
+            try request.validate()
+            isQuickConnectEnabled = options.quickConnectEnabled
+            try request.validate()
+            publicUsers = options.users
+            try request.validate()
+            serverDisclaimer = options.disclaimer
+        } catch { try request.validate()
+            throw error
+        }
+    }
+
+    private func received(_ response: AccountAuthentication, request: Request) throws {
+        try request.validate()
+        guard !response.userID.isEmpty, !response.accessToken.isEmpty,
+              response.user.serverID == nil || response.user.serverID == server.id
+        else { throw AccountStoreError.identityMismatch }
+        let matches = store.users.filter { $0.id == response.userID }
+        guard matches.allSatisfy({ $0.serverID == server.id }) else { throw AccountStoreError.identityMismatch }
+        let existing = matches.first
+        let user = existing ?? UserState(id: response.userID, serverID: server.id, username: response.username)
+        let pair: UserStateDataPair = ((user, response.accessToken), response.user)
+        pending = .init(user: pair, validate: request.validate)
+        try request.validate()
+        if existing != nil {
+            events.send(.existingUser(pair))
+        } else {
+            events.send(.connected(pair))
+        }
+    }
+
+    @Function(\Action.Cases.runSignIn)
+    private func _runSignIn(_ request: Request, _ username: String, _ password: String) async throws {
+        do {
+            try request.validate()
+            let username = username.trimmingCharacters(in: .whitespacesAndNewlines).trimmingCharacters(in: .objectReplacement)
+            let password = password.trimmingCharacters(in: .whitespacesAndNewlines).trimmingCharacters(in: .objectReplacement)
+            try await received(request.access.signIn(username: username, password: password), request: request)
+        } catch { try request.validate()
+            throw error
+        }
+    }
+
+    @Function(\Action.Cases.runQuick)
+    private func _runQuick(_ request: Request, _ secret: String, _ access: AccountAccessClient) async throws {
+        do {
+            try request.validate()
+            try access.checkBinding()
+            let response = try await access.signIn(quickConnectSecret: secret)
+            try access.checkBinding()
+            try received(response, request: request)
+        } catch { try request.validate()
+            throw error
+        }
+    }
+
+    @Function(\Action.Cases.runSave)
+    private func _runSave(
+        _ request: SaveRequest,
         _ user: UserStateDataPair,
-        _ replaceForAccessToken: Bool,
-        _ authenticationAction: (action: LocalUserAuthenticationAction, accessPolicy: LocalUserAccessPolicy, reason: String?),
-        _ evaluatedPolicyMap: EvaluatedPolicyMap
+        _ action: AuthenticationAction,
+        _ map: EvaluatedPolicyMap
     ) async throws {
-
-        let accessPolicy = authenticationAction.accessPolicy
-
-        let evaluatedPolicy = try await evaluatedPolicyMap(
-            evaluatedPolicy: authenticationAction.action(
-                policy: accessPolicy,
-                reason: authenticationAction.reason
+        do {
+            try request.validate()
+            let evaluated = try await map(evaluatedPolicy: action.action(policy: action.accessPolicy, reason: action.reason))
+            try request.validate()
+            let pin = evaluated as? PinEvaluatedUserAccessPolicy
+            let saved = try store.commitUserAdmission(
+                request.snapshot,
+                data: user.data,
+                accessToken: user.state.accessToken,
+                policy: action.accessPolicy,
+                pin: pin?.pin,
+                pinHint: pin?.pinHint,
+                validate: request.validate
             )
-        )
-
-        if let evaluatedPinPolicy = evaluatedPolicy as? PinEvaluatedUserAccessPolicy {
-            guard user.state.state.pin == evaluatedPinPolicy.pin else {
-                throw ErrorMessage(L10n.incorrectPinForUser(user.state.state.username))
-            }
+            try request.validate()
+            events.send(.saved(saved))
+        } catch AccountStoreError.incorrectPIN {
+            try request.validate()
+            throw ErrorMessage(L10n.incorrectPinForUser(user.state.state.username))
+        } catch { try request.validate()
+            throw error
         }
-
-        if replaceForAccessToken {
-            try user.state.state.storeAccessToken(user.state.accessToken)
-        }
-
-        events.send(.saved(user.state.state))
     }
 }

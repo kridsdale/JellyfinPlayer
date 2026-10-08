@@ -2,7 +2,7 @@
 
 Active goal: complete the minimal-responsibility package refactor and remaining Swift 6 compatibility warnings. This document records scope and evidence, not a narrower replacement objective.
 
-Latest offline evidence:53 libraries;75 current affected ItemMetadata contracts;665 app sources with440 retained,7 mixed,218 pending and47 scoped API reviews. Final tvOS Debug compile-for-testing and iOS Release builds pass without owned Swift/generated-macro diagnostics. Full source/API/actor and held runtime acceptance remain required.
+Latest offline evidence:53 libraries;43 current affected AccountStore contracts;665 app sources with464 retained,4 mixed,197 pending and50 scoped API reviews. Final tvOS Debug compile-for-testing and iOS Release builds pass without owned Swift/generated-macro diagnostics. Full source/API/actor/bootstrap and held runtime acceptance remain required.
 
 ## Initial source map
 
@@ -812,3 +812,11 @@ Seven new native contracts extend the package to26 passing checks. Initial iOS c
 ItemMetadataEditor owns the original client/item and mutation-plus-reload workflows in the existing ItemMetadata library. Its per-editor predecessor tail drains accepted noncooperative writes before successors; reads drain the admitted predecessor. Refresh retains its started callback and injected five-second wait. Image delete retains partial item publication before image-fetch failure; subtitle deletion retains descending indices/indexed failure. Wrong returned item IDs and retired ordinary errors become cancellation.
 
 Four application adapters retain native file/image/format decoding, localized errors, committed presentation and notifications/events, with checkpoints between effects. Entry captures account/item intent before macro scheduling; emitted subtitle language/perfect-match is captured before debounce, and upload language at submission. Component lookup/update now uses its original bound metadata owner. Twelve new contracts extend the package to75 passing tests. Initial platform compilation exposed generated event-type mismatches; private helpers now use the existing generated event type. Runtime/server validation remains held. Remaining mixed responsibility includes account admission/connection editing, EPG/search and recording timer orchestration; complete API/actor/source acceptance remains open.
+
+## Account admission and connection catalog checkpoint (2026-10-07, offline)
+
+Existing AccountStore now owns opaque store-bound admission receipts, exact user/server/endpoint/policy validation and credential-first local writes. It retains accepted partial effects on failure or retirement; existing-user replacement changes only the token after strict PIN verification. Server registration caches its single verified public-info DTO and refuses duplicate/reentrant replacement. The same store owns connection snapshots, stable IDs, normalized addition, upsert, exact activation, permutation/priority changes and active/last deletion protection. No new library, dependency, schema or entitlement is introduced.
+
+UserSignIn, ConnectToServer and ServerConnection retain native/platform composition with submitted gates and committed UI fields. Obsolete results cannot use a newly selected root session or overwrite edited local connection settings; a foreign server account does not supply a probe token. Generated events keep individual case declarations; TestState equality supports committed test-map publication. All43 affected native contracts pass, including15 new synthetic regressions. Both final compile-only platform checks pass. The initial failed integration build remains recorded; its errors are corrected by the final source.
+
+Twenty-one unchanged navigation, route, UIKit appearance/search-inset, filter layout, gesture and draft-edit presentation bodies are classified individually with source hashes and specific reasons. They manage app UI/composition rather than reusable account/catalog policy. Existing visual/transition TODOs and native lifetime coverage remain explicit. Reading a UI caller does not approve all its providers. Full goal and held runtime acceptance remain unfinished.

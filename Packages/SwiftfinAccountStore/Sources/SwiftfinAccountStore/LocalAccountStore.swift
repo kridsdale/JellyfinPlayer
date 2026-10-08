@@ -13,7 +13,7 @@ import SwiftfinCredentials
 import SwiftfinStorage
 import SwiftfinStoredValues
 
-public enum AccountStoreError: Error, Sendable { case identityMismatch }
+public enum AccountStoreError: Error, Sendable { case identityMismatch, incorrectPIN, invalidConnection }
 
 /// Owns local account records, their scoped settings and credential operations.
 /// It neither contacts a server nor resolves an application session/global.
@@ -277,5 +277,157 @@ public final class LocalAccountStore {
         for key in suite.dictionaryRepresentation().keys {
             suite.removeObject(forKey: key)
         }
+    }
+}
+
+public extension LocalAccountStore {
+    typealias Checkpoint = @MainActor @Sendable () throws -> Void
+
+    /// Snapshot local identity/policy and the exact endpoint before UI authentication.
+    /// Global user-ID storage cannot represent the same ID on two different servers.
+    func prepareUserAdmission(user: UserAccountRecord, mode: UserAdmissionMode, endpoint: URL) throws -> UserAdmissionSnapshot {
+        try Task.checkCancellation()
+        guard !user.id.isEmpty, let server = servers.first(where: { $0.id == user.serverID }),
+              effectiveURL(for: server) == endpoint else { throw AccountStoreError.identityMismatch }
+        let existing = users.first { $0.id == user.id }
+        guard existing == nil || existing?.serverID == user.serverID else { throw AccountStoreError.identityMismatch }
+        switch mode {
+        case .new: guard existing == nil else { throw AccountStoreError.identityMismatch }
+        case .existing: guard existing == user else { throw AccountStoreError.identityMismatch }
+        }
+        return UserAdmissionSnapshot(
+            owner: ObjectIdentifier(self),
+            user: user,
+            mode: mode,
+            existing: existing,
+            endpoint: endpoint,
+            policy: accessPolicy(userID: user.id)
+        )
+    }
+
+    /// Retains credential-first, nontransactional admission. Reentrant/cancelled
+    /// input is checked between effects; accepted local writes are never rolled back.
+    func commitUserAdmission(
+        _ snapshot: UserAdmissionSnapshot, data: UserDto, accessToken: String,
+        policy: LocalUserAccessPolicy, pin: String?, pinHint: String?, validate: Checkpoint = {}
+    ) throws -> UserAccountRecord {
+        guard snapshot.owner == ObjectIdentifier(self), data.id == snapshot.user.id,
+              data.serverID == nil || data.serverID == snapshot.user.serverID,
+              !accessToken.isEmpty else { throw AccountStoreError.identityMismatch }
+        var expectedUser = snapshot.existing
+        var expectedPolicy = snapshot.policy
+        func check() throws {
+            try Task.checkCancellation()
+            try validate()
+            guard let server = servers.first(where: { $0.id == snapshot.user.serverID }),
+                  effectiveURL(for: server) == snapshot.endpoint,
+                  users.first(where: { $0.id == snapshot.user.id }) == expectedUser,
+                  accessPolicy(userID: snapshot.user.id) == expectedPolicy
+            else { throw CancellationError() }
+        }
+        try check()
+        switch snapshot.mode {
+        case let .existing(replaceAccessToken):
+            guard policy == snapshot.policy else { throw CancellationError() }
+            if policy == .requirePin, pin == nil {
+                throw AccountStoreError.incorrectPIN
+            }
+            if let pin {
+                let matches = try matchesPIN(pin, userID: snapshot.user.id)
+                try check()
+                guard matches else { throw AccountStoreError.incorrectPIN }
+            }
+            if replaceAccessToken {
+                try storeAccessToken(accessToken, userID: snapshot.user.id)
+                try check()
+            }
+        case .new:
+            if policy == .requirePin, pin == nil {
+                throw AccountStoreError.incorrectPIN
+            }
+            try storeAccessToken(accessToken, userID: snapshot.user.id)
+            try check()
+            if let pin {
+                try storePIN(pin, userID: snapshot.user.id)
+                try check()
+            }
+            expectedUser = snapshot.user
+            replaceUserRecord(snapshot.user)
+            try check()
+            var records = servers
+            guard let index = records.firstIndex(where: { $0.id == snapshot.user.serverID }) else { throw CancellationError() }
+            let server = records[index]
+            if !server.userIDs.contains(snapshot.user.id) {
+                records[index] = .init(
+                    urls: server.urls,
+                    currentURL: server.currentURL,
+                    name: server.name,
+                    id: server.id,
+                    userIDs: server.userIDs + [snapshot.user.id]
+                )
+                servers = records
+                try check()
+            }
+            expectedPolicy = policy
+            setAccessPolicy(policy, userID: snapshot.user.id)
+            try check()
+            StoredValues[AccountStorageKeys.userData(userID: snapshot.user.id, database: database)] = data
+            try check()
+            if let pinHint {
+                setPINHint(pinHint, userID: snapshot.user.id)
+                try check()
+            }
+        }
+        try check()
+        return snapshot.user
+    }
+
+    /// Merge the one verified public-info result; no second network request.
+    /// Returns false for a concurrently registered duplicate and never replaces it.
+    @discardableResult
+    func registerServer(_ server: ServerAccountRecord, info: PublicSystemInfo, validate: Checkpoint = {}) throws -> Bool {
+        try Task.checkCancellation()
+        try validate()
+        guard !server.id.isEmpty, info.id == server.id else { throw AccountStoreError.identityMismatch }
+        guard !servers.contains(where: { $0.id == server.id }) else { return false }
+        servers = servers + [server]
+        try Task.checkCancellation()
+        try validate()
+        guard servers.first(where: { $0.id == server.id }) == server else { throw CancellationError() }
+        StoredValues[AccountStorageKeys.publicInfo(serverID: server.id, database: database)] = info
+        try Task.checkCancellation()
+        try validate()
+        guard servers.first(where: { $0.id == server.id }) == server else { throw CancellationError() }
+        return true
+    }
+
+    /// Existing local connection catalog is authoritative; append a normalized URL
+    /// once and retain stable IDs. Only local settings are changed.
+    func addConnection(
+        url: URL,
+        serverID: String,
+        validate: Checkpoint = {},
+        makeID: () -> String = { UUID().uuidString }
+    ) throws -> ServerConnection {
+        try Task.checkCancellation()
+        try validate()
+        var snapshot = try connectionCatalog(serverID: serverID)
+        try validate()
+        let normalized = ServerConnection.normalizedURL(url) ?? url
+        let connection: ServerConnection
+        if let existing = snapshot.connections.first(where: { $0.url == normalized }) {
+            connection = existing
+        } else {
+            connection = .init(
+                id: makeID(),
+                name: normalized.absoluteString,
+                url: normalized,
+                interface: .any,
+                priority: snapshot.connections.count
+            )
+            snapshot = try editConnections(.upsert(connection), snapshot: snapshot, validate: validate)
+        }
+        try editConnections(.activate(connection), snapshot: snapshot, validate: validate)
+        return connection
     }
 }
