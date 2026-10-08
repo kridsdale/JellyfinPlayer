@@ -1,0 +1,9 @@
+{
+  "observed_utc": "2026-10-08T15:49:57.443189+00:00",
+  "sdk": "AppleTVSimulator27.0.sdk",
+  "target": "arm64-apple-tvos26.1-simulator",
+  "exit_code": 1,
+  "public_webkit_framework_exists": false,
+  "diagnostic": "/private/tmp/kids-youtube-webkit-probe.swift:1:8: error: no such module 'WebKit'\n1 | import WebKit\n  |        `- error: no such module 'WebKit'\n2 | let view: WKWebView? = nil\n3 | \n",
+  "scope": "Public SDK import feasibility only; no simulator launch, app build, plugin installation or media/server change."
+}
