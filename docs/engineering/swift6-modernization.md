@@ -1,5 +1,7 @@
 # Swift 6 ownership modernization
 
+The source-level package refactor, app-consumer and actor/startup audits are complete for the current inputs: 53 extracted libraries / 250 sources, 664 retained app UI/composition sources, plus the 15 sources of the pre-existing PreferencesView and SwiftfinMacros/plugin targets. The actual library graph has 74 one-way local edges. Prior tvOS Debug and iOS Release compile gates remain applicable because all production inputs are unchanged. Required current simulator navigation, restricted-account playback/recovery and decoded/UI callback acceptance remain held by the human; items 1/2 are not complete. See client-completion-audit.md for the requirement-by-requirement disposition.
+
 This pass makes UI, saved-account, playback, and observation ownership explicit before extracting the remaining monolith into Swift packages. It changes only the app targets' language setting; dependencies keep their declared package language modes. The default actor isolation remains `nonisolated`, with explicit `@MainActor` declarations for UI and session work.
 
 ## Changes

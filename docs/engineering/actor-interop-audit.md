@@ -1,6 +1,6 @@
 # Actor and SDK interoperability review
 
-All 53 libraries have complete current source and emitted public-API reviews; all 664 app source responsibility classifications are current. This document records the deliberate executor bridges, bootstrap shim and feature checkpoints. Those scoped reviews and offline contracts do not establish whole-graph consumer closure or actual SDK/UI delivery. The final interoperability completion audit remains required, and live simulator/server activity remains held. Dated earlier totals below are historical.
+Current source-level actor/SDK bootstrap and caller integration review is complete, with current hashes and contract dispositions in source-review-ledger.json and client-completion-audit.md. Eight package compatibility files plus the app identity adapter retain explicit scheduler/thread/host contracts; the sole private preconcurrency import is the pinned CoreStore startup writer. Native callback delivery, UI/navigation and real decoded playback remain held. Source review and compilation do not establish those runtime gates; dated older checkpoints below are historical.
 
 ## Explicit executor bridges
 

@@ -6,7 +6,7 @@
         "SwiftfinImages"
       ],
       "path": "Shared/App/SwiftfinApp+configure.swift",
-      "reason": "Complete configuration body reviewed: chooses application persistent/debug handlers and adapts storage log levels, sets process Nuke cache budgets/decoder selection and composes its poster pipeline. Source retains process startup choices and framework configuration; library storage/image implementations remain owned. This does not approve repeated/late global startup or claim the separate private SDK bootstrap audit complete.",
+      "reason": "Complete process-startup composition reviewed: chooses logging handlers, maps immutable storage log values, sets Nuke cache/decoder policy and composes the poster pipeline. Both platform App initializers configure before body/storage opening. The private CoreStore gate admits one early write and freezes before owned DataStack construction; actual SDK startup execution remains held.",
       "sha256": "a85a16342dbdf2265f1ef8b6a63c930060a5334a6a4c65b538f5563731ad8433",
       "status": "source-reviewed-retained"
     },
@@ -124,7 +124,7 @@
     {
       "owners": [],
       "path": "Shared/Components/ContentGroupVStack.swift",
-      "reason": "Displays supplied content groups with existing identity/focus coordination and platform spacing; group/view-model internals remain separately pending.",
+      "reason": "Displays supplied content groups with existing identity/focus coordination and platform spacing. The current ContentGroupViewModel and paging/provider bodies are source-reviewed composition over SwiftfinPaging refresh ownership; this view implements no worker.",
       "sha256": "862c797e104643ef3831d389530b137def931aa81f38c642f9ab39ddd61dc244",
       "status": "source-reviewed-retained"
     },
@@ -274,7 +274,7 @@
     {
       "owners": [],
       "path": "Shared/Components/FocusedPosterCinematicBackgroundView.swift",
-      "reason": "tvOS focus/defaults choose backdrop view composition, transition, blur and fill. Poster source and fade-transition internals remain separate pending owners; no fetch implementation in this body.",
+      "reason": "tvOS focus/defaults choose supplied backdrop composition, transition, blur and fill. Poster/ImageView adapt the owned image pipeline; the source-reviewed main-actor fade coordinator retires delayed work and native transitions. No fetch implementation is in this body.",
       "sha256": "8cd2897424d335f21bf995149ab8ec0321fb9100d005c691d61050b048fd8457",
       "status": "source-reviewed-retained"
     },
@@ -757,7 +757,7 @@
         "SwiftfinUIState"
       ],
       "path": "Shared/Coordinators/Navigation/NavigationRoute/NavigationRoute+Media.swift",
-      "reason": "Complete body reviewed: constructs app media routes/sheets, registers the chosen manager, sends a synchronous source-tagged activation and composes player-safe-area/platform presentation. Manager resource/preparation behavior remains a separate mixed entry. No simulator/navigation acceptance claimed.",
+      "reason": "Complete body reviewed: constructs app media routes/sheets, registers the supplied manager and sends source-tagged activation. Current manager/provider/proxy/resource consumers are source-reviewed composition over preparation/native/effect owners. Native player-safe-area and navigation presentation remain here; runtime navigation/playback acceptance stays held.",
       "sha256": "4fe0168513512af19f948190be4fbd21a226d52ad4d7cc2fadd71922956b5fce",
       "status": "source-reviewed-retained"
     },
@@ -980,7 +980,7 @@
     {
       "owners": [],
       "path": "Shared/Extensions/JellyfinAPI/AuthenticationInfo.swift",
-      "reason": "Transferable/UI export projection chooses title and token text from a caller-supplied immutable SDK value; file creation is in the separately mixed TextTransferable body. No credentials are fetched or exported during review.",
+      "reason": "Transferable/UI export projection chooses title and token text from a caller-supplied immutable SDK value. The app TextTransferable spelling/ShareLink adapter delegates atomic temporary export to SwiftfinText. No credential query or export is performed during review.",
       "sha256": "fdfb8cf5aba1b25826253471a5f688eb3ca8a0f1d918c2960e2cf1aa9723ddec",
       "status": "source-reviewed-retained"
     },
@@ -1226,7 +1226,7 @@
     {
       "owners": [],
       "path": "Shared/Extensions/JellyfinAPI/LogFile.swift",
-      "reason": "App account composition captures the current transport and delegates log URL policy to ServerOperations; type calls the separately mixed ServerLogType classifier. No file read or server request.",
+      "reason": "App composition captures the current transport for ServerDiagnosticURLPolicy. ServerLogType is a display alias to the reviewed immutable ServerLogKind filename classifier. No SDK request/file IO implementation is retained here.",
       "sha256": "a8bc574d3249d7d71863886e407bbde47686a365917e72c7d2572e072ae2090d",
       "status": "source-reviewed-retained"
     },
@@ -1925,7 +1925,7 @@
     {
       "owners": [],
       "path": "Shared/Objects/Empty.swift",
-      "reason": "App presentation environment sentinel and no-op refresh/default/evaluated-policy conformances; no validation/storage behavior. Evaluated access-token ownership remains a separate mixed file.",
+      "reason": "App presentation sentinel with no-op refresh/default and evaluated-policy conformance. The reviewed AccountAccess protocol carries a prompt result only; stored-PIN comparison and admission remain with the account/credential owners.",
       "sha256": "c3de46d8daa715c41926607aae91518f6820f33bd49322518949da725612e405",
       "status": "source-reviewed-retained"
     },
@@ -3267,7 +3267,7 @@
         "SwiftfinMediaCatalog"
       ],
       "path": "Shared/Services/UserSession/UserSessionManager+SocketCommands.swift",
-      "reason": "Complete updated body reviewed: remote SDK interpretation delegates to immutable playback intent policy. App composes merged account/transport-scoped receipts, pending metadata/trailer latest requests, native control/default preference selection, provider routing and OS trailer opening. Logout/connection/root replacement and Stop cancel pending requests; receipt binding is rechecked before routing. Cancellation failures are quiet; current request errors retain logging. The tvOS observer returns before subscriptions, preserving the Kids remote-navigation prohibition. Actual routing/player execution remains held and downstream player composition remains pending.",
+      "reason": "Complete current body reviewed: immutable command policy, exact account/transport receipts, latest metadata/trailer requests and bound native provider routing remain composition. Logout/root/connection/Stop retire work. Downstream provider/manager/native owners are source-reviewed; tvOS returns before subscriptions. Actual routing/player execution remains held.",
       "sha256": "5e2988e23428bd2d091f8e1a05e2bede144a93be123c3258f4b87abc4d4403e3",
       "status": "source-reviewed-retained"
     },
@@ -3977,7 +3977,7 @@
         "SwiftfinPlaybackProfiles"
       ],
       "path": "Shared/Views/ItemView/Components/ActionButtons/PlaybackActionButton.swift",
-      "reason": "Complete selection menu reviewed: media-source, bitrate, audio/subtitle labels and picker values forward to the captured provider. External-audio filtering TODO remains native choice presentation. The provider selection policy is separately marked mixed and is not approved through this caller.",
+      "reason": "Complete selection menu reviewed: source/bitrate/audio/subtitle labels and picker values forward to the captured provider. Provider resolution and stream policy are source-reviewed composition over Preparation/MediaTracks; external-audio filtering TODO remains native choice presentation. Actual picker/playback acceptance stays held.",
       "sha256": "2be17ad0e22cc3ffa07348e0045fff6cc3c295c28a305a53ff69cf9cd5d5e755",
       "status": "source-reviewed-retained"
     },
@@ -4002,7 +4002,7 @@
         "SwiftfinItemMetadata"
       ],
       "path": "Shared/Views/ItemView/Components/ActionButtons/RefreshActionButton.swift",
-      "reason": "Refresh button constructs the application metadata-refresh route for the composed current item. It does not choose refresh flags or send a command; request policy remains a separately mixed MetadataRefreshType candidate.",
+      "reason": "Refresh button creates the current item metadata-refresh route only. MetadataRefreshType is a display alias to the reviewed immutable selection policy; the bound editor owns request flags and command sequencing.",
       "sha256": "bbd846b4306f5dbbafd93b5c327e28bf5c7ed4c1d59d90de3b800ac2ab1d6649",
       "status": "source-reviewed-retained"
     },
@@ -4840,7 +4840,7 @@
     {
       "owners": [],
       "path": "Swiftfin/Views/AdminDashboardView/ServerActivity/ServerActivityView/ServerActivityView.swift",
-      "reason": "Complete body reviewed: Native activity/user paging composition, environment filter bindings, row/detail routes and loading/empty/progress UI remain presentation. The separate avatar row is explicitly mixed until its account binding is corrected.",
+      "reason": "Complete native activity/user paging, filter bindings, detail routes and loading/progress UI reviewed. The current LogEntry/profile image uses the original detail-model bound account; activity/account/avatar implementations remain with their owners. No avatar load or server request is executed.",
       "sha256": "541d958b1f2cf03a55169ecaf9625219128642b934c41ca26453489bb4a35bd7",
       "status": "source-reviewed-retained"
     },
@@ -11921,7 +11921,8 @@
       "source-reviewed-retained": 664
     },
     "currentAPIReviews": 252,
-    "runtimeAcceptance": "held by human; no simulator/server testing"
+    "runtimeAcceptance": "held by human; no simulator/server testing",
+    "sourceConsumerClosure": "complete current source/public-contract review; actual SDK/UI/playback held"
   },
   "packageReviews": [
     {
@@ -12926,5 +12927,734 @@
       "consumerReview": "All 27 direct importing app boundaries reviewed. Complete bodies were read for editors, reference adapters, permissions/images and root paging composition; metadata-specific scopes were read in the DTO and program supplement, with unchanged complete-source classifications retained. Original-session, base view-model and socket reviews were reused by exact hash. This is not whole-graph indirect-consumer closure or runtime acceptance.",
       "runtimeAcceptance": "held by human"
     }
-  ]
+  ],
+  "consumerClosure": {
+    "scope": "Combined complete current app/package source bodies and public-contract review; direct-edge locator is coverage aid, not semantic proof. Individual historical interface entries remain scoped. Native UI/SDK runtime acceptance remains held.",
+    "applicationSourcesReviewed": 664,
+    "packageSourcesReviewed": 250,
+    "additionalLocalTargetSourceBodies": 15,
+    "libraryReviews": [
+      {
+        "module": "KidsAccounts",
+        "contractReview": "Synchronous actor-qualified identity host ports, admissions and credential-free leases guard parent/child asynchronous effects. App activation supplies the exact full identity and checked secure-storage callbacks.",
+        "localDependencies": [
+          "KidsDomain",
+          "SwiftfinAsyncStreams"
+        ],
+        "applicationConsumerCount": 1,
+        "packageSourceConsumerCount": 2,
+        "sourceEvidence": "current complete source bodies in applicationSources/interfaceReviews and emitted declarations in packageReviews",
+        "status": "source-contract-reviewed; runtime held"
+      },
+      {
+        "module": "KidsApplication",
+        "contractReview": "The main-actor child model composes account/catalog/artwork/persistence/session ports. Leases and generation/binding checks reject obsolete work and protected methods enforce the parent gate.",
+        "localDependencies": [
+          "KidsAccounts",
+          "KidsArtwork",
+          "KidsArtworkUI",
+          "KidsCatalog",
+          "KidsDiagnostics",
+          "KidsDomain",
+          "KidsPersistence",
+          "KidsPlaybackSession"
+        ],
+        "applicationConsumerCount": 1,
+        "packageSourceConsumerCount": 3,
+        "sourceEvidence": "current complete source bodies in applicationSources/interfaceReviews and emitted declarations in packageReviews",
+        "status": "source-contract-reviewed; runtime held"
+      },
+      {
+        "module": "KidsArtwork",
+        "contractReview": "Bounded original-account byte caching and prefetch plans admit only eligible verified item/image owners. Pixel/UI storage is separate.",
+        "localDependencies": [
+          "KidsCatalog",
+          "KidsDiagnostics",
+          "KidsDomain"
+        ],
+        "applicationConsumerCount": 0,
+        "packageSourceConsumerCount": 2,
+        "sourceEvidence": "current complete source bodies in applicationSources/interfaceReviews and emitted declarations in packageReviews",
+        "status": "source-contract-reviewed; runtime held"
+      },
+      {
+        "module": "KidsArtworkUI",
+        "contractReview": "Main-actor decoded image retention and memory-warning retirement use the byte owner; model verifies catalog/episode membership and artwork revision before publication.",
+        "localDependencies": [
+          "KidsArtwork",
+          "KidsCatalog",
+          "KidsDiagnostics",
+          "KidsDomain"
+        ],
+        "applicationConsumerCount": 0,
+        "packageSourceConsumerCount": 1,
+        "sourceEvidence": "current complete source bodies in applicationSources/interfaceReviews and emitted declarations in packageReviews",
+        "status": "source-contract-reviewed; runtime held"
+      },
+      {
+        "module": "KidsCatalog",
+        "contractReview": "Exact restricted account and both approved library identities precede catalog/episode/item/byte access; app/model caches never widen discovery.",
+        "localDependencies": [
+          "KidsDiagnostics",
+          "KidsDomain"
+        ],
+        "applicationConsumerCount": 2,
+        "packageSourceConsumerCount": 6,
+        "sourceEvidence": "current complete source bodies in applicationSources/interfaceReviews and emitted declarations in packageReviews",
+        "status": "source-contract-reviewed; runtime held"
+      },
+      {
+        "module": "KidsDiagnostics",
+        "contractReview": "Immutable opt-in trace values and task-local spans retain measured phase/session identity. App supplies native presentation/transport timing and no credential payload.",
+        "localDependencies": [
+          "KidsDomain"
+        ],
+        "applicationConsumerCount": 6,
+        "packageSourceConsumerCount": 15,
+        "sourceEvidence": "current complete source bodies in applicationSources/interfaceReviews and emitted declarations in packageReviews",
+        "status": "source-contract-reviewed; runtime held"
+      },
+      {
+        "module": "KidsDiagnosticsUI",
+        "contractReview": "The native presentation probe marks supplied trace phases; timing storage and trace aggregation remain in Diagnostics.",
+        "localDependencies": [
+          "KidsDiagnostics"
+        ],
+        "applicationConsumerCount": 0,
+        "packageSourceConsumerCount": 1,
+        "sourceEvidence": "current complete source bodies in applicationSources/interfaceReviews and emitted declarations in packageReviews",
+        "status": "source-contract-reviewed; runtime held"
+      },
+      {
+        "module": "KidsDomain",
+        "contractReview": "Curated IDs, eligibility, ordered/shuffle/session/progress/gate values enforce the child contract independently of native UI/SDK objects.",
+        "localDependencies": [],
+        "applicationConsumerCount": 2,
+        "packageSourceConsumerCount": 17,
+        "sourceEvidence": "current complete source bodies in applicationSources/interfaceReviews and emitted declarations in packageReviews",
+        "status": "source-contract-reviewed; runtime held"
+      },
+      {
+        "module": "KidsExperience",
+        "contractReview": "The child root and protected parent Form retain presentation. App supplies accounts/player rendering; tvOS has no general-account/item deep-link route or remote queue/navigation subscription.",
+        "localDependencies": [
+          "KidsAccounts",
+          "KidsApplication",
+          "KidsCatalog",
+          "KidsDiagnostics",
+          "KidsDiagnosticsUI",
+          "KidsDomain",
+          "KidsPlaybackSession",
+          "SwiftfinUIState"
+        ],
+        "applicationConsumerCount": 2,
+        "packageSourceConsumerCount": 0,
+        "sourceEvidence": "current complete source bodies in applicationSources/interfaceReviews and emitted declarations in packageReviews",
+        "status": "source-contract-reviewed; runtime held"
+      },
+      {
+        "module": "KidsPersistence",
+        "contractReview": "SwiftData/private CloudKit merge/save/reset and same-store fallback own account/library-bound progress. Model supplies explicit snapshots/write intents; no RAID media or server catalog mutation is involved.",
+        "localDependencies": [
+          "KidsDiagnostics",
+          "KidsDomain"
+        ],
+        "applicationConsumerCount": 0,
+        "packageSourceConsumerCount": 1,
+        "sourceEvidence": "current complete source bodies in applicationSources/interfaceReviews and emitted declarations in packageReviews",
+        "status": "source-contract-reviewed; runtime held"
+      },
+      {
+        "module": "KidsPlayback",
+        "contractReview": "Readiness, safe resume/timing and playback-value policies feed captured app driver/report adapters without owning the native player.",
+        "localDependencies": [
+          "KidsDiagnostics",
+          "SwiftfinAsyncStreams"
+        ],
+        "applicationConsumerCount": 3,
+        "packageSourceConsumerCount": 1,
+        "sourceEvidence": "current complete source bodies in applicationSources/interfaceReviews and emitted declarations in packageReviews",
+        "status": "source-contract-reviewed; runtime held"
+      },
+      {
+        "module": "KidsPlaybackSession",
+        "contractReview": "One controller/session owns start, teardown, checkpoints, recovery and budget/countdown. Model callbacks bind controller, account lease and libraries before progress effects.",
+        "localDependencies": [
+          "KidsDiagnostics",
+          "KidsDomain",
+          "KidsPlayback"
+        ],
+        "applicationConsumerCount": 1,
+        "packageSourceConsumerCount": 4,
+        "sourceEvidence": "current complete source bodies in applicationSources/interfaceReviews and emitted declarations in packageReviews",
+        "status": "source-contract-reviewed; runtime held"
+      },
+      {
+        "module": "SwiftfinAccountAccess",
+        "contractReview": "Original-account authentication, prompt facts, Quick Connect and profile URLs remain captured-transport commands. UI prompts do not themselves grant credential access.",
+        "localDependencies": [
+          "SwiftfinNetworking"
+        ],
+        "applicationConsumerCount": 18,
+        "packageSourceConsumerCount": 0,
+        "sourceEvidence": "current complete source bodies in applicationSources/interfaceReviews and emitted declarations in packageReviews",
+        "status": "source-contract-reviewed; runtime held"
+      },
+      {
+        "module": "SwiftfinAccountModels",
+        "contractReview": "Immutable account/connection/policy/session values and parsing rules feed explicit account adapters; native forms and display labels remain app presentation.",
+        "localDependencies": [
+          "SwiftfinLocalization"
+        ],
+        "applicationConsumerCount": 27,
+        "packageSourceConsumerCount": 11,
+        "sourceEvidence": "current complete source bodies in applicationSources/interfaceReviews and emitted declarations in packageReviews",
+        "status": "source-contract-reviewed; runtime held"
+      },
+      {
+        "module": "SwiftfinAccountStore",
+        "contractReview": "Local inventory/security/cache/admission mutations use captured records, caller validation and credential-first effects; app adapters retain prompts and current-record composition.",
+        "localDependencies": [
+          "SwiftfinAccountModels",
+          "SwiftfinCredentials",
+          "SwiftfinStorage",
+          "SwiftfinStoredValues"
+        ],
+        "applicationConsumerCount": 11,
+        "packageSourceConsumerCount": 0,
+        "sourceEvidence": "current complete source bodies in applicationSources/interfaceReviews and emitted declarations in packageReviews",
+        "status": "source-contract-reviewed; runtime held"
+      },
+      {
+        "module": "SwiftfinAsyncStreams",
+        "contractReview": "Typed notification, latest-request, scoped-publisher, task/effect and serial report ownership define cancellation/reentry contracts. App scheduling and exact account/item checks compose those contracts.",
+        "localDependencies": [],
+        "applicationConsumerCount": 37,
+        "packageSourceConsumerCount": 6,
+        "sourceEvidence": "current complete source bodies in applicationSources/interfaceReviews and emitted declarations in packageReviews",
+        "status": "source-contract-reviewed; runtime held"
+      },
+      {
+        "module": "SwiftfinAudioSession",
+        "contractReview": "Native audio category, interruption and route leases belong here; app supplies captured playback policy and explicitly scheduled value-only signal reads.",
+        "localDependencies": [
+          "KidsDiagnostics"
+        ],
+        "applicationConsumerCount": 1,
+        "packageSourceConsumerCount": 0,
+        "sourceEvidence": "current complete source bodies in applicationSources/interfaceReviews and emitted declarations in packageReviews",
+        "status": "source-contract-reviewed; runtime held"
+      },
+      {
+        "module": "SwiftfinCollections",
+        "contractReview": "Collection/value builders and ordered projections operate on supplied inputs. The unused mutable Trie is removed; app layout and selection remain presentation.",
+        "localDependencies": [],
+        "applicationConsumerCount": 126,
+        "packageSourceConsumerCount": 14,
+        "sourceEvidence": "current complete source bodies in applicationSources/interfaceReviews and emitted declarations in packageReviews",
+        "status": "source-contract-reviewed; runtime held"
+      },
+      {
+        "module": "SwiftfinConnections",
+        "contractReview": "Snapshot-based endpoint ordering and exact server-ID resolution use an injected resolver. App captures root/context and verifies publication relevance.",
+        "localDependencies": [
+          "SwiftfinAccountModels"
+        ],
+        "applicationConsumerCount": 1,
+        "packageSourceConsumerCount": 0,
+        "sourceEvidence": "current complete source bodies in applicationSources/interfaceReviews and emitted declarations in packageReviews",
+        "status": "source-contract-reviewed; runtime held"
+      },
+      {
+        "module": "SwiftfinConnectivity",
+        "contractReview": "Native context observation/probing belongs to this owner; app chooses current-account connection policy and cancels obsolete publication.",
+        "localDependencies": [
+          "SwiftfinAccountModels"
+        ],
+        "applicationConsumerCount": 3,
+        "packageSourceConsumerCount": 0,
+        "sourceEvidence": "current complete source bodies in applicationSources/interfaceReviews and emitted declarations in packageReviews",
+        "status": "source-contract-reviewed; runtime held"
+      },
+      {
+        "module": "SwiftfinCredentials",
+        "contractReview": "Secure storage commands remain main-actor and behind the credential port. App and account-store callers supply installed keys/user identity without exposing native Security query implementation.",
+        "localDependencies": [],
+        "applicationConsumerCount": 2,
+        "packageSourceConsumerCount": 1,
+        "sourceEvidence": "current complete source bodies in applicationSources/interfaceReviews and emitted declarations in packageReviews",
+        "status": "source-contract-reviewed; runtime held"
+      },
+      {
+        "module": "SwiftfinFilters",
+        "contractReview": "Immutable selection/query/schema and captured two-stage filter discovery feed native controls and scoped search. Submission identity, not execution-time ambient state, owns work.",
+        "localDependencies": [
+          "SwiftfinMediaCatalog",
+          "SwiftfinNetworking"
+        ],
+        "applicationConsumerCount": 38,
+        "packageSourceConsumerCount": 0,
+        "sourceEvidence": "current complete source bodies in applicationSources/interfaceReviews and emitted declarations in packageReviews",
+        "status": "source-contract-reviewed; runtime held"
+      },
+      {
+        "module": "SwiftfinFormatting",
+        "contractReview": "Format/parse values operate on immutable inputs; native pickers and labels retain presentation. No account, transport or scheduler crosses this API.",
+        "localDependencies": [
+          "SwiftfinLocalization",
+          "SwiftfinValues"
+        ],
+        "applicationConsumerCount": 53,
+        "packageSourceConsumerCount": 0,
+        "sourceEvidence": "current complete source bodies in applicationSources/interfaceReviews and emitted declarations in packageReviews",
+        "status": "source-contract-reviewed; runtime held"
+      },
+      {
+        "module": "SwiftfinImageProcessing",
+        "contractReview": "Private native SVG and bounded pixel/encoding work stay here; app UIImage and view adapters retain explicit platform presentation.",
+        "localDependencies": [],
+        "applicationConsumerCount": 3,
+        "packageSourceConsumerCount": 0,
+        "sourceEvidence": "current complete source bodies in applicationSources/interfaceReviews and emitted declarations in packageReviews",
+        "status": "source-contract-reviewed; runtime held"
+      },
+      {
+        "module": "SwiftfinImages",
+        "contractReview": "Private Nuke pipelines and cache identity/key policy own image IO/cache lifecycle. App supplies immutable server index, installed settings and process startup choices.",
+        "localDependencies": [],
+        "applicationConsumerCount": 32,
+        "packageSourceConsumerCount": 0,
+        "sourceEvidence": "current complete source bodies in applicationSources/interfaceReviews and emitted declarations in packageReviews",
+        "status": "source-contract-reviewed; runtime held"
+      },
+      {
+        "module": "SwiftfinItemMetadata",
+        "contractReview": "Bound metadata, subtitle, image and identify editors serialize captured original-account commands and reload publication. Native edit forms supply immutable intents and validate relevance between effects; immutable refresh/display policies remain with this owner.",
+        "localDependencies": [
+          "SwiftfinNetworking"
+        ],
+        "applicationConsumerCount": 27,
+        "packageSourceConsumerCount": 0,
+        "sourceEvidence": "current complete source bodies in applicationSources/interfaceReviews and emitted declarations in packageReviews",
+        "status": "source-contract-reviewed; runtime held"
+      },
+      {
+        "module": "SwiftfinLocalization",
+        "contractReview": "Generated immutable strings and typed formatted members correspond to the complete resource/proper-noun inventory. Label callers do not acquire mutable or account authority.",
+        "localDependencies": [],
+        "applicationConsumerCount": 327,
+        "packageSourceConsumerCount": 6,
+        "sourceEvidence": "current complete source bodies in applicationSources/interfaceReviews and emitted declarations in packageReviews",
+        "status": "source-contract-reviewed; runtime held"
+      },
+      {
+        "module": "SwiftfinMPV",
+        "contractReview": "Native mpv player/surface/events and sidecar/track operations remain private and per-open scoped. App proxy retains captured manager/item/account publication checks.",
+        "localDependencies": [],
+        "applicationConsumerCount": 1,
+        "packageSourceConsumerCount": 0,
+        "sourceEvidence": "current complete source bodies in applicationSources/interfaceReviews and emitted declarations in packageReviews",
+        "status": "source-contract-reviewed; runtime held"
+      },
+      {
+        "module": "SwiftfinMediaCatalog",
+        "contractReview": "Bound reads and supplied-value eligibility/guide/adjacency policies own discovery and cursors; native guide/paging/provider adapters publish matching snapshots only.",
+        "localDependencies": [
+          "SwiftfinCollections",
+          "SwiftfinNetworking",
+          "SwiftfinTime"
+        ],
+        "applicationConsumerCount": 40,
+        "packageSourceConsumerCount": 2,
+        "sourceEvidence": "current complete source bodies in applicationSources/interfaceReviews and emitted declarations in packageReviews",
+        "status": "source-contract-reviewed; runtime held"
+      },
+      {
+        "module": "SwiftfinMediaTracks",
+        "contractReview": "Stream/quality/caption/sidecar/track selection facts consume immutable DTO values. App native-index and picker adapters delegate policy rather than implement it.",
+        "localDependencies": [
+          "SwiftfinPlaybackProfiles"
+        ],
+        "applicationConsumerCount": 16,
+        "packageSourceConsumerCount": 1,
+        "sourceEvidence": "current complete source bodies in applicationSources/interfaceReviews and emitted declarations in packageReviews",
+        "status": "source-contract-reviewed; runtime held"
+      },
+      {
+        "module": "SwiftfinNativePlayback",
+        "contractReview": "Native AVPlayer observers/requests/rendering and lazy hardware queries remain private. App proxy and surface compose semantic commands and generation-checked events.",
+        "localDependencies": [],
+        "applicationConsumerCount": 3,
+        "packageSourceConsumerCount": 0,
+        "sourceEvidence": "current complete source bodies in applicationSources/interfaceReviews and emitted declarations in packageReviews",
+        "status": "source-contract-reviewed; runtime held"
+      },
+      {
+        "module": "SwiftfinNetworking",
+        "contractReview": "HTTP/auth/socket lifetimes remain actor-owned. Feature clients retain one sender/URL scope; app session composition replaces clients rather than mutating existing request credentials.",
+        "localDependencies": [],
+        "applicationConsumerCount": 19,
+        "packageSourceConsumerCount": 14,
+        "sourceEvidence": "current complete source bodies in applicationSources/interfaceReviews and emitted declarations in packageReviews",
+        "status": "source-contract-reviewed; runtime held"
+      },
+      {
+        "module": "SwiftfinNowPlaying",
+        "contractReview": "Tracked system command/press registration and metadata targets belong here. App observer binds commands to its captured manager and retires the lease.",
+        "localDependencies": [],
+        "applicationConsumerCount": 2,
+        "packageSourceConsumerCount": 0,
+        "sourceEvidence": "current complete source bodies in applicationSources/interfaceReviews and emitted declarations in packageReviews",
+        "status": "source-contract-reviewed; runtime held"
+      },
+      {
+        "module": "SwiftfinPaging",
+        "contractReview": "Cursor/search/content refresh ownership rejects retired bindings and requests. App adapters supply snapshots/checkpoints; notification edits use immutable staged snapshots.",
+        "localDependencies": [],
+        "applicationConsumerCount": 4,
+        "packageSourceConsumerCount": 0,
+        "sourceEvidence": "current complete source bodies in applicationSources/interfaceReviews and emitted declarations in packageReviews",
+        "status": "source-contract-reviewed; runtime held"
+      },
+      {
+        "module": "SwiftfinPermissions",
+        "contractReview": "Native permission/hardware adapters and supplied status/capability values retain explicit actor and scheduler contracts. App owns prompt/presentation choices; review does not execute OS prompts or grant account authority.",
+        "localDependencies": [],
+        "applicationConsumerCount": 4,
+        "packageSourceConsumerCount": 0,
+        "sourceEvidence": "current complete source bodies in applicationSources/interfaceReviews and emitted declarations in packageReviews",
+        "status": "source-contract-reviewed; runtime held"
+      },
+      {
+        "module": "SwiftfinPlaybackPreparation",
+        "contractReview": "One frozen connection owns metadata/info/source/stream/sidecar/preview preparation. App builder/provider checks cancellation and binding before constructing or publishing native values.",
+        "localDependencies": [
+          "SwiftfinMediaTracks",
+          "SwiftfinNetworking",
+          "SwiftfinPlaybackReporting"
+        ],
+        "applicationConsumerCount": 9,
+        "packageSourceConsumerCount": 0,
+        "sourceEvidence": "current complete source bodies in applicationSources/interfaceReviews and emitted declarations in packageReviews",
+        "status": "source-contract-reviewed; runtime held"
+      },
+      {
+        "module": "SwiftfinPlaybackPreviews",
+        "contractReview": "Distinct chapter/thumbnail timelines and bounded flights/LRU/cropping stay here. App chooses UI selection and supplies loaders from the frozen connection.",
+        "localDependencies": [],
+        "applicationConsumerCount": 4,
+        "packageSourceConsumerCount": 0,
+        "sourceEvidence": "current complete source bodies in applicationSources/interfaceReviews and emitted declarations in packageReviews",
+        "status": "source-contract-reviewed; runtime held"
+      },
+      {
+        "module": "SwiftfinPlaybackProfiles",
+        "contractReview": "Immutable codec/player/bitrate/capability/profile construction consumes supplied settings and hardware snapshots. Native hardware probing is separately owned.",
+        "localDependencies": [
+          "SwiftfinCollections"
+        ],
+        "applicationConsumerCount": 23,
+        "packageSourceConsumerCount": 2,
+        "sourceEvidence": "current complete source bodies in applicationSources/interfaceReviews and emitted declarations in packageReviews",
+        "status": "source-contract-reviewed; runtime held"
+      },
+      {
+        "module": "SwiftfinPlaybackReporting",
+        "contractReview": "Report identity, payload and original-sender cleanup remain captured. App timer/observer composition closes ingress; terminal cleanup intentionally retains the original sender.",
+        "localDependencies": [
+          "SwiftfinAsyncStreams",
+          "SwiftfinNetworking"
+        ],
+        "applicationConsumerCount": 3,
+        "packageSourceConsumerCount": 1,
+        "sourceEvidence": "current complete source bodies in applicationSources/interfaceReviews and emitted declarations in packageReviews",
+        "status": "source-contract-reviewed; runtime held"
+      },
+      {
+        "module": "SwiftfinRecordingTimers",
+        "contractReview": "One captured timer editor owns serial mutation/snapshot/reload. Native actions retain macro progress, committed display and per-effect relevance checks.",
+        "localDependencies": [
+          "SwiftfinMediaCatalog",
+          "SwiftfinNetworking"
+        ],
+        "applicationConsumerCount": 3,
+        "packageSourceConsumerCount": 0,
+        "sourceEvidence": "current complete source bodies in applicationSources/interfaceReviews and emitted declarations in packageReviews",
+        "status": "source-contract-reviewed; runtime held"
+      },
+      {
+        "module": "SwiftfinScrolling",
+        "contractReview": "Geometry and native observation leases remain main-actor, weak and generation-owned. Native guide views register supplied scroll views; foreign callbacks hop before reading geometry.",
+        "localDependencies": [],
+        "applicationConsumerCount": 5,
+        "packageSourceConsumerCount": 0,
+        "sourceEvidence": "current complete source bodies in applicationSources/interfaceReviews and emitted declarations in packageReviews",
+        "status": "source-contract-reviewed; runtime held"
+      },
+      {
+        "module": "SwiftfinServerOperations",
+        "contractReview": "Captured administrative requests and immutable diagnostic/session/log policies feed native screens and reference paging. Old receipts cannot use replacement account authority.",
+        "localDependencies": [
+          "SwiftfinCollections",
+          "SwiftfinNetworking"
+        ],
+        "applicationConsumerCount": 18,
+        "packageSourceConsumerCount": 0,
+        "sourceEvidence": "current complete source bodies in applicationSources/interfaceReviews and emitted declarations in packageReviews",
+        "status": "source-contract-reviewed; runtime held"
+      },
+      {
+        "module": "SwiftfinSessions",
+        "contractReview": "Selection and activation/resource lifetimes use opaque generation/caller checkpoints. App bridges local prompts/settings/routing and checks between effects; accepted synchronous effects are not rolled back.",
+        "localDependencies": [
+          "SwiftfinAsyncStreams"
+        ],
+        "applicationConsumerCount": 2,
+        "packageSourceConsumerCount": 0,
+        "sourceEvidence": "current complete source bodies in applicationSources/interfaceReviews and emitted declarations in packageReviews",
+        "status": "source-contract-reviewed; runtime held"
+      },
+      {
+        "module": "SwiftfinStorage",
+        "contractReview": "Private native database/schema/CRUD and typed records stay behind this owner. App composition supplies credentials and startup logging before opening storage.",
+        "localDependencies": [
+          "SwiftfinAccountModels"
+        ],
+        "applicationConsumerCount": 2,
+        "packageSourceConsumerCount": 4,
+        "sourceEvidence": "current complete source bodies in applicationSources/interfaceReviews and emitted declarations in packageReviews",
+        "status": "source-contract-reviewed; runtime held"
+      },
+      {
+        "module": "SwiftfinStoredValues",
+        "contractReview": "Installed-key typed storage, serializers and namespaces remain bound to the database owner; per-user selection and platform preference types are supplied by composition.",
+        "localDependencies": [
+          "SwiftfinAccountModels",
+          "SwiftfinPlaybackProfiles",
+          "SwiftfinStorage"
+        ],
+        "applicationConsumerCount": 47,
+        "packageSourceConsumerCount": 4,
+        "sourceEvidence": "current complete source bodies in applicationSources/interfaceReviews and emitted declarations in packageReviews",
+        "status": "source-contract-reviewed; runtime held"
+      },
+      {
+        "module": "SwiftfinStoredValuesUI",
+        "contractReview": "The main-actor SwiftUI wrapper adapts typed stored values to native bindings. App preference declarations retain their existing key/default/suite contracts.",
+        "localDependencies": [
+          "SwiftfinStoredValues"
+        ],
+        "applicationConsumerCount": 14,
+        "packageSourceConsumerCount": 0,
+        "sourceEvidence": "current complete source bodies in applicationSources/interfaceReviews and emitted declarations in packageReviews",
+        "status": "source-contract-reviewed; runtime held"
+      },
+      {
+        "module": "SwiftfinText",
+        "contractReview": "Text/URL/raw-value projections and Transferable export stay with this owner; app adapters supply immutable content and native ShareLink presentation.",
+        "localDependencies": [],
+        "applicationConsumerCount": 82,
+        "packageSourceConsumerCount": 0,
+        "sourceEvidence": "current complete source bodies in applicationSources/interfaceReviews and emitted declarations in packageReviews",
+        "status": "source-contract-reviewed; runtime held"
+      },
+      {
+        "module": "SwiftfinTime",
+        "contractReview": "Tick, duration, clock and strict recency arithmetic take explicit values/time; guide and report adapters supply the captured snapshot.",
+        "localDependencies": [],
+        "applicationConsumerCount": 46,
+        "packageSourceConsumerCount": 1,
+        "sourceEvidence": "current complete source bodies in applicationSources/interfaceReviews and emitted declarations in packageReviews",
+        "status": "source-contract-reviewed; runtime held"
+      },
+      {
+        "module": "SwiftfinUIState",
+        "contractReview": "Committed publication, view lifetimes, clock/offset/jump state and native settings wrappers retain actor/cancellation contracts. App owns concrete SwiftUI/ UIKit composition.",
+        "localDependencies": [],
+        "applicationConsumerCount": 65,
+        "packageSourceConsumerCount": 1,
+        "sourceEvidence": "current complete source bodies in applicationSources/interfaceReviews and emitted declarations in packageReviews",
+        "status": "source-contract-reviewed; runtime held"
+      },
+      {
+        "module": "SwiftfinUserAdministration",
+        "contractReview": "Bound target/configuration writers and ordered user batches retain original authority. App adapters capture intent before scheduling and validate UI/event publication.",
+        "localDependencies": [
+          "SwiftfinCollections",
+          "SwiftfinNetworking"
+        ],
+        "applicationConsumerCount": 11,
+        "packageSourceConsumerCount": 0,
+        "sourceEvidence": "current complete source bodies in applicationSources/interfaceReviews and emitted declarations in packageReviews",
+        "status": "source-contract-reviewed; runtime held"
+      },
+      {
+        "module": "SwiftfinUserMediaState",
+        "contractReview": "Serial played/favorite commands and response merge facts retain original item/account identity; caller checks bracket optimistic state, notifications and request effects.",
+        "localDependencies": [
+          "SwiftfinNetworking"
+        ],
+        "applicationConsumerCount": 7,
+        "packageSourceConsumerCount": 0,
+        "sourceEvidence": "current complete source bodies in applicationSources/interfaceReviews and emitted declarations in packageReviews",
+        "status": "source-contract-reviewed; runtime held"
+      },
+      {
+        "module": "SwiftfinVLC",
+        "contractReview": "Native VLC player/render/event and per-open operation ownership remain private. App proxy maps supplied item/settings/events and stops deferred opening before replacement.",
+        "localDependencies": [
+          "KidsDiagnostics"
+        ],
+        "applicationConsumerCount": 2,
+        "packageSourceConsumerCount": 0,
+        "sourceEvidence": "current complete source bodies in applicationSources/interfaceReviews and emitted declarations in packageReviews",
+        "status": "source-contract-reviewed; runtime held"
+      },
+      {
+        "module": "SwiftfinValues",
+        "contractReview": "Scalar bounds, key-path/optional transforms and rounding are supplied-value operations; native geometry/presentation callers retain their own state.",
+        "localDependencies": [],
+        "applicationConsumerCount": 30,
+        "packageSourceConsumerCount": 4,
+        "sourceEvidence": "current complete source bodies in applicationSources/interfaceReviews and emitted declarations in packageReviews",
+        "status": "source-contract-reviewed; runtime held"
+      }
+    ],
+    "additionalLocalTargetReviews": [
+      {
+        "module": "PreferencesView",
+        "manifestSHA256": "cdb2e6c7dd692f0553e4a5bea89821ebde5f122b91821cb763feae7f82cbc114",
+        "sourceBodiesRead": 10,
+        "sources": [
+          {
+            "path": "PreferencesView/Sources/PreferencesView/Box.swift",
+            "sha256": "e70dd4b55a12a327df668a50bfe1b1aae1a66bcf2f46adb4723fc5db7c6d6a82"
+          },
+          {
+            "path": "PreferencesView/Sources/PreferencesView/KeyCommandAction.swift",
+            "sha256": "91f9aabe58bbac9e1f8e6e11dda11e9021379e7426d5394f37b22fbac5c40088"
+          },
+          {
+            "path": "PreferencesView/Sources/PreferencesView/KeyCommandsBuilder.swift",
+            "sha256": "ca3f8307b5bf3363ccedc92bb4f5c415d0f509cc29a7f41d54dc2465686325fb"
+          },
+          {
+            "path": "PreferencesView/Sources/PreferencesView/PreferenceKeys.swift",
+            "sha256": "7df0ecf91eee99a87b30314fdcb1488cd2919a5897dd94689a859ccfb423bea4"
+          },
+          {
+            "path": "PreferencesView/Sources/PreferencesView/PreferencesView.swift",
+            "sha256": "227f747c53f7be57cdf5ac03d3a465a85868e0a89df44ae2c14b68de950b4d89"
+          },
+          {
+            "path": "PreferencesView/Sources/PreferencesView/PressCommandAction.swift",
+            "sha256": "8d811199e6535c70e444032129137c8fe5a888f8faeba02a5c61974448d5d8ea"
+          },
+          {
+            "path": "PreferencesView/Sources/PreferencesView/PressCommandBuilder.swift",
+            "sha256": "e69243c6a0c16c50921298386196f2a45d87584e616733bf61b2d167f6fbcdc7"
+          },
+          {
+            "path": "PreferencesView/Sources/PreferencesView/UIPreferencesHostingController.swift",
+            "sha256": "c7750d790cc2a8e64de50829b7178c7b7180f4377b8dfbfc0271797330afb2b3"
+          },
+          {
+            "path": "PreferencesView/Sources/PreferencesView/UIViewController+Swizzling.swift",
+            "sha256": "c57dc499cd90d6b1460310874a6c4d229f126f2ec8786e2fe414ca194d520f5d"
+          },
+          {
+            "path": "PreferencesView/Sources/PreferencesView/ViewExtensions.swift",
+            "sha256": "9f91a2f57b2a283bba3dd5a5ac6f6556eb071ddbfd0ebec3702dfb1cca15449d"
+          }
+        ],
+        "compilerGraphs": [
+          {
+            "path": "/private/tmp/kids-existing-api-symbolgraphs/PreferencesView/PreferencesView.symbols.json",
+            "sha256": "d0ab0075b301ce640efe73b760fcf2badea8dbee0279960be9bd7765ca2f9e77",
+            "platform": "tvOS26.1",
+            "publicSymbols": 40
+          },
+          {
+            "path": "/private/tmp/kids-existing-api-symbolgraphs/PreferencesView/PreferencesView@SwiftUICore.symbols.json",
+            "sha256": "5ed3c65706976639d57f2e00173420730efbfb39ba39d5dd2d60a998c674dc71",
+            "platform": "tvOS26.1",
+            "publicSymbols": 2
+          },
+          {
+            "path": "/private/tmp/kids-existing-ios-api-symbolgraphs/PreferencesView/PreferencesView.symbols.json",
+            "sha256": "21df0567a78280b6e7469d8418f42c5d75d3d9ed396073e0cceb5b0cd09ca0e6",
+            "platform": "iOS26.1",
+            "publicSymbols": 31
+          },
+          {
+            "path": "/private/tmp/kids-existing-ios-api-symbolgraphs/PreferencesView/PreferencesView@SwiftUICore.symbols.json",
+            "sha256": "a66330575b2040f7da876a3ad8e40610f2bd0597e04993da6d98c37830922958",
+            "platform": "iOS26.1",
+            "publicSymbols": 2
+          },
+          {
+            "path": "/private/tmp/kids-existing-ios-api-symbolgraphs/PreferencesView/PreferencesView@UIKit.symbols.json",
+            "sha256": "0dcc6c07195b11a705e23a6b8b8250c94009209d0f81fc1edd81e6a4c880a881",
+            "platform": "iOS26.1",
+            "publicSymbols": 1
+          }
+        ],
+        "applicationConsumers": [
+          "Shared/Coordinators/Navigation/NavigationInjectionView.swift",
+          "Shared/Coordinators/Navigation/NavigationRoute/NavigationRoute+Media.swift",
+          "Swiftfin/App/SwiftfinApp.swift",
+          "Swiftfin/Views/VideoPlayer/VideoPlayer+KeyCommands.swift"
+        ],
+        "contractReview": "Main-actor UIKit hosting, weak callback box, Sendable command descriptors/builders and one-time orientation swizzle; conditional iOS/tvOS public surfaces reviewed.",
+        "runtimeAcceptance": "UIKit execution held; macro fake-test result retained separately"
+      },
+      {
+        "module": "SwiftfinMacros",
+        "manifestSHA256": "aae3e6ac85da802fc3aee283f7a259a8d1a1b5dd94a339125ef0e98a2f38f654",
+        "sourceBodiesRead": 5,
+        "sources": [
+          {
+            "path": "SwiftfinMacros/Sources/SwiftfinMacros/DefaultDecodable.swift",
+            "sha256": "d3057f03c78bf5385435a15c031441b07e15406762cc11087a1a19f457495b29"
+          },
+          {
+            "path": "SwiftfinMacros/Sources/SwiftfinMacros/OptionSet.swift",
+            "sha256": "f8aacbc226fb0f634b9d53e236b58e9f1276f1f92a6feb7f623b7283ee6761aa"
+          },
+          {
+            "path": "SwiftfinMacros/Sources/SwiftfinMacrosPlugin/DefaultDecodableMacro.swift",
+            "sha256": "8114fbb899db0919753708425dba7a10b7247a751c46bd59054e2a8a0273e658"
+          },
+          {
+            "path": "SwiftfinMacros/Sources/SwiftfinMacrosPlugin/OptionSetMacro.swift",
+            "sha256": "0ff884ccbe45baddc17173e00170ed3bae005dbf41d402b4937e0f14774db125"
+          },
+          {
+            "path": "SwiftfinMacros/Sources/SwiftfinMacrosPlugin/SwiftfinMacrosPlugin.swift",
+            "sha256": "5387d0e4495c7ee1508e2d995225807724919fd48f21a5ed3ebe114b3d1ad8a4"
+          }
+        ],
+        "compilerGraphs": [
+          {
+            "path": "/private/tmp/kids-existing-api-symbolgraphs/SwiftfinMacros/SwiftfinMacros.symbols.json",
+            "sha256": "3ebfca25e8a147120217f8b496fd44f8109f1d586f722f7267067aa9e3044cd7",
+            "platform": "tvOS26.1",
+            "publicSymbols": 2
+          }
+        ],
+        "applicationConsumers": [
+          "Shared/Objects/ContentGroup/ContentGroupCustomization.swift",
+          "Shared/Objects/Direction.swift",
+          "Shared/Objects/PosterConfiguration.swift",
+          "Shared/Objects/PosterIndicator.swift",
+          "Shared/Objects/RectangleCorner.swift",
+          "Shared/Objects/TrailerSelection.swift",
+          "Shared/Objects/WithViewContext.swift"
+        ],
+        "contractReview": "Public macro declarations and all plugin expansion/validation bodies reviewed; generated Codable/OptionSet witnesses retain supported defaults/access/raw-value contracts.",
+        "runtimeAcceptance": "UIKit execution held; macro fake-test result retained separately"
+      }
+    ],
+    "remainingSourceConsumerReview": []
+  }
 }

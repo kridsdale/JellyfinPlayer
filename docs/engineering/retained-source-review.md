@@ -1,6 +1,6 @@
 # Retained application responsibility review
 
-The app retains composition and platform presentation. All 664 current application Swift sources have source-reviewed retention reasons and exact hashes in source-review-ledger.json; all 53 libraries have complete current source and public-API reviews. Folder names or import counts are not approval evidence. Whole-graph consumer closure and final interoperability acceptance remain required. Live simulator/server activity stays held. The dated sections below preserve earlier checkpoints and are historical, not the current totals.
+All 664 current application Swift sources have source-reviewed UI/composition reasons and exact hashes. The complete package public-contract review and current caller/actor/startup audit close source-level retention and integration. Earlier notes calling already-reviewed neighbours pending/mixed are reconciled against their current owners. Native UI/SDK execution and real playback remain held. Dated older totals below are historical; see client-completion-audit.md.
 
 ## Reviewed boundaries at the date/program checkpoint
 

@@ -1,6 +1,6 @@
 # Package API review
 
-All 53 libraries have complete current source and emitted public-API reviews, with exact source, manifest and compiler-graph hashes in source-review-ledger.json. Whole-graph app-consumer closure and held runtime acceptance remain outstanding. Compiler graphs include external type extensions and protocol witnesses; they identify declarations, not behavior. Dated sections preserve earlier checkpoints.
+All 53 extracted libraries and the two pre-existing local targets have complete current source and emitted public-API reviews. Combined app/package source and contract review closes the source-level consumer audit; historical interface entries remain explicitly scoped. Exact current hashes are recorded in source-review-ledger.json. Required real UI/SDK/playback acceptance stays held and is not established by symbol graphs, counts or compilation. See client-completion-audit.md.
 
 ## Reviewed batch (2026-10-07)
 
