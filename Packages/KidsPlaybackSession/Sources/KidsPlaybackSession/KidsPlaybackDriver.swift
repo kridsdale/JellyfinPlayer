@@ -60,7 +60,7 @@ public protocol KidsPlaybackSessionDelegate: AnyObject {
     func playbackCheckpoint(_ session: KidsPlaybackController, seconds: Double)
     func completed(_ session: KidsPlaybackController) async
     func continuePlayback(_ session: KidsPlaybackController) async
-    func stopPlaybackFromSession() async
+    func stopPlaybackFromSession(_ session: KidsPlaybackController) async
     func retryPlayback(_ session: KidsPlaybackController, position: Double)
     func playbackFailed(_ session: KidsPlaybackController, error: KidsPlaybackFailure)
 }

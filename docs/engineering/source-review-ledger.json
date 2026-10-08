@@ -6292,26 +6292,24 @@
     },
     {
       "path": "Packages/KidsAccounts/Sources/KidsAccounts/KidsAccountHost.swift",
-      "reason": "Scoped activation port lifetime adjustment: the escaping Sendable main-actor checkpoint may be held through the host session-selection/resource pipeline. Existing one-shot binding preparation and activation checks are unchanged; no global credential or native transport is exposed.",
+      "reason": "Complete identity/host/activation body read with the real main-actor session adapter and all three fake host implementations. Identity equality/hash include URL/server/user/token and ignore display name; descriptions redact credentials. Synchronous main-actor publication is an explicit port requirement and holds in the current published-session projection. Prepared activation is consumed before suspension, with injected effect checkpoints. Actual credentials and native authentication are not accessed or accepted by compilation.",
       "reviewedConsumers": [
         "Packages/KidsApplication/Sources/KidsApplication/KidsAppModel.swift",
         "Swiftfin tvOS/App/KidsAccountAdapter.swift",
-        "Shared/Services/UserSession/UserSessionManager.swift"
+        "Packages/KidsAccounts/Sources/KidsAccounts/KidsAccountAdmission.swift",
+        "Packages/KidsAccounts/Sources/KidsAccounts/KidsAccountScope.swift"
       ],
       "reviewedInterfaces": [
+        "KidsAccountIdentity",
         "KidsAccountCheckpoint",
-        "KidsAuthenticatedAccount.init",
-        "prepareActivation(binding:validate:)",
-        "activate(binding:validate:)",
-        "KidsAccountHost.identityChanges",
-        "signOut(validate:)",
-        "KidsAuthenticatedAccount.init activation checkpoint lifetime"
+        "KidsAuthenticatedAccount",
+        "KidsAccountHost"
       ],
       "sha256": "05f01e75bd8cc14b587912617243c0ca207599db8fa411a19b62ac8451e54f91"
     },
     {
       "path": "Packages/KidsAccounts/Sources/KidsAccounts/KidsAccountAdmission.swift",
-      "reason": "Complete admission owner reviewed: existing AsyncStreams ticket gate rejects replaced/cancelled/released work, full identity signals permanently reject ABA, and the exact authenticated target is admitted during own credential replacement/activation. Nil is an explicit sign-out target. Ten synthetic contracts cover owner lifetime, cancelled submission, identity replacement, old work, checked storage reentry, one-shot activation, missing/wrong publication and late logout. It starts no tasks, performs no IO and undoes no accepted effects. UIKit/SDK composition is compile-only under the human hold.",
+      "reason": "Complete existing admission owner and synchronous host signal contract read. One ticket governs each sign-in/out; identity changes latch rejection through ABA except its exact prepared activation/sign-out target. Weak checkpoints do not retain attempts. Existing owner-lifetime, credential reentry, one-shot activation and late logout fake contracts are included in the 31 passing account tests. It starts no tasks or IO. Real SDK publication remains held.",
       "reviewedConsumers": [
         "Packages/KidsApplication/Sources/KidsApplication/KidsAppModel.swift",
         "Swiftfin tvOS/App/KidsAccountAdapter.swift"
@@ -6787,6 +6785,170 @@
       "reviewedConsumers": [
         "Shared/Views/EditServerConnectionView.swift"
       ]
+    },
+    {
+      "path": "Packages/KidsAccounts/Sources/KidsAccounts/KidsAccountScope.swift",
+      "reason": "Main-actor account lifetime owner consumes the documented synchronous identity port. Leases capture only UUID, initial publication consistency and weak owner, retaining no host or credentials. Duplicate/display-name changes preserve authority; URL/user/token/logout changes permanently revoke it through ABA. isCurrent supports valid final checkpoints in cancelled cleanup; check also rejects task cancellation. Six fake-host native regressions pass. No IO, new package or edge.",
+      "reviewedConsumers": [
+        "Packages/KidsApplication/Sources/KidsApplication/KidsAppModel.swift"
+      ],
+      "reviewedInterfaces": [
+        "init(host:)",
+        "capture()",
+        "Lease.isCurrent",
+        "Lease.check()"
+      ],
+      "sha256": "356243bc76311056d19103baeff5e227dc656a0307164a454277a8ae97434b21"
+    },
+    {
+      "path": "Packages/KidsApplication/Sources/KidsApplication/KidsAppModel.swift",
+      "reason": "Complete coordinator body read for actor and suspension boundaries. Published UI values, parent actions and composition stay on MainActor; catalog/domain/persistence/player work stays in existing owners. Exact account leases now guard catalog, episode, artwork, reset, parent-play and preparation results. Playback callbacks require the original controller, account lease and library binding. Stop checks its generation/controller after teardown and skips progress effects for expired accounts; completion and delayed failures recheck ownership. Real cloud notifications, narration and UIKit behavior remain unexecuted. This scoped lifetime audit is not full consumer or runtime acceptance.",
+      "reviewedConsumers": [
+        "Packages/KidsExperience/Sources/KidsExperience/KidsViews.swift",
+        "Packages/KidsExperience/Sources/KidsExperience/KidsParentView.swift",
+        "Shared/Coordinators/Root/UserSessionRootView.swift",
+        "Packages/KidsPlaybackSession/Sources/KidsPlaybackSession/KidsPlaybackController.swift"
+      ],
+      "reviewedInterfaces": [
+        "MainActor UI state and composition",
+        "refresh/episodes/artworkImage",
+        "resetLocalState",
+        "playOnce/startMovieOver",
+        "play/dismissPlayback/stopPlayback",
+        "KidsPlaybackSessionDelegate callbacks"
+      ],
+      "sha256": "baaadc92701293339ceb34fd40fee8930175a379d3414965376c8e956adf8e1c"
+    },
+    {
+      "path": "Packages/KidsPlaybackSession/Sources/KidsPlaybackSession/KidsPlaybackDriver.swift",
+      "reason": "Complete value/driver/delegate/factory port surface read. Frames and events are checked Sendable snapshots; mutable SDK players are absent. Drivers and delegate callbacks are MainActor. Stop-from-session now requires its originating controller; the sole production sender and every conformance were inspected and compiled. Native fake delegate verifies the exact identity.",
+      "reviewedConsumers": [
+        "Packages/KidsApplication/Sources/KidsApplication/KidsAppModel.swift",
+        "Packages/KidsPlaybackSession/Sources/KidsPlaybackSession/KidsPlaybackController.swift"
+      ],
+      "reviewedInterfaces": [
+        "KidsPlaybackFrame",
+        "KidsPlaybackFailure",
+        "KidsPlaybackDriverEvent",
+        "KidsPlaybackDriver",
+        "KidsPlaybackSessionDelegate",
+        "KidsPlaybackSessionFactory"
+      ],
+      "sha256": "cb4c5d05068f2c3e306859acae90154e13151c7b00d3d5e72c87ece46fc48c8a"
+    },
+    {
+      "path": "Packages/KidsPlaybackSession/Sources/KidsPlaybackSession/KidsPlaybackController.swift",
+      "reason": "Scoped stop/retry/background/Back lifetime body read. Back passes its actual controller. Stop retains one private actor task for native teardown; all overlapping callers await that same completion rather than returning when the stopped flag is first set. Final checkpoint precedes teardown and timer retirement follows completion. The fake delayed-driver regression passes; this is not a full audit of remaining controller APIs or real VLC draining.",
+      "reviewedConsumers": [
+        "Packages/KidsApplication/Sources/KidsApplication/KidsAppModel.swift",
+        "Packages/KidsPlaybackSession/Sources/KidsPlaybackSession/KidsPlaybackDriver.swift"
+      ],
+      "reviewedInterfaces": [
+        "stop()",
+        "handleBack()",
+        "retry()",
+        "pauseOnBackground()"
+      ],
+      "sha256": "6b02c23aaeb953c01329f9980e7e9fc56e15f978d02831c46a99cc0241d672d6"
+    },
+    {
+      "path": "Packages/KidsArtworkUI/Sources/KidsArtworkUI/KidsArtworkStore.swift",
+      "reason": "Complete main-actor pixel-store body read. Native images and flights stay private, with item/binding checks, shared receipts, byte-owner invalidation and bounded LRU retention. Main-queue memory warning delivery justifies the weak actor assertion; retention generation prevents cancelled memory pressure fills from repopulating cache. Async image preparation rechecks cancellation and validity. Current UIKit/cache execution remains held.",
+      "reviewedConsumers": [
+        "Packages/KidsApplication/Sources/KidsApplication/KidsAppModel.swift"
+      ],
+      "reviewedInterfaces": [
+        "init(api:binding:)",
+        "init(cache:binding:)",
+        "image(for:binding:width:)",
+        "invalidate()"
+      ],
+      "sha256": "eda35fadc717371b2a98b56c1133ceb0014e480f8298b3c639b931091c390e6e"
+    },
+    {
+      "path": "Packages/SwiftfinAsyncStreams/Sources/SwiftfinAsyncStreams/NotificationEvent.swift",
+      "reason": "Complete descriptor and publisher bridge read with app keys and foreign-post/cancellation contracts. Raw native notification userInfo is decoded on the posting executor; only checked values or Void cross scheduling. mainActorPublisher maps raw signals to Void outside actor isolation, receives on main, then invokes its actor reader. Immutable names and injected centers have no app Factory dependency. Actual UIKit queries remain held.",
+      "reviewedConsumers": [
+        "Shared/Services/Notifications.swift"
+      ],
+      "reviewedInterfaces": [
+        "init(_:decode:)",
+        "post(_:to:)",
+        "post(to:)",
+        "publisher(in:)",
+        "mainActorPublisher(in:read:)"
+      ],
+      "sha256": "9f2616ca745451fff5291dc977dc4d3ab3dc05c6fb04ef258c945244d1d1611c"
+    },
+    {
+      "path": "Packages/SwiftfinScrolling/Sources/SwiftfinScrolling/EPGScrollProxy.swift",
+      "reason": "Complete MainActor native scroll owner read with EPG composition and platform contracts. Weak borrowed scroll targets and private KVO tokens are generation/member checked. Main-thread callbacks remain synchronous for recursion guards; foreign callbacks hop before reading current geometry, never transferring raw KVO objects. Disconnect invalidates both maps. Centering delegates to the pure owner. UIKit KVO tests are compile-only under the hold.",
+      "reviewedConsumers": [
+        "Shared/Views/EPGView/EPGContentView.swift"
+      ],
+      "reviewedInterfaces": [
+        "init()",
+        "registerContent(_:centeringOn:)",
+        "registerHorizontal(_:)",
+        "registerVertical(_:)",
+        "reset()",
+        "connect()",
+        "disconnect()",
+        "scrollTo(centering:)"
+      ],
+      "sha256": "d1e2485ef625241c00f3542a655112ecf3b5b7c099775ebf514df55a04423b3c"
+    },
+    {
+      "path": "Packages/SwiftfinScrolling/Sources/SwiftfinScrolling/ScrollCentering.swift",
+      "reason": "Complete stateless geometry API read. Finite inputs, positive viewport and content larger than viewport are required; output clamps the centered target to scrollable bounds. It has no native handle or global lookup.",
+      "reviewedConsumers": [
+        "Packages/SwiftfinScrolling/Sources/SwiftfinScrolling/EPGScrollProxy.swift"
+      ],
+      "reviewedInterfaces": [
+        "offset(target:viewport:content:)"
+      ],
+      "sha256": "b246256b1d03a60a14ec7d3ad558ee8e2278d3a58df2a0ecd84f95949134b12c"
+    },
+    {
+      "path": "Packages/SwiftfinStorage/Sources/SwiftfinStorage/CoreStoreBootstrap.swift",
+      "reason": "Complete internal compatibility shim read. The sole owned preconcurrency import wraps exactly one native SDK global logger assignment. The MainActor startup gate is its only caller; first install or database construction closes replacement. This does not certify unowned third-party initialization.",
+      "reviewedConsumers": [
+        "Packages/SwiftfinStorage/Sources/SwiftfinStorage/StorageLogging.swift"
+      ],
+      "reviewedInterfaces": [
+        "internal installLegacyCoreStoreLogger(_:)"
+      ],
+      "sha256": "e9e7af4c52e7c66caa2997c8e321b8d8466e0ad20b18f301fe3a6e816c6492d0"
+    },
+    {
+      "path": "Packages/SwiftfinStorage/Sources/SwiftfinStorage/StorageLogging.swift",
+      "reason": "Complete public log-value/bootstrap and private gate/native logger bodies read with injected-writer tests and app configure ordering. MainActor gate rejects repeated/late writes; native worker logger is checked Sendable and emits immutable entries through a Sendable closure. Assertions preserve lazy message evaluation. App entrypoints configure before storage composition. No SDK-global test mutation or runtime SDK initialization performed.",
+      "reviewedConsumers": [
+        "Shared/App/SwiftfinApp+configure.swift",
+        "Packages/SwiftfinStorage/Sources/SwiftfinStorage/SwiftfinDatabase.swift"
+      ],
+      "reviewedInterfaces": [
+        "StorageLogLevel",
+        "StorageLogEntry",
+        "StorageLogging.bootstrap(_:)",
+        "internal startup gate and NativeStorageLogger"
+      ],
+      "sha256": "afa573d047259c6f3106f5838cd29343150ab96758630511b4055ba38174b5eb"
+    },
+    {
+      "path": "Packages/SwiftfinStorage/Sources/SwiftfinStorage/SwiftfinDatabase.swift",
+      "reason": "Complete database actor/body/public surface read for SDK bootstrap and isolation. Construction freezes logger replacement before creating DataStack. The stack, store, open gates and migration objects stay private/internal on MainActor. Transaction bodies accept checked snapshots/bytes; immutable migrated account values and actor credential-storage callback form the public open boundary. Existing SQLite replacement semantics are retained, not newly claimed transactional. No household store or RAID action performed; schema/value API review remains separately required.",
+      "reviewedConsumers": [
+        "Packages/SwiftfinStorage/Sources/SwiftfinStorage/StorageLogging.swift",
+        "Shared/App/SwiftfinApp+configure.swift"
+      ],
+      "reviewedInterfaces": [
+        "init(fileURL:)",
+        "shared",
+        "MigratedAccounts",
+        "open(persistAccessToken:)"
+      ],
+      "sha256": "7da42d47a853d601879cf1817414c4a4b38b459e7064725f71488b8e7cfe251c"
     }
   ],
   "limits": "This ledger records bodies explicitly reviewed, with exact current hashes; earlier prose or lexical inventory is not automatically promoted. Pending and mixed entries prevent whole-source completion. Retained UI algorithms have specific presentation reasons, not folder/import-based blanket approval. API entries do not classify the rest of the public graph. Source review and offline tests do not satisfy held runtime acceptance.",
@@ -6797,7 +6959,7 @@
     "classification": {
       "source-reviewed-retained": 664
     },
-    "currentAPIReviews": 64,
+    "currentAPIReviews": 75,
     "runtimeAcceptance": "held by human; no simulator/server testing"
   }
 }

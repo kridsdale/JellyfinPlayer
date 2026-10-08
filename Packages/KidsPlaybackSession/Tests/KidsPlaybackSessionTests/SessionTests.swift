@@ -24,6 +24,7 @@ private final class Driver: KidsPlaybackDriver {
     var reports = 0
     var pauses = 0
     var stops = 0
+    var stopWait: (@MainActor () async -> Void)?
     var seeks: [Double] = []
     func start() {
         starts += 1
@@ -45,6 +46,7 @@ private final class Driver: KidsPlaybackDriver {
 
     func stop() async {
         stops += 1
+        await stopWait?()
     }
 
     func advance(_ seconds: Double, output: Int = 1) {
@@ -63,6 +65,7 @@ private final class Delegate: KidsPlaybackSessionDelegate {
     var completions = 0
     var continuations = 0
     var stopRequests = 0
+    var stopOrigins: [ObjectIdentifier] = []
     var retries: [Double] = []
     var failures: [KidsPlaybackFailure] = []
     func playbackBegan(_ session: KidsPlaybackController) {
@@ -81,8 +84,9 @@ private final class Delegate: KidsPlaybackSessionDelegate {
         continuations += 1
     }
 
-    func stopPlaybackFromSession() async {
+    func stopPlaybackFromSession(_ session: KidsPlaybackController) async {
         stopRequests += 1
+        stopOrigins.append(ObjectIdentifier(session))
     }
 
     func retryPlayback(_ session: KidsPlaybackController, position: Double) {
@@ -246,4 +250,51 @@ func `back hides controls before requesting application stop`() async {
     await f.session.handleBack()
     #expect(f.delegate.stopRequests == 1)
     await f.session.stop()
+}
+
+@MainActor
+struct SessionStopOriginContract {
+    @Test
+    func `back request identifies exactly the controller that originated it`() async {
+        let fixture = Fixture()
+        fixture.session.controlsVisible = false
+        await fixture.session.handleBack()
+        #expect(fixture.delegate.stopRequests == 1)
+        #expect(fixture.delegate.stopOrigins == [ObjectIdentifier(fixture.session)])
+    }
+}
+
+@Test @MainActor
+func `overlapping stops both wait for one native teardown`() async {
+    let fixture = Fixture()
+    let entered = AsyncStream<Void>.makeStream()
+    let resume = AsyncStream<Void>.makeStream()
+    let secondEntered = AsyncStream<Void>.makeStream()
+    fixture.driver.stopWait = {
+        entered.continuation.yield(())
+        for await _ in resume.stream {
+            break
+        }
+    }
+    let first = Task { await fixture.session.stop() }
+    for await _ in entered.stream {
+        break
+    }
+    var secondFinished = false
+    let second = Task { @MainActor in
+        secondEntered.continuation.yield(())
+        await fixture.session.stop()
+        secondFinished = true
+    }
+    for await _ in secondEntered.stream {
+        break
+    }
+    #expect(!secondFinished && fixture.driver.stops == 1)
+    resume.continuation.yield(())
+    await first.value
+    await second.value
+    #expect(secondFinished && fixture.driver.stops == 1 && fixture.driver.pauses == 1)
+    entered.continuation.finish()
+    resume.continuation.finish()
+    secondEntered.continuation.finish()
 }

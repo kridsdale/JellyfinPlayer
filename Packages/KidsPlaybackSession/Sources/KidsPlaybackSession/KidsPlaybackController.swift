@@ -278,8 +278,12 @@ public final class KidsPlaybackController: ObservableObject, Identifiable {
         model.retryPlayback(self, position: saved)
     }
 
+    private var stopFlight: Task<Void, Never>?
+
     public func stop() async {
-        if !stopped {
+        if let stopFlight {
+            await stopFlight.value
+        } else if !stopped {
             if began && !finished {
                 model?.playbackCheckpoint(self, seconds: seconds)
             }
@@ -288,7 +292,10 @@ public final class KidsPlaybackController: ObservableObject, Identifiable {
             eventSubscription = nil
             if model?.isPreview != true {
                 driver.pause()
-                await driver.stop()
+                let driver = driver
+                let flight = Task { await driver.stop() }
+                stopFlight = flight
+                await flight.value
             }
         }
         if !showCountdown {
@@ -310,7 +317,7 @@ public final class KidsPlaybackController: ObservableObject, Identifiable {
         if controlsVisible && !recovery && !showCountdown {
             controlsVisible = false
         } else {
-            await model?.stopPlaybackFromSession()
+            await model?.stopPlaybackFromSession(self)
         }
     }
 

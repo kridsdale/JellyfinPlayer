@@ -84,6 +84,90 @@ final class KidsApplicationBoundaryTests: XCTestCase {
         }
     }
 
+    private final class SuspendedDriver: KidsPlaybackDriver {
+        var frame = KidsPlaybackFrame()
+        let subject = PassthroughSubject<KidsPlaybackDriverEvent, Never>()
+        var events: AnyPublisher<KidsPlaybackDriverEvent, Never> {
+            subject.eraseToAnyPublisher()
+        }
+
+        let entered = AsyncStream<Void>.makeStream()
+        var resume: CheckedContinuation<Void, Never>?
+        func start() {}
+        func beginReporting() {}
+        func togglePlayPause() {}
+        func pause() {}
+        func seek(seconds: Double) {}
+        func stop() async {
+            await withCheckedContinuation { continuation in
+                resume = continuation
+                entered.continuation.yield(())
+            }
+        }
+    }
+
+    private func controller(_ item: KidsItem, driver: any KidsPlaybackDriver, model: KidsAppModel) -> KidsPlaybackController {
+        KidsPlaybackController(item: item, title: item, mode: .movie, position: 0, episodes: [], driver: driver, delegate: model)
+    }
+
+    func testLateStopCannotClearReplacementPlayback() async {
+        let accounts = Accounts(), model = KidsAppModel(accounts: accounts, playbackFactory: PlaybackFactory())
+        accounts.changes.send(identity())
+        let movie = KidsItem(id: "movie", name: "Fixture", kind: .movie, libraryID: "movies")
+        let oldDriver = SuspendedDriver()
+        model.activePlayback = controller(movie, driver: oldDriver, model: model)
+        let stopping = Task { await model.stopPlayback() }
+        for await _ in oldDriver.entered.stream {
+            break
+        }
+        let replacement = controller(movie, driver: SuspendedDriver(), model: model)
+        model.activePlayback = replacement
+        oldDriver.resume?.resume()
+        await stopping.value
+        XCTAssertTrue(model.activePlayback === replacement)
+    }
+
+    func testLateStopAndOldCallbacksCannotChangeReplacementAccountProgress() async {
+        let accounts = Accounts(), model = KidsAppModel(accounts: accounts, playbackFactory: PlaybackFactory())
+        accounts.changes.send(identity())
+        let binding = KidsBinding(serverID: "server", userID: "kid", showsID: "shows", moviesID: "movies")
+        model.state = KidsState(binding: binding)
+        let movie = KidsItem(id: "movie", name: "Fixture", kind: .movie, libraryID: "movies")
+        let driver = SuspendedDriver(), old = controller(movie, driver: driver, model: model)
+        model.activePlayback = old
+        let stopping = Task { await model.stopPlayback() }
+        for await _ in driver.entered.stream {
+            break
+        }
+        accounts.changes.send(identity(token: "replacement"))
+        model.state?.movies[movie.id] = KidsProgress(itemID: movie.id, seconds: 42)
+        model.playbackCheckpoint(old, seconds: 99)
+        driver.resume?.resume()
+        await stopping.value
+        XCTAssertEqual(model.state?.movies[movie.id]?.seconds, 42)
+        XCTAssertNil(model.activePlayback)
+    }
+
+    func testStaleBackRequestCannotStopReplacementController() async throws {
+        let model = KidsAppModel.preview("controls")
+        let old = try XCTUnwrap(model.activePlayback)
+        let title = try XCTUnwrap(model.catalog[.shows]?.first)
+        let episodes = try await model.episodes(for: title)
+        let replacement = KidsPlaybackController.preview(
+            item: episodes[1],
+            title: title,
+            mode: .ordered,
+            episodes: episodes,
+            delegate: model,
+            scenario: "controls"
+        )
+        model.activePlayback = replacement
+        await model.stopPlaybackFromSession(old)
+        XCTAssertTrue(model.activePlayback === replacement)
+        await model.stopPlaybackFromSession(replacement)
+        XCTAssertNil(model.activePlayback)
+    }
+
     private func identity(
         url: String = "http://localhost:9",
         server: String = "server",

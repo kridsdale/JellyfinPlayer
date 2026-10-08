@@ -1,6 +1,6 @@
 # Current engineering goal disposition
 
-Application responsibility review is complete: all 664 current app sources have individual retained UI/composition reasons, with 0 pending or mixed bodies. Editable connection normalization moves to ServerConnectionDraft; remote-session display capabilities move to ServerOperationsPolicy. Session commands capture their original client before deferred macro execution. Offline acceptance: 47 scoped native tests (7 new scenarios), 53 boundaries and tvOS Debug/iOS Release compile-only builds without owned Swift/generated-macro diagnostics. There are 64 scoped API reviews; the full 250-source package API/actor/bootstrap and held runtime audits remain required. Items 1/2 stay active.
+Account and playback lifetime fixes pass 42 offline contracts (31 account, 11 player session), including eight new regressions. Three coordinator race regressions compile with the tvOS test host and remain unexecuted. tvOS Debug and iOS Release compile without owned Swift/generated-macro diagnostics; the 53-library dependency graph is unchanged. All 664 app sources remain classified. There are 75 scoped API reviews among 251 package source files; the complete package/consumer audit and held runtime acceptance remain required. Items 1/2 stay active.
 
 The table below records the candidate checkpoint from 2026-10-05. The active goal on 2026-10-06 is full-client package extraction and Swift 6 completion; see [current package evidence](package-refactor.md). It remains active.
 

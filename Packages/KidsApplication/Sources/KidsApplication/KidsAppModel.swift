@@ -30,6 +30,9 @@ public final class KidsAppModel: ObservableObject, KidsPlaybackSessionDelegate {
     private let playbackFactory: (any KidsPlaybackSessionFactory)?
     private let accounts: (any KidsAccountHost)?
     private let admission: KidsAccountAdmission?
+    private let accountScope: KidsAccountScope?
+    private var activePlaybackLease: KidsAccountScope.Lease?
+    private var activePlaybackBinding: KidsBinding?
     @Published
     private(set) var accountIdentity: KidsAccountIdentity?
     @Published
@@ -54,7 +57,13 @@ public final class KidsAppModel: ObservableObject, KidsPlaybackSessionDelegate {
     public internal(set) var starting = false
     public internal(set) var isPreview = false
     @Published
-    public internal(set) var activePlayback: KidsPlaybackController?
+    public internal(set) var activePlayback: KidsPlaybackController? {
+        didSet {
+            activePlaybackLease = activePlayback == nil ? nil : accountScope?.capture()
+            activePlaybackBinding = activePlayback == nil ? nil : binding
+        }
+    }
+
     @Published
     public var sessionFinished = false
     @Published
@@ -271,6 +280,7 @@ public final class KidsAppModel: ObservableObject, KidsPlaybackSessionDelegate {
         self.playbackFactory = playbackFactory
         self.accounts = accounts
         self.admission = accounts.map { KidsAccountAdmission(host: $0) }
+        self.accountScope = accounts.map { KidsAccountScope(host: $0) }
         self.accountIdentity = accounts?.currentIdentity
         if preview {
             isPreview = true
@@ -291,6 +301,19 @@ public final class KidsAppModel: ObservableObject, KidsPlaybackSessionDelegate {
             gate = saved
             gate.lock()
         }
+    }
+
+    private func isCurrentAccount(_ lease: KidsAccountScope.Lease?) -> Bool {
+        isPreview || lease?.isCurrent == true
+    }
+
+    private func checkAccount(_ lease: KidsAccountScope.Lease?) throws {
+        try Task.checkCancellation()
+        guard isCurrentAccount(lease) else { throw CancellationError() }
+    }
+
+    private func isCurrentPlayback(_ controller: KidsPlaybackController) -> Bool {
+        activePlayback === controller && isCurrentAccount(activePlaybackLease) && activePlaybackBinding == binding
     }
 
     public func enterBrowse() {
@@ -334,6 +357,7 @@ public final class KidsAppModel: ObservableObject, KidsPlaybackSessionDelegate {
     }
 
     private func refreshMeasured() async -> KidsPerformanceOutcome {
+        let accountLease = accountScope?.capture()
         // Re-inserting the browse view after this refresh must not start another refresh loop.
         skipNextBrowseRefresh = true
         let generation = UUID()
@@ -354,6 +378,7 @@ public final class KidsAppModel: ObservableObject, KidsPlaybackSessionDelegate {
             selectedMovie = nil
             lastFocus = [:]
             await stopPlayback()
+            guard isCurrentAccount(accountLease), generation == refreshGeneration else { return .cancelled }
             loading = false
             requiresParent = true
             problem = "A grown-up needs to set up your shows."
@@ -373,16 +398,20 @@ public final class KidsAppModel: ObservableObject, KidsPlaybackSessionDelegate {
             #endif
             let first = category
             try await api.catalogs(first: first, binding: expected, prepare: {
+                try self.checkAccount(accountLease)
+                guard generation == self.refreshGeneration else { throw CancellationError() }
                 let load = KidsPerformance.begin(.storeLoad)
                 defer { load?.finish(Task.isCancelled ? .cancelled : .failure) }
                 let restored = try self.repository().load(binding: stored, legacyURL: self.stateURL)
-                guard generation == self.refreshGeneration, !Task.isCancelled else { throw CancellationError() }
+                guard self.isCurrentAccount(accountLease), generation == self.refreshGeneration,
+                      !Task.isCancelled else { throw CancellationError() }
                 self.syncBaseline = restored
                 self.state = restored.state
                 self.requiresParent = !self.hasParentPIN
                 load?.finish()
             }, receive: { category, items in
-                guard generation == self.refreshGeneration, !Task.isCancelled else { throw CancellationError() }
+                guard self.isCurrentAccount(accountLease), generation == self.refreshGeneration,
+                      !Task.isCancelled else { throw CancellationError() }
                 let firstPublication = self.catalog[category] == nil
                 self.catalog[category] = items
                 self.loading = false
@@ -392,14 +421,14 @@ public final class KidsAppModel: ObservableObject, KidsPlaybackSessionDelegate {
                     KidsPerformance.launch?.once(phase)
                 }
             })
-            guard generation == refreshGeneration, !Task.isCancelled else { return .cancelled }
+            guard isCurrentAccount(accountLease), generation == refreshGeneration, !Task.isCancelled else { return .cancelled }
             KidsPerformance.current?.mark(.catalogReady, values: [
                 "shows": Double(catalog[.shows]?.count ?? 0), "movies": Double(catalog[.movies]?.count ?? 0)
             ])
             KidsPerformance.launch?.once(.catalogReady)
             catalogComplete = true
             return requiresParent ? .failure : .success
-        } catch { guard generation == refreshGeneration else { return .cancelled }
+        } catch { guard isCurrentAccount(accountLease), generation == refreshGeneration else { return .cancelled }
             show(error)
             loading = false
             return Task.isCancelled || error is CancellationError ? .cancelled : .failure
@@ -423,7 +452,13 @@ public final class KidsAppModel: ObservableObject, KidsPlaybackSessionDelegate {
                 sessionEndItem = nil
                 lastFocus = [:]
                 startTask?.cancel()
-                Task { await stopPlayback() }
+                let generation = startGeneration
+                let playback = activePlayback
+                let accountLease = accountScope?.capture()
+                Task {
+                    guard isCurrentAccount(accountLease), startGeneration == generation, activePlayback === playback else { return }
+                    await stopPlayback()
+                }
             }
         } else if (error as? KidsContractError) == .invalidStateVersion {
             requiresParent = true
@@ -445,6 +480,7 @@ public final class KidsAppModel: ObservableObject, KidsPlaybackSessionDelegate {
         guard let api, let binding, KidsEligibility.permits(show, binding: binding),
               show.kind == .series else { throw KidsContractError.denied }
         let generation = refreshGeneration
+        let accountLease = accountScope?.capture()
         do {
             if verifiedEpisodes?.binding != binding {
                 invalidateEpisodeMetadata()
@@ -458,13 +494,13 @@ public final class KidsAppModel: ObservableObject, KidsPlaybackSessionDelegate {
             } else {
                 items = try await cached.episodes(for: show, binding: binding)
             }
-            guard !Task.isCancelled, self.binding == binding, refreshGeneration == generation else {
+            guard isCurrentAccount(accountLease), !Task.isCancelled, self.binding == binding, refreshGeneration == generation else {
                 throw CancellationError()
             }
             episodeCache[show.id] = items
             return items
         } catch {
-            guard !Task.isCancelled, self.binding == binding, refreshGeneration == generation else {
+            guard isCurrentAccount(accountLease), !Task.isCancelled, self.binding == binding, refreshGeneration == generation else {
                 throw CancellationError()
             }
             if let failure = error as? KidsAPIError, [.authentication, .policy, .libraryChanged].contains(failure) {
@@ -490,13 +526,15 @@ public final class KidsAppModel: ObservableObject, KidsPlaybackSessionDelegate {
         }
         guard let store = artworkStore?.value else { throw KidsContractError.denied }
         let revision = artworkRevision
+        let accountLease = accountScope?.capture()
         do {
             let image = try await store.image(for: item, binding: binding)
-            guard !Task.isCancelled, self.binding == binding, artworkRevision == revision,
+            guard isCurrentAccount(accountLease), !Task.isCancelled, self.binding == binding, artworkRevision == revision,
                   !loading, !requiresParent else { throw CancellationError() }
             return image
         } catch {
-            guard !Task.isCancelled, self.binding == binding, artworkRevision == revision else { throw CancellationError() }
+            guard isCurrentAccount(accountLease), !Task.isCancelled, self.binding == binding,
+                  artworkRevision == revision else { throw CancellationError() }
             if (error as? KidsAPIError) == .authentication {
                 show(error)
             }
@@ -570,7 +608,10 @@ public final class KidsAppModel: ObservableObject, KidsPlaybackSessionDelegate {
             if saved.invalidatesPlayback, let controller = activePlayback {
                 controller.allowsCheckpoints = false
                 cancelPendingStart()
-                Task { await stopPlayback(endSession: false) }
+                Task {
+                    guard activePlayback === controller else { return }
+                    await stopPlayback(endSession: false)
+                }
             }
             trace?.finish()
         } catch { problem = "Playback progress could not be saved. A grown-up can check storage." }
@@ -613,8 +654,12 @@ public final class KidsAppModel: ObservableObject, KidsPlaybackSessionDelegate {
 
     public func resetLocalState() async throws {
         guard unlocked else { throw KidsContractError.denied }
-        var confirmed = binding
-        if confirmed == nil, let data = UserDefaults.standard.data(forKey: bindingKey) {
+        let accountLease = accountScope?.capture()
+        try checkAccount(accountLease)
+        let originalBinding = binding
+        let storedBinding = UserDefaults.standard.data(forKey: bindingKey)
+        var confirmed = originalBinding
+        if confirmed == nil, let data = storedBinding {
             confirmed = try? JSONDecoder().decode(KidsBinding.self, from: data)
         }
         guard let confirmed else { throw KidsContractError.denied }
@@ -623,8 +668,11 @@ public final class KidsAppModel: ObservableObject, KidsPlaybackSessionDelegate {
                   session.userID == confirmed.userID, session.serverID == confirmed.serverID
             else { throw KidsAPIError.authentication }
             try await api.validate(confirmed)
+            try checkAccount(accountLease)
         }
         await stopPlayback()
+        try checkAccount(accountLease)
+        guard binding == originalBinding, UserDefaults.standard.data(forKey: bindingKey) == storedBinding else { throw CancellationError() }
         if isPreview {
             state = KidsState(binding: confirmed)
         } else {
@@ -843,9 +891,11 @@ public final class KidsAppModel: ObservableObject, KidsPlaybackSessionDelegate {
               KidsEligibility.permits(episode, binding: approvedBinding), episode.seriesID == show.id
         else { return }
         touchGate()
+        let accountLease = accountScope?.capture()
         Task {
+            guard isCurrentAccount(accountLease), !Task.isCancelled else { return }
             await stopPlayback()
-            guard binding == approvedBinding else { return }
+            guard isCurrentAccount(accountLease), !Task.isCancelled, binding == approvedBinding else { return }
             // The protected action was authorized before the parent sheet dismissed and relocked.
             beginPlayback(show, mode: .once, explicitEpisode: episode)
         }
@@ -855,9 +905,11 @@ public final class KidsAppModel: ObservableObject, KidsPlaybackSessionDelegate {
         guard unlocked, let approvedBinding = binding, movie.kind == .movie,
               KidsEligibility.permits(movie, binding: approvedBinding) else { return }
         touchGate()
+        let accountLease = accountScope?.capture()
         Task {
+            guard isCurrentAccount(accountLease), !Task.isCancelled else { return }
             await stopPlayback()
-            guard binding == approvedBinding else { return }
+            guard isCurrentAccount(accountLease), !Task.isCancelled, binding == approvedBinding else { return }
             // Stop checkpoints the old stream first; then discard that position for this explicit restart.
             state?.movies.removeValue(forKey: movie.id)
             persist()
@@ -874,6 +926,8 @@ public final class KidsAppModel: ObservableObject, KidsPlaybackSessionDelegate {
         continuing: Bool = false
     ) {
         guard startTask == nil, activePlayback == nil, let api, let binding else { return }
+        let accountLease = accountScope?.capture()
+        guard isCurrentAccount(accountLease) else { return }
         let variant = KidsPerformanceVariant(rawValue: mode.rawValue) ?? .unknown
         let trace = KidsPerformance.begin(.playback, variant: variant, values: ["retry": retryItem == nil ? 0 : 1])
         starting = true
@@ -898,6 +952,7 @@ public final class KidsAppModel: ObservableObject, KidsPlaybackSessionDelegate {
             }
             await KidsPerformance.$current.withValue(trace) { [self] in
                 do {
+                    try self.checkAccount(accountLease)
                     var item: KidsItem
                     var position = 0.0
                     var allEpisodes: [KidsItem] = []
@@ -941,7 +996,7 @@ public final class KidsAppModel: ObservableObject, KidsPlaybackSessionDelegate {
                     trace?.mark(.itemSelected, values: ["resume_seconds": position, "episodes": Double(allEpisodes.count)])
                     let verified = try await api.authorize(itemID: item.id, expectedKind: item.kind, binding: binding)
                     trace?.mark(.authorized)
-                    guard !Task.isCancelled, self.binding == binding else { trace?.finish(.cancelled)
+                    guard self.isCurrentAccount(accountLease), !Task.isCancelled, self.binding == binding else { trace?.finish(.cancelled)
                         return
                     }
                     if verified.kind == .episode {
@@ -962,7 +1017,9 @@ public final class KidsAppModel: ObservableObject, KidsPlaybackSessionDelegate {
                         delegate: self,
                         performance: trace, simulateStreamFailure: simulateStreamFailure
                     )
-                    guard !Task.isCancelled, self.binding == binding, self.startGeneration == generation else { await controller.stop()
+                    guard self.isCurrentAccount(accountLease), !Task.isCancelled, self.binding == binding,
+                          self.startGeneration == generation
+                    else { await controller.stop()
                         trace?.finish(.cancelled)
                         return
                     }
@@ -971,7 +1028,8 @@ public final class KidsAppModel: ObservableObject, KidsPlaybackSessionDelegate {
                     controller.start()
                 } catch {
                     trace?.finish(error: error)
-                    guard !Task.isCancelled, self.startGeneration == generation, self.binding == binding else { return }
+                    guard self.isCurrentAccount(accountLease), !Task.isCancelled, self.startGeneration == generation,
+                          self.binding == binding else { return }
                     if (error as? KidsContractError) ==
                         .missingCursor
                     {
@@ -997,14 +1055,20 @@ public final class KidsAppModel: ObservableObject, KidsPlaybackSessionDelegate {
     }
 
     public func stopPlayback(endSession: Bool = true) async {
-        startGeneration = UUID()
+        let generation = UUID()
+        startGeneration = generation
         startTask?.cancel()
         startTask = nil
         starting = false
-        if let playback = activePlayback {
+        let playback = activePlayback
+        let accountLease = playback == nil ? accountScope?.capture() : activePlaybackLease
+        let originalBinding = binding
+        if let playback {
             await playback.stop()
         }
+        guard startGeneration == generation, activePlayback === playback else { return }
         activePlayback = nil
+        guard isCurrentAccount(accountLease), binding == originalBinding else { return }
         if endSession {
             state?.endSession()
         }
@@ -1025,23 +1089,25 @@ public final class KidsAppModel: ObservableObject, KidsPlaybackSessionDelegate {
     }
 
     public func playbackBegan(_ controller: KidsPlaybackController) {
-        guard activePlayback === controller else { return }
+        guard isCurrentPlayback(controller) else { return }
         do { try state?.began(item: controller.item, mode: controller.mode, showID: controller.title.id)
             lastPlayback = .now
             persist(intent: .playback)
-        } catch { Task { await stopPlayback() }
+        } catch { Task { await dismissPlayback(controller) }
             show(error)
         }
     }
 
     public func playbackCheckpoint(_ controller: KidsPlaybackController, seconds: Double) {
-        guard activePlayback === controller, controller.allowsCheckpoints else { return }
+        guard isCurrentPlayback(controller), controller.allowsCheckpoints else { return }
         state?.checkpoint(item: controller.item, mode: controller.mode, seconds: seconds)
         persist(intent: .playback)
     }
 
     public func completed(_ controller: KidsPlaybackController) async {
-        guard activePlayback === controller, controller.allowsCheckpoints else { return }
+        guard isCurrentPlayback(controller), controller.allowsCheckpoints else { return }
+        let accountLease = activePlaybackLease
+        let originalBinding = binding
         do {
             let more = try state?.finished(item: controller.item, mode: controller.mode, episodes: controller.episodes) ?? false
             if !more {
@@ -1058,6 +1124,7 @@ public final class KidsAppModel: ObservableObject, KidsPlaybackSessionDelegate {
                 persist(intent: .playback)
             }
             await controller.stop()
+            guard isCurrentPlayback(controller) else { return }
             if !more {
                 activePlayback = nil
                 sessionFinished = controller.mode == .ordered || controller.mode == .shuffle
@@ -1066,37 +1133,40 @@ public final class KidsAppModel: ObservableObject, KidsPlaybackSessionDelegate {
                 }
             }
         } catch { await stopPlayback()
+            guard isCurrentAccount(accountLease), binding == originalBinding else { return }
             show(error)
         }
     }
 
     public func continuePlayback(_ controller: KidsPlaybackController) async {
-        guard activePlayback === controller else { return }
+        guard isCurrentPlayback(controller) else { return }
         activePlayback = nil
         play(controller.title, mode: controller.mode, continuing: true)
     }
 
-    public func stopPlaybackFromSession() async {
+    public func stopPlaybackFromSession(_ controller: KidsPlaybackController) async {
+        guard activePlayback === controller else { return }
         await stopPlayback()
     }
 
     public func retryPlayback(_ controller: KidsPlaybackController, position: Double) {
-        guard activePlayback === controller else { return }
+        guard isCurrentPlayback(controller) else { return }
         activePlayback = nil
         play(controller.title, mode: controller.mode, retryItem: controller.item, retryPosition: position, continuing: true)
     }
 
     public func playbackFailed(_ controller: KidsPlaybackController, error: KidsPlaybackFailure) {
-        guard activePlayback === controller else { return }
+        guard isCurrentPlayback(controller) else { return }
         if error == .authentication {
             show(KidsAPIError.authentication)
             return
         }
         Task { [weak self, weak controller] in
-            guard let self, let controller, let api = self.api, let binding = self.binding else { return }
+            guard let self, let controller, self.isCurrentPlayback(controller), let api = self.api,
+                  let binding = self.binding else { return }
             do { try await api.validate(binding) }
             catch {
-                guard self.activePlayback === controller, self.binding == binding else { return }
+                guard self.isCurrentPlayback(controller), self.binding == binding else { return }
                 if let failure = error as? KidsAPIError, [.authentication, .policy, .libraryChanged].contains(failure) {
                     self.show(failure)
                 }
