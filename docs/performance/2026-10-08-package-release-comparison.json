@@ -1,0 +1,1273 @@
+{
+  "bandwidth_network_observations": [
+    {
+      "historical": {
+        "excluded_negative": 0,
+        "max_ms": 48.709,
+        "median_ms": 44.127,
+        "min_ms": 33.241,
+        "n": 7,
+        "p95_ms": 48.709
+      },
+      "metric": "task_ms",
+      "release85": {
+        "excluded_negative": 0,
+        "max_ms": 665.966,
+        "median_ms": 584.397,
+        "min_ms": 278.918,
+        "n": 7,
+        "p95_ms": 665.966
+      },
+      "release86": {
+        "excluded_negative": 0,
+        "max_ms": 340.287,
+        "median_ms": 300.17,
+        "min_ms": 181.476,
+        "n": 7,
+        "p95_ms": 340.287
+      }
+    },
+    {
+      "historical": {
+        "excluded_negative": 0,
+        "max_ms": 14.466,
+        "median_ms": 12.018,
+        "min_ms": 9.186,
+        "n": 7,
+        "p95_ms": 14.466
+      },
+      "metric": "transfer_ms",
+      "release85": {
+        "excluded_negative": 0,
+        "max_ms": 538.645,
+        "median_ms": 498.005,
+        "min_ms": 241.569,
+        "n": 7,
+        "p95_ms": 538.645
+      },
+      "release86": {
+        "excluded_negative": 0,
+        "max_ms": 308.207,
+        "median_ms": 277.274,
+        "min_ms": 138.094,
+        "n": 7,
+        "p95_ms": 308.207
+      }
+    },
+    {
+      "historical": {
+        "excluded_negative": 0,
+        "max_ms": 34.277,
+        "median_ms": 29.336,
+        "min_ms": 22.389,
+        "n": 7,
+        "p95_ms": 34.277
+      },
+      "metric": "ttfb_ms",
+      "release85": {
+        "excluded_negative": 0,
+        "max_ms": 127.008,
+        "median_ms": 44.838,
+        "min_ms": 26.663,
+        "n": 7,
+        "p95_ms": 127.008
+      },
+      "release86": {
+        "excluded_negative": 0,
+        "max_ms": 50.449,
+        "median_ms": 28.776,
+        "min_ms": 18.645,
+        "n": 7,
+        "p95_ms": 50.449
+      }
+    },
+    {
+      "historical": {
+        "excluded_negative": 0,
+        "max_ms": 0.842,
+        "median_ms": 0.541,
+        "min_ms": 0.388,
+        "n": 7,
+        "p95_ms": 0.842
+      },
+      "metric": "pre_request_ms",
+      "release85": {
+        "excluded_negative": 0,
+        "max_ms": 1.025,
+        "median_ms": 0.46,
+        "min_ms": 0.365,
+        "n": 7,
+        "p95_ms": 1.025
+      },
+      "release86": {
+        "excluded_negative": 0,
+        "max_ms": 0.821,
+        "median_ms": 0.501,
+        "min_ms": 0.333,
+        "n": 7,
+        "p95_ms": 0.821
+      }
+    }
+  ],
+  "candidate": {
+    "base_commit": "d431ccf1a534c90fb8a2b1f384b6663b1937f960",
+    "compiler_evidence": {
+      "debug_define": false,
+      "enable_testing": true,
+      "line": 10632,
+      "log": "/private/tmp/kids-resumed-tvos-release-84-retry.log",
+      "module": "Swiftfin",
+      "optimization": "-O"
+    },
+    "configuration": "Release",
+    "executable_sha256": "86651095246a5ab2b0966cd67c83f15c7c8c80722b4a814fa61f39a261159317",
+    "installed_hash_observations": {
+      "release85": [
+        {
+          "method": "explicit_preinstall",
+          "sha256": "86651095246a5ab2b0966cd67c83f15c7c8c80722b4a814fa61f39a261159317",
+          "unix_ms": 1791472324324
+        },
+        {
+          "method": "testProfileEpisodeAndShuffleStarts",
+          "sha256": "86651095246a5ab2b0966cd67c83f15c7c8c80722b4a814fa61f39a261159317",
+          "unix_ms": 1791472326430
+        },
+        {
+          "method": "testProfileMovieStarts",
+          "sha256": "86651095246a5ab2b0966cd67c83f15c7c8c80722b4a814fa61f39a261159317",
+          "unix_ms": 1791472369883
+        },
+        {
+          "method": "after_test_run",
+          "sha256": "86651095246a5ab2b0966cd67c83f15c7c8c80722b4a814fa61f39a261159317",
+          "unix_ms": 1791472426718
+        }
+      ],
+      "release86": [
+        {
+          "method": "explicit_preinstall",
+          "sha256": "86651095246a5ab2b0966cd67c83f15c7c8c80722b4a814fa61f39a261159317",
+          "unix_ms": 1791472889880
+        },
+        {
+          "method": "testProfileEpisodeAndShuffleStarts",
+          "sha256": "86651095246a5ab2b0966cd67c83f15c7c8c80722b4a814fa61f39a261159317",
+          "unix_ms": 1791472892047
+        },
+        {
+          "method": "testProfileMovieStarts",
+          "sha256": "86651095246a5ab2b0966cd67c83f15c7c8c80722b4a814fa61f39a261159317",
+          "unix_ms": 1791472935252
+        },
+        {
+          "method": "after_test_run",
+          "sha256": "86651095246a5ab2b0966cd67c83f15c7c8c80722b4a814fa61f39a261159317",
+          "unix_ms": 1791472990047
+        }
+      ]
+    },
+    "probe_revision": 12,
+    "successful_build_evidence": {
+      "enable_testability": true,
+      "errors": 0,
+      "excluded_test_source": "KidsApplicationBoundaryTests.swift",
+      "line": 5143,
+      "log": "/private/tmp/kids-resumed-tvos-release-84-final.log",
+      "reason": "Uses DEBUG-only preview APIs; fixture separately passed in Debug acceptance89."
+    },
+    "worktree_candidate": true
+  },
+  "catalog_startup_markers": {
+    "classification": "All markers are brief unknown/empty catalog outcomes before HTTP, followed by successful catalogs. Release86 adds a second such marker at line5 of its episode launch; no exact unavailable guard condition is exposed.",
+    "release85": [
+      {
+        "elapsed_ms": 0.133625,
+        "file": "build/validation/performance-release-resumed-85/9F95C1D8-A887-4096-A7C5-1D3CA28C3EDF.jsonl",
+        "first_http_after_failure_ms": 68.487,
+        "later_shows_catalog_success": true,
+        "line": 3,
+        "values_empty": true,
+        "variant": "unknown"
+      },
+      {
+        "elapsed_ms": 0.130958,
+        "file": "build/validation/performance-release-resumed-85/A5CBD32A-DC45-4B3E-9AF9-9040E4EB2339.jsonl",
+        "first_http_after_failure_ms": 71.683,
+        "later_shows_catalog_success": true,
+        "line": 3,
+        "values_empty": true,
+        "variant": "unknown"
+      }
+    ],
+    "release86": [
+      {
+        "elapsed_ms": 0.156584,
+        "file": "build/validation/performance-release-resumed-86/12F1B0AD-B215-417D-B4E3-844555A35B28.jsonl",
+        "first_http_after_failure_ms": 73.02,
+        "later_shows_catalog_success": true,
+        "line": 3,
+        "values_empty": true,
+        "variant": "unknown"
+      },
+      {
+        "elapsed_ms": 0.146292,
+        "file": "build/validation/performance-release-resumed-86/671BE9BB-F92E-464B-B9AA-C35318742309.jsonl",
+        "first_http_after_failure_ms": 73.385,
+        "later_shows_catalog_success": true,
+        "line": 3,
+        "values_empty": true,
+        "variant": "unknown"
+      },
+      {
+        "elapsed_ms": 0.079333,
+        "file": "build/validation/performance-release-resumed-86/671BE9BB-F92E-464B-B9AA-C35318742309.jsonl",
+        "first_http_after_failure_ms": 19.678,
+        "later_shows_catalog_success": true,
+        "line": 5,
+        "values_empty": true,
+        "variant": "unknown"
+      }
+    ]
+  },
+  "comparisons": [
+    {
+      "historical": {
+        "max_ms": 1176.929,
+        "median_ms": 1067.635,
+        "min_ms": 958.341,
+        "n": 2,
+        "p95_ms": 1176.929
+      },
+      "label": "First Shows ready",
+      "metric": "launch.firstShowsReady",
+      "release85": {
+        "max_ms": 1037.726,
+        "median_ms": 1032.995,
+        "min_ms": 1028.264,
+        "n": 2,
+        "p95_ms": 1037.726
+      },
+      "release85_median_delta_ms": -34.64,
+      "release85_median_delta_percent": -3.245,
+      "release86": {
+        "max_ms": 1357.396,
+        "median_ms": 1259.648,
+        "min_ms": 1161.901,
+        "n": 2,
+        "p95_ms": 1357.396
+      },
+      "release86_median_delta_ms": 192.013,
+      "release86_median_delta_percent": 17.985,
+      "release86_vs_release85_median_delta_ms": 226.653
+    },
+    {
+      "historical": {
+        "max_ms": 1217.742,
+        "median_ms": 1107.161,
+        "min_ms": 996.58,
+        "n": 2,
+        "p95_ms": 1217.742
+      },
+      "label": "First browse",
+      "metric": "launch.browsePresented",
+      "release85": {
+        "max_ms": 1081.139,
+        "median_ms": 1076.669,
+        "min_ms": 1072.2,
+        "n": 2,
+        "p95_ms": 1081.139
+      },
+      "release85_median_delta_ms": -30.492,
+      "release85_median_delta_percent": -2.754,
+      "release86": {
+        "max_ms": 1395.694,
+        "median_ms": 1304.508,
+        "min_ms": 1213.321,
+        "n": 2,
+        "p95_ms": 1395.694
+      },
+      "release86_median_delta_ms": 197.347,
+      "release86_median_delta_percent": 17.825,
+      "release86_vs_release85_median_delta_ms": 227.839
+    },
+    {
+      "historical": {
+        "max_ms": 3335.098,
+        "median_ms": 3185.383,
+        "min_ms": 3035.668,
+        "n": 2,
+        "p95_ms": 3335.098
+      },
+      "label": "Complete catalog",
+      "metric": "launch.catalogReady",
+      "release85": {
+        "max_ms": 2176.994,
+        "median_ms": 2111.679,
+        "min_ms": 2046.364,
+        "n": 2,
+        "p95_ms": 2176.994
+      },
+      "release85_median_delta_ms": -1073.704,
+      "release85_median_delta_percent": -33.707,
+      "release86": {
+        "max_ms": 2027.997,
+        "median_ms": 1971.358,
+        "min_ms": 1914.718,
+        "n": 2,
+        "p95_ms": 2027.997
+      },
+      "release86_median_delta_ms": -1214.025,
+      "release86_median_delta_percent": -38.112,
+      "release86_vs_release85_median_delta_ms": -140.321
+    },
+    {
+      "historical": {
+        "max_ms": 325.784,
+        "median_ms": 123.572,
+        "min_ms": 18.704,
+        "n": 29,
+        "p95_ms": 315.298
+      },
+      "label": "Grid artwork",
+      "metric": "artwork.artworkPresented.grid",
+      "release85": {
+        "max_ms": 426.899,
+        "median_ms": 145.174,
+        "min_ms": 22.845,
+        "n": 29,
+        "p95_ms": 398.661
+      },
+      "release85_median_delta_ms": 21.602,
+      "release85_median_delta_percent": 17.481,
+      "release86": {
+        "max_ms": 260.137,
+        "median_ms": 111.558,
+        "min_ms": 42.127,
+        "n": 29,
+        "p95_ms": 259.539
+      },
+      "release86_median_delta_ms": -12.014,
+      "release86_median_delta_percent": -9.722,
+      "release86_vs_release85_median_delta_ms": -33.616
+    },
+    {
+      "historical": {
+        "max_ms": 21.298,
+        "median_ms": 19.857,
+        "min_ms": 18.704,
+        "n": 7,
+        "p95_ms": 21.298
+      },
+      "label": "Grid artwork: memory",
+      "metric": "artwork.presented.memoryHit.grid",
+      "release85": {
+        "max_ms": 30.736,
+        "median_ms": 26.861,
+        "min_ms": 22.845,
+        "n": 7,
+        "p95_ms": 30.736
+      },
+      "release85_median_delta_ms": 7.004,
+      "release85_median_delta_percent": 35.272,
+      "release86": {
+        "max_ms": 49.427,
+        "median_ms": 45.157,
+        "min_ms": 42.127,
+        "n": 7,
+        "p95_ms": 49.427
+      },
+      "release86_median_delta_ms": 25.3,
+      "release86_median_delta_percent": 127.411,
+      "release86_vs_release85_median_delta_ms": 18.296
+    },
+    {
+      "historical": {
+        "max_ms": 325.784,
+        "median_ms": 192.355,
+        "min_ms": 74.794,
+        "n": 22,
+        "p95_ms": 315.298
+      },
+      "label": "Grid artwork: network",
+      "metric": "artwork.presented.network.grid",
+      "release85": {
+        "max_ms": 426.899,
+        "median_ms": 351.931,
+        "min_ms": 112.493,
+        "n": 22,
+        "p95_ms": 398.661
+      },
+      "release85_median_delta_ms": 159.576,
+      "release85_median_delta_percent": 82.959,
+      "release86": {
+        "max_ms": 260.137,
+        "median_ms": 210.071,
+        "min_ms": 78.703,
+        "n": 22,
+        "p95_ms": 259.539
+      },
+      "release86_median_delta_ms": 17.716,
+      "release86_median_delta_percent": 9.21,
+      "release86_vs_release85_median_delta_ms": -141.86
+    },
+    {
+      "historical": {
+        "max_ms": 1200.345,
+        "median_ms": 1102.9,
+        "min_ms": 1005.455,
+        "n": 2,
+        "p95_ms": 1200.345
+      },
+      "label": "Ordered output",
+      "metric": "playback.firstVideoOutput.ordered",
+      "release85": {
+        "max_ms": 1852.409,
+        "median_ms": 1841.819,
+        "min_ms": 1831.23,
+        "n": 2,
+        "p95_ms": 1852.409
+      },
+      "release85_median_delta_ms": 738.919,
+      "release85_median_delta_percent": 66.998,
+      "release86": {
+        "max_ms": 1448.573,
+        "median_ms": 1402.794,
+        "min_ms": 1357.015,
+        "n": 2,
+        "p95_ms": 1448.573
+      },
+      "release86_median_delta_ms": 299.894,
+      "release86_median_delta_percent": 27.191,
+      "release86_vs_release85_median_delta_ms": -439.025
+    },
+    {
+      "historical": {
+        "max_ms": 815.898,
+        "median_ms": 815.898,
+        "min_ms": 815.898,
+        "n": 1,
+        "p95_ms": 815.898
+      },
+      "label": "Shuffle output",
+      "metric": "playback.firstVideoOutput.shuffle",
+      "release85": {
+        "max_ms": 1495.227,
+        "median_ms": 1495.227,
+        "min_ms": 1495.227,
+        "n": 1,
+        "p95_ms": 1495.227
+      },
+      "release85_median_delta_ms": 679.329,
+      "release85_median_delta_percent": 83.262,
+      "release86": {
+        "max_ms": 1258.372,
+        "median_ms": 1258.372,
+        "min_ms": 1258.372,
+        "n": 1,
+        "p95_ms": 1258.372
+      },
+      "release86_median_delta_ms": 442.474,
+      "release86_median_delta_percent": 54.232,
+      "release86_vs_release85_median_delta_ms": -236.855
+    },
+    {
+      "historical": {
+        "max_ms": 1720.999,
+        "median_ms": 1443.907,
+        "min_ms": 878.24,
+        "n": 4,
+        "p95_ms": 1720.999
+      },
+      "label": "Movie output",
+      "metric": "playback.firstVideoOutput.movie",
+      "release85": {
+        "max_ms": 2235.522,
+        "median_ms": 2008.825,
+        "min_ms": 1909.419,
+        "n": 4,
+        "p95_ms": 2235.522
+      },
+      "release85_median_delta_ms": 564.918,
+      "release85_median_delta_percent": 39.124,
+      "release86": {
+        "max_ms": 2546.529,
+        "median_ms": 1438.417,
+        "min_ms": 1393.355,
+        "n": 4,
+        "p95_ms": 2546.529
+      },
+      "release86_median_delta_ms": -5.49,
+      "release86_median_delta_percent": -0.38,
+      "release86_vs_release85_median_delta_ms": -570.408
+    },
+    {
+      "historical": {
+        "max_ms": 1482.1,
+        "median_ms": 1398.752,
+        "min_ms": 1315.404,
+        "n": 2,
+        "p95_ms": 1482.1
+      },
+      "label": "Ordered surface",
+      "metric": "playback.playerSurfacePresented.ordered",
+      "release85": {
+        "max_ms": 2181.204,
+        "median_ms": 2148.142,
+        "min_ms": 2115.08,
+        "n": 2,
+        "p95_ms": 2181.204
+      },
+      "release85_median_delta_ms": 749.39,
+      "release85_median_delta_percent": 53.576,
+      "release86": {
+        "max_ms": 1615.063,
+        "median_ms": 1614.91,
+        "min_ms": 1614.757,
+        "n": 2,
+        "p95_ms": 1615.063
+      },
+      "release86_median_delta_ms": 216.158,
+      "release86_median_delta_percent": 15.454,
+      "release86_vs_release85_median_delta_ms": -533.232
+    },
+    {
+      "historical": {
+        "max_ms": 1082.019,
+        "median_ms": 1082.019,
+        "min_ms": 1082.019,
+        "n": 1,
+        "p95_ms": 1082.019
+      },
+      "label": "Shuffle surface",
+      "metric": "playback.playerSurfacePresented.shuffle",
+      "release85": {
+        "max_ms": 1631.607,
+        "median_ms": 1631.607,
+        "min_ms": 1631.607,
+        "n": 1,
+        "p95_ms": 1631.607
+      },
+      "release85_median_delta_ms": 549.588,
+      "release85_median_delta_percent": 50.793,
+      "release86": {
+        "max_ms": 1532.263,
+        "median_ms": 1532.263,
+        "min_ms": 1532.263,
+        "n": 1,
+        "p95_ms": 1532.263
+      },
+      "release86_median_delta_ms": 450.244,
+      "release86_median_delta_percent": 41.611,
+      "release86_vs_release85_median_delta_ms": -99.344
+    },
+    {
+      "historical": {
+        "max_ms": 1882.191,
+        "median_ms": 1524.761,
+        "min_ms": 1365.883,
+        "n": 4,
+        "p95_ms": 1882.191
+      },
+      "label": "Movie surface",
+      "metric": "playback.playerSurfacePresented.movie",
+      "release85": {
+        "max_ms": 2763.73,
+        "median_ms": 2505.99,
+        "min_ms": 2281.361,
+        "n": 4,
+        "p95_ms": 2763.73
+      },
+      "release85_median_delta_ms": 981.229,
+      "release85_median_delta_percent": 64.353,
+      "release86": {
+        "max_ms": 3063.828,
+        "median_ms": 1756.276,
+        "min_ms": 1480.896,
+        "n": 4,
+        "p95_ms": 3063.828
+      },
+      "release86_median_delta_ms": 231.515,
+      "release86_median_delta_percent": 15.184,
+      "release86_vs_release85_median_delta_ms": -749.714
+    },
+    {
+      "historical": {
+        "max_ms": 50.475,
+        "median_ms": 44.747,
+        "min_ms": 33.847,
+        "n": 7,
+        "p95_ms": 50.475
+      },
+      "label": "Bandwidth operation",
+      "metric": "operation.bitrate",
+      "release85": {
+        "max_ms": 668.791,
+        "median_ms": 588.436,
+        "min_ms": 281.566,
+        "n": 7,
+        "p95_ms": 668.791
+      },
+      "release85_median_delta_ms": 543.689,
+      "release85_median_delta_percent": 1215.029,
+      "release86": {
+        "max_ms": 344.29,
+        "median_ms": 302.498,
+        "min_ms": 184.227,
+        "n": 7,
+        "p95_ms": 344.29
+      },
+      "release86_median_delta_ms": 257.751,
+      "release86_median_delta_percent": 576.019,
+      "release86_vs_release85_median_delta_ms": -285.938
+    },
+    {
+      "historical": {
+        "max_ms": 72.445,
+        "median_ms": 64.858,
+        "min_ms": 56.772,
+        "n": 7,
+        "p95_ms": 72.445
+      },
+      "label": "Native drain",
+      "metric": "operation.playerDrain",
+      "release85": {
+        "max_ms": 74.908,
+        "median_ms": 62.14,
+        "min_ms": 49.957,
+        "n": 7,
+        "p95_ms": 74.908
+      },
+      "release85_median_delta_ms": -2.718,
+      "release85_median_delta_percent": -4.191,
+      "release86": {
+        "max_ms": 72.721,
+        "median_ms": 52.718,
+        "min_ms": 41.228,
+        "n": 7,
+        "p95_ms": 72.721
+      },
+      "release86_median_delta_ms": -12.14,
+      "release86_median_delta_percent": -18.718,
+      "release86_vs_release85_median_delta_ms": -9.422
+    }
+  ],
+  "component_observations": [
+    {
+      "historical_median_ms": 135.3,
+      "metric": "playback.component.provider.ordered",
+      "release85_median_ms": 581.831,
+      "release86_median_ms": 399.315
+    },
+    {
+      "historical_median_ms": 117.664,
+      "metric": "playback.component.provider.movie",
+      "release85_median_ms": 702.384,
+      "release86_median_ms": 374.664
+    },
+    {
+      "historical_median_ms": 392.42,
+      "metric": "playback.component.openToVideoOutput.ordered",
+      "release85_median_ms": 658.788,
+      "release86_median_ms": 609.826
+    },
+    {
+      "historical_median_ms": 784.996,
+      "metric": "playback.component.openToVideoOutput.movie",
+      "release85_median_ms": 1022.835,
+      "release86_median_ms": 765.111
+    },
+    {
+      "historical_median_ms": 148.745,
+      "metric": "playback.component.outputToSurface.movie",
+      "release85_median_ms": 497.164,
+      "release86_median_ms": 319.639
+    }
+  ],
+  "date": "2026-10-08",
+  "historical_baseline": "docs/performance/2026-10-05-swift6-final-12.json",
+  "interpretation": {
+    "component_observations": "Quiet 86 provider medians ordered 399.315/movie 374.664 ms versus 135.300/117.664 ms historical; open-to-output ordered 609.826 versus 392.420 ms and movie 765.111 versus 784.996 ms; movie output-to-surface319.639 versus 148.745 ms.",
+    "decomposition_limit": "Per-sample 86 probe durations are linked by parent trace to each playback and consume 184.227\u2013344.290 ms of 267.507\u2013455.939 ms provider work. Separate metric medians do not add into a causal regression explanation.",
+    "functional_result": "Both runs passed their exact two methods and seven real H264 direct starts; full state restoration passed.",
+    "launch_artwork_drain": "Quiet 86 Shows/browse were approximately 18% slower; complete catalog faster; overall grid-artwork median/P95 lower, network grid-artwork median 9.2% higher, memory-grid presentation25.300 ms higher; native drain lower.",
+    "measured_opportunity": "The repeated 8 MiB selected-item bandwidth probe occupies roughly 0.18\u20130.34 s per quiet86 start and is a measured investigation target. No source change, cache integration or removal of fresh authorization is justified by these observations alone.",
+    "measured_probe_change": "Same 8 MiB payload: bandwidth operation medians 44.747/588.436/302.498 ms for historical/85/86. Quiet 86 transfer median 277.274 ms versus 12.018 ms historical, with comparable first-byte/pre-request medians.",
+    "observed_startup_change": "Quiet 86 ordered output remained +299.894 ms (+27.2%) and Shuffle +442.474 ms (+54.2%) versus probe 12. Movie median returned within5.490 ms of historical, but its maximum was 2546.529 ms versus 1720.999 ms.",
+    "preservation_conclusion": "Functional acceptance passed; unchanged timing is not established. Ordered/Shuffle and repeated probe slowdowns persisted in the single quiet repeat; the85 movie median slowdown did not.",
+    "statistical_claim": "None; samples are small, workload/network/cache conditions differ, runs are not pooled, and results do not establish sustained percentiles, causal regression or speedup."
+  },
+  "limits": [
+    "No cache purge or mechanical-disk seek isolation.",
+    "Same selectors and start/profile/cache counts, but ancillary HTTP/ancestry work differs and subsequent resumed positions drift slightly.",
+    "First output is sampled native displayed-picture readiness; surface is a presentation opportunity, not a GPU fence.",
+    "AVI compatibility acceptance is separate and excluded from this H264 timing distribution.",
+    "Release85 does not supersede the earlier aborted Release84 installation-mismatch trial, which remains failure evidence.",
+    "Release85 and86 are retained separately; the single quiet repeat does not control historical transport, server/disk/cache state or all ancillary catalog work."
+  ],
+  "network_context": {
+    "built_in_ethernet_active": false,
+    "collisions": 0,
+    "current_interface_active": true,
+    "current_mtu": 1500,
+    "current_server_route_interface": "en1",
+    "current_transport": "Wi-Fi",
+    "evidence": "build/validation/resumed-network-context.json",
+    "historical_oct05_route_independently_verified": false,
+    "input_errors": 0,
+    "interpretation": "Snapshots showed no ongoing saturation or leftover transcoder after85. They cannot attribute earlier or86 timings or establish end-to-end capacity; no historical Ethernet claim.",
+    "local_observed_utc": "2026-10-08T15:18:56Z to 15:20Z",
+    "output_errors": 0,
+    "scope": "Read-only snapshots after profile85; they do not attribute earlier timing increases or establish end-to-end capacity.",
+    "server_observation": {
+      "ffmpeg_processes": 0,
+      "free_internal_gib": 54.79,
+      "interval_cpu_idle_percent_approx": 95,
+      "interval_internal_disk_mbs_approx": 0.06,
+      "jellyfin_cpu_percent_approx": 1.2,
+      "jellyfin_processes": 1,
+      "jellyfin_rss_mib_approx": 214,
+      "memory_pressure_level": 1,
+      "now_playing": 0,
+      "other_reported_disk_mbs": 0,
+      "raid_denial_passed": true,
+      "service_or_policy_changes": false,
+      "source_writes": 0
+    },
+    "server_observed_utc": "2026-10-08T15:18:38Z to 15:19:04Z",
+    "server_route_limit": "Reported active 10G server route was to the previous client address, not proof of the current complete path."
+  },
+  "release86_playback_samples": [
+    {
+      "authorization_ms": 98.9,
+      "bandwidth_operation_ms": 344.29,
+      "controllerPreparation_ms": 62.4,
+      "decoded_video": 35,
+      "displayed_pictures": 1,
+      "firstClock_ms": 1702.153,
+      "firstVideoOutput_ms": 1439.135,
+      "lost_pictures": 0,
+      "openToVideoOutput_ms": 794.964,
+      "outputToSurface_ms": 558.085,
+      "playerSurfacePresented_ms": 1997.22,
+      "provider_minus_bandwidth_ms": 111.649,
+      "provider_ms": 455.939,
+      "resume_pending": 0,
+      "resume_seconds": 181.405,
+      "sample": "Movie 1",
+      "viewAndOpen_ms": 14.937
+    },
+    {
+      "authorization_ms": 396.773,
+      "bandwidth_operation_ms": 184.227,
+      "controllerPreparation_ms": 43.904,
+      "decoded_video": 12,
+      "displayed_pictures": 6,
+      "firstClock_ms": 1393.248,
+      "firstVideoOutput_ms": 1393.355,
+      "lost_pictures": 0,
+      "openToVideoOutput_ms": 577.242,
+      "outputToSurface_ms": 121.978,
+      "playerSurfacePresented_ms": 1515.333,
+      "provider_minus_bandwidth_ms": 175.172,
+      "provider_ms": 359.399,
+      "resume_pending": 0,
+      "resume_seconds": 184.257,
+      "sample": "Movie 2",
+      "viewAndOpen_ms": 8.843
+    },
+    {
+      "authorization_ms": 385.622,
+      "bandwidth_operation_ms": 203.125,
+      "controllerPreparation_ms": 35.982,
+      "decoded_video": 15,
+      "displayed_pictures": 5,
+      "firstClock_ms": 1417.893,
+      "firstVideoOutput_ms": 1437.699,
+      "lost_pictures": 0,
+      "openToVideoOutput_ms": 735.258,
+      "outputToSurface_ms": 43.196,
+      "playerSurfacePresented_ms": 1480.896,
+      "provider_minus_bandwidth_ms": 64.382,
+      "provider_ms": 267.507,
+      "resume_pending": 0,
+      "resume_seconds": 187.379,
+      "sample": "Movie 3",
+      "viewAndOpen_ms": 6.03
+    },
+    {
+      "authorization_ms": 418.245,
+      "bandwidth_operation_ms": 329.234,
+      "controllerPreparation_ms": 41.851,
+      "decoded_video": 27,
+      "displayed_pictures": 1,
+      "firstClock_ms": 2779.547,
+      "firstVideoOutput_ms": 2546.529,
+      "lost_pictures": 0,
+      "openToVideoOutput_ms": 1683.6,
+      "outputToSurface_ms": 517.3,
+      "playerSurfacePresented_ms": 3063.828,
+      "provider_minus_bandwidth_ms": 60.696,
+      "provider_ms": 389.93,
+      "resume_pending": 0,
+      "resume_seconds": 190.218,
+      "sample": "Movie 4",
+      "viewAndOpen_ms": 4.897
+    },
+    {
+      "authorization_ms": 118.127,
+      "bandwidth_operation_ms": 334.681,
+      "controllerPreparation_ms": 84.301,
+      "decoded_video": 10,
+      "displayed_pictures": 5,
+      "firstClock_ms": 1316.904,
+      "firstVideoOutput_ms": 1357.015,
+      "lost_pictures": 0,
+      "openToVideoOutput_ms": 692.91,
+      "outputToSurface_ms": 258.048,
+      "playerSurfacePresented_ms": 1615.063,
+      "provider_minus_bandwidth_ms": 99.51,
+      "provider_ms": 434.191,
+      "resume_pending": 0,
+      "resume_seconds": 113.694,
+      "sample": "Ordered 1",
+      "viewAndOpen_ms": 12.295
+    },
+    {
+      "authorization_ms": 509.298,
+      "bandwidth_operation_ms": 302.498,
+      "controllerPreparation_ms": 32.265,
+      "decoded_video": 18,
+      "displayed_pictures": 6,
+      "firstClock_ms": 1432.422,
+      "firstVideoOutput_ms": 1448.573,
+      "lost_pictures": 0,
+      "openToVideoOutput_ms": 526.742,
+      "outputToSurface_ms": 166.184,
+      "playerSurfacePresented_ms": 1614.757,
+      "provider_minus_bandwidth_ms": 61.94,
+      "provider_ms": 364.438,
+      "resume_pending": 0,
+      "resume_seconds": 116.798,
+      "sample": "Ordered 2",
+      "viewAndOpen_ms": 3.93
+    },
+    {
+      "authorization_ms": 429.066,
+      "bandwidth_operation_ms": 256.769,
+      "controllerPreparation_ms": 29.062,
+      "decoded_video": 9,
+      "displayed_pictures": 8,
+      "firstClock_ms": 1250.952,
+      "firstVideoOutput_ms": 1258.372,
+      "lost_pictures": 0,
+      "openToVideoOutput_ms": 475.814,
+      "outputToSurface_ms": 273.891,
+      "playerSurfacePresented_ms": 1532.263,
+      "provider_minus_bandwidth_ms": 52.013,
+      "provider_ms": 308.782,
+      "resume_pending": 0,
+      "resume_seconds": 0,
+      "sample": "Shuffle 1",
+      "viewAndOpen_ms": 5.065
+    }
+  ],
+  "runs": {
+    "release85": {
+      "artifacts": {
+        "build-manifest": "build/validation/performance-release-resumed-85/build-manifest.json",
+        "restore-verification": "build/validation/performance-release-resumed-85/restore-verification.json",
+        "summary": "build/validation/performance-release-resumed-85/summary.json",
+        "xcresult-summary": "build/validation/performance-release-resumed-85/xcresult-summary.json"
+      },
+      "cancellations": {
+        "episodeCache": 1,
+        "prefetch": 1
+      },
+      "events": 4701,
+      "failures": {
+        "catalog": 2
+      },
+      "files": 2,
+      "full_sdk_export_equal_original85": true,
+      "incomplete_spans": {
+        "ancestry": 1,
+        "catalog": 2,
+        "http": 8,
+        "launch": 2
+      },
+      "malformed_lines": 0,
+      "original85_and_restored85_equal_original80": true,
+      "selectors": [
+        "KidsUITests/KidsPerformanceTests/testProfileEpisodeAndShuffleStarts",
+        "KidsUITests/KidsPerformanceTests/testProfileMovieStarts"
+      ],
+      "state_evidence": [
+        "build/validation/release-resumed-85-original.json",
+        "build/validation/release-resumed-85-restored.json",
+        "build/validation/packages-original-session-80.json"
+      ],
+      "validated_start_counts": {
+        "movie": 4,
+        "ordered": 2,
+        "shuffle": 1
+      },
+      "xcresult": {
+        "failedTests": 0,
+        "passedTests": 2,
+        "result": "Passed",
+        "skippedTests": 0,
+        "totalTestCount": 2
+      }
+    },
+    "release86": {
+      "artifacts": {
+        "build-manifest": "build/validation/performance-release-resumed-86/build-manifest.json",
+        "restore-verification": "build/validation/performance-release-resumed-86/restore-verification.json",
+        "summary": "build/validation/performance-release-resumed-86/summary.json",
+        "xcresult-summary": "build/validation/performance-release-resumed-86/xcresult-summary.json"
+      },
+      "cancellations": {
+        "episodeCache": 1,
+        "prefetch": 1
+      },
+      "events": 5099,
+      "failures": {
+        "catalog": 3
+      },
+      "files": 2,
+      "full_sdk_export_equal_original86": true,
+      "incomplete_spans": {
+        "ancestry": 1,
+        "catalog": 2,
+        "http": 8,
+        "launch": 2
+      },
+      "malformed_lines": 0,
+      "original86_and_restored86_equal_original80": true,
+      "quiet_conditions": {
+        "cache_purge": false,
+        "concurrent_client_builds": false,
+        "concurrent_observer": false,
+        "same_binary": true,
+        "source": "Runtime owner controlled execution",
+        "source_or_server_configuration_changes": false
+      },
+      "selectors": [
+        "KidsUITests/KidsPerformanceTests/testProfileEpisodeAndShuffleStarts",
+        "KidsUITests/KidsPerformanceTests/testProfileMovieStarts"
+      ],
+      "state_evidence": [
+        "build/validation/release-resumed-86-original.json",
+        "build/validation/release-resumed-86-restored.json",
+        "build/validation/packages-original-session-80.json"
+      ],
+      "validated_start_counts": {
+        "movie": 4,
+        "ordered": 2,
+        "shuffle": 1
+      },
+      "xcresult": {
+        "failedTests": 0,
+        "passedTests": 2,
+        "result": "Passed",
+        "skippedTests": 0,
+        "totalTestCount": 2
+      }
+    }
+  },
+  "schema_version": 2,
+  "status": "Complete: Release85 and one quiet same-binary Release86 retained; no further sampling.",
+  "workload": {
+    "ancestry_network_transactions": {
+      "historical": 445,
+      "release85": 561,
+      "release86": 627
+    },
+    "artwork_sources_each": {
+      "memoryHit": 9,
+      "network": 22
+    },
+    "bandwidth_samples_each": 7,
+    "episode_list_network_transactions": {
+      "historical": 1,
+      "release85": 2,
+      "release86": 2
+    },
+    "grid_artwork_presentations_each": 29,
+    "grid_memory_presentations_each": 7,
+    "grid_network_presentations_each": 22,
+    "h264_direct_starts_only": true,
+    "http200_transactions": {
+      "historical": 515,
+      "release85": 636,
+      "release86": 702
+    },
+    "launches_each": 2,
+    "profiles": {
+      "historical": [
+        {
+          "ancestor_http_count": 1,
+          "bit_depth": 8,
+          "height": 802,
+          "instrumented_http_count": 6,
+          "mode": "movie",
+          "resume_seconds": 181.405,
+          "video_bitrate": 14794025,
+          "video_codec": 1,
+          "video_fps": 23.976024627685547,
+          "width": 1920
+        },
+        {
+          "ancestor_http_count": 1,
+          "bit_depth": 8,
+          "height": 802,
+          "instrumented_http_count": 6,
+          "mode": "movie",
+          "resume_seconds": 184.798,
+          "video_bitrate": 14794025,
+          "video_codec": 1,
+          "video_fps": 23.976024627685547,
+          "width": 1920
+        },
+        {
+          "ancestor_http_count": 1,
+          "bit_depth": 8,
+          "height": 802,
+          "instrumented_http_count": 6,
+          "mode": "movie",
+          "resume_seconds": 188.307,
+          "video_bitrate": 14794025,
+          "video_codec": 1,
+          "video_fps": 23.976024627685547,
+          "width": 1920
+        },
+        {
+          "ancestor_http_count": 1,
+          "bit_depth": 8,
+          "height": 802,
+          "instrumented_http_count": 6,
+          "mode": "movie",
+          "resume_seconds": 190.978,
+          "video_bitrate": 14794025,
+          "video_codec": 1,
+          "video_fps": 23.976024627685547,
+          "width": 1920
+        },
+        {
+          "ancestor_http_count": 1,
+          "bit_depth": 8,
+          "height": 384,
+          "instrumented_http_count": 6,
+          "mode": "ordered",
+          "resume_seconds": 113.694,
+          "video_bitrate": 632373,
+          "video_codec": 1,
+          "video_fps": 23.976024627685547,
+          "width": 510
+        },
+        {
+          "ancestor_http_count": 1,
+          "bit_depth": 8,
+          "height": 384,
+          "instrumented_http_count": 6,
+          "mode": "ordered",
+          "resume_seconds": 116.319,
+          "video_bitrate": 632373,
+          "video_codec": 1,
+          "video_fps": 23.976024627685547,
+          "width": 510
+        },
+        {
+          "ancestor_http_count": 1,
+          "bit_depth": 8,
+          "height": 384,
+          "instrumented_http_count": 6,
+          "mode": "shuffle",
+          "resume_seconds": 0,
+          "video_bitrate": 647474,
+          "video_codec": 1,
+          "video_fps": 23.976024627685547,
+          "width": 510
+        }
+      ],
+      "release85": [
+        {
+          "ancestor_http_count": 1,
+          "bit_depth": 8,
+          "height": 802,
+          "instrumented_http_count": 6,
+          "mode": "movie",
+          "resume_seconds": 181.405,
+          "video_bitrate": 14794025,
+          "video_codec": 1,
+          "video_fps": 23.976024627685547,
+          "width": 1920
+        },
+        {
+          "ancestor_http_count": 1,
+          "bit_depth": 8,
+          "height": 802,
+          "instrumented_http_count": 6,
+          "mode": "movie",
+          "resume_seconds": 184.568,
+          "video_bitrate": 14794025,
+          "video_codec": 1,
+          "video_fps": 23.976024627685547,
+          "width": 1920
+        },
+        {
+          "ancestor_http_count": 1,
+          "bit_depth": 8,
+          "height": 802,
+          "instrumented_http_count": 6,
+          "mode": "movie",
+          "resume_seconds": 187.049,
+          "video_bitrate": 14794025,
+          "video_codec": 1,
+          "video_fps": 23.976024627685547,
+          "width": 1920
+        },
+        {
+          "ancestor_http_count": 1,
+          "bit_depth": 8,
+          "height": 802,
+          "instrumented_http_count": 6,
+          "mode": "movie",
+          "resume_seconds": 190.302,
+          "video_bitrate": 14794025,
+          "video_codec": 1,
+          "video_fps": 23.976024627685547,
+          "width": 1920
+        },
+        {
+          "ancestor_http_count": 1,
+          "bit_depth": 8,
+          "height": 384,
+          "instrumented_http_count": 6,
+          "mode": "ordered",
+          "resume_seconds": 113.694,
+          "video_bitrate": 632373,
+          "video_codec": 1,
+          "video_fps": 23.976024627685547,
+          "width": 510
+        },
+        {
+          "ancestor_http_count": 1,
+          "bit_depth": 8,
+          "height": 384,
+          "instrumented_http_count": 6,
+          "mode": "ordered",
+          "resume_seconds": 116.325,
+          "video_bitrate": 632373,
+          "video_codec": 1,
+          "video_fps": 23.976024627685547,
+          "width": 510
+        },
+        {
+          "ancestor_http_count": 1,
+          "bit_depth": 8,
+          "height": 384,
+          "instrumented_http_count": 6,
+          "mode": "shuffle",
+          "resume_seconds": 0,
+          "video_bitrate": 647474,
+          "video_codec": 1,
+          "video_fps": 23.976024627685547,
+          "width": 510
+        }
+      ],
+      "release86": [
+        {
+          "ancestor_http_count": 1,
+          "bit_depth": 8,
+          "height": 802,
+          "instrumented_http_count": 6,
+          "mode": "movie",
+          "resume_seconds": 181.405,
+          "video_bitrate": 14794025,
+          "video_codec": 1,
+          "video_fps": 23.976024627685547,
+          "width": 1920
+        },
+        {
+          "ancestor_http_count": 1,
+          "bit_depth": 8,
+          "height": 802,
+          "instrumented_http_count": 6,
+          "mode": "movie",
+          "resume_seconds": 184.257,
+          "video_bitrate": 14794025,
+          "video_codec": 1,
+          "video_fps": 23.976024627685547,
+          "width": 1920
+        },
+        {
+          "ancestor_http_count": 1,
+          "bit_depth": 8,
+          "height": 802,
+          "instrumented_http_count": 6,
+          "mode": "movie",
+          "resume_seconds": 187.379,
+          "video_bitrate": 14794025,
+          "video_codec": 1,
+          "video_fps": 23.976024627685547,
+          "width": 1920
+        },
+        {
+          "ancestor_http_count": 1,
+          "bit_depth": 8,
+          "height": 802,
+          "instrumented_http_count": 6,
+          "mode": "movie",
+          "resume_seconds": 190.218,
+          "video_bitrate": 14794025,
+          "video_codec": 1,
+          "video_fps": 23.976024627685547,
+          "width": 1920
+        },
+        {
+          "ancestor_http_count": 1,
+          "bit_depth": 8,
+          "height": 384,
+          "instrumented_http_count": 6,
+          "mode": "ordered",
+          "resume_seconds": 113.694,
+          "video_bitrate": 632373,
+          "video_codec": 1,
+          "video_fps": 23.976024627685547,
+          "width": 510
+        },
+        {
+          "ancestor_http_count": 1,
+          "bit_depth": 8,
+          "height": 384,
+          "instrumented_http_count": 6,
+          "mode": "ordered",
+          "resume_seconds": 116.798,
+          "video_bitrate": 632373,
+          "video_codec": 1,
+          "video_fps": 23.976024627685547,
+          "width": 510
+        },
+        {
+          "ancestor_http_count": 1,
+          "bit_depth": 8,
+          "height": 384,
+          "instrumented_http_count": 6,
+          "mode": "shuffle",
+          "resume_seconds": 0,
+          "video_bitrate": 647474,
+          "video_codec": 1,
+          "video_fps": 23.976024627685547,
+          "width": 510
+        }
+      ]
+    },
+    "received_data_bytes_each": 8388608,
+    "received_network_bytes_each": 8388608,
+    "requested_bytes_each": 5000000,
+    "sdk_item_details_and_playback_info_network_transactions_each": 14,
+    "validated_starts_each": 7
+  }
+}

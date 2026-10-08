@@ -13,7 +13,17 @@ import SwiftVLC
 
 @MainActor
 final class SwiftVLCNativeEngine: VLCNativeEngine {
-    private let player = Player()
+    var requiresSurfaceMount: Bool {
+        true
+    }
+
+    private let instance = VLCInstance.shared
+    private let player: Player
+
+    init() {
+        player = Player(instance: instance)
+    }
+
     private var updateTask: Task<Void, Never>?
     var frame: VLCPlaybackFrame {
         var result = VLCPlaybackFrame()
@@ -44,6 +54,17 @@ final class SwiftVLCNativeEngine: VLCNativeEngine {
 
     var subtitleTracks: [VLCSubtitleTrack] {
         player.subtitleTracks.enumerated().map { .init(index: $0.offset, id: $0.element.id) }
+    }
+
+    func startupMeasurements() -> [String: Double] {
+        var values = frame.startupMeasurements
+        values["active_video_outputs"] = Double(player.activeVideoOutputs)
+        if let statistics = player.statistics {
+            values["decoded_audio"] = Double(statistics.decodedAudio)
+            values["played_audio_buffers"] = Double(statistics.playedAudioBuffers)
+            values["lost_audio_buffers"] = Double(statistics.lostAudioBuffers)
+        }
+        return values
     }
 
     func surface(controller: VLCPlaybackController, generation: UUID) -> AnyView {
@@ -154,9 +175,9 @@ final class SwiftVLCNativeEngine: VLCNativeEngine {
         return player.state == .idle
     }
 
-    static func observeDiagnostics(_ performance: KidsPerformanceSpan?) -> Task<Void, Never>? {
+    func observeDiagnostics(_ performance: KidsPerformanceSpan?) -> Task<Void, Never>? {
         guard let performance else { return nil }
-        let logs = VLCInstance.shared.logStream(minimumLevel: .warning)
+        let logs = instance.logStream(minimumLevel: .warning)
         return Task {
             var seen = Set<Int>()
             for await entry in logs {
@@ -184,7 +205,7 @@ final class SwiftVLCNativeEngine: VLCNativeEngine {
         let controller: VLCPlaybackController
         let generation: UUID
         var body: some View {
-            VideoView(player)
+            VLCMountedVideoView(player: player, controller: controller, generation: generation)
                 .onChange(of: player.currentTime) { controller.observed(.clock, generation: generation) }
                 .onChange(of: player.state) { controller.observed(.state, generation: generation) }
                 .onChange(of: player.bufferFill) { controller.observed(.buffer, generation: generation) }

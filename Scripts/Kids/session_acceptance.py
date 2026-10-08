@@ -9,6 +9,7 @@ Progress restoration uses simulator_resume.py's SwiftData SDK tool.
 from pathlib import Path
 import json, os, plistlib, subprocess, sys
 import argparse
+from acceptance_results import AcceptanceResultError, verify_result_bundle
 parser = argparse.ArgumentParser(description="Run frozen-build simulator acceptance and restore all SDK progress.")
 parser.add_argument('--run-number', type=int, required=True)
 parser.add_argument('--device', default='C185BD69-BF46-4520-AC7E-8174AEA534E3')
@@ -36,27 +37,30 @@ state_log=open(f'/private/tmp/kids-packages-session-{number}-state.log','x')
 os.chmod(state_log.name,0o600)
 def state(action,backup,*extra):
     subprocess.run(['python3',str(root/'Scripts/Kids/simulator_resume.py'),action,'--device',device,'--backup',str(backup),*extra],cwd=root,check=True,stdout=state_log,stderr=subprocess.STDOUT)
-def test(name,selectors):
+def test(name,selectors,expected_count):
     cmd=['xcodebuild','test-without-building','-xctestrun',str(run),'-destination',f'platform=tvOS Simulator,id={device}','-parallel-testing-enabled','NO','-collect-test-diagnostics','never','-resultBundlePath',str(root/f'build/validation/Kids-Packages-{name}.xcresult')]
     cmd += ['-only-testing:'+selector for selector in selectors]
     with open('/private/tmp/kids-packages-'+name.lower()+'.log','x') as out:
         os.chmod(out.name,0o600)
         subprocess.run(cmd,cwd=root,check=True,stdout=out,stderr=subprocess.STDOUT)
-    print(name+' passed',flush=True)
+    print(verify_result_bundle(root/f'build/validation/Kids-Packages-{name}.xcresult', expected_count),flush=True)
 state('snapshot',baseline)
 failures=[]
-def checked_test(name, selectors):
-    try: test(name, selectors)
+def checked_test(name, selectors, expected_count):
+    try: test(name, selectors, expected_count)
     except subprocess.CalledProcessError as error:
         failures.append((name,error.returncode))
         print(name+' FAILED with exit '+str(error.returncode),flush=True)
+    except AcceptanceResultError as error:
+        failures.append((name,'invalid evidence'))
+        print(name+' FAILED evidence: '+str(error),flush=True)
 try:
-    checked_test(f'Acceptance-{number}',['KidsUITests/KidsApplicationBoundaryTests','KidsUITests/KidsArtworkBoundaryTests','KidsUITests/KidsNavigationTests','KidsUITests/PreferencesOwnershipTests','KidsUITests/VLCPlaybackOwnershipTests','KidsUITests/NativePlaybackOwnershipTests','KidsUITests/PreviewImageOwnershipTests','KidsUITests/ScrollOwnershipTests','KidsUITests/NowPlayingArtworkOwnershipTests','KidsUITests/ServerImageCacheIdentityTests','KidsNativeTests/CredentialInteropTests']+['KidsUITests/KidsLivePlaybackTests/'+t for t in ['testRealApprovedLegacyMoviePlayback','testRealEpisodePauseSeekAndResumeAfterRelaunch','testRealMoviePauseSeekAndResume','testRealRecoveryClearsCatalogAndPreservesSavedAccount','testRealStreamFailureRetriesExactItem','testRealShufflePlaysEpisode']])
+    checked_test(f'Acceptance-{number}',['KidsUITests/KidsApplicationBoundaryTests','KidsUITests/KidsArtworkBoundaryTests','KidsUITests/KidsNavigationTests','KidsUITests/PreferencesOwnershipTests','KidsUITests/VLCPlaybackOwnershipTests','KidsUITests/NativePlaybackOwnershipTests','KidsUITests/PreviewImageOwnershipTests','KidsUITests/ScrollOwnershipTests','KidsUITests/NowPlayingArtworkOwnershipTests','KidsUITests/ServerImageCacheIdentityTests','KidsNativeTests/CredentialInteropTests']+['KidsUITests/KidsLivePlaybackTests/'+t for t in ['testRealApprovedLegacyMoviePlayback','testRealEpisodePauseSeekAndResumeAfterRelaunch','testRealMoviePauseSeekAndResume','testRealRecoveryClearsCatalogAndPreservesSavedAccount','testRealStreamFailureRetriesExactItem','testRealShufflePlaysEpisode']],90)
     state('restore',baseline)
     state('seed',seedbackup,'--show-id','92835060f3344b9b3b57a281e15b5626','--item-id','1f74938947519192e646194fd9e6b86c','--season','1','--episode','1','--runtime','1353.194','--completed','0')
-    checked_test(f'Natural-{number}',['KidsUITests/KidsLivePlaybackTests/testRealNaturalEpisodeTransition'])
+    checked_test(f'Natural-{number}',['KidsUITests/KidsLivePlaybackTests/testRealNaturalEpisodeTransition'],1)
     state('seed',seedbackup,'--show-id','92835060f3344b9b3b57a281e15b5626','--item-id','4ab00c91031efca8643d24373020a0c5','--season','1','--episode','2','--runtime','1353.898','--completed','1')
-    checked_test(f'Cap-{number}',['KidsUITests/KidsLivePlaybackTests/testRealSessionCapAtNaturalEnd'])
+    checked_test(f'Cap-{number}',['KidsUITests/KidsLivePlaybackTests/testRealSessionCapAtNaturalEnd'],1)
 finally:
     state('restore',baseline)
     state('snapshot',restored)

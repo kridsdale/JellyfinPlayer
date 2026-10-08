@@ -1,6 +1,6 @@
-# Active goal: libraries with minimal responsibilities
+# Completed goal: libraries with minimal responsibilities
 
-Requested by the user on 2026-10-05 and initially queued. It is now the active full-client/package and Swift 6 workstream. See current-goal-status.md and package-refactor.md for current evidence; the complete objective and criteria below remain required.
+Requested on 2026-10-05 and completed on 2026-10-08 within the authorized client scope. The objective and completion criteria below are retained; [current acceptance](resumed-client-acceptance.md) records actual build/runtime/performance evidence and the separately deferred device/cloud/server/release gates.
 
 ## Objective
 

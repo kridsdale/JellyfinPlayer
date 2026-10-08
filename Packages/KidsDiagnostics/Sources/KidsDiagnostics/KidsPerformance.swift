@@ -93,6 +93,7 @@ public enum KidsPerformancePhase: String, Codable, Sendable {
     case controllerReady
     case managerStart
     case providerReady
+    case rendererMounted
     case vlcOpen
     case vlcOpenReturned
     case vlcOpening
@@ -247,6 +248,15 @@ public final class KidsPerformanceSpan: Sendable {
         "displayed_pictures",
         "lost_pictures",
         "resume_pending",
+        "buffer_fraction",
+        "surface_mounted",
+        "surface_width_points",
+        "surface_height_points",
+        "native_state",
+        "active_video_outputs",
+        "decoded_audio",
+        "played_audio_buffers",
+        "lost_audio_buffers",
         "seconds",
         "runtime_seconds",
         "failure_code",

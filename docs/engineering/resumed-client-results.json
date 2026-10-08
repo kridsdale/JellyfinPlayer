@@ -1,0 +1,98 @@
+{
+  "results": {
+    "Acceptance": {
+      "result": "Passed",
+      "totalTestCount": 90,
+      "passedTests": 90,
+      "failedTests": 0,
+      "skippedTests": 0,
+      "expectedFailures": 0,
+      "startTime": 1791470768.285,
+      "finishTime": 1791471158.177
+    },
+    "Natural": {
+      "result": "Passed",
+      "totalTestCount": 1,
+      "passedTests": 1,
+      "failedTests": 0,
+      "skippedTests": 0,
+      "expectedFailures": 0,
+      "startTime": 1791471168.239,
+      "finishTime": 1791471226.233
+    },
+    "Cap": {
+      "result": "Passed",
+      "totalTestCount": 1,
+      "passedTests": 1,
+      "failedTests": 0,
+      "skippedTests": 0,
+      "expectedFailures": 0,
+      "startTime": 1791471230.981,
+      "finishTime": 1791471276.286
+    }
+  },
+  "full_sdk_restored_equal": true,
+  "matches_original_preinstall80": true,
+  "source_inputs_unchanged": true,
+  "compiled_installed_sha256": "74c5bb520b1cef7bcfcd83b3779c950db8c0009c77e69e93229c9b033ab23ffe",
+  "AVI88_visual": "clean readable titlecards at decoded and advancing frames; pause/resume pass",
+  "server_observation": "bounded DirectPlay/max1/cleanup captured; AVI transcode window missed",
+  "scope": "Current tvOS simulator acceptance; compile/performance and deferred device/cloud/server/release gates are recorded separately in resumed-client-acceptance.md.",
+  "runtime_run": 89,
+  "configuration": "Debug",
+  "underlying_native_avi_cause": "Unresolved; accepted exact MPEG-4/AVI source uses existing compatible H264 profile.",
+  "final_compiler_inputs_sha256": "f7d498bf4cdec460ec4359e837d90711dcff83f09b51b2d81da24b71f55f88d7",
+  "release_executable_sha256": "86651095246a5ab2b0966cd67c83f15c7c8c80722b4a814fa61f39a261159317",
+  "release_profile_runs": [
+    {
+      "run": 85,
+      "methods_executed": 2,
+      "methods_passed": 2,
+      "validated_starts": 7,
+      "ordered": 2,
+      "shuffle": 1,
+      "movie": 4,
+      "failed": 0,
+      "skipped": 0,
+      "malformed_trace_lines": 0,
+      "complete_sdk_restoration_equal": true,
+      "matches_original80": true
+    },
+    {
+      "run": 86,
+      "methods_executed": 2,
+      "methods_passed": 2,
+      "validated_starts": 7,
+      "ordered": 2,
+      "shuffle": 1,
+      "movie": 4,
+      "failed": 0,
+      "skipped": 0,
+      "malformed_trace_lines": 0,
+      "complete_sdk_restoration_equal": true,
+      "matches_original80": true
+    }
+  ],
+  "final_compile": {
+    "tvOS_Debug": "Passed",
+    "tvOS_Release": "Passed; -O/no DEBUG/testability enabled for harness",
+    "iOS_Release": "Passed; compile-only",
+    "owned_swift_or_generated_macro_diagnostics": 0,
+    "inherited_diagnostics": "SVGKit umbrella headers; pre-existing lint/build/AppIntents diagnostics are separate"
+  },
+  "normal_release_launch": {
+    "arguments": [],
+    "visually_observed": "approved Shows browser, child cards, Movies and Parents controls; no autoplay",
+    "screenshot": "build/validation/resumed-normal-release-86.png"
+  },
+  "protected_baseline_files_unchanged": 5,
+  "source_review_inventory": {
+    "app_bodies": 664,
+    "package_bodies": 252,
+    "preexisting_local_target_bodies": 15,
+    "extracted_libraries": 53,
+    "local_edges": 74,
+    "review_entries": 254
+  },
+  "performance_limit": "Slower ordered/Shuffle raw starts persist in current Wi-Fi conditions; movie median recovers in quiet86. No causal or statistical non-regression claim; exact comparison recorded separately."
+}

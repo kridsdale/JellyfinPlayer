@@ -13,8 +13,10 @@ import SwiftUI
 
 @MainActor
 protocol VLCNativeEngine: AnyObject {
+    var requiresSurfaceMount: Bool { get }
     var frame: VLCPlaybackFrame { get }
     var subtitleTracks: [VLCSubtitleTrack] { get }
+    func startupMeasurements() -> [String: Double]
     func surface(controller: VLCPlaybackController, generation: UUID) -> AnyView
     func observeUpdates(_ update: @escaping @MainActor () -> Void)
     func cancelUpdates()
@@ -34,6 +36,38 @@ protocol VLCNativeEngine: AnyObject {
     func shutdown() async -> Bool
 }
 
+extension VLCNativeEngine {
+    // Synthetic engines have no platform drawable. Production explicitly opts in.
+    var requiresSurfaceMount: Bool {
+        false
+    }
+
+    func startupMeasurements() -> [String: Double] {
+        frame.startupMeasurements
+    }
+}
+
+extension VLCPlaybackFrame {
+    var startupMeasurements: [String: Double] {
+        // Fixed diagnostic codes; neither native prose nor stream identity escapes.
+        let stateCode: Double = switch state {
+        case .idle: 0
+        case .opening: 1
+        case .buffering: 2
+        case .playing: 3
+        case .paused: 4
+        case .stopped: 5
+        case .stopping: 6
+        case .error: 7
+        }
+        return [
+            "read_bytes": Double(readBytes), "decoded_video": Double(decodedVideo),
+            "displayed_pictures": Double(displayedPictures), "lost_pictures": Double(lostPictures),
+            "seconds": time.vlcSeconds, "buffer_fraction": Double(bufferFill), "native_state": stateCode
+        ]
+    }
+}
+
 enum VLCObservation { case clock, state, buffer, seekable, end, audioTracks, subtitleTracks }
 
 /// Owns the SDK, renderer and native lifecycle; no SDK object escapes this module.
@@ -44,6 +78,13 @@ public final class VLCPlaybackController {
     private var generation: UUID?
     private var operationID: UUID?
     private var request: VLCPlaybackRequest?
+    private var pendingNativeOpen = false
+    private var surfaceGeneration: UUID?
+    private var surfaceID: UUID?
+    private var surfaceMounted = false
+    private var surfaceSize = CGSize.zero
+    private var retiredSurfaceIDs = Set<UUID>()
+    private var retiredSurfaceGenerations = Set<UUID>()
     private var pendingStart: Duration?
     private var buffering = false
     private var ended = false
@@ -76,30 +117,109 @@ public final class VLCPlaybackController {
     }
 
     public var frame: VLCPlaybackFrame {
-        var result = engine.frame
+        // A replacement waiting for its own drawable cannot expose decoded
+        // output or an advancing clock retained by the predecessor.
+        var result = pendingNativeOpen ? VLCPlaybackFrame() : engine.frame
         result.buffering = buffering
-        result.applyingStartPosition = pendingStart != nil
+        result.applyingStartPosition = pendingStart != nil || pendingNativeOpen
         return result
     }
 
     public func surface(generation: UUID) -> AnyView {
-        engine.surface(controller: self, generation: generation)
+        // An obsolete SwiftUI body must not reset the successor's mount receipt
+        // or create an SDK view that can take its native drawable ownership.
+        guard !retiredSurfaceGenerations.contains(generation) else { return AnyView(Color.clear) }
+        expectSurface(generation: generation)
+        return engine.surface(controller: self, generation: generation)
+    }
+
+    private func expectSurface(generation: UUID) {
+        guard surfaceGeneration != generation else { return }
+        if let surfaceGeneration {
+            retiredSurfaceGenerations.insert(surfaceGeneration)
+        }
+        if let surfaceID {
+            retiredSurfaceIDs.insert(surfaceID)
+        }
+        surfaceGeneration = generation
+        surfaceID = nil
+        surfaceMounted = false
+        surfaceSize = .zero
+    }
+
+    func surfaceAttached(generation: UUID, id: UUID) {
+        guard surfaceGeneration == generation, !retiredSurfaceIDs.contains(id) else { return }
+        guard surfaceID != id else { return }
+        if let surfaceID {
+            retiredSurfaceIDs.insert(surfaceID)
+        }
+        surfaceID = id
+        surfaceMounted = false
+        surfaceSize = .zero
+    }
+
+    func surfaceLaidOut(generation: UUID, id: UUID, size: CGSize) {
+        guard surfaceGeneration == generation, surfaceID == id, !retiredSurfaceIDs.contains(id),
+              size.width.isFinite, size.height.isFinite, size.width > 0, size.height > 0 else { return }
+        surfaceMounted = true
+        surfaceSize = size
+        guard self.generation == generation, pendingNativeOpen, let operation = operationID else { return }
+        beginNativeOpen(operation: operation, generation: generation)
+    }
+
+    func surfaceUnavailable(generation: UUID, id: UUID) {
+        guard surfaceGeneration == generation, surfaceID == id else { return }
+        surfaceMounted = false
+        surfaceSize = .zero
+    }
+
+    func surfaceDetached(generation: UUID, id: UUID) {
+        guard surfaceGeneration == generation, surfaceID == id else { return }
+        retiredSurfaceIDs.insert(id)
+        surfaceID = nil
+        surfaceMounted = false
+        surfaceSize = .zero
+        guard self.generation == generation, pendingNativeOpen else { return }
+        pendingNativeOpen = false
+        request = nil
+        pendingStart = nil
+        self.generation = nil
+        operationID = nil
+        onEvent?(.playbackFailed)
     }
 
     public func open(_ request: VLCPlaybackRequest, generation: UUID, performance: KidsPerformanceSpan? = nil) {
+        guard !retiredSurfaceGenerations.contains(generation) else { return }
         let operation = UUID()
+        if let current = self.generation, current != generation {
+            retiredSurfaceGenerations.insert(current)
+        }
         operationID = operation
         self.generation = generation
+        expectSurface(generation: generation)
         self.request = request
+        pendingNativeOpen = true
         self.performance = performance
         self.pendingStart = !request.live && request.start > .zero ? request.start : nil
         self.ended = false
         self.terminalPosition = .zero
         performanceSampler?.cancel()
         nativeDiagnostics?.cancel()
+        guard !engine.requiresSurfaceMount || surfaceMounted else { return }
+        beginNativeOpen(operation: operation, generation: generation)
+    }
+
+    private func beginNativeOpen(operation: UUID, generation: UUID) {
+        guard operationID == operation, self.generation == generation, pendingNativeOpen, let request else { return }
+        pendingNativeOpen = false
         do {
-            nativeDiagnostics = SwiftVLCNativeEngine.observeDiagnostics(performance)
-            performance?.mark(.vlcOpen, values: ["resume_seconds": request.start.vlcSeconds])
+            nativeDiagnostics = (engine as? SwiftVLCNativeEngine)?.observeDiagnostics(performance)
+            var measurements = startupMeasurements()
+            measurements["resume_seconds"] = request.start.vlcSeconds
+            if engine.requiresSurfaceMount {
+                performance?.mark(.rendererMounted, values: measurements)
+            }
+            performance?.mark(.vlcOpen, values: measurements)
             try engine.open(request)
             guard operationID == operation else { return }
             performance?.mark(.vlcOpenReturned)
@@ -113,7 +233,7 @@ public final class VLCPlaybackController {
     }
 
     public func play() {
-        guard generation != nil else { return }
+        guard generation != nil, !pendingNativeOpen else { return }
         perform(.play) { try engine.play() }
     }
 
@@ -123,8 +243,23 @@ public final class VLCPlaybackController {
     }
 
     public func stop() {
+        if let generation {
+            retiredSurfaceGenerations.insert(generation)
+        }
+        if let surfaceGeneration {
+            retiredSurfaceGenerations.insert(surfaceGeneration)
+        }
         generation = nil
         operationID = nil
+        pendingNativeOpen = false
+        request = nil
+        if let surfaceID {
+            retiredSurfaceIDs.insert(surfaceID)
+        }
+        surfaceGeneration = nil
+        surfaceID = nil
+        surfaceMounted = false
+        surfaceSize = .zero
         pendingStart = nil
         buffering = false
         performanceSampler?.cancel()
@@ -211,7 +346,7 @@ public final class VLCPlaybackController {
     }
 
     func observed(_ kind: VLCObservation, generation: UUID) {
-        guard self.generation == generation, let operation = operationID else { return }
+        guard self.generation == generation, !pendingNativeOpen, let operation = operationID else { return }
         let native = engine.frame
         guard operationID == operation else { return }
         switch kind {
@@ -298,11 +433,16 @@ public final class VLCPlaybackController {
                 try? await Task.sleep(for: .milliseconds(50))
             }
             guard !Task.isCancelled, let self, self.generation == generation else { return }
-            let sample = self.engine.frame
-            performance.once(.observationTimeout, values: [
-                "read_bytes": Double(sample.readBytes), "decoded_video": Double(sample.decodedVideo),
-                "displayed_pictures": Double(sample.displayedPictures), "lost_pictures": Double(sample.lostPictures)
-            ])
+            performance.once(.observationTimeout, values: self.startupMeasurements())
         }
+    }
+
+    private func startupMeasurements() -> [String: Double] {
+        var values = engine.startupMeasurements()
+        values["resume_pending"] = pendingStart == nil ? 0 : 1
+        values["surface_mounted"] = surfaceMounted ? 1 : 0
+        values["surface_width_points"] = Double(surfaceSize.width)
+        values["surface_height_points"] = Double(surfaceSize.height)
+        return values
     }
 }

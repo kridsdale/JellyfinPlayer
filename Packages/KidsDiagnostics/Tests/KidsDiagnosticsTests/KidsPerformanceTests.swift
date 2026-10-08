@@ -145,3 +145,26 @@ func `concurrent file writers preserve complete ordered sink records within the 
     #expect(lines.map(\.phase) == events.events.map(\.phase))
     #expect(lines.allSatisfy { $0.traceID == span.id })
 }
+
+@Test
+func `renderer startup evidence remains numeric and discards sensitive field names`() throws {
+    let events = PerformanceEvents()
+    let recorder = KidsPerformanceRecorder(enabled: true, sink: events.append)
+    let span = try #require(recorder.begin(.decode))
+    span.mark(.rendererMounted, values: [
+        "surface_mounted": 1, "surface_width_points": 1280, "surface_height_points": 720,
+        "buffer_fraction": 0.5, "native_state": 3, "active_video_outputs": 1,
+        "decoded_audio": 2, "played_audio_buffers": 2, "lost_audio_buffers": 0,
+        "https://host/?api_key=private-secret": 1, "native_message": 1,
+    ])
+    recorder.flush()
+    let event = try #require(events.events.last)
+    #expect(event.phase == .rendererMounted)
+    #expect(event.values == [
+        "surface_mounted": 1, "surface_width_points": 1280, "surface_height_points": 720,
+        "buffer_fraction": 0.5, "native_state": 3, "active_video_outputs": 1,
+        "decoded_audio": 2, "played_audio_buffers": 2, "lost_audio_buffers": 0,
+    ])
+    let json = try String(decoding: JSONEncoder().encode(event), as: UTF8.self)
+    #expect(!json.contains("private-secret") && !json.contains("native_message"))
+}

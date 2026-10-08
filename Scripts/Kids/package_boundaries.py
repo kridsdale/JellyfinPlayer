@@ -74,7 +74,7 @@ POLICIES = {
     "SwiftfinStorage": ({"SwiftfinAccountModels"}, {"CoreStore", "Foundation"}),
     "SwiftfinStoredValues": ({"SwiftfinStorage", "SwiftfinAccountModels", "SwiftfinPlaybackProfiles"}, {"Defaults", "Foundation", "Combine"}),
     "SwiftfinStoredValuesUI": ({"SwiftfinStoredValues"}, {"SwiftUI"}),
-    "SwiftfinVLC": ({"KidsDiagnostics"}, {"Foundation", "Combine", "SwiftUI", "SwiftVLC"}),
+    "SwiftfinVLC": ({"KidsDiagnostics"}, {"Foundation", "Combine", "SwiftUI", "SwiftVLC", "UIKit", "AppKit"}),
     "SwiftfinNowPlaying": ({}, {"Foundation", "MediaPlayer", "UIKit"}),
     "SwiftfinAudioSession": ({"KidsDiagnostics"}, {"Foundation", "OSLog", "AVFAudio"}),
     "KidsApplication": ({"KidsAccounts","KidsArtwork","KidsArtworkUI","KidsCatalog","KidsDiagnostics","KidsDomain","KidsPersistence","KidsPlaybackSession"}, {"Foundation", "Combine", "CoreData", "SwiftData", "UIKit", "AVFoundation"}),

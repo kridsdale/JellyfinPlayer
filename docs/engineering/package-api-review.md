@@ -1,6 +1,6 @@
 # Package API review
 
-All 53 extracted libraries and the two pre-existing local targets have complete current source and emitted public-API reviews. Combined app/package source and contract review closes the source-level consumer audit; historical interface entries remain explicitly scoped. Exact current hashes are recorded in source-review-ledger.json. Required real UI/SDK/playback acceptance stays held and is not established by symbol graphs, counts or compilation. See client-completion-audit.md.
+All 53 extracted libraries and the two pre-existing local targets have complete current source and public-API reviews. The final delta rereads changed consumers and emits fresh tvOS declarations for KidsPlayback (15 symbols), KidsDiagnostics (183) and SwiftfinVLC (80), with no prior declaration removed or changed. The policy type/method and rendererMounted phase are additive. Exact current hashes and scoped historical entries remain in source-review-ledger.json. Current real tvOS owner/playback acceptance is recorded in [the resumed report](resumed-client-acceptance.md); other platform execution is not inferred.
 
 ## Reviewed batch (2026-10-07)
 

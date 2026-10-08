@@ -7,6 +7,7 @@
 //
 
 import Combine
+import Defaults
 import Foundation
 import Get
 import JellyfinAPI
@@ -19,6 +20,9 @@ import KidsPlaybackSession
 import SwiftfinAsyncStreams
 import SwiftfinFormatting
 import SwiftfinMediaTracks
+import SwiftfinPlaybackPreparation
+import SwiftfinPlaybackProfiles
+import SwiftfinStoredValues
 import SwiftfinText
 import SwiftfinTime
 import SwiftUI
@@ -52,6 +56,13 @@ final class SwiftfinKidsPlaybackFactory: KidsPlaybackSessionFactory {
         guard raw.id == item.id, raw.mediaType == .video,
               (item.kind == .episode && raw.type == .episode) || (item.kind == .movie && raw.type == .movie)
         else { throw KidsContractError.denied }
+        // The selected source and pure codec policy share the same metadata
+        // used by preparation; compatibility must never choose another item.
+        let initialSource = try PlaybackPreparationPolicy.initialSource(in: raw, preferred: nil)
+        let videoCodec = initialSource.mediaStreams?.first { $0.type == .video }?.codec
+        let needsCompatibleStream = KidsPlaybackCompatibilityPolicy.requiresCompatibleStream(
+            videoCodec: videoCodec, container: initialSource.container
+        )
         let start = KidsPlaybackStartPosition(position)
         #if DEBUG
         let failStreamOnce = simulateStreamFailure
@@ -65,7 +76,9 @@ final class SwiftfinKidsPlaybackFactory: KidsPlaybackSessionFactory {
                     for: base,
                     preparedItem: raw,
                     connection: connection,
+                    mediaSource: initialSource,
                     videoPlayerType: .vlc,
+                    compatibilityMode: needsCompatibleStream ? .mostCompatible : Defaults[.VideoPlayer.Playback.compatibilityMode],
                     modifyItem: { dto in
                         if dto.userData == nil {
                             dto.userData = UserItemDataDto(key: "")

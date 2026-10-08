@@ -1,6 +1,6 @@
 # Kids implementation validation record
 
-Status: **RC1 ready for simulator release-candidate evaluation**. Updated 2026-10-03 (America/Los_Angeles). Branch: `feature/kids-release-candidate`.
+Status: **current package-refactor/Swift 6 client acceptance complete**. Updated 2026-10-08. Current session 89 passes 90 integrated methods and separate genuine EOF/next and session-cap checks; matched Release profiling passes two methods/seven starts. Original complete client SDK state is restored/exported equal and the Release app is visually verified on the approved Shows browser without autoplay. See [the resumed acceptance report](engineering/resumed-client-acceptance.md). Older results below retain their original scopes; physical Apple TV/live CloudKit/server boot/App Store release remain deferred or separately owned.
 
 ## Account and media boundary
 

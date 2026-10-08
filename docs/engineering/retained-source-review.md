@@ -1,6 +1,6 @@
 # Retained application responsibility review
 
-All 664 current application Swift sources have source-reviewed UI/composition reasons and exact hashes. The complete package public-contract review and current caller/actor/startup audit close source-level retention and integration. Earlier notes calling already-reviewed neighbours pending/mixed are reconciled against their current owners. Native UI/SDK execution and real playback remain held. Dated older totals below are historical; see client-completion-audit.md.
+All 664 current application sources have reviewed UI/composition responsibilities and exact hashes. Complete current package public-contract, caller and actor/startup review covers 252 package source bodies across 53 libraries. Current scoped tvOS navigation/native-player/recovery/EOF acceptance passes; it does not establish every iOS/AppKit/device/SDK path. The changed tvOS source/profile adapter remains app composition. See [the resumed acceptance report](resumed-client-acceptance.md); dated older totals below are historical.
 
 ## Reviewed boundaries at the date/program checkpoint
 

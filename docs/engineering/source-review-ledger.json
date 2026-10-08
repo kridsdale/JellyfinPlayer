@@ -5560,11 +5560,14 @@
         "SwiftfinFormatting",
         "SwiftfinMediaTracks",
         "SwiftfinText",
-        "SwiftfinTime"
+        "SwiftfinTime",
+        "SwiftfinPlaybackPreparation",
+        "SwiftfinPlaybackProfiles",
+        "SwiftfinStoredValues"
       ],
       "path": "Swiftfin tvOS/App/KidsPlaybackAdapter.swift",
-      "reason": "Complete updated factory/driver/surface/track/presentation body reviewed. One connection performs metadata and deferred build; exact kind/ID guards remain. KidsPlayback now owns finite resume normalization and safe integer ticks. Manager owns platform composition over tested request/effect owners; all native/report resources remain delegated. Synthetic failure clone preserves connection/backend. Parent-authorized track UI remains composition and child queue stays nil. This source does not establish real decoded readiness or playback under the runtime hold.",
-      "sha256": "44a720b3b85a7247bac6b8b7ace0169b2e11ecf9d5614558666a962afc195d7e",
+      "reason": "Complete updated factory/driver/surface/track/presentation body reviewed. One connection performs metadata and deferred build; exact kind/ID guards remain. KidsPlayback now owns finite resume normalization and safe integer ticks. Manager owns platform composition over tested request/effect owners; all native/report resources remain delegated. Synthetic failure clone preserves connection/backend. Parent-authorized track UI remains composition and child queue stays nil. This source does not establish real decoded readiness or playback under the runtime hold. Current 2026-10-08 delta: select the initial source once from the already-authorized DTO; compose the pure MPEG-4/AVI policy with existing profile preparation. Reuse that selected source for build, keep original-account binding and exact-item checks, and preserve other sources' preferences. Real restricted tvOS session 89 and readable AVI/H264 frames accepted.",
+      "sha256": "ccd29fefdf87b24eec11bf109675d4530737a9dd0ad7bed113010f95d41b8135",
       "status": "source-reviewed-retained"
     },
     {
@@ -10823,7 +10826,7 @@
     },
     {
       "path": "Packages/KidsDiagnostics/Sources/KidsDiagnostics/KidsPerformance.swift",
-      "reason": "KidsPerformance.swift: complete current source body and public interface audit. Checked Sendable recorder/span owners protect mutable state with native locks and move bounded JSON output to a serial utility queue. Fixed enums, numeric whitelists and finite values prevent arbitrary request/error/native strings from reaching diagnostics; TaskLocal and generated SDK witnesses were inspected. Per-task metrics observe existing requests only; native/hardware/permission queries and profiling launches were not executed. Listed consumers are scoped reviewed boundaries; whole-graph/runtime acceptance remains required.",
+      "reason": "KidsPerformance.swift: complete current source body and public interface audit. Checked Sendable recorder/span owners protect mutable state with native locks and move bounded JSON output to a serial utility queue. Fixed enums, numeric whitelists and finite values prevent arbitrary request/error/native strings from reaching diagnostics; TaskLocal and generated SDK witnesses were inspected. Per-task metrics observe existing requests only; native/hardware/permission queries and profiling launches were not executed. Listed consumers are scoped reviewed boundaries; whole-graph/runtime acceptance remains required. Current 2026-10-08 delta: Current numeric diagnostic whitelist and additive rendererMounted phase reviewed; 11 privacy/value tests pass. Native warning classifications retain no arbitrary native strings.",
       "reviewedConsumers": [
         "Swiftfin tvOS/Kids/KidsMediaProgressObserver.swift"
       ],
@@ -10987,19 +10990,20 @@
         "static let timestamp: KidsNativeContext",
         "static var current: KidsPerformanceSpan? { get }",
         "struct KidsNativeContext",
-        "struct KidsPerformanceEvent"
+        "struct KidsPerformanceEvent",
+        "case rendererMounted"
       ],
-      "sha256": "c9b50c3f5d3c4f1c3712c616d0fce9c41b77863ce113df2d2ace0704ef5d62fa"
+      "sha256": "305ccaddf1d450de9971bcfd143c4033809729c8482a691ff6f0938cfb4c59c4"
     },
     {
       "path": "Packages/SwiftfinVLC/Sources/SwiftfinVLC/SwiftVLCNativeEngine.swift",
-      "reason": "SwiftVLCNativeEngine.swift: complete current source body and public interface audit. Private native SDK/render/log-stream owner exposes checked value snapshots and typed main-actor commands/events. Every open has its own operation receipt, including reused render identities; retired open/resume/seek effects cannot publish state or stamp replacement completion. Listed app adapters were read; KidsAppModel review is its preparation/publication/start boundary only. Whole-graph consumer and runtime acceptance remain required.",
+      "reason": "SwiftVLCNativeEngine.swift: complete current source body and public interface audit. Private native SDK/render/log-stream owner exposes checked value snapshots and typed main-actor commands/events. Every open has its own operation receipt, including reused render identities; retired open/resume/seek effects cannot publish state or stamp replacement completion. Listed app adapters were read; KidsAppModel review is its preparation/publication/start boundary only. Whole-graph consumer and runtime acceptance remain required. Current 2026-10-08 delta: Current instance-scoped native diagnostics and actual mount requirement reviewed. Unsupported trial flags were removed. Real tvOS VLC startup, decoded playback, transport, recovery and cleanup are accepted in session 89; this is not universal codec/device acceptance.",
       "reviewedConsumers": [
         "Shared/Objects/MediaPlayerManager/MediaPlayerProxy/MediaPlayerProxy+VLC.swift",
         "Swiftfin tvOS/App/KidsPlaybackAdapter.swift"
       ],
       "reviewedInterfaces": [],
-      "sha256": "75f492531000d6a0f0017f829369d6eacacbed8b9603a5e1573a85c2fdc4000f"
+      "sha256": "11cd07c4d2fd7535cfcdd40bc19a7c5f42b9026fb097e0fadf846d2bc9027ddf"
     },
     {
       "path": "Packages/SwiftfinVLC/Sources/SwiftfinVLC/VLCPlaybackContracts.swift",
@@ -11074,7 +11078,7 @@
     },
     {
       "path": "Packages/SwiftfinVLC/Sources/SwiftfinVLC/VLCPlaybackController.swift",
-      "reason": "VLCPlaybackController.swift: complete current source body and public interface audit. Private native SDK/render/log-stream owner exposes checked value snapshots and typed main-actor commands/events. Every open has its own operation receipt, including reused render identities; retired open/resume/seek effects cannot publish state or stamp replacement completion. Listed app adapters were read; KidsAppModel review is its preparation/publication/start boundary only. Whole-graph consumer and runtime acceptance remain required.",
+      "reason": "VLCPlaybackController.swift: complete current source body and public interface audit. Private native SDK/render/log-stream owner exposes checked value snapshots and typed main-actor commands/events. Every open has its own operation receipt, including reused render identities; retired open/resume/seek effects cannot publish state or stamp replacement completion. Listed app adapters were read; KidsAppModel review is its preparation/publication/start boundary only. Whole-graph consumer and runtime acceptance remain required. Current 2026-10-08 delta: Current generation/host-scoped mount-before-open gate, retired-host rejection, pending-frame reset and cancellation reviewed; 21 owner tests and current real tvOS playback pass. Public frame/API declarations are unchanged.",
       "reviewedConsumers": [
         "Shared/Objects/MediaPlayerManager/MediaPlayerProxy/MediaPlayerProxy+VLC.swift",
         "Swiftfin tvOS/App/KidsPlaybackAdapter.swift"
@@ -11101,7 +11105,7 @@
         "@MainActor var onEvent: (@MainActor @Sendable (VLCPlaybackEvent) -> Void)?",
         "@MainActor var updates: AnyPublisher<Void, Never> { get }"
       ],
-      "sha256": "cde7ba66bce7ab64cd6a8eae6bebab9bb59e28234f3924c426b4a875c3fca4f3"
+      "sha256": "c6c186ce9b646d73c32b95559e9821d43eae68f463e52cbbf93381b0c03547dc"
     },
     {
       "path": "Packages/SwiftfinMPV/Sources/SwiftfinMPV/MPVPlaybackController.swift",
@@ -11910,19 +11914,40 @@
         "var year: Int?"
       ],
       "sha256": "1317345fcfda331b09ef0422dfdc58c6a48ac38255608d62d0016314bd7b1b4b"
+    },
+    {
+      "path": "Packages/SwiftfinVLC/Sources/SwiftfinVLC/VLCMountedVideoView.swift",
+      "reason": "Private main-actor UIKit/AppKit native host: real attached-window/positive-bounds acknowledgement precedes native open. Weak playback ownership, exact generation/host receipts and dismantling prevent old surfaces altering a replacement drawable. UIKit real-window integration and player acceptance are verified on tvOS; AppKit real-window fixture passed offline; AppKit media playback remains unvalidated.",
+      "reviewedConsumers": [
+        "Packages/SwiftfinVLC/Sources/SwiftfinVLC/SwiftVLCNativeEngine.swift"
+      ],
+      "reviewedInterfaces": [],
+      "sha256": "9834a9104aa51a2c27311f14b733d36e55b17a53a019e1e0da4aa32ef1c8c3f9"
+    },
+    {
+      "path": "Packages/KidsPlayback/Sources/KidsPlayback/KidsPlaybackCompatibilityPolicy.swift",
+      "reason": "Pure checked-Sendable policy matches only normalized exact MPEG-4/AVI metadata. Six tests cover 49 inputs including unknown/composite/malformed lookalikes. The app composes the existing mostCompatible H264/AAC profile for that exact match; other codecs preserve preferences. No SDK/native/storage/network ownership added.",
+      "reviewedConsumers": [
+        "Swiftfin tvOS/App/KidsPlaybackAdapter.swift"
+      ],
+      "reviewedInterfaces": [
+        "enum KidsPlaybackCompatibilityPolicy",
+        "static func requiresCompatibleStream(videoCodec: String?, container: String?) -> Bool"
+      ],
+      "sha256": "aa6d02762afc0dc04fd5eacb900c1acfd7d9b4c001c3a3fca0b0b1517e0988e4"
     }
   ],
-  "limits": "This ledger records bodies explicitly reviewed, with exact current hashes; earlier prose or lexical inventory is not automatically promoted. Pending and mixed entries prevent whole-source completion. Retained UI algorithms have specific presentation reasons, not folder/import-based blanket approval. API entries do not classify the rest of the public graph. Source review and offline tests do not satisfy held runtime acceptance.",
+  "limits": "Exact current source hashes and reviewed contracts are retained; historical interface entries keep their scoped consumer statements. Counts/import locators and offline tests do not prove runtime behavior. Current tvOS navigation/playback/owner acceptance is recorded in resumed-client-acceptance.md; iOS/AppKit media playback, physical-device and live CloudKit execution are not inferred.",
   "schemaVersion": 1,
-  "scope": "All current app Swift files; complete-body classifications and scoped public/internal lifecycle/consumer reviews. No simulator/server testing.",
+  "scope": "All current app and package Swift bodies; exact-hash source/public/actor/consumer closure with scoped actual tvOS acceptance 89 recorded separately.",
   "summary": {
     "applicationSwiftFiles": 664,
     "classification": {
       "source-reviewed-retained": 664
     },
-    "currentAPIReviews": 252,
-    "runtimeAcceptance": "held by human; no simulator/server testing",
-    "sourceConsumerClosure": "complete current source/public-contract review; actual SDK/UI/playback held"
+    "currentAPIReviews": 254,
+    "runtimeAcceptance": "Current tvOS session 89: 90 integrated + 1 genuine EOF/next + 1 cap methods pass with zero skips/failures; full SDK state restored equal. Release comparison and iOS compile tracked separately in resumed-client-acceptance.md.",
+    "sourceConsumerClosure": "Complete current source/public-contract review; scoped actual tvOS SDK/UI/playback acceptance recorded separately, no universal platform claim."
   },
   "packageReviews": [
     {
@@ -12252,18 +12277,18 @@
     {
       "module": "KidsPlayback",
       "manifestSHA256": "b8616019525c5d34ec6ed93e0eb761b89f987e36cba6209ca44fef27e22542fd",
-      "sourceBodiesRead": 4,
-      "compilerPublicSymbols": 13,
-      "compilerPlatform": "macOS14; app builds reused with unchanged inputs",
+      "sourceBodiesRead": 5,
+      "compilerPublicSymbols": 15,
+      "compilerPlatform": "tvOS simulator: SDK 27.0, arm64-apple-tvos26.1-simulator; current Debug 88 modules",
       "compilerGraphs": [
         {
           "file": "KidsPlayback.symbols.json",
-          "sha256": "464b79c3f079218ca759f81475ae69050f274c2e26549bf172a2d0a743839dfe"
+          "sha256": "f39a5c9d27f3d51d33dd35a16afe2c176c2b0317e7d3777e9f4f93082ef32871"
         }
       ],
       "sourceReview": "complete current source and public declarations",
-      "consumerReview": "scoped listed call sites; remaining whole-graph review required",
-      "runtimeAcceptance": "held by human"
+      "consumerReview": "Complete current source/contract closure; changed consumers reread for the mount/diagnostic/compatibility delta. Historical interface entries retain their stated scopes.",
+      "runtimeAcceptance": "Scoped current tvOS acceptance 89: 90 integrated methods plus separate real EOF/next and cap methods pass. Physical/iOS/AppKit/live CloudKit execution is not inferred."
     },
     {
       "module": "SwiftfinStorage",
@@ -12707,17 +12732,17 @@
       "module": "KidsDiagnostics",
       "manifestSHA256": "af9a842e89bcd0e2ecbc20de986ccc85d0b0b1796483c4aa08427bbb3997e09b",
       "sourceBodiesRead": 1,
-      "compilerPublicSymbols": 182,
-      "compilerPlatform": "macOS14; app platform compilation separate",
+      "compilerPublicSymbols": 183,
+      "compilerPlatform": "tvOS simulator: SDK 27.0, arm64-apple-tvos26.1-simulator; current Debug 88 modules",
       "compilerGraphs": [
         {
           "file": "KidsDiagnostics.symbols.json",
-          "sha256": "2211fda3f99a67c0d7d3ab064b7f4d8963c800806dcd4cb230604cfd4e749bf4"
+          "sha256": "1659852741bc4d045b7059eda62679ddd482a7a9c0fe86cbd7b44936bf76ecff"
         }
       ],
       "sourceReview": "complete current source and public declarations",
-      "consumerReview": "scoped listed boundaries; remaining whole-graph review required",
-      "runtimeAcceptance": "held by human"
+      "consumerReview": "Complete current source/contract closure; changed consumers reread for the mount/diagnostic/compatibility delta. Historical interface entries retain their stated scopes.",
+      "runtimeAcceptance": "Scoped current tvOS acceptance 89: 90 integrated methods plus separate real EOF/next and cap methods pass. Physical/iOS/AppKit/live CloudKit execution is not inferred."
     },
     {
       "module": "KidsPlaybackSession",
@@ -12738,18 +12763,18 @@
     {
       "module": "SwiftfinVLC",
       "manifestSHA256": "98cfbc616d57e6f4b2448c8b7bbc3bd837bd2e3e68259fcc9d9c4671fb60f612",
-      "sourceBodiesRead": 3,
+      "sourceBodiesRead": 4,
       "compilerPublicSymbols": 80,
-      "compilerPlatform": "macOS15; public source declarations are platform-independent; private UIKit rendering compiled separately on tvOS/iOS",
+      "compilerPlatform": "tvOS simulator: SDK 27.0, arm64-apple-tvos26.1-simulator; current Debug 88 modules",
       "compilerGraphs": [
         {
           "file": "SwiftfinVLC.symbols.json",
-          "sha256": "178366c3cfc493730167671400b4bef360c10afd1d1d4e8340fa8d52e68d33e7"
+          "sha256": "32e3d71c1baba5d015b8d05b032bf26ecb0944ec5ccbbae2195d48f26ee9c5b2"
         }
       ],
       "sourceReview": "complete current source and public declarations",
-      "consumerReview": "scoped listed boundaries; remaining whole-graph review required",
-      "runtimeAcceptance": "held by human"
+      "consumerReview": "Complete current source/contract closure; changed consumers reread for the mount/diagnostic/compatibility delta. Historical interface entries retain their stated scopes.",
+      "runtimeAcceptance": "Scoped current tvOS acceptance 89: 90 integrated methods plus separate real EOF/next and cap methods pass. Physical/iOS/AppKit/live CloudKit execution is not inferred."
     },
     {
       "module": "SwiftfinMPV",
@@ -12929,9 +12954,9 @@
     }
   ],
   "consumerClosure": {
-    "scope": "Combined complete current app/package source bodies and public-contract review; direct-edge locator is coverage aid, not semantic proof. Individual historical interface entries remain scoped. Native UI/SDK runtime acceptance remains held.",
+    "scope": "Combined complete current app/package source bodies and public-contract review; direct-edge locator is coverage aid, not semantic proof. Historical interface entries remain scoped. Current tvOS runtime acceptance is recorded in resumed-client-acceptance.md; no iOS/AppKit/physical/live CloudKit runtime acceptance is inferred.",
     "applicationSourcesReviewed": 664,
-    "packageSourcesReviewed": 250,
+    "packageSourcesReviewed": 252,
     "additionalLocalTargetSourceBodies": 15,
     "libraryReviews": [
       {
@@ -12944,7 +12969,7 @@
         "applicationConsumerCount": 1,
         "packageSourceConsumerCount": 2,
         "sourceEvidence": "current complete source bodies in applicationSources/interfaceReviews and emitted declarations in packageReviews",
-        "status": "source-contract-reviewed; runtime held"
+        "status": "source-contract-reviewed; scoped current tvOS runtime evidence in resumed-client-acceptance.md"
       },
       {
         "module": "KidsApplication",
@@ -12962,7 +12987,7 @@
         "applicationConsumerCount": 1,
         "packageSourceConsumerCount": 3,
         "sourceEvidence": "current complete source bodies in applicationSources/interfaceReviews and emitted declarations in packageReviews",
-        "status": "source-contract-reviewed; runtime held"
+        "status": "source-contract-reviewed; scoped current tvOS runtime evidence in resumed-client-acceptance.md"
       },
       {
         "module": "KidsArtwork",
@@ -12975,7 +13000,7 @@
         "applicationConsumerCount": 0,
         "packageSourceConsumerCount": 2,
         "sourceEvidence": "current complete source bodies in applicationSources/interfaceReviews and emitted declarations in packageReviews",
-        "status": "source-contract-reviewed; runtime held"
+        "status": "source-contract-reviewed; scoped current tvOS runtime evidence in resumed-client-acceptance.md"
       },
       {
         "module": "KidsArtworkUI",
@@ -12989,7 +13014,7 @@
         "applicationConsumerCount": 0,
         "packageSourceConsumerCount": 1,
         "sourceEvidence": "current complete source bodies in applicationSources/interfaceReviews and emitted declarations in packageReviews",
-        "status": "source-contract-reviewed; runtime held"
+        "status": "source-contract-reviewed; scoped current tvOS runtime evidence in resumed-client-acceptance.md"
       },
       {
         "module": "KidsCatalog",
@@ -13001,18 +13026,18 @@
         "applicationConsumerCount": 2,
         "packageSourceConsumerCount": 6,
         "sourceEvidence": "current complete source bodies in applicationSources/interfaceReviews and emitted declarations in packageReviews",
-        "status": "source-contract-reviewed; runtime held"
+        "status": "source-contract-reviewed; scoped current tvOS runtime evidence in resumed-client-acceptance.md"
       },
       {
         "module": "KidsDiagnostics",
-        "contractReview": "Immutable opt-in trace values and task-local spans retain measured phase/session identity. App supplies native presentation/transport timing and no credential payload.",
+        "contractReview": "Immutable opt-in trace values and task-local spans retain measured phase/session identity. App supplies native presentation/transport timing and no credential payload. Renderer mount and fixed numeric startup measurements add no arbitrary string payload.",
         "localDependencies": [
           "KidsDomain"
         ],
         "applicationConsumerCount": 6,
         "packageSourceConsumerCount": 15,
         "sourceEvidence": "current complete source bodies in applicationSources/interfaceReviews and emitted declarations in packageReviews",
-        "status": "source-contract-reviewed; runtime held"
+        "status": "source-contract-reviewed; scoped current tvOS runtime evidence in resumed-client-acceptance.md"
       },
       {
         "module": "KidsDiagnosticsUI",
@@ -13023,7 +13048,7 @@
         "applicationConsumerCount": 0,
         "packageSourceConsumerCount": 1,
         "sourceEvidence": "current complete source bodies in applicationSources/interfaceReviews and emitted declarations in packageReviews",
-        "status": "source-contract-reviewed; runtime held"
+        "status": "source-contract-reviewed; scoped current tvOS runtime evidence in resumed-client-acceptance.md"
       },
       {
         "module": "KidsDomain",
@@ -13032,7 +13057,7 @@
         "applicationConsumerCount": 2,
         "packageSourceConsumerCount": 17,
         "sourceEvidence": "current complete source bodies in applicationSources/interfaceReviews and emitted declarations in packageReviews",
-        "status": "source-contract-reviewed; runtime held"
+        "status": "source-contract-reviewed; scoped current tvOS runtime evidence in resumed-client-acceptance.md"
       },
       {
         "module": "KidsExperience",
@@ -13050,7 +13075,7 @@
         "applicationConsumerCount": 2,
         "packageSourceConsumerCount": 0,
         "sourceEvidence": "current complete source bodies in applicationSources/interfaceReviews and emitted declarations in packageReviews",
-        "status": "source-contract-reviewed; runtime held"
+        "status": "source-contract-reviewed; scoped current tvOS runtime evidence in resumed-client-acceptance.md"
       },
       {
         "module": "KidsPersistence",
@@ -13062,11 +13087,11 @@
         "applicationConsumerCount": 0,
         "packageSourceConsumerCount": 1,
         "sourceEvidence": "current complete source bodies in applicationSources/interfaceReviews and emitted declarations in packageReviews",
-        "status": "source-contract-reviewed; runtime held"
+        "status": "source-contract-reviewed; scoped current tvOS runtime evidence in resumed-client-acceptance.md"
       },
       {
         "module": "KidsPlayback",
-        "contractReview": "Readiness, safe resume/timing and playback-value policies feed captured app driver/report adapters without owning the native player.",
+        "contractReview": "Readiness, safe resume/timing and playback-value policies feed captured app driver/report adapters without owning the native player. Exact MPEG-4/AVI compatibility choice is pure; app owns composition with the already-selected source.",
         "localDependencies": [
           "KidsDiagnostics",
           "SwiftfinAsyncStreams"
@@ -13074,7 +13099,7 @@
         "applicationConsumerCount": 3,
         "packageSourceConsumerCount": 1,
         "sourceEvidence": "current complete source bodies in applicationSources/interfaceReviews and emitted declarations in packageReviews",
-        "status": "source-contract-reviewed; runtime held"
+        "status": "source-contract-reviewed; scoped current tvOS runtime evidence in resumed-client-acceptance.md"
       },
       {
         "module": "KidsPlaybackSession",
@@ -13087,7 +13112,7 @@
         "applicationConsumerCount": 1,
         "packageSourceConsumerCount": 4,
         "sourceEvidence": "current complete source bodies in applicationSources/interfaceReviews and emitted declarations in packageReviews",
-        "status": "source-contract-reviewed; runtime held"
+        "status": "source-contract-reviewed; scoped current tvOS runtime evidence in resumed-client-acceptance.md"
       },
       {
         "module": "SwiftfinAccountAccess",
@@ -13098,7 +13123,7 @@
         "applicationConsumerCount": 18,
         "packageSourceConsumerCount": 0,
         "sourceEvidence": "current complete source bodies in applicationSources/interfaceReviews and emitted declarations in packageReviews",
-        "status": "source-contract-reviewed; runtime held"
+        "status": "source-contract-reviewed; scoped current tvOS runtime evidence in resumed-client-acceptance.md"
       },
       {
         "module": "SwiftfinAccountModels",
@@ -13109,7 +13134,7 @@
         "applicationConsumerCount": 27,
         "packageSourceConsumerCount": 11,
         "sourceEvidence": "current complete source bodies in applicationSources/interfaceReviews and emitted declarations in packageReviews",
-        "status": "source-contract-reviewed; runtime held"
+        "status": "source-contract-reviewed; scoped current tvOS runtime evidence in resumed-client-acceptance.md"
       },
       {
         "module": "SwiftfinAccountStore",
@@ -13123,7 +13148,7 @@
         "applicationConsumerCount": 11,
         "packageSourceConsumerCount": 0,
         "sourceEvidence": "current complete source bodies in applicationSources/interfaceReviews and emitted declarations in packageReviews",
-        "status": "source-contract-reviewed; runtime held"
+        "status": "source-contract-reviewed; scoped current tvOS runtime evidence in resumed-client-acceptance.md"
       },
       {
         "module": "SwiftfinAsyncStreams",
@@ -13132,7 +13157,7 @@
         "applicationConsumerCount": 37,
         "packageSourceConsumerCount": 6,
         "sourceEvidence": "current complete source bodies in applicationSources/interfaceReviews and emitted declarations in packageReviews",
-        "status": "source-contract-reviewed; runtime held"
+        "status": "source-contract-reviewed; scoped current tvOS runtime evidence in resumed-client-acceptance.md"
       },
       {
         "module": "SwiftfinAudioSession",
@@ -13143,7 +13168,7 @@
         "applicationConsumerCount": 1,
         "packageSourceConsumerCount": 0,
         "sourceEvidence": "current complete source bodies in applicationSources/interfaceReviews and emitted declarations in packageReviews",
-        "status": "source-contract-reviewed; runtime held"
+        "status": "source-contract-reviewed; scoped current tvOS runtime evidence in resumed-client-acceptance.md"
       },
       {
         "module": "SwiftfinCollections",
@@ -13152,7 +13177,7 @@
         "applicationConsumerCount": 126,
         "packageSourceConsumerCount": 14,
         "sourceEvidence": "current complete source bodies in applicationSources/interfaceReviews and emitted declarations in packageReviews",
-        "status": "source-contract-reviewed; runtime held"
+        "status": "source-contract-reviewed; scoped current tvOS runtime evidence in resumed-client-acceptance.md"
       },
       {
         "module": "SwiftfinConnections",
@@ -13163,7 +13188,7 @@
         "applicationConsumerCount": 1,
         "packageSourceConsumerCount": 0,
         "sourceEvidence": "current complete source bodies in applicationSources/interfaceReviews and emitted declarations in packageReviews",
-        "status": "source-contract-reviewed; runtime held"
+        "status": "source-contract-reviewed; scoped current tvOS runtime evidence in resumed-client-acceptance.md"
       },
       {
         "module": "SwiftfinConnectivity",
@@ -13174,7 +13199,7 @@
         "applicationConsumerCount": 3,
         "packageSourceConsumerCount": 0,
         "sourceEvidence": "current complete source bodies in applicationSources/interfaceReviews and emitted declarations in packageReviews",
-        "status": "source-contract-reviewed; runtime held"
+        "status": "source-contract-reviewed; scoped current tvOS runtime evidence in resumed-client-acceptance.md"
       },
       {
         "module": "SwiftfinCredentials",
@@ -13183,7 +13208,7 @@
         "applicationConsumerCount": 2,
         "packageSourceConsumerCount": 1,
         "sourceEvidence": "current complete source bodies in applicationSources/interfaceReviews and emitted declarations in packageReviews",
-        "status": "source-contract-reviewed; runtime held"
+        "status": "source-contract-reviewed; scoped current tvOS runtime evidence in resumed-client-acceptance.md"
       },
       {
         "module": "SwiftfinFilters",
@@ -13195,7 +13220,7 @@
         "applicationConsumerCount": 38,
         "packageSourceConsumerCount": 0,
         "sourceEvidence": "current complete source bodies in applicationSources/interfaceReviews and emitted declarations in packageReviews",
-        "status": "source-contract-reviewed; runtime held"
+        "status": "source-contract-reviewed; scoped current tvOS runtime evidence in resumed-client-acceptance.md"
       },
       {
         "module": "SwiftfinFormatting",
@@ -13207,7 +13232,7 @@
         "applicationConsumerCount": 53,
         "packageSourceConsumerCount": 0,
         "sourceEvidence": "current complete source bodies in applicationSources/interfaceReviews and emitted declarations in packageReviews",
-        "status": "source-contract-reviewed; runtime held"
+        "status": "source-contract-reviewed; scoped current tvOS runtime evidence in resumed-client-acceptance.md"
       },
       {
         "module": "SwiftfinImageProcessing",
@@ -13216,7 +13241,7 @@
         "applicationConsumerCount": 3,
         "packageSourceConsumerCount": 0,
         "sourceEvidence": "current complete source bodies in applicationSources/interfaceReviews and emitted declarations in packageReviews",
-        "status": "source-contract-reviewed; runtime held"
+        "status": "source-contract-reviewed; scoped current tvOS runtime evidence in resumed-client-acceptance.md"
       },
       {
         "module": "SwiftfinImages",
@@ -13225,7 +13250,7 @@
         "applicationConsumerCount": 32,
         "packageSourceConsumerCount": 0,
         "sourceEvidence": "current complete source bodies in applicationSources/interfaceReviews and emitted declarations in packageReviews",
-        "status": "source-contract-reviewed; runtime held"
+        "status": "source-contract-reviewed; scoped current tvOS runtime evidence in resumed-client-acceptance.md"
       },
       {
         "module": "SwiftfinItemMetadata",
@@ -13236,7 +13261,7 @@
         "applicationConsumerCount": 27,
         "packageSourceConsumerCount": 0,
         "sourceEvidence": "current complete source bodies in applicationSources/interfaceReviews and emitted declarations in packageReviews",
-        "status": "source-contract-reviewed; runtime held"
+        "status": "source-contract-reviewed; scoped current tvOS runtime evidence in resumed-client-acceptance.md"
       },
       {
         "module": "SwiftfinLocalization",
@@ -13245,7 +13270,7 @@
         "applicationConsumerCount": 327,
         "packageSourceConsumerCount": 6,
         "sourceEvidence": "current complete source bodies in applicationSources/interfaceReviews and emitted declarations in packageReviews",
-        "status": "source-contract-reviewed; runtime held"
+        "status": "source-contract-reviewed; scoped current tvOS runtime evidence in resumed-client-acceptance.md"
       },
       {
         "module": "SwiftfinMPV",
@@ -13254,7 +13279,7 @@
         "applicationConsumerCount": 1,
         "packageSourceConsumerCount": 0,
         "sourceEvidence": "current complete source bodies in applicationSources/interfaceReviews and emitted declarations in packageReviews",
-        "status": "source-contract-reviewed; runtime held"
+        "status": "source-contract-reviewed; scoped current tvOS runtime evidence in resumed-client-acceptance.md"
       },
       {
         "module": "SwiftfinMediaCatalog",
@@ -13267,7 +13292,7 @@
         "applicationConsumerCount": 40,
         "packageSourceConsumerCount": 2,
         "sourceEvidence": "current complete source bodies in applicationSources/interfaceReviews and emitted declarations in packageReviews",
-        "status": "source-contract-reviewed; runtime held"
+        "status": "source-contract-reviewed; scoped current tvOS runtime evidence in resumed-client-acceptance.md"
       },
       {
         "module": "SwiftfinMediaTracks",
@@ -13278,7 +13303,7 @@
         "applicationConsumerCount": 16,
         "packageSourceConsumerCount": 1,
         "sourceEvidence": "current complete source bodies in applicationSources/interfaceReviews and emitted declarations in packageReviews",
-        "status": "source-contract-reviewed; runtime held"
+        "status": "source-contract-reviewed; scoped current tvOS runtime evidence in resumed-client-acceptance.md"
       },
       {
         "module": "SwiftfinNativePlayback",
@@ -13287,7 +13312,7 @@
         "applicationConsumerCount": 3,
         "packageSourceConsumerCount": 0,
         "sourceEvidence": "current complete source bodies in applicationSources/interfaceReviews and emitted declarations in packageReviews",
-        "status": "source-contract-reviewed; runtime held"
+        "status": "source-contract-reviewed; scoped current tvOS runtime evidence in resumed-client-acceptance.md"
       },
       {
         "module": "SwiftfinNetworking",
@@ -13296,7 +13321,7 @@
         "applicationConsumerCount": 19,
         "packageSourceConsumerCount": 14,
         "sourceEvidence": "current complete source bodies in applicationSources/interfaceReviews and emitted declarations in packageReviews",
-        "status": "source-contract-reviewed; runtime held"
+        "status": "source-contract-reviewed; scoped current tvOS runtime evidence in resumed-client-acceptance.md"
       },
       {
         "module": "SwiftfinNowPlaying",
@@ -13305,7 +13330,7 @@
         "applicationConsumerCount": 2,
         "packageSourceConsumerCount": 0,
         "sourceEvidence": "current complete source bodies in applicationSources/interfaceReviews and emitted declarations in packageReviews",
-        "status": "source-contract-reviewed; runtime held"
+        "status": "source-contract-reviewed; scoped current tvOS runtime evidence in resumed-client-acceptance.md"
       },
       {
         "module": "SwiftfinPaging",
@@ -13314,7 +13339,7 @@
         "applicationConsumerCount": 4,
         "packageSourceConsumerCount": 0,
         "sourceEvidence": "current complete source bodies in applicationSources/interfaceReviews and emitted declarations in packageReviews",
-        "status": "source-contract-reviewed; runtime held"
+        "status": "source-contract-reviewed; scoped current tvOS runtime evidence in resumed-client-acceptance.md"
       },
       {
         "module": "SwiftfinPermissions",
@@ -13323,7 +13348,7 @@
         "applicationConsumerCount": 4,
         "packageSourceConsumerCount": 0,
         "sourceEvidence": "current complete source bodies in applicationSources/interfaceReviews and emitted declarations in packageReviews",
-        "status": "source-contract-reviewed; runtime held"
+        "status": "source-contract-reviewed; scoped current tvOS runtime evidence in resumed-client-acceptance.md"
       },
       {
         "module": "SwiftfinPlaybackPreparation",
@@ -13333,10 +13358,10 @@
           "SwiftfinNetworking",
           "SwiftfinPlaybackReporting"
         ],
-        "applicationConsumerCount": 9,
+        "applicationConsumerCount": 10,
         "packageSourceConsumerCount": 0,
         "sourceEvidence": "current complete source bodies in applicationSources/interfaceReviews and emitted declarations in packageReviews",
-        "status": "source-contract-reviewed; runtime held"
+        "status": "source-contract-reviewed; scoped current tvOS runtime evidence in resumed-client-acceptance.md"
       },
       {
         "module": "SwiftfinPlaybackPreviews",
@@ -13345,7 +13370,7 @@
         "applicationConsumerCount": 4,
         "packageSourceConsumerCount": 0,
         "sourceEvidence": "current complete source bodies in applicationSources/interfaceReviews and emitted declarations in packageReviews",
-        "status": "source-contract-reviewed; runtime held"
+        "status": "source-contract-reviewed; scoped current tvOS runtime evidence in resumed-client-acceptance.md"
       },
       {
         "module": "SwiftfinPlaybackProfiles",
@@ -13353,10 +13378,10 @@
         "localDependencies": [
           "SwiftfinCollections"
         ],
-        "applicationConsumerCount": 23,
+        "applicationConsumerCount": 24,
         "packageSourceConsumerCount": 2,
         "sourceEvidence": "current complete source bodies in applicationSources/interfaceReviews and emitted declarations in packageReviews",
-        "status": "source-contract-reviewed; runtime held"
+        "status": "source-contract-reviewed; scoped current tvOS runtime evidence in resumed-client-acceptance.md"
       },
       {
         "module": "SwiftfinPlaybackReporting",
@@ -13368,7 +13393,7 @@
         "applicationConsumerCount": 3,
         "packageSourceConsumerCount": 1,
         "sourceEvidence": "current complete source bodies in applicationSources/interfaceReviews and emitted declarations in packageReviews",
-        "status": "source-contract-reviewed; runtime held"
+        "status": "source-contract-reviewed; scoped current tvOS runtime evidence in resumed-client-acceptance.md"
       },
       {
         "module": "SwiftfinRecordingTimers",
@@ -13380,7 +13405,7 @@
         "applicationConsumerCount": 3,
         "packageSourceConsumerCount": 0,
         "sourceEvidence": "current complete source bodies in applicationSources/interfaceReviews and emitted declarations in packageReviews",
-        "status": "source-contract-reviewed; runtime held"
+        "status": "source-contract-reviewed; scoped current tvOS runtime evidence in resumed-client-acceptance.md"
       },
       {
         "module": "SwiftfinScrolling",
@@ -13389,7 +13414,7 @@
         "applicationConsumerCount": 5,
         "packageSourceConsumerCount": 0,
         "sourceEvidence": "current complete source bodies in applicationSources/interfaceReviews and emitted declarations in packageReviews",
-        "status": "source-contract-reviewed; runtime held"
+        "status": "source-contract-reviewed; scoped current tvOS runtime evidence in resumed-client-acceptance.md"
       },
       {
         "module": "SwiftfinServerOperations",
@@ -13401,7 +13426,7 @@
         "applicationConsumerCount": 18,
         "packageSourceConsumerCount": 0,
         "sourceEvidence": "current complete source bodies in applicationSources/interfaceReviews and emitted declarations in packageReviews",
-        "status": "source-contract-reviewed; runtime held"
+        "status": "source-contract-reviewed; scoped current tvOS runtime evidence in resumed-client-acceptance.md"
       },
       {
         "module": "SwiftfinSessions",
@@ -13412,7 +13437,7 @@
         "applicationConsumerCount": 2,
         "packageSourceConsumerCount": 0,
         "sourceEvidence": "current complete source bodies in applicationSources/interfaceReviews and emitted declarations in packageReviews",
-        "status": "source-contract-reviewed; runtime held"
+        "status": "source-contract-reviewed; scoped current tvOS runtime evidence in resumed-client-acceptance.md"
       },
       {
         "module": "SwiftfinStorage",
@@ -13423,7 +13448,7 @@
         "applicationConsumerCount": 2,
         "packageSourceConsumerCount": 4,
         "sourceEvidence": "current complete source bodies in applicationSources/interfaceReviews and emitted declarations in packageReviews",
-        "status": "source-contract-reviewed; runtime held"
+        "status": "source-contract-reviewed; scoped current tvOS runtime evidence in resumed-client-acceptance.md"
       },
       {
         "module": "SwiftfinStoredValues",
@@ -13433,10 +13458,10 @@
           "SwiftfinPlaybackProfiles",
           "SwiftfinStorage"
         ],
-        "applicationConsumerCount": 47,
+        "applicationConsumerCount": 48,
         "packageSourceConsumerCount": 4,
         "sourceEvidence": "current complete source bodies in applicationSources/interfaceReviews and emitted declarations in packageReviews",
-        "status": "source-contract-reviewed; runtime held"
+        "status": "source-contract-reviewed; scoped current tvOS runtime evidence in resumed-client-acceptance.md"
       },
       {
         "module": "SwiftfinStoredValuesUI",
@@ -13447,7 +13472,7 @@
         "applicationConsumerCount": 14,
         "packageSourceConsumerCount": 0,
         "sourceEvidence": "current complete source bodies in applicationSources/interfaceReviews and emitted declarations in packageReviews",
-        "status": "source-contract-reviewed; runtime held"
+        "status": "source-contract-reviewed; scoped current tvOS runtime evidence in resumed-client-acceptance.md"
       },
       {
         "module": "SwiftfinText",
@@ -13456,7 +13481,7 @@
         "applicationConsumerCount": 82,
         "packageSourceConsumerCount": 0,
         "sourceEvidence": "current complete source bodies in applicationSources/interfaceReviews and emitted declarations in packageReviews",
-        "status": "source-contract-reviewed; runtime held"
+        "status": "source-contract-reviewed; scoped current tvOS runtime evidence in resumed-client-acceptance.md"
       },
       {
         "module": "SwiftfinTime",
@@ -13465,7 +13490,7 @@
         "applicationConsumerCount": 46,
         "packageSourceConsumerCount": 1,
         "sourceEvidence": "current complete source bodies in applicationSources/interfaceReviews and emitted declarations in packageReviews",
-        "status": "source-contract-reviewed; runtime held"
+        "status": "source-contract-reviewed; scoped current tvOS runtime evidence in resumed-client-acceptance.md"
       },
       {
         "module": "SwiftfinUIState",
@@ -13474,7 +13499,7 @@
         "applicationConsumerCount": 65,
         "packageSourceConsumerCount": 1,
         "sourceEvidence": "current complete source bodies in applicationSources/interfaceReviews and emitted declarations in packageReviews",
-        "status": "source-contract-reviewed; runtime held"
+        "status": "source-contract-reviewed; scoped current tvOS runtime evidence in resumed-client-acceptance.md"
       },
       {
         "module": "SwiftfinUserAdministration",
@@ -13486,7 +13511,7 @@
         "applicationConsumerCount": 11,
         "packageSourceConsumerCount": 0,
         "sourceEvidence": "current complete source bodies in applicationSources/interfaceReviews and emitted declarations in packageReviews",
-        "status": "source-contract-reviewed; runtime held"
+        "status": "source-contract-reviewed; scoped current tvOS runtime evidence in resumed-client-acceptance.md"
       },
       {
         "module": "SwiftfinUserMediaState",
@@ -13497,18 +13522,18 @@
         "applicationConsumerCount": 7,
         "packageSourceConsumerCount": 0,
         "sourceEvidence": "current complete source bodies in applicationSources/interfaceReviews and emitted declarations in packageReviews",
-        "status": "source-contract-reviewed; runtime held"
+        "status": "source-contract-reviewed; scoped current tvOS runtime evidence in resumed-client-acceptance.md"
       },
       {
         "module": "SwiftfinVLC",
-        "contractReview": "Native VLC player/render/event and per-open operation ownership remain private. App proxy maps supplied item/settings/events and stops deferred opening before replacement.",
+        "contractReview": "Native VLC player/render/event and per-open operation ownership remain private. App proxy maps supplied item/settings/events and stops deferred opening before replacement. Native open additionally waits for the exact current host to attach/layout; obsolete host and pending-frame state is rejected.",
         "localDependencies": [
           "KidsDiagnostics"
         ],
         "applicationConsumerCount": 2,
         "packageSourceConsumerCount": 0,
         "sourceEvidence": "current complete source bodies in applicationSources/interfaceReviews and emitted declarations in packageReviews",
-        "status": "source-contract-reviewed; runtime held"
+        "status": "source-contract-reviewed; scoped current tvOS runtime evidence in resumed-client-acceptance.md"
       },
       {
         "module": "SwiftfinValues",
@@ -13517,7 +13542,7 @@
         "applicationConsumerCount": 30,
         "packageSourceConsumerCount": 4,
         "sourceEvidence": "current complete source bodies in applicationSources/interfaceReviews and emitted declarations in packageReviews",
-        "status": "source-contract-reviewed; runtime held"
+        "status": "source-contract-reviewed; scoped current tvOS runtime evidence in resumed-client-acceptance.md"
       }
     ],
     "additionalLocalTargetReviews": [
@@ -13606,7 +13631,7 @@
           "Swiftfin/Views/VideoPlayer/VideoPlayer+KeyCommands.swift"
         ],
         "contractReview": "Main-actor UIKit hosting, weak callback box, Sendable command descriptors/builders and one-time orientation swizzle; conditional iOS/tvOS public surfaces reviewed.",
-        "runtimeAcceptance": "UIKit execution held; macro fake-test result retained separately"
+        "runtimeAcceptance": "Current tvOS UIKit owner integration included in acceptance 89; iOS runtime remains compile-only. Macro fake-test result retained separately."
       },
       {
         "module": "SwiftfinMacros",
@@ -13652,7 +13677,7 @@
           "Shared/Objects/WithViewContext.swift"
         ],
         "contractReview": "Public macro declarations and all plugin expansion/validation bodies reviewed; generated Codable/OptionSet witnesses retain supported defaults/access/raw-value contracts.",
-        "runtimeAcceptance": "UIKit execution held; macro fake-test result retained separately"
+        "runtimeAcceptance": "Existing 18 fake expansion tests retained by unchanged hashes; current app/test macro compilation recorded separately."
       }
     ],
     "remainingSourceConsumerReview": []
