@@ -1,6 +1,6 @@
 # Package API review
 
-This is the current scoped source/API checkpoint, not whole-client acceptance. Exact source, manifest and compiler-graph hashes are in source-review-ledger.json. Compiler symbol graphs include external type extensions and protocol witnesses; they locate the emitted surface and do not prove behavior.
+All 53 libraries have complete current source and emitted public-API reviews, with exact source, manifest and compiler-graph hashes in source-review-ledger.json. Whole-graph app-consumer closure and held runtime acceptance remain outstanding. Compiler graphs include external type extensions and protocol witnesses; they identify declarations, not behavior. Dated sections preserve earlier checkpoints.
 
 ## Reviewed batch (2026-10-07)
 
@@ -150,3 +150,16 @@ Missing image URLs now allow fallback to continue; paging notification edits use
 | SwiftfinPlaybackPreviews | 4 | 54 |
 
 Four new offline contracts cover missing-URL fallback, update/removal invalidation and nested edit ordering. Image tests use a synthetic DataLoading implementation that rejects all network access; paging uses synthetic rows and ports. Failing pre-fix evidence is retained for image fallback, update invalidation and nested updates. SVG sampling/encoding, timeline/cache arithmetic and playback preparation/commands retain their original fixture/sender contracts. The 112 passing macOS tests do not execute the UIKit renderer, decoder, cropper or scrub-selection tests. Those public declarations were reviewed from actual tvOS compiler graphs and their implementations compile in the platform gates; runtime acceptance stays held. Existing app image/paging adapters were read, while playback-build/DTO/socket/chapter consumers have explicitly scoped composition/selection coverage. SDK pins, persistence/signing inputs and protected workflow/lock changes are preserved. No simulator execution, native player/hardware/credential query, household-server request or RAID access occurred.
+
+
+## Final package source and public-API reviews (2026-10-08)
+
+All 53 libraries now have complete current source and emitted public-API reviews, covering all 250 package source bodies. The final three reviews add 16 bodies and 209 tvOS public symbols. There are 252 scoped interface entries for 250 unique sources; all 664 app source classifications remain current. All 79 synthetic metadata contracts pass. No production inputs changed in this batch: the previous tvOS Debug compile-for-testing and iOS Release gates are reused after comparing 1,523 non-document/workflow/lock inputs. Whole-graph app-consumer closure, final actor/bootstrap completion audit and held runtime acceptance remain; items 1/2 stay active.
+
+| Module | Complete source bodies | tvOS compiler public symbols |
+| --- | ---: | ---: |
+| KidsApplication | 2 | 66 |
+| KidsExperience | 4 | 7 |
+| SwiftfinItemMetadata | 10 | 136 |
+
+The child application model and tvOS presentation preserve account/library checks, protected actions, original-session playback and renderer injection. Metadata retains captured transport, item-scoped serialized writes, delayed program refresh, immutable policy facts and caller checkpoints. All current direct importing app boundaries were inspected, with source-specific scopes and unchanged earlier full-body reviews recorded in the ledger. The 79 passing native metadata tests use synthetic senders and injected waits. KidsApplication and KidsExperience are compiled platform code; no native model/speech/repository, SwiftUI preview or real player is executed. Existing compile gates are reused because their inputs are unchanged, rather than rebuilding for documentation edits. The dependency checker still validates 53 libraries. Signing, schema, SDK revisions, protected workflow/lock changes and restored progress are preserved. No simulator, household-server, hardware/credential, cloud or RAID action occurred.

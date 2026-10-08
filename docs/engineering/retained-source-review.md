@@ -1,6 +1,6 @@
 # Retained application responsibility review
 
-The application is intended to retain composition and platform presentation. This is a source-reviewed ledger, not an automatic approval of files based on their folder, filename or import count. The full-client refactor remains active. Live simulator/server activity is held by the human. Current ledger:529 retained,2 mixed and134 pending among665 app files;56 scoped interface reviews.
+The app retains composition and platform presentation. All 664 current application Swift sources have source-reviewed retention reasons and exact hashes in source-review-ledger.json; all 53 libraries have complete current source and public-API reviews. Folder names or import counts are not approval evidence. Whole-graph consumer closure and final interoperability acceptance remain required. Live simulator/server activity stays held. The dated sections below preserve earlier checkpoints and are historical, not the current totals.
 
 ## Reviewed boundaries at the date/program checkpoint
 

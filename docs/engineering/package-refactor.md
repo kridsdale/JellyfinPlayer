@@ -2,7 +2,7 @@
 
 Active goal: complete the minimal-responsibility package refactor and remaining Swift 6 compatibility warnings. This document records scope and evidence, not a narrower replacement objective.
 
-Latest offline evidence:Scoped search and original-item image integration now pass:34 paging+79 metadata native contracts, including12 new regressions;53 package boundaries;tvOS Debug compile-for-testing and iOS Release with no owned Swift/generated-macro diagnostics. The665-source ledger has529 retained,2 mixed and134 pending, with56 scoped API reviews. Full source/API/actor/bootstrap and held runtime acceptance remain required; items1/2 stay active.
+Latest offline evidence: All 53 libraries now have complete current source and emitted public-API reviews, covering all 250 package source bodies. The final three reviews add 16 bodies and 209 tvOS public symbols. There are 252 scoped interface entries for 250 unique sources; all 664 app source classifications remain current. All 79 synthetic metadata contracts pass. No production inputs changed in this batch: the previous tvOS Debug compile-for-testing and iOS Release gates are reused after comparing 1,523 non-document/workflow/lock inputs. Whole-graph app-consumer closure, final actor/bootstrap completion audit and held runtime acceptance remain; items 1/2 stay active.
 
 ## Initial source map
 
