@@ -42,6 +42,7 @@ public final class VLCPlaybackController {
     private let engine: any VLCNativeEngine
     private let updateSubject = PassthroughSubject<Void, Never>()
     private var generation: UUID?
+    private var operationID: UUID?
     private var request: VLCPlaybackRequest?
     private var pendingStart: Duration?
     private var buffering = false
@@ -86,6 +87,8 @@ public final class VLCPlaybackController {
     }
 
     public func open(_ request: VLCPlaybackRequest, generation: UUID, performance: KidsPerformanceSpan? = nil) {
+        let operation = UUID()
+        operationID = operation
         self.generation = generation
         self.request = request
         self.performance = performance
@@ -98,10 +101,12 @@ public final class VLCPlaybackController {
             nativeDiagnostics = SwiftVLCNativeEngine.observeDiagnostics(performance)
             performance?.mark(.vlcOpen, values: ["resume_seconds": request.start.vlcSeconds])
             try engine.open(request)
+            guard operationID == operation else { return }
             performance?.mark(.vlcOpenReturned)
             observeStartup(generation: generation)
             engine.subtitleStyle(request.subtitleStyle)
         } catch {
+            guard operationID == operation else { return }
             pendingStart = nil
             onEvent?(.playbackFailed)
         }
@@ -119,6 +124,7 @@ public final class VLCPlaybackController {
 
     public func stop() {
         generation = nil
+        operationID = nil
         pendingStart = nil
         buffering = false
         performanceSampler?.cancel()
@@ -140,10 +146,11 @@ public final class VLCPlaybackController {
     }
 
     public func seek(_ value: Duration) {
-        guard generation != nil, engine.frame.seekable else { return }
+        guard let operation = operationID, engine.frame.seekable, operationID == operation else { return }
         pendingStart = nil
         perform(.seek) {
             try engine.seek(value)
+            guard operationID == operation else { return }
             terminalPosition = max(.zero, value)
         }
     }
@@ -179,25 +186,34 @@ public final class VLCPlaybackController {
     }
 
     private func perform(_ operation: VLCPlaybackOperation, _ action: () throws -> Void) {
-        do { try action() } catch { onEvent?(.operationRejected(operation)) }
+        let receipt = operationID
+        do { try action() } catch {
+            guard operationID == receipt else { return }
+            onEvent?(.operationRejected(operation))
+        }
     }
 
     @discardableResult
     private func applyPendingStart() -> Bool {
-        guard let pendingStart, engine.frame.seekable else { return false }
+        guard let operation = operationID, let pendingStart, engine.frame.seekable, operationID == operation else { return false }
         self.pendingStart = nil
         performance?.once(.resumeSeek, values: ["seconds": pendingStart.vlcSeconds])
         do {
             try engine.seek(pendingStart)
+            guard operationID == operation else { return true }
             terminalPosition = pendingStart
             onEvent?(.resumePosition(pendingStart))
-        } catch { onEvent?(.operationRejected(.seek)) }
+        } catch {
+            guard operationID == operation else { return true }
+            onEvent?(.operationRejected(.seek))
+        }
         return true
     }
 
     func observed(_ kind: VLCObservation, generation: UUID) {
-        guard self.generation == generation else { return }
+        guard self.generation == generation, let operation = operationID else { return }
         let native = engine.frame
+        guard operationID == operation else { return }
         switch kind {
         case .clock:
             guard native.state == .playing || native.state == .paused, !applyPendingStart() else { return }
@@ -217,6 +233,8 @@ public final class VLCPlaybackController {
                 buffering = true
             case .playing: performance?.once(.vlcPlaying)
                 applyPendingStart()
+                // A resume event can synchronously stop or replace this open.
+                guard operationID == operation else { return }
                 buffering = false
             case .paused: buffering = false
             case .error: performance?.once(.playerError)

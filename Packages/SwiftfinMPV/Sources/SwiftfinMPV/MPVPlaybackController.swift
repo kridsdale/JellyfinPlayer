@@ -221,9 +221,11 @@ public final class MPVPlaybackController {
     }
 
     public func loadMissingSidecars(mappedIndexes: Set<Int>, generation: UUID) {
-        guard isCurrent(generation), frame.phase.acceptsTracks, !frame.tracks.isEmpty, let request,
+        guard let operation = operationID, isCurrent(generation), frame.phase.acceptsTracks, !frame.tracks.isEmpty, let request,
               frame.sourceURL == request.url else { return }
         for sidecar in request.sidecars {
+            // A native/frame callback may reopen the same rendering identity.
+            guard operationID == operation, isCurrent(generation) else { return }
             guard let index = sidecar.jellyfinIndex, !mappedIndexes.contains(index), loadedSidecars.insert(index).inserted else { continue }
             engine.addSubtitle(url: sidecar.url, title: "swiftfin-subtitle-\(index)")
         }

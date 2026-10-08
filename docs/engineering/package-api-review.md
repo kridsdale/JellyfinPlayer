@@ -121,3 +121,17 @@ Watched/favorite callers now check their original mutation receipt before submis
 The two media-state callers validate account/field/item authority after optimistic publication, after the response and between notification effects. Scrolling checks the original observation generation before each borrowed follower update. These are source-backed callback fixes verified by platform compilation; the native media-state suite covers serial requests, binding retirement, per-field tickets and selective merge, not live UIKit callback execution. Simulator and server testing remain held.
 
 Localization owns the full generator/plugin bodies and exactly 1,086 public member names: 964 resource keys and 122 proper nouns. All 1,045 immutable String shapes and 41 formatted String signatures were audited against current inputs. UIKit/audio/display-link APIs were inspected from the tvOS compiler graph, avoiding a macOS-only interface claim for conditional code. Credential/schema/signing inputs, the original SDK revisions and saved playback progress remain unchanged. No RAID, server, hardware, actual credential or cloud operation was performed.
+
+
+## Playback retirement and driver lifetime (2026-10-07)
+
+Three reproduced playback lifetime defects are repaired: retired VLC opens/resumes/seeks cannot alter replacement state or completion, MPV sidecar batches stop after replacement, and a retired kids session cannot restart. All 61 offline playback contracts pass; platform compile gates are recorded with the validation evidence. Four complete playback module reviews add 13 source bodies and 270 compiler public symbols. The graph remains 53 libraries; 45 complete module reviews cover 211 source bodies, and 225 scoped interface entries cover 223 unique sources of 250. All 664 app sources remain classified. Eight module reviews, whole-graph consumer closure and held runtime acceptance remain; items 1/2 stay active.
+
+| Module | Complete source bodies | Compiler public symbols |
+| --- | ---: | ---: |
+| KidsPlaybackSession | 2 | 69 |
+| SwiftfinVLC | 3 | 80 |
+| SwiftfinMPV | 4 | 77 |
+| SwiftfinNativePlayback | 4 | 44 |
+
+Five new test declarations cover six synthetic regression cases, with failing pre-fix evidence retained. All 61 current contracts pass using fake engines, synthetic metadata, captions and injected hardware readers. Compiler interface extraction uses macOS 15; these libraries have no platform-conditional public declarations. Private AVPlayer UIKit surfaces and native SDK render paths are covered by the separate tvOS/iOS compile gates, not runtime observation. No simulator/player/media stream, hardware probe, credential query, cloud operation, server action or RAID access occurred. The existing app proxies and kids driver adapter were read; the KidsAppModel review covers its final preparation/publication/start boundary, not its complete body. Full app/experience/metadata and remaining image/paging/preparation/preview owners remain on the finite checklist.

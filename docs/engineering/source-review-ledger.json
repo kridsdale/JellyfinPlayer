@@ -5915,17 +5915,25 @@
     },
     {
       "path": "Packages/SwiftfinNativePlayback/Sources/SwiftfinNativePlayback/NativePlaybackHardwareReader.swift",
-      "reason": "Private checked-Sendable readers hide AVPlayer/Metal/VideoToolbox native queries and CoreMedia constants. Default construction performs no probe; each requested field reads current hardware lazily. Injected closure readers enable native tests without actual probes. No native handle or profile/settings lookup crosses the interface; app keeps preference and immutable snapshot composition.",
+      "reason": "NativePlaybackHardwareReader.swift: complete current source body and public interface audit. Main-actor private AVPlayer engine owns KVO/time/end subscriptions and weak UIKit surfaces; seeks have generation/revision receipts. Public requests are redacted. Checked Sendable hardware-reader closures remain lazy and tests use only injected readers. Listed app adapters were read; KidsAppModel review is its preparation/publication/start boundary only. Whole-graph consumer and runtime acceptance remain required.",
       "reviewedConsumers": [
-        "Shared/Objects/PlaybackCapabilities.swift"
+        "Shared/Objects/PlaybackCapabilities.swift",
+        "Shared/Objects/MediaPlayerManager/MediaPlayerProxy/MediaPlayerProxy+AVPlayer.swift",
+        "Shared/Components/NativeVideoPlayer.swift"
       ],
       "reviewedInterfaces": [
-        "HardwareVideoCodec",
-        "NativePlaybackHardwareReader.init()",
-        "NativePlaybackHardwareReader.init(hdr:gpuName:codec:)",
-        "NativePlaybackHardwareReader.isHDRCapable",
-        "NativePlaybackHardwareReader.gpuName",
-        "NativePlaybackHardwareReader.supports(_:)"
+        "case av1",
+        "case dolbyVisionHEVC",
+        "case h264",
+        "case hevc",
+        "case vp9",
+        "enum HardwareVideoCodec",
+        "func supports(_ codec: HardwareVideoCodec) -> Bool",
+        "init()",
+        "init(hdr: @escaping @Sendable () -> Bool, gpuName: @escaping @Sendable () -> String?, codec: @escaping @Sendable (HardwareVideoCodec) -> Bool)",
+        "struct NativePlaybackHardwareReader",
+        "var gpuName: String? { get }",
+        "var isHDRCapable: Bool { get }"
       ],
       "sha256": "da4c12deeedd78180dfded13e7d78f492504efb669d0af1e0d81fce16816461c"
     },
@@ -7292,35 +7300,96 @@
     },
     {
       "path": "Packages/KidsPlaybackSession/Sources/KidsPlaybackSession/KidsPlaybackDriver.swift",
-      "reason": "Complete value/driver/delegate/factory port surface read. Frames and events are checked Sendable snapshots; mutable SDK players are absent. Drivers and delegate callbacks are MainActor. Stop-from-session now requires its originating controller; the sole production sender and every conformance were inspected and compiled. Native fake delegate verifies the exact identity.",
+      "reason": "KidsPlaybackDriver.swift: complete current source body and public interface audit. The main-actor single-lifetime driver/session owns readiness, controls, checkpoints, retries, completion, countdown and joined teardown; catalog/account/persistence decisions stay in delegate/factory ports. Start is idempotent and rejects retirement. Listed app adapters were read; KidsAppModel review is its preparation/publication/start boundary only. Whole-graph consumer and runtime acceptance remain required.",
       "reviewedConsumers": [
         "Packages/KidsApplication/Sources/KidsApplication/KidsAppModel.swift",
-        "Packages/KidsPlaybackSession/Sources/KidsPlaybackSession/KidsPlaybackController.swift"
+        "Packages/KidsPlaybackSession/Sources/KidsPlaybackSession/KidsPlaybackController.swift",
+        "Swiftfin tvOS/App/KidsPlaybackAdapter.swift"
       ],
       "reviewedInterfaces": [
-        "KidsPlaybackFrame",
-        "KidsPlaybackFailure",
-        "KidsPlaybackDriverEvent",
-        "KidsPlaybackDriver",
-        "KidsPlaybackSessionDelegate",
-        "KidsPlaybackSessionFactory"
+        "@MainActor func beginReporting()",
+        "@MainActor func completed(_ session: KidsPlaybackController) async",
+        "@MainActor func continuePlayback(_ session: KidsPlaybackController) async",
+        "@MainActor func pause()",
+        "@MainActor func playbackBegan(_ session: KidsPlaybackController)",
+        "@MainActor func playbackCheckpoint(_ session: KidsPlaybackController, seconds: Double)",
+        "@MainActor func playbackFailed(_ session: KidsPlaybackController, error: KidsPlaybackFailure)",
+        "@MainActor func prepare(item: KidsItem, title: KidsItem, mode: KidsPlaybackMode, position: Double, episodes: [KidsItem], delegate: any KidsPlaybackSessionDelegate, performance: KidsPerformanceSpan?, simulateStreamFailure: Bool) async throws -> KidsPlaybackController",
+        "@MainActor func retryPlayback(_ session: KidsPlaybackController, position: Double)",
+        "@MainActor func seek(seconds: Double)",
+        "@MainActor func start()",
+        "@MainActor func stop() async",
+        "@MainActor func stopPlaybackFromSession(_ session: KidsPlaybackController) async",
+        "@MainActor func togglePlayPause()",
+        "@MainActor protocol KidsPlaybackDriver : AnyObject",
+        "@MainActor protocol KidsPlaybackSessionDelegate : AnyObject",
+        "@MainActor protocol KidsPlaybackSessionFactory : AnyObject",
+        "@MainActor var events: AnyPublisher<KidsPlaybackDriverEvent, Never> { get }",
+        "@MainActor var frame: KidsPlaybackFrame { get }",
+        "@MainActor var isPreview: Bool { get }",
+        "case authentication",
+        "case failure(KidsPlaybackFailure)",
+        "case naturalEnd",
+        "case stream",
+        "case transport(paused: Bool, seconds: Double, terminal: Bool)",
+        "case updated",
+        "enum KidsPlaybackDriverEvent",
+        "enum KidsPlaybackFailure",
+        "init()",
+        "struct KidsPlaybackFrame",
+        "var applyingStartPosition: Bool",
+        "var buffering: Bool",
+        "var displayedPictures: Int",
+        "var failed: Bool",
+        "var paused: Bool",
+        "var playing: Bool",
+        "var preparing: Bool",
+        "var reachedEnd: Bool",
+        "var seconds: Double",
+        "var seekable: Bool",
+        "var terminal: Bool"
       ],
       "sha256": "cb4c5d05068f2c3e306859acae90154e13151c7b00d3d5e72c87ece46fc48c8a"
     },
     {
       "path": "Packages/KidsPlaybackSession/Sources/KidsPlaybackSession/KidsPlaybackController.swift",
-      "reason": "Scoped stop/retry/background/Back lifetime body read. Back passes its actual controller. Stop retains one private actor task for native teardown; all overlapping callers await that same completion rather than returning when the stopped flag is first set. Final checkpoint precedes teardown and timer retirement follows completion. The fake delayed-driver regression passes; this is not a full audit of remaining controller APIs or real VLC draining.",
+      "reason": "KidsPlaybackController.swift: complete current source body and public interface audit. The main-actor single-lifetime driver/session owns readiness, controls, checkpoints, retries, completion, countdown and joined teardown; catalog/account/persistence decisions stay in delegate/factory ports. Start is idempotent and rejects retirement. Listed app adapters were read; KidsAppModel review is its preparation/publication/start boundary only. Whole-graph consumer and runtime acceptance remain required.",
       "reviewedConsumers": [
         "Packages/KidsApplication/Sources/KidsApplication/KidsAppModel.swift",
-        "Packages/KidsPlaybackSession/Sources/KidsPlaybackSession/KidsPlaybackDriver.swift"
+        "Packages/KidsPlaybackSession/Sources/KidsPlaybackSession/KidsPlaybackDriver.swift",
+        "Swiftfin tvOS/App/KidsPlaybackAdapter.swift"
       ],
       "reviewedInterfaces": [
-        "stop()",
-        "handleBack()",
-        "retry()",
-        "pauseOnBackground()"
+        "@MainActor final class KidsPlaybackController",
+        "@MainActor func handleBack() async",
+        "@MainActor func pauseOnBackground()",
+        "@MainActor func retry() async",
+        "@MainActor func reveal()",
+        "@MainActor func seek(_ delta: Double)",
+        "@MainActor func start()",
+        "@MainActor func stop() async",
+        "@MainActor func toggle()",
+        "@MainActor init(item: KidsItem, title: KidsItem, mode: KidsPlaybackMode, position: Double, episodes: [KidsItem], driver: any KidsPlaybackDriver, delegate: any KidsPlaybackSessionDelegate, performance: KidsPerformanceSpan? = nil, now: @escaping @MainActor @Sendable () -> Date = { .now })",
+        "@MainActor let driver: any KidsPlaybackDriver",
+        "@MainActor let episodes: [KidsItem]",
+        "@MainActor let id: UUID",
+        "@MainActor let item: KidsItem",
+        "@MainActor let mode: KidsPlaybackMode",
+        "@MainActor let title: KidsItem",
+        "@MainActor static func preview(item: KidsItem, title: KidsItem, mode: KidsPlaybackMode, episodes: [KidsItem], delegate: any KidsPlaybackSessionDelegate, scenario: String) -> KidsPlaybackController",
+        "@MainActor var allowsCheckpoints: Bool",
+        "@MainActor var performance: KidsPerformanceSpan?",
+        "@Published @MainActor var buffering: Bool { get set }",
+        "@Published @MainActor var controlsVisible: Bool { get set }",
+        "@Published @MainActor var countdown: Int { get set }",
+        "@Published @MainActor var failed: Bool { get set }",
+        "@Published @MainActor var nextEpisode: KidsItem? { get set }",
+        "@Published @MainActor var paused: Bool { get set }",
+        "@Published @MainActor var recovery: Bool { get set }",
+        "@Published @MainActor var seconds: Double { get set }",
+        "@Published @MainActor var showCountdown: Bool { get set }"
       ],
-      "sha256": "6b02c23aaeb953c01329f9980e7e9fc56e15f978d02831c46a99cc0241d672d6"
+      "sha256": "ec395e9e9c12b8dc4c70ada1ac3474768f910f99f77787d8a2263db6b2f00f2e"
     },
     {
       "path": "Packages/KidsArtworkUI/Sources/KidsArtworkUI/KidsArtworkStore.swift",
@@ -10626,6 +10695,293 @@
         "struct KidsPerformanceEvent"
       ],
       "sha256": "c9b50c3f5d3c4f1c3712c616d0fce9c41b77863ce113df2d2ace0704ef5d62fa"
+    },
+    {
+      "path": "Packages/SwiftfinVLC/Sources/SwiftfinVLC/SwiftVLCNativeEngine.swift",
+      "reason": "SwiftVLCNativeEngine.swift: complete current source body and public interface audit. Private native SDK/render/log-stream owner exposes checked value snapshots and typed main-actor commands/events. Every open has its own operation receipt, including reused render identities; retired open/resume/seek effects cannot publish state or stamp replacement completion. Listed app adapters were read; KidsAppModel review is its preparation/publication/start boundary only. Whole-graph consumer and runtime acceptance remain required.",
+      "reviewedConsumers": [
+        "Shared/Objects/MediaPlayerManager/MediaPlayerProxy/MediaPlayerProxy+VLC.swift",
+        "Swiftfin tvOS/App/KidsPlaybackAdapter.swift"
+      ],
+      "reviewedInterfaces": [],
+      "sha256": "75f492531000d6a0f0017f829369d6eacacbed8b9603a5e1573a85c2fdc4000f"
+    },
+    {
+      "path": "Packages/SwiftfinVLC/Sources/SwiftfinVLC/VLCPlaybackContracts.swift",
+      "reason": "VLCPlaybackContracts.swift: complete current source body and public interface audit. Private native SDK/render/log-stream owner exposes checked value snapshots and typed main-actor commands/events. Every open has its own operation receipt, including reused render identities; retired open/resume/seek effects cannot publish state or stamp replacement completion. Listed app adapters were read; KidsAppModel review is its preparation/publication/start boundary only. Whole-graph consumer and runtime acceptance remain required.",
+      "reviewedConsumers": [
+        "Shared/Objects/MediaPlayerManager/MediaPlayerProxy/MediaPlayerProxy+VLC.swift",
+        "Swiftfin tvOS/App/KidsPlaybackAdapter.swift"
+      ],
+      "reviewedInterfaces": [
+        "case audioDelay",
+        "case audioTracksChanged",
+        "case buffer(VLCPlaybackFrame)",
+        "case buffering",
+        "case clock(VLCPlaybackFrame)",
+        "case error",
+        "case idle",
+        "case naturalEnd(Duration?)",
+        "case open",
+        "case opening",
+        "case operationRejected(VLCPlaybackOperation)",
+        "case paused",
+        "case play",
+        "case playbackFailed",
+        "case playing",
+        "case rate",
+        "case resumePosition(Duration)",
+        "case seek",
+        "case state(VLCPlaybackFrame)",
+        "case stopped",
+        "case stopping",
+        "case subtitleDelay",
+        "case subtitleTracksChanged([VLCSubtitleTrack])",
+        "enum VLCPlaybackEvent",
+        "enum VLCPlaybackOperation",
+        "enum VLCPlaybackState",
+        "init()",
+        "init(fontName: String, colorRGB: Int?, approximatePoints: Double)",
+        "init(index: Int, id: String)",
+        "init(url: URL, start: Duration, runtime: Duration?, live: Bool, subtitleURLs: [URL], subtitleStyle: VLCSubtitleStyle)",
+        "let approximatePoints: Double",
+        "let colorRGB: Int?",
+        "let fontName: String",
+        "let id: String",
+        "let index: Int",
+        "let live: Bool",
+        "let runtime: Duration?",
+        "let start: Duration",
+        "let subtitleStyle: VLCSubtitleStyle",
+        "let subtitleURLs: [URL]",
+        "let url: URL",
+        "struct VLCPlaybackFrame",
+        "struct VLCPlaybackRequest",
+        "struct VLCSubtitleStyle",
+        "struct VLCSubtitleTrack",
+        "var applyingStartPosition: Bool",
+        "var bufferFill: Float",
+        "var buffering: Bool",
+        "var corruptedPictures: UInt64",
+        "var debugDescription: String { get }",
+        "var decodedVideo: UInt64",
+        "var description: String { get }",
+        "var displayedPictures: UInt64",
+        "var lostPictures: UInt64",
+        "var reachedEnd: Bool",
+        "var readBytes: UInt64",
+        "var seekable: Bool",
+        "var state: VLCPlaybackState",
+        "var time: Duration",
+        "var videoSize: CGSize"
+      ],
+      "sha256": "0eedb4f1e59b3ee2e12c4c986e83a1ff8e0afc66f2b12dcea2fc2ad7ef649013"
+    },
+    {
+      "path": "Packages/SwiftfinVLC/Sources/SwiftfinVLC/VLCPlaybackController.swift",
+      "reason": "VLCPlaybackController.swift: complete current source body and public interface audit. Private native SDK/render/log-stream owner exposes checked value snapshots and typed main-actor commands/events. Every open has its own operation receipt, including reused render identities; retired open/resume/seek effects cannot publish state or stamp replacement completion. Listed app adapters were read; KidsAppModel review is its preparation/publication/start boundary only. Whole-graph consumer and runtime acceptance remain required.",
+      "reviewedConsumers": [
+        "Shared/Objects/MediaPlayerManager/MediaPlayerProxy/MediaPlayerProxy+VLC.swift",
+        "Swiftfin tvOS/App/KidsPlaybackAdapter.swift"
+      ],
+      "reviewedInterfaces": [
+        "@MainActor convenience init()",
+        "@MainActor final class VLCPlaybackController",
+        "@MainActor func jump(_ offset: Duration)",
+        "@MainActor func open(_ request: VLCPlaybackRequest, generation: UUID, performance: KidsPerformanceSpan? = nil)",
+        "@MainActor func pause()",
+        "@MainActor func play()",
+        "@MainActor func seek(_ value: Duration)",
+        "@MainActor func setAspectFill(_ value: Bool)",
+        "@MainActor func setAudioDelay(_ value: Duration)",
+        "@MainActor func setAudioTrack(_ index: Int?)",
+        "@MainActor func setRate(_ value: Float)",
+        "@MainActor func setSubtitleDelay(_ value: Duration)",
+        "@MainActor func setSubtitleStyle(_ value: VLCSubtitleStyle)",
+        "@MainActor func setSubtitleTrack(_ index: Int?)",
+        "@MainActor func shutdown() async -> Bool",
+        "@MainActor func stop()",
+        "@MainActor func surface(generation: UUID) -> AnyView",
+        "@MainActor var frame: VLCPlaybackFrame { get }",
+        "@MainActor var onEvent: (@MainActor @Sendable (VLCPlaybackEvent) -> Void)?",
+        "@MainActor var updates: AnyPublisher<Void, Never> { get }"
+      ],
+      "sha256": "cde7ba66bce7ab64cd6a8eae6bebab9bb59e28234f3924c426b4a875c3fca4f3"
+    },
+    {
+      "path": "Packages/SwiftfinMPV/Sources/SwiftfinMPV/MPVPlaybackController.swift",
+      "reason": "MPVPlaybackController.swift: complete current source body and public interface audit. Private native player/track/command owner exposes typed frames/commands and one immutable semantic-caption SDK value. Observation and caption streams retain operation identities; sidecar batches now recheck that identity between native effects. Listed app adapters were read; KidsAppModel review is its preparation/publication/start boundary only. Whole-graph consumer and runtime acceptance remain required.",
+      "reviewedConsumers": [
+        "Shared/Objects/MediaPlayerManager/MediaPlayerProxy/MediaPlayerProxy+MPV.swift"
+      ],
+      "reviewedInterfaces": [
+        "@MainActor convenience init()",
+        "@MainActor final class MPVPlaybackController",
+        "@MainActor func isCurrent(_ generation: UUID) -> Bool",
+        "@MainActor func jump(_ offset: Duration)",
+        "@MainActor func loadMissingSidecars(mappedIndexes: Set<Int>, generation: UUID)",
+        "@MainActor func open(_ request: MPVPlaybackRequest, generation: UUID)",
+        "@MainActor func pause()",
+        "@MainActor func play()",
+        "@MainActor func seek(_ time: Duration)",
+        "@MainActor func setAspectFill(_ value: Bool)",
+        "@MainActor func setAudioDelay(_ value: Duration)",
+        "@MainActor func setRate(_ value: Float)",
+        "@MainActor func setSubtitleDelay(_ value: Duration)",
+        "@MainActor func setTrack(_ index: Int?, kind: MPVPlaybackTrackKind)",
+        "@MainActor func stop()",
+        "@MainActor func subtitles(generation: UUID) -> AsyncStream<TextSubtitleSnapshot>",
+        "@MainActor func surface(generation: UUID) -> AnyView",
+        "@MainActor var frame: MPVPlaybackFrame { get set }",
+        "@MainActor var onFrame: (@MainActor @Sendable (UUID, MPVPlaybackFrame) -> Void)?"
+      ],
+      "sha256": "b6f9a8888af9d4482766e1534ca1e6227fbd3401e8a4bcda082f9e8b60630180"
+    },
+    {
+      "path": "Packages/SwiftfinMPV/Sources/SwiftfinMPV/MPVPlaybackValues.swift",
+      "reason": "MPVPlaybackValues.swift: complete current source body and public interface audit. Private native player/track/command owner exposes typed frames/commands and one immutable semantic-caption SDK value. Observation and caption streams retain operation identities; sidecar batches now recheck that identity between native effects. Listed app adapters were read; KidsAppModel review is its preparation/publication/start boundary only. Whole-graph consumer and runtime acceptance remain required.",
+      "reviewedConsumers": [
+        "Shared/Objects/MediaPlayerManager/MediaPlayerProxy/MediaPlayerProxy+MPV.swift"
+      ],
+      "reviewedInterfaces": [
+        "case audio",
+        "case buffering",
+        "case ended",
+        "case failed(MPVPlaybackFailure)",
+        "case idle",
+        "case loading",
+        "case paused",
+        "case playing",
+        "case ready",
+        "case seeking",
+        "case stopped",
+        "case subtitle",
+        "case video",
+        "enum MPVPlaybackPhase",
+        "enum MPVPlaybackTrackKind",
+        "init()",
+        "init(index: Int, kind: MPVPlaybackTrackKind, title: String? = nil, external: Bool = false, selected: Bool = false)",
+        "init(jellyfinIndex: Int?, url: URL)",
+        "init(message: String)",
+        "init(url: URL, start: Duration?, autoPlay: Bool, rate: Float, sidecars: [MPVSidecarSubtitle])",
+        "let autoPlay: Bool",
+        "let external: Bool",
+        "let index: Int",
+        "let jellyfinIndex: Int?",
+        "let kind: MPVPlaybackTrackKind",
+        "let message: String",
+        "let rate: Float",
+        "let selected: Bool",
+        "let sidecars: [MPVSidecarSubtitle]",
+        "let start: Duration?",
+        "let title: String?",
+        "let url: URL",
+        "struct MPVPlaybackFailure",
+        "struct MPVPlaybackFrame",
+        "struct MPVPlaybackRequest",
+        "struct MPVPlaybackTrack",
+        "struct MPVSidecarSubtitle",
+        "var acceptsTracks: Bool { get }",
+        "var debugDescription: String { get }",
+        "var description: String { get }",
+        "var errorDescription: String? { get }",
+        "var phase: MPVPlaybackPhase",
+        "var sourceURL: URL?",
+        "var subtitleVideoSize: CGSize?",
+        "var time: Duration",
+        "var tracks: [MPVPlaybackTrack]",
+        "var transient: Bool { get }",
+        "var videoSize: CGSize?"
+      ],
+      "sha256": "12ffdf1bbd87c7d80b1fbb5f79a6d3c3291ad5c0b5bf6d03f35eb3299f117514"
+    },
+    {
+      "path": "Packages/SwiftfinMPV/Sources/SwiftfinMPV/MPVTextSubtitlePresentation.swift",
+      "reason": "MPVTextSubtitlePresentation.swift: complete current source body and public interface audit. Private native player/track/command owner exposes typed frames/commands and one immutable semantic-caption SDK value. Observation and caption streams retain operation identities; sidecar batches now recheck that identity between native effects. Listed app adapters were read; KidsAppModel review is its preparation/publication/start boundary only. Whole-graph consumer and runtime acceptance remain required.",
+      "reviewedConsumers": [
+        "Shared/Objects/MediaPlayerManager/MediaPlayerProxy/MediaPlayerProxy+MPV.swift"
+      ],
+      "reviewedInterfaces": [
+        "@MainActor final class MPVTextSubtitlePresentation",
+        "@MainActor func clear()",
+        "@MainActor func observe(_ controller: MPVPlaybackController, generation: UUID, load: @MainActor @Sendable () -> Void) async",
+        "@MainActor init()",
+        "@MainActor var snapshot: TextSubtitleSnapshot { get set }"
+      ],
+      "sha256": "4245cd17681b1185cb3dbac0d0b88b814c66e8ef86419098da8bcfad4f37927d"
+    },
+    {
+      "path": "Packages/SwiftfinMPV/Sources/SwiftfinMPV/NativeMPVEngine.swift",
+      "reason": "NativeMPVEngine.swift: complete current source body and public interface audit. Private native player/track/command owner exposes typed frames/commands and one immutable semantic-caption SDK value. Observation and caption streams retain operation identities; sidecar batches now recheck that identity between native effects. Listed app adapters were read; KidsAppModel review is its preparation/publication/start boundary only. Whole-graph consumer and runtime acceptance remain required.",
+      "reviewedConsumers": [
+        "Shared/Objects/MediaPlayerManager/MediaPlayerProxy/MediaPlayerProxy+MPV.swift"
+      ],
+      "reviewedInterfaces": [],
+      "sha256": "23d213b2f47ad37f422d271b685f40a2eb00f7c7f50cd81fb4e6ab10092bbc0b"
+    },
+    {
+      "path": "Packages/SwiftfinNativePlayback/Sources/SwiftfinNativePlayback/AVPlaybackEngine.swift",
+      "reason": "AVPlaybackEngine.swift: complete current source body and public interface audit. Main-actor private AVPlayer engine owns KVO/time/end subscriptions and weak UIKit surfaces; seeks have generation/revision receipts. Public requests are redacted. Checked Sendable hardware-reader closures remain lazy and tests use only injected readers. Listed app adapters were read; KidsAppModel review is its preparation/publication/start boundary only. Whole-graph consumer and runtime acceptance remain required.",
+      "reviewedConsumers": [
+        "Shared/Objects/MediaPlayerManager/MediaPlayerProxy/MediaPlayerProxy+AVPlayer.swift",
+        "Shared/Components/NativeVideoPlayer.swift"
+      ],
+      "reviewedInterfaces": [],
+      "sha256": "3155ac343d37b87d1cc58f0f05023e4a7b4f4becdb7a212750c0121ff50c8e36"
+    },
+    {
+      "path": "Packages/SwiftfinNativePlayback/Sources/SwiftfinNativePlayback/NativePlaybackContracts.swift",
+      "reason": "NativePlaybackContracts.swift: complete current source body and public interface audit. Main-actor private AVPlayer engine owns KVO/time/end subscriptions and weak UIKit surfaces; seeks have generation/revision receipts. Public requests are redacted. Checked Sendable hardware-reader closures remain lazy and tests use only injected readers. Listed app adapters were read; KidsAppModel review is its preparation/publication/start boundary only. Whole-graph consumer and runtime acceptance remain required.",
+      "reviewedConsumers": [
+        "Shared/Objects/MediaPlayerManager/MediaPlayerProxy/MediaPlayerProxy+AVPlayer.swift",
+        "Shared/Components/NativeVideoPlayer.swift"
+      ],
+      "reviewedInterfaces": [
+        "case clock(Duration)",
+        "case naturalEnd",
+        "case paused",
+        "case playbackFailed",
+        "case playing",
+        "case resumePosition(Duration)",
+        "case state(NativePlaybackState)",
+        "case waiting",
+        "enum NativePlaybackEvent",
+        "enum NativePlaybackState",
+        "init(url: URL, start: Duration = .zero, live: Bool = false, title: String, subtitle: String? = nil, overview: String? = nil)",
+        "let live: Bool",
+        "let overview: String?",
+        "let start: Duration",
+        "let subtitle: String?",
+        "let title: String",
+        "let url: URL",
+        "struct NativePlaybackRequest",
+        "var debugDescription: String { get }",
+        "var description: String { get }"
+      ],
+      "sha256": "330b4424fb59f871c39b04ce3a557760a01258a0f706f8ca8b119c2958542a3a"
+    },
+    {
+      "path": "Packages/SwiftfinNativePlayback/Sources/SwiftfinNativePlayback/NativePlaybackController.swift",
+      "reason": "NativePlaybackController.swift: complete current source body and public interface audit. Main-actor private AVPlayer engine owns KVO/time/end subscriptions and weak UIKit surfaces; seeks have generation/revision receipts. Public requests are redacted. Checked Sendable hardware-reader closures remain lazy and tests use only injected readers. Listed app adapters were read; KidsAppModel review is its preparation/publication/start boundary only. Whole-graph consumer and runtime acceptance remain required.",
+      "reviewedConsumers": [
+        "Shared/Objects/MediaPlayerManager/MediaPlayerProxy/MediaPlayerProxy+AVPlayer.swift",
+        "Shared/Components/NativeVideoPlayer.swift"
+      ],
+      "reviewedInterfaces": [
+        "@MainActor convenience init()",
+        "@MainActor final class NativePlaybackController",
+        "@MainActor func jump(_ offset: Duration)",
+        "@MainActor func open(_ request: NativePlaybackRequest)",
+        "@MainActor func pause()",
+        "@MainActor func play()",
+        "@MainActor func seek(_ time: Duration)",
+        "@MainActor func setAspectFill(_ value: Bool)",
+        "@MainActor func setRate(_ value: Float)",
+        "@MainActor func stop()",
+        "@MainActor func surface(showControls: Bool = false) -> AnyView",
+        "@MainActor var onEvent: (@MainActor @Sendable (NativePlaybackEvent) -> Void)?"
+      ],
+      "sha256": "aee09094f5540c6509ed12c778a53ab6bd6ea118acb5e0cb05db353374dffc01"
     }
   ],
   "limits": "This ledger records bodies explicitly reviewed, with exact current hashes; earlier prose or lexical inventory is not automatically promoted. Pending and mixed entries prevent whole-source completion. Retained UI algorithms have specific presentation reasons, not folder/import-based blanket approval. API entries do not classify the rest of the public graph. Source review and offline tests do not satisfy held runtime acceptance.",
@@ -10636,7 +10992,7 @@
     "classification": {
       "source-reviewed-retained": 664
     },
-    "currentAPIReviews": 215,
+    "currentAPIReviews": 225,
     "runtimeAcceptance": "held by human; no simulator/server testing"
   },
   "packageReviews": [
@@ -11428,6 +11784,70 @@
         {
           "file": "KidsDiagnostics.symbols.json",
           "sha256": "2211fda3f99a67c0d7d3ab064b7f4d8963c800806dcd4cb230604cfd4e749bf4"
+        }
+      ],
+      "sourceReview": "complete current source and public declarations",
+      "consumerReview": "scoped listed boundaries; remaining whole-graph review required",
+      "runtimeAcceptance": "held by human"
+    },
+    {
+      "module": "KidsPlaybackSession",
+      "manifestSHA256": "cfe87be4e21fe888eaebccf357ca5357318ab200855cfbe05587699f5e72eda1",
+      "sourceBodiesRead": 2,
+      "compilerPublicSymbols": 69,
+      "compilerPlatform": "macOS15; public source declarations are platform-independent; private UIKit rendering compiled separately on tvOS/iOS",
+      "compilerGraphs": [
+        {
+          "file": "KidsPlaybackSession.symbols.json",
+          "sha256": "66361d89ae165e8a4fb4a892bae1006fea59ad66d9f12667a5e086b95b8e954c"
+        }
+      ],
+      "sourceReview": "complete current source and public declarations",
+      "consumerReview": "scoped listed boundaries; remaining whole-graph review required",
+      "runtimeAcceptance": "held by human"
+    },
+    {
+      "module": "SwiftfinVLC",
+      "manifestSHA256": "98cfbc616d57e6f4b2448c8b7bbc3bd837bd2e3e68259fcc9d9c4671fb60f612",
+      "sourceBodiesRead": 3,
+      "compilerPublicSymbols": 80,
+      "compilerPlatform": "macOS15; public source declarations are platform-independent; private UIKit rendering compiled separately on tvOS/iOS",
+      "compilerGraphs": [
+        {
+          "file": "SwiftfinVLC.symbols.json",
+          "sha256": "178366c3cfc493730167671400b4bef360c10afd1d1d4e8340fa8d52e68d33e7"
+        }
+      ],
+      "sourceReview": "complete current source and public declarations",
+      "consumerReview": "scoped listed boundaries; remaining whole-graph review required",
+      "runtimeAcceptance": "held by human"
+    },
+    {
+      "module": "SwiftfinMPV",
+      "manifestSHA256": "0fcfa76a73e9195dd1cafe5267e9a7a9c2cd54abfe6e45cb62a33a9a79f945e1",
+      "sourceBodiesRead": 4,
+      "compilerPublicSymbols": 77,
+      "compilerPlatform": "macOS15; public source declarations are platform-independent; private UIKit rendering compiled separately on tvOS/iOS",
+      "compilerGraphs": [
+        {
+          "file": "SwiftfinMPV.symbols.json",
+          "sha256": "9a0c047dbbe3dd03671dc80900b16bf4c4e8a623648a1404dc34121ab554894e"
+        }
+      ],
+      "sourceReview": "complete current source and public declarations",
+      "consumerReview": "scoped listed boundaries; remaining whole-graph review required",
+      "runtimeAcceptance": "held by human"
+    },
+    {
+      "module": "SwiftfinNativePlayback",
+      "manifestSHA256": "8bbd41363cbfd8478af0eafed40019641e9173a985a6a3a49e3bd055a47e4d66",
+      "sourceBodiesRead": 4,
+      "compilerPublicSymbols": 44,
+      "compilerPlatform": "macOS15; public source declarations are platform-independent; private UIKit rendering compiled separately on tvOS/iOS",
+      "compilerGraphs": [
+        {
+          "file": "SwiftfinNativePlayback.symbols.json",
+          "sha256": "1312d70761ce646304675b3dd459d56b53f379a0d09826174d22f728889738b1"
         }
       ],
       "sourceReview": "complete current source and public declarations",

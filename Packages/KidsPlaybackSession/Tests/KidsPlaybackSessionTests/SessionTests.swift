@@ -298,3 +298,18 @@ func `overlapping stops both wait for one native teardown`() async {
     resume.continuation.finish()
     secondEntered.continuation.finish()
 }
+
+@Test @MainActor
+func `starting is idempotent and a retired session cannot restart its driver`() async {
+    let fixture = Fixture()
+    fixture.session.start()
+    fixture.session.start()
+    #expect(fixture.driver.starts == 1)
+    fixture.driver.advance(121)
+    #expect(fixture.driver.reports == 1 && fixture.delegate.began == 1)
+    await fixture.session.stop()
+    fixture.session.start()
+    fixture.driver.subject.send(.failure(.stream))
+    #expect(fixture.driver.starts == 1 && fixture.driver.stops == 1)
+    #expect(fixture.delegate.failures.isEmpty)
+}

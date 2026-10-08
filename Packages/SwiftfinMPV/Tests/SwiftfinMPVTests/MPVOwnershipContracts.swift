@@ -29,6 +29,7 @@ private final class FakeEngine: MPVNativeEngine {
     var disabled: [MPVPlaybackTrackKind] = []
     var sidecars: [(URL, String)] = []
     var surfaces = 0
+    var afterSidecar: (@MainActor () -> Void)?
     func open(_ request: MPVPlaybackRequest) {
         commands.append("open")
         requests.append(request)
@@ -94,6 +95,7 @@ private final class FakeEngine: MPVNativeEngine {
 
     func addSubtitle(url: URL, title: String) {
         sidecars.append((url, title))
+        afterSidecar?()
     }
 
     func emit(
@@ -256,6 +258,35 @@ struct MPVOwnershipContracts {
         #expect(engine.sidecars.count == 1 && engine.sidecars[0].0 == b && engine.sidecars[0].1 == "swiftfin-subtitle-2")
         controller.loadMissingSidecars(mappedIndexes: [], generation: UUID())
         #expect(engine.sidecars.count == 1)
+    }
+
+    @Test(arguments: [false, true])
+    func `sidecar batch stops when its frame callback retires or reopens playback`(replaces: Bool) {
+        let engine = FakeEngine()
+        let controller = MPVPlaybackController(engine: engine)
+        let id = UUID()
+        controller.open(request(sidecars: [
+            .init(jellyfinIndex: 1, url: url.appendingPathComponent("a")),
+            .init(jellyfinIndex: 2, url: url.appendingPathComponent("b"))
+        ]), generation: id)
+        engine.emit(.ready, tracks: [.init(index: 7, kind: .audio)])
+        controller.onFrame = { _, value in
+            if value.phase == .paused {
+                if replaces {
+                    controller.open(self.request(), generation: id)
+                } else {
+                    controller.stop()
+                }
+            }
+        }
+        engine.afterSidecar = {
+            engine.afterSidecar = nil
+            engine.emit(.paused, tracks: [.init(index: 7, kind: .audio)])
+        }
+        controller.loadMissingSidecars(mappedIndexes: [], generation: id)
+        #expect(engine.sidecars.count == 1)
+        #expect(controller.frame.phase == (replaces ? .loading : .stopped))
+        controller.onFrame = nil
     }
 
     @Test

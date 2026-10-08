@@ -22,6 +22,8 @@ final class VLCPlaybackOwnershipTests: XCTestCase {
         var stops = 0
         var shutdowns = 0
         var rejectSeek = false
+        var afterOpen: (@MainActor () throws -> Void)?
+        var afterSeek: (@MainActor () -> Void)?
         var update: (@MainActor () -> Void)?
         func surface(controller: VLCPlaybackController, generation: UUID) -> AnyView {
             AnyView(Color.clear)
@@ -37,6 +39,7 @@ final class VLCPlaybackOwnershipTests: XCTestCase {
 
         func open(_ request: VLCPlaybackRequest) throws {
             opens += 1
+            try afterOpen?()
         }
 
         func play() throws {}
@@ -50,6 +53,7 @@ final class VLCPlaybackOwnershipTests: XCTestCase {
                 throw NSError(domain: "fixture", code: 1)
             }
             seeks.append(time)
+            afterSeek?()
         }
 
         func jump(_ offset: Duration) {}
@@ -217,6 +221,68 @@ final class VLCPlaybackOwnershipTests: XCTestCase {
         XCTAssertEqual(player.frame.videoSize.width, 720)
         XCTAssertFalse(String(describing: request()).contains("private-fixture"))
         XCTAssertFalse(String(reflecting: request()).contains("api_key"))
+    }
+
+    func testResumeCallbackCannotPublishStateFromRetiredPlayback() {
+        for replaces in [false, true] {
+            let engine = Engine(), player = VLCPlaybackController(engine: engine)
+            let old = UUID(), new = UUID()
+            var events: [VLCPlaybackEvent] = []
+            player.onEvent = { event in
+                events.append(event)
+                if case .resumePosition = event {
+                    if replaces {
+                        player.open(self.request(start: .seconds(200)), generation: new)
+                    } else {
+                        player.stop()
+                    }
+                }
+            }
+            player.open(request(), generation: old)
+            engine.frame.state = .playing
+            engine.frame.seekable = true
+            player.observed(.state, generation: old)
+            XCTAssertEqual(events, [.resumePosition(.seconds(120))])
+            XCTAssertEqual(player.frame.applyingStartPosition, replaces)
+            player.onEvent = nil
+        }
+    }
+
+    func testRetiredOpenFailureCannotClearReplacementResumeOrPublishFailure() {
+        let engine = Engine(), player = VLCPlaybackController(engine: engine), id = UUID()
+        var events: [VLCPlaybackEvent] = []
+        player.onEvent = { events.append($0) }
+        engine.afterOpen = {
+            engine.afterOpen = nil
+            player.open(self.request(start: .seconds(200)), generation: id)
+            throw NSError(domain: "synthetic", code: 1)
+        }
+        player.open(request(), generation: id)
+        XCTAssertTrue(events.isEmpty)
+        XCTAssertTrue(player.frame.applyingStartPosition)
+        engine.frame.seekable = true
+        player.observed(.seekable, generation: id)
+        XCTAssertEqual(engine.seeks, [.seconds(200)])
+        player.onEvent = nil
+    }
+
+    func testRetiredSeekCannotMarkReplacementAsNaturallyComplete() {
+        let engine = Engine(), player = VLCPlaybackController(engine: engine)
+        let old = UUID(), new = UUID()
+        var events: [VLCPlaybackEvent] = []
+        player.onEvent = { events.append($0) }
+        player.open(request(start: .zero), generation: old)
+        engine.frame.seekable = true
+        engine.afterSeek = {
+            engine.afterSeek = nil
+            player.open(self.request(start: .zero), generation: new)
+        }
+        player.seek(.seconds(899))
+        engine.frame.time = .zero
+        engine.frame.reachedEnd = true
+        player.observed(.end, generation: new)
+        XCTAssertEqual(events, [.playbackFailed])
+        player.onEvent = nil
     }
 
     func testShutdownCancelsNativeUpdatesBeforeReleasingOutput() async {

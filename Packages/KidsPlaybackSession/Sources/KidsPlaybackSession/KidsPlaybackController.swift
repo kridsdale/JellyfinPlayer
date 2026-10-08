@@ -45,6 +45,7 @@ public final class KidsPlaybackController: ObservableObject, Identifiable {
     private var finished = false
     public var allowsCheckpoints = true
     private var stopped = false
+    private var started = false
     private var tickTask: Task<Void, Never>?
     private var eventSubscription: AnyCancellable?
     private var requestedStartPosition = 0.0
@@ -155,6 +156,8 @@ public final class KidsPlaybackController: ObservableObject, Identifiable {
     #endif
 
     public func start() {
+        guard !started, !stopped else { return }
+        started = true
         performance?.mark(.managerStart)
         eventSubscription = driver.events.sink { [weak self] event in self?.receive(event) }
         driver.start()
