@@ -1,8 +1,8 @@
 {
-  "title": "YouTube, curated by parents",
-  "subtitle": "A source design for KidsJellyFin",
+  "title": "Parent-approved playlists, local playback",
+  "subtitle": "A managed RAID cache for KidsJellyFin",
   "date": "8 October 2026",
-  "status": "Research and design proposal - no integration installed",
+  "status": "Revised design proposal - cache folder write permission scoped by user; no implementation installed",
   "sources": [
     {
       "id": "S1",
@@ -10,19 +10,9 @@
       "url": "https://jellyfin.org/docs/general/server/libraries/"
     },
     {
-      "id": "S2",
-      "title": "Jellyfin: plugins and YouTube metadata",
-      "url": "https://jellyfin.org/docs/general/server/plugins/"
-    },
-    {
       "id": "S3",
       "title": "YouTubeSync: maintainer's implementation",
       "url": "https://github.com/kingschnulli/jellyfin-youtube-plugin"
-    },
-    {
-      "id": "S4",
-      "title": "YouTube Data API: search.list",
-      "url": "https://developers.google.com/youtube/v3/docs/search/list"
     },
     {
       "id": "S5",
@@ -35,11 +25,6 @@
       "url": "https://developers.google.com/youtube/v3/docs/videos"
     },
     {
-      "id": "S7",
-      "title": "YouTube Data API: quota and setup",
-      "url": "https://developers.google.com/youtube/v3/getting-started"
-    },
-    {
       "id": "S8",
       "title": "YouTube: IFrame Player API",
       "url": "https://developers.google.com/youtube/iframe_api_reference"
@@ -50,19 +35,9 @@
       "url": "https://developers.google.com/youtube/player_parameters"
     },
     {
-      "id": "S10",
-      "title": "YouTube: minimum player requirements",
-      "url": "https://developers.google.com/youtube/terms/required-minimum-functionality"
-    },
-    {
       "id": "S11",
       "title": "YouTube: developer policies",
       "url": "https://developers.google.com/youtube/terms/developer-policies"
-    },
-    {
-      "id": "S12",
-      "title": "YouTube: embedding and privacy",
-      "url": "https://support.google.com/youtube/answer/171780?hl=en"
     },
     {
       "id": "S13",
@@ -75,16 +50,6 @@
       "url": "https://developer.apple.com/app-store/review/guidelines/"
     },
     {
-      "id": "S15",
-      "title": "YouTube: living-room device partners",
-      "url": "https://developers.google.com/youtube/devices/living-room"
-    },
-    {
-      "id": "S16",
-      "title": "YouTube: policy implementation guide",
-      "url": "https://developers.google.com/youtube/terms/developer-policies-guide"
-    },
-    {
       "id": "S17",
       "title": "YouTube: service terms",
       "url": "https://www.youtube.com/static?template=terms"
@@ -93,437 +58,497 @@
       "id": "S18",
       "title": "YouTube: editing without changing the URL",
       "url": "https://support.google.com/youtube/answer/9057455?hl=en-GB"
+    },
+    {
+      "id": "S19",
+      "title": "yt-dlp: formats, postprocessing and archive",
+      "url": "https://github.com/yt-dlp/yt-dlp"
+    },
+    {
+      "id": "S20",
+      "title": "Jellyfin: client codec compatibility",
+      "url": "https://jellyfin.org/docs/general/clients/codec-support/"
+    },
+    {
+      "id": "S21",
+      "title": "Apple TV 4K: supported video formats",
+      "url": "https://support.apple.com/en-us/111839"
+    },
+    {
+      "id": "S22",
+      "title": "FFmpeg: VideoToolbox HEVC encoder",
+      "url": "https://www.ffmpeg.org/doxygen/8.1/videotoolboxenc_8c.html"
+    },
+    {
+      "id": "S23",
+      "title": "Jellyfin: local NFO metadata",
+      "url": "https://jellyfin.org/docs/general/server/metadata/nfo/"
+    },
+    {
+      "id": "S24",
+      "title": "Jellyfin: TV series folder conventions",
+      "url": "https://jellyfin.org/docs/general/server/media/shows/"
+    },
+    {
+      "id": "S25",
+      "title": "FFmpeg: MP4 and faststart options",
+      "url": "https://ffmpeg.org/ffmpeg-formats.html"
     }
   ],
   "pages": [
     {
       "number": 1,
-      "eyebrow": "THE DECISION",
-      "title": "YouTube, curated by parents",
-      "dek": "More radio, less browsing. Approve a collection once; children get pictures, Next and Shuffle.",
+      "eyebrow": "REVISED RECOMMENDATION",
+      "title": "Parent-approved playlists, local playback",
+      "dek": "YouTube supplies approved material. Jellyfin supplies the child experience.",
       "blocks": [
         {
           "type": "callout",
-          "label": "Recommendation",
-          "text": "Build a parent-owned catalog of exact approved videos. Trial a separate YouTube category only after proving a supported Apple TV player and acceptable child-access behavior. For a strict, native tvOS experience today, rights-cleared media files delivered through Jellyfin are the strongest path."
+          "label": "Preferred design",
+          "text": "Adopt the proposed pipeline: parent selects a playlist, approves an exact snapshot, a managed worker retrieves and normalizes permitted videos into a dedicated RAID subfolder, and Jellyfin indexes only completed assets. The kids app keeps its current player, Next, Shuffle and progress model."
         },
         {
           "type": "heading",
-          "text": "Yes: Jellyfin already has a web admin dashboard"
-        },
-        {
-          "type": "paragraph",
-          "text": "Open <b>http://1531server.local:8096/web/</b> and sign in as an administrator. Library settings live under <b>Admin > Dashboard > Server > Libraries</b>. This covers the existing RAID catalog; a YouTube search, review and approval workflow would be an added admin tool, preferably a small companion web service. [S1]"
+          "text": "Why this is a stronger technical fit"
         },
         {
           "type": "table",
-          "widths": [
-            0.27,
-            0.73
-          ],
           "headers": [
-            "What we learned",
-            "What it means for this family"
+            "Decision",
+            "Consequence"
           ],
           "rows": [
             [
-              "Discovery is feasible",
-              "The Data API finds playlists and returns their member video IDs. A search term is a discovery hint, never permission to keep adding matches. [S4, S5]"
+              "Playback stays local",
+              "Once published, an episode no longer depends on YouTube stream URL resolution, a web player or WAN availability. The downloader can fail while existing cached videos keep playing."
             ],
             [
-              "Apple TV playback is the gate",
-              "YouTube's supported embed is a web player. Apple's WKWebView availability excludes tvOS; our current tvOS SDK probe also failed to import WebKit. A normal embedded web player is not a ready tvOS solution. [S8, S13]"
+              "HEVC first; AV1 measured",
+              "Use an HEVC/H.265 + AAC MP4 profile as the conservative starting point. Preserve a compatible source when practical. Treat AV1 as an optional tested profile, not an assumed improvement. [S20, S21]"
             ],
             [
-              "An embed is not a sealed kids player",
-              "rel=0 still allows same-channel recommendations. Ads and player links need separate review; whitelisting our cards does not whitelist everything inside YouTube's player. [S9, S12]"
+              "Keep familiar navigation",
+              "First version: add only the published Shows directory as an extra folder in the existing Kid TV library. Keep the exact Kid TV/Kid Movie binding. A third YouTube library and new top-level UI become optional later. [S1]"
             ],
             [
-              "Plugins are conditional",
-              "YouTube metadata support exists. A third-party stream plugin uses yt-dlp and FFmpeg, which introduces a different reliability and authorization question. It is not installed or validated here. [S2, S3]"
+              "Scoped RAID exception",
+              "The user now permits writes in a dedicated cache subfolder. All existing media and every other RAID path remain protected. The worker must receive only that narrow write capability."
             ]
+          ],
+          "widths": [
+            0.23,
+            0.77
           ]
         },
         {
           "type": "heading",
-          "text": "Two choices, kept independent"
+          "text": "The parent still owns the playlist boundary"
         },
         {
           "type": "paragraph",
-          "text": "<b>Transport:</b> official player, a stream resolver, an authorized mirror, or licensed files. <b>Presentation:</b> mix approved collections into Shows/Movies, or add a YouTube category. A third tab cannot solve a playback or permission problem; a working stream cannot solve weak parental approval."
+          "text": "Approving a playlist means approving its current video IDs. Later additions remain pending. The published local file is the approved artifact; subsequent upstream edits do not replace it automatically. A playlist is not a standing instruction to download future content."
         },
         {
           "type": "note",
-          "text": "Evidence: official documentation reviewed on 8 October 2026; local public-SDK import probe only. No live YouTube playback, plugin install, server change or RAID write occurred. Little Bear and Thomas are illustrative search terms, not approved sources."
+          "text": "Acquisition is a separate permission issue: YouTube restrictions and rightsholder rights remain applicable to downloading and offline copies. This design does not infer authorization from an API key or Premium account. [S11, S17]"
+        },
+        {
+          "type": "note",
+          "text": "Design revision dated 8 October 2026. No cache folder, downloader, transcode job, server library or client change was created. The exact RAID volume, folder, quotas and server encoding capabilities are still unverified."
         }
       ]
     },
     {
       "number": 2,
-      "eyebrow": "THE PARENT CONTRACT",
-      "title": "Approve the set, not the search",
-      "dek": "The parent sees discovery. The child sees only the published result.",
+      "eyebrow": "PARENT WORKFLOW",
+      "title": "Select, review, queue, publish",
+      "dek": "An adult web interface manages imports; children see only ready Jellyfin items.",
       "blocks": [
         {
           "type": "flow",
           "items": [
-            "Search / paste",
-            "Review draft",
-            "Publish revision",
-            "Kids catalog"
+            "Select playlist",
+            "Approve snapshot",
+            "Build cache",
+            "Jellyfin catalog"
           ],
           "captions": [
             "Parent only",
             "Exact video IDs",
-            "Explicit approval",
-            "Read only"
+            "Background jobs",
+            "Ready assets only"
           ]
         },
         {
           "type": "table",
-          "widths": [
-            0.19,
-            0.81
-          ],
           "headers": [
             "Admin screen",
             "Controls and resulting behavior"
           ],
           "rows": [
             [
-              "1. Find",
-              "Search Little Bear or Thomas, or paste a playlist URL. Show original YouTube titles, channels and artwork with attribution. Offer channel, language and duration filters plus preview. safeSearch=strict helps discovery; it does not establish family suitability. [S4]"
+              "Find + preview",
+              "Jellyfin already has web library administration at http://1531server.local:8096/web/. Add a small parent import page beside it. Paste/select a playlist; search can follow later. Show original source and channel identity, duration, language and preview. [S1]"
             ],
             [
-              "2. Review",
-              "Fetch every playlist page, then video metadata. Display channel identities, order, duration, region/embed status and unavailable entries. Parent excludes clips, compilations or unsuitable items and chooses a family label. A partial fetch cannot become a publishable draft. [S5, S6] Embed status is a hint; actual playback must still be tested."
+              "Review snapshot",
+              "Enumerate every playlist page and inspect video metadata. Parent excludes unwanted clips or compilations and approves the exact remaining IDs in bulk. A partial fetch cannot publish. Matching titles and made-for-kids labels do not establish family suitability. [S5, S6]"
             ],
             [
-              "3. Publish",
-              "Parent approves this exact list, in bulk if desired. Commit the reviewed draft hash and revision atomically. Choose category, artwork, approved Next order and Shuffle behavior. A changed draft requires renewed review."
+              "Queue approved IDs",
+              "Record the draft hash, ordered IDs and approval revision. Workers receive individual admitted IDs, never an unrestricted playlist URL for automatic expansion. Jobs report downloading, normalizing, verifying, ready, indexing or failed."
             ],
             [
-              "4. Maintain",
-              "A changes inbox shows additions, removals, reorderings and metadata changes. New members stay pending. Parent can republish, hide a collection or revoke a video. No automatic channel ingestion."
+              "Publish ready assets",
+              "Generate files, local metadata and artwork outside the indexed tree. Verify the bundle, move it into the published tree, then refresh Jellyfin. Show the parent which assets became visible; no broken placeholders or half-written episodes."
             ],
             [
-              "5. Kids",
-              "One approved playlist becomes one illustrated collection card. Next and Shuffle select only admitted members. Specific-video selection is behind Parents. No search, trending feed, channel browser or arbitrary URL input."
+              "Maintain the set",
+              "New playlist members enter a changes inbox. Upstream edits do not overwrite approved files. Existing cache remains usable during download failures. Removing or replacing a cached item is an explicit parent action."
             ]
+          ],
+          "widths": [
+            0.2,
+            0.8
           ]
         },
         {
           "type": "heading",
-          "text": "What the whitelist actually identifies"
+          "text": "Frozen approval and stable identity"
         },
         {
           "type": "paragraph",
-          "text": "Store approved video IDs, trusted channel IDs, collection UUID, ordered membership, reviewer, approval time and policy revision. The playlist URL is provenance. Matching titles, channel display names and the made-for-kids flag are not authorization. Every catalog response, image fetch, deep link and play request must pass the same membership policy."
+          "text": "Store collection UUID, source playlist/channel/video IDs, approval revision, local asset digest, stable relative path and Jellyfin item mapping. Recheck the revision before publication. If approval was revoked while a job ran, keep the result out of the published tree."
         },
         {
           "type": "callout",
-          "label": "The subtle failure",
-          "text": "A playlist owner can add videos tomorrow. Even an approved video can be trimmed while keeping its URL. A snapshot protects membership, not immutable audiovisual content. Metadata changes trigger review, but cannot detect every content change. A stronger content guarantee requires a permitted, verified local file. [S18]"
+          "label": "Parent authority",
+          "text": "Validate a real administrator session for imports and publication. A child PIN is only a local UI gate. Kids cannot launch jobs, submit URLs or expand playlists. Service credentials stay on the server; no child Google login or cookie access."
         },
         {
           "type": "note",
-          "text": "Use real Jellyfin administrator authorization for publishing. The child's local Parents PIN is a UI gate, not a server credential. Default to public playlists and server-held API credentials; no child's Google account, cookies or OAuth session."
+          "text": "A YouTube video can be trimmed without changing its URL. A verified local file avoids silent replacement, but only after an authorized acquisition. Where the Data API is used, refresh/delete its cached metadata under the applicable retention rules; retain parent-authored approval records separately. [S18, S11]"
         }
       ]
     },
     {
       "number": 3,
-      "eyebrow": "TRANSPORT PROPOSALS / LIVE VIDEO",
-      "title": "Official player or Jellyfin resolver?",
-      "dek": "Both can consume an approved catalog. Their playback guarantees differ sharply.",
+      "eyebrow": "INGESTION AND CODECS",
+      "title": "Download once; encode only when useful",
+      "dek": "The output profile is a playback decision, not simply a newer-codec preference.",
       "blocks": [
         {
-          "type": "heading",
-          "text": "A. Official YouTube playback"
+          "type": "flow",
+          "items": [
+            "Fetch approved",
+            "Normalize",
+            "Verify / publish",
+            "Jellyfin"
+          ],
+          "captions": [
+            "yt-dlp",
+            "FFmpeg as needed",
+            "Managed cache",
+            "Existing kids UI"
+          ]
         },
         {
-          "type": "labeled",
-          "label": "Strawman",
-          "text": "Put a YouTube iframe inside the SwiftUI player, pass the approved playlist URL, set rel=0, and call it kid-safe. It looks like a small integration; it assumes both a tvOS web view and complete control of player navigation."
-        },
-        {
-          "type": "labeled",
-          "label": "Steelman",
-          "text": "On a supported web or iOS host, use the official player and load one admitted video ID at a time. Handle state, time, seek and error events; obtain fresh approval before Next or Shuffle. Keep required identification, controls and attribution. Parent previews use this route where available. [S8, S10]"
-        },
-        {
-          "type": "labeled",
-          "label": "Stress test",
-          "text": "A full upstream playlist bypasses our frozen membership. Same-channel recommendations remain with rel=0, and controls cannot simply be covered to hide them. Privacy-enhanced embeds can still show ads. The public tvOS SDK lacks WebKit; a browser prototype would not prove the Apple TV app. [S9, S10, S12, S13]"
-        },
-        {
-          "type": "labeled",
-          "label": "Verdict",
-          "text": "Good for adult preview and a conditional non-tvOS experiment. Do not promise the requested Apple TV experience until a supported player route and its escape paths are demonstrated. YouTube's living-room partner program is a device-manufacturer route, not a general native SDK for this app. [S15]"
-        },
-        {
-          "type": "heading",
-          "text": "B. Resolve YouTube streams through Jellyfin"
-        },
-        {
-          "type": "labeled",
-          "label": "Strawman",
-          "text": "Install YouTubeSync, point it at a channel, and let periodic sync turn everything into episodes. The kids app keeps using its current VLC player. This ignores manual approval, provider changes and the server's existing access boundary."
-        },
-        {
-          "type": "labeled",
-          "label": "Steelman",
-          "text": "A controlled adapter consumes only our approved snapshot. A restricted worker resolves an admitted ID and exposes a short-lived playback session to the client. Generated metadata lives on the server's internal disk. The maintainer's plugin describes yt-dlp URL resolution and optional FFmpeg HLS restreaming; its default periodic sync would need replacement. [S3]"
-        },
-        {
-          "type": "labeled",
-          "label": "Stress test",
-          "text": "Extraction can fail as YouTube changes; stream URLs expire, WAN outages remain visible and FFmpeg adds load. The plugin excludes age-restricted/member-only playback today. Downloading or bypassing the supported player is not authorized merely by holding a Data API key. [S3, S11, S17]"
+          "type": "table",
+          "headers": [
+            "Step / profile",
+            "Recommended behavior"
+          ],
+          "rows": [
+            [
+              "Fetch",
+              "yt-dlp retrieves available audio/video streams. FFmpeg handles merging or encoding; changing a container does not by itself produce HEVC. Pin tested tool versions and track each job by video ID. Current YouTube support also requires its supported JavaScript tooling. [S19]"
+            ],
+            [
+              "Default output",
+              "Candidate baseline: source resolution capped at 1080p, SDR, HEVC Main + AAC stereo in MP4, with metadata at the front for streaming. Never upscale. Select quality and bitrate from real cartoon samples rather than inventing a universal setting. [S21, S25]"
+            ],
+            [
+              "Encode strategy",
+              "Reuse compatible streams when possible. Otherwise normalize once in the background. FFmpeg provides hevc_videotoolbox; whether 1531Server can accelerate it must be checked against its hardware and installed build. Start with one low-priority job. [S22]"
+            ],
+            [
+              "AV1 option",
+              "Swiftfin/VLCKit supports AV1, but client support is not proof of smooth decoding on this Apple TV. Compare source AV1 reuse against HEVC for startup, seek, frame drops and size. Avoid a costly AV1 re-encode until measurements justify it. [S20]"
+            ],
+            [
+              "Validate",
+              "Probe streams, duration and dimensions; check decode integrity and audio/video sync; verify file digest and provenance. Mark our job complete only after validation. A download archive is a deduplication aid, not proof that publication succeeded. [S19]"
+            ],
+            [
+              "Publish + play",
+              "Finalize MP4, NFO and approved artwork in staging. Move a complete bundle within the same RAID filesystem, then request indexing. Verify the actual Jellyfin playback session uses Direct Play rather than runtime transcoding."
+            ]
+          ],
+          "widths": [
+            0.2,
+            0.8
+          ]
         },
         {
           "type": "callout",
-          "label": "Verdict",
-          "text": "Closest technical fit to our native Next/Shuffle experience, but not the default shipping proposal. Establish applicable permissions, server compatibility and maintenance ownership before any installation or resolver prototype. No plugin was tested against 1531Server in this research."
+          "label": "Optimize for family playback",
+          "text": "Prefer the profile that yields reliable direct playback with acceptable quality and storage. Measure a representative episode on the real Apple TV when available; a simulator or a codec support table does not establish hardware performance."
+        },
+        {
+          "type": "note",
+          "text": "No encode or device trial was run for this revision. Source formats, server CPU/encoder availability, client profile, audio and subtitles can change the Direct Play outcome. The first experiment should compare a small authorized sample, not ingest an entire channel."
         }
       ]
     },
     {
       "number": 4,
-      "eyebrow": "TRANSPORT PROPOSALS / LOCAL VIDEO",
-      "title": "Local files, familiar playback",
-      "dek": "Local playback can meet the radio-like product promise. Acquisition is a separate gate.",
+      "eyebrow": "STORAGE AND RECOVERY",
+      "title": "One writable island on the RAID",
+      "dek": "The new cache exception does not relax protection of existing media.",
       "blocks": [
         {
-          "type": "heading",
-          "text": "C. Mirror the approved YouTube collection"
-        },
-        {
-          "type": "labeled",
-          "label": "Strawman",
-          "text": "Run a downloader every night, mirror the whole playlist onto the RAID and let Jellyfin scan it. It seems to make YouTube reliable, but permits unreviewed additions and writes to the storage you explicitly protected."
-        },
-        {
-          "type": "labeled",
-          "label": "Steelman",
-          "text": "Only if the necessary permissions are established: ingest exact approved IDs into a new, bounded folder on the server's internal disk. Stage, verify and atomically publish each permitted file. Record source, approval and file digest. Publish no new playlist members automatically; retain an explicit removal and revocation policy."
-        },
-        {
-          "type": "labeled",
-          "label": "Stress test",
-          "text": "YouTube restricts downloading/caching audiovisual content without prior written approval; rightsholder permission also matters. Premium or an API key is not a redistribution license. Storage capacity, regional availability, upstream removal and the intended retention period need decisions. [S11, S17]"
-        },
-        {
-          "type": "labeled",
-          "label": "Verdict",
-          "text": "Excellent playback and reboot resilience once authorized, but a conditional acquisition route. Do not build a generic YouTube download service as the first step."
-        },
-        {
-          "type": "heading",
-          "text": "D. Acquire rights-cleared files outside YouTube"
-        },
-        {
-          "type": "labeled",
-          "label": "Strawman",
-          "text": "Abandon the YouTube feature and ask parents to manage downloads manually. This loses the convenience of discovering a show and publishing a collection."
-        },
-        {
-          "type": "labeled",
-          "label": "Steelman",
-          "text": "Keep YouTube as a parent discovery and provenance source, then obtain authorized files or a licensed feed directly from a creator or distributor. Publish those files through Jellyfin after the same review. Kids retain the existing player, local artwork, progress tracking, Next and Shuffle without embedded recommendations."
-        },
-        {
-          "type": "labeled",
-          "label": "Stress test",
-          "text": "The exact desired shows may not offer licensed files, and a streaming subscription does not imply export rights. We have not identified an available, licensed Little Bear or Thomas catalog. Approved acquisition may be more work than watching through the official YouTube app."
-        },
-        {
-          "type": "labeled",
-          "label": "Verdict",
-          "text": "Strongest design for strict child containment and a native Apple TV client. It satisfies the experience when rights and files are available; it does not claim that all YouTube playlists can become Jellyfin media."
-        },
-        {
           "type": "callout",
-          "label": "RAID invariant",
-          "text": "No import, rename, delete, transcode output, artwork sidecar or cleanup writes on the RAID. All new state and permitted files use a dedicated internal-disk location with bounded space. New workers receive no RAID write access. Existing library additions remain an explicit parent action, never a broader drive scan."
+          "label": "Scope of permission",
+          "text": "Proposed root: /Volumes/<RAID>/KidsJellyFin-YouTube/ - an example, not a created path. A dedicated non-root worker may create and update only its own generated assets there. Every existing media path outside that root remains read-only. Do not change broad RAID ownership or permissions."
+        },
+        {
+          "type": "table",
+          "headers": [
+            "Location",
+            "Purpose and indexing boundary"
+          ],
+          "rows": [
+            [
+              "Cache root / staging",
+              "Downloads, normalization and temporary bundles. Not a Jellyfin library root; keep it outside published Shows/Movies rather than relying on hidden-file behavior."
+            ],
+            [
+              "Cache root / published",
+              "Only complete approved series/episodes and their metadata. Jellyfin sees the explicit published/Shows folder, and published/Movies only if separately configured. Never index the whole cache or RAID root."
+            ],
+            [
+              "Cache root / quarantine",
+              "Unpublished service-owned assets awaiting parent review. Not indexed. Parent-controlled retention; no automatic purge of unknown or pre-existing files."
+            ],
+            [
+              "Server internal disk",
+              "Approval database, durable job queue, logs, credentials and configuration backups. None belong in the media library."
+            ]
+          ],
+          "widths": [
+            0.25,
+            0.75
+          ]
+        },
+        {
+          "type": "heading",
+          "text": "Survive interruption without harming the catalog"
+        },
+        {
+          "type": "paragraph",
+          "text": "Persist jobs before work; resume or safely retry after a crash. Use source ID plus profile version for deduplication. A download failure affects that job, never the existing published episode. Do not overwrite the last good asset until its replacement is approved, validated and safely committed."
+        },
+        {
+          "type": "paragraph",
+          "text": "Verify the expected mounted volume identity and cache-root marker before any write. If the RAID is missing, wait and report unavailable; never create a replacement directory at its empty mount point. Reject symlinks and path escapes. Use OS permissions plus resolved-path checks, not string-prefix checks alone."
+        },
+        {
+          "type": "heading",
+          "text": "Bound storage and recovery work"
+        },
+        {
+          "type": "paragraph",
+          "text": "Set a hard cache quota and free-space reserve, accounting for input, output and temporary overlap. Stop queuing when space is insufficient. Default to retained approved assets; any later automatic eviction must be opted into and restricted to manifest-owned cache files, never arbitrary files on the RAID."
         },
         {
           "type": "note",
-          "text": "If a new Jellyfin library is needed, migrate the client's exact library binding deliberately. The current restricted account permits exactly Kid TV and Kid Movie; enabling every folder would break that safety property."
+          "text": "Revocation requires an explicit unpublish operation, Jellyfin refresh and confirmation that the child can no longer access the item. Test active playback termination and stale item IDs; a file move alone does not prove immediate revocation. Back up the approval/job database and reconcile cache contents after reboot without broad cleanup."
         }
       ]
     },
     {
       "number": 5,
-      "eyebrow": "NAVIGATION PROPOSALS",
-      "title": "One familiar shelf, or a new doorway?",
-      "dek": "The source adapter and approval model stay the same under either navigation choice.",
+      "eyebrow": "STRAWMAN AND STEELMAN",
+      "title": "The cache changes the comparison",
+      "dek": "Local transport makes the simplest child navigation much more attractive.",
       "blocks": [
         {
-          "type": "navigation"
-        },
-        {
           "type": "heading",
-          "text": "1. Alongside the RAID-backed Shows and Movies"
+          "text": "Preferred route: an approved playlist becomes local media"
         },
         {
           "type": "labeled",
           "label": "Strawman",
-          "text": "Merge every matching show title and hide the source. Children see one Little Bear card, while the app silently switches between Jellyfin episodes, YouTube clips and compilations."
+          "text": "Run yt-dlp against the playlist nightly, encode everything as AV1 and let Jellyfin scan the RAID. This confuses playlist trust with video approval, assumes a codec win and gives a worker unnecessary access."
         },
         {
           "type": "labeled",
           "label": "Steelman",
-          "text": "Present approved collections on the familiar shelf, with explicit parent grouping and a visible YouTube badge. Keep sources distinct underneath. Begin with one card per playlist; never deduplicate by fuzzy title alone. Next and Shuffle stay within the selected approved collection. Cross-source sequencing requires a parent-authored order."
-        },
-        {
-          "type": "labeled",
-          "label": "Tradeoff",
-          "text": "Fewest root choices for a non-reader and the clearest radio metaphor. It also makes WAN failures, different player controls and duplicate artwork harder to explain. A silent fallback to another source or a new search result is forbidden."
+          "text": "Freeze approved IDs, acquire permitted assets, normalize to a measured profile, publish verified bundles in one bounded writable folder, then use standard Jellyfin playback. Downloader updates and WAN outages affect new imports; already cached episodes remain stable."
         },
         {
           "type": "heading",
-          "text": "2. A separate YouTube category"
+          "text": "Alongside the existing Shows shelf"
         },
         {
           "type": "labeled",
           "label": "Strawman",
-          "text": "Add a red YouTube tab that opens the normal YouTube experience. This is easy to recognize but exposes the discovery interface the parent explicitly wanted outside the kids app."
+          "text": "Call every matching video Little Bear and merge it into the existing series. Titles alone can mix clips, duplicate episodes and different sources."
         },
         {
           "type": "labeled",
           "label": "Steelman",
-          "text": "Add an illustrated source doorway that contains only published collection cards. A child chooses Little Bear, then Next or Shuffle. Large artwork, stable focus order and optional spoken labels support non-readers. Detailed membership and all discovery remain behind Parents."
+          "text": "Publish one distinct, clearly labeled parent-curated series per playlist. Add its published root to Kid TV. Children use the familiar artwork, Next and Shuffle; provenance lives in metadata and parent controls. No extra player or source category is required."
+        },
+        {
+          "type": "heading",
+          "text": "A separate YouTube category"
         },
         {
           "type": "labeled",
-          "label": "Tradeoff",
-          "text": "An extra navigation choice, but clearer source identity, outage isolation and containment testing. It can be hidden whenever no approved collection is available. The category cannot constrain YouTube's own embedded ads or recommendations."
+          "label": "Strawman",
+          "text": "Add a third Jellyfin library and expect the current kids app to discover it automatically. Its exact two-library access check deliberately rejects that configuration."
         },
         {
-          "type": "callout",
-          "label": "Recommended first trial",
-          "text": "Use a separate category if a live YouTube player passes the transport gates. Later, merge presentation only if measured child navigation improves and source boundaries stay clear. Authorized local files can use the existing Shows/Movies shelves immediately after a deliberate library-binding migration, if needed."
+          "type": "labeled",
+          "label": "Steelman",
+          "text": "Explicitly version the allowed-library binding and add an illustrated curated-source doorway. This distinguishes imported collections and provides source-specific admin status, at the cost of more navigation and client work. Keep it optional until child testing shows value."
+        },
+        {
+          "type": "table",
+          "headers": [
+            "Other route",
+            "Strongest case and practical limit"
+          ],
+          "rows": [
+            [
+              "Official live player",
+              "Avoids a local mirror and uses supported YouTube playback. Its web-based player is not a ready tvOS integration, and recommendations remain a separate child-access issue. [S8, S9, S13]"
+            ],
+            [
+              "Live resolver plugin",
+              "Closer to native playback, with less retained storage. URL expiry, WAN failures and extractor changes remain on the playback path. Cache ingestion moves those failures away from watching. [S3]"
+            ],
+            [
+              "Licensed direct files",
+              "Same resilient local experience with clearer acquisition rights where a creator/distributor supplies permitted files. Availability of the exact desired shows remains unknown."
+            ]
+          ],
+          "widths": [
+            0.24,
+            0.76
+          ]
         },
         {
           "type": "note",
-          "text": "Unavailable video: say 'This show is taking a break' with Back and Retry. Skip only to another currently admitted member. An empty collection goes back to its shelf; it never opens search, an external YouTube app or a random recommendation. Advanced episode selection remains a parent feature."
+          "text": "Recommendation: approved local-cache ingestion and the existing Shows shelf first. Revisit a third category as a product choice, not a technical prerequisite. Download permission remains distinct from the newly granted filesystem write permission. [S11, S17]"
         }
       ]
     },
     {
       "number": 6,
-      "eyebrow": "SYSTEM DESIGN",
-      "title": "Source boundaries and shared state",
-      "dek": "Proposed components reuse the client's existing domain, catalog and playback responsibilities.",
+      "eyebrow": "JELLYFIN AND CLIENT DESIGN",
+      "title": "Make each playlist a stable local series",
+      "dek": "Use Jellyfin as the catalog and playback system; avoid a second player architecture.",
       "blocks": [
         {
-          "type": "flow",
-          "items": [
-            "Parent web UI",
-            "Policy service",
-            "Source adapters",
-            "Kids client"
-          ],
-          "captions": [
-            "Admin session",
-            "Published revision",
-            "JF / approved YT",
-            "Admit, then play"
-          ]
-        },
-        {
           "type": "table",
-          "widths": [
-            0.25,
-            0.75
-          ],
           "headers": [
             "Boundary",
-            "Responsibility and constraint"
+            "Implementation proposal"
           ],
           "rows": [
             [
-              "Server admin + policy",
-              "Companion service on 1531Server owns drafts, approvals, audit history and revocation. Validate actual Jellyfin admin identity for writes; give the child only authenticated published-catalog and playback-admission access. Keep API keys server-side, restricted to the required API."
+              "Parent import service",
+              "Own draft approval, source identities, jobs and publication history. Keep downloader/transcoder subprocesses behind a narrow worker boundary. Use validated IDs and fixed source hosts; no shell interpolation from playlist titles or arbitrary URL resolver."
             ],
             [
-              "Client domain + catalog",
-              "Add a source-aware identity and curated-collection model in KidsDomain. Compose Jellyfin and approved-YouTube catalog adapters in KidsCatalog. A small YouTube adapter package is justified; a package per DTO is not. Preserve the exact two-library JF binding until an explicit versioned migration."
+              "Jellyfin layout",
+              "Represent an approved collection as a distinct series folder with tvshow.nfo, Season 01 and numbered files plus episode NFO. Supply approved local artwork and source provenance; lock curated fields to avoid incorrect external matching. [S23, S24]"
             ],
             [
-              "Playback + state",
-              "Reuse the KidsPlaybackSession lifecycle and provide a separate player adapter with explicit seek, resume, EOF and cap capabilities. Namespace progress as jf:server:item or yt:video; keep collection and account identity separate. Do not fake TV season/episode numbers for playlist positions."
+              "Stable numbering",
+              "Assign positive import ordinals once. They represent collection order, not official broadcast seasons. Never renumber existing files because upstream playlist order changed. Version 1 preserves the approved initial order and appends newly approved videos."
             ],
             [
-              "Persistence",
-              "The server is the approval authority. Existing SwiftData/iCloud state can sync the family's progress and shuffle bags after a schema migration, but cannot authorize a stale or revoked item. Track app-local viewing state; no YouTube likes, comments or watch-history writes."
+              "Library access",
+              "Add only published/Shows as an extra folder of existing Kid TV. Do not change Kid Movie, enable all folders or add broad drive scans. A third curated library would require an explicit client binding migration and negative access tests. [S1]"
+            ],
+            [
+              "Client responsibilities",
+              "Existing Jellyfin item IDs, catalog, player, Next, Shuffle and session limits remain the playback path. Keep source-to-local mapping in the import service. New child-facing code is limited to any deliberate display/provenance changes."
+            ],
+            [
+              "Progress and refresh",
+              "Reuse current Jellyfin user state plus client progress/shuffle persistence. Stable paths reduce identity churn; validate item-ID stability on scan and restart. Do not mark watched or overwrite progress through generated NFO. A cached item disappears from the app only after tested unpublication and refresh."
             ]
+          ],
+          "widths": [
+            0.23,
+            0.77
           ]
         },
         {
           "type": "heading",
-          "text": "Fresh approval at the point of use"
+          "text": "Adult metadata, child simplicity"
         },
         {
           "type": "paragraph",
-          "text": "Proposed API: draft preview, revision-checked publish, published catalog, admit(video ID, revision), and revoke. Admission checks membership and current availability. Use a short policy lease with a defined maximum revocation delay, then recheck before every transition. When the lease expires offline, YouTube stops; existing Jellyfin access continues independently. Stop an active revoked video at the next lease check."
+          "text": "A parent sees original title, channel, approval time, output codec, size and job errors. Children see approved collection artwork and the current Next/Shuffle controls. No import UI, YouTube search or Google authentication enters the kids flow."
         },
         {
-          "type": "heading",
-          "text": "Bounded latency and failure"
-        },
-        {
-          "type": "paragraph",
-          "text": "No YouTube search on child launch. Fetch a compact approved manifest, prefetch only admitted artwork, and isolate WAN errors from RAID playback. Validate IDs and fixed upstream hosts; accept no arbitrary resolver URLs. Live YouTube startup is bounded by WAN/player latency, so RAID seek time is not its performance target."
+          "type": "callout",
+          "label": "The first version can stay small",
+          "text": "A parent web page, durable importer, protected cache folder and a precise Jellyfin library-folder addition are enough to trial the architecture. A new client source provider, YouTube player SDK and top-level category are unnecessary for this route."
         },
         {
           "type": "note",
-          "text": "API budgets: current docs give search.list 100 calls/day in its separate Search Queries bucket; playlist and video metadata reads use the general quota. Verify the project's actual console limits. Refresh or delete retained public API metadata within the applicable 30-day policy window; keep parent-authored approvals separate from cached metadata. Child-directed service obligations and Apple review requirements are launch gates. [S7, S11, S14]"
+          "text": "No server metadata settings or account permissions were changed. Local NFO has priority over remote metadata in Jellyfin, but artwork and locked-field behavior must be verified for generated assets without changing settings for existing RAID media. [S23]"
         }
       ]
     },
     {
       "number": 7,
       "eyebrow": "DELIVERY AND EVIDENCE",
-      "title": "Prove the gate before the feature",
-      "dek": "This document is complete research. Every integration stage below is proposed work.",
+      "title": "Test a small cache before scaling",
+      "dek": "All stages below are proposed implementation, not completed installation.",
       "blocks": [
         {
           "type": "table",
-          "widths": [
-            0.23,
-            0.77
-          ],
           "headers": [
-            "Stage / gate",
-            "Evidence required to advance"
+            "Stage",
+            "Required evidence"
           ],
           "rows": [
             [
-              "0. Transport decision",
-              "Supported tvOS route and applicable permissions; real Apple TV behavior for recommendations, ads, links, focus and Back. A web demo is insufficient. If strict containment fails, choose rights-cleared local media."
+              "1. Readiness",
+              "Confirm exact RAID root, mounted volume identity, non-root write confinement, free-space budget and server encoder support. Establish permitted source material."
             ],
             [
-              "1. Parent prototype",
-              "Search/preview two real candidate collections, fetch all pages, review exact IDs, publish a revision and demonstrate a pending playlist addition. No actual source is approved by this document."
+              "2. Small import",
+              "Approve a few videos; download, normalize and validate; publish one series with NFO/artwork. Confirm only the explicit cache subtree is indexed."
             ],
             [
-              "2. Policy tests",
-              "Reject partial pagination, stale draft hashes, unknown IDs, arbitrary URLs and new members. Exercise revocation, unavailable videos, unapproved artwork, account switching and restored old caches."
+              "3. Playback",
+              "Compare HEVC and source AV1 where available. Measure startup, seeks, frame drops and Direct Play on the actual Apple TV when possible. Verify Next, Shuffle, resume and session limits."
             ],
             [
-              "3. End-to-end trial",
-              "On Apple TV: Next, Shuffle, EOF, progress resume, sleep, WAN loss and reboot. Verify session caps, error exits and no unintended source transition. Simulated iCloud sync is not live-device proof."
+              "4. Recovery + access",
+              "Exercise reboot, interrupted download/encode, WAN loss, absent RAID, low space, revoked approval, stale item IDs and a new upstream playlist member. Prove no writes outside the owned cache root."
             ],
             [
-              "4. Operate + release",
-              "Internal-disk backups, bounded storage, restart/backoff and quota monitoring; demonstrate no RAID writes. Complete child-directed privacy and platform review before distribution. [S11, S14, S16]"
+              "5. Operations",
+              "Bound concurrency, retries and storage. Back up policy/jobs, provide parent-visible failures, and test tool upgrades with rollback. Review distribution obligations before release. [S14]"
             ]
+          ],
+          "widths": [
+            0.23,
+            0.77
           ]
         },
         {
           "type": "paragraph",
-          "text": "<b>Success:</b> no unapproved item can be selected through our UI, API or restored state; a parent can see and revoke the exact set; a missing YouTube source does not break Jellyfin. Separately measure all content and navigation exposed by the actual player. If that exceeds the family's allowed boundary, the live route fails acceptance."
+          "text": "<b>Success:</b> a parent-approved collection plays through the ordinary Jellyfin path without live YouTube dependency; new playlist members cannot appear automatically; existing RAID media is unchanged; reboot recovery neither corrupts published files nor broadens library access."
         },
         {
           "type": "heading",
@@ -534,7 +559,7 @@
         },
         {
           "type": "note",
-          "text": "Local evidence: docs/design/youtube-tvos-feasibility.json, observed 8 October 2026. AppleTVSimulator27.0 SDK, arm64 tvOS simulator target: public WebKit framework absent; 'import WebKit' failed. This is SDK feasibility evidence only, not a full player test. Current client code was inspected for exact library binding, item identity and playback lifecycle. All uncited system behavior in this document is a design proposal, not an implemented feature."
+          "text": "Research reviewed 8 October 2026. Existing client access and playback profiles were inspected; no downloader, server encoder, cache or physical-device test ran. The earlier tvOS WebKit probe remains recorded in docs/design/youtube-tvos-feasibility.json, but this local-file proposal does not require a web player. All uncited behavior is proposed design."
         }
       ]
     }
