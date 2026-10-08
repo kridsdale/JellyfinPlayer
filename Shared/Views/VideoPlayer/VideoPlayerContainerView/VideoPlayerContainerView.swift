@@ -10,7 +10,6 @@ import Combine
 import Defaults
 import Engine
 import Logging
-import MediaPlayer
 import SwiftfinAsyncStreams
 import SwiftfinUIState
 import SwiftfinValues
@@ -581,12 +580,6 @@ extension VideoPlayer {
                 initialHitBlockView.removeFromSuperview()
                 didInitiallyAppear = true
             }
-
-            #if os(tvOS)
-            Task { @MainActor in
-                disableTogglePlayPauseCommand()
-            }
-            #endif
         }
 
         // MARK: - viewDidLoad
@@ -771,12 +764,6 @@ extension VideoPlayer {
             Task { @MainActor in
                 manager.stop()
             }
-        }
-
-        private func disableTogglePlayPauseCommand() {
-            let command = MPRemoteCommandCenter.shared().togglePlayPauseCommand
-            command.removeTarget(nil)
-            command.addTarget { _ in .success }
         }
 
         override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {

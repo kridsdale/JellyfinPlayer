@@ -2,6 +2,8 @@
 
 Owns system Now Playing metadata and remote media-command registration. The app passes immutable command events to its current playback owner; SDK callbacks and exact registration tokens stay internal.
 
-One process has one publication owner. A new owner revokes all old command tokens; old queued callbacks and late cleanup cannot change the new owner. Metadata publication also checks ownership. Paused seeks retain static metadata and publish fractional time with an explicit floating-point zero rate.
+Each configuration gets an owner/epoch lease. Reconfiguration rejects old callbacks even when the same controller remains alive. Authority is revoked before SDK cleanup; captured old and orphan registrations are removed without disabling newer commands through synchronous reentry. Dynamic publication checks the lease before reading shared metadata and between metadata/play-state writes. Already accepted SDK effects are not rolled back.
 
-Controller, metadata and registry are main-actor owned. Command payloads are checked Sendable and reject non-finite or negative positions and intervals. Six native tests use a typed output port without changing the Mac's actual media controls.
+The optional handledByInterface command set acknowledges controls performed by native UI without forwarding playback twice. tvOS uses it for play/pause toggle; iOS forwards through its player owner. The app no longer removes all system toggle targets or installs an untracked global handler.
+
+Controller, metadata and registry are main-actor owned. Command payloads are checked Sendable and reject non-finite or negative positions/intervals. Fifteen native tests use a synthetic output port, including nine stale/reentrant ownership regressions. The UIKit artwork fixture remains compile-only under the runtime hold. No actual Mac media-control state is touched by the native tests.

@@ -12,8 +12,10 @@ import Foundation
 import IdentifiedCollections
 import JellyfinAPI
 import StatefulMacros
+import SwiftfinAccountAccess
 import SwiftfinAsyncStreams
 import SwiftfinCollections
+import SwiftfinImages
 import SwiftfinUserAdministration
 import SwiftUI
 
@@ -65,10 +67,25 @@ final class ServerUsersViewModel: ViewModel, Identifiable {
     @Published
     var users: IdentifiedArrayOf<UserDto> = []
 
+    private var accounts: UserAdministrationClient?
+    private var access: AccountAccessClient?
+
+    func profileImageSource(for user: UserDto) -> ImageSource {
+        ImageSource(url: user.id.flatMap { try? access?.profileURL(userID: $0, imageTag: user.primaryImageTag) })
+    }
+
+    private func requireAccounts() throws -> UserAdministrationClient {
+        guard let accounts else { throw UserSessionError.missingCurrentSession }
+        try accounts.checkBinding()
+        return accounts
+    }
+
     // MARK: - Initializer
 
     override init() {
         super.init()
+        accounts = try? requireUserAdministration()
+        access = userSession?.accountAccess
 
         Notifications[.didChangeUserProfile]
             .publisher
@@ -84,7 +101,9 @@ final class ServerUsersViewModel: ViewModel, Identifiable {
     private func _refreshUser(_ userID: String) async throws {
         await cancel()
 
-        let newUser = try await requireUserAdministration().user(id: userID)
+        let accounts = try requireAccounts()
+        let newUser = try await accounts.user(id: userID)
+        try accounts.checkBinding()
 
         if let index = users.firstIndex(where: { $0.id == userID }) {
             users[index] = newUser
@@ -96,10 +115,12 @@ final class ServerUsersViewModel: ViewModel, Identifiable {
     @Function(\Action.Cases.getUsers)
     private func _getUsers(_ isHidden: Bool, _ isDisabled: Bool) async throws {
         await cancel()
-        let users = try await requireUserAdministration().users(
+        let accounts = try requireAccounts()
+        let users = try await accounts.users(
             isHidden: UserAdministrationClient.filterValue(isHidden),
             isDisabled: UserAdministrationClient.filterValue(isDisabled)
         )
+        try accounts.checkBinding()
         self.users = IdentifiedArray(uniqueElements: UserAdministrationClient.sortedUsers(users))
     }
 
@@ -108,8 +129,11 @@ final class ServerUsersViewModel: ViewModel, Identifiable {
     @Function(\Action.Cases.deleteUsers)
     private func _deleteUsers(_ ids: [String]) async throws {
         await cancel()
-        let deleted = try await requireUserAdministration().deleteUsers(ids: ids)
+        let accounts = try requireAccounts()
+        let deleted = try await accounts.deleteUsers(ids: ids)
+        try accounts.checkBinding()
         users.removeAll { deleted.contains($0.id ?? "") }
+        try accounts.checkBinding()
         events.send(.deleted)
     }
 
@@ -119,8 +143,11 @@ final class ServerUsersViewModel: ViewModel, Identifiable {
     private func _appendUser(_ user: UserDto) async {
         await cancel()
 
+        guard let accounts, (try? accounts.checkBinding()) != nil else { return }
         users.append(user)
+        guard (try? accounts.checkBinding()) != nil else { return }
         users.sort(by: { $0.name ?? "" < $1.name ?? "" })
+        guard (try? accounts.checkBinding()) != nil else { return }
         events.send(.deleted)
     }
 }

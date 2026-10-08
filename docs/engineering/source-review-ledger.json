@@ -1129,11 +1129,13 @@
       "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinText"
+      ],
       "path": "Shared/Extensions/JellyfinAPI/GeneralCommandType.swift",
-      "reason": "",
+      "reason": "Complete SDK DTO display extension reviewed: raw enum names become labels and map exhaustively to native system symbols. No remote command is dispatched and no SDK implementation escapes.",
       "sha256": "e9253796388bf1d8575f00047feff88d90f897d886af7c97b07448a6a6ec3cc1",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -1811,16 +1813,18 @@
     {
       "owners": [],
       "path": "Shared/Objects/ContentGroup/SeriesEpisodeContentGroup/SeriesEpisodeContentGroup+SeasonSelector.swift",
-      "reason": "",
+      "reason": "Complete native selector reviewed: tvOS focus track and cancellable debounce retain existing season identity; iOS uses menu/picker labels. Matching current focus/existing supplied season is checked after delay. No catalog lookup or persisted playback choice.",
       "sha256": "773516d21284246276e92e7a31df6a6963d68f4ef193e792d5760ca074aa048b",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinCollections"
+      ],
       "path": "Shared/Objects/ContentGroup/SeriesEpisodeContentGroup/SeriesEpisodeContentGroup.swift",
-      "reason": "",
+      "reason": "Complete seasonal content-group composition reviewed: native loading/episode views, selected-row identity and preferred focus derived from supplied play-button season. Paging/query behavior delegates to season/episode library owners. Preferred selection is UI state rather than child next/shuffle policy.",
       "sha256": "e9fffde40f1fc8f9b90d2c3e8d84ea02e6865d62bf32f39e975dd14899c457fa",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -1951,11 +1955,15 @@
       "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinStoredValues",
+        "SwiftfinText",
+        "SwiftfinCollections"
+      ],
       "path": "Shared/Objects/ItemActionButton.swift",
-      "reason": "",
+      "reason": "Complete display enum reviewed: stable stored raw values, platform icon/title/color mappings and default toolbar/menu ordering define app presentation. Cases do not implement their server actions.",
       "sha256": "6ac8bf04d1bf08b232b1e711124be333558d971331a80ca1a0e8de4e4b205fbd",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -2518,8 +2526,8 @@
         "SwiftfinVLC"
       ],
       "path": "Shared/Objects/MediaPlayerManager/NowPlayable/NowPlayableObserver.swift",
-      "reason": "Complete updated body reviewed. App composes OS commands/interruption observations with the existing NowPlaying/AudioSession/native owners and exact audio-owner UUID. AsyncStreams owns replaceable artwork task lifetime. Image binding is checked before/after IO and again for exact manager/item/audio owner before metadata publication. Terminal actions clear commands/subscriptions and release audio through captured native drain. All three backends now await audio acquisition before opening. Native interruptions/commands/audio output remain unexecuted under the hold.",
-      "sha256": "8929e91b1e00a261136ec426fc6794a74f4b8386a6fc87a3a420127a1a188b79",
+      "reason": "Complete main-actor host adapter reviewed: native static/dynamic metadata, captured playback/audio owner and callbacks compose NowPlaying/AudioSession library owners. tvOS interface-owned toggle is registered and acknowledged by the tracked NowPlaying lease; no globally untracked target remains. iOS commands keep forwarding through the captured manager. Actual native press/audio/renderer acceptance remains held.",
+      "sha256": "4e1be5991cfbc9aa093002c7ed976ccdb91d493b1397e7c77eb79cd83a6d246e",
       "status": "source-reviewed-retained"
     },
     {
@@ -2895,13 +2903,6 @@
     },
     {
       "owners": [],
-      "path": "Shared/Objects/SwizzleDefaults.swift",
-      "reason": "",
-      "sha256": "ad02d3be7133eac9d705c0c7ea60bce1f67c4a8fdb29a0f62fb301d1e200f81e",
-      "status": "pending"
-    },
-    {
-      "owners": [],
       "path": "Shared/Objects/SystemImageable.swift",
       "reason": "App SF Symbol protocol and secondary-symbol fallback are presentation semantics only.",
       "sha256": "3966e0af4fec28e8a02c7790af6d62ecb6ab5b200db07aa7465c3a7923c51002",
@@ -3099,11 +3100,13 @@
       "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinPermissions"
+      ],
       "path": "Shared/Services/Permissions/AppPermission.swift",
-      "reason": "",
+      "reason": "Complete main-actor display/identity adapter reviewed: title and privacy description come from the app bundle; status/query/request are injected owner callbacks. Immutable string identity defines equality/hash without carrying OS contexts across actors.",
       "sha256": "648313e4f55d42face040fa36ea0ed3cd07681ca690f31e2ec6dd8b57f674eab",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [
@@ -3365,11 +3368,13 @@
     {
       "owners": [
         "SwiftfinUserAdministration",
+        "SwiftfinAccountAccess",
+        "SwiftfinImages",
         "SwiftfinAsyncStreams"
       ],
       "path": "Shared/ViewModels/AdminDashboard/Users/ServerUsersViewModel.swift",
-      "reason": "Main-actor screen cancellation and local row publication wrap bound user read/deletion commands; filtering/current-user protection and query sort live in UserAdministration. Supplied-row insertion and UI sorting/event spelling remain in presentation. Weak profile refresh subscription is local composition; no server operation was executed.",
-      "sha256": "fa9287fd2138b64526159185e7175c7d6c75103a8ba062b4bded241f80165e0e",
+      "reason": "Complete list adapter re-reviewed: original administration/avatar clients are captured at initialization and checked around row mutation and event publication. Refresh/filter/delete requests stay with UserAdministration, and avatar URL resolution stays with AccountAccess. Local row insertion/sorting and existing event spelling remain UI adaptation. No ambient replacement account can be used for old row images or pending list operations.",
+      "sha256": "4fc87f76e071d9587d83bdb163d4f3d508c95417d25e63f6ffb0ebacdfdad683",
       "status": "source-reviewed-retained"
     },
     {
@@ -3751,11 +3756,13 @@
       "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinStoredValues"
+      ],
       "path": "Shared/Views/EditLocalServerView.swift",
-      "reason": "",
+      "reason": "Complete server settings form reviewed: installed server/version/connection labels, compatibility warning, routing and deletion confirmation. Actual local removal and connection selection delegate to ServerConnectionViewModel and its library owners.",
       "sha256": "669b68c91d4c448b7445b86c4e29abdf6f58a0c5e9e9f988be11f0ae0f1f2f7a",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -3796,11 +3803,15 @@
       "status": "pending"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinMediaCatalog",
+        "SwiftfinUserMediaState",
+        "SwiftfinPlaybackProfiles"
+      ],
       "path": "Shared/Views/ItemContentGroupView/ItemContentGroupProvider.swift",
-      "reason": "",
+      "reason": "Complete current body reviewed. Native localized content groups, routing and captured catalog/media-state adapters can remain app composition. However the media-source/audio/subtitle/bitrate selection transition still lives in the app and must move into an owned playback-selection policy before this file satisfies the full minimal-responsibility goal. The existing optimistic mutation sequence delegates merge/authority to UserMediaState; no catalog/server action was executed.",
       "sha256": "02d491560b7669e579b052fba36bf2812a4fe5bea2bab4e693f4b99316e6ac86",
-      "status": "pending"
+      "status": "source-reviewed-mixed"
     },
     {
       "owners": [],
@@ -3870,11 +3881,14 @@
       "status": "pending"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinMediaTracks",
+        "SwiftfinPlaybackProfiles"
+      ],
       "path": "Shared/Views/ItemView/Components/ActionButtons/PlaybackActionButton.swift",
-      "reason": "",
+      "reason": "Complete selection menu reviewed: media-source, bitrate, audio/subtitle labels and picker values forward to the captured provider. External-audio filtering TODO remains native choice presentation. The provider selection policy is separately marked mixed and is not approved through this caller.",
       "sha256": "2be17ad0e22cc3ffa07348e0045fff6cc3c295c28a305a53ff69cf9cd5d5e755",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -3884,11 +3898,13 @@
       "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinRecordingTimers"
+      ],
       "path": "Shared/Views/ItemView/Components/ActionButtons/RecordActionButton.swift",
-      "reason": "",
+      "reason": "Complete recording control reviewed: schedule/status/menu labels, series/timer choice, permission visibility, notifications and error presentation wrap RecordingTimerViewModel. Timer construction, authorization and server actions belong to RecordingTimers; no recording action was invoked.",
       "sha256": "302248fe0c5213af74dd08aeab6f4a208023e5691de8a82f3ad753da5405b4d9",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [
@@ -3907,11 +3923,14 @@
       "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinStoredValuesUI",
+        "SwiftfinCollections"
+      ],
       "path": "Shared/Views/ItemView/Components/ActionButtons/TrailersActionButton.swift",
-      "reason": "",
+      "reason": "Complete trailer menu reviewed: installed display preferences, supplied local/remote trailer lists, native player routing and UIApplication URL capability/open adaptation. Existing callback/error presentation remains native UI; no external app or trailer was opened.",
       "sha256": "5593fdce06ec9c06788b57fdd17fd7216b16ca2410ee6b425eed73d73f73017c",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -4040,11 +4059,13 @@
       "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinAccountAccess"
+      ],
       "path": "Shared/Views/QuickConnectView.swift",
-      "reason": "",
+      "reason": "Complete login sheet reviewed: stateful polling code, instructions, errors and native dismissal; Quick Connect transport/polling belongs to captured AccountAccess. Binding is checked per event and task cancellation is quiet. The authenticated secret is passed to the supplied admission action; no credentials are persisted here.",
       "sha256": "67ee634a0c66f6b3a1277581159360d725b5d8a24d91a8e3f38c34d2aebdebfe",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -4193,11 +4214,13 @@
       "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinPlaybackProfiles"
+      ],
       "path": "Shared/Views/SettingsView/DebugSettingsView.swift",
-      "reason": "",
+      "reason": "Complete DEBUG-only diagnostics form reviewed: progress-report toggle and localized codec/HDR/device capability labels. Native probing belongs to PlaybackProfiles and is not performed by this review.",
       "sha256": "338ed78897e7ba92e803fc72e3e83863ed936f256e61852545b6d554441059e2",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -4238,11 +4261,14 @@
       "status": "pending"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinAccountAccess",
+        "SwiftfinUserAdministration"
+      ],
       "path": "Shared/Views/SettingsView/LocalUserSettings/LocalUserSettingsView.swift",
-      "reason": "",
+      "reason": "Complete account settings screen reviewed: native photo picker/profile display, image-owner callbacks, password/Quick Connect/security routing and success feedback. The disabled reset-settings TODO remains inactive. No image upload, account or native picker action was executed.",
       "sha256": "35ef7b3d67d69c96fe2bfffd56e9132eff190794199b71edc30ad15f29e5b46a",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [
@@ -4440,11 +4466,14 @@
       "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinUIState",
+        "SwiftfinAsyncStreams"
+      ],
       "path": "Shared/Views/VideoPlayer/VideoPlayerContainerView/VideoPlayerContainerView.swift",
-      "reason": "",
-      "sha256": "02c64443717d09b880a3aa6585ef325f9b9b4b0df7258c56fe7062824ca8a928",
-      "status": "pending"
+      "reason": "Complete UIKit controller body reviewed: hosted children, platform constraints, transitions, native focus/press/pan recognition and overlay/supplement layout compose captured player/container owners. The untracked process-wide MediaPlayer toggle target and delayed registration are removed; NowPlaying owns its exact SDK lease. Existing gesture/layout TODOs remain platform presentation. No decoder or server implementation.",
+      "sha256": "55f69f081122855ebbee62066bbeeba07affda7a1819f61f955eeec7f8664537",
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -4575,11 +4604,14 @@
       "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinUserAdministration",
+        "SwiftfinCollections"
+      ],
       "path": "Swiftfin/Views/AdminDashboardView/APIKeyView/APIKeysView.swift",
-      "reason": "",
+      "reason": "Complete administrative key screen reviewed: native list/create-name alert, progress/errors, refresh and row callbacks delegate to the model owner. No token generation, deletion, replacement or credential storage is implemented by this view or executed in review.",
       "sha256": "cdc7c5d91c9086c0c9d965ed36243432c5fd336db5e7b5e58bfb0f850944efc1",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -4610,11 +4642,14 @@
       "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinFormatting",
+        "SwiftfinUIState"
+      ],
       "path": "Swiftfin/Views/AdminDashboardView/ActiveSessions/ActiveSessionsView/Components/ActiveSessionRow.swift",
-      "reason": "",
+      "reason": "Complete session row reviewed: supplied session DTO selects current-item poster or device icon, localized now-playing/idle labels and refreshable last-seen date. Actual progress/transport behavior is delegated to existing owners; no server or media query.",
       "sha256": "ca8ad244fba546ca89eaf53f2d6b3503f63bd628437e915d29859c36a6e66182",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [
@@ -4750,18 +4785,25 @@
       "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinFormatting",
+        "SwiftfinTime"
+      ],
       "path": "Swiftfin/Views/AdminDashboardView/ServerTasks/ServerTaskDetailsView/Components/ServerTaskTriggerRow.swift",
-      "reason": "",
+      "reason": "Complete trigger row reviewed: native daily/weekly/interval/startup labels and time-limit formatting from supplied DTO; confirmation invokes a supplied delete callback. Existing FormatStyle TODO is display-only; request construction belongs to ServerOperations.",
       "sha256": "d9c55e4b4fe721e1db50b8aa14cc1f8da49d3c0c49836d40e09a2594732e39e1",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinFormatting",
+        "SwiftfinUIState",
+        "SwiftfinServerOperations"
+      ],
       "path": "Swiftfin/Views/AdminDashboardView/ServerTasks/ServerTaskDetailsView/ServerTaskDetailsView.swift",
-      "reason": "",
+      "reason": "Complete task-detail presentation reviewed: state/progress/result/trigger labels and native start/stop/add/delete controls forward to the captured model. Request payloads and task operations remain private to ServerOperations.",
       "sha256": "aae9bdfbe09cb683357e60d1e4aa96d672677200cc605a295775a452e6aea38b",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -4834,11 +4876,14 @@
       "status": "pending"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinUserAdministration",
+        "SwiftfinUIState"
+      ],
       "path": "Swiftfin/Views/AdminDashboardView/ServerUsers/ServerUserSettings/ServerUserDeviceAccessView/ServerUserDeviceAccessView.swift",
-      "reason": "",
+      "reason": "Complete native device-access editor reviewed: copied policy bindings, existing nonnil ID assumptions, device rows, save comparison and model callbacks. Device querying/policy persistence stay owned. Existing force-unwrapped server ID assumptions are explicit and unchanged; no server policy was changed.",
       "sha256": "e606737fb967fd32e24672f4603f396db71101a2c87fdb9b6290fd1dfddd2fd7",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -4848,11 +4893,14 @@
       "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinUserAdministration",
+        "SwiftfinUIState"
+      ],
       "path": "Swiftfin/Views/AdminDashboardView/ServerUsers/ServerUserSettings/ServerUserMediaAccessView/ServerUserMediaAccessView.swift",
-      "reason": "",
+      "reason": "Complete administrative media-access editor reviewed: copied server policy, native library/deletion toggles, save comparison and model callbacks. Existing required library-ID assumptions and box-set display exclusion are preserved; no child catalog authorization is replaced and no server mutation was executed.",
       "sha256": "295b12da393bc70b3d9737ce3de7d19d3fb1a6ab58f166a81c4c5bb23655cb08",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -4934,18 +4982,25 @@
       "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinImages",
+        "SwiftfinFormatting",
+        "SwiftfinUIState"
+      ],
       "path": "Swiftfin/Views/AdminDashboardView/ServerUsers/ServerUsersView/Components/ServerUsersRow.swift",
-      "reason": "",
-      "sha256": "d926913dac07b2f1b70d044d3225fc6830742ad23c95904870434b5af525a854",
-      "status": "pending"
+      "reason": "Complete row reviewed after repair: it receives an immutable ImageSource from the original list owner, removing the ambient account injection and forced session access. Role/status/last-seen labels, checkbox, display styles and supplied actions remain native presentation.",
+      "sha256": "dec748d5b49d02a5c417069d7fcd71f1b1d8638d20b7daa3186a51ce12b6d40f",
+      "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinUserAdministration",
+        "SwiftfinCollections"
+      ],
       "path": "Swiftfin/Views/AdminDashboardView/ServerUsers/ServerUsersView/ServerUsersView.swift",
-      "reason": "",
-      "sha256": "c9d1a84c3d6cd00c4a1d0ab36875a718c53511db9a017036f5fcb7fb759913aa",
-      "status": "pending"
+      "reason": "Complete user-list screen reviewed: native filter/edit/selection/delete confirmations, local self-delete warning and supplied model operations. Each avatar source comes from that model original bound account. Existing notification routing and identity/selection behavior remain composition; no user was added or deleted.",
+      "sha256": "c2d6c8f8c129bc4873d69dfd0e14ecc36f1384d630c0441eb86d13646dc036ee",
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -5219,11 +5274,13 @@
       "status": "pending"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinUIState"
+      ],
       "path": "Swiftfin/Views/VideoPlayer/Gestures/PanHandlingAction.swift",
-      "reason": "",
+      "reason": "Complete generic gesture adapter reviewed: supplied gesture callbacks, native points/states and captured container-state context define UI interaction; no decoder, storage or transport policy.",
       "sha256": "85fe0b9c3d100abc90d1fa2a010307bf3065569861524724d33ba55f041e6a40",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -5247,11 +5304,14 @@
       "status": "pending"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinUIState",
+        "SwiftfinTime"
+      ],
       "path": "Swiftfin/Views/VideoPlayer/PlaybackControls/Components/PlaybackButtons.swift",
-      "reason": "",
+      "reason": "Complete iOS action buttons reviewed: localized play/pause/jump labels, visibility for live streams, native animation/sizing and captured manager/proxy command forwarding. No playback request construction.",
       "sha256": "adc859e325383a98ad54f00c02558bdb03513318f789c99e07219f96b787ea2c",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -5261,11 +5321,13 @@
       "status": "pending"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinUIState"
+      ],
       "path": "Swiftfin/Views/VideoPlayer/PlaybackControls/PlaybackControls.swift",
-      "reason": "",
+      "reason": "Complete iOS overlay reviewed: safe-area layout, native toolbar/progress/buttons, scrubbing visibility and buffering display state. The unused buffering-display TODO remains; player commands and gesture state belong to captured owners.",
       "sha256": "a6a828c619d109a8c7344f827f3dd12762b43b59cd79591a95f772aaa5fd454a",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -5275,11 +5337,13 @@
       "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinUIState"
+      ],
       "path": "Swiftfin/Views/VideoPlayer/VideoPlayer+KeyCommands.swift",
-      "reason": "",
+      "reason": "Complete native keyboard adapter reviewed: platform keys invoke captured player/queue, overlay, jump, volume and rate commands with UI feedback. Playback/queue implementation stays with its existing owner; no child queue is enabled.",
       "sha256": "ee6481208697e8af783094c6df888e96e378e1256d7b63810b520321a3f2e1c5",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [
@@ -5480,18 +5544,23 @@
       "status": "pending"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinUIState"
+      ],
       "path": "Swiftfin tvOS/Views/VideoPlayer/PlaybackControls/Components/PlaybackControls+PressHandling.swift",
-      "reason": "",
+      "reason": "Complete native press adapter reviewed: event type/phase, progress focus, overlay visibility, arrow/jump and long-press actions delegate to captured UI/player owners. This is remote-control interaction; no queue generation or transport.",
       "sha256": "c504bde38f62a78f2d0c002e9de83ea4a87cd42846872bc86f179444680a84b2",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinUIState",
+        "SwiftfinFormatting"
+      ],
       "path": "Swiftfin tvOS/Views/VideoPlayer/PlaybackControls/Components/PlaybackControls+Scrubbing.swift",
-      "reason": "",
+      "reason": "Complete remote interaction adapter reviewed: delayed long-press recognition and coalesced jumps are view-owned tasks, canceled on replacement/disappearance. Captured manager/container handle rate/seek and jump bookkeeping; native labels/toasts are presentation. The manager async rate overload was separately inspected and contains the synchronous guarded update, with no hidden suspension/decoder work.",
       "sha256": "cf0e0db8571dda51443333a3413eb8e7bec70c0abe7ec5c8f1db2be09d299555",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -5501,11 +5570,13 @@
       "status": "pending"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinUIState"
+      ],
       "path": "Swiftfin tvOS/Views/VideoPlayer/PlaybackControls/PlaybackControls.swift",
-      "reason": "",
+      "reason": "Complete tvOS controls body reviewed: remote focus, overlay/supplement display, close confirmation, press subscription and UI task cancellation on disappearance. Native press/decoder acceptance remains held; no timer/queue/player implementation is imported into the view.",
       "sha256": "e987783f784ecad426d7b3ea1c9ec5897c80894b7f1649b825b652821b1825de",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -6412,22 +6483,57 @@
       ],
       "reviewedConsumers": [
         "Shared/ViewModels/AdminDashboard/ServerActivityDetailViewModel.swift",
-        "Swiftfin/Views/AdminDashboardView/ServerActivity/ServerActivityView/Components/ServerActivityEntry.swift"
+        "Swiftfin/Views/AdminDashboardView/ServerActivity/ServerActivityView/Components/ServerActivityEntry.swift",
+        "Shared/ViewModels/AdminDashboard/Users/ServerUsersViewModel.swift",
+        "Swiftfin/Views/AdminDashboardView/ServerUsers/ServerUsersView/Components/ServerUsersRow.swift"
       ],
-      "reason": "Scoped URL construction revalidates the captured account before and after profile/splash resolver callbacks, rejecting synchronous binding replacement without enabling API-key query strings or invoking HTTP. Existing transport/auth/login/own-user contracts are unchanged.",
+      "reason": "Scoped profile/splash construction checks captured account authority before and after resolver callbacks. The server-user list now passes original-client profile sources to its rows rather than combining DTOs with an ambient transport. No HTTP/image/key query executed; transport and existing native contracts are unchanged.",
       "sha256": "b1c3ba744f6f8a9d64b52f7a7d08bb146ab9ebe7c08372831cb0293ab1066e65"
+    },
+    {
+      "path": "Packages/SwiftfinNowPlaying/Sources/SwiftfinNowPlaying/NowPlayingController.swift",
+      "reviewedInterfaces": [
+        "init()",
+        "configure(_:handledByInterface:handler:)",
+        "clearCommands()",
+        "setMetadata(_:)",
+        "updatePlayback(playing:metadata:)",
+        "NowPlayingOutput",
+        "NowPlayingRegistry"
+      ],
+      "reviewedConsumers": [
+        "Shared/Objects/MediaPlayerManager/NowPlayable/NowPlayableObserver.swift",
+        "Shared/Views/VideoPlayer/VideoPlayerContainerView/VideoPlayerContainerView.swift"
+      ],
+      "reason": "Complete registry/controller and native output adapter reviewed: MainActor owns process metadata and exact SDK tokens; each configure captures a distinct owner/epoch lease. Replacement revokes authority before SDK callbacks, removes every captured old/orphan token and preserves newer enabled commands through reentry. Dynamic updates validate before reading and between metadata/play-state effects. Interface-handled commands acknowledge without forwarding twice. Immutable events are Sendable; native tokens/SDK callback objects stay internal. Already accepted SDK effects are not transactional rollback.",
+      "sha256": "6ebed3f6018256d33ea5361f25a21aa2349a6ae649213fd4ce4b7690535ff85b"
+    },
+    {
+      "path": "Packages/SwiftfinNowPlaying/Sources/SwiftfinNowPlaying/NowPlayableCommand.swift",
+      "reviewedInterfaces": [
+        "NowPlayableCommand",
+        "Event.init(interval:positionTime:)",
+        "Event.isValid(for:)",
+        "addHandler(_:)"
+      ],
+      "reviewedConsumers": [
+        "Shared/Objects/MediaPlayerManager/NowPlayable/NowPlayableObserver.swift"
+      ],
+      "reason": "Complete command DTO/adapter reviewed: immutable Sendable interval/position values are copied from raw native events on their SDK executor and validated before queued MainActor delivery; the registry rechecks epoch before effects. Native command mapping, preferred intervals and target installation stay internal. Native success acknowledges queued delivery rather than synchronous playback completion; unsupported command behavior remains defined by the supplied handler.",
+      "sha256": "14c2ee5a35002ceb62bc4d0d139c519c6557a6c57260f6259d63ed08d6821777"
     }
   ],
   "limits": "This ledger records bodies explicitly reviewed, with exact current hashes; earlier prose or lexical inventory is not automatically promoted. Pending and mixed entries prevent whole-source completion. Retained UI algorithms have specific presentation reasons, not folder/import-based blanket approval. API entries do not classify the rest of the public graph. Source review and offline tests do not satisfy held runtime acceptance.",
   "schemaVersion": 1,
   "scope": "All current app Swift files; complete-body classifications and scoped public/internal lifecycle/consumer reviews. No simulator/server testing.",
   "summary": {
-    "applicationSwiftFiles": 665,
+    "applicationSwiftFiles": 664,
     "classification": {
-      "pending": 105,
-      "source-reviewed-retained": 560
+      "pending": 75,
+      "source-reviewed-mixed": 1,
+      "source-reviewed-retained": 588
     },
-    "currentAPIReviews": 58,
+    "currentAPIReviews": 60,
     "runtimeAcceptance": "held by human; no simulator/server testing"
   }
 }

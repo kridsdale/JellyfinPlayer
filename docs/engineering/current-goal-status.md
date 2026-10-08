@@ -1,6 +1,6 @@
 # Current engineering goal disposition
 
-Session choices and original-account avatars are now scoped through existing owners. Remote-login save/activation preserves its original intent; late authentication, restoration and synchronous publication reentry cannot proceed to newer-account effects. Offline acceptance:47 session+31 account-access+27 server-operation+10 kids-account tests;53 boundaries;tvOS Debug compile-for-testing and iOS Release, with no owned Swift/generated-macro diagnostics. The665-source ledger has560 retained,0 mixed and105 pending, with58 scoped API reviews. Whole source/API/actor/bootstrap and held runtime acceptance remain required; items1/2 remain active.
+The system Now Playing owner now tracks tvOS interface-handled toggle commands and revokes stale/reentrant command and metadata leases. Original-account server-user avatars and list operations remain bound to their captured clients. An unused application defaults-swizzling utility is isolated unchanged as a runtime fixture. Offline evidence:15 NowPlaying tests (9 new),3 runtime helpers,53 boundaries and final tvOS Debug/iOS Release compile-only builds, without owned Swift/generated-macro diagnostics. The664-source ledger records588 retained,1 mixed and75 pending with60 scoped API reviews. The mixed provider still contains app-owned playback-option selection policy. Whole source/API/actor/bootstrap and held runtime acceptance remain required; items1/2 remain active.
 
 The table below records the candidate checkpoint from 2026-10-05. The active goal on 2026-10-06 is full-client package extraction and Swift 6 completion; see [current package evidence](package-refactor.md). It remains active.
 
@@ -462,3 +462,10 @@ The child host adapter is now retained composition; UserSessionManager remains m
 An explicit choice captures its receipt before remote/native authentication or UI task scheduling. Passive restoration waits for unfinished explicit work; canceled queued admission releases it. Remote-login credential admission and its saved event reuse the same receipt, adding the resolved account binding without submitting a new choice. Exact server/user and local policy are checked before native effects. Root identity includes both account IDs, and bound activity avatars retain their original transport.
 
 Offline regression/build evidence is recorded in package-refactor.md. Accepted synchronous effects are not rolled back, and no native credential query, prompt, simulator execution, server operation or RAID access occurred. The115 passing native tests and compile-only builds do not establish runtime acceptance. Items1/2 remain active with105 source bodies and whole API/actor/bootstrap acceptance outstanding.
+
+
+## System media control and retained UI checkpoint (2026-10-07, offline)
+
+The tracked NowPlaying owner replaces the tvOS view controller untracked global toggle registration. Fifteen synthetic native contracts exercise stale callbacks, same-controller reconfiguration, SDK install/remove/enable reentry and split metadata/play-state publication. The server-user list captures original administration/avatar clients and passes immutable image sources to its rows. No real media control, permission, credential, simulator or server action was invoked.
+
+Twenty-eight previously pending complete UI bodies are individually classified, with original source hashes and explicit retained assumptions. The provider playback-option transition remains reviewed-mixed and unfinished. The defaults-swizzling helper has no production caller; its identical bytes now live only in runtime fixtures and all three helper checks pass. Final platform builds are compile-only. See package-refactor.md for acceptance evidence; whole items1/2 remain active.

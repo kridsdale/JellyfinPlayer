@@ -187,7 +187,7 @@ struct ServerUsersView: View {
             } else {
                 ForEach(viewModel.users, id: \.self) { user in
                     if let userID = user.id {
-                        ServerUsersRow(user: user) {
+                        ServerUsersRow(user: user, profileImageSource: viewModel.profileImageSource(for: user)) {
                             if isEditing {
                                 selectedUsers.toggle(value: userID)
                             } else {

@@ -60,7 +60,12 @@ class NowPlayableObserver: ViewModel, MediaPlayerObserver {
         audioOwner = owner
         audioActivation = PlaybackAudioSession.shared.acquire(owner)
 
-        nowPlaying.configure(defaultRegisteredCommands, handler: { [weak self] command, event in
+        #if os(tvOS)
+        let interfaceCommands: Set<NowPlayableCommand> = [.togglePausePlay]
+        #else
+        let interfaceCommands: Set<NowPlayableCommand> = []
+        #endif
+        nowPlaying.configure(defaultRegisteredCommands, handledByInterface: interfaceCommands, handler: { [weak self] command, event in
             guard let self, self.audioOwner == owner else { return .commandFailed }
             return self.handleCommand(command: command, event: event)
         })

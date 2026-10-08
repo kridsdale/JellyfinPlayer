@@ -55,8 +55,18 @@ private final class SystemNowPlayingOutput: NowPlayingOutput {
 final class NowPlayingRegistry {
     static let shared = NowPlayingRegistry(output: SystemNowPlayingOutput())
     let output: any NowPlayingOutput
-    private var targets: [NowPlayableCommand: (owner: UUID, target: Any)] = [:]
-    private var publicationOwner: UUID?
+    private struct Authority: Equatable {
+        let owner: UUID
+        let epoch: UUID
+    }
+
+    private struct Lease {
+        let authority: Authority
+        let target: Any
+    }
+
+    private var targets: [NowPlayableCommand: Lease] = [:]
+    private var publication: Authority?
     init(output: any NowPlayingOutput) {
         self.output = output
     }
@@ -64,49 +74,75 @@ final class NowPlayingRegistry {
     func configure(
         owner: UUID,
         commands: [NowPlayableCommand],
+        handledByInterface: Set<NowPlayableCommand> = [],
         handler: @escaping @MainActor @Sendable (NowPlayableCommand, NowPlayableCommand.Event) -> MPRemoteCommandHandlerStatus
     ) {
-        // A process has one current playback owner, even when its command set changes.
-        for command in Array(targets.keys) {
-            guard let previous = targets[command] else { continue }
-            output.remove(command, target: previous.target)
-            output.enable(command, value: false)
-        }
-        targets.removeAll()
-        publicationOwner = owner
+        let authority = Authority(owner: owner, epoch: UUID())
+        let previous = targets
+        targets = [:]
+        publication = authority
+        retire(previous)
         for command in commands {
-            if let previous = targets[command] {
-                output.remove(command, target: previous.target)
+            guard publication == authority else { return }
+            if let previous = targets.removeValue(forKey: command) {
+                retire([command: previous])
+                guard publication == authority else { return }
             }
             let target = output.install(command) { [weak self] command, event in
-                guard let self, self.publicationOwner == owner, self.targets[command]?.owner == owner,
+                guard let self, self.publication == authority, self.targets[command]?.authority == authority,
                       event.isValid(for: command) else { return .commandFailed }
+                // The visible native interface performs this command once.
+                if handledByInterface.contains(command) {
+                    return .success
+                }
                 return handler(command, event)
             }
-            targets[command] = (owner, target)
+            guard publication == authority else {
+                // Reentrant replacement must not leave an orphan registration.
+                output.remove(command, target: target)
+                return
+            }
+            targets[command] = Lease(authority: authority, target: target)
             output.enable(command, value: true)
         }
     }
 
-    func clear(owner: UUID) {
-        for command in Array(targets.keys) {
-            guard let lease = targets[command], lease.owner == owner else { continue }
+    private func retire(_ previous: [NowPlayableCommand: Lease]) {
+        for (command, lease) in previous {
             output.remove(command, target: lease.target)
-            output.enable(command, value: false)
+            // Cleanup only owns its captured token, never a replacement target.
+            if targets[command] == nil {
+                output.enable(command, value: false)
+            }
+        }
+    }
+
+    func clear(owner: UUID) {
+        let previous = targets.filter { $0.value.authority.owner == owner }
+        for command in previous.keys {
             targets.removeValue(forKey: command)
         }
-        if publicationOwner == owner {
-            publicationOwner = nil
+        if publication?.owner == owner {
+            publication = nil
         }
+        retire(previous)
     }
 
     func publish(owner: UUID, info: [String: Any]) {
-        guard publicationOwner == owner else { return }
+        guard publication?.owner == owner else { return }
         output.info = info
     }
 
-    func publish(owner: UUID, playing: Bool) {
-        guard publicationOwner == owner else { return }
+    /// Capture one lease before reading the shared center and retain it through
+    /// both metadata and playback-state writes, including reentrant SDK effects.
+    func update(owner: UUID, playing: Bool, transform: (inout [String: Any]) -> Void) {
+        guard let authority = publication, authority.owner == owner else { return }
+        var info = output.info ?? [:]
+        guard publication == authority else { return }
+        transform(&info)
+        guard publication == authority else { return }
+        output.info = info
+        guard publication == authority else { return }
         output.playing = playing
     }
 }
@@ -126,9 +162,10 @@ public final class NowPlayingController {
 
     public func configure(
         _ commands: [NowPlayableCommand],
+        handledByInterface: Set<NowPlayableCommand> = [],
         handler: @escaping @MainActor @Sendable (NowPlayableCommand, NowPlayableCommand.Event) -> MPRemoteCommandHandlerStatus
     ) {
-        registry.configure(owner: owner, commands: commands, handler: handler)
+        registry.configure(owner: owner, commands: commands, handledByInterface: handledByInterface, handler: handler)
     }
 
     isolated deinit { registry.clear(owner: owner) }
@@ -149,17 +186,16 @@ public final class NowPlayingController {
     }
 
     public func updatePlayback(playing: Bool, metadata: NowPlayableDynamicMetadata) {
-        var info = registry.output.info ?? [:]
-        func seconds(_ value: Duration) -> Float {
-            Float(Double(value.components.seconds) + Double(value.components.attoseconds) * 1e-18)
+        registry.update(owner: owner, playing: playing) { info in
+            func seconds(_ value: Duration) -> Float {
+                Float(Double(value.components.seconds) + Double(value.components.attoseconds) * 1e-18)
+            }
+            info[MPMediaItemPropertyPlaybackDuration] = seconds(metadata.duration)
+            info[MPNowPlayingInfoPropertyElapsedPlaybackTime] = seconds(metadata.position)
+            info[MPNowPlayingInfoPropertyPlaybackRate] = playing ? metadata.rate : Float(0)
+            info[MPNowPlayingInfoPropertyDefaultPlaybackRate] = 1.0
+            info[MPNowPlayingInfoPropertyCurrentLanguageOptions] = metadata.currentLanguageOptions
+            info[MPNowPlayingInfoPropertyAvailableLanguageOptions] = metadata.availableLanguageOptionGroups
         }
-        info[MPMediaItemPropertyPlaybackDuration] = seconds(metadata.duration)
-        info[MPNowPlayingInfoPropertyElapsedPlaybackTime] = seconds(metadata.position)
-        info[MPNowPlayingInfoPropertyPlaybackRate] = playing ? metadata.rate : Float(0)
-        info[MPNowPlayingInfoPropertyDefaultPlaybackRate] = 1.0
-        info[MPNowPlayingInfoPropertyCurrentLanguageOptions] = metadata.currentLanguageOptions
-        info[MPNowPlayingInfoPropertyAvailableLanguageOptions] = metadata.availableLanguageOptionGroups
-        registry.publish(owner: owner, info: info)
-        registry.publish(owner: owner, playing: playing)
     }
 }

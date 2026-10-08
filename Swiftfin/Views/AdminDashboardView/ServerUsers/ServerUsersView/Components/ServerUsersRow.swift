@@ -7,9 +7,9 @@
 //
 
 import Defaults
-import FactoryKit
 import JellyfinAPI
 import SwiftfinFormatting
+import SwiftfinImages
 import SwiftfinLocalization
 import SwiftfinUIState
 import SwiftUI
@@ -17,9 +17,6 @@ import SwiftUI
 extension ServerUsersView {
 
     struct ServerUsersRow: View {
-
-        @Injected(\.currentUserSession)
-        private var userSession
 
         @Default(.accentColor)
         private var accentColor
@@ -37,6 +34,7 @@ extension ServerUsersView {
         private var currentDate: Date
 
         let user: UserDto
+        let profileImageSource: ImageSource
 
         // MARK: - Actions
 
@@ -68,10 +66,7 @@ extension ServerUsersView {
             ZStack {
                 UserProfileImage(
                     userID: user.id,
-                    source: user.profileImageSource(
-                        client: userSession!.client,
-                        maxWidth: 60
-                    )
+                    source: profileImageSource
                 )
                 .environment(\.isEnabled, isUserActive)
                 .isEditing(isEditing)
