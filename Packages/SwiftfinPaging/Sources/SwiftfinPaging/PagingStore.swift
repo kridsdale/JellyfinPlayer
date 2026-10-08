@@ -29,6 +29,7 @@ public final class PagingStore<Element: Identifiable>: ObservableObject {
     private var offset = 0
     private var searchOffset = 0
     private var query = ""
+    private var contentRevision = UUID()
 
     public init(pageSize: Int = 50) {
         self.pageSize = max(1, pageSize)
@@ -113,13 +114,40 @@ public final class PagingStore<Element: Identifiable>: ObservableObject {
 
     /// Notification-driven removal does not rewind the consumed server cursor.
     public func remove(where predicate: (Element) -> Bool) {
-        elements.removeAll(where: predicate)
-        searchElements.removeAll(where: predicate)
+        editContent { predicate($0) ? nil : $0 }
     }
 
     public func update(_ transform: (Element) -> Element) {
-        elements = unique(elements.map(transform))
-        searchElements = unique(searchElements.map(transform))
+        editContent { transform($0) }
+    }
+
+    /// Client callbacks run against snapshots, never an inout borrow of published
+    /// storage. A nested edit or binding/query change retires the outer computation.
+    private func editContent(_ transform: (Element) -> Element?) {
+        let revision = UUID()
+        contentRevision = revision
+        let epoch = binding, main = mainGeneration, search = searchGeneration
+        let rows = elements, searchRows = searchElements
+        func isCurrent() -> Bool {
+            contentRevision == revision && binding == epoch &&
+                mainGeneration == main && searchGeneration == search
+        }
+        func edited(_ snapshot: [Element]) -> [Element]? {
+            var result: [Element] = []
+            for row in snapshot {
+                guard isCurrent() else { return nil }
+                let next = transform(row)
+                guard isCurrent() else { return nil }
+                if let next {
+                    result.append(next)
+                }
+            }
+            return unique(result)
+        }
+        guard let updated = edited(rows), let updatedSearch = edited(searchRows), isCurrent() else { return }
+        elements = updated
+        guard isCurrent() else { return }
+        searchElements = updatedSearch
     }
 
     private func activate(_ source: PagingSource<Element>) throws {

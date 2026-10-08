@@ -8,6 +8,7 @@
 
 import Foundation
 import Nuke
+import os
 import SwiftfinImages
 import Testing
 
@@ -111,4 +112,37 @@ func `cancelled fallback cannot begin an image load`() async throws {
     let task = Task { await pipeline.loadFirstImage(from: [source]) }
     task.cancel()
     #expect(await task.value == nil)
+}
+
+private final class SyntheticImageLoader: DataLoading {
+    let requests = OSAllocatedUnfairLock(initialState: [URL]())
+    private struct Token: Cancellable {
+        func cancel() {}
+    }
+
+    func loadData(
+        with request: URLRequest,
+        didReceiveData: @escaping @Sendable (Data, URLResponse) -> Void,
+        completion: @escaping @Sendable (Error?) -> Void
+    ) -> any Cancellable {
+        if let url = request.url {
+            requests.withLock { $0.append(url) }
+        }
+        completion(URLError(.cannotLoadFromNetwork))
+        return Token()
+    }
+}
+
+@Test @MainActor
+func `missing image urls do not suppress subsequent synthetic fallback loads`() async throws {
+    let loader = SyntheticImageLoader()
+    let pipeline = ImagePipeline {
+        $0.dataLoader = loader
+        $0.imageCache = nil
+        $0.dataCache = nil
+    }
+    let url = try #require(URL(string: "https://synthetic.invalid/image"))
+    let image = await pipeline.loadFirstImage(from: [ImageSource(), ImageSource(url: url)])
+    #expect(image == nil)
+    #expect(loader.requests.withLock { $0 } == [url])
 }

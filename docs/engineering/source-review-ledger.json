@@ -5939,27 +5939,30 @@
     },
     {
       "path": "Packages/SwiftfinImageProcessing/Sources/SwiftfinImageProcessing/SVGRenderState.swift",
-      "reason": "Internal main-actor single-payload replacement/retirement: identical/failing inputs are memoized, empty input bypasses parse, invalid replacement clears old output, reentrant revisions/reset reject obsolete results. Factories are synchronous and not retained; generic fake renders prove lifetime without SDK/UI/network.",
+      "reason": "SVGRenderState.swift: complete current source body and public interface audit. Bounded CPU image sampling/median-cut/encoding values and a private memoized SVG parser/render lifecycle; only the UIView renderer and UIImage encoding extension are platform conditional. UIKit declarations were read from the tvOS graph. Listed consumers are scoped boundaries; playback-build/DTO/socket/chapter reviews cover only the relevant composition/selection methods. Whole-graph consumer and runtime acceptance remain required.",
       "reviewedConsumers": [
-        "Packages/SwiftfinImageProcessing/Sources/SwiftfinImageProcessing/NativeSVGRenderView.swift"
+        "Packages/SwiftfinImageProcessing/Sources/SwiftfinImageProcessing/NativeSVGRenderView.swift",
+        "Shared/Components/FastSVGView.swift",
+        "Shared/Extensions/UIImage.swift",
+        "Shared/Extensions/UIImage+InterestingColor.swift"
       ],
-      "reviewedInterfaces": [
-        "internal SVGRenderState.update(_:make:)",
-        "internal SVGRenderState.reset()"
-      ],
+      "reviewedInterfaces": [],
       "sha256": "64641092e0242799b285c79127be7c9a936f5f2d6408036b6944b59365ab7650"
     },
     {
       "path": "Packages/SwiftfinImageProcessing/Sources/SwiftfinImageProcessing/NativeSVGRenderView.swift",
-      "reason": "Main-actor UIKit surface hides SVGKit image/parser/fast-view types. Private render guard handles nil/un-sized/invalid dimensions without forced unwrap; native child fill/intrinsic size is owned. App supplies immutable data and presentation priorities; controller replacement/reset owns SDK object retirement. Compile-only UIKit integration and fake lifecycle evidence are separate from held actual rendering.",
+      "reason": "NativeSVGRenderView.swift: complete current source body and public interface audit. Bounded CPU image sampling/median-cut/encoding values and a private memoized SVG parser/render lifecycle; only the UIView renderer and UIImage encoding extension are platform conditional. UIKit declarations were read from the tvOS graph. Listed consumers are scoped boundaries; playback-build/DTO/socket/chapter reviews cover only the relevant composition/selection methods. Whole-graph consumer and runtime acceptance remain required.",
       "reviewedConsumers": [
-        "Shared/Components/FastSVGView.swift"
+        "Shared/Components/FastSVGView.swift",
+        "Shared/Extensions/UIImage.swift",
+        "Shared/Extensions/UIImage+InterestingColor.swift"
       ],
       "reviewedInterfaces": [
-        "NativeSVGRenderView.init(data:)",
-        "NativeSVGRenderView.update(_:)",
-        "NativeSVGRenderView.clear()",
-        "NativeSVGRenderView.intrinsicContentSize"
+        "@MainActor final class NativeSVGRenderView",
+        "@MainActor func clear()",
+        "@MainActor func update(_ data: Data)",
+        "@MainActor init(data: Data)",
+        "@MainActor override var intrinsicContentSize: CGSize { get }"
       ],
       "sha256": "9e8e6cd285d67a07d0ff1a1eac32c187fed4f58285ea0fd0ab109df81751ee07"
     },
@@ -6245,14 +6248,34 @@
     },
     {
       "path": "Packages/SwiftfinPlaybackPreparation/Sources/SwiftfinPlaybackPreparation/RemotePlaybackCommandPolicy.swift",
-      "reason": "Immutable Equatable/Sendable SDK-command interpretation with finite intents; exact optional/default index fallback, signed ticks/numbers, case-sensitive fields and unsupported-command behavior. No account, preferences, native player, navigation or application globals enter this policy. Eight native contracts exercise every SDK kind and malformed/boundary values; actual player routing remains held.",
+      "reason": "RemotePlaybackCommandPolicy.swift: complete current source body and public interface audit. An exact frozen sender/user/URL port owns item identity, playback-info, unchanged source selection, authenticated stream/sidecar/image resolution and semantic remote command values. Reporting retains the original sender for terminal cleanup; tvOS remote playback subscriptions remain disabled in composition. Listed consumers are scoped boundaries; playback-build/DTO/socket/chapter reviews cover only the relevant composition/selection methods. Whole-graph consumer and runtime acceptance remain required.",
       "reviewedConsumers": [
         "Shared/Services/UserSession/UserSessionManager.swift",
-        "Shared/Services/UserSession/UserSessionManager+SocketCommands.swift"
+        "Shared/Services/UserSession/UserSessionManager+SocketCommands.swift",
+        "Shared/Objects/MediaPlayerManager/MediaPlayerItem/MediaPlayerItem+Build.swift"
       ],
       "reviewedInterfaces": [
-        "RemotePlaybackIntent cases",
-        "RemotePlaybackCommandPolicy.play/playstate/general"
+        "case audioStream(index: Int)",
+        "case displayItem(id: String)",
+        "case fastForward",
+        "case ignore",
+        "case maxBitrate(Int)",
+        "case nextTrack",
+        "case pause",
+        "case playItem(id: String, mediaSourceID: String?, startPositionTicks: Int?)",
+        "case playPause",
+        "case previousTrack",
+        "case rewind",
+        "case seek(ticks: Int)",
+        "case stop",
+        "case subtitleStream(index: Int)",
+        "case trailers(itemID: String)",
+        "case unpause",
+        "enum RemotePlaybackCommandPolicy",
+        "enum RemotePlaybackIntent",
+        "static func general(_ command: GeneralCommand) -> RemotePlaybackIntent",
+        "static func play(_ command: PlayRequest) -> RemotePlaybackIntent",
+        "static func playstate(_ command: PlaystateRequest) -> RemotePlaybackIntent"
       ],
       "sha256": "b319ec47b37733e055b15943aacbf6cc2c8520e510b1c80bd51fbc53d32a9440"
     },
@@ -6573,7 +6596,7 @@
     },
     {
       "path": "Packages/SwiftfinPlaybackPreparation/Sources/SwiftfinPlaybackPreparation/PlaybackConnection.swift",
-      "reason": "Complete connection capsule and updated initial/deferred build, item, report observer and rebuild consumers reviewed. One sender constructs both scoped preparation and unscoped terminal report clients. Account/connection expiry blocks preparation; terminal reports deliberately keep original sender after replacement. One new synthetic contract proves no expired preparation IO and original-sender cleanup; 27 preparation and six reporting contracts pass. App placeholder has no connection/reporter. Post-await publication guards are compile-only; this scoped contract does not approve the complete manager generation/native lifetime graph.",
+      "reason": "PlaybackConnection.swift: complete current source body and public interface audit. An exact frozen sender/user/URL port owns item identity, playback-info, unchanged source selection, authenticated stream/sidecar/image resolution and semantic remote command values. Reporting retains the original sender for terminal cleanup; tvOS remote playback subscriptions remain disabled in composition. Listed consumers are scoped boundaries; playback-build/DTO/socket/chapter reviews cover only the relevant composition/selection methods. Whole-graph consumer and runtime acceptance remain required.",
       "reviewedConsumers": [
         "Shared/Objects/MediaPlayerManager/MediaPlayerItem/MediaPlayerItem.swift",
         "Shared/Objects/MediaPlayerManager/MediaProgressObserver.swift",
@@ -6581,12 +6604,14 @@
         "Shared/Objects/MediaPlayerManager/MediaPlayerItem/MediaPlayerItem+Build.swift",
         "Shared/Objects/MediaPlayerManager/MediaPlayerManager.swift",
         "Swiftfin tvOS/App/KidsPlaybackAdapter.swift",
-        "Shared/Services/UserSession/UserSession+ItemMetadata.swift"
+        "Shared/Services/UserSession/UserSession+ItemMetadata.swift",
+        "Shared/Services/UserSession/UserSessionManager+SocketCommands.swift"
       ],
       "reviewedInterfaces": [
-        "PlaybackConnection.init(sender:urls:userID:isCurrent:)",
-        "preparation",
-        "reportingClient(identity:)"
+        "@MainActor final class PlaybackConnection",
+        "@MainActor func reportingClient(identity: PlaybackReportIdentity) -> PlaybackReportingClient",
+        "@MainActor init(sender: any JellyfinRequestSending, urls: any PlaybackURLResolving, userID: String, isCurrent: @escaping @MainActor @Sendable () -> Bool)",
+        "@MainActor let preparation: PlaybackPreparationClient"
       ],
       "sha256": "66793e814d66882d82fac37ee8c41bab359a82fce4dc75ccfc17328f6bc1c77b"
     },
@@ -7015,23 +7040,25 @@
     },
     {
       "path": "Packages/SwiftfinPaging/Sources/SwiftfinPaging/ContentRefreshCoordinator.swift",
-      "reason": "Complete fixed-actor refresh owner/API reviewed. Admission checks precede generation replacement; nested workers retain an escaping parent/epoch checkpoint through publication and later pages. Explicit actor hops retain compiler-checked Sendable closures without unchecked isolation. Group-builder/resolution reentry and stale errors are checked before candidate/change-signal commit; current ordinary failures retire the accepted child scope. Cancellation retirement checks the exact epoch before mutation. All34 paging contracts pass, including8 new adversarial scoped-refresh tests. No runtime macro/client acceptance is inferred.",
+      "reason": "ContentRefreshCoordinator.swift: complete current source body and public interface audit. Main-actor cursor/query/refresh ownership retains identity, generation, cancellation, deduplication and consumed-row accounting. Notification edits stage immutable snapshots and reject retired/nested computations without an inout borrow of published storage. Listed consumers are scoped boundaries; playback-build/DTO/socket/chapter reviews cover only the relevant composition/selection methods. Whole-graph consumer and runtime acceptance remain required.",
       "reviewedConsumers": [
         "Shared/ViewModels/ContentGroupViewModel/ContentGroupViewModel.swift",
         "Shared/Objects/PagingLibrary/PagingLibraryViewModel.swift"
       ],
       "reviewedInterfaces": [
-        "ContentRefreshOperation.Checkpoint",
-        "ContentRefreshOperation.init(identity:refresh:)",
-        "ContentRefreshOperation.init(identity:scopedRefresh:)",
-        "ContentRefreshOperation.identity",
-        "ContentRefreshOperation.refresh",
-        "ContentRefreshCoordinator.init()",
-        "hasPendingChanges",
-        "markChanged()",
-        "shouldRefresh(sinceLastDisappear:staleThreshold:)",
-        "cancel()",
-        "refresh(inBackground:validate:makeGroups:operations:shouldResolve:)"
+        "@MainActor final class ContentRefreshCoordinator<Group>",
+        "@MainActor func cancel()",
+        "@MainActor func markChanged()",
+        "@MainActor func refresh(inBackground: Bool, validate: @escaping ContentRefreshOperation.Checkpoint = {}, makeGroups: @MainActor @Sendable () async throws -> [Group], operations: @MainActor @Sendable ([Group], Bool) -> [ContentRefreshOperation], shouldResolve: @MainActor @Sendable (Group) -> Bool) async throws -> [Group]",
+        "@MainActor func shouldRefresh(sinceLastDisappear interval: TimeInterval, staleThreshold: TimeInterval = 60) -> Bool",
+        "@MainActor init()",
+        "@MainActor var hasPendingChanges: Bool { get }",
+        "init(identity: ObjectIdentifier, refresh: @escaping @MainActor @Sendable () async throws -> Void)",
+        "init(identity: ObjectIdentifier, scopedRefresh: @escaping @MainActor @Sendable (@escaping ContentRefreshOperation.Checkpoint) async throws -> Void)",
+        "let identity: ObjectIdentifier",
+        "let refresh: @MainActor @Sendable (@escaping ContentRefreshOperation.Checkpoint) async throws -> Void",
+        "struct ContentRefreshOperation",
+        "typealias Checkpoint = @MainActor @Sendable () throws -> Void"
       ],
       "sha256": "1d29a640321727ee36e1e16e4da5e89d01ed6d048916fdd3ac67541e991a4f9c"
     },
@@ -10982,6 +11009,384 @@
         "@MainActor var onEvent: (@MainActor @Sendable (NativePlaybackEvent) -> Void)?"
       ],
       "sha256": "aee09094f5540c6509ed12c778a53ab6bd6ea118acb5e0cb05db353374dffc01"
+    },
+    {
+      "path": "Packages/SwiftfinImageProcessing/Sources/SwiftfinImageProcessing/ImageDataEncoding.swift",
+      "reason": "ImageDataEncoding.swift: complete current source body and public interface audit. Bounded CPU image sampling/median-cut/encoding values and a private memoized SVG parser/render lifecycle; only the UIView renderer and UIImage encoding extension are platform conditional. UIKit declarations were read from the tvOS graph. Listed consumers are scoped boundaries; playback-build/DTO/socket/chapter reviews cover only the relevant composition/selection methods. Whole-graph consumer and runtime acceptance remain required.",
+      "reviewedConsumers": [
+        "Shared/Components/FastSVGView.swift",
+        "Shared/Extensions/UIImage.swift",
+        "Shared/Extensions/UIImage+InterestingColor.swift"
+      ],
+      "reviewedInterfaces": [
+        "case encodingFailed",
+        "case exceedsLimit(actual: Int, maximum: Int)",
+        "enum ImageDataEncoding",
+        "enum ImageEncodingError",
+        "let contentType: String",
+        "let data: Data",
+        "static func encode(hasAlpha: Bool, maximumByteCount: Int? = 30_000_000, png: () -> Data?, jpeg: () -> Data?) throws -> EncodedImageData",
+        "static func hasAlpha(_ alpha: CGImageAlphaInfo?) -> Bool",
+        "struct EncodedImageData"
+      ],
+      "sha256": "3a59268e38fa96210037c64f58f97a75c7a102f53ee7338a06535b98e918564b"
+    },
+    {
+      "path": "Packages/SwiftfinImageProcessing/Sources/SwiftfinImageProcessing/ImagePalette.swift",
+      "reason": "ImagePalette.swift: complete current source body and public interface audit. Bounded CPU image sampling/median-cut/encoding values and a private memoized SVG parser/render lifecycle; only the UIView renderer and UIImage encoding extension are platform conditional. UIKit declarations were read from the tvOS graph. Listed consumers are scoped boundaries; playback-build/DTO/socket/chapter reviews cover only the relevant composition/selection methods. Whole-graph consumer and runtime acceptance remain required.",
+      "reviewedConsumers": [
+        "Shared/Components/FastSVGView.swift",
+        "Shared/Extensions/UIImage.swift",
+        "Shared/Extensions/UIImage+InterestingColor.swift"
+      ],
+      "reviewedInterfaces": [
+        "enum ImagePalette",
+        "let blue: CGFloat",
+        "let green: CGFloat",
+        "let red: CGFloat",
+        "static func interestingColor(in image: CGImage) -> ImageColor?",
+        "struct ImageColor"
+      ],
+      "sha256": "fd5b4644fe53ca509a580fd6c3b9a1624a3b8bd3c7361e568015a56f64563c41"
+    },
+    {
+      "path": "Packages/SwiftfinImageProcessing/Sources/SwiftfinImageProcessing/UIKitImageEncoding.swift",
+      "reason": "UIKitImageEncoding.swift: complete current source body and public interface audit. Bounded CPU image sampling/median-cut/encoding values and a private memoized SVG parser/render lifecycle; only the UIView renderer and UIImage encoding extension are platform conditional. UIKit declarations were read from the tvOS graph. Listed consumers are scoped boundaries; playback-build/DTO/socket/chapter reviews cover only the relevant composition/selection methods. Whole-graph consumer and runtime acceptance remain required.",
+      "reviewedConsumers": [
+        "Shared/Components/FastSVGView.swift",
+        "Shared/Extensions/UIImage.swift",
+        "Shared/Extensions/UIImage+InterestingColor.swift"
+      ],
+      "reviewedInterfaces": [
+        "@MainActor func encodedImageData(maximumByteCount: Int? = 30_000_000) throws -> EncodedImageData"
+      ],
+      "sha256": "7daee06c7a7340ec9fb0d57309ba3cd8fb935690a30cf605ef510ccd6d9cfe2c"
+    },
+    {
+      "path": "Packages/SwiftfinImages/Sources/SwiftfinImages/ImageCacheKeys.swift",
+      "reason": "ImageCacheKeys.swift: complete current source body and public interface audit. Native Nuke pipelines/caches remain in one owner with explicit UI interoperability, unchanged installed filename policy and checked lock-owned server identity snapshots. Missing URL candidates are skipped and cancellation is rechecked before returning an image. Listed consumers are scoped boundaries; playback-build/DTO/socket/chapter reviews cover only the relevant composition/selection methods. Whole-graph consumer and runtime acceptance remain required.",
+      "reviewedConsumers": [
+        "Shared/Extensions/Nuke/ImagePipeline.swift",
+        "Shared/Services/ServerImageCacheIdentity.swift",
+        "Shared/Extensions/JellyfinAPI/BaseItemDto/BaseItemDto.swift"
+      ],
+      "reviewedInterfaces": [
+        "enum ImageCacheKeys",
+        "static func local(for url: URL, identities: ServerImageCacheIdentityIndex) -> String?",
+        "static func poster(for url: URL) -> String?"
+      ],
+      "sha256": "c4c32aeb8ca46b59b4475649b2b90491016c798ed0fd28ec9f2d86bf89e46564"
+    },
+    {
+      "path": "Packages/SwiftfinImages/Sources/SwiftfinImages/ImagePipelines.swift",
+      "reason": "ImagePipelines.swift: complete current source body and public interface audit. Native Nuke pipelines/caches remain in one owner with explicit UI interoperability, unchanged installed filename policy and checked lock-owned server identity snapshots. Missing URL candidates are skipped and cancellation is rechecked before returning an image. Listed consumers are scoped boundaries; playback-build/DTO/socket/chapter reviews cover only the relevant composition/selection methods. Whole-graph consumer and runtime acceptance remain required.",
+      "reviewedConsumers": [
+        "Shared/Extensions/Nuke/ImagePipeline.swift",
+        "Shared/Services/ServerImageCacheIdentity.swift",
+        "Shared/Extensions/JellyfinAPI/BaseItemDto/BaseItemDto.swift"
+      ],
+      "reviewedInterfaces": [
+        "@ImagePipelineActor func loadFirstImage(from requests: some Collection<ImageSource>) async -> PlatformImage?",
+        "@ImagePipelineActor func removeItem(for url: URL)",
+        "@MainActor final class ImagePipelines",
+        "@MainActor init(identities: ServerImageCacheIdentityIndex, postersCachePath: URL? = nil, documentsDirectory: URL? = nil, makeDataLoader: @MainActor @Sendable () -> DataLoader)",
+        "@MainActor let local: ImagePipeline",
+        "@MainActor let other: ImagePipeline",
+        "@MainActor let posters: ImagePipeline"
+      ],
+      "sha256": "441f5f5b443c82cc0b0699be2dc92c954362bb68b6b3f026297505d405da1a1e"
+    },
+    {
+      "path": "Packages/SwiftfinImages/Sources/SwiftfinImages/ImageSource.swift",
+      "reason": "ImageSource.swift: complete current source body and public interface audit. Native Nuke pipelines/caches remain in one owner with explicit UI interoperability, unchanged installed filename policy and checked lock-owned server identity snapshots. Missing URL candidates are skipped and cancellation is rechecked before returning an image. Listed consumers are scoped boundaries; playback-build/DTO/socket/chapter reviews cover only the relevant composition/selection methods. Whole-graph consumer and runtime acceptance remain required.",
+      "reviewedConsumers": [
+        "Shared/Extensions/Nuke/ImagePipeline.swift",
+        "Shared/Services/ServerImageCacheIdentity.swift",
+        "Shared/Extensions/JellyfinAPI/BaseItemDto/BaseItemDto.swift"
+      ],
+      "reviewedInterfaces": [
+        "init(url: URL? = nil, blurHash: String? = nil)",
+        "let blurHash: String?",
+        "let url: URL?",
+        "struct ImageSource"
+      ],
+      "sha256": "e1f3548623cb774e4bf7eca17660a4a797821570abe27c266b21a91b5d23bff1"
+    },
+    {
+      "path": "Packages/SwiftfinImages/Sources/SwiftfinImages/ImageSourceOptions.swift",
+      "reason": "ImageSourceOptions.swift: complete current source body and public interface audit. Native Nuke pipelines/caches remain in one owner with explicit UI interoperability, unchanged installed filename policy and checked lock-owned server identity snapshots. Missing URL candidates are skipped and cancellation is rechecked before returning an image. Listed consumers are scoped boundaries; playback-build/DTO/socket/chapter reviews cover only the relevant composition/selection methods. Whole-graph consumer and runtime acceptance remain required.",
+      "reviewedConsumers": [
+        "Shared/Extensions/Nuke/ImagePipeline.swift",
+        "Shared/Services/ServerImageCacheIdentity.swift",
+        "Shared/Extensions/JellyfinAPI/BaseItemDto/BaseItemDto.swift"
+      ],
+      "reviewedInterfaces": [
+        "init(maxWidth: CGFloat? = nil, maxHeight: CGFloat? = nil, quality: Int? = 90)",
+        "protocol WithImageSourceOptions",
+        "struct ImageSourceOptions",
+        "var maxHeight: CGFloat?",
+        "var maxHeight: CGFloat? { get set }",
+        "var maxWidth: CGFloat?",
+        "var maxWidth: CGFloat? { get set }",
+        "var quality: Int?",
+        "var quality: Int? { get set }"
+      ],
+      "sha256": "591f9b245acffb95141201b3dbbf49f9b6b155b0b1e5da72928db83dc1e4d23d"
+    },
+    {
+      "path": "Packages/SwiftfinImages/Sources/SwiftfinImages/ServerImageCacheIdentityIndex.swift",
+      "reason": "ServerImageCacheIdentityIndex.swift: complete current source body and public interface audit. Native Nuke pipelines/caches remain in one owner with explicit UI interoperability, unchanged installed filename policy and checked lock-owned server identity snapshots. Missing URL candidates are skipped and cancellation is rechecked before returning an image. Listed consumers are scoped boundaries; playback-build/DTO/socket/chapter reviews cover only the relevant composition/selection methods. Whole-graph consumer and runtime acceptance remain required.",
+      "reviewedConsumers": [
+        "Shared/Extensions/Nuke/ImagePipeline.swift",
+        "Shared/Services/ServerImageCacheIdentity.swift",
+        "Shared/Extensions/JellyfinAPI/BaseItemDto/BaseItemDto.swift"
+      ],
+      "reviewedInterfaces": [
+        "final class ServerImageCacheIdentityIndex",
+        "func replace(_ values: [URL : String])",
+        "func serverID(for url: URL) -> String?",
+        "init()"
+      ],
+      "sha256": "c7b9c989071b1ac24c3c5b4e433b55268e5fc84104dfda6955881ed2840a6abe"
+    },
+    {
+      "path": "Packages/SwiftfinPaging/Sources/SwiftfinPaging/PagingRefreshScheduler.swift",
+      "reason": "PagingRefreshScheduler.swift: complete current source body and public interface audit. Main-actor cursor/query/refresh ownership retains identity, generation, cancellation, deduplication and consumed-row accounting. Notification edits stage immutable snapshots and reject retired/nested computations without an inout borrow of published storage. Listed consumers are scoped boundaries; playback-build/DTO/socket/chapter reviews cover only the relevant composition/selection methods. Whole-graph consumer and runtime acceptance remain required.",
+      "reviewedConsumers": [
+        "Shared/Objects/PagingLibrary/PagingLibraryViewModel.swift",
+        "Shared/ViewModels/ContentGroupViewModel/ContentGroupViewModel.swift"
+      ],
+      "reviewedInterfaces": [
+        "@MainActor final class PagingRefreshScheduler",
+        "@MainActor func cancel()",
+        "@MainActor init(now: @escaping PagingRefreshScheduler.Now = { .seconds(ProcessInfo.processInfo.systemUptime) }, sleep: @escaping PagingRefreshScheduler.Sleep = { try await Task.sleep(for: $0) })",
+        "@discardableResult @MainActor func schedule(debounce: Duration = .milliseconds(350), minimumInterval: Duration = .seconds(5), refresh: @escaping @MainActor @Sendable () async -> Void) -> Bool",
+        "typealias Now = @MainActor @Sendable () -> Duration",
+        "typealias Sleep = @Sendable (Duration) async throws -> Void"
+      ],
+      "sha256": "044e3d393560be582bbd63ff94637b88b7665062ff20ff397b9a174a17733991"
+    },
+    {
+      "path": "Packages/SwiftfinPaging/Sources/SwiftfinPaging/PagingSource.swift",
+      "reason": "PagingSource.swift: complete current source body and public interface audit. Main-actor cursor/query/refresh ownership retains identity, generation, cancellation, deduplication and consumed-row accounting. Notification edits stage immutable snapshots and reject retired/nested computations without an inout borrow of published storage. Listed consumers are scoped boundaries; playback-build/DTO/socket/chapter reviews cover only the relevant composition/selection methods. Whole-graph consumer and runtime acceptance remain required.",
+      "reviewedConsumers": [
+        "Shared/Objects/PagingLibrary/PagingLibraryViewModel.swift",
+        "Shared/ViewModels/ContentGroupViewModel/ContentGroupViewModel.swift"
+      ],
+      "reviewedInterfaces": [
+        "@MainActor init(identity: UUID, canPage: Bool = true, isCurrent: @escaping @MainActor @Sendable () -> Bool, load: @escaping PagingSource<Element>.Load, search: PagingSource<Element>.Load? = nil, random: (@MainActor @Sendable () async throws -> Element?)? = nil)",
+        "@MainActor init(items: [Element], consumedCount: Int? = nil)",
+        "@MainActor let canPage: Bool",
+        "@MainActor let consumedCount: Int",
+        "@MainActor let identity: UUID",
+        "@MainActor let isCurrent: @MainActor @Sendable () -> Bool",
+        "@MainActor let items: [Element]",
+        "@MainActor let load: PagingSource<Element>.Load",
+        "@MainActor let random: (@MainActor @Sendable () async throws -> Element?)?",
+        "@MainActor let search: PagingSource<Element>.Load?",
+        "@MainActor struct PagingPage<Element>",
+        "@MainActor struct PagingSource<Element>",
+        "init(offset: Int, limit: Int, query: String? = nil)",
+        "let limit: Int",
+        "let offset: Int",
+        "let query: String?",
+        "struct PagingRequest",
+        "typealias Load = @MainActor @Sendable (PagingRequest) async throws -> PagingPage<Element>",
+        "var debugDescription: String { get }",
+        "var description: String { get }"
+      ],
+      "sha256": "41dfb51c974fe9a8a2a29300ef1ca2ff740d03d26f8a973cf16176d0a2c83013"
+    },
+    {
+      "path": "Packages/SwiftfinPaging/Sources/SwiftfinPaging/PagingStore.swift",
+      "reason": "PagingStore.swift: complete current source body and public interface audit. Main-actor cursor/query/refresh ownership retains identity, generation, cancellation, deduplication and consumed-row accounting. Notification edits stage immutable snapshots and reject retired/nested computations without an inout borrow of published storage. Listed consumers are scoped boundaries; playback-build/DTO/socket/chapter reviews cover only the relevant composition/selection methods. Whole-graph consumer and runtime acceptance remain required.",
+      "reviewedConsumers": [
+        "Shared/Objects/PagingLibrary/PagingLibraryViewModel.swift",
+        "Shared/ViewModels/ContentGroupViewModel/ContentGroupViewModel.swift"
+      ],
+      "reviewedInterfaces": [
+        "@MainActor final class PagingStore<Element> where Element : Identifiable",
+        "@MainActor func invalidate()",
+        "@MainActor func nextPage(using source: PagingSource<Element>) async throws",
+        "@MainActor func nextSearchPage(using source: PagingSource<Element>) async throws",
+        "@MainActor func prepareSearch(_ value: String)",
+        "@MainActor func randomElement(using source: PagingSource<Element>) async throws -> Element?",
+        "@MainActor func refresh(using source: PagingSource<Element>, retainingContent: Bool = false) async throws",
+        "@MainActor func remove(where predicate: (Element) -> Bool)",
+        "@MainActor func search(_ value: String, using source: PagingSource<Element>) async throws",
+        "@MainActor func update(_ transform: (Element) -> Element)",
+        "@MainActor init(pageSize: Int = 50)",
+        "@MainActor let pageSize: Int",
+        "@Published @MainActor var elements: [Element] { get set }",
+        "@Published @MainActor var hasMore: Bool { get set }",
+        "@Published @MainActor var hasMoreSearch: Bool { get set }",
+        "@Published @MainActor var searchElements: [Element] { get set }",
+        "case cursorOverflow",
+        "enum PagingError"
+      ],
+      "sha256": "3df649bb2838efa5a0931f2a3fb4d9331770f3310ce5dfcb82cb00ad0db1a650"
+    },
+    {
+      "path": "Packages/SwiftfinPlaybackPreparation/Sources/SwiftfinPlaybackPreparation/PlaybackPreparationClient.swift",
+      "reason": "PlaybackPreparationClient.swift: complete current source body and public interface audit. An exact frozen sender/user/URL port owns item identity, playback-info, unchanged source selection, authenticated stream/sidecar/image resolution and semantic remote command values. Reporting retains the original sender for terminal cleanup; tvOS remote playback subscriptions remain disabled in composition. Listed consumers are scoped boundaries; playback-build/DTO/socket/chapter reviews cover only the relevant composition/selection methods. Whole-graph consumer and runtime acceptance remain required.",
+      "reviewedConsumers": [
+        "Shared/Objects/MediaPlayerManager/MediaPlayerItem/MediaPlayerItem+Build.swift",
+        "Shared/Services/UserSession/UserSessionManager+SocketCommands.swift"
+      ],
+      "reviewedInterfaces": [
+        "@MainActor final class PlaybackPreparationClient",
+        "@MainActor func bitrateBytes(size: Int, delegate: (any URLSessionDataDelegate)? = nil) async throws -> Data",
+        "@MainActor func checkBinding() throws",
+        "@MainActor func image(url: URL) async throws -> Data",
+        "@MainActor func item(id: String, delegate: (any URLSessionDataDelegate)? = nil) async throws -> BaseItemDto",
+        "@MainActor func prepare(item: BaseItemDto, initial: MediaSourceInfo, profile: DeviceProfile, maxBitrate: Int, audio: Int?, subtitle: Int?, delegate: (any URLSessionDataDelegate)? = nil) async throws -> PreparedPlayback",
+        "@MainActor func sidecarSubtitles(from streams: [MediaStream]) throws -> [PreparedSidecarSubtitle]",
+        "@MainActor func streamURL(for request: Request<Data>) -> URL?",
+        "@MainActor func streamURL(item: BaseItemDto, source: MediaSourceInfo, sessionID: String) throws -> URL",
+        "@MainActor func streamURL(path: String) -> URL?",
+        "@MainActor func trickplayImage(itemID: String, width: Int, index: Int, sourceID: String) async throws -> Data",
+        "@MainActor init(executor: AuthenticatedRequestExecutor, urls: any PlaybackURLResolving, userID: String)",
+        "@MainActor protocol PlaybackURLResolving",
+        "@MainActor var serverURL: URL { get }"
+      ],
+      "sha256": "0bceedf4285f2ddf3ab8e7fcd02f23dac5ebc6a237a4963505fe06ea3b30dc74"
+    },
+    {
+      "path": "Packages/SwiftfinPlaybackPreparation/Sources/SwiftfinPlaybackPreparation/PlaybackPreparationPolicy.swift",
+      "reason": "PlaybackPreparationPolicy.swift: complete current source body and public interface audit. An exact frozen sender/user/URL port owns item identity, playback-info, unchanged source selection, authenticated stream/sidecar/image resolution and semantic remote command values. Reporting retains the original sender for terminal cleanup; tvOS remote playback subscriptions remain disabled in composition. Listed consumers are scoped boundaries; playback-build/DTO/socket/chapter reviews cover only the relevant composition/selection methods. Whole-graph consumer and runtime acceptance remain required.",
+      "reviewedConsumers": [
+        "Shared/Objects/MediaPlayerManager/MediaPlayerItem/MediaPlayerItem+Build.swift",
+        "Shared/Services/UserSession/UserSessionManager+SocketCommands.swift"
+      ],
+      "reviewedInterfaces": [
+        "case invalidURL",
+        "case itemIdentityChanged",
+        "case missingItemID",
+        "case missingPlaySession",
+        "case missingSource",
+        "enum PlaybackPreparationError",
+        "enum PlaybackPreparationPolicy",
+        "init(item: BaseItemDto, source: MediaSourceInfo, playSessionID: String, url: URL)",
+        "let item: BaseItemDto",
+        "let playSessionID: String",
+        "let source: MediaSourceInfo",
+        "let url: URL",
+        "static func info(item: BaseItemDto, initial: MediaSourceInfo, userID: String, profile: DeviceProfile, maxBitrate: Int, audio: Int?, subtitle: Int?) -> PlaybackInfoDto",
+        "static func initialSource(in item: BaseItemDto, preferred: MediaSourceInfo?) throws -> MediaSourceInfo",
+        "static func resolveSource(in sources: [MediaSourceInfo]?, initial: MediaSourceInfo) throws -> MediaSourceInfo",
+        "struct PreparedPlayback"
+      ],
+      "sha256": "54c3ae33e9856190e587310fb4e51e0df9de3bb448e9cf1a83edbc698aad2476"
+    },
+    {
+      "path": "Packages/SwiftfinPlaybackPreparation/Sources/SwiftfinPlaybackPreparation/PreparedSidecarSubtitle.swift",
+      "reason": "PreparedSidecarSubtitle.swift: complete current source body and public interface audit. An exact frozen sender/user/URL port owns item identity, playback-info, unchanged source selection, authenticated stream/sidecar/image resolution and semantic remote command values. Reporting retains the original sender for terminal cleanup; tvOS remote playback subscriptions remain disabled in composition. Listed consumers are scoped boundaries; playback-build/DTO/socket/chapter reviews cover only the relevant composition/selection methods. Whole-graph consumer and runtime acceptance remain required.",
+      "reviewedConsumers": [
+        "Shared/Objects/MediaPlayerManager/MediaPlayerItem/MediaPlayerItem+Build.swift",
+        "Shared/Services/UserSession/UserSessionManager+SocketCommands.swift"
+      ],
+      "reviewedInterfaces": [
+        "let jellyfinIndex: Int?",
+        "let url: URL",
+        "struct PreparedSidecarSubtitle"
+      ],
+      "sha256": "47b92f1eca5e8edfe3ad75bbb46b19a4d907efaa9659e3772244dd81bfa5be75"
+    },
+    {
+      "path": "Packages/SwiftfinPlaybackPreviews/Sources/SwiftfinPlaybackPreviews/ChapterSelectionTimeline.swift",
+      "reason": "ChapterSelectionTimeline.swift: complete current source body and public interface audit. Separate chapter-selection/thumbnail semantics, checked tile arithmetic, bounded generation-owned flights/LRU and private UIKit decoding/cropping. Scrub-image publication belongs to the main actor; loaders are supplied by the frozen connection. Conditional public UIKit providers were read from the tvOS graph. Listed consumers are scoped boundaries; playback-build/DTO/socket/chapter reviews cover only the relevant composition/selection methods. Whole-graph consumer and runtime acceptance remain required.",
+      "reviewedConsumers": [
+        "Shared/Components/MediaPlayer/PreviewImageView.swift",
+        "Shared/Objects/MediaPlayerManager/MediaPlayerItem/MediaPlayerItem+Build.swift",
+        "Shared/Objects/MediaPlayerManager/Supplements/MediaChaptersSupplement.swift"
+      ],
+      "reviewedInterfaces": [
+        "func index(at seconds: Duration) -> Int?",
+        "init(starts: [Duration?])",
+        "struct ChapterSelectionTimeline"
+      ],
+      "sha256": "78e3709e797a6d50da103b3b3e1e9c6fbd42f481cb778baa6aa0525c0a221bc1"
+    },
+    {
+      "path": "Packages/SwiftfinPlaybackPreviews/Sources/SwiftfinPlaybackPreviews/PreviewImageCache.swift",
+      "reason": "PreviewImageCache.swift: complete current source body and public interface audit. Separate chapter-selection/thumbnail semantics, checked tile arithmetic, bounded generation-owned flights/LRU and private UIKit decoding/cropping. Scrub-image publication belongs to the main actor; loaders are supplied by the frozen connection. Conditional public UIKit providers were read from the tvOS graph. Listed consumers are scoped boundaries; playback-build/DTO/socket/chapter reviews cover only the relevant composition/selection methods. Whole-graph consumer and runtime acceptance remain required.",
+      "reviewedConsumers": [
+        "Shared/Components/MediaPlayer/PreviewImageView.swift",
+        "Shared/Objects/MediaPlayerManager/MediaPlayerItem/MediaPlayerItem+Build.swift",
+        "Shared/Objects/MediaPlayerManager/Supplements/MediaChaptersSupplement.swift"
+      ],
+      "reviewedInterfaces": [
+        "@MainActor final class PreviewImageCache<Image> where Image : Sendable",
+        "@MainActor func image(at index: Int) async -> Image?",
+        "@MainActor func invalidate()",
+        "@MainActor func prefetch(_ indexes: [Int])",
+        "@MainActor init(capacity: Int = 16, flightLimit: Int = 4, isCurrent: @escaping @MainActor @Sendable () -> Bool, load: @escaping PreviewImageCache<Image>.Load)",
+        "@MainActor var isValid: Bool { get }",
+        "typealias Load = @MainActor @Sendable (Int) async -> Image?"
+      ],
+      "sha256": "7cab429648ee320cfbe6a9401d088401b31f71f8bc04e6809a80770959654b0f"
+    },
+    {
+      "path": "Packages/SwiftfinPlaybackPreviews/Sources/SwiftfinPlaybackPreviews/PreviewImageProviders.swift",
+      "reason": "PreviewImageProviders.swift: complete current source body and public interface audit. Separate chapter-selection/thumbnail semantics, checked tile arithmetic, bounded generation-owned flights/LRU and private UIKit decoding/cropping. Scrub-image publication belongs to the main actor; loaders are supplied by the frozen connection. Conditional public UIKit providers were read from the tvOS graph. Listed consumers are scoped boundaries; playback-build/DTO/socket/chapter reviews cover only the relevant composition/selection methods. Whole-graph consumer and runtime acceptance remain required.",
+      "reviewedConsumers": [
+        "Shared/Components/MediaPlayer/PreviewImageView.swift",
+        "Shared/Objects/MediaPlayerManager/MediaPlayerItem/MediaPlayerItem+Build.swift",
+        "Shared/Objects/MediaPlayerManager/Supplements/MediaChaptersSupplement.swift"
+      ],
+      "reviewedInterfaces": [
+        "@MainActor enum PreviewTileCrop",
+        "@MainActor final class ChapterPreviewImageProvider",
+        "@MainActor final class PreviewImageSelection",
+        "@MainActor final class TrickplayPreviewImageProvider",
+        "@MainActor func image(for seconds: Duration) async -> UIImage?",
+        "@MainActor func imageIndex(for seconds: Duration) -> Int?",
+        "@MainActor func invalidate()",
+        "@MainActor func request(_ seconds: Duration)",
+        "@MainActor func stop()",
+        "@MainActor init(chapters: [PreviewChapter], isCurrent: @escaping @MainActor @Sendable () -> Bool, load: @escaping @MainActor @Sendable (URL) async -> Data?)",
+        "@MainActor init(layout: TrickplayPreviewLayout, isCurrent: @escaping @MainActor @Sendable () -> Bool, load: @escaping @MainActor @Sendable (Int) async -> Data?)",
+        "@MainActor init(provider: any PreviewImageProvider)",
+        "@MainActor protocol PreviewImageProvider : ObservableObject",
+        "@MainActor static func image(_ image: UIImage, columns: Int, rows: Int, index: Int) -> UIImage?",
+        "@Published @MainActor var image: UIImage? { get set }",
+        "@Published @MainActor var index: Int? { get set }"
+      ],
+      "sha256": "4f851211add069e5547abab7c25f968c28e7846b1352b2dd3194502eccae6344"
+    },
+    {
+      "path": "Packages/SwiftfinPlaybackPreviews/Sources/SwiftfinPlaybackPreviews/PreviewTimeline.swift",
+      "reason": "PreviewTimeline.swift: complete current source body and public interface audit. Separate chapter-selection/thumbnail semantics, checked tile arithmetic, bounded generation-owned flights/LRU and private UIKit decoding/cropping. Scrub-image publication belongs to the main actor; loaders are supplied by the frozen connection. Conditional public UIKit providers were read from the tvOS graph. Listed consumers are scoped boundaries; playback-build/DTO/socket/chapter reviews cover only the relevant composition/selection methods. Whole-graph consumer and runtime acceptance remain required.",
+      "reviewedConsumers": [
+        "Shared/Components/MediaPlayer/PreviewImageView.swift",
+        "Shared/Objects/MediaPlayerManager/MediaPlayerItem/MediaPlayerItem+Build.swift",
+        "Shared/Objects/MediaPlayerManager/Supplements/MediaChaptersSupplement.swift"
+      ],
+      "reviewedInterfaces": [
+        "enum ChapterPreviewTimeline",
+        "func address(for seconds: Duration) -> PreviewTileAddress?",
+        "func adjacentSheets(to address: PreviewTileAddress) -> [Int]",
+        "init(sheet: Int, tile: Int, interval: Int)",
+        "init(start: Duration?, url: URL?)",
+        "init?(columns: Int, rows: Int, width: Int, intervalMilliseconds: Int, runtime: Duration)",
+        "let columns: Int",
+        "let interval: Duration",
+        "let interval: Int",
+        "let rows: Int",
+        "let runtime: Duration",
+        "let sheet: Int",
+        "let start: Duration?",
+        "let tile: Int",
+        "let url: URL?",
+        "let width: Int",
+        "static func index(for seconds: Duration, chapters: [PreviewChapter]) -> Int?",
+        "struct PreviewChapter",
+        "struct PreviewTileAddress",
+        "struct TrickplayPreviewLayout",
+        "var debugDescription: String { get }",
+        "var description: String { get }"
+      ],
+      "sha256": "3d30707a091b327f90aad2a110b487c04f73718a717d18edecdbd857716b1502"
     }
   ],
   "limits": "This ledger records bodies explicitly reviewed, with exact current hashes; earlier prose or lexical inventory is not automatically promoted. Pending and mixed entries prevent whole-source completion. Retained UI algorithms have specific presentation reasons, not folder/import-based blanket approval. API entries do not classify the rest of the public graph. Source review and offline tests do not satisfy held runtime acceptance.",
@@ -10992,7 +11397,7 @@
     "classification": {
       "source-reviewed-retained": 664
     },
-    "currentAPIReviews": 225,
+    "currentAPIReviews": 243,
     "runtimeAcceptance": "held by human; no simulator/server testing"
   },
   "packageReviews": [
@@ -11848,6 +12253,98 @@
         {
           "file": "SwiftfinNativePlayback.symbols.json",
           "sha256": "1312d70761ce646304675b3dd459d56b53f379a0d09826174d22f728889738b1"
+        }
+      ],
+      "sourceReview": "complete current source and public declarations",
+      "consumerReview": "scoped listed boundaries; remaining whole-graph review required",
+      "runtimeAcceptance": "held by human"
+    },
+    {
+      "module": "SwiftfinImageProcessing",
+      "manifestSHA256": "3a43ffd0837e12cd672348bec1ec86f3c2df9a4001f5b96bcd535479f52c0aee",
+      "sourceBodiesRead": 5,
+      "compilerPublicSymbols": 21,
+      "compilerPlatform": "tvOS17 Simulator; conditional UIKit providers/rendering/encoding and SDK extensions included",
+      "compilerGraphs": [
+        {
+          "file": "SwiftfinImageProcessing.symbols.json",
+          "sha256": "5126155fa868dfe1dddf8ae1202b0d81cf78c2a451bd860104f582a302a74476"
+        },
+        {
+          "file": "SwiftfinImageProcessing@UIKit.symbols.json",
+          "sha256": "12d133641c7283eb6b5aa248125da3a8626e3404eee8eab20c55f0ee57e4be6d"
+        }
+      ],
+      "sourceReview": "complete current source and public declarations",
+      "consumerReview": "scoped listed boundaries; remaining whole-graph review required",
+      "runtimeAcceptance": "held by human"
+    },
+    {
+      "module": "SwiftfinImages",
+      "manifestSHA256": "3e59122e9e779fb833765d4661b56b28a65a97635e04f42283d05f5ad7576c91",
+      "sourceBodiesRead": 5,
+      "compilerPublicSymbols": 27,
+      "compilerPlatform": "tvOS17 Simulator; conditional UIKit providers/rendering/encoding and SDK extensions included",
+      "compilerGraphs": [
+        {
+          "file": "SwiftfinImages.symbols.json",
+          "sha256": "993024ea8d6b7714f0859aac547ea4b77d55f417be0149c8733d02ceefcff213"
+        },
+        {
+          "file": "SwiftfinImages@Nuke.symbols.json",
+          "sha256": "dddb566301da3cd26ad20de51c988a1bef57348f3551a19734988cd5132d840a"
+        }
+      ],
+      "sourceReview": "complete current source and public declarations",
+      "consumerReview": "scoped listed boundaries; remaining whole-graph review required",
+      "runtimeAcceptance": "held by human"
+    },
+    {
+      "module": "SwiftfinPaging",
+      "manifestSHA256": "e1fd26cc45874bd7259b8954ad03671a6b3bdc69e5a5792bcea6c2326d7ccb99",
+      "sourceBodiesRead": 4,
+      "compilerPublicSymbols": 57,
+      "compilerPlatform": "tvOS17 Simulator; conditional UIKit providers/rendering/encoding and SDK extensions included",
+      "compilerGraphs": [
+        {
+          "file": "SwiftfinPaging.symbols.json",
+          "sha256": "fc15925220a1f3d709392944fd908519209ed1c38c07e330efa8a168eca2e30d"
+        }
+      ],
+      "sourceReview": "complete current source and public declarations",
+      "consumerReview": "scoped listed boundaries; remaining whole-graph review required",
+      "runtimeAcceptance": "held by human"
+    },
+    {
+      "module": "SwiftfinPlaybackPreparation",
+      "manifestSHA256": "626b67c609523176e64e63a8c20c81a9a21a6a49b350478ae2622ae47707ba09",
+      "sourceBodiesRead": 5,
+      "compilerPublicSymbols": 61,
+      "compilerPlatform": "tvOS17 Simulator; conditional UIKit providers/rendering/encoding and SDK extensions included",
+      "compilerGraphs": [
+        {
+          "file": "SwiftfinPlaybackPreparation.symbols.json",
+          "sha256": "92c6f98d18064cb8067b048cede0b3e0bd89e674375023ec87546e1cdfe8d520"
+        },
+        {
+          "file": "SwiftfinPlaybackPreparation@SwiftfinNetworking.symbols.json",
+          "sha256": "1a6bd9cc4749bd7bfb46e6a5e9d66e7277e5b64be98f0ef1da48abb75346f0fc"
+        }
+      ],
+      "sourceReview": "complete current source and public declarations",
+      "consumerReview": "scoped listed boundaries; remaining whole-graph review required",
+      "runtimeAcceptance": "held by human"
+    },
+    {
+      "module": "SwiftfinPlaybackPreviews",
+      "manifestSHA256": "5a6e670a445e6f7a955a915b6d4ac339634065aaee8c0e79565db5f452de82b6",
+      "sourceBodiesRead": 4,
+      "compilerPublicSymbols": 54,
+      "compilerPlatform": "tvOS17 Simulator; conditional UIKit providers/rendering/encoding and SDK extensions included",
+      "compilerGraphs": [
+        {
+          "file": "SwiftfinPlaybackPreviews.symbols.json",
+          "sha256": "61bdc72aec231f0755002cb6b997d5efbe4c192eb137157c7ebf97454942aa3c"
         }
       ],
       "sourceReview": "complete current source and public declarations",

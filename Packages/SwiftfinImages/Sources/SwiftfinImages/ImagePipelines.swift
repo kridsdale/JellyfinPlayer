@@ -61,8 +61,10 @@ private final class CacheDelegate: ImagePipeline.Delegate {
 public extension ImagePipeline {
     func loadFirstImage(from requests: some Collection<ImageSource>) async -> PlatformImage? {
         for source in requests {
-            guard !Task.isCancelled, let url = source.url else { return nil }
+            guard !Task.isCancelled else { return nil }
+            guard let url = source.url else { continue }
             if let image = try? await image(for: url) {
+                guard !Task.isCancelled else { return nil }
                 return image
             }
         }

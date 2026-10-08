@@ -442,3 +442,51 @@ struct PagingSchedulerTests {
         #expect(!delivered)
     }
 }
+
+@MainActor
+struct PagingCallbackContracts {
+    private func populatedStore() async throws -> PagingStore<Row> {
+        let store = PagingStore<Row>(pageSize: 2)
+        let source = PagingSource<Row>(identity: UUID(), isCurrent: { true }, load: { _ in
+            PagingPage(items: [Row(id: 1), Row(id: 2)])
+        }, search: { _ in PagingPage(items: [Row(id: 3)]) })
+        try await store.refresh(using: source)
+        try await store.search("synthetic", using: source)
+        return store
+    }
+
+    @Test
+    func `update invalidation`() async throws {
+        let store = try await populatedStore()
+        store.update { row in
+            store.invalidate()
+            return Row(id: row.id, name: "retired")
+        }
+        #expect(store.elements.isEmpty && store.searchElements.isEmpty)
+    }
+
+    @Test
+    func `removal invalidation`() async throws {
+        let store = try await populatedStore()
+        store.remove { _ in
+            store.invalidate()
+            return false
+        }
+        #expect(store.elements.isEmpty && store.searchElements.isEmpty)
+    }
+
+    @Test
+    func `nested edit wins`() async throws {
+        let store = try await populatedStore()
+        var replaced = false
+        store.update { row in
+            if !replaced {
+                replaced = true
+                store.update { Row(id: $0.id, name: "new") }
+            }
+            return Row(id: row.id, name: "old")
+        }
+        #expect(store.elements.map(\.name) == ["new", "new"])
+        #expect(store.searchElements.map(\.name) == ["new"])
+    }
+}

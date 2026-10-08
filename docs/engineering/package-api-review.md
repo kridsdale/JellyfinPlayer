@@ -135,3 +135,18 @@ Three reproduced playback lifetime defects are repaired: retired VLC opens/resum
 | SwiftfinNativePlayback | 4 | 44 |
 
 Five new test declarations cover six synthetic regression cases, with failing pre-fix evidence retained. All 61 current contracts pass using fake engines, synthetic metadata, captions and injected hardware readers. Compiler interface extraction uses macOS 15; these libraries have no platform-conditional public declarations. Private AVPlayer UIKit surfaces and native SDK render paths are covered by the separate tvOS/iOS compile gates, not runtime observation. No simulator/player/media stream, hardware probe, credential query, cloud operation, server action or RAID access occurred. The existing app proxies and kids driver adapter were read; the KidsAppModel review covers its final preparation/publication/start boundary, not its complete body. Full app/experience/metadata and remaining image/paging/preparation/preview owners remain on the finite checklist.
+
+
+## Image fallback and paging callback ownership (2026-10-08)
+
+Missing image URLs now allow fallback to continue; paging notification edits use snapshots and reject invalidation or nested supersession. All 112 offline contracts across the five image/paging/preparation/preview owners pass; platform compile gates are recorded with the validation evidence. Five complete module reviews add 23 source bodies and 220 tvOS compiler public symbols, including conditional UIKit APIs. The graph remains 53 libraries; 50 complete module reviews cover 234 source bodies, and 243 scoped interface entries cover 241 unique sources of 250. All 664 app sources remain classified. Three module reviews, whole-graph consumer closure and held runtime acceptance remain; items 1/2 stay active.
+
+| Module | Complete source bodies | tvOS compiler public symbols |
+| --- | ---: | ---: |
+| SwiftfinImageProcessing | 5 | 21 |
+| SwiftfinImages | 5 | 27 |
+| SwiftfinPaging | 4 | 57 |
+| SwiftfinPlaybackPreparation | 5 | 61 |
+| SwiftfinPlaybackPreviews | 4 | 54 |
+
+Four new offline contracts cover missing-URL fallback, update/removal invalidation and nested edit ordering. Image tests use a synthetic DataLoading implementation that rejects all network access; paging uses synthetic rows and ports. Failing pre-fix evidence is retained for image fallback, update invalidation and nested updates. SVG sampling/encoding, timeline/cache arithmetic and playback preparation/commands retain their original fixture/sender contracts. The 112 passing macOS tests do not execute the UIKit renderer, decoder, cropper or scrub-selection tests. Those public declarations were reviewed from actual tvOS compiler graphs and their implementations compile in the platform gates; runtime acceptance stays held. Existing app image/paging adapters were read, while playback-build/DTO/socket/chapter consumers have explicitly scoped composition/selection coverage. SDK pins, persistence/signing inputs and protected workflow/lock changes are preserved. No simulator execution, native player/hardware/credential query, household-server request or RAID access occurred.
