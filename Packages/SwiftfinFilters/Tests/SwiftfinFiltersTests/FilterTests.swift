@@ -122,7 +122,6 @@ struct FilterSelectionTests {
         #expect(ItemLanguage(from: erased).displayTitle == "Localized")
         #expect(ItemGenre(from: erased).value == "value" && ItemLetter(from: erased).displayTitle == "value")
         #expect(AnyItemFilter(from: erased) == erased)
-        #expect(ItemYear(integerLiteral: 2024).intValue == 2024)
         #expect(ChannelCategory.allCases.map(\.rawValue) == ["movies", "series", "news", "kids", "sports"])
         #expect(ItemFilterType.allCases.map(\.rawValue) == [
             "audioLanguage",

@@ -97,6 +97,27 @@ struct PublisherContracts {
     }
 
     @Test
+    func `natural completion remains terminal and cannot revive the old source`() async {
+        let source = Source()
+        let publisher = AsyncStreamPublishers.shared { source.stream() }
+        var firstCompleted = false
+        let first = publisher.sink(receiveCompletion: { _ in firstCompleted = true }, receiveValue: { _ in })
+        await until { source.starts == 1 }
+        source.output?.finish()
+        await until { firstCompleted && source.endings == 1 }
+        #expect(firstCompleted && source.endings == 1)
+        var secondCompleted = false
+        let second = publisher.sink(
+            receiveCompletion: { _ in secondCompleted = true },
+            receiveValue: { _ in Issue.record("Finished source emitted") }
+        )
+        await until { secondCompleted }
+        #expect(secondCompleted && source.starts == 1)
+        first.cancel()
+        second.cancel()
+    }
+
+    @Test
     func `completion finishes subscribers and dropping the subscription releases its source`() async {
         let source = Source()
         let publisher = AsyncStreamPublishers.shared { source.stream() }

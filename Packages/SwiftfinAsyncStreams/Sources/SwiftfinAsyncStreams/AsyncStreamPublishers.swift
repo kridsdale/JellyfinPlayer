@@ -12,7 +12,9 @@ import os
 
 /// Main-actor stream delivery with subscription-scoped, executor-independent
 /// Combine cancellation. One publisher shares a stream while subscribers exist;
-/// the last subscriber releases it. A later subscriber starts a fresh stream.
+/// the last cancellation releases it. A later subscription restarts a cancelled
+/// stream. Natural completion is terminal for this publisher; request a new
+/// publisher instance to begin another source lifetime.
 public enum AsyncStreamPublishers {
     @MainActor
     public static func shared<Value: Sendable>(

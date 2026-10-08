@@ -5922,17 +5922,23 @@
     },
     {
       "path": "Packages/SwiftfinAccountModels/Sources/SwiftfinAccountModels/ServerSelection.swift",
-      "reason": "Checked-Sendable immutable account selection; no settings, lookup client or native handle. Original swiftfin-all sentinel/raw Codable values remain exact, including reserved-ID roundtrip collision. Lookup accepts a caller-provided sequence, all consumes nothing and server uses first exact ID without normalization/deduplication.",
+      "reason": "Complete raw/Codable sentinel and first exact-ID selection bodies were read with stored selection aliases. Selection does not create a session or authorize the selected server. Complete source body and compiler-emitted public declarations reviewed; listed consumers are scoped boundaries, not whole-graph runtime acceptance.",
       "reviewedConsumers": [
-        "Shared/Objects/SelectUserServerSelection.swift",
-        "Packages/SwiftfinStoredValues/Sources/SwiftfinStoredValues/Storable.swift"
+        "Shared/Services/DeepLink.swift",
+        "Shared/SwiftfinStore/SwiftfinStore+ServerState.swift",
+        "Shared/SwiftfinStore/SwiftinStore+UserState.swift",
+        "Packages/SwiftfinAccountStore/Sources/SwiftfinAccountStore/AccountStorageKeys.swift",
+        "Packages/SwiftfinAccountStore/Sources/SwiftfinAccountStore/UserAdmissionSnapshot.swift",
+        "Packages/SwiftfinStorage/Sources/SwiftfinStorage/StoredAccountRecords.swift",
+        "Packages/SwiftfinConnectivity/Sources/SwiftfinConnectivity/NetworkContextObservation.swift"
       ],
       "reviewedInterfaces": [
-        "ServerSelection.all",
-        "ServerSelection.server(id:)",
-        "ServerSelection.rawValue",
-        "ServerSelection.init(rawValue:)",
-        "ServerSelection.server(from:)"
+        "case all",
+        "case server(id: String)",
+        "enum ServerSelection",
+        "func server(from servers: some Sequence<ServerAccountRecord>) -> ServerAccountRecord?",
+        "init?(rawValue: String)",
+        "var rawValue: String { get }"
       ],
       "sha256": "5d0081b6311a3373a98fda2f408c1bd6f6578caa6961e497c73c2c3c0cc36bfe"
     },
@@ -6094,17 +6100,20 @@
     },
     {
       "path": "Packages/SwiftfinAsyncStreams/Sources/SwiftfinAsyncStreams/ScopedPublisher.swift",
-      "reason": "Actor-owned subscription/generation, private Combine token and weak queued receipts; source identity and currentness are supplied by app composition. No account, SDK, settings or application globals enter the owner. Raw sink creation is explicitly nonisolated; checked-Sendable values enter an explicit main-actor delivery. Retirement/factory/subscription/currentness reentry checks protect newer scopes; same identity reuses its subscription. Twelve native contracts include logout, A-B-A, weak owner/UI lifetime and real foreign-queue emission. Native scheduling is internally injectable; GUI socket acceptance remains held. The iOS remote-command adapter additionally composes merged immutable intents; tvOS command subscriptions remain disabled.",
+      "reason": "Complete scope/generation, make/delivery reentrancy, weak cleanup and executor-independent cancellation bodies were read. Obsolete callbacks cannot publish into replacement state. Complete source body and compiler-emitted public declarations reviewed; listed consumers are scoped boundaries, not whole-graph runtime acceptance.",
       "reviewedConsumers": [
-        "Shared/Services/UserSession/UserSessionManager+SocketCommands.swift",
-        "Shared/ViewModels/AdminDashboard/Sessions/ActiveSessionsViewModel.swift",
-        "Shared/ViewModels/AdminDashboard/Tasks/ServerTasksViewModel.swift"
+        "Shared/Services/ServerSocketManager.swift",
+        "Shared/ViewModels/SearchViewModel.swift",
+        "Packages/SwiftfinSessions/Sources/SwiftfinSessions/SessionMetadataRefresh.swift",
+        "Packages/SwiftfinPlaybackReporting/Sources/SwiftfinPlaybackReporting/PlaybackReportingClient.swift",
+        "Shared/Objects/MediaPlayerManager/MediaProgressObserver.swift",
+        "Swiftfin tvOS/Kids/KidsMediaProgressObserver.swift"
       ],
       "reviewedInterfaces": [
-        "init()",
-        "replace(scope:makePublisher:isCurrent:receive:)",
-        "cancel()",
-        "internal scheduling/publication/isolated teardown"
+        "@MainActor final class ScopedPublisher<Scope, Value> where Scope : Hashable, Scope : Sendable, Value : Sendable",
+        "@MainActor func cancel()",
+        "@MainActor init()",
+        "@discardableResult @MainActor func replace(scope: Scope, makePublisher: @MainActor @Sendable () -> AnyPublisher<Value, Never>, isCurrent: @escaping @MainActor @Sendable () -> Bool, receive: @escaping @MainActor @Sendable (Value) -> Void) -> Bool"
       ],
       "sha256": "ecdb1b974976584e10e4a1d8084508d39ed52f26caa121fc8274eeff2558b258"
     },
@@ -6148,18 +6157,21 @@
     },
     {
       "path": "Packages/SwiftfinAsyncStreams/Sources/SwiftfinAsyncStreams/LatestRequest.swift",
-      "reason": "Complete updated owner and original/new native contracts reviewed. Cancelled submission preserves current work; synchronous begin is checked against cancellation/replace reentry before IO; values and optional errors publish only for current noncancelled work. Fields revoke before callbacks. Waiting captures the task owned at entry. Seven new contracts plus existing scope/release/reentry tests pass (61 in the package). App player composes separate synchronous effect checkpoints and committed phases; UI actors/native decoder acceptance remains held.",
+      "reason": "Complete replacement/cancellation/wait/deinit and reentrant callback guards were read with scoped metadata refresh and adjacent queue request capture. Weak generations reject stale success/failure; lease cleanup precedes consumer callbacks. Complete source body and compiler-emitted public declarations reviewed; listed consumers are scoped boundaries, not whole-graph runtime acceptance.",
       "reviewedConsumers": [
-        "Shared/Objects/MediaPlayerManager/MediaPlayerManager.swift",
-        "Shared/Objects/MediaPlayerManager/NowPlayable/NowPlayableObserver.swift",
-        "Shared/Objects/MediaPlayerManager/MediaPlayerProxy/MediaPlayerProxy+AVPlayer.swift"
+        "Shared/Services/ServerSocketManager.swift",
+        "Shared/ViewModels/SearchViewModel.swift",
+        "Packages/SwiftfinSessions/Sources/SwiftfinSessions/SessionMetadataRefresh.swift",
+        "Packages/SwiftfinPlaybackReporting/Sources/SwiftfinPlaybackReporting/PlaybackReportingClient.swift",
+        "Shared/Objects/MediaPlayerManager/MediaProgressObserver.swift",
+        "Swiftfin tvOS/Kids/KidsMediaProgressObserver.swift"
       ],
       "reviewedInterfaces": [
-        "init()",
-        "replace(operation:begin:failure:receive:)",
-        "waitUntilFinished()",
-        "cancel()",
-        "isolated task teardown"
+        "@MainActor final class LatestRequest<Value> where Value : Sendable",
+        "@MainActor func cancel()",
+        "@MainActor func replace(operation: @escaping @MainActor @Sendable () async throws -> Value, begin: @MainActor @Sendable () -> Void = {}, failure: @escaping @MainActor @Sendable (any Error) -> Void = { _ in }, receive: @escaping @MainActor @Sendable (Value) -> Void)",
+        "@MainActor func waitUntilFinished() async",
+        "@MainActor init()"
       ],
       "sha256": "4a3952b250c2d5ccbc555007fef09fb284fc2712afb47f79ac43381d8a4d3ac2"
     },
@@ -6237,16 +6249,21 @@
     },
     {
       "path": "Packages/SwiftfinAsyncStreams/Sources/SwiftfinAsyncStreams/AsyncOperationGate.swift",
-      "reason": "Main-actor generation remains private; returned main-actor Sendable throwing checkpoint captures the owner weakly and checks the current calling Task plus operation identity. Capture precedes scheduling; cancel/replacement/release reject future effects without undoing prior commits. No tasks, native handles, SDK, settings or globals are owned/exposed; caller-owned tasks keep existing error/action semantics. Nine synthetic contracts include delayed noncooperating returns, queued A-B-A, release, cancellation, multistage effects and synchronous notification reentry. Actual debounce/GUI acceptance remains held. Additional complete component-editor consumer review covers queued empty delivery, exact current item ID and checkpoints between state, metadata notification, final event and tag-cache advisory; real data failures retain the macro error path, while cancellation is quiet. Actual Combine/macro lifetime remains held.",
+      "reason": "Complete UUID-generation and weak checkpoint bodies were read with search/editor request capture. The gate does not own tasks or undo an already committed effect; callers check around suspension/effects. Complete source body and compiler-emitted public declarations reviewed; listed consumers are scoped boundaries, not whole-graph runtime acceptance.",
       "reviewedConsumers": [
-        "Shared/ViewModels/ItemAdministration/IdentifyItemViewModel.swift",
-        "Shared/ViewModels/ItemAdministration/ItemEditorViewModel/ItemComponentEditorViewModel.swift"
+        "Shared/Services/ServerSocketManager.swift",
+        "Shared/ViewModels/SearchViewModel.swift",
+        "Packages/SwiftfinSessions/Sources/SwiftfinSessions/SessionMetadataRefresh.swift",
+        "Packages/SwiftfinPlaybackReporting/Sources/SwiftfinPlaybackReporting/PlaybackReportingClient.swift",
+        "Shared/Objects/MediaPlayerManager/MediaProgressObserver.swift",
+        "Swiftfin tvOS/Kids/KidsMediaProgressObserver.swift"
       ],
       "reviewedInterfaces": [
-        "AsyncOperationGate.init()",
-        "AsyncOperationGate.begin()",
-        "AsyncOperationGate.Checkpoint",
-        "AsyncOperationGate.cancel()"
+        "@MainActor final class AsyncOperationGate",
+        "@MainActor func begin() -> AsyncOperationGate.Checkpoint",
+        "@MainActor func cancel()",
+        "@MainActor init()",
+        "typealias Checkpoint = @MainActor @Sendable () throws -> Void"
       ],
       "sha256": "3c523b50da530541e6126ed8feb91295e5d95766dcbbb0fa1137eb6f84edc923"
     },
@@ -6546,15 +6563,40 @@
     },
     {
       "path": "Packages/SwiftfinAccountModels/Sources/SwiftfinAccountModels/ServerConnection.swift",
-      "reason": "TestState string-valued cases now synthesize equality for committed observable UI publication. Full model body retains installed Codable IDs/interface/SSID/priority and normalization/order semantics; no key/schema/dependency change. Synthetic connection catalogs and both platform compilations cover affected consumers.",
+      "reason": "Complete initializer, display, normalization, context matching, duplicate, ordering and priority-projection bodies were read. Existing query/port/fragment and interface matching semantics are preserved; value helpers perform no reachability probe. Complete source body and compiler-emitted public declarations reviewed; listed consumers are scoped boundaries, not whole-graph runtime acceptance.",
       "reviewedConsumers": [
-        "Shared/ViewModels/ServerConnectionViewModel.swift",
-        "Packages/SwiftfinAccountStore/Sources/SwiftfinAccountStore/ConnectionCatalogEditing.swift"
+        "Shared/Services/DeepLink.swift",
+        "Shared/SwiftfinStore/SwiftfinStore+ServerState.swift",
+        "Shared/SwiftfinStore/SwiftinStore+UserState.swift",
+        "Packages/SwiftfinAccountStore/Sources/SwiftfinAccountStore/AccountStorageKeys.swift",
+        "Packages/SwiftfinAccountStore/Sources/SwiftfinAccountStore/UserAdmissionSnapshot.swift",
+        "Packages/SwiftfinStorage/Sources/SwiftfinStorage/StoredAccountRecords.swift",
+        "Packages/SwiftfinConnectivity/Sources/SwiftfinConnectivity/NetworkContextObservation.swift"
       ],
       "reviewedInterfaces": [
-        "ServerConnection.TestState Equatable/Sendable",
-        "ordered(_:preservingOrder:)",
-        "normalizedURL(_:)"
+        "case any",
+        "case cellular",
+        "case failure(String)",
+        "case idle",
+        "case success",
+        "case testing",
+        "case wifi",
+        "enum Interface",
+        "enum TestState",
+        "func matches(_ context: NetworkConnectionContext) -> Bool",
+        "func with(priority: Int) -> ServerConnection",
+        "init(id: String, name: String, url: URL, interface: ServerConnection.Interface, wifiSSIDs: [String] = [], priority: Int)",
+        "let id: String",
+        "static func isDuplicate(_ connection: ServerConnection, in connections: [ServerConnection]) -> Bool",
+        "static func normalizedURL(_ url: URL) -> URL?",
+        "static func ordered(_ connections: [ServerConnection], preservingOrder: Bool = false) -> [ServerConnection]",
+        "struct ServerConnection",
+        "var displayTitle: String { get }",
+        "var interface: ServerConnection.Interface { get }",
+        "var name: String",
+        "var priority: Int",
+        "var url: URL { get }",
+        "var wifiSSIDs: [String] { get }"
       ],
       "sha256": "a71274ec43922d1faae852024022b26efa6a778f307d673b6161870ff61fe987"
     },
@@ -6766,25 +6808,33 @@
     },
     {
       "path": "Packages/SwiftfinAccountModels/Sources/SwiftfinAccountModels/ServerConnectionDraft.swift",
-      "sha256": "ccb49965df639aa1732e2c32ed7d09f755e0be0f33714abfd870532f00c372c2",
-      "reason": "Complete checked-Sendable mutable draft value API reviewed: immutable connection identity and editable name/URL/interface/SSID/priority fields. Preserves installed scheme fallback, host/scheme/path normalization, whitespace trimming, sorted nonblank SSIDs with duplicate/case bytes retained, WiFi-name validation and dropped SSIDs for unscoped interfaces. Errors are typed; localization, transport/native permissions and persistence stay outside. Golden URL/SSID/identity/failure and detached-value scenarios verify extraction behavior.",
-      "reviewedInterfaces": [
-        "ServerConnectionDraftError",
-        "ServerConnectionDraft",
-        "init(connection:)",
-        "id",
-        "name",
-        "urlString",
-        "interface",
-        "wifiSSIDs",
-        "priority",
-        "useWifiName",
-        "url",
-        "connection()"
-      ],
+      "reason": "Complete draft and URL/SSID validation surface was read with connection editing composition. The returned value is applied by the store owner; the draft starts no hardware query or task. Complete source body and compiler-emitted public declarations reviewed; listed consumers are scoped boundaries, not whole-graph runtime acceptance.",
       "reviewedConsumers": [
-        "Shared/Views/EditServerConnectionView.swift"
-      ]
+        "Shared/Services/DeepLink.swift",
+        "Shared/SwiftfinStore/SwiftfinStore+ServerState.swift",
+        "Shared/SwiftfinStore/SwiftinStore+UserState.swift",
+        "Packages/SwiftfinAccountStore/Sources/SwiftfinAccountStore/AccountStorageKeys.swift",
+        "Packages/SwiftfinAccountStore/Sources/SwiftfinAccountStore/UserAdmissionSnapshot.swift",
+        "Packages/SwiftfinStorage/Sources/SwiftfinStorage/StoredAccountRecords.swift",
+        "Packages/SwiftfinConnectivity/Sources/SwiftfinConnectivity/NetworkContextObservation.swift"
+      ],
+      "reviewedInterfaces": [
+        "case invalidURL",
+        "case invalidWifiName",
+        "enum ServerConnectionDraftError",
+        "func connection() throws -> ServerConnection",
+        "init(connection: ServerConnection)",
+        "let id: String",
+        "struct ServerConnectionDraft",
+        "var interface: ServerConnection.Interface",
+        "var name: String",
+        "var priority: Int",
+        "var url: URL? { get }",
+        "var urlString: String",
+        "var useWifiName: Bool",
+        "var wifiSSIDs: [String]"
+      ],
+      "sha256": "ccb49965df639aa1732e2c32ed7d09f755e0be0f33714abfd870532f00c372c2"
     },
     {
       "path": "Packages/KidsAccounts/Sources/KidsAccounts/KidsAccountScope.swift",
@@ -6867,16 +6917,23 @@
     },
     {
       "path": "Packages/SwiftfinAsyncStreams/Sources/SwiftfinAsyncStreams/NotificationEvent.swift",
-      "reason": "Complete descriptor and publisher bridge read with app keys and foreign-post/cancellation contracts. Raw native notification userInfo is decoded on the posting executor; only checked values or Void cross scheduling. mainActorPublisher maps raw signals to Void outside actor isolation, receives on main, then invokes its actor reader. Immutable names and injected centers have no app Factory dependency. Actual UIKit queries remain held.",
+      "reason": "Complete raw native decoder, checked-value publisher and Void-only foreign signal bridge were read. Native userInfo stays on the posting executor; the actor reader runs after main-queue delivery. No app global or Factory dependency. Complete source body and compiler-emitted public declarations reviewed; listed consumers are scoped boundaries, not whole-graph runtime acceptance.",
       "reviewedConsumers": [
-        "Shared/Services/Notifications.swift"
+        "Shared/Services/ServerSocketManager.swift",
+        "Shared/ViewModels/SearchViewModel.swift",
+        "Packages/SwiftfinSessions/Sources/SwiftfinSessions/SessionMetadataRefresh.swift",
+        "Packages/SwiftfinPlaybackReporting/Sources/SwiftfinPlaybackReporting/PlaybackReportingClient.swift",
+        "Shared/Objects/MediaPlayerManager/MediaProgressObserver.swift",
+        "Swiftfin tvOS/Kids/KidsMediaProgressObserver.swift"
       ],
       "reviewedInterfaces": [
-        "init(_:decode:)",
-        "post(_:to:)",
-        "post(to:)",
-        "publisher(in:)",
-        "mainActorPublisher(in:read:)"
+        "@MainActor func mainActorPublisher(in center: NotificationCenter, read: @escaping @MainActor @Sendable () -> Payload?) -> AnyPublisher<Payload, Never>",
+        "func post(_ payload: Payload, to center: NotificationCenter)",
+        "func post(to center: NotificationCenter) where Payload == ()",
+        "func publisher(in center: NotificationCenter) -> AnyPublisher<Payload, Never>",
+        "init(_ name: Notification.Name, decode: (@Sendable ([AnyHashable : Any]) -> Payload?)? = nil)",
+        "let name: Notification.Name",
+        "struct NotificationEvent<Payload> where Payload : Sendable"
       ],
       "sha256": "9f2616ca745451fff5291dc977dc4d3ab3dc05c6fb04ef258c945244d1d1611c"
     },
@@ -6949,6 +7006,598 @@
         "open(persistAccessToken:)"
       ],
       "sha256": "7da42d47a853d601879cf1817414c4a4b38b459e7064725f71488b8e7cfe251c"
+    },
+    {
+      "path": "Packages/SwiftfinCollections/Sources/SwiftfinCollections/Array.swift",
+      "reason": "Synchronous array projections/mutations, conditional autoclosures and rethrowing predicates retain ordering. No callbacks or tasks are retained. Complete source body and compiler-emitted public declarations reviewed; listed consumers are scoped boundaries, not whole-graph runtime acceptance.",
+      "reviewedConsumers": [
+        "Packages/SwiftfinPlaybackProfiles/Sources/SwiftfinPlaybackProfiles",
+        "Shared/Objects/ItemFilter/ItemFilter.swift",
+        "Shared/Objects/ItemFilter/ItemFilterCollection.swift",
+        "Packages/SwiftfinCollections/Tests/SwiftfinCollectionsTests"
+      ],
+      "reviewedInterfaces": [
+        "@discardableResult mutating func removeFirstSafe() -> Element?",
+        "func appending(_ contents: [Element]) -> [Element]",
+        "func appending(_ element: @autoclosure () -> Element, if condition: Bool) -> [Element]",
+        "func appending(_ element: Element) -> [Element]",
+        "func count(where predicate: (Element) throws -> Bool) rethrows -> Int",
+        "func prepending(_ element: @autoclosure () -> Element, if condition: Bool) -> [Element]",
+        "func prepending(_ element: Element) -> [Element]",
+        "func removing(_ element: Element) -> [Element] where Element : Equatable",
+        "mutating func removeAll(equalTo element: Element)",
+        "mutating func removeFirst(equalTo element: Element)",
+        "mutating func toggle(_ element: Element)"
+      ],
+      "sha256": "59f14520773230a280e29662023ef3cc309fb4eb102f2acf7c9f81dd1503183e"
+    },
+    {
+      "path": "Packages/SwiftfinCollections/Sources/SwiftfinCollections/ArrayBuilder.swift",
+      "reason": "All result-builder expressions, raw-representable projections, conditionals, loops and Void branches were read; public compiler entrypoints remain necessary to typed playback-profile construction. Complete source body and compiler-emitted public declarations reviewed; listed consumers are scoped boundaries, not whole-graph runtime acceptance.",
+      "reviewedConsumers": [
+        "Packages/SwiftfinPlaybackProfiles/Sources/SwiftfinPlaybackProfiles",
+        "Shared/Objects/ItemFilter/ItemFilter.swift",
+        "Shared/Objects/ItemFilter/ItemFilterCollection.swift",
+        "Packages/SwiftfinCollections/Tests/SwiftfinCollectionsTests"
+      ],
+      "reviewedInterfaces": [
+        "@resultBuilder enum ArrayBuilder<Component>",
+        "static func buildArray(_ components: [[Component]]) -> [Component]",
+        "static func buildBlock(_ components: [Component]...) -> [Component]",
+        "static func buildEither(first component: [Component]) -> [Component]",
+        "static func buildEither(second component: [Component]) -> [Component]",
+        "static func buildExpression(_ expression: Component) -> [Component]",
+        "static func buildExpression(_ expression: Component?) -> [Component]",
+        "static func buildExpression(_ expression: Void) -> [Component]",
+        "static func buildExpression(_ expression: [Component]) -> [Component]",
+        "static func buildExpression<T>(_ expression: T) -> [Component] where Component == T.RawValue, T : RawRepresentable",
+        "static func buildExpression<T>(_ expression: [T]) -> [Component] where Component == T.RawValue, T : RawRepresentable",
+        "static func buildOptional(_ component: [Component]?) -> [Component]"
+      ],
+      "sha256": "a571a39723ac7ff03d22c8d5cb95d6898b7ff6860748fbe683a6945b151a011c"
+    },
+    {
+      "path": "Packages/SwiftfinCollections/Sources/SwiftfinCollections/Collection.swift",
+      "reason": "Safe indexing uses collection indices, including nonzero slices. keyed(using:) retains Dictionary unique-key preconditions rather than claiming duplicate merging. Complete source body and compiler-emitted public declarations reviewed; listed consumers are scoped boundaries, not whole-graph runtime acceptance.",
+      "reviewedConsumers": [
+        "Packages/SwiftfinPlaybackProfiles/Sources/SwiftfinPlaybackProfiles",
+        "Shared/Objects/ItemFilter/ItemFilter.swift",
+        "Shared/Objects/ItemFilter/ItemFilterCollection.swift",
+        "Packages/SwiftfinCollections/Tests/SwiftfinCollectionsTests"
+      ],
+      "reviewedInterfaces": [
+        "func keyed<Key>(using keyPath: KeyPath<Self.Element, Key>) -> [Key : Self.Element] where Key : Hashable",
+        "subscript(safe index: Self.Index) -> Self.Element? { get }",
+        "var asArray: [Self.Element] { get }",
+        "var isNotEmpty: Bool { get }"
+      ],
+      "sha256": "e51e1973694f653f468ca3963dbdaab0ec5b72a007a3efda63e9cac9b4839a7a"
+    },
+    {
+      "path": "Packages/SwiftfinCollections/Sources/SwiftfinCollections/Dictionary.swift",
+      "reason": "Value insertion/removal and optional lookup are synchronous generic projections with no shared state. Complete source body and compiler-emitted public declarations reviewed; listed consumers are scoped boundaries, not whole-graph runtime acceptance.",
+      "reviewedConsumers": [
+        "Packages/SwiftfinPlaybackProfiles/Sources/SwiftfinPlaybackProfiles",
+        "Shared/Objects/ItemFilter/ItemFilter.swift",
+        "Shared/Objects/ItemFilter/ItemFilterCollection.swift",
+        "Packages/SwiftfinCollections/Tests/SwiftfinCollectionsTests"
+      ],
+      "reviewedInterfaces": [
+        "func inserting(value: Value, for key: Key) -> Dictionary<Key, Value>",
+        "func removingValue(for key: Key) -> Dictionary<Key, Value>",
+        "subscript(key: Key?) -> Value? { get }"
+      ],
+      "sha256": "a761249dda86af71f750db511090778a61246da7cba1b62ec8017623ad557f8d"
+    },
+    {
+      "path": "Packages/SwiftfinCollections/Sources/SwiftfinCollections/OptionalCollection.swift",
+      "reason": "Optional collection queries are synchronous. appendedOrInit returns a projected collection and does not assign the optional; the existing signature and behavior are preserved. Complete source body and compiler-emitted public declarations reviewed; listed consumers are scoped boundaries, not whole-graph runtime acceptance.",
+      "reviewedConsumers": [
+        "Packages/SwiftfinPlaybackProfiles/Sources/SwiftfinPlaybackProfiles",
+        "Shared/Objects/ItemFilter/ItemFilter.swift",
+        "Shared/Objects/ItemFilter/ItemFilterCollection.swift",
+        "Packages/SwiftfinCollections/Tests/SwiftfinCollectionsTests"
+      ],
+      "reviewedInterfaces": [
+        "mutating func appendedOrInit(_ element: Wrapped.Element) -> [Wrapped.Element]",
+        "var isNilOrEmpty: Bool { get }"
+      ],
+      "sha256": "6e059181d78cda695a407905b7a566b6aca59ebc3fe043ed3ef0fce6b36966e8"
+    },
+    {
+      "path": "Packages/SwiftfinCollections/Sources/SwiftfinCollections/OrderedDictionary.swift",
+      "reason": "Ordered key compaction and sorting retain ordered/value semantics. The manifest explicitly owns pinned OrderedCollections, not Foundation alone. Complete source body and compiler-emitted public declarations reviewed; listed consumers are scoped boundaries, not whole-graph runtime acceptance.",
+      "reviewedConsumers": [
+        "Packages/SwiftfinPlaybackProfiles/Sources/SwiftfinPlaybackProfiles",
+        "Shared/Objects/ItemFilter/ItemFilter.swift",
+        "Shared/Objects/ItemFilter/ItemFilterCollection.swift",
+        "Packages/SwiftfinCollections/Tests/SwiftfinCollectionsTests"
+      ],
+      "reviewedInterfaces": [
+        "func compactKeys<WrappedKey>() -> OrderedDictionary<WrappedKey, Value> where Key == WrappedKey?, WrappedKey : Hashable",
+        "func sortedKeys(by areInIncreasingOrder: (Key, Key) -> Bool) -> OrderedDictionary<Key, Value>",
+        "func sortedKeys(using keyValue: (Key) -> some Comparable) -> OrderedDictionary<Key, Value>",
+        "var isNotEmpty: Bool { get }"
+      ],
+      "sha256": "3ce433568dae27ae07d3a3c2ac970f63df6b718641f57da9b1dbdcf8dd44969f"
+    },
+    {
+      "path": "Packages/SwiftfinCollections/Sources/SwiftfinCollections/Sequence.swift",
+      "reason": "All predicate/key-path, exclusion, sort, flatten, zip and set-like operations were read. Nil sorts last with a strict nil/nil comparator; duplicate/order semantics are preserved. Writable key paths may mutate reference elements synchronously. Complete source body and compiler-emitted public declarations reviewed; listed consumers are scoped boundaries, not whole-graph runtime acceptance.",
+      "reviewedConsumers": [
+        "Packages/SwiftfinPlaybackProfiles/Sources/SwiftfinPlaybackProfiles",
+        "Shared/Objects/ItemFilter/ItemFilter.swift",
+        "Shared/Objects/ItemFilter/ItemFilterCollection.swift",
+        "Packages/SwiftfinCollections/Tests/SwiftfinCollectionsTests"
+      ],
+      "reviewedInterfaces": [
+        "func coalesced<Value>(property keyPath: WritableKeyPath<Self.Element, Value?>, with value: Value) -> [Self.Element]",
+        "func compacted(using keyPath: KeyPath<Self.Element, (some Any)?>) -> [Self.Element]",
+        "func filtering(where isIncluded: (Self.Element) throws -> Bool) rethrows -> [Self.Element]",
+        "func first(equalTo other: Self.Element) -> Self.Element?",
+        "func first<V>(property: (Self.Element) -> V, equalTo value: V) -> Self.Element? where V : Equatable",
+        "func flattened() -> [Self.Element.Element]",
+        "func intersecting<Value>(_ other: some Sequence, using keyPath: KeyPath<Self.Element, Value>) -> [Self.Element] where Value : Equatable",
+        "func intersection(_ other: some Sequence<Self.Element>) -> [Self.Element]",
+        "func sorted(using keyPath: KeyPath<Self.Element, (some Comparable)?>) -> [Self.Element]",
+        "func sorted(using keyPath: KeyPath<Self.Element, some Comparable>) -> [Self.Element]",
+        "func subtracting(_ other: some Sequence<Self.Element>) -> [Self.Element]",
+        "func subtracting<Value>(_ other: some Sequence, using keyPath: KeyPath<Self.Element, Value>) -> [Self.Element] where Value : Equatable",
+        "func zipped<Value>(map mapToOther: (Self.Element) throws -> Value) rethrows -> [(Self.Element, Value)]"
+      ],
+      "sha256": "8617a352f6962c7350ce2b3b13cf79a7f9a7a248ea7069f7decc5ad7d03417eb"
+    },
+    {
+      "path": "Packages/SwiftfinCollections/Sources/SwiftfinCollections/SetAlgebra.swift",
+      "reason": "Insertion, removal, toggle and conditional autoclosures support set and option-set semantics. Arbitrary elements do not gain Sendable conformance. Complete source body and compiler-emitted public declarations reviewed; listed consumers are scoped boundaries, not whole-graph runtime acceptance.",
+      "reviewedConsumers": [
+        "Packages/SwiftfinPlaybackProfiles/Sources/SwiftfinPlaybackProfiles",
+        "Shared/Objects/ItemFilter/ItemFilter.swift",
+        "Shared/Objects/ItemFilter/ItemFilterCollection.swift",
+        "Packages/SwiftfinCollections/Tests/SwiftfinCollectionsTests"
+      ],
+      "reviewedInterfaces": [
+        "func inserting(_ element: Self.Element) -> Self",
+        "func inserting(_ element: Self.Element, if condition: Bool) -> Self",
+        "func removing(_ element: Self.Element) -> Self",
+        "func removing(_ element: Self.Element, if condition: Bool) -> Self",
+        "mutating func insert(contentsOf elements: [Self.Element])",
+        "mutating func toggle(value: Self.Element)"
+      ],
+      "sha256": "40e585531cffb5b09bb41fdbca2cb6c9c5e9513a82f521b3c3e8336e1260a13c"
+    },
+    {
+      "path": "Packages/SwiftfinCollections/Sources/SwiftfinCollections/SupportedCaseIterable.swift",
+      "reason": "Subset-case protocol, associated type and membership implementation were read with actual app conformances. The compiler-facing protocol surface remains public. Complete source body and compiler-emitted public declarations reviewed; listed consumers are scoped boundaries, not whole-graph runtime acceptance.",
+      "reviewedConsumers": [
+        "Packages/SwiftfinPlaybackProfiles/Sources/SwiftfinPlaybackProfiles",
+        "Shared/Objects/ItemFilter/ItemFilter.swift",
+        "Shared/Objects/ItemFilter/ItemFilterCollection.swift",
+        "Packages/SwiftfinCollections/Tests/SwiftfinCollectionsTests"
+      ],
+      "reviewedInterfaces": [
+        "associatedtype SupportedCases : Collection = [Self] where Self == Self.SupportedCases.Element",
+        "protocol SupportedCaseIterable : CaseIterable",
+        "static var supportedCases: Self.SupportedCases { get }",
+        "var isSupported: Bool { get }"
+      ],
+      "sha256": "dad8cf4ba33005703f2d24adc6ba3cff5a7f774bb2f84502ba53679fc573be23"
+    },
+    {
+      "path": "Packages/SwiftfinFilters/Sources/SwiftfinFilters/AnyItemFilter.swift",
+      "reason": "Immutable display title and string value erase filter presentation without native handles; Codable/Hashable/Sendable shapes are retained. Complete source body and compiler-emitted public declarations reviewed; listed consumers are scoped boundaries, not whole-graph runtime acceptance.",
+      "reviewedConsumers": [
+        "Shared/ViewModels/FilterViewModel.swift",
+        "Shared/ViewModels/SearchViewModel.swift",
+        "Shared/Objects/ItemFilter/ItemFilter.swift",
+        "Shared/Objects/ItemFilter/ItemFilterCollection.swift"
+      ],
+      "reviewedInterfaces": [
+        "init(displayTitle: String, value: String)",
+        "init(from anyFilter: AnyItemFilter)",
+        "let displayTitle: String",
+        "let value: String",
+        "struct AnyItemFilter"
+      ],
+      "sha256": "74fe0e532639f8ed545756a44cbf4d620fe27d8aaf7c2c7e7a4b46f2d19b0b05"
+    },
+    {
+      "path": "Packages/SwiftfinFilters/Sources/SwiftfinFilters/ChannelCategory.swift",
+      "reason": "Exact installed category raw values and checked Sendable enum cases are retained. Complete source body and compiler-emitted public declarations reviewed; listed consumers are scoped boundaries, not whole-graph runtime acceptance.",
+      "reviewedConsumers": [
+        "Shared/ViewModels/FilterViewModel.swift",
+        "Shared/ViewModels/SearchViewModel.swift",
+        "Shared/Objects/ItemFilter/ItemFilter.swift",
+        "Shared/Objects/ItemFilter/ItemFilterCollection.swift"
+      ],
+      "reviewedInterfaces": [
+        "case kids",
+        "case movies",
+        "case news",
+        "case series",
+        "case sports",
+        "enum ChannelCategory"
+      ],
+      "sha256": "420dbd2d2cdade9d53d8fecf60d39e7d9ffcded1e61d8f6910ea49443ee7093a"
+    },
+    {
+      "path": "Packages/SwiftfinFilters/Sources/SwiftfinFilters/ItemFilterCollection.swift",
+      "reason": "Complete initializer/default/reset/union and catalog snapshot bodies were read. Stored arrays and sort precedence are preserved; only the first letter enters the query snapshot. No account lookup or IO. Complete source body and compiler-emitted public declarations reviewed; listed consumers are scoped boundaries, not whole-graph runtime acceptance.",
+      "reviewedConsumers": [
+        "Shared/ViewModels/FilterViewModel.swift",
+        "Shared/ViewModels/SearchViewModel.swift",
+        "Shared/Objects/ItemFilter/ItemFilter.swift",
+        "Shared/Objects/ItemFilter/ItemFilterCollection.swift"
+      ],
+      "reviewedInterfaces": [
+        "func containsFilters(ofType type: ItemFilterType) -> Bool",
+        "func union(_ other: ItemFilterCollection) -> ItemFilterCollection",
+        "init(audioLanguages: [ItemLanguage] = [], categories: [ChannelCategory] = [], genres: [ItemGenre] = [], itemTypes: [BaseItemKind] = [], letter: [ItemLetter] = [], officialRatings: [ItemOfficialRating] = [], sortBy: [ItemSortBy] = [.sortName], sortOrder: [SortOrder] = [.ascending], subtitleLanguages: [ItemLanguage] = [], tags: [ItemTag] = [], traits: [ItemFilter] = [], years: [ItemYear] = [], query: String? = nil)",
+        "mutating func reset(_ type: ItemFilterType?)",
+        "static let `default`: ItemFilterCollection",
+        "static let favorites: ItemFilterCollection",
+        "static let recent: ItemFilterCollection",
+        "struct ItemFilterCollection",
+        "var audioLanguages: [ItemLanguage]",
+        "var catalogSnapshot: CatalogFilters { get }",
+        "var categories: [ChannelCategory]",
+        "var genres: [ItemGenre]",
+        "var hasQueryableFilters: Bool { get }",
+        "var isNotEmpty: Bool { get }",
+        "var itemTypes: [BaseItemKind]",
+        "var letter: [ItemLetter]",
+        "var officialRatings: [ItemOfficialRating]",
+        "var query: String?",
+        "var sortBy: [ItemSortBy]",
+        "var sortOrder: [SortOrder]",
+        "var subtitleLanguages: [ItemLanguage]",
+        "var tags: [ItemTag]",
+        "var traits: [ItemFilter]",
+        "var years: [ItemYear]"
+      ],
+      "sha256": "02397a759bd050b29cadf37c4cb06d5c406f61282381cc11b3f22d321c4c7f93"
+    },
+    {
+      "path": "Packages/SwiftfinFilters/Sources/SwiftfinFilters/ItemFilterType.swift",
+      "reason": "Exact installed enum identities and Identifiable surface remain value-only. Complete source body and compiler-emitted public declarations reviewed; listed consumers are scoped boundaries, not whole-graph runtime acceptance.",
+      "reviewedConsumers": [
+        "Shared/ViewModels/FilterViewModel.swift",
+        "Shared/ViewModels/SearchViewModel.swift",
+        "Shared/Objects/ItemFilter/ItemFilter.swift",
+        "Shared/Objects/ItemFilter/ItemFilterCollection.swift"
+      ],
+      "reviewedInterfaces": [
+        "case audioLanguage",
+        "case category",
+        "case genres",
+        "case letter",
+        "case officialRatings",
+        "case sortBy",
+        "case subtitleLanguage",
+        "case tags",
+        "case traits",
+        "case years",
+        "enum ItemFilterType",
+        "var id: String { get }"
+      ],
+      "sha256": "ab908c9f8f25d6f85acb2421cb67fa1208f3be25b0dc129536717e405ea91deb"
+    },
+    {
+      "path": "Packages/SwiftfinFilters/Sources/SwiftfinFilters/ItemGenre.swift",
+      "reason": "String-literal/erased/Codable filter projection retains title/value shape and checked Sendable semantics. Complete source body and compiler-emitted public declarations reviewed; listed consumers are scoped boundaries, not whole-graph runtime acceptance.",
+      "reviewedConsumers": [
+        "Shared/ViewModels/FilterViewModel.swift",
+        "Shared/ViewModels/SearchViewModel.swift",
+        "Shared/Objects/ItemFilter/ItemFilter.swift",
+        "Shared/Objects/ItemFilter/ItemFilterCollection.swift"
+      ],
+      "reviewedInterfaces": [
+        "init(from anyFilter: AnyItemFilter)",
+        "init(stringLiteral value: String)",
+        "let value: String",
+        "struct ItemGenre",
+        "var displayTitle: String { get }"
+      ],
+      "sha256": "aa0738a2e778a9be50f3fc3176f10b07715594649790087971e4aa8cd3ca5926"
+    },
+    {
+      "path": "Packages/SwiftfinFilters/Sources/SwiftfinFilters/ItemLanguage.swift",
+      "reason": "Typed/erased and SDK pair projections retain title/value shape. SDK pair initialization requires both fields; no network query occurs here. Complete source body and compiler-emitted public declarations reviewed; listed consumers are scoped boundaries, not whole-graph runtime acceptance.",
+      "reviewedConsumers": [
+        "Shared/ViewModels/FilterViewModel.swift",
+        "Shared/ViewModels/SearchViewModel.swift",
+        "Shared/Objects/ItemFilter/ItemFilter.swift",
+        "Shared/Objects/ItemFilter/ItemFilterCollection.swift"
+      ],
+      "reviewedInterfaces": [
+        "init(displayTitle: String, value: String)",
+        "init(from anyFilter: AnyItemFilter)",
+        "init?(_ nameValuePair: NameValuePair)",
+        "let displayTitle: String",
+        "let value: String",
+        "struct ItemLanguage"
+      ],
+      "sha256": "f31fc3ff801fa8b019cbd0eaab68eb6fa69c107cf1395a6ce77ffe8a348d418d"
+    },
+    {
+      "path": "Packages/SwiftfinFilters/Sources/SwiftfinFilters/ItemLetter.swift",
+      "reason": "String/erased/Codable projection remains portable; UIKit collation stays in app composition. Complete source body and compiler-emitted public declarations reviewed; listed consumers are scoped boundaries, not whole-graph runtime acceptance.",
+      "reviewedConsumers": [
+        "Shared/ViewModels/FilterViewModel.swift",
+        "Shared/ViewModels/SearchViewModel.swift",
+        "Shared/Objects/ItemFilter/ItemFilter.swift",
+        "Shared/Objects/ItemFilter/ItemFilterCollection.swift"
+      ],
+      "reviewedInterfaces": [
+        "init(from anyFilter: AnyItemFilter)",
+        "init(stringLiteral value: String)",
+        "let value: String",
+        "struct ItemLetter",
+        "var displayTitle: String { get }"
+      ],
+      "sha256": "452d3f21af942b0f85bf2c984c0a637698036d03b0779b95a2a888e0ff875c8d"
+    },
+    {
+      "path": "Packages/SwiftfinFilters/Sources/SwiftfinFilters/ItemOfficialRating.swift",
+      "reason": "Literal/erased/Codable rating value retains its installed representation and has no policy lookup. Complete source body and compiler-emitted public declarations reviewed; listed consumers are scoped boundaries, not whole-graph runtime acceptance.",
+      "reviewedConsumers": [
+        "Shared/ViewModels/FilterViewModel.swift",
+        "Shared/ViewModels/SearchViewModel.swift",
+        "Shared/Objects/ItemFilter/ItemFilter.swift",
+        "Shared/Objects/ItemFilter/ItemFilterCollection.swift"
+      ],
+      "reviewedInterfaces": [
+        "init(from anyFilter: AnyItemFilter)",
+        "init(stringLiteral value: String)",
+        "let value: String",
+        "struct ItemOfficialRating",
+        "var displayTitle: String { get }"
+      ],
+      "sha256": "d3a3aea2b5d87cbaa0fcb74620e5da99e5416fca759b09ff3cbdf79819868bea"
+    },
+    {
+      "path": "Packages/SwiftfinFilters/Sources/SwiftfinFilters/ItemTag.swift",
+      "reason": "Literal/erased/Codable tag value retains its installed representation and has no cache or server lifetime. Complete source body and compiler-emitted public declarations reviewed; listed consumers are scoped boundaries, not whole-graph runtime acceptance.",
+      "reviewedConsumers": [
+        "Shared/ViewModels/FilterViewModel.swift",
+        "Shared/ViewModels/SearchViewModel.swift",
+        "Shared/Objects/ItemFilter/ItemFilter.swift",
+        "Shared/Objects/ItemFilter/ItemFilterCollection.swift"
+      ],
+      "reviewedInterfaces": [
+        "init(from anyFilter: AnyItemFilter)",
+        "init(stringLiteral value: String)",
+        "let value: String",
+        "struct ItemTag",
+        "var displayTitle: String { get }"
+      ],
+      "sha256": "0dc1508f2c224778dfc350a5dc3c7a0163d04e459420ff96f3e74897bacef3c4"
+    },
+    {
+      "path": "Packages/SwiftfinFilters/Sources/SwiftfinFilters/ItemYear.swift",
+      "reason": "Integer-literal, erased and Codable values retain their string representation. The unused forced Int getter was removed; malformed erased values cannot invoke that trap through this public API. Complete source body and compiler-emitted public declarations reviewed; listed consumers are scoped boundaries, not whole-graph runtime acceptance.",
+      "reviewedConsumers": [
+        "Shared/ViewModels/FilterViewModel.swift",
+        "Shared/ViewModels/SearchViewModel.swift",
+        "Shared/Objects/ItemFilter/ItemFilter.swift",
+        "Shared/Objects/ItemFilter/ItemFilterCollection.swift"
+      ],
+      "reviewedInterfaces": [
+        "init(from anyFilter: AnyItemFilter)",
+        "init(integerLiteral value: IntegerLiteralType)",
+        "let value: String",
+        "struct ItemYear",
+        "var displayTitle: String { get }"
+      ],
+      "sha256": "d72712640fc5ac5ebc3d619e26a00960e226a516eea8d8b04232216cad77bf07"
+    },
+    {
+      "path": "Packages/SwiftfinFilters/Sources/SwiftfinFilters/QueryFiltersClient.swift",
+      "reason": "Complete modern/legacy discovery and result projections were read. The private main-actor executor captures one user/transport; checks surround each IO stage and publication. Results only replace the fields owned by that discovery stage. Complete source body and compiler-emitted public declarations reviewed; listed consumers are scoped boundaries, not whole-graph runtime acceptance.",
+      "reviewedConsumers": [
+        "Shared/ViewModels/FilterViewModel.swift",
+        "Shared/ViewModels/SearchViewModel.swift",
+        "Shared/Objects/ItemFilter/ItemFilter.swift",
+        "Shared/Objects/ItemFilter/ItemFilterCollection.swift"
+      ],
+      "reviewedInterfaces": [
+        "@MainActor final class QueryFiltersClient",
+        "@MainActor func checkBinding() throws",
+        "@MainActor func legacy(parentID: String?, itemTypes: [BaseItemKind]) async throws -> DiscoveredLegacyFilters",
+        "@MainActor func modern(parentID: String?, itemTypes: [BaseItemKind]) async throws -> DiscoveredModernFilters",
+        "@MainActor init(executor: AuthenticatedRequestExecutor, userID: String)",
+        "func applying(to existing: ItemFilterCollection) -> ItemFilterCollection",
+        "let audioLanguages: [ItemLanguage]",
+        "let genres: [ItemGenre]",
+        "let officialRatings: [ItemOfficialRating]",
+        "let subtitleLanguages: [ItemLanguage]",
+        "let tags: [ItemTag]",
+        "let years: [ItemYear]",
+        "struct DiscoveredLegacyFilters",
+        "struct DiscoveredModernFilters"
+      ],
+      "sha256": "733531163f6aae9f3c9d02c19f7c8636d2982bded5cd2657d66b4b22b28d6fda"
+    },
+    {
+      "path": "Packages/SwiftfinAccountModels/Sources/SwiftfinAccountModels/AccountDeepLink.swift",
+      "reason": "The complete whole-match parser and route/errors were read with the app route adapter. Parsing IDs grants no access; scheme, allowed ID characters and item/library spelling remain exact. Complete source body and compiler-emitted public declarations reviewed; listed consumers are scoped boundaries, not whole-graph runtime acceptance.",
+      "reviewedConsumers": [
+        "Shared/Services/DeepLink.swift",
+        "Shared/SwiftfinStore/SwiftfinStore+ServerState.swift",
+        "Shared/SwiftfinStore/SwiftinStore+UserState.swift",
+        "Packages/SwiftfinAccountStore/Sources/SwiftfinAccountStore/AccountStorageKeys.swift",
+        "Packages/SwiftfinAccountStore/Sources/SwiftfinAccountStore/UserAdmissionSnapshot.swift",
+        "Packages/SwiftfinStorage/Sources/SwiftfinStorage/StoredAccountRecords.swift",
+        "Packages/SwiftfinConnectivity/Sources/SwiftfinConnectivity/NetworkContextObservation.swift"
+      ],
+      "reviewedInterfaces": [
+        "case item(id: String)",
+        "case missingServer(String)",
+        "case missingUser(String)",
+        "enum AccountDeepLinkError",
+        "enum Destination",
+        "init?(_ url: URL)",
+        "let destination: AccountDeepLink.Destination",
+        "let serverID: String",
+        "let userID: String",
+        "struct AccountDeepLink"
+      ],
+      "sha256": "fac31beccf4977602343908ab4176c78265acccff1598e58292dbb18a16ca784"
+    },
+    {
+      "path": "Packages/SwiftfinAccountModels/Sources/SwiftfinAccountModels/AccountRecords.swift",
+      "reason": "Complete immutable server/user records and public initializers were read through storage aliases and local admission composition. No credential, native database handle or implicit IO crosses these Codable/Sendable records. Complete source body and compiler-emitted public declarations reviewed; listed consumers are scoped boundaries, not whole-graph runtime acceptance.",
+      "reviewedConsumers": [
+        "Shared/Services/DeepLink.swift",
+        "Shared/SwiftfinStore/SwiftfinStore+ServerState.swift",
+        "Shared/SwiftfinStore/SwiftinStore+UserState.swift",
+        "Packages/SwiftfinAccountStore/Sources/SwiftfinAccountStore/AccountStorageKeys.swift",
+        "Packages/SwiftfinAccountStore/Sources/SwiftfinAccountStore/UserAdmissionSnapshot.swift",
+        "Packages/SwiftfinStorage/Sources/SwiftfinStorage/StoredAccountRecords.swift",
+        "Packages/SwiftfinConnectivity/Sources/SwiftfinConnectivity/NetworkContextObservation.swift"
+      ],
+      "reviewedInterfaces": [
+        "init(id: String, serverID: String, username: String)",
+        "init(urls: Set<URL>, currentURL: URL, name: String, id: String, userIDs: [String])",
+        "let currentURL: URL",
+        "let id: String",
+        "let name: String",
+        "let serverID: String",
+        "let urls: Set<URL>",
+        "let userIDs: [String]",
+        "let username: String",
+        "struct ServerAccountRecord",
+        "struct UserAccountRecord"
+      ],
+      "sha256": "d9047905aed72fbc5715f6e0b191c39f7cfaa7e9d2e784dc18e3c7d222c9168f"
+    },
+    {
+      "path": "Packages/SwiftfinAccountModels/Sources/SwiftfinAccountModels/LocalUserAccessPolicy.swift",
+      "reason": "Complete enum/title and reason-string APIs were read with local policy storage. Labels use the Localization owner; these values do not themselves prompt, query credentials or authorize a user. Complete source body and compiler-emitted public declarations reviewed; listed consumers are scoped boundaries, not whole-graph runtime acceptance.",
+      "reviewedConsumers": [
+        "Shared/Services/DeepLink.swift",
+        "Shared/SwiftfinStore/SwiftfinStore+ServerState.swift",
+        "Shared/SwiftfinStore/SwiftinStore+UserState.swift",
+        "Packages/SwiftfinAccountStore/Sources/SwiftfinAccountStore/AccountStorageKeys.swift",
+        "Packages/SwiftfinAccountStore/Sources/SwiftfinAccountStore/UserAdmissionSnapshot.swift",
+        "Packages/SwiftfinStorage/Sources/SwiftfinStorage/StoredAccountRecords.swift",
+        "Packages/SwiftfinConnectivity/Sources/SwiftfinConnectivity/NetworkContextObservation.swift"
+      ],
+      "reviewedInterfaces": [
+        "case none",
+        "case requireDeviceAuthentication",
+        "case requirePin",
+        "enum LocalUserAccessPolicy",
+        "func authenticateReason(user: UserAccountRecord) -> String?",
+        "func createReason(user: UserAccountRecord) -> String?",
+        "var displayTitle: String { get }"
+      ],
+      "sha256": "d67504cb79693de479ce5b1aaf9818d66e54850780b30eda6a8b24e43955002f"
+    },
+    {
+      "path": "Packages/SwiftfinAccountModels/Sources/SwiftfinAccountModels/NetworkConnectionContext.swift",
+      "reason": "Complete immutable interface/satisfaction/trimmed optional SSID value was read with the native observation projection. No hardware query or monitor is started by the value. Complete source body and compiler-emitted public declarations reviewed; listed consumers are scoped boundaries, not whole-graph runtime acceptance.",
+      "reviewedConsumers": [
+        "Shared/Services/DeepLink.swift",
+        "Shared/SwiftfinStore/SwiftfinStore+ServerState.swift",
+        "Shared/SwiftfinStore/SwiftinStore+UserState.swift",
+        "Packages/SwiftfinAccountStore/Sources/SwiftfinAccountStore/AccountStorageKeys.swift",
+        "Packages/SwiftfinAccountStore/Sources/SwiftfinAccountStore/UserAdmissionSnapshot.swift",
+        "Packages/SwiftfinStorage/Sources/SwiftfinStorage/StoredAccountRecords.swift",
+        "Packages/SwiftfinConnectivity/Sources/SwiftfinConnectivity/NetworkContextObservation.swift"
+      ],
+      "reviewedInterfaces": [
+        "init(isSatisfied: Bool, interface: ServerConnection.Interface, wifiSSID: String?)",
+        "let interface: ServerConnection.Interface",
+        "let isSatisfied: Bool",
+        "let wifiSSID: String?",
+        "static var unavailable: NetworkConnectionContext { get }",
+        "struct NetworkConnectionContext"
+      ],
+      "sha256": "eb12c0c5d5548ae9def86ca13c3e43d53e2dc7a05ea1d2220126403a5b83f116"
+    },
+    {
+      "path": "Packages/SwiftfinAccountModels/Sources/SwiftfinAccountModels/UserSessionState.swift",
+      "reason": "Exact empty-string signed-out and nonempty signed-in raw/Codable representation was read with current-session defaults. It carries only a user ID, not credentials or a native session. Complete source body and compiler-emitted public declarations reviewed; listed consumers are scoped boundaries, not whole-graph runtime acceptance.",
+      "reviewedConsumers": [
+        "Shared/Services/DeepLink.swift",
+        "Shared/SwiftfinStore/SwiftfinStore+ServerState.swift",
+        "Shared/SwiftfinStore/SwiftinStore+UserState.swift",
+        "Packages/SwiftfinAccountStore/Sources/SwiftfinAccountStore/AccountStorageKeys.swift",
+        "Packages/SwiftfinAccountStore/Sources/SwiftfinAccountStore/UserAdmissionSnapshot.swift",
+        "Packages/SwiftfinStorage/Sources/SwiftfinStorage/StoredAccountRecords.swift",
+        "Packages/SwiftfinConnectivity/Sources/SwiftfinConnectivity/NetworkContextObservation.swift"
+      ],
+      "reviewedInterfaces": [
+        "case signedIn(userID: String)",
+        "case signedOut",
+        "enum UserSessionState",
+        "init?(rawValue: String)",
+        "var rawValue: String { get }"
+      ],
+      "sha256": "4ddd0fc29a8591ca5e33239c7c97c9fd7729a6b93082eca534df7b6c3a042677"
+    },
+    {
+      "path": "Packages/SwiftfinAsyncStreams/Sources/SwiftfinAsyncStreams/AsyncStreamPublishers.swift",
+      "reason": "Complete relay/private cancellation bridge was read with all socket projection constructors. Only checked Sendable values or main-actor relay references enter tasks. Last cancellation permits a new source; natural completion is terminal for that publisher. A native regression verifies no old-source resurrection. Complete source body and compiler-emitted public declarations reviewed; listed consumers are scoped boundaries, not whole-graph runtime acceptance.",
+      "reviewedConsumers": [
+        "Shared/Services/ServerSocketManager.swift",
+        "Shared/ViewModels/SearchViewModel.swift",
+        "Packages/SwiftfinSessions/Sources/SwiftfinSessions/SessionMetadataRefresh.swift",
+        "Packages/SwiftfinPlaybackReporting/Sources/SwiftfinPlaybackReporting/PlaybackReportingClient.swift",
+        "Shared/Objects/MediaPlayerManager/MediaProgressObserver.swift",
+        "Swiftfin tvOS/Kids/KidsMediaProgressObserver.swift"
+      ],
+      "reviewedInterfaces": [
+        "@MainActor static func shared<Value>(_ makeStream: @escaping @MainActor @Sendable () -> AsyncStream<Value>) -> AnyPublisher<Value, Never> where Value : Sendable",
+        "enum AsyncStreamPublishers"
+      ],
+      "sha256": "92c669a9375a3ba7469963f0d0304a9f63b775aa6231f677c91e8fd1b3b21c0d"
+    },
+    {
+      "path": "Packages/SwiftfinAsyncStreams/Sources/SwiftfinAsyncStreams/CoalescingSessionQueue.swift",
+      "reason": "Complete detached worker, bounded pending progress, ordered start/stop, failed-start retry, cancellation and lifetime bodies were read with both reporting aliases and captured-client consumers. Stop remains ordered and undroppable after finish; transport timeout remains an injected responsibility. Complete source body and compiler-emitted public declarations reviewed; listed consumers are scoped boundaries, not whole-graph runtime acceptance.",
+      "reviewedConsumers": [
+        "Shared/Services/ServerSocketManager.swift",
+        "Shared/ViewModels/SearchViewModel.swift",
+        "Packages/SwiftfinSessions/Sources/SwiftfinSessions/SessionMetadataRefresh.swift",
+        "Packages/SwiftfinPlaybackReporting/Sources/SwiftfinPlaybackReporting/PlaybackReportingClient.swift",
+        "Shared/Objects/MediaPlayerManager/MediaProgressObserver.swift",
+        "Swiftfin tvOS/Kids/KidsMediaProgressObserver.swift"
+      ],
+      "reviewedInterfaces": [
+        "@MainActor final class CoalescingSessionQueue<Snapshot> where Snapshot : Sendable",
+        "@MainActor func cancel()",
+        "@MainActor func finish(_ snapshot: Snapshot)",
+        "@MainActor func update(_ snapshot: Snapshot)",
+        "@MainActor func waitUntilFinished() async",
+        "@MainActor init(initial: Snapshot, after previous: CoalescingSessionQueue<Snapshot>? = nil, send: @escaping @Sendable (CoalescingSessionQueue<Snapshot>.Event) async throws -> Void)",
+        "case progress",
+        "case start",
+        "case stop",
+        "enum Kind",
+        "let kind: CoalescingSessionQueue<Snapshot>.Kind",
+        "let snapshot: Snapshot",
+        "struct Event"
+      ],
+      "sha256": "5063a866a39cdd1f088fbb8e55c0a0dbb14e8bafeb6e17d13472920aad52fed4"
+    },
+    {
+      "path": "Packages/SwiftfinAsyncStreams/Sources/SwiftfinAsyncStreams/TaskCancellation.swift",
+      "reason": "Complete Task-to-AnyCancellable/store surface was read. Cancellation captures a checked Task handle and may run on any executor; it transfers no user callback or app state. Complete source body and compiler-emitted public declarations reviewed; listed consumers are scoped boundaries, not whole-graph runtime acceptance.",
+      "reviewedConsumers": [
+        "Shared/Services/ServerSocketManager.swift",
+        "Shared/ViewModels/SearchViewModel.swift",
+        "Packages/SwiftfinSessions/Sources/SwiftfinSessions/SessionMetadataRefresh.swift",
+        "Packages/SwiftfinPlaybackReporting/Sources/SwiftfinPlaybackReporting/PlaybackReportingClient.swift",
+        "Shared/Objects/MediaPlayerManager/MediaProgressObserver.swift",
+        "Swiftfin tvOS/Kids/KidsMediaProgressObserver.swift"
+      ],
+      "reviewedInterfaces": [
+        "func asAnyCancellable() -> AnyCancellable",
+        "func store(in set: inout Set<AnyCancellable>)"
+      ],
+      "sha256": "2c64471778972909d3e075d916b03e82d1077f989a31fc3add02b9c4deeaf7c9"
     }
   ],
   "limits": "This ledger records bodies explicitly reviewed, with exact current hashes; earlier prose or lexical inventory is not automatically promoted. Pending and mixed entries prevent whole-source completion. Retained UI algorithms have specific presentation reasons, not folder/import-based blanket approval. API entries do not classify the rest of the public graph. Source review and offline tests do not satisfy held runtime acceptance.",
@@ -6959,7 +7608,81 @@
     "classification": {
       "source-reviewed-retained": 664
     },
-    "currentAPIReviews": 75,
+    "currentAPIReviews": 103,
     "runtimeAcceptance": "held by human; no simulator/server testing"
-  }
+  },
+  "packageReviews": [
+    {
+      "module": "SwiftfinCollections",
+      "manifestSHA256": "a5aeee8fc396aaedfd10ebdaae301c9cf76f847d1963a21bda78f9c808b79bbe",
+      "sourceBodiesRead": 9,
+      "compilerPublicSymbols": 59,
+      "compilerGraphs": [
+        {
+          "file": "SwiftfinCollections.symbols.json",
+          "sha256": "4468bd9c6a0867276c275226f73281894aa01a53edc6facf13d93c25102b0af1"
+        },
+        {
+          "file": "SwiftfinCollections@OrderedCollections.symbols.json",
+          "sha256": "37d22b56ff1083c1ee0e85df7c1462f807886840ddf5eb86287f64f554c4df12"
+        },
+        {
+          "file": "SwiftfinCollections@Swift.symbols.json",
+          "sha256": "d1fbfd1cbcb8d65ac05feb423d3832d1691fbf70af8a6f16d9a72ea6615fa0b5"
+        }
+      ],
+      "sourceReview": "complete current source bodies and emitted public declarations",
+      "consumerReview": "scoped listed call boundaries; full remaining graph review required",
+      "runtimeAcceptance": "held by human"
+    },
+    {
+      "module": "SwiftfinFilters",
+      "manifestSHA256": "4d48248adfe2eec76a51b24015f6565a064700b4751de7770b75edd69e5409b9",
+      "sourceBodiesRead": 11,
+      "compilerPublicSymbols": 102,
+      "compilerGraphs": [
+        {
+          "file": "SwiftfinFilters.symbols.json",
+          "sha256": "f2dec0f9cb23b5b08ad268a19282042336dda74f68c730ed4d04def778d62264"
+        }
+      ],
+      "sourceReview": "complete current source bodies and emitted public declarations",
+      "consumerReview": "scoped listed call boundaries; full remaining graph review required",
+      "runtimeAcceptance": "held by human"
+    },
+    {
+      "module": "SwiftfinAccountModels",
+      "manifestSHA256": "9b5d0e3cd2eea66c04b1a8539b3933eeda2105ac9628ceffd622a08290835187",
+      "sourceBodiesRead": 8,
+      "compilerPublicSymbols": 89,
+      "compilerGraphs": [
+        {
+          "file": "SwiftfinAccountModels.symbols.json",
+          "sha256": "4783cef77d4424ea27b0d112458f03de4c6d905b470379fd1a6f3277cca5a683"
+        }
+      ],
+      "sourceReview": "complete current source bodies and emitted public declarations",
+      "consumerReview": "scoped listed call boundaries; full remaining graph review required",
+      "runtimeAcceptance": "held by human"
+    },
+    {
+      "module": "SwiftfinAsyncStreams",
+      "manifestSHA256": "aaf97538f109c1a2b9f0fcf83d85b872dfbc5ed576824e0213d13117c40d42b9",
+      "sourceBodiesRead": 7,
+      "compilerPublicSymbols": 38,
+      "compilerGraphs": [
+        {
+          "file": "SwiftfinAsyncStreams.symbols.json",
+          "sha256": "51cebdd113ac1009c9e8aa04bad7d104a7b4cf6f23653d004c61de8e91f2c8d6"
+        },
+        {
+          "file": "SwiftfinAsyncStreams@_Concurrency.symbols.json",
+          "sha256": "46b65ff9133a1413eac836dd8acd2e369bda6c63ca4b36232ffb15368759de42"
+        }
+      ],
+      "sourceReview": "complete current source bodies and emitted public declarations",
+      "consumerReview": "scoped listed call boundaries; full remaining graph review required",
+      "runtimeAcceptance": "held by human"
+    }
+  ]
 }

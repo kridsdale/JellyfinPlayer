@@ -1,6 +1,6 @@
 # Current engineering goal disposition
 
-Account and playback lifetime fixes pass 42 offline contracts (31 account, 11 player session), including eight new regressions. Three coordinator race regressions compile with the tvOS test host and remain unexecuted. tvOS Debug and iOS Release compile without owned Swift/generated-macro diagnostics; the 53-library dependency graph is unchanged. All 664 app sources remain classified. There are 75 scoped API reviews among 251 package source files; the complete package/consumer audit and held runtime acceptance remain required. Items 1/2 stay active.
+Public API cleanup passes 84 offline contracts across Collections, Filters and AsyncStreams. Four complete module source bodies and compiler-emitted public declarations were reviewed with scoped consumers. An unused mutable Trie and unused forced year conversion are removed; natural publisher completion is documented and regression-tested. tvOS Debug and iOS Release compile without owned Swift/generated-macro diagnostics. The 53-library graph is unchanged; all 664 app sources remain classified. There are 103 scoped interface entries among 250 package source files. The remaining graph audit and held runtime acceptance are required; items 1/2 stay active.
 
 The table below records the candidate checkpoint from 2026-10-05. The active goal on 2026-10-06 is full-client package extraction and Swift 6 completion; see [current package evidence](package-refactor.md). It remains active.
 

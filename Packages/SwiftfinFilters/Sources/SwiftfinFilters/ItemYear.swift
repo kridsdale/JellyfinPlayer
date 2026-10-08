@@ -16,10 +16,6 @@ public struct ItemYear: Codable, ExpressibleByIntegerLiteral, Hashable, Sendable
         value
     }
 
-    public var intValue: Int {
-        Int(value)!
-    }
-
     public init(integerLiteral value: IntegerLiteralType) {
         self.value = "\(value)"
     }

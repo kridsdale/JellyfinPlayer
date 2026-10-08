@@ -68,17 +68,6 @@ func `collection projections coalesce only missing values and preserve set opera
 }
 
 @Test
-func `one owner trie retains exact matches and ordered prefix entries`() {
-    let trie = Trie<String, Int>()
-    #expect(trie.isEmpty && !trie.contains(key: "ab"))
-    trie.insert(key: "abc", element: 1)
-    trie.insert(key: "abd", element: 2)
-    #expect(trie.contains(key: "abc") && !trie.contains(key: "ab"))
-    #expect(trie.search(prefix: "ab") == [1, 2])
-    #expect(trie.search(prefix: "missing").isEmpty && trie.search(prefix: "").isEmpty)
-}
-
-@Test
 func `array toggles removals and conditional appends retain original ordering`() {
     var values = [1, 2, 2]
     values.toggle(2)

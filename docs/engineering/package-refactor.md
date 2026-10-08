@@ -884,3 +884,8 @@ Account and playback lifetime fixes pass 42 offline contracts (31 account, 11 pl
 The account owner provides weak, credential-free lifetime receipts. Original-authority checks surround asynchronous child catalog/artwork/preparation and parent reset/play actions. Controller callbacks additionally bind their library scope; stale Back requests identify their sender. Overlapping stops share an awaited native teardown, and late completions cannot clear replacement playback or persist replacement-account progress. Existing packages and dependency edges are retained.
 
 The actor/SDK review covers all eight current explicit compatibility source files, their scheduler/host contracts and the CoreStore startup writer. It does not establish the complete 251-source public API/consumer audit. Real SDK/GUI/cloud/player acceptance stays held; cancelled acceptance 79 remains cancelled.
+
+
+## Scoped package API cleanup (2026-10-07, offline)
+
+Public API cleanup passes 84 offline contracts across Collections, Filters and AsyncStreams. Four complete module source bodies and compiler-emitted public declarations were reviewed with scoped consumers. An unused mutable Trie and unused forced year conversion are removed; natural publisher completion is documented and regression-tested. tvOS Debug and iOS Release compile without owned Swift/generated-macro diagnostics. The 53-library graph is unchanged; all 664 app sources remain classified. There are 103 scoped interface entries among 250 package source files. The remaining graph audit and held runtime acceptance are required; items 1/2 stay active. See [the API review](package-api-review.md) for the four reviewed modules, exact scope and validation limits.
