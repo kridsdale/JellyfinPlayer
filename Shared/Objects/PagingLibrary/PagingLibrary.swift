@@ -19,34 +19,46 @@ import SwiftUI
 struct LibraryPageState {
     let pageOffset: Int
     let pageSize: Int
-    let client: JellyfinTransport
-    let userID: String
+    private let client: JellyfinTransport
+    private let userID: String
+    private let isCurrent: @MainActor @Sendable () -> Bool
 
-    init(pageOffset: Int, pageSize: Int, client: JellyfinTransport, userID: String) {
+    init(
+        pageOffset: Int,
+        pageSize: Int,
+        client: JellyfinTransport,
+        userID: String,
+        isCurrent: @escaping @MainActor @Sendable () -> Bool
+    ) {
         self.pageOffset = pageOffset
         self.pageSize = pageSize
         self.client = client
         self.userID = userID
+        self.isCurrent = isCurrent
+    }
+
+    private var executor: AuthenticatedRequestExecutor {
+        AuthenticatedRequestExecutor(sender: client, isCurrent: isCurrent)
     }
 
     var serverOperations: ServerOperationsClient {
-        ServerOperationsClient(executor: .init(sender: client), deviceID: client.configuration.deviceID)
+        ServerOperationsClient(executor: executor, deviceID: client.configuration.deviceID)
     }
 
     var userAdministration: UserAdministrationClient {
-        UserAdministrationClient(executor: .init(sender: client), currentUserID: userID)
+        UserAdministrationClient(executor: executor, currentUserID: userID)
     }
 
     var itemMetadata: ItemMetadataClient {
         ItemMetadataClient(
-            executor: .init(sender: client),
+            executor: executor,
             userID: userID,
             bindingID: .init(transport: ObjectIdentifier(client), userID: userID)
         )
     }
 
     var mediaCatalog: MediaCatalogClient {
-        MediaCatalogClient(reader: client, userID: userID)
+        MediaCatalogClient(reader: client, userID: userID, isCurrent: isCurrent)
     }
 
     func readMedia(_ query: MediaCatalogQuery) async throws -> CatalogPage {
@@ -56,10 +68,6 @@ struct LibraryPageState {
     func mediaPageResult(_ query: MediaCatalogQuery) async throws -> PagingPage<BaseItemDto> {
         let page = try await readMedia(query)
         return PagingPage(items: page.items, consumedCount: page.consumedCount)
-    }
-
-    init(pageOffset: Int, pageSize: Int, userSession: UserSession) {
-        self.init(pageOffset: pageOffset, pageSize: pageSize, client: userSession.client, userID: userSession.user.id)
     }
 }
 

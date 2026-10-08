@@ -59,6 +59,7 @@ private final class SecurityFixture {
     let database: SwiftfinDatabase
     let credentials = SecurityCredentials()
     let store: LocalAccountStore
+    var bindingCurrent = true
     var observedPolicy: LocalUserAccessPolicy?
     var observedHint: String?
 
@@ -231,5 +232,96 @@ struct LocalSecurityContracts {
         let other = try f.store.matchesPIN("0", userID: f.userID)
         #expect(matches && !other && f.credentials.values[.userPIN(userID: f.userID)] == "")
         #expect(f.store.accessPolicy(userID: f.userID) == .requirePin && f.store.pinHint(userID: f.userID).isEmpty)
+    }
+
+    @Test
+    func `expired security edit neither reads nor writes credentials`() async throws {
+        let f = try await SecurityFixture()
+        defer { f.clean() }
+        let update = try f.store.securityUpdate(userID: f.userID) {
+            guard f.bindingCurrent else { throw CancellationError() }
+        }
+        f.bindingCurrent = false
+        #expect(throws: CancellationError.self) { try update.check(oldPIN: "old") }
+        #expect(throws: CancellationError.self) { try update.commit(policy: .requirePin, pin: "new", hint: "hint") }
+        #expect(f.credentials.reads.isEmpty && f.credentials.writes.isEmpty && f.credentials.removals.isEmpty)
+        #expect(f.store.accessPolicy(userID: f.userID) == .none)
+    }
+
+    @Test
+    func `interleaved policy change invalidates the original edit`() async throws {
+        let f = try await SecurityFixture()
+        defer { f.clean() }
+        let update = try f.store.securityUpdate(userID: f.userID, validate: {})
+        f.store.setAccessPolicy(.requireDeviceAuthentication, userID: f.userID)
+        #expect(throws: CancellationError.self) { try update.commit(policy: .none, pin: "", hint: "") }
+        #expect(f.credentials.writes.isEmpty && f.credentials.removals.isEmpty)
+        #expect(f.store.accessPolicy(userID: f.userID) == .requireDeviceAuthentication)
+    }
+
+    @Test
+    func `PIN change requires verified original PIN and rechecks before mutation`() async throws {
+        let f = try await SecurityFixture()
+        defer { f.clean() }
+        f.store.setAccessPolicy(.requirePin, userID: f.userID)
+        f.credentials.values[.userPIN(userID: f.userID)] = "old"
+        let update = try f.store.securityUpdate(userID: f.userID, validate: {})
+        #expect(throws: AccountStoreError.incorrectPIN) { try update.commit(policy: .none, pin: "", hint: "") }
+        let mismatch = try update.check(oldPIN: "wrong")
+        #expect(!mismatch)
+        let matched = try update.check(oldPIN: "old")
+        #expect(matched)
+        f.credentials.values[.userPIN(userID: f.userID)] = "other"
+        #expect(throws: AccountStoreError.incorrectPIN) { try update.commit(policy: .none, pin: "", hint: "") }
+        #expect(f.credentials.writes.isEmpty && f.credentials.removals.isEmpty)
+        #expect(f.credentials.values[.userPIN(userID: f.userID)] == "other")
+    }
+
+    @Test
+    func `bound edit commits once with exact bytes and preserves sibling state`() async throws {
+        let f = try await SecurityFixture()
+        defer { f.clean() }
+        f.store.setAccessPolicy(.requirePin, userID: f.userID)
+        f.credentials.values[.userPIN(userID: f.userID)] = "old"
+        f.credentials.values[.userPIN(userID: f.siblingID)] = "sibling"
+        let update = try f.store.securityUpdate(userID: f.userID, validate: {})
+        let matched = try update.check(oldPIN: "old")
+        #expect(matched)
+        try update.commit(policy: .requirePin, pin: " 00🦄 ", hint: "hint")
+        #expect(f.credentials.values[.userPIN(userID: f.userID)] == " 00🦄 ")
+        #expect(f.store.pinHint(userID: f.userID) == "hint")
+        #expect(f.credentials.values[.userPIN(userID: f.siblingID)] == "sibling")
+        #expect(throws: CancellationError.self) { try update.commit(policy: .none, pin: "", hint: "") }
+        #expect(f.credentials.writes == [.userPIN(userID: f.userID)] && f.credentials.removals.isEmpty)
+    }
+
+    @Test
+    func `credential failure retains policy and leaves the edit retryable`() async throws {
+        let f = try await SecurityFixture()
+        defer { f.clean() }
+        let update = try f.store.securityUpdate(userID: f.userID, validate: {})
+        f.credentials.failure = .write
+        #expect(throws: SecurityFailure.write) { try update.commit(policy: .requirePin, pin: "new", hint: "new hint") }
+        #expect(f.store.accessPolicy(userID: f.userID) == .none && f.store.pinHint(userID: f.userID).isEmpty)
+        f.credentials.failure = nil
+        try update.commit(policy: .requirePin, pin: "new", hint: "new hint")
+        #expect(f.credentials.values[.userPIN(userID: f.userID)] == "new")
+    }
+
+    @Test
+    func `cancelled edit cannot mutate local security`() async throws {
+        let f = try await SecurityFixture()
+        defer { f.clean() }
+        let update = try f.store.securityUpdate(userID: f.userID, validate: {})
+        let task = Task { try update.commit(policy: .requirePin, pin: "new", hint: "hint") }
+        task.cancel()
+        do {
+            try await task.value
+            Issue.record("Cancelled edit committed")
+        } catch is CancellationError {
+            // Cancellation is the required result.
+        }
+        #expect(f.credentials.reads.isEmpty && f.credentials.writes.isEmpty && f.credentials.removals.isEmpty)
+        #expect(f.store.accessPolicy(userID: f.userID) == .none && f.store.pinHint(userID: f.userID).isEmpty)
     }
 }

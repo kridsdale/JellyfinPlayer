@@ -8,6 +8,7 @@
 
 import FactoryKit
 import JellyfinAPI
+import SwiftfinItemMetadata
 import SwiftfinLocalization
 import SwiftUI
 
@@ -58,7 +59,7 @@ struct ItemEditorView: View {
 
             Section(L10n.edit) {
                 if let itemKind = viewModel.item.type,
-                   BaseItemKind.itemIdentifiableCases.contains(itemKind)
+                   ItemMetadataPolicy.supportsIdentification(of: itemKind)
                 {
                     ChevronButton(L10n.identify) {
                         router.route(to: .identifyItem(item: viewModel.item))

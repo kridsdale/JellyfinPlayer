@@ -10,6 +10,11 @@ import Foundation
 import JellyfinAPI
 
 public enum ItemMetadataPolicy {
+    /// Preserve the supported item types from the installed identification UI.
+    public static func supportsIdentification(of kind: BaseItemKind) -> Bool {
+        [.boxSet, .movie, .person, .series].contains(kind)
+    }
+
     private static func apply<Value>(_ change: MetadataComponentChange<Value>, to values: [Value]?) -> [Value]? {
         switch change { case let .append(new): (values ?? []) + new
         case let .remove(old): values?.filter { !old.contains($0) }

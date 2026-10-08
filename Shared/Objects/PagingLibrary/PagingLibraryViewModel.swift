@@ -272,8 +272,18 @@ class PagingLibraryViewModel<Library: PagingLibrary>: ViewModel, Identifiable, W
         let environment = environment
         let library = library
         let userID = session.user.id
+        let isCurrent: @MainActor @Sendable () -> Bool = { [weak self, weak session] in
+            guard let self, let session, (try? refreshScope()) != nil else { return false }
+            return sourceIdentity == identity && manager.currentSession === session && session.client === client
+        }
         let state: @MainActor @Sendable (PagingRequest) -> LibraryPageState = { request in
-            LibraryPageState(pageOffset: request.offset, pageSize: request.limit, client: client, userID: userID)
+            LibraryPageState(
+                pageOffset: request.offset,
+                pageSize: request.limit,
+                client: client,
+                userID: userID,
+                isCurrent: isCurrent
+            )
         }
         let search: PagingSource<Element>.Load? = if let searchable = searchableLibrary {
             { request in
@@ -295,10 +305,7 @@ class PagingLibraryViewModel<Library: PagingLibrary>: ViewModel, Identifiable, W
         } else {
             nil
         }
-        return PagingSource(identity: identity, canPage: library.hasNextPage, isCurrent: { [weak self, weak session] in
-            guard let self, let session, (try? refreshScope()) != nil else { return false }
-            return sourceIdentity == identity && manager.currentSession === session && session.client === client
-        }, load: { request in
+        return PagingSource(identity: identity, canPage: library.hasNextPage, isCurrent: isCurrent, load: { request in
             try await library.retrievePageResult(environment: environment, pageState: state(request))
         }, search: search, random: random)
     }

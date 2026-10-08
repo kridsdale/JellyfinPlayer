@@ -14,22 +14,52 @@ import SwiftfinLocalization
 
 final class LocalUserSecurityViewModel: ViewModel {
 
-    func check(oldPin: String) throws {
-        let user = try authenticatedUser
+    private let securityUser: UserState?
+    private let update: LocalSecurityUpdate?
 
-        guard try Container.shared.localAccountStore().matchesPIN(oldPin, userID: user.id, allowMissing: true) else {
-            throw ErrorMessage(L10n.incorrectPinForUser(user.username))
+    override init() {
+        let manager = Container.shared.userSessionManager()
+        let session = manager.currentSession
+        self.securityUser = session?.user
+        if let session {
+            let client = session.client
+            self.update = try? Container.shared.localAccountStore().securityUpdate(userID: session.user.id) {
+                guard manager.currentSession === session, session.client === client else { throw CancellationError() }
+            }
+        } else {
+            self.update = nil
+        }
+        super.init()
+    }
+
+    private func requireUpdate() throws -> LocalSecurityUpdate {
+        guard let update else { throw UserSessionError.missingCurrentSession }
+        try update.checkBinding()
+        return update
+    }
+
+    func userForSecurityChange() throws -> UserState {
+        _ = try requireUpdate()
+        guard let securityUser else { throw UserSessionError.missingCurrentSession }
+        return securityUser
+    }
+
+    func checkBinding() throws {
+        _ = try requireUpdate()
+    }
+
+    func check(oldPin: String) throws {
+        let update = try requireUpdate()
+        guard try update.check(oldPIN: oldPin) else {
+            throw ErrorMessage(L10n.incorrectPinForUser(securityUser?.username ?? ""))
         }
     }
 
     func set(newPolicy: LocalUserAccessPolicy, newPin: String, newPinHint: String) throws {
-        let user = try authenticatedUser
-
-        try Container.shared.localAccountStore().setLocalSecurity(
-            userID: user.id,
-            policy: newPolicy,
-            pin: newPin,
-            hint: newPinHint
-        )
+        do {
+            try requireUpdate().commit(policy: newPolicy, pin: newPin, hint: newPinHint)
+        } catch AccountStoreError.incorrectPIN {
+            throw ErrorMessage(L10n.incorrectPinForUser(securityUser?.username ?? ""))
+        }
     }
 }

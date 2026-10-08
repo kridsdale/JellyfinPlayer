@@ -5,3 +5,5 @@ Owns item metadata editing, remote identity/image/subtitle lookup, metadata refe
 Existing write-capable endpoints are preserved for their explicit administrative UI actions. All package tests use synthetic senders; tests must never run media edits, subtitle operations, refresh or deletion against the server or RAID.
 
 Dependencies: SwiftfinNetworking, exact Jellyfin SDK 3.2.0/Get 2.2.1. No database or CloudKit schema changes.
+
+ItemMetadataPolicy also owns the installed four-kind identification capability; native menu presentation remains in the app.

@@ -41,27 +41,32 @@ struct LocalUserSecurityView: View {
         }
 
         do {
-            let user = try viewModel.requireUserSession().user
+            let user = try viewModel.userForSecurityChange()
             let oldPolicy = user.accessPolicy
+            let newPolicy = signInPolicy
+            let newHint = newPolicy == .requirePin ? pinHint : ""
 
             let oldEvaluatedPolicy = try await authenticationAction(
                 policy: oldPolicy,
                 reason: oldPolicy.authenticateReason(user: user)
             )
 
+            try viewModel.checkBinding()
+
             if let oldPinPolicy = oldEvaluatedPolicy as? PinEvaluatedUserAccessPolicy {
                 try viewModel.check(oldPin: oldPinPolicy.pin)
             }
 
             let newEvaluatedPolicy = try await authenticationAction(
-                policy: signInPolicy,
-                reason: signInPolicy.createReason(user: user)
+                policy: newPolicy,
+                reason: newPolicy.createReason(user: user)
             )
 
+            try viewModel.checkBinding()
             try viewModel.set(
-                newPolicy: signInPolicy,
+                newPolicy: newPolicy,
                 newPin: (newEvaluatedPolicy as? PinEvaluatedUserAccessPolicy)?.pin ?? "",
-                newPinHint: signInPolicy == .requirePin ? pinHint : ""
+                newPinHint: newHint
             )
             router.dismiss()
         } catch is CancellationError {
