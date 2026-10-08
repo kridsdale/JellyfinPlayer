@@ -287,11 +287,15 @@
       "status": "pending"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinImages",
+        "SwiftfinCollections",
+        "SwiftfinValues"
+      ],
       "path": "Shared/Components/ImageView.swift",
-      "reason": "",
+      "reason": "Complete image facade and modifiers reviewed: supplied immutable URL/source sequence, native Nuke loading/placeholder/failure phases, SVG display, priority on disappearance and captured customization closures. Actual cache/pipeline/token/transport policy is delegated. Existing SVG/failure-state/transition TODOs and state-initialized source behavior are explicitly retained display concerns.",
       "sha256": "c6cd68b9f7a1b125848ddd844d714e82fa7c151a2bd01608cd084cee712aa5e6",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -482,11 +486,13 @@
       "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinCollections"
+      ],
       "path": "Shared/Components/PosterHStackLibrarySection.swift",
-      "reason": "",
+      "reason": "Complete poster section reviewed: supplied paging model/group chooses native header/button/focus/accessibility and forwards selected library elements or header routing. Paging, DTO/resource binding and queries remain owner responsibilities.",
       "sha256": "66e4a1ffac8921902fd69608f8605c4b65f91a87444b516227303529f91de086",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [
@@ -693,9 +699,9 @@
     {
       "owners": [],
       "path": "Shared/Coordinators/Navigation/NavigationInjectionView.swift",
-      "reason": "",
+      "reason": "Complete native host reviewed: NavigationStack destinations, per-path router environment and recursive iOS/tvOS sheets/full-screen covers compose app routes. UIKit preferences/interactive zoom and the existing centering TODO are presentation only; no business implementation or SDK bootstrap.",
       "sha256": "03ae6c6b5fcc7d8fba1e7e77ec1e7395f35e8b8ac83765b4ed309e491f928c1c",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -761,11 +767,13 @@
       "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinUIState"
+      ],
       "path": "Shared/Coordinators/Navigation/Router.swift",
-      "reason": "",
+      "reason": "Complete actor-owned native routing wrapper reviewed: supplied route namespace/transition and cached environment dismissal forward to the captured app NavigationCoordinator. PublishedBox supplies UI lifetime state; no transport, persistence or catalog query.",
       "sha256": "4013e768fcceae70c6446b26046e3880956a25d4e9475e2fa2a376dc0062f1be",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [
@@ -802,11 +810,13 @@
       "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinSessions"
+      ],
       "path": "Shared/Coordinators/Tabs/MainTabView.swift",
-      "reason": "",
+      "reason": "Complete native tab root reviewed: installed placement preference, captured per-view TabCoordinator, settings button and session-owned route/deep-link events define UI composition. The called async TabCoordinator.route body was inspected and has no suspension or transport: it pushes into its captured selected-tab coordinator. No new account admission or query implementation; native task/navigation delivery remains untested under the hold.",
       "sha256": "64c39285fc3a2da4697c02e5bd516e4777519274baf8ff34bde0f769b782ac51",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [
@@ -818,11 +828,13 @@
       "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinFilters"
+      ],
       "path": "Shared/Coordinators/Tabs/TabItem.swift",
-      "reason": "",
+      "reason": "Complete app destination factory reviewed: actor-owned erased views, display/icon identity and supplied library/filter/content providers compose native tabs. Query/paging behavior stays with owners. UUID library identity and selected-icon TODO retain inherited presentation behavior.",
       "sha256": "3c44e427f6c7163463f7b1a783402e71f39ce3e44e832502994fe2b25e7f6a80",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [
@@ -3697,18 +3709,21 @@
       "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinStoredValuesUI",
+        "SwiftfinCollections"
+      ],
       "path": "Shared/Views/AppSettingsView.swift",
-      "reason": "",
+      "reason": "Complete app preferences form reviewed: installed splash/background-signout/appearance preferences, server choice labels, navigation and local native bindings. Actual sign-out/lifecycle policy stays with the session owner. Existing future super-user settings placement TODO is preserved.",
       "sha256": "e2e730c3caf284dd2d6ad7b38c189e14c399dd9b753d3192bbad0c6b980e3626",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
       "path": "Shared/Views/ConnectToServerView/Components/DuplicateServerConnectionView.swift",
-      "reason": "",
+      "reason": "Complete duplicate-connection sheet reviewed: supplied server labels/URL, iOS form/tvOS focus layout and provided add/dismiss actions. Matching, admission and connection persistence stay with their owner; no server connection was made.",
       "sha256": "5674f9ffbe5b840da2148b3eddf11b8b7070e86043a11f4e6bbb1da3524cda4e",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [
@@ -3765,11 +3780,14 @@
       "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinRecordingTimers",
+        "SwiftfinUIState"
+      ],
       "path": "Shared/Views/EditRecordingView.swift",
-      "reason": "",
+      "reason": "Complete recording-settings form reviewed: copied timer DTOs, bounded minute/second bindings, native series/channel/time/retention pickers and supplied model save/events. The conversions adapt displayed units; timer request/authorization/mutation policy stays owned. No recording was changed.",
       "sha256": "c1be131b1abf9506d44569748d0d3a760a4a5a5362cc763beec26536430ddae1",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -3809,9 +3827,9 @@
         "SwiftfinPlaybackProfiles"
       ],
       "path": "Shared/Views/ItemContentGroupView/ItemContentGroupProvider.swift",
-      "reason": "Complete current body reviewed. Native localized content groups, routing and captured catalog/media-state adapters can remain app composition. However the media-source/audio/subtitle/bitrate selection transition still lives in the app and must move into an owned playback-selection policy before this file satisfies the full minimal-responsibility goal. The existing optimistic mutation sequence delegates merge/authority to UserMediaState; no catalog/server action was executed.",
-      "sha256": "02d491560b7669e579b052fba36bf2812a4fe5bea2bab4e693f4b99316e6ac86",
-      "status": "source-reviewed-mixed"
+      "reason": "Complete current provider re-reviewed: native localized group/routing composition and captured catalog/media-state adapters remain in the app. The selection enum and all media-source/audio/subtitle/bitrate transition policy now belong to immutable PlaybackOptions in the existing profile owner; app captures choices and supplies the resulting fields to its native provider factory. Original four-branch behavior matches exactly, including source-change resets and nil/disabled choices. Optimistic authority/merge stays with UserMediaState. No catalog/player/server operation was executed.",
+      "sha256": "369443e102031304716ff579b5c85f6a9f6a9fb4556543183c8377f433586e14",
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -3933,11 +3951,15 @@
       "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinImages",
+        "SwiftfinImageProcessing",
+        "SwiftfinStoredValuesUI"
+      ],
       "path": "Shared/Views/ItemView/Components/Headers/CompactEnhancedHeaderContentGroup.swift",
-      "reason": "",
+      "reason": "Complete header composition reviewed: immutable image sources, native logo/backdrop/fallback, item actions/attributes, masking/parallax and supplied resolved-color Binding. Detached color computation calls the owned image-processing adapter then explicitly returns to MainActor for display. Color result ordering is inherited visual behavior and not claimed tested; no pixel algorithm, query or authorization policy lives in this header.",
       "sha256": "08bf5bda0656b6a712423c5e3218bf85a256908d6099b3bd2aa2ad1851be8b0f",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -3970,11 +3992,14 @@
       "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinMediaTracks",
+        "SwiftfinCollections"
+      ],
       "path": "Shared/Views/ItemView/Components/ItemView+AttributeHStack.swift",
-      "reason": "",
+      "reason": "Complete item-badge presentation reviewed: supplied rating/media source creates localized/system-symbol badges. Codec/HDR/channel/subtitle classification delegates to MediaTracks; the critic-icon threshold is visual. No stream selection or authorization.",
       "sha256": "77a9b68894b609be45ddc80a38d523f19cb11ed9c7a6c81cb3fd12739da1acaf",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [
@@ -4135,11 +4160,13 @@
       "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinCollections"
+      ],
       "path": "Shared/Views/SelectUserView/Components/Toolbar/SelectUserView+Toolbar.swift",
-      "reason": "",
+      "reason": "Complete account-selection toolbar reviewed: supplied server/user rows, select-all/edit/cancel/delete bindings, size-class layout and native focus/menu controls. Account deletion/auth/selection intent belongs to the parent and library owners.",
       "sha256": "454f464d6813f45ebfa0cdeee020f28e7c28fa064fea15b63efca99042eeeaa3",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [
@@ -4230,11 +4257,15 @@
       "status": "pending"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinPlaybackProfiles",
+        "SwiftfinStoredValuesUI",
+        "SwiftfinCollections"
+      ],
       "path": "Shared/Views/SettingsView/DeviceProfileSettings/EditDeviceProfileView.swift",
-      "reason": "",
+      "reason": "Complete profile form reviewed: copied profile, required codec/container field completeness, native selection routes and supplied binding/installed list save. Profile assembly/compatibility and serialization remain owned; the form adds no hardware or decoder policy.",
       "sha256": "1e86132dea7cf2f48b146051bddc9ab7e0937f1051f4106dd2e2dc6dfcdda58e",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [
@@ -4497,18 +4528,24 @@
       "status": "pending"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinItemMetadata",
+        "SwiftfinCollections"
+      ],
       "path": "Swiftfin/Components/ItemElementSearchView.swift",
-      "reason": "",
+      "reason": "Complete search/editor presentation reviewed: supplied matches and validity state, native name/person-kind/role fields, selected editor ID/name and status labels. Matching/remote search belongs to the editor owner and is not approved by this display adapter.",
       "sha256": "ffb8166d0e33472cf3d334b0b2b829ac161ed4b4ff1ec1d646f1e6627b2cfad3",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinLocalization",
+        "SwiftfinText"
+      ],
       "path": "Swiftfin/Components/ListTitleSection.swift",
-      "reason": "",
+      "reason": "Complete title/header components and initializers reviewed: native title/description/learn-more layout, accent/rounding and optional captured content/action. Existing image/name TODOs are display-only; no domain implementation.",
       "sha256": "814dbe88fe4b16994b86552502815488aecaadf7a3748099b8ef15dbe4945a3a",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [
@@ -4527,11 +4564,14 @@
       "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinValues",
+        "SwiftfinCollections"
+      ],
       "path": "Swiftfin/Components/UnmaskSecureField.swift",
-      "reason": "",
+      "reason": "Complete native text-field representable/delegate reviewed: supplied text binding, secure-entry eye button, selection-preserving toggle, text/submit callbacks and weak UIKit references. Existing animation-workaround TODO remains UI; no credential query, persistence or authentication occurs.",
       "sha256": "36c058e720f9fdab171fcf3743bb83b93eebf3a43bb99e7bbc38492fb4e0b406",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -4566,9 +4606,9 @@
     {
       "owners": [],
       "path": "Swiftfin/Extensions/View/Modifiers/NavigationBarDrawerButtons/NavigationBarDrawerView.swift",
-      "reason": "",
+      "reason": "Complete representable/UIViewController reviewed: captured hosted content/drawer, constraints, blur/safe-area/navbar appearance and VoiceOver ordering. Actor-owned child controllers and existing fixed-height TODO remain native presentation; no domain or global SDK bootstrap.",
       "sha256": "28aa4df8ee3e6164af016063c9301df68d34050ff2758df168e0e3001c16723b",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [
@@ -4590,11 +4630,13 @@
       "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinValues"
+      ],
       "path": "Swiftfin/Extensions/View/Modifiers/SliderInteractionModifier.swift",
-      "reason": "",
+      "reason": "Complete native gesture modifier reviewed: finite geometry/translation checks, view-owned damping/drag tracking, supplied editing/value bindings and edge haptics. Generic clamp is library-owned. Existing damping TODO concerns gesture presentation, with total-range assumptions delegated to the enclosing guarded slider.",
       "sha256": "23d033fa341c128d01104e27fab757e7a91735203e33be1fb5b2ad56d37c60e6",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -4628,11 +4670,15 @@
       "status": "pending"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinFormatting",
+        "SwiftfinTime",
+        "SwiftfinServerOperations"
+      ],
       "path": "Swiftfin/Views/AdminDashboardView/ActiveSessions/ActiveSessionsView/ActiveSessionsView.swift",
-      "reason": "",
+      "reason": "Complete session-list form reviewed: supplied filter parameters, native picker labels, grid/empty/error states, pause-during-menu display behavior and model refresh/routing. Session queries/commands and activity filtering remain library responsibilities.",
       "sha256": "c9a350576879e1d3bf5091382c5e80402873be260f147992fff5c7a1deb76ed9",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -4806,11 +4852,15 @@
       "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinTime",
+        "SwiftfinServerOperations",
+        "SwiftfinUIState"
+      ],
       "path": "Swiftfin/Views/AdminDashboardView/ServerTasks/ServerTaskTriggerView/ServerTaskTriggerView.swift",
-      "reason": "",
+      "reason": "Complete task-trigger form reviewed: supplied task model, copied trigger, native weekday/time/interval/runtime editors, duplicate label and save/discard UI. Owned time conversion and trigger defaults remain delegated; task mutation belongs to ServerOperations. No scheduler action is invoked.",
       "sha256": "7621f28229f1da38657f3db1c13279db8a66fbe615623e4e7c5a2e1a970fd51d",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -4820,18 +4870,23 @@
       "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinUserAdministration"
+      ],
       "path": "Swiftfin/Views/AdminDashboardView/ServerUsers/AddServerUserView/AddServerUserView.swift",
-      "reason": "",
+      "reason": "Complete native user-creation form reviewed: username/password-confirmation validity, focused fields, submission/cancel UI, feedback and supplied model event routing. User creation/auth/configuration remain UserAdministration responsibilities; no account or password was changed.",
       "sha256": "8ae11293d9f601f3bcbe0452b64e2794377cb2fffa91122ee851f49563a1cc99",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinUserAdministration",
+        "SwiftfinUIState"
+      ],
       "path": "Swiftfin/Views/AdminDashboardView/ServerUsers/ServerUserDetailsView.swift",
-      "reason": "",
+      "reason": "Complete administrative detail form reviewed: native profile picker/display, username alert, password/permission/access routing and captured models. Image, policy and remote user mutations delegate to their existing owners. Display callbacks are not claimed runtime-verified and no server operation was performed.",
       "sha256": "d4c9a3e328b252aa4cfd3a7d0bee78d90039bc2a95c74ca65f84c2011287533a",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -4855,11 +4910,15 @@
       "status": "pending"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinUserAdministration",
+        "SwiftfinItemMetadata",
+        "SwiftfinCollections"
+      ],
       "path": "Swiftfin/Views/AdminDashboardView/ServerUsers/ServerUserSettings/ServerUserAccessTags/AddServerUserAccessTagsView.swift",
-      "reason": "",
+      "reason": "Complete access-tag form reviewed: copied policy, supplied editor matches, case-insensitive duplicate display validation, allow/block selection, native save/cancel/feedback and model callback. Actual search/tag/user policy requests and serialization remain owners; no child whitelist is replaced and no server policy is changed.",
       "sha256": "57d6f4976df8e512c76ab96733bc7b8f4b498557f47cb00cbe0c876a094eb7cf",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -4903,11 +4962,15 @@
       "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinUserAdministration",
+        "SwiftfinCollections",
+        "SwiftfinUIState"
+      ],
       "path": "Swiftfin/Views/AdminDashboardView/ServerUsers/ServerUserSettings/ServerUserParentalRatingView/ServerUserParentalRatingView.swift",
-      "reason": "",
+      "reason": "Complete rating editor reviewed: copied user policy, native picker/toggles, supplied rating rows and localized grouping of identical numeric ratings into display/learn-more labels. Numeric values are preserved; query/policy enforcement stays owned. No rating or media access was changed.",
       "sha256": "066c4f33649f19773353c2bbdd0c9cac9c514fe81cf0e2ea66ecea29f92a2bcf",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -5260,11 +5323,13 @@
       "status": "pending"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinAccountAccess"
+      ],
       "path": "Swiftfin/Views/QuickConnectAuthorizeView.swift",
-      "reason": "",
+      "reason": "Complete authorization sheet reviewed: captured user/model, native six-digit code editing, focus/progress/cancel/success/error UI and supplied authorize action. Code/HTTP authorization is not implemented here. No code, credential, image or native prompt was queried.",
       "sha256": "e85d3a5d920f8ee8077c9068a846a5c3af60226b5b0df09ed5b3237b8021cc03",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -5400,9 +5465,9 @@
     {
       "owners": [],
       "path": "Swiftfin tvOS/Components/CinematicItemSelector.swift",
-      "reason": "",
+      "reason": "Complete focused poster layout reviewed: supplied items/action/top-content, local selected focus, fallback poster, native debounced background image display and masking. Existing intrinsic-sizing TODO remains. Image/pipeline policy is delegated; no catalog request or item authorization.",
       "sha256": "6b204cae38e2c86443416461c5e394369c4ac7f2966c698a23795314e7f2cbbe",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [
@@ -5425,9 +5490,9 @@
     {
       "owners": [],
       "path": "Swiftfin tvOS/Components/ColorPicker/Components/ColorPicker+Sheet.swift",
-      "reason": "",
+      "reason": "Complete color sheet reviewed: native channel sliders, byte/hex/preset display, fixed geometry, opacity visibility and supplied Color binding. Defaults are UI presets; no image sampling/encoding or persisted media state.",
       "sha256": "590d2322c701ee22a194e52eb4efe01574d321387f80105cc9c4fdf601dd8a91",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [
@@ -5464,9 +5529,9 @@
     {
       "owners": [],
       "path": "Swiftfin tvOS/Components/ListRowMenu.swift",
-      "reason": "",
+      "reason": "Complete native menu wrapper and all initializers reviewed: text/subtitle composition, focus/glass/legacy styles and generic bound picker content. No selection-domain policy or storage implementation.",
       "sha256": "bf79eefef15d086e2fa02cce92346a79c0e4688c10beb33e17574a8bdcf744f0",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [
@@ -5478,11 +5543,14 @@
       "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinValues",
+        "SwiftfinTime"
+      ],
       "path": "Swiftfin tvOS/Components/SliderContainer/UISliderContainer.swift",
-      "reason": "",
+      "reason": "Complete native slider control reviewed: UIKit horizontal pan/focus events, view-owned velocity/deceleration physics, timer and bound value publication. Focus loss/scroll disable stop the timer, and the actual representable dismantleUIView was inspected to invalidate it on removal. Clamp is owned; no playback seeking, server call or generic scheduling implementation. Native gesture delivery remains held.",
       "sha256": "b79eed4f640894faedc4e9b708372745eae056eb192328c5cf0b50bb2d6035cc",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -6521,6 +6589,21 @@
       ],
       "reason": "Complete command DTO/adapter reviewed: immutable Sendable interval/position values are copied from raw native events on their SDK executor and validated before queued MainActor delivery; the registry rechecks epoch before effects. Native command mapping, preferred intervals and target installation stay internal. Native success acknowledges queued delivery rather than synchronous playback completion; unsupported command behavior remains defined by the supplied handler.",
       "sha256": "14c2ee5a35002ceb62bc4d0d139c519c6557a6c57260f6259d63ed08d6821777"
+    },
+    {
+      "path": "Packages/SwiftfinPlaybackProfiles/Sources/SwiftfinPlaybackProfiles/PlaybackOptions.swift",
+      "sha256": "b36687e93e43a3e8f801f2eff16d69b81e11d53b24eeb6c9b2d7d240b62bcc9b",
+      "reason": "Complete immutable selection API reviewed: checked Sendable source DTO, optional audio/subtitle indices and explicit requested bitrate are value snapshots. Typed selection retains all original policy branches; source choices reset both source-specific tracks even on reselection, while other choices preserve unrelated payloads. No settings, native hardware/player, account/session, network or UI dependency. The public API retains the existing SDK DTO interoperability boundary without transfer of live transport objects. Original switch equality and multi-step/native cross-executor regressions verify behavior.",
+      "reviewedInterfaces": [
+        "PlaybackOptions",
+        "Selection",
+        "init(mediaSource:audioStreamIndex:subtitleStreamIndex:requestedBitrate:)",
+        "selecting(_:)"
+      ],
+      "reviewedConsumers": [
+        "Shared/Views/ItemContentGroupView/ItemContentGroupProvider.swift",
+        "Shared/Views/ItemView/Components/ActionButtons/PlaybackActionButton.swift"
+      ]
     }
   ],
   "limits": "This ledger records bodies explicitly reviewed, with exact current hashes; earlier prose or lexical inventory is not automatically promoted. Pending and mixed entries prevent whole-source completion. Retained UI algorithms have specific presentation reasons, not folder/import-based blanket approval. API entries do not classify the rest of the public graph. Source review and offline tests do not satisfy held runtime acceptance.",
@@ -6529,11 +6612,10 @@
   "summary": {
     "applicationSwiftFiles": 664,
     "classification": {
-      "pending": 75,
-      "source-reviewed-mixed": 1,
-      "source-reviewed-retained": 588
+      "pending": 46,
+      "source-reviewed-retained": 618
     },
-    "currentAPIReviews": 60,
+    "currentAPIReviews": 61,
     "runtimeAcceptance": "held by human; no simulator/server testing"
   }
 }
