@@ -2,7 +2,7 @@
 
 Active goal: complete the minimal-responsibility package refactor and remaining Swift 6 compatibility warnings. This document records scope and evidence, not a narrower replacement objective.
 
-Latest offline evidence:53 libraries;43 current affected AccountStore contracts;665 app sources with464 retained,4 mixed,197 pending and50 scoped API reviews. Final tvOS Debug compile-for-testing and iOS Release builds pass without owned Swift/generated-macro diagnostics. Full source/API/actor/bootstrap and held runtime acceptance remain required.
+Latest offline evidence:53 libraries;73 catalog+19 recording native contracts;665 app sources with481 retained,3 mixed,181 pending and54 scoped API reviews. Final tvOS Debug compile-for-testing and iOS Release builds pass without owned Swift/generated-macro diagnostics. Full source/API/actor/bootstrap and held runtime acceptance remain required.
 
 ## Initial source map
 
@@ -820,3 +820,11 @@ Existing AccountStore now owns opaque store-bound admission receipts, exact user
 UserSignIn, ConnectToServer and ServerConnection retain native/platform composition with submitted gates and committed UI fields. Obsolete results cannot use a newly selected root session or overwrite edited local connection settings; a foreign server account does not supply a probe token. Generated events keep individual case declarations; TestState equality supports committed test-map publication. All43 affected native contracts pass, including15 new synthetic regressions. Both final compile-only platform checks pass. The initial failed integration build remains recorded; its errors are corrected by the final source.
 
 Twenty-one unchanged navigation, route, UIKit appearance/search-inset, filter layout, gesture and draft-edit presentation bodies are classified individually with source hashes and specific reasons. They manage app UI/composition rather than reusable account/catalog policy. Existing visual/transition TODOs and native lifetime coverage remain explicit. Reading a UI caller does not approve all its providers. Full goal and held runtime acceptance remain unfinished.
+
+## Guide and recording workflow checkpoint (2026-10-07, offline)
+
+Existing MediaCatalog now owns guide clock/calendar rules, raw channel cursor and filtering/deduplication, per-channel ProgramBlocks and atomic snapshot merge/revision. Explicit dates/calendar preserve half-hour rounding, selected/refreshed day rules, minimum span/next midnight and clock rebasing, including DST. EPGViewModel retains timer, native identified rows and macro/loading presentation with one original catalog and submitted refresh/page receipts. Channels/programs/revision/cursor publish together.
+
+Existing RecordingTimers now owns a captured editor with accepted-command serialization, fresh initial toggle snapshot, toggle/update/no-op policy composition, change receipt before reload and reentrant callback/error checks. Atomic timer state and native event/notification composition remain in the UI model. Accepted change receipt survives ordinary reload failure; retired work cannot continue its callback/reload sequence. No new library, dependency, storage schema or cloud/signing configuration is introduced.
+
+All73 catalog and19 timer tests pass, including12 new regressions. Both final compile-only platform checks and all53 boundaries pass. Initial clock-callback integration errors remain recorded and are fixed in the final source. Fifteen full unchanged UI bodies are retained with individual reasons; ItemImageDetailView is mixed because an old item identity can use an ambient replacement-account transport for its resource URL. Search nested-worker propagation and inherited UserSessionManager sequencing remain mixed and require separate coherent work. Full goal/runtime acceptance remain unfinished.

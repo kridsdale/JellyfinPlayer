@@ -13,42 +13,33 @@ import IdentifiedCollections
 import JellyfinAPI
 import StatefulMacros
 import SwiftfinAsyncStreams
-import SwiftfinCollections
 import SwiftfinMediaCatalog
-import SwiftfinText
 import SwiftfinTime
+import SwiftfinUIState
 
 @MainActor
 @Stateful
 final class EPGViewModel: ViewModel {
+    struct Request: Sendable {
+        let start: Date
+        let end: Date
+        let previous: GuideSnapshot
+        let validate: AsyncOperationGate.Checkpoint
+    }
 
     @CasePathable
     enum Action {
-        case getNextPage
-        case refresh(startDate: Date?)
-        case setDate(date: Date)
-
-        case _actuallyGetNextPage
-
+        case runRefresh(Request)
+        case runPage(Request)
         var transition: Transition {
             switch self {
-            case .getNextPage:
-                .none
-            case .refresh:
-                .to(.refreshing, then: .content)
-                    .onRepeat(.cancel)
-            case .setDate:
-                .none
-            case ._actuallyGetNextPage:
-                .background(.gettingNextPage)
+            case .runRefresh: .to(.refreshing, then: .content).onRepeat(.cancel)
+            case .runPage: .background(.gettingNextPage)
             }
         }
     }
 
-    enum BackgroundState {
-        case gettingNextPage
-    }
-
+    enum BackgroundState { case gettingNextPage }
     enum State {
         case content
         case error
@@ -56,242 +47,159 @@ final class EPGViewModel: ViewModel {
         case refreshing
     }
 
-    private struct ChannelPage {
+    private struct Display: Equatable {
+        let source: GuideSnapshot
         let channels: IdentifiedArrayOf<BaseItemDto>
-        let nextOffset: Int
-        let hasNextPage: Bool
+        init(_ source: GuideSnapshot) {
+            self.source = source
+            channels = IdentifiedArray(source.channels, uniquingIDsWith: { existing, _ in existing })
+        }
     }
 
-    @Published
-    private(set) var channels: IdentifiedArrayOf<BaseItemDto> = IdentifiedArray(
-        [],
-        uniquingIDsWith: { existing, _ in existing }
-    )
-    @Published
-    private(set) var now: Date = .now
-    @Published
-    private(set) var programs: [String: [ProgramBlock]] = [:]
-    private(set) var programsRevision = 0
-    @Published
-    private(set) var startDate: Date
+    @CommittedPublished
+    private var display: Display {
+        didSet { objectWillChange.send() }
+    }
 
-    private let channelPageSize = defaultPagingLibraryPageSize
-    private let channelsLibrary = EPGChannelsLibrary()
-    private let minimumDuration: Duration
+    @CommittedPublished
+    private(set) var now: Date {
+        didSet { objectWillChange.send() }
+    }
 
-    private var hasNextChannelPage = true
-    private var nextChannelOffset = 0
-    private var requestGeneration = 0
+    var channels: IdentifiedArrayOf<BaseItemDto> {
+        display.channels
+    }
+
+    var programs: [String: [ProgramBlock]] {
+        display.source.programs
+    }
+
+    var programsRevision: Int {
+        display.source.revision
+    }
+
+    var startDate: Date {
+        display.source.startDate
+    }
 
     var availableDates: [Date] {
-        let today = Calendar.current.startOfDay(for: .now)
-
-        return (0 ..< 7).compactMap {
-            Calendar.current.date(byAdding: .day, value: $0, to: today)
-        }
+        timeline.availableDates(at: .now)
     }
 
     var endDate: Date {
-        endDate(startingAt: startDate)
+        timeline.endDate(startingAt: startDate)
     }
+
+    private let minimumDuration: Duration
+    private var timeline: GuideTimeline {
+        .init(minimumInterval: minimumDuration.seconds)
+    }
+
+    private var catalog: MediaCatalogClient?
+    private let refreshes = AsyncOperationGate()
+    private let pages = AsyncOperationGate()
 
     init(minimumDuration: Duration = .hours(12)) {
         self.minimumDuration = minimumDuration
-        self.startDate = .now
-
+        let date = Date.now
+        now = date
+        display = .init(.init(startDate: GuideTimeline(minimumInterval: minimumDuration.seconds).defaultStartDate(at: date)))
         super.init()
-
-        self.startDate = defaultStartDate()
-
-        Timer.publish(every: 60, on: .main, in: .common)
-            .autoconnect()
-            .sink { [weak self] date in
-                Task { @MainActor in
-                    guard let self else { return }
-
-                    self.now = date
-
-                    let startOfToday = Calendar.current.startOfDay(for: date)
-                    let guideNeedsRebase = date >= self.endDate || self.startDate < startOfToday
-
-                    if guideNeedsRebase, self.state == .content {
-                        self.refresh(startDate: nil)
-                    }
+        catalog = try? requireMediaCatalog()
+        Timer.publish(every: 60, on: .main, in: .common).autoconnect().sink { [weak self] date in
+            Task { @MainActor in
+                guard let self, let catalog = self.catalog, (try? catalog.checkBinding()) != nil else { return }
+                self.now = date
+                guard (try? catalog.checkBinding()) != nil else { return }
+                if self.timeline.needsRebase(start: self.startDate, now: date), self.state == .content {
+                    self.refresh(startDate: nil)
                 }
             }
-            .store(in: &cancellables)
+        }.store(in: &cancellables)
     }
 
-    @Function(\Action.Cases.getNextPage)
-    private func _getNextPage() async throws {
-        guard state == .content,
-              hasNextChannelPage,
-              !background.is(.gettingNextPage)
-        else { return }
-
-        await _actuallyGetNextPage()
-    }
-
-    @Function(\Action.Cases.setDate)
-    private func _setDate(_ date: Date) async throws {
-        let calendar = Calendar.current
-        let newStartDate = calendar.isDateInToday(date)
-            ? defaultStartDate()
-            : calendar.startOfDay(for: date)
-
-        guard newStartDate != startDate else { return }
-        await refresh(startDate: newStartDate)
-    }
-
-    @Function(\Action.Cases._actuallyGetNextPage)
-    private func __actuallyGetNextPage() async throws {
-        guard hasNextChannelPage else { return }
-
-        let generation = requestGeneration
-        let catalog = try requireMediaCatalog()
-        let requestStartDate = startDate
-        let requestEndDate = endDate
-        let page = try await getChannelPage(offset: nextChannelOffset, catalog: catalog)
-        let existingChannelIDs = Set(channels.compactMap(\.id))
-        let newChannels = IdentifiedArray(
-            page.channels.elements.filter { channel in
-                channel.id.map { !existingChannelIDs.contains($0) } ?? false
-            },
-            uniquingIDsWith: { existing, _ in existing }
-        )
-        let newPrograms = try await getProgramBlocks(
-            for: newChannels,
-            startDate: requestStartDate,
-            endDate: requestEndDate,
-            catalog: catalog
-        )
-
-        try catalog.checkBinding()
-        guard !Task.isCancelled,
-              generation == requestGeneration,
-              startDate == requestStartDate
-        else { return }
-
-        channels = IdentifiedArray(
-            channels.elements + newChannels.elements,
-            uniquingIDsWith: { existing, _ in existing }
-        )
-        programs.merge(newPrograms) { _, new in new }
-        programsRevision &+= 1
-        nextChannelOffset = page.nextOffset
-        hasNextChannelPage = page.hasNextPage
-    }
-
-    @Function(\Action.Cases.refresh)
-    private func _refresh(_ requestedStartDate: Date?) async throws {
-        requestGeneration += 1
-        let generation = requestGeneration
-        let catalog = try requireMediaCatalog()
-        let requestStartDate = requestedStartDate ?? refreshedStartDate()
-        let requestEndDate = endDate(startingAt: requestStartDate)
-        let page = try await getChannelPage(offset: 0, catalog: catalog)
-        let newPrograms = try await getProgramBlocks(
-            for: page.channels,
-            startDate: requestStartDate,
-            endDate: requestEndDate,
-            catalog: catalog
-        )
-
-        try catalog.checkBinding()
-        guard !Task.isCancelled,
-              generation == requestGeneration
-        else { return }
-
-        startDate = requestStartDate
-        channels = page.channels
-        programs = newPrograms
-        programsRevision &+= 1
-        nextChannelOffset = page.nextOffset
-        hasNextChannelPage = page.hasNextPage
-    }
-
-    private func getChannelPage(offset: Int, catalog: MediaCatalogClient) async throws -> ChannelPage {
-        let items = try await catalog.page(.channels, at: CatalogPageRequest(offset: offset, limit: channelPageSize)).items
-        let validChannels = items.filter { channel in
-            guard let id = channel.id else { return false }
-            return id.nilIfBlank == id
-        }
-
-        return ChannelPage(
-            channels: IdentifiedArray(
-                validChannels,
-                uniquingIDsWith: { existing, _ in existing }
-            ),
-            nextOffset: offset + items.count,
-            hasNextPage: items.count >= channelPageSize
+    private func request(start: Date, using gate: AsyncOperationGate) -> Request? {
+        guard let catalog, (try? catalog.checkBinding()) != nil else { return nil }
+        let receipt = gate.begin()
+        return .init(
+            start: start,
+            end: timeline.endDate(startingAt: start),
+            previous: display.source,
+            validate: { [weak self] in
+                try receipt()
+                try catalog.checkBinding()
+                guard self != nil else { throw CancellationError() }
+                try receipt()
+            }
         )
     }
 
-    private func getProgramBlocks(
-        for channels: IdentifiedArrayOf<BaseItemDto>,
-        startDate: Date,
-        endDate: Date,
-        catalog: MediaCatalogClient
-    ) async throws -> [String: [ProgramBlock]] {
-        let channelIDs = channels.compactMap(\.id)
-        guard channelIDs.isNotEmpty else { return [:] }
+    func refresh(startDate requested: Date?) {
+        guard let request = request(start: requested ?? timeline.refreshedStartDate(startDate, now: .now), using: refreshes) else { return }
+        pages.cancel()
+        runRefresh(request)
+    }
 
-        let fetchedPrograms = try await catalog.programs(
-            channelIDs: channelIDs,
-            startDate: startDate,
-            endDate: endDate
-        )
-        let programsByChannel = fetchedPrograms.reduce(into: [String: [BaseItemDto]]()) { result, program in
-            guard let channelID = program.channelID,
-                  channelID.nilIfBlank == channelID
-            else { return }
+    func refresh(startDate requested: Date?) async {
+        guard let request = request(start: requested ?? timeline.refreshedStartDate(startDate, now: .now), using: refreshes) else { return }
+        pages.cancel()
+        await runRefresh(request)
+    }
 
-            result[channelID, default: []].append(program)
-        }
+    func setDate(date: Date) {
+        let start = timeline.selectedStartDate(date, now: .now)
+        guard start != startDate else { return }
+        refresh(startDate: start)
+    }
 
-        return programsByChannel.mapValues { channelPrograms in
-            channelPrograms.programBlocks(
-                startDate: startDate,
-                endDate: endDate
+    func getNextPage() {
+        guard state == .content, display.source.hasNextPage, !background.is(.gettingNextPage),
+              let request = request(start: startDate, using: pages) else { return }
+        runPage(request)
+    }
+
+    @Function(\Action.Cases.runRefresh)
+    private func _runRefresh(_ request: Request) async throws {
+        do {
+            try request.validate()
+            guard let catalog else { throw CancellationError() }
+            let page = try await catalog.guidePage(
+                offset: 0,
+                limit: defaultPagingLibraryPageSize,
+                startDate: request.start,
+                endDate: request.end,
+                validate: request.validate
             )
+            try request.validate()
+            display = .init(display.source.applying(page, startDate: request.start, replacing: true))
+            try request.validate()
+        } catch { try request.validate()
+            throw error
         }
     }
 
-    private func endDate(startingAt startDate: Date) -> Date {
-        let spanEnd = startDate.addingTimeInterval(minimumDuration.seconds)
-
-        guard let nextDay = Calendar.current.date(
-            byAdding: .day,
-            value: 1,
-            to: Calendar.current.startOfDay(for: startDate)
-        ) else {
-            return spanEnd
+    @Function(\Action.Cases.runPage)
+    private func _runPage(_ request: Request) async throws {
+        func check() throws {
+            try request.validate()
+            guard display.source == request.previous else { throw CancellationError() }
         }
-
-        return max(spanEnd, nextDay)
-    }
-
-    private func refreshedStartDate() -> Date {
-        let calendar = Calendar.current
-
-        if calendar.isDateInToday(startDate) ||
-            startDate < calendar.startOfDay(for: .now)
-        {
-            return defaultStartDate()
+        do {
+            try check()
+            guard let catalog else { throw CancellationError() }
+            let page = try await catalog.guidePage(
+                offset: request.previous.nextOffset,
+                limit: defaultPagingLibraryPageSize,
+                startDate: request.start,
+                endDate: request.end,
+                excluding: Set(request.previous.channels.compactMap(\.id)),
+                validate: check
+            )
+            try check()
+            display = .init(request.previous.applying(page, startDate: request.start, replacing: false))
+            try request.validate()
+        } catch { try request.validate()
+            throw error
         }
-
-        return startDate
-    }
-
-    private func defaultStartDate() -> Date {
-        let current = Date.now
-        let calendar = Calendar.current
-        let components = calendar.dateComponents([.minute, .second, .nanosecond], from: current)
-        let minute = components.minute ?? 0
-        let second = components.second ?? 0
-        let nanosecond = components.nanosecond ?? 0
-        let elapsed = TimeInterval((minute % 30) * 60 + second) + TimeInterval(nanosecond) / 1_000_000_000
-
-        return current.addingTimeInterval(-elapsed)
     }
 }

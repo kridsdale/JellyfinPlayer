@@ -136,18 +136,23 @@
       "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinCollections"
+      ],
       "path": "Shared/Components/EPG/Body/Components/EPGChannelButton.swift",
-      "reason": "",
+      "reason": "Retains channel image-or-text presentation, native focus/selection border and supplied action. Image-tag availability controls rendering only; no program or account query is made here.",
       "sha256": "7a83810f9ca81f8a50e8d446aa0bfb62a22f97d13d3a3a3f8c4b9c340180d95b",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinScrolling",
+        "SwiftfinLocalization"
+      ],
       "path": "Shared/Components/EPG/Body/Components/EPGChannelColumn.swift",
-      "reason": "",
+      "reason": "Retains channel column/button composition, now-position scroll action, selected-row presentation, UIKit scroll registration and supplied navigation action. Guide data/date/paging rules now belong to MediaCatalog; scroll ownership remains with the existing proxy/library. Native focus/layout acceptance is held.",
       "sha256": "b7d4aa0e32b867f43369fb65c07a39283b8861608fb9d2bd060fed7f0e9a8b37",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -173,11 +178,14 @@
       "status": "pending"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinCollections",
+        "SwiftfinValues"
+      ],
       "path": "Shared/Components/EPG/Body/EPGGridLayout.swift",
-      "reason": "",
+      "reason": "Retains UICollectionView frame/row cache, viewport attribute lookup and native now-line decoration. Main-actor UIKit layout values remain local; nonisolated NSObject color equality/copy uses locked immutable UIColor snapshots. Native rendering and unsupported geometry are not newly guaranteed.",
       "sha256": "93c504b27b61688f5c3a1771fb6cd9c017fe40085e255a8dfac40f6548d823d6",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -3409,15 +3417,15 @@
     },
     {
       "owners": [
-        "SwiftfinPaging",
         "SwiftfinMediaCatalog",
+        "SwiftfinAsyncStreams",
         "SwiftfinTime",
-        "SwiftfinAsyncStreams"
+        "SwiftfinUIState"
       ],
       "path": "Shared/ViewModels/EPGViewModel.swift",
-      "reason": "Mixed: captured catalog reads and ProgramBlocks are owned, but channel eligibility/deduplication/page offsets, per-channel grouping, guide range/default-date/calendar rules, timer rebase and publication generations remain app implementations. Move those coherent paging/time/catalog responsibilities while preserving current ordering, range/rounding and stale-result guards.",
-      "sha256": "a23edaacfe5d205dca7b77ad3d099be1e1af70f9f76877bcdf3460f725567ead",
-      "status": "source-reviewed-mixed"
+      "reason": "Retains native minute-timer and SwiftUI/IdentifiedArray presentation, macro loading/error state and original-catalog request gates. MediaCatalog owns raw-row channel eligibility/deduplication/cursor, program grouping, date rounding/day/span/rebase and immutable GuideSnapshot merging. One committed display state holds channels/programs/revision/cursor together; page requests check exact previous snapshot before publication and refresh invalidates pending pages. Queued native callbacks recheck bound catalog; GUI/timer acceptance remains held.",
+      "sha256": "f9999d48836ccc5f95f7d336a4b6c46624529e3c9d1a9d3ec8d3989387bd0dae",
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [
@@ -3572,12 +3580,13 @@
     {
       "owners": [
         "SwiftfinRecordingTimers",
-        "SwiftfinAsyncStreams"
+        "SwiftfinAsyncStreams",
+        "SwiftfinUIState"
       ],
       "path": "Shared/ViewModels/RecordingTimerViewModel.swift",
-      "reason": "Mixed: snapshot/toggle/update decisions and commands delegate to the captured recording owner, but snapshot-before-toggle then notification/reload and update/event/reload sequencing and overlapping receipt relevance still need a coherent operation audit/owner. Preserve current UI progress and partial-failure notification order rather than hiding intermediate results.",
-      "sha256": "d6ba5be8e299d8e3d1bf5d66b24ed1dd1a2fade228e47da9e302bc56a50aa0e6",
-      "status": "source-reviewed-mixed"
+      "reason": "Retains macro progress/errors, native event/notification delivery and committed atomic timer display. One captured RecordingTimerEditor owns serial snapshot/toggle/update/receipt/reload workflows; submission captures mutation/read gate before scheduling and never resolves a replacement account. Checks surround reentrant notification/event/state callbacks and ordinary errors. Actual native UI/server actions remain held.",
+      "sha256": "5bceaa5d40fc7262bc701b9b13ad8b6bfcc1d1e9753c7fe89e58e36aaedfc007",
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [
@@ -3700,11 +3709,16 @@
       "status": "pending"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinMediaCatalog",
+        "SwiftfinScrolling",
+        "SwiftfinLocalization",
+        "SwiftfinText"
+      ],
       "path": "Shared/Views/EPGView/EPGContentView.swift",
-      "reason": "",
+      "reason": "Retains guide loading/error/empty UI, scroll/ruler/grid composition, supplied program navigation and grouped program chooser. Native scroll proxy connects/disconnects with presentation; guide domain state/paging comes from the bound owner. Runtime layout/focus/lifetime acceptance remains held.",
       "sha256": "691ab2d9821e1a2034bed37c61762ece79cd86a4b8a31d9d5e8407ed23b58ae6",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [
@@ -3776,11 +3790,13 @@
       "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinLocalization"
+      ],
       "path": "Shared/Views/ItemEditorView/ItemRefreshView.swift",
-      "reason": "",
+      "reason": "Retains refresh option controls, platform layout and started/error presentation. MetadataRefreshType supplies option mapping; the captured metadata editor owns command/delay/reload. No refresh action or media operation was executed during source review.",
       "sha256": "b2f70a53437d7c63e61f991b4a581ce54d72d59774aca8a5ef898201738c78c5",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [
@@ -3792,11 +3808,14 @@
       "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinLocalization",
+        "SwiftfinCollections"
+      ],
       "path": "Shared/Views/ItemEditorView/ItemSubtitleSearchView/ItemSubtitleSearchView.swift",
-      "reason": "",
+      "reason": "Retains subtitle search options, selected IDs, results/loading display and set command presentation. Language/perfect-match capture and actual download/reload belong to the reviewed subtitle adapter/ItemMetadata owner. Native search/edit acceptance is not inferred from UI source.",
       "sha256": "0d488cf6f1875576416be83f062bce0bb1acbb54d22cbe52229892b21754c90a",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [
@@ -4899,18 +4918,22 @@
       "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinLocalization"
+      ],
       "path": "Swiftfin/Views/ItemEditorView/ItemEditorView.swift",
-      "reason": "",
+      "reason": "Retains metadata menu/layout, error/refresh/delete presentation and editor destination composition. Capability fields select offered UI sections; query/update/delete behavior stays with existing bound model/library. Routing into another view is not provider-graph approval.",
       "sha256": "c1aedacf935caf82092b3fbb4bc406442837e645e3a72a808e852d7d28864f5c",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinLocalization"
+      ],
       "path": "Swiftfin/Views/ItemEditorView/ItemIdentification/IdentifyItemResultView.swift",
-      "reason": "",
+      "reason": "Retains remote identification result details, selected-result save command presentation and update-driven dismissal/feedback. It supplies the immutable result to the previously reviewed identification owner and contains no remote command implementation.",
       "sha256": "b98b05542f8f6ef4943ec5e2e180159babb14b11a812fe85b659f24d33dbf694",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [
@@ -4923,18 +4946,25 @@
       "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinLocalization",
+        "SwiftfinCollections"
+      ],
       "path": "Swiftfin/Views/ItemEditorView/ItemIdentification/IdentifyItemView/IdentifyItemView.swift",
-      "reason": "",
+      "reason": "Retains local identification query text/year bindings, results/focus/loading presentation and routed selected result. The captured query/search/update owner remains separate; native debounce/edit lifecycle is held.",
       "sha256": "0b5dfa3d088868ef44dd1d1d94e855147f79f134fc2f29814ab47d2e60722ac5",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinItemMetadata",
+        "SwiftfinImages",
+        "SwiftfinNetworking"
+      ],
       "path": "Swiftfin/Views/ItemEditorView/ItemImages/ItemImageDetailView.swift",
-      "reason": "",
+      "reason": "Mixed: image detail UI derives an old model item ID with viewModel.userSession from the ambient current account to build an authenticated resource URL. ImageInfo/ItemImageURLPolicy accept an explicit transport, but the caller has not bound that transport to the item/editor origin. Retain native display/link/delete presentation and replace this ambient resource binding in the next integration pass. No URL was loaded or native delete command executed.",
       "sha256": "a38cb81b4863c147335451860d41da89643bd71e74c8d1e0d068aeba20a7a093",
-      "status": "pending"
+      "status": "source-reviewed-mixed"
     },
     {
       "owners": [],
@@ -4944,11 +4974,15 @@
       "status": "pending"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinLocalization",
+        "SwiftfinCollections",
+        "SwiftfinText"
+      ],
       "path": "Swiftfin/Views/ItemEditorView/ItemImages/RemoteImageDetailView.swift",
-      "reason": "",
+      "reason": "Retains remote image presentation, display details, external link opening and save command feedback. Remote image source construction and captured mutation use their existing owners; it performs no account-derived URL selection.",
       "sha256": "65c50afb4ec59d810241f0107224936bf4f052ce2b031b5ae7e17538d4a612c0",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -4958,11 +4992,14 @@
       "status": "pending"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinLocalization",
+        "SwiftfinCollections"
+      ],
       "path": "Swiftfin/Views/ItemEditorView/ItemMetadata/AddItemElementView.swift",
-      "reason": "",
+      "reason": "Retains component input/search display, save-button eligibility, routed dismissal and feedback. Existence/element construction delegates to the supplied editor; search/add commands belong to the separately reviewed captured component adapter/ItemMetadata owner.",
       "sha256": "99d057b84746082e4db2bab02b35d1dac328b25850f7754046a00f9841b70a14",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -5039,18 +5076,26 @@
       "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinLocalization",
+        "SwiftfinText"
+      ],
       "path": "Swiftfin/Views/ItemEditorView/ItemMetadata/EditMetadataView/Components/Sections/ReviewsSection.swift",
-      "reason": "",
+      "reason": "Retains local critic/community rating draft text fields, display formatting and numeric input bounds for the presented controls. It mutates only the supplied edit Binding; server submission/metadata policy is not implemented or approved by this form.",
       "sha256": "4d04618e9e9bcf5e55df15129df8ae55f15e83712162b36276c73cd913b9b0ce",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinFormatting",
+        "SwiftfinLocalization",
+        "SwiftfinTime",
+        "SwiftfinUIState"
+      ],
       "path": "Swiftfin/Views/ItemEditorView/ItemMetadata/EditMetadataView/Components/Sections/SeriesSection.swift",
-      "reason": "",
+      "reason": "Retains staged series status, DatePicker/day toggles and runtime input presentation. Duration conversion/formatting delegates to Time/Formatting; HH:mm DatePicker text conversion and existing invalid-text current-date fallback are local UI behavior, not server normalization. No media or remote metadata write occurs in this body.",
       "sha256": "24a861ebea4513660f928a068f9b43584bd3c011485da8edf5079063c96ac0f9",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [
@@ -5062,18 +5107,23 @@
       "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinLocalization"
+      ],
       "path": "Swiftfin/Views/ItemEditorView/ItemMetadata/EditMetadataView/EditMetadataView.swift",
-      "reason": "",
+      "reason": "Retains staged metadata draft and kind-specific form sections, explicit save invocation and feedback/dismissal. Original nonnil item-type assumption remains a UI input limitation; no unsupported/nil-type correctness claim. Server mutation/reload belongs to ItemMetadata, not these draft bindings.",
       "sha256": "8594fdf1f701d7d22374393655b50393a3b458a0fe65bb68fb1038a44da91420",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinLocalization",
+        "SwiftfinPlaybackProfiles"
+      ],
       "path": "Swiftfin/Views/ItemEditorView/ItemSubtitles/ItemSubtitleUploadView.swift",
-      "reason": "",
+      "reason": "Retains native file selection, language/flag controls and upload/dismiss presentation. Supported text types come from SubtitleFormat; file reading/bytes and bound upload are separately owned. Native importer permission and real server uploads remain held.",
       "sha256": "21ff9c28090d1600fb506f8ef7ffac9205ccc1a98cb2901e7a3b289efb79b5c5",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -6176,6 +6226,67 @@
       ],
       "reason": "TestState string-valued cases now synthesize equality for committed observable UI publication. Full model body retains installed Codable IDs/interface/SSID/priority and normalization/order semantics; no key/schema/dependency change. Synthetic connection catalogs and both platform compilations cover affected consumers.",
       "sha256": "a71274ec43922d1faae852024022b26efa6a778f307d673b6161870ff61fe987"
+    },
+    {
+      "path": "Packages/SwiftfinMediaCatalog/Sources/SwiftfinMediaCatalog/GuideCatalog.swift",
+      "reviewedInterfaces": [
+        "GuideTimeline",
+        "GuidePage",
+        "GuideSnapshot.applying(_:startDate:replacing:)",
+        "guidePage(offset:limit:startDate:endDate:excluding:validate:)"
+      ],
+      "reviewedConsumers": [
+        "Shared/ViewModels/EPGViewModel.swift",
+        "Packages/SwiftfinMediaCatalog/Tests/SwiftfinMediaCatalogTests/GuideCatalogContracts.swift"
+      ],
+      "reason": "Full new guide owner body reviewed: explicit clock/calendar, inherited half-hour/day/minimum-span rules; raw-row cursor/eligibility/deduplication; exact captured catalog and caller relevance before/after reads/errors; original per-channel ProgramBlock mapping; one immutable snapshot merge/revision. No UI, app global, native query or write belongs to this API. Six deterministic regressions pass within the73-test catalog package.",
+      "sha256": "45921fb672ccf7e9f77eaeadfb962a32f8580814c668570ef1493d3fba4258ad"
+    },
+    {
+      "path": "Packages/SwiftfinRecordingTimers/Sources/SwiftfinRecordingTimers/RecordingTimerEditor.swift",
+      "reviewedInterfaces": [
+        "RecordingTimerEdit",
+        "RecordingTimerEditor.checkBinding()",
+        "refresh(validate:publish:)",
+        "edit(_:validate:publish:changed:)"
+      ],
+      "reviewedConsumers": [
+        "Shared/ViewModels/RecordingTimerViewModel.swift",
+        "Packages/SwiftfinRecordingTimers/Tests/SwiftfinRecordingTimersTests/RecordingTimerTests.swift"
+      ],
+      "reason": "Full new editor body reviewed: captured client; serial accepted predecessor drain; cancellation-safe job tail; initial toggle snapshot publication; no-op/missing-ID behavior; accepted command receipt before reload; relevance checks around publication/callbacks and errors. Native notification/local record globals remain caller ports. Six new regressions pass within19 timer tests. Scope does not approve all unrelated controller/native lifetimes.",
+      "sha256": "4d0d214cf1ee1a5d5fb30fe0f38e439d4bf21ea7f3c626806a58f124fb4b57ff"
+    },
+    {
+      "path": "Packages/SwiftfinMediaCatalog/Sources/SwiftfinMediaCatalog/ProgramBlocks.swift",
+      "reviewedInterfaces": [
+        "ProgramBlock Equatable/Sendable",
+        "programBlocks(startDate:endDate:)",
+        "isAiring(at:)"
+      ],
+      "reviewedConsumers": [
+        "Packages/SwiftfinMediaCatalog/Sources/SwiftfinMediaCatalog/GuideCatalog.swift",
+        "Shared/ViewModels/EPGViewModel.swift"
+      ],
+      "reason": "Complete existing block grouping and strict airing body reviewed; only synthesized equality is added for atomic committed guide display. Installed channel/program/date identity, clamping, short-program chunking and ordering remain. Existing grouping/airing contracts plus new guide grouping tests pass; no schema or dependency is changed.",
+      "sha256": "c6599bba0108fb6fcfdf73330feee323d9bf34229b8ed3034e1022e11ce4f3c2"
+    },
+    {
+      "path": "Packages/SwiftfinRecordingTimers/Sources/SwiftfinRecordingTimers/RecordingTimersClient.swift",
+      "reviewedInterfaces": [
+        "RecordingTimerSnapshot Equatable/Sendable",
+        "snapshot()",
+        "toggleRecording(_:)",
+        "toggleSeriesRecording(_:)",
+        "update(_: TimerInfoDto)",
+        "update(_: SeriesTimerInfoDto)"
+      ],
+      "reviewedConsumers": [
+        "Packages/SwiftfinRecordingTimers/Sources/SwiftfinRecordingTimers/RecordingTimerEditor.swift",
+        "Shared/ViewModels/RecordingTimerViewModel.swift"
+      ],
+      "reason": "Complete captured recording-client body reviewed as the editor port: account/user/item and permission/time closure; program/timer/series resolution; scheduled filtering and fresh template/permission checks; exact submitted update routes/payloads. Only snapshot equality is added in this batch; inherited policy/DTO behavior is retained and covered by original+new19 synthetic contracts. Real server capability/auth acceptance remains held.",
+      "sha256": "ac58b16d067086b228e32de629ab8dc74c653e7f3def7e8ae63f3245db149c4f"
     }
   ],
   "limits": "This ledger records bodies explicitly reviewed, with exact current hashes; earlier prose or lexical inventory is not automatically promoted. Pending and mixed entries prevent whole-source completion. Retained UI algorithms have specific presentation reasons, not folder/import-based blanket approval. API entries do not classify the rest of the public graph. Source review and offline tests do not satisfy held runtime acceptance.",
@@ -6184,11 +6295,11 @@
   "summary": {
     "applicationSwiftFiles": 665,
     "classification": {
-      "pending": 197,
-      "source-reviewed-mixed": 4,
-      "source-reviewed-retained": 464
+      "pending": 181,
+      "source-reviewed-mixed": 3,
+      "source-reviewed-retained": 481
     },
-    "currentAPIReviews": 50,
+    "currentAPIReviews": 54,
     "runtimeAcceptance": "held by human; no simulator/server testing"
   }
 }

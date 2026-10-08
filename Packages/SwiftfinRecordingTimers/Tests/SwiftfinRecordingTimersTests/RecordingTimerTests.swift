@@ -336,4 +336,89 @@ struct RecordingTimerTests {
         sender.failure = true
         await #expect(throws: StubError.self) { try await client(sender).snapshot() }
     }
+
+    @Test
+    func `editor update emits change before reloading and preserves the submitted payload`() async throws {
+        let sender = Sender()
+        sender.responses["/LiveTv/Programs/program"] = Data(#"{"Id":"program","Name":"Reloaded"}"#.utf8)
+        let editor = RecordingTimerEditor(client: client(sender))
+        var events: [String] = []
+        try await editor.edit(.update(.init(id: "timer", name: "submitted")), publish: { state in
+            events.append(state.program?.name ?? "nil")
+        }, changed: { events.append("changed") })
+        #expect(events == ["changed", "Reloaded"])
+        #expect(sender.calls.map(\.path) == ["/LiveTv/Timers/timer", "/LiveTv/Programs/program"])
+        #expect(sender.calls[0].method == "POST")
+        let body = try #require(sender.calls[0].body)
+        #expect(try JSONDecoder().decode(TimerInfoDto.self, from: body).name == "submitted")
+    }
+
+    @Test
+    func `accepted edit keeps change receipt when subsequent reload fails`() async throws {
+        let sender = Sender(), editor = RecordingTimerEditor(client: client(sender))
+        var changes = 0, publications = 0
+        await #expect(throws: StubError.self) { try await editor.edit(
+            .update(.init(id: "timer")),
+            publish: { _ in publications += 1 },
+            changed: {
+                changes += 1
+                sender.failure = true
+            }
+        ) }
+        #expect(changes == 1 && publications == 0 && sender.calls.map(\.path) == ["/LiveTv/Timers/timer", "/LiveTv/Programs/program"])
+    }
+
+    @Test
+    func `change callback retirement stops reload after the accepted command`() async throws {
+        let sender = Sender(), binding = Binding(), editor = RecordingTimerEditor(client: client(sender))
+        await #expect(throws: CancellationError.self) { try await editor.edit(.update(.init(id: "timer")), validate: {
+            guard binding.current else { throw CancellationError() }
+        }, changed: { binding.current = false }) }
+        #expect(sender.calls.map(\.path) == ["/LiveTv/Timers/timer"])
+    }
+
+    @Test
+    func `toggle publishes its fresh initial snapshot and no-op creates no change receipt`() async throws {
+        let sender = Sender(), editor = RecordingTimerEditor(client: client(sender, item: .init(id: "movie", type: .movie)))
+        var publications = 0, changes = 0
+        try await editor.edit(.toggleRecording, publish: { state in #expect(state.program == nil)
+            publications += 1
+        }, changed: { changes += 1 })
+        #expect(publications == 1 && changes == 0 && sender.calls.isEmpty)
+    }
+
+    @Test
+    func `queued edit drains accepted predecessor before a successor and refresh`() async throws {
+        let sender = Sender(), gate = Gate(), editor = RecordingTimerEditor(client: client(sender))
+        sender.gate = gate
+        sender.gatePath = "/LiveTv/Timers/first"
+        let first = Task { try await editor.edit(.update(.init(id: "first"))) }
+        defer { first.cancel()
+            gate.finish()
+        }
+        await settle { gate.continuation != nil }
+        let second = Task { try await editor.edit(.update(.init(id: "second"))) }
+        for _ in 0 ..< 20 {
+            await Task.yield()
+        }
+        #expect(sender.calls.map(\.path) == ["/LiveTv/Timers/first"])
+        gate.finish()
+        try await first.value
+        try await second.value
+        #expect(sender.calls.map(\.path) == [
+            "/LiveTv/Timers/first",
+            "/LiveTv/Programs/program",
+            "/LiveTv/Timers/second",
+            "/LiveTv/Programs/program"
+        ])
+    }
+
+    @Test
+    func `retired editor admission and missing update identity perform no IO`() async throws {
+        let sender = Sender(), editor = RecordingTimerEditor(client: client(sender))
+        await #expect(throws: CancellationError.self) { try await editor.edit(.toggleRecording, validate: { throw CancellationError() }) }
+        try await editor.edit(.update(.init()))
+        try await editor.edit(.updateSeries(.init()))
+        #expect(sender.calls.isEmpty)
+    }
 }

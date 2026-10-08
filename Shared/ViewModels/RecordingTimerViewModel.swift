@@ -10,26 +10,22 @@ import CasePaths
 import Foundation
 import JellyfinAPI
 import StatefulMacros
+import SwiftfinAsyncStreams
 import SwiftfinRecordingTimers
+import SwiftfinUIState
 
 @MainActor
 @Stateful
 final class RecordingTimerViewModel: ViewModel {
-
+    struct Request: Sendable { let validate: AsyncOperationGate.Checkpoint }
     @CasePathable
     enum Action {
-        case refresh
-        case toggleRecording
-        case toggleSeriesRecording
-        case updateRecordingTimer(TimerInfoDto)
-        case updateSeriesRecordingTimer(SeriesTimerInfoDto)
-
+        case runRefresh(Request)
+        case runEdit(Request, RecordingTimerEdit, Bool)
         var transition: Transition {
             switch self {
-            case .refresh:
-                .background(.refreshing)
-            case .toggleRecording, .toggleSeriesRecording, .updateRecordingTimer, .updateSeriesRecordingTimer:
-                .background(.updating)
+            case .runRefresh: .background(.refreshing)
+            case .runEdit: .background(.updating)
             }
         }
     }
@@ -39,89 +35,121 @@ final class RecordingTimerViewModel: ViewModel {
         case updating
     }
 
-    enum Event {
-        case updated
-    }
-
+    enum Event { case updated }
     enum State {
         case error
         case initial
     }
 
-    @Published
-    private(set) var program: BaseItemDto?
-    @Published
-    private(set) var recordingTimer: TimerInfoDto?
-    @Published
-    private(set) var seriesRecordingTimer: SeriesTimerInfoDto?
+    @CommittedPublished
+    private var snapshot: RecordingTimerSnapshot? {
+        didSet { objectWillChange.send() }
+    }
 
-    private let item: BaseItemDto
+    var program: BaseItemDto? {
+        snapshot?.program
+    }
 
+    var recordingTimer: TimerInfoDto? {
+        snapshot?.recordingTimer
+    }
+
+    var seriesRecordingTimer: SeriesTimerInfoDto? {
+        snapshot?.seriesRecordingTimer
+    }
+
+    private var editor: RecordingTimerEditor?
+    private let reads = AsyncOperationGate()
+    private let edits = AsyncOperationGate()
     var canManageRecordings: Bool {
-        (program?.canBeRecorded == true || recordingTimer != nil || seriesRecordingTimer != nil) &&
-            !background.is(.refreshing) && !background.is(.updating)
+        (program?.canBeRecorded == true || recordingTimer != nil || seriesRecordingTimer != nil)
+            && !background.is(.refreshing) && !background.is(.updating)
     }
 
     init(item: BaseItemDto) {
-        self.item = item
         super.init()
+        editor = try? RecordingTimerEditor(client: requireRecordingTimers(item: item))
     }
 
-    @Function(\Action.Cases.refresh)
-    private func _refresh() async throws {
-        guard !background.is(.updating) else { return }
-        try await refreshRecordingTimers(using: requireRecordingTimers(item: item))
+    private func request(_ gate: AsyncOperationGate) -> Request? {
+        guard let editor, (try? editor.checkBinding()) != nil else { return nil }
+        let receipt = gate.begin()
+        return .init(validate: { [weak self] in
+            try receipt()
+            try editor.checkBinding()
+            guard self != nil else { throw CancellationError() }
+            try receipt()
+        })
     }
 
-    @Function(\Action.Cases.toggleRecording)
-    private func _toggleRecording() async throws {
-        let client = try requireRecordingTimers(item: item)
-        let state = try await refreshRecordingTimers(using: client)
-        guard try await client.toggleRecording(state) else { return }
-        try client.checkBinding()
-        Notifications[.recordingTimersDidChange].post()
-        try await refreshRecordingTimers(using: client)
+    func refresh() {
+        guard !background.is(.updating), let request = request(reads) else { return }
+        runRefresh(request)
     }
 
-    @Function(\Action.Cases.toggleSeriesRecording)
-    private func _toggleSeriesRecording() async throws {
-        let client = try requireRecordingTimers(item: item)
-        let state = try await refreshRecordingTimers(using: client)
-        guard try await client.toggleSeriesRecording(state) else { return }
-        try client.checkBinding()
-        Notifications[.recordingTimersDidChange].post()
-        try await refreshRecordingTimers(using: client)
+    func refresh() async {
+        guard !background.is(.updating), let request = request(reads) else { return }
+        await runRefresh(request)
     }
 
-    @Function(\Action.Cases.updateRecordingTimer)
-    private func _updateRecordingTimer(_ updatedRecordingTimer: TimerInfoDto) async throws {
-        guard updatedRecordingTimer.id != nil else { return }
-        let client = try requireRecordingTimers(item: item)
-        try await client.update(updatedRecordingTimer)
-        try client.checkBinding()
-        Notifications[.recordingTimersDidChange].post()
-        events.send(.updated)
-        try await refreshRecordingTimers(using: client)
+    func toggleRecording() {
+        submit(.toggleRecording, updatedEvent: false)
     }
 
-    @Function(\Action.Cases.updateSeriesRecordingTimer)
-    private func _updateSeriesRecordingTimer(_ updatedSeriesRecordingTimer: SeriesTimerInfoDto) async throws {
-        guard updatedSeriesRecordingTimer.id != nil else { return }
-        let client = try requireRecordingTimers(item: item)
-        try await client.update(updatedSeriesRecordingTimer)
-        try client.checkBinding()
-        Notifications[.recordingTimersDidChange].post()
-        events.send(.updated)
-        try await refreshRecordingTimers(using: client)
+    func toggleSeriesRecording() {
+        submit(.toggleSeriesRecording, updatedEvent: false)
     }
 
-    @discardableResult
-    private func refreshRecordingTimers(using client: RecordingTimersClient) async throws -> RecordingTimerSnapshot {
-        let state = try await client.snapshot()
-        try client.checkBinding()
-        program = state.program
-        recordingTimer = state.recordingTimer
-        seriesRecordingTimer = state.seriesRecordingTimer
-        return state
+    func updateRecordingTimer(_ timer: TimerInfoDto) {
+        guard timer.id != nil else { return }
+        submit(.update(timer), updatedEvent: true)
+    }
+
+    func updateSeriesRecordingTimer(_ timer: SeriesTimerInfoDto) {
+        guard timer.id != nil else { return }
+        submit(.updateSeries(timer), updatedEvent: true)
+    }
+
+    private func submit(_ edit: RecordingTimerEdit, updatedEvent: Bool) {
+        guard let request = request(edits) else { return }
+        reads.cancel()
+        runEdit(request, edit, updatedEvent)
+    }
+
+    private func publish(_ value: RecordingTimerSnapshot, request: Request) throws {
+        try request.validate()
+        snapshot = value
+        try request.validate()
+    }
+
+    @Function(\Action.Cases.runRefresh)
+    private func _runRefresh(_ request: Request) async throws {
+        guard !background.is(.updating), let editor else { return }
+        do { try await editor.refresh(validate: request.validate, publish: { [weak self] value in
+            guard let self else { throw CancellationError() }
+            try publish(value, request: request)
+        }) } catch { try request.validate()
+            throw error
+        }
+    }
+
+    @Function(\Action.Cases.runEdit)
+    private func _runEdit(_ request: Request, _ edit: RecordingTimerEdit, _ updatedEvent: Bool) async throws {
+        guard let editor else { return }
+        do { try await editor.edit(edit, validate: request.validate, publish: { [weak self] value in
+            guard let self else { throw CancellationError() }
+            try publish(value, request: request)
+        }, changed: { [weak self] in
+            try request.validate()
+            guard let self else { throw CancellationError() }
+            Notifications[.recordingTimersDidChange].post()
+            try request.validate()
+            if updatedEvent {
+                events.send(.updated)
+                try request.validate()
+            }
+        }) } catch { try request.validate()
+            throw error
+        }
     }
 }

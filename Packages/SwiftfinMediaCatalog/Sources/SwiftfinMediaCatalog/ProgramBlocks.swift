@@ -45,7 +45,7 @@ import Foundation
 import JellyfinAPI
 import SwiftfinCollections
 
-public struct ProgramBlock: Identifiable, Sendable {
+public struct ProgramBlock: Identifiable, Equatable, Sendable {
 
     public struct ID: Hashable, Sendable {
 

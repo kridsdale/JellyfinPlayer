@@ -11,7 +11,7 @@ import JellyfinAPI
 import SwiftfinMediaCatalog
 import SwiftfinNetworking
 
-public struct RecordingTimerSnapshot: Sendable {
+public struct RecordingTimerSnapshot: Equatable, Sendable {
     public let program: BaseItemDto?
     public let recordingTimer: TimerInfoDto?
     public let seriesRecordingTimer: SeriesTimerInfoDto?
