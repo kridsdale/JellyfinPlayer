@@ -171,11 +171,16 @@
       "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinMediaCatalog",
+        "SwiftfinScrolling",
+        "SwiftfinTime",
+        "SwiftfinAsyncStreams"
+      ],
       "path": "Shared/Components/EPG/Body/EPGCollectionView.swift",
-      "reason": "",
+      "reason": "Complete native EPG representable/coordinator reviewed: supplied channel/program data maps to cached cell/frame signatures and duplicate-safe snapshot IDs, UIKit layout/cell/focus callbacks and bottom-edge refresh input. Program/query/grouping and scroll ownership delegate to libraries. Accent subscription and weak callbacks stay with native UI; no schedule/server action executed.",
       "sha256": "6214187a7447301c3263081876cf1d1352618ed98d5dc48f82986b7626ea2921",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [
@@ -244,9 +249,9 @@
     {
       "owners": [],
       "path": "Shared/Components/FadeContentTransitionView.swift",
-      "reason": "",
+      "reason": "Complete fade representable/coordinator/UIView reviewed: supplied content identity, native hosting, generation-guarded debounce/animation, pending zero-bounds layout and intrinsic measurement. Dismantle cancels scheduled work and transitions. MainActor coordinator and UIKit ownership keep platform objects in UI; no domain scheduler, transport or media implementation.",
       "sha256": "24876c0da9d29df880d4a7202446651b01097193fc28332bd4371787edc93cf4",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [
@@ -305,11 +310,13 @@
       "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinCollections"
+      ],
       "path": "Shared/Components/Layouts/FlowLayout.swift",
-      "reason": "",
+      "reason": "Complete SwiftUI Layout/cache reviewed: native subview measurement, proposed-width invalidation, wrapping/balancing/alignment and placement. Row distribution and geometric caches are cohesive presentation behavior; no data/query/domain algorithm. Existing ordering/bounds assumptions are retained with no native visual correctness claim.",
       "sha256": "ce387545b567e94ee2fb43921bbe16e80ce8dedac0e33bafab8223a8bea05336",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -403,9 +410,9 @@
     {
       "owners": [],
       "path": "Shared/Components/Marquee.swift",
-      "reason": "",
+      "reason": "Complete native marquee/GeometryEffect reviewed: supplied content size, focus/axis/bounce/loop timing, geometry offsets, gradient masks and SwiftUI animation initialization/reset/disappearance. This is platform rendering and interaction; no playback lifecycle or asynchronous domain scheduler. Existing size/speed/gradient edge behavior is unchanged and not claimed runtime-tested.",
       "sha256": "8d0ea5713364c5c50c21b100af6d277f5a4de081c18c8c99b8e39941b0cc4c0d",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -755,11 +762,17 @@
       "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinAccountModels",
+        "SwiftfinCollections",
+        "SwiftfinFilters",
+        "SwiftfinPlaybackProfiles",
+        "SwiftfinLocalization"
+      ],
       "path": "Shared/Coordinators/Navigation/NavigationRoute/NavigationRoute+Settings.swift",
-      "reason": "",
+      "reason": "Complete settings destination factories reviewed: supplied typed value/binding selectors, native sheets/route IDs and admin/log/password/security/profile feature composition. Local security wraps the native prompt host. Persistence, profile assembly, account commands and permission evaluation stay owned; no setting/credential action executed.",
       "sha256": "2f42bf7e8a3493ae286faf4919b9a88f00880e1684780392c7a62d7751660d8c",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [
@@ -1736,11 +1749,14 @@
       "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinCollections",
+        "SwiftfinLocalization"
+      ],
       "path": "Shared/Extensions/ViewExtensions/ViewExtensions.swift",
-      "reason": "",
+      "reason": "Complete View-constrained modifier facades reviewed: native binding/geometry/layout/mask/poster/toolbar/alert/environment operations and lifecycle/notification adapter composition. Helpers remain constrained to SwiftUI presentation; no generic domain/transport/storage implementation is hidden here. Debug rendering remains compile-time UI.",
       "sha256": "ca7b763520b493e542f86dd8d4aabb40f14b5a6f1e3d702549f8144d059e59f3",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -2715,11 +2731,16 @@
       "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinStoredValuesUI",
+        "SwiftfinLocalization",
+        "SwiftfinText",
+        "SwiftfinPaging"
+      ],
       "path": "Shared/Objects/PagingLibrary/PagingLibraryView/PagingLibraryView.swift",
-      "reason": "",
+      "reason": "Complete paging screen reviewed: owned model/style normalization, native grid/safe-area/focus/error/loading/search controls, refresh/bottom-edge/menu inputs and selection routing. Pagination, queries, cancellation/deduplication and filter semantics stay with owners. UIKit introspection only adjusts hosting/scroll insets; no transport/page algorithm in the view.",
       "sha256": "e7a20fb287fd8914995a1cb32ed227164ecd20e068fe9914d2c585f45ba73ae2",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -3375,8 +3396,8 @@
         "SwiftfinServerOperations"
       ],
       "path": "Shared/ViewModels/AdminDashboard/Sessions/SessionViewModel.swift",
-      "reason": "Main-actor remote-session screen maps user actions and current optional session ID to owned playback/message/playstate/general commands, with UI sending/error states. SDK payload values are supplied by composition; request construction/authorization/transport live in ServerOperations. No remote action was executed.",
-      "sha256": "0755c4c83a3f2e526b1aaeb0e2366ff61be0588353a8a947fe0d6379af97ee97",
+      "reason": "Complete current MainActor session command adapter reviewed. Captures original bound ServerOperationsClient once at model creation; queued macro handlers validate and use that client rather than resolving ambient account/connection at execution. Current displayed session IDs and command parameters stay supplied UI inputs. Request construction and transport remain owner; synthetic retirement tests and compilation do not claim live macro execution.",
+      "sha256": "01c2574d5ae9d23ad61e2e4be75e78164e57ed15fec815489643c35a3ccf06dc",
       "status": "source-reviewed-retained"
     },
     {
@@ -3834,11 +3855,14 @@
       "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinAccountModels",
+        "SwiftfinConnectivity"
+      ],
       "path": "Shared/Views/EditServerConnectionView.swift",
-      "reason": "",
-      "sha256": "1114643da1ec39b17371f2b6cb3df8e3c363a8196cc6f3a4a6ef712fcc343dcc",
-      "status": "pending"
+      "reason": "Complete current editor reviewed after extraction. ServerConnectionDraft now owns editable value normalization and SDK-independent validation. View retains localized error mapping, name/duplicate warnings, native fields/SSID-permission presentation and supplied model save/test/activate actions. Existing SSID task result ordering remains native editor state; no permission/network call executed in review.",
+      "sha256": "5eef66a31f324ca4c6562cfa4ef6e2f7ef603c9d0c25a289879dad909fccc328",
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [
@@ -3938,11 +3962,14 @@
       "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinCollections",
+        "SwiftfinStoredValuesUI"
+      ],
       "path": "Shared/Views/ItemView/Components/ActionButtons/ItemActionButtons.swift",
-      "reason": "",
+      "reason": "Complete action-bar/button/menu configuration reviewed: supplied capability flags select native views, local/external trailer display availability and platform-specific overflow/menu deduplication. Actual permission enforcement, item mutation, playback selection and transport remain owners. Maximum button count, focus, stored customization and label/tint styling are presentation.",
       "sha256": "b0f91b96bf57578e1c537387979b450bcda74e3e7977a255be5e60b228705e7a",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [
@@ -4724,11 +4751,14 @@
       "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinServerOperations",
+        "SwiftfinCollections"
+      ],
       "path": "Swiftfin/Views/AdminDashboardView/ActiveSessions/ActiveSessionDetailsView/ActiveSessionDetailsView.swift",
-      "reason": "",
-      "sha256": "d2ac09424a8ba63fd4e519bab66cb23cfe69fb6282a27ea530677276b878fba4",
-      "status": "pending"
+      "reason": "Complete current session screen reviewed after extraction. Immutable remote control availability delegates to ServerOperationsPolicy, preserving independent message support. Native stream/codec/progress labels, details routes, play/stop/message confirmation and supplied model actions remain composition; exact original client owns commands. No remote session or message action executed.",
+      "sha256": "2399216031443fc01349336f9e64668adba22975241bd96cd8b7c8baecdf3aa0",
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [
@@ -5427,11 +5457,15 @@
       "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinTime",
+        "SwiftfinValues",
+        "SwiftfinFormatting"
+      ],
       "path": "Swiftfin/Views/VideoPlayer/Gestures/VideoPlayerContainerView+PanGesture.swift",
-      "reason": "",
+      "reason": "Complete native pan/swipe adapter reviewed: UIKit gesture state/geometry/preferences choose overlay/scrub/brightness/volume handling and forward existing manager/proxy inputs. Native UIScreen/MPVolumeView callbacks are UI adapters; lifecycle, media preparation and reporting remain owners. Existing cancellation/hit-test/geometry assumptions are unchanged; no hardware query or playback occurred.",
       "sha256": "d3aeac03d4b80e5b3f8af8990c8dfeda4086e8c8c42251c3c02c131d7a363916",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -5780,16 +5814,18 @@
     },
     {
       "path": "Packages/SwiftfinServerOperations/Sources/SwiftfinServerOperations/ServerOperationsPolicy.swift",
-      "reason": "Immutable DTO selection with explicit device/item and preserved order/payload; no session-manager lookup or subscription construction. Other policy members source-reviewed in the same file; their full consumer audit remains open. Adds scoped immutable trigger construction with the same four encoded DTO defaults. One-hour ticks remain 36,000,000,000 without adding a Time dependency. Construction does not update schedules or send commands.",
+      "reason": "Immutable DTO selection with explicit device/item and preserved order/payload; no session-manager lookup or subscription construction. Other policy members source-reviewed in the same file; their full consumer audit remains open. Adds scoped immutable trigger construction with the same four encoded DTO defaults. One-hour ticks remain 36,000,000,000 without adding a Time dependency. Construction does not update schedules or send commands. Complete current policy body re-read; sessionControls additionally owns remote-session display availability with explicit user ID/other-user permission and preserved independent message support. Existing policies remain unchanged. This scoped addition does not establish the final full API/consumer audit.",
       "reviewedConsumers": [
         "Shared/Extensions/JellyfinAPI/TaskTriggerInfo.swift",
-        "Shared/Objects/MediaPlayerManager/Supplements/PlaybackInformationSupplement.swift"
+        "Shared/Objects/MediaPlayerManager/Supplements/PlaybackInformationSupplement.swift",
+        "Swiftfin/Views/AdminDashboardView/ActiveSessions/ActiveSessionDetailsView/ActiveSessionDetailsView.swift"
       ],
       "reviewedInterfaces": [
         "ServerOperationsPolicy.playbackSession(in:deviceID:itemID:)",
-        "ServerOperationsPolicy.defaultTrigger(type:)"
+        "ServerOperationsPolicy.defaultTrigger(type:)",
+        "ServerOperationsPolicy.sessionControls(for:userID:mayControlOtherUsers:)"
       ],
-      "sha256": "95378fd225c19d9a4d1428c252001a312f718e9387ca2864d4b944fcc3bf3ede"
+      "sha256": "15651a3382252db04215eea8c50c9fc34bd5748a0466e923ff376e7e2b5f9d27"
     },
     {
       "path": "Packages/SwiftfinUserMediaState/Sources/SwiftfinUserMediaState/LibraryMembershipChange.swift",
@@ -6729,6 +6765,28 @@
         "Shared/Views/SettingsView/LocalUserSettings/LocalUserSecurityView.swift"
       ],
       "sha256": "3c958ee2e00896889d3a5013b27c7714d83b5b4b9ee948328a8c5a1e9d0758bd"
+    },
+    {
+      "path": "Packages/SwiftfinAccountModels/Sources/SwiftfinAccountModels/ServerConnectionDraft.swift",
+      "sha256": "ccb49965df639aa1732e2c32ed7d09f755e0be0f33714abfd870532f00c372c2",
+      "reason": "Complete checked-Sendable mutable draft value API reviewed: immutable connection identity and editable name/URL/interface/SSID/priority fields. Preserves installed scheme fallback, host/scheme/path normalization, whitespace trimming, sorted nonblank SSIDs with duplicate/case bytes retained, WiFi-name validation and dropped SSIDs for unscoped interfaces. Errors are typed; localization, transport/native permissions and persistence stay outside. Golden URL/SSID/identity/failure and detached-value scenarios verify extraction behavior.",
+      "reviewedInterfaces": [
+        "ServerConnectionDraftError",
+        "ServerConnectionDraft",
+        "init(connection:)",
+        "id",
+        "name",
+        "urlString",
+        "interface",
+        "wifiSSIDs",
+        "priority",
+        "useWifiName",
+        "url",
+        "connection()"
+      ],
+      "reviewedConsumers": [
+        "Shared/Views/EditServerConnectionView.swift"
+      ]
     }
   ],
   "limits": "This ledger records bodies explicitly reviewed, with exact current hashes; earlier prose or lexical inventory is not automatically promoted. Pending and mixed entries prevent whole-source completion. Retained UI algorithms have specific presentation reasons, not folder/import-based blanket approval. API entries do not classify the rest of the public graph. Source review and offline tests do not satisfy held runtime acceptance.",
@@ -6737,10 +6795,9 @@
   "summary": {
     "applicationSwiftFiles": 664,
     "classification": {
-      "pending": 11,
-      "source-reviewed-retained": 653
+      "source-reviewed-retained": 664
     },
-    "currentAPIReviews": 63,
+    "currentAPIReviews": 64,
     "runtimeAcceptance": "held by human; no simulator/server testing"
   }
 }

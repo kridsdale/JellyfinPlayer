@@ -53,6 +53,8 @@ final class SessionViewModel: ViewModel, @MainActor Identifiable {
     @Published
     var session: SessionInfoDto
 
+    private var operations: ServerOperationsClient?
+
     var id: String? {
         session.id
     }
@@ -60,6 +62,13 @@ final class SessionViewModel: ViewModel, @MainActor Identifiable {
     init(session: SessionInfoDto) {
         self.session = session
         super.init()
+        self.operations = try? requireServerOperations()
+    }
+
+    private func requireOperations() throws -> ServerOperationsClient {
+        guard let operations else { throw UserSessionError.missingCurrentSession }
+        try operations.checkBinding()
+        return operations
     }
 
     // MARK: - Remote Playback Session
@@ -75,7 +84,7 @@ final class SessionViewModel: ViewModel, @MainActor Identifiable {
         _ startIndex: Int? = nil
     ) async throws {
         guard let id else { return }
-        try await requireServerOperations().play(
+        try await requireOperations().play(
             sessionID: id,
             command: command,
             itemIDs: itemIDs,
@@ -97,18 +106,18 @@ final class SessionViewModel: ViewModel, @MainActor Identifiable {
     @Function(\Action.Cases.sendMessage)
     private func _sendMessage(_ command: MessageCommand) async throws {
         guard let id else { return }
-        try await requireServerOperations().message(sessionID: id, command: command)
+        try await requireOperations().message(sessionID: id, command: command)
     }
 
     @Function(\Action.Cases.sendPlaystateCommand)
     private func _sendPlaystateCommand(_ command: PlaystateCommand, _ seekPositionTicks: Int?) async throws {
         guard let id else { return }
-        try await requireServerOperations().playstate(sessionID: id, command: command, position: seekPositionTicks)
+        try await requireOperations().playstate(sessionID: id, command: command, position: seekPositionTicks)
     }
 
     @Function(\Action.Cases.sendGeneralCommand)
     private func _sendGeneralCommand(_ command: GeneralCommandType) async throws {
         guard let id else { return }
-        try await requireServerOperations().general(sessionID: id, command: command)
+        try await requireOperations().general(sessionID: id, command: command)
     }
 }

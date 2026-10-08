@@ -75,7 +75,7 @@ struct EditServerConnectionView: View {
     }
 
     private var isDuplicateConnection: Bool {
-        guard let connection = try? draft.connection() else { return false }
+        guard let connection = try? draft.connectionForUI() else { return false }
         return ServerConnection.isDuplicate(connection, in: viewModel.connections)
     }
 
@@ -144,7 +144,7 @@ struct EditServerConnectionView: View {
             throw ErrorMessage(L10n.invalidName)
         }
 
-        let connection = try draft.connection()
+        let connection = try draft.connectionForUI()
 
         guard !isDuplicateConnection else {
             throw ErrorMessage(L10n.connectionAlreadyExists)
@@ -157,7 +157,7 @@ struct EditServerConnectionView: View {
     }
 
     private func testDraft() {
-        guard let draftConnection = try? draft.connection() else { return }
+        guard let draftConnection = try? draft.connectionForUI() else { return }
 
         test(draftConnection)
     }
@@ -331,60 +331,14 @@ struct EditServerConnectionView: View {
     }
 }
 
-private struct ServerConnectionDraft: Equatable {
-    let id: String
-    var name: String
-    var urlString: String
-    var interface: ServerConnection.Interface
-    var wifiSSIDs: [String]
-    var priority: Int
-    var useWifiName: Bool
-
-    init(connection: ServerConnection) {
-        self.id = connection.id
-        self.name = connection.name
-        self.urlString = connection.url.absoluteString
-        self.interface = connection.interface
-        self.wifiSSIDs = connection.wifiSSIDs
-        self.priority = connection.priority
-        self.useWifiName = connection.interface == .wifi && connection.wifiSSIDs.isNotEmpty
-    }
-
-    var url: URL? {
-        let resolvedURLString = urlString
-            .trimmingCharacters(in: .whitespacesAndNewlines)
-            .prepending("http://", if: !urlString.contains("://"))
-
-        return URL(string: resolvedURLString)?.normalizedServerConnectionURL
-    }
-
-    func connection() throws -> ServerConnection {
-        guard let url, url.host != nil else {
+private extension ServerConnectionDraft {
+    func connectionForUI() throws -> ServerConnection {
+        do {
+            return try connection()
+        } catch ServerConnectionDraftError.invalidURL {
             throw ErrorMessage(L10n.invalidURL)
-        }
-
-        let normalizedSSIDs = Self.normalizeSSIDs(wifiSSIDs)
-
-        if interface == .wifi,
-           useWifiName,
-           normalizedSSIDs.isEmpty
-        {
+        } catch ServerConnectionDraftError.invalidWifiName {
             throw ErrorMessage(L10n.invalidWifiName)
         }
-
-        return ServerConnection(
-            id: id,
-            name: name.trimmingCharacters(in: .whitespacesAndNewlines),
-            url: url,
-            interface: interface,
-            wifiSSIDs: interface == .wifi && useWifiName ? normalizedSSIDs : [],
-            priority: priority
-        )
-    }
-
-    private static func normalizeSSIDs(_ wifiSSIDs: [String]) -> [String] {
-        wifiSSIDs
-            .compactMap { $0.trimmingCharacters(in: .whitespacesAndNewlines).nilIfBlank }
-            .sorted()
     }
 }

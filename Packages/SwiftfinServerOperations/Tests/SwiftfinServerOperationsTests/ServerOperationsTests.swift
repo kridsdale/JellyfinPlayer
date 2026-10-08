@@ -224,4 +224,23 @@ struct ServerOperationsTests {
         #expect(object?["ArchiveFileName"] == "backup.zip")
         #expect(s.calls.contains { $0.query["seekPositionTicks"] == "123" })
     }
+
+    @Test
+    func `retired original session client rejects every remote command before transport`() async throws {
+        let sender = Sender()
+        let binding = Binding()
+        let original = ServerOperationsClient(executor: .init(sender: sender, isCurrent: { binding.current }), deviceID: "device")
+        binding.current = false
+        #expect(throws: CancellationError.self) { try original.checkBinding() }
+        await #expect(throws: CancellationError.self) { try await original.message(sessionID: "old", command: .init(text: "fixture")) }
+        await #expect(throws: CancellationError.self) { try await original.playstate(sessionID: "old", command: .pause, position: nil) }
+        await #expect(throws: CancellationError.self) { try await original.general(sessionID: "old", command: .volumeUp) }
+        await #expect(throws: CancellationError.self) {
+            try await original.play(
+                sessionID: "old", command: .playNow, itemIDs: ["fixture"], position: nil,
+                mediaSourceID: nil, audioIndex: nil, subtitleIndex: nil, startIndex: nil
+            )
+        }
+        #expect(sender.calls.isEmpty)
+    }
 }

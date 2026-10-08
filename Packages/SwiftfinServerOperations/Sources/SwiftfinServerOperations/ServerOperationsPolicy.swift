@@ -12,6 +12,24 @@ import SwiftfinCollections
 
 public enum ServerSessionFilter: String, Sendable { case all, active, inactive }
 public enum ServerOperationsPolicy {
+    /// Availability of the installed remote-session controls. Message support is
+    /// independent of playback ownership; actual commands retain server checks.
+    public static func sessionControls(
+        for session: SessionInfoDto,
+        userID: String?,
+        mayControlOtherUsers: Bool
+    ) -> (canControl: Bool, canControlPlayback: Bool, canSendMessage: Bool) {
+        let canControl = userID.map { userID in
+            mayControlOtherUsers || session.userID == nil || session.userID == userID ||
+                session.additionalUsers?.contains { $0.userID == userID } == true
+        } ?? false
+        return (
+            canControl,
+            canControl && session.isSupportsMediaControl == true && session.nowPlayingItem != nil,
+            session.supportedCommands?.contains(.displayMessage) == true
+        )
+    }
+
     public static func sortedKeys(_ values: [AuthenticationInfo]) -> [AuthenticationInfo] {
         values.sorted { ($0.appName ?? "").localizedCaseInsensitiveCompare($1.appName ?? "") == .orderedAscending }
     }

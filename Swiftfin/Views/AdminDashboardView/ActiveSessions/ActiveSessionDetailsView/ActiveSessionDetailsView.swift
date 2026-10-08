@@ -10,6 +10,7 @@ import Foundation
 import JellyfinAPI
 import SwiftfinCollections
 import SwiftfinLocalization
+import SwiftfinServerOperations
 import SwiftfinText
 import SwiftUI
 
@@ -34,22 +35,21 @@ struct ActiveSessionDetailsView: View {
         viewModel.session.playState?.isPaused == true
     }
 
-    private var canControl: Bool {
-        guard let user = viewModel.userSession?.user else { return false }
-        let session = viewModel.session
-
-        return user.data.policy?.enableRemoteControlOfOtherUsers == true
-            || session.userID == nil
-            || session.userID == user.id
-            || session.additionalUsers?.contains { $0.userID == user.id } == true
+    private var controls: (canControl: Bool, canControlPlayback: Bool, canSendMessage: Bool) {
+        let user = viewModel.userSession?.user
+        return ServerOperationsPolicy.sessionControls(
+            for: viewModel.session,
+            userID: user?.id,
+            mayControlOtherUsers: user?.data.policy?.enableRemoteControlOfOtherUsers == true
+        )
     }
 
     private var hasPlaybackControls: Bool {
-        canControl && viewModel.session.isSupportsMediaControl == true && viewModel.session.nowPlayingItem != nil
+        controls.canControlPlayback
     }
 
     private var hasMessageControl: Bool {
-        viewModel.session.supportedCommands?.contains(.displayMessage) == true
+        controls.canSendMessage
     }
 
     @ViewBuilder
