@@ -62,13 +62,13 @@ public typealias KidsAccountCheckpoint = @MainActor @Sendable () throws -> Void
 public final class KidsAuthenticatedAccount {
     public let identity: KidsAccountIdentity
     private let credentialStorage: @MainActor (KidsAccountCheckpoint) throws -> Void
-    private let activation: @MainActor (KidsAccountCheckpoint) async throws -> Void
+    private let activation: @MainActor (@escaping KidsAccountCheckpoint) async throws -> Void
     private var preparedBinding: KidsBinding?
 
     public init(
         identity: KidsAccountIdentity,
         credentialStorage: @escaping @MainActor (KidsAccountCheckpoint) throws -> Void = { try $0() },
-        activation: @escaping @MainActor (KidsAccountCheckpoint) async throws -> Void
+        activation: @escaping @MainActor (@escaping KidsAccountCheckpoint) async throws -> Void
     ) {
         self.identity = identity
         self.credentialStorage = credentialStorage

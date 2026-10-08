@@ -75,7 +75,7 @@ public final class SessionLifecycle {
     isolated deinit { stop() }
 }
 
-public struct AccountSessionIdentity: Equatable, Sendable {
+public struct AccountSessionIdentity: Hashable, Sendable {
     public let serverID: String
     public let userID: String
     public init(serverID: String, userID: String) {
@@ -100,10 +100,15 @@ public final class ActiveSessionCoordinator<Session: AccountSessionLifecycle> {
     private var preparing: Session?
     private var generation: UInt64 = 0
     private var publishedIdentity: AccountSessionIdentity?
-    private let publish: @MainActor (Session?, Bool) -> Void
+    public typealias Checkpoint = @MainActor @Sendable () throws -> Void
+    private let publish: @MainActor (Session?, Bool, Checkpoint) throws -> Void
 
     public init(publish: @escaping @MainActor (Session?, Bool) -> Void) {
-        self.publish = publish
+        self.publish = { session, changed, _ in publish(session, changed) }
+    }
+
+    public init(publishScoped: @escaping @MainActor (Session?, Bool, Checkpoint) throws -> Void) {
+        self.publish = publishScoped
     }
 
     public func replace(with replacement: Session?) async {
@@ -111,7 +116,7 @@ public final class ActiveSessionCoordinator<Session: AccountSessionLifecycle> {
     }
 
     /// Admission checks precede teardown and surround noncooperating preparation/publication.
-    public func replace(with replacement: Session?, validate: @MainActor @Sendable () throws -> Void) async throws {
+    public func replace(with replacement: Session?, validate: @escaping Checkpoint) async throws {
         try Task.checkCancellation()
         try validate()
         if let current, let replacement, current === replacement {
@@ -119,6 +124,12 @@ public final class ActiveSessionCoordinator<Session: AccountSessionLifecycle> {
         }
         generation &+= 1
         let attempt = generation
+        let checkpoint: Checkpoint = { [weak self] in
+            try Task.checkCancellation()
+            guard let self, generation == attempt else { throw CancellationError() }
+            try validate()
+            guard generation == attempt else { throw CancellationError() }
+        }
         let oldPreparing = preparing
         let oldCurrent = current
         preparing = nil
@@ -126,21 +137,18 @@ public final class ActiveSessionCoordinator<Session: AccountSessionLifecycle> {
         oldPreparing?.stop()
         oldCurrent?.stop()
         do {
-            try validate()
-            guard generation == attempt else { throw CancellationError() }
+            try checkpoint()
             preparing = replacement
             await replacement?.prepare()
             try Task.checkCancellation()
-            try validate()
-            guard generation == attempt else { throw CancellationError() }
+            try checkpoint()
             preparing = nil
             current = replacement
             let identity = replacement?.sessionIdentity
             let changed = publishedIdentity != identity
             publishedIdentity = identity
-            publish(replacement, changed)
-            try validate()
-            guard generation == attempt else { throw CancellationError() }
+            try publish(replacement, changed, checkpoint)
+            try checkpoint()
             replacement?.start()
         } catch {
             // Never stop an instance that a newer request now owns.

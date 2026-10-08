@@ -11,6 +11,9 @@ import Combine
 import Dispatch
 import JellyfinAPI
 import StatefulMacros
+import SwiftfinAccountAccess
+import SwiftfinAsyncStreams
+import SwiftfinImages
 import SwiftfinServerOperations
 import SwiftfinUserAdministration
 
@@ -45,26 +48,54 @@ final class ServerActivityDetailViewModel: ViewModel {
     @Published
     var item: BaseItemDto?
 
+    private let originalItemID: String?
+    private let originalUserID: String?
+    private var operations: ServerOperationsClient?
+    private var accounts: UserAdministrationClient?
+    private var access: AccountAccessClient?
+    private let refreshGate = AsyncOperationGate()
+
+    var profileImageSource: ImageSource {
+        ImageSource(url: user?.id.flatMap { try? access?.profileURL(userID: $0, imageTag: user?.primaryImageTag) })
+    }
+
     init(log: ActivityLogEntry, user: UserDto?) {
+        self.originalItemID = log.itemID
+        self.originalUserID = log.userID
         self.log = log
         self.user = user
         super.init()
+        self.operations = try? requireServerOperations()
+        self.accounts = try? requireUserAdministration()
+        self.access = userSession?.accountAccess
     }
 
     @Function(\Action.Cases.refresh)
     private func _refresh() async {
+        guard !Task.isCancelled else { return }
+        let caller = refreshGate.begin()
+        guard let operations, let accounts, let access else { return }
+        let checkpoint: AsyncOperationGate.Checkpoint = {
+            try caller()
+            try operations.checkBinding()
+            try accounts.checkBinding()
+            try access.checkBinding()
+            try caller()
+        }
         do {
-            let operations = try requireServerOperations()
-            let accounts = try requireUserAdministration()
-            async let fetchedItem = readItem(log.itemID, operations: operations)
-            async let fetchedUser = readUser(log.userID, accounts: accounts)
+            try checkpoint()
+            async let fetchedItem = readItem(originalItemID, operations: operations)
+            async let fetchedUser = readUser(originalUserID, accounts: accounts)
             let results = try await (fetchedItem, fetchedUser)
+            try checkpoint()
             item = results.0
+            try checkpoint()
             user = results.1
-        } catch is CancellationError {
-            return
+        } catch is CancellationError { return
         } catch {
+            guard (try? checkpoint()) != nil else { return }
             item = nil
+            guard (try? checkpoint()) != nil else { return }
             user = nil
         }
     }

@@ -21,6 +21,10 @@ public final class ServerOperationsClient {
         self.deviceID = deviceID
     }
 
+    public func checkBinding() throws {
+        try executor.checkBinding()
+    }
+
     public func activity(offset: Int, limit: Int, hasUserID: Bool?, minimumDate: Date?) async throws -> [ActivityLogEntry] {
         var p = Paths.GetLogEntriesParameters()
         p.startIndex = max(0, offset)

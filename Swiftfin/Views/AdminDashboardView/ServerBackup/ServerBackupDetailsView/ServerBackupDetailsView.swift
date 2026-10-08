@@ -100,9 +100,7 @@ struct ServerBackupDetailsView: View {
             isPresented: $isPresentingRestoreComplete
         ) {
             Button(L10n.ok) {
-                Task { @MainActor in
-                    await userSessionManager.signOut(reason: .explicit)
-                }
+                userSessionManager.requestSignOut(reason: .explicit)
             }
         } message: {
             Text(L10n.restoringMessage)

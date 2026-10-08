@@ -52,16 +52,16 @@
     {
       "owners": [],
       "path": "Shared/Components/ButtonStyles/BackportGlassButtonStyles.swift",
-      "reason": "",
+      "reason": "Complete style body reviewed: native glass availability, legacy fallback, role/accent tint, control-size padding and forwarded PrimitiveButtonStyle trigger. Defaults supplies appearance only.",
       "sha256": "7c45e3dcf911314515814574e59ecd01dca9770546713743980e9a12ec775342",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
       "path": "Shared/Components/ButtonStyles/CapsuleButtonStyle.swift",
-      "reason": "",
+      "reason": "Complete style body reviewed: control-size metrics, focus/selection/pressed opacity, shape, animation and accessibility selected traits. These metrics directly implement native control presentation.",
       "sha256": "6255f6420b96af64a0c15d7306a17af8b0f87ebab97fd2853dbeb299a7fbfbb7",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -255,11 +255,13 @@
       "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinFilters"
+      ],
       "path": "Shared/Components/FilterTrack.swift",
-      "reason": "",
+      "reason": "Complete filter-control body reviewed: supplied filter types, reset/focus presentation and routing to the already bound FilterViewModel. Filter/query implementation remains with its owner; this control owns no request/debounce.",
       "sha256": "b0bbee628baa2352bdcec76524722f11cbfe5aa1eca7955642bb47c756b11139",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -301,9 +303,9 @@
     {
       "owners": [],
       "path": "Shared/Components/Layouts/ImageContentColumnsLayout.swift",
-      "reason": "",
+      "reason": "Complete SwiftUI Layout body reviewed: exactly two subviews, bounded width/column fraction, native sizeThatFits and placement. Existing positive aspect-ratio and spacing assumptions remain; this classification does not claim invalid ratios were tested.",
       "sha256": "a01d7817bd3b0bb081ebd9cf188dcc59f363ab03fcb4c9abe606f914855282af",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -336,9 +338,9 @@
     {
       "owners": [],
       "path": "Shared/Components/LibraryElement.swift",
-      "reason": "",
+      "reason": "Complete platform presentation protocol/defaults reviewed: app Router and native collection-grid layouts use supplied item/style choices and existing normalization. No catalog fetch, account authorization or asynchronous source ownership.",
       "sha256": "e1b5182d1db3a1657ca0e5dbb834322b97027f5f1bfe6145697f1a0c2cbe6794",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -416,18 +418,21 @@
       "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinCollections",
+        "SwiftfinUIState"
+      ],
       "path": "Shared/Components/OrderedSectionSelectorView.swift",
-      "reason": "",
+      "reason": "Complete ordered-selection form reviewed: supplied sources/removable choices, PublishedBox binding, enable/disable toggles, native move offsets, haptic and edit mode. No query or storage algorithm beyond caller-owned UI binding.",
       "sha256": "2da26b59689646e959e373c3e15f882aabf42b982f0664039e4fdadb7c5c5eb5",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
       "path": "Shared/Components/OverlayToastView.swift",
-      "reason": "",
+      "reason": "Complete toast display body reviewed: existing ToastProxy supplies presentation, title and icon; the view sizes/animates the overlay and dismisses on platform click. Existing rapid-animation/enhanced-toast TODOs are retained.",
       "sha256": "ed25e47258d7d38509d05bb005d820840b62d15e5482b3f069f979cf079d6f29",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [
@@ -458,9 +463,9 @@
     {
       "owners": [],
       "path": "Shared/Components/PinEntry.swift",
-      "reason": "",
+      "reason": "Complete native prompt/representable body reviewed: request-ID presentation, secure local text, completion forwarding, weak queued UIKit responder work and teardown. Caller WithLocalUserAuthentication owns continuation identity/duplicate completion; access policy and PIN comparison are not implemented here. No native prompt was invoked.",
       "sha256": "50701f623c06be4713d1651522d6acb65db0b6bddb91386d860e53f1f331c301",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -521,11 +526,13 @@
       "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinCollections"
+      ],
       "path": "Shared/Components/Quadrant.swift",
-      "reason": "",
+      "reason": "Complete quadrant/badge body reviewed: stable enumerated visual IDs, trailing order, overlap z-order, shape and environment metrics implement poster presentation from supplied labels/colors.",
       "sha256": "820d47c5f2ff7edc4ee14f244777cfbabe36360a2d481655f05f6c78bc8a425a",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -589,11 +596,13 @@
       "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinValues"
+      ],
       "path": "Shared/Components/SliderContainer/SliderContainer.swift",
-      "reason": "",
+      "reason": "Complete slider composition reviewed: finite positive native range, focus/editing UI state, guarded editing notifications and supplied gesture/value bindings. It delegates native interaction and does not seek or choose playback policy.",
       "sha256": "8e502dc696f064d45422335fd0523f8b972aa3526abf3afb6eb626042d86d062",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -626,9 +635,9 @@
     {
       "owners": [],
       "path": "Shared/Components/UserButton.swift",
-      "reason": "",
+      "reason": "Complete profile-button body reviewed: captured native image/title, selected/delete presentation and supplied actions; the two initializers use an explicitly supplied server/transport. No account activation, policy evaluation or async request sequencing.",
       "sha256": "fd9c93a51426f44560fb821594423b1f3c6e7182d8e57c63acd8efbd3dcfca05",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [
@@ -782,11 +791,15 @@
       "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinSessions",
+        "KidsApplication",
+        "KidsExperience"
+      ],
       "path": "Shared/Coordinators/Root/UserSessionRootView.swift",
-      "reason": "",
-      "sha256": "d65cd72cd45b331773def5d87a3d1e2c3abf5ab88a10c3efcb80be1ebb7b2a01",
-      "status": "pending"
+      "reason": "Complete platform root composition reviewed: app/preview host construction, startup task, native signed-in/out UI and poster environment remain app-owned. Native root identity now includes server/user pair; URL submission captures manager intent before queued authentication.",
+      "sha256": "8acd22b7e9cf3aaf4157f52ab8437b5c13ae3634c1e9480524a7b7f1d38b9661",
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -844,9 +857,9 @@
     {
       "owners": [],
       "path": "Shared/Extensions/Color.swift",
-      "reason": "",
+      "reason": "Complete platform color body reviewed: native UIColor conversion, UI palette/overlay selection and RGBA/hex display adaptation belong to the platform representation. Existing tvOS palette TODO and conversion assumptions are preserved; no generic image/pixel processing or catalog policy.",
       "sha256": "ae086a9f3be43d65525e2f785ce246a07323a1af5414a1e81d84ddb7dc57c8a8",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -893,9 +906,9 @@
     {
       "owners": [],
       "path": "Shared/Extensions/Form.swift",
-      "reason": "",
+      "reason": "Complete form composition reviewed: native form overloads, two-column tvOS layout, focused learn-more overlay, masks and scrolling labels. The actual Marquee implementation is not approved through this caller.",
       "sha256": "b2305cc011df66857c8372c0ccfb223bb054abf918cb70da0aae0c872ecc1b01",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -1422,9 +1435,9 @@
     {
       "owners": [],
       "path": "Shared/Extensions/LabeledContentStyle.swift",
-      "reason": "",
+      "reason": "Complete style body reviewed: label/content fonts, colors, focus highlighting and platform button wrapping are native presentation.",
       "sha256": "229925c0f213d8d557c6cc6eddf9c4e3d294a604fac0bd6550c076fa7d9a293d",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -1469,11 +1482,14 @@
       "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinLocalization",
+        "SwiftfinText"
+      ],
       "path": "Shared/Extensions/Section.swift",
-      "reason": "",
+      "reason": "Complete native section and LearnMoreButton body reviewed: captured content, focused descriptions, modal text layout, local presentation and supplied labels. No domain query or persistence implementation.",
       "sha256": "a3e61b5d79597db0ed13c9a34119b80e92da153026f47eedae2d33c0a5131b4a",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -1585,9 +1601,9 @@
     {
       "owners": [],
       "path": "Shared/Extensions/ViewExtensions/Modifiers/BackgroundParallaxHeaderModifier.swift",
-      "reason": "",
+      "reason": "Complete geometry modifier reviewed: captured header, frame/safe-area measurements, display offsets/masking and guarded scale denominator. This is scroll presentation, with inherited multiplier/input assumptions preserved.",
       "sha256": "9f7343d6e4167dbc4105dd7a1b69d7ac044b07c04037f0e7e85b510a6d5f0f5f",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -1599,9 +1615,9 @@
     {
       "owners": [],
       "path": "Shared/Extensions/ViewExtensions/Modifiers/ExtendedBackgroundModifier.swift",
-      "reason": "",
+      "reason": "Complete three-modifier body reviewed: captured background/mask/overlay and measured native sizes expanded by caller insets. Geometry affects display only.",
       "sha256": "706c378d77ea35d02a6a4f0848fd5edc102135279a7a04e4aa568e5313151558",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -3180,15 +3196,16 @@
     },
     {
       "owners": [
-        "SwiftfinUIState",
         "SwiftfinSessions",
+        "SwiftfinAccountStore",
         "SwiftfinAccountAccess",
-        "SwiftfinAsyncStreams"
+        "SwiftfinAsyncStreams",
+        "SwiftfinUIState"
       ],
       "path": "Shared/Services/UserSession/UserSessionManager.swift",
-      "reason": "Mixed: scoped metadata freshness/lifetime now delegates to SessionMetadataRefresh with exact weak session/transport identity and explicit pre-commit checkpoints; captured sign-in scheduling replaces delayed current-account selection. Selection and bound SDK socket/metadata operations delegate. Deep-link authentication, sign-in/sign-out and foreground inter-await intent sequencing still require a higher-level operation audit; this entry does not approve them. Exact evaluated-PIN validation now delegates to AccountStore with strict missing-PIN denial; local authentication prompting and localized errors remain composition. Scoped child sign-in/sign-out overloads now resolve an exact account pair and borrow a caller checkpoint/full-session validator through resource preparation and publication. The existing inherited login/start/deep-link/foreground paths remain outside that scoped approval, so the file stays mixed.",
-      "sha256": "97698003251eccf00e739612cdb36b2547ede1307698c9008f1e6bca283206ce",
-      "status": "source-reviewed-mixed"
+      "reason": "Complete current manager and changed lifecycle consumers reviewed: explicit selection/restoration/authentication sequencing delegates to SessionSelectionCoordinator and resource publication to ActiveSessionCoordinator. Original remote-login intent is reused across save/activation, exact server/user and captured local policy are checked, and native authentication/stop/settings/Factory/routing callbacks borrow checkpoints between effects. Metadata refresh and selected player remain with existing owners. Native policy evaluation and legacy installed-key composition remain in the app. Synchronous effects already committed, including Published willSet callbacks, are not rolled back; no real authentication/restoration/playback acceptance is inferred.",
+      "sha256": "48fae026c228757ef7410ee72e149fc2c915b898fd3f688420b6e5fcf7882825",
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [
@@ -3260,11 +3277,13 @@
     {
       "owners": [
         "SwiftfinServerOperations",
-        "SwiftfinUserAdministration"
+        "SwiftfinUserAdministration",
+        "SwiftfinAccountAccess",
+        "SwiftfinAsyncStreams"
       ],
       "path": "Shared/ViewModels/AdminDashboard/ServerActivityDetailViewModel.swift",
-      "reason": "Composes concurrent owned item/user reads for an activity detail screen, preserving missing-ID nils, cancellation and clearing the two UI fields on other errors. It constructs no SDK request/client and retains no native stream or resource policy.",
-      "sha256": "fc6586676dd53a3c39962837e58d4cb5f45ae56afccb87e65f4e6a1f7c754a54",
+      "reason": "Complete current detail adapter reviewed: original log IDs and bound operation/account/avatar clients are captured at construction, concurrent owned reads retain missing-ID nils, and parent/account checks surround UI effects including failure clearing. Avatar URLs use that captured account; no ambient replacement transport or SDK request construction.",
+      "sha256": "a9ea8d4d5b596c89702d45b54107f14927b26a02cfbf59f4128398911b9fa090",
       "status": "source-reviewed-retained"
     },
     {
@@ -3607,11 +3626,12 @@
     },
     {
       "owners": [
-        "SwiftfinAccountStore"
+        "SwiftfinAccountStore",
+        "SwiftfinCollections"
       ],
       "path": "Shared/ViewModels/SelectUserViewModel.swift",
-      "reason": "Retains Stateful UI transitions/events, grouped/sorted local account presentation and owner deletions. Required-PIN admission delegates exact comparison and missing denial to AccountStore before signedIn publication; localized errors and precondition remain in the app. No keychain implementation/read/comparison remains.",
-      "sha256": "afa2227d397b2f513242439ef49b11832d596895e550af4f0fcfbb2dd7bcd432",
+      "reason": "Complete current body reviewed: Stateful loading/error UI, grouped/sorted local account presentation and owner deletions. Native authentication and activation have moved out of this intermediate event bridge to the scoped manager selection flow.",
+      "sha256": "414ac0b3dadf218283795e42840b98ee3180592ce8c718ec7c101c31aeef62f8",
       "status": "source-reviewed-retained"
     },
     {
@@ -3629,14 +3649,14 @@
     },
     {
       "owners": [
+        "SwiftfinSessions",
         "SwiftfinAccountAccess",
         "SwiftfinAccountStore",
-        "SwiftfinAsyncStreams",
-        "SwiftfinUIState"
+        "SwiftfinAsyncStreams"
       ],
       "path": "Shared/ViewModels/UserSignInViewModel.swift",
-      "reason": "Retains main-actor login UI transitions, native local-authentication/map port and localized error/events. AccountAccess binds the submitted transport; login/save gates capture at UI submission. Store-owned opaque admission snapshot rejects changed endpoint, local identity or policy before credentials/settings and between accepted writes. Existing-user PIN uses throwing owner validation. Committed display values check original account and intent before publication. GUI/native authentication remains held.",
-      "sha256": "d1d538bf9906e04f991eb6fd7a6194c20c98f809e658cee9e4d5fa7ea12d232e",
+      "reason": "Complete admission body reviewed: existing exact origin and read/login/save gates remain; account choices now capture a session selection receipt before remote work and native save prompts. Pending/save/saved-event handoff carries that receipt without making a newer selection. Failed remote login, explicit cancel and disappearance abandon only a matching pending ticket; active publication cannot be revoked by host disappearance. Policy/PIN/token persistence stays with AccountStore and transport/auth with AccountAccess. Native outcomes remain untested under the human hold.",
+      "sha256": "ca51ffb534fc7088c9458ab12519c91b5bba6e3039e81dcd6844adbff3b5be5a",
       "status": "source-reviewed-retained"
     },
     {
@@ -3655,18 +3675,21 @@
       "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinLocalization",
+        "SwiftfinText"
+      ],
       "path": "Shared/Views/AboutAppView.swift",
-      "reason": "",
+      "reason": "Complete information screen reviewed: native bundle/version labels, permissions/settings routing and UIApplication external links. Existing inherited Swiftfin labels/links are preserved; no release or server operation is implemented.",
       "sha256": "6c018d897eb6640199a3c6392443227ce511493433d2ca11e7f8146078f6d8de",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
       "path": "Shared/Views/AppIconSelectorView.swift",
-      "reason": "",
+      "reason": "Complete icon picker/row reviewed: native alternate-icon SDK adaptation, optimistic display and rollback on SDK failure are platform UI. Concurrent icon-selection rollback behavior is preserved and unverified; no account/media/storage responsibility.",
       "sha256": "8a266d51412dcc227769fc9de3a1006ebc8c3404e270fc13efe2ee29c8b7f5a6",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -3997,11 +4020,14 @@
       "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinMediaTracks",
+        "SwiftfinCollections"
+      ],
       "path": "Shared/Views/MediaInformation/MediaSourceInfoView.swift",
-      "reason": "",
+      "reason": "Complete native information screen reviewed: supplied media-source stream facts populate sections, focus selects adjacent information and routes/share links adapt existing values. No metadata fetching or playback changes.",
       "sha256": "7bd7957a3b9c58fd5d9218b4f85a0681375133688a07e57c55a0ec72b6b208ef",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [
@@ -4053,11 +4079,13 @@
       "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinCollections"
+      ],
       "path": "Shared/Views/SelectUserView/Components/SelectUserView+ListView.swift",
-      "reason": "",
+      "reason": "Complete account-list body reviewed: supplied account/server pairs produce native profile rows, edit selection and forwarded select/delete callbacks. Existing user-ID row identity is preserved; this review does not claim duplicate cross-server user-ID layout behavior tested.",
       "sha256": "8ca36169a3f92c48800117abc0643e4421af317422a3c3dc236fa142516b7404",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [
@@ -4093,18 +4121,24 @@
       "status": "pending"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinSessions",
+        "SwiftfinAccountStore",
+        "SwiftfinCollections"
+      ],
       "path": "Shared/Views/SelectUserView/SelectUserView.swift",
-      "reason": "",
-      "sha256": "17783d7fe0c6d4a87a83a2cefbb3342367828c3750f5d96d32a4f0313a4d3b73",
-      "status": "pending"
+      "reason": "Complete account-selection screen reviewed: local sorting/selection/filtering, native layout, toolbar, deletion confirmation and owner refresh remain presentation. Selection now captures exact server/user intent before native authentication; manager/library owns policy checks and activation, with quiet cancellation and scoped haptic completion.",
+      "sha256": "ecdfe42bf24746ffa46ad02496f2984a1f507c851912f1536d9878d1bfd85984",
+      "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinAccountModels"
+      ],
       "path": "Shared/Views/ServerConnectionView.swift",
-      "reason": "",
+      "reason": "Complete connection screen reviewed: observed owner supplies connection/status, move/create/evaluate methods; the view owns native editing, labels, toggles and routing. No resolver/network/settings implementation or server action is performed here.",
       "sha256": "142d1704502a540b866b296f2e2517980f55786c37c9c4d7e81a5dda42c845b1",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [
@@ -4223,11 +4257,13 @@
       "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinSessions"
+      ],
       "path": "Shared/Views/SettingsView/SettingsView.swift",
-      "reason": "",
-      "sha256": "5988f5c2b8664d32b54518e6bf2a622c66880dfbcff9b7c76ff7cfbcf727753e",
-      "status": "pending"
+      "reason": "Complete native settings composition reviewed: observed account/profile routes, platform appearance and diagnostics choices remain app-owned. Explicit sign-out is captured synchronously before its task, and dismissal runs only for that successful request.",
+      "sha256": "4207546c9eba5404a5a3ea01794cb66cca253d4a74da42399b2b7a174293d008",
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [
@@ -4242,11 +4278,15 @@
       "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinSessions",
+        "SwiftfinAccountAccess",
+        "SwiftfinAccountStore"
+      ],
       "path": "Shared/Views/UserSignInView.swift",
-      "reason": "",
-      "sha256": "3aed008260164143cc6174c402aede2f357d09070003cf6be846cc4dcbd1e2a0",
-      "status": "pending"
+      "reason": "Complete admission screen reviewed: native entered values, policy/hint bindings, remote/Quick Connect and duplicate-account UI call their existing owners. The saved event carries its original selection receipt into activation; dismissal/cancel retires an unexecuted handoff. Original environment-action nonnil preconditions remain; no credential/native action was executed.",
+      "sha256": "bb8c61d796cfa335d6dfb4c03b36d9cdf5d079fe6e6bcbf45375611a8046029c",
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [
@@ -4442,11 +4482,13 @@
       "status": "pending"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinAccountModels"
+      ],
       "path": "Swiftfin/Components/LocalUserAccessPolicyView.swift",
-      "reason": "",
+      "reason": "Complete native policy/hint form reviewed: supplied bindings, draft picker, localized policy description and 120-character UI hint truncation. No native authentication or credential writes are implemented; inherited hint/picker presentation behavior is preserved.",
       "sha256": "a5db7faa018b278c42c711eec2757b6fcae5651faf7dc20b2da5da04842553fd",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -4619,9 +4661,9 @@
         "SwiftfinAccountAccess"
       ],
       "path": "Swiftfin/Views/AdminDashboardView/ServerActivity/ServerActivityView/Components/ServerActivityEntry.swift",
-      "reason": "Complete row reviewed: activity labels/layout/callback are presentation, but its user profile image combines an old detail-model user DTO with ambient viewModel.userSession.client. The resource transport has not been bound to the original activity/account. Keep this explicit for the next account-resource integration; no avatar was loaded.",
-      "sha256": "d84d910cdbbf7af130e79bffe3670e6c86c2dea0576033813ea5f45852310f70",
-      "status": "source-reviewed-mixed"
+      "reason": "Complete activity row reviewed: localized labels, date/severity, sizing and callback are native presentation. Profile image now comes from the original detail-model bound account rather than combining an old user DTO with an ambient session transport. No avatar was loaded.",
+      "sha256": "e795383d7dfe5b37185caa75367af83d9b4404311f70da003fb35ec19754fbb7",
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -4638,10 +4680,13 @@
       "status": "source-reviewed-retained"
     },
     {
-      "owners": [],
+      "owners": [
+        "SwiftfinServerOperations",
+        "SwiftfinSessions"
+      ],
       "path": "Swiftfin/Views/AdminDashboardView/ServerBackup/ServerBackupDetailsView/ServerBackupDetailsView.swift",
-      "reason": "Complete body reviewed: Backup filename/date/options presentation and native restore confirmation/result alert remain UI; restore delegates to the existing bound model and explicit sign-out composes the session manager. No restoration was executed.",
-      "sha256": "17a1b4740faf059103fe29e0aa1a7508b190c4bd3c7a3d79e586411feb8815d3",
+      "reason": "Complete backup detail body reviewed: supplied manifest labels, confirmation/status/error UI and existing owner restoration callback. Post-restoration sign-out now captures an explicit manager intent synchronously. No restore, server operation or file access was executed.",
+      "sha256": "031e9fbc28a03e1bb8644449f74595c55ebd8e9810e1b8389100ae3e8bce48af",
       "status": "source-reviewed-retained"
     },
     {
@@ -4905,9 +4950,9 @@
     {
       "owners": [],
       "path": "Swiftfin/Views/AppPermissionsView.swift",
-      "reason": "",
+      "reason": "Complete permission screen reviewed: native status/request adapter supplies OS authority; this view presents status, privacy description, errors and settings link. No permission query/request was executed; inherited local-network description TODO remains.",
       "sha256": "f0785ef32f420261c3b6512f073861d182d131b2dc64585263410fb760682dbb",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [
@@ -5148,9 +5193,9 @@
     {
       "owners": [],
       "path": "Swiftfin/Views/PhotoCropView/PhotoCropAspectRatios.swift",
-      "reason": "",
+      "reason": "Complete crop-picker choice enum reviewed: fixed width/height pairs, optional free ratio and localized display ID are choices for native crop UI. It implements no image processing.",
       "sha256": "d816efae111fd617c20825d36085447a77a2494ddd13f5186dbcebdae6bae505",
-      "status": "pending"
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -5792,15 +5837,17 @@
     },
     {
       "path": "Packages/SwiftfinServerOperations/Sources/SwiftfinServerOperations/ServerOperationsClient.swift",
-      "reason": "Scoped API review of compound key operations and the whole captured-client body: neither credentials nor SDK clients escape the feature owner. The synchronous main-actor revocation receipt preserves intermediate UI removal, then the executor revalidates cancellation/binding before creation/reload. Missing list remains nil; errors stop subsequent requests. New create/reload sequencing is shared by replacement. Ten new synthetic contracts cover exact routes/methods/name, sorting, nil lists, partial failures, expired binding and cancellation. All other existing operation implementations retain their original source bodies. No household server operation was executed.",
+      "reason": "The small main-actor checkBinding method forwards existing executor authority for caller UI publication checkpoints; all server request construction remains private to this owner. No additional request, SDK object escape or server action.",
       "reviewedConsumers": [
-        "Shared/ViewModels/AdminDashboard/APIKeysViewModel.swift"
+        "Shared/ViewModels/AdminDashboard/APIKeysViewModel.swift",
+        "Shared/ViewModels/AdminDashboard/ServerActivityDetailViewModel.swift"
       ],
       "reviewedInterfaces": [
         "createKeyAndReload(name:)",
-        "replaceKey(name:token:didRevoke:)"
+        "replaceKey(name:token:didRevoke:)",
+        "checkBinding()"
       ],
-      "sha256": "30b249c9ae8db3da0ebb615acbfdac10da137aad05092d51a37d9d5c2cc299c2"
+      "sha256": "7d92a5520a11e1e22557a9538cdf88077acbbf02ae10f189cf4cd353442d99ed"
     },
     {
       "path": "Packages/SwiftfinPlaybackPreparation/Sources/SwiftfinPlaybackPreparation/RemotePlaybackCommandPolicy.swift",
@@ -5972,10 +6019,11 @@
     },
     {
       "path": "Packages/KidsAccounts/Sources/KidsAccounts/KidsAccountHost.swift",
-      "reason": "Scoped staged-account and host contracts reviewed: throwing main-actor Sendable checkpoints enter secure storage and activation callbacks; each preparation revokes previous authority and activation consumes preparation before suspension. The original failed-preparation retry regression failed, then passes. Identity changes must be synchronous on the main actor; the concrete adapter uses the actor-owned session publisher directly. No transactional rollback or generic approval of all host implementations is claimed.",
+      "reason": "Scoped activation port lifetime adjustment: the escaping Sendable main-actor checkpoint may be held through the host session-selection/resource pipeline. Existing one-shot binding preparation and activation checks are unchanged; no global credential or native transport is exposed.",
       "reviewedConsumers": [
         "Packages/KidsApplication/Sources/KidsApplication/KidsAppModel.swift",
-        "Swiftfin tvOS/App/KidsAccountAdapter.swift"
+        "Swiftfin tvOS/App/KidsAccountAdapter.swift",
+        "Shared/Services/UserSession/UserSessionManager.swift"
       ],
       "reviewedInterfaces": [
         "KidsAccountCheckpoint",
@@ -5983,9 +6031,10 @@
         "prepareActivation(binding:validate:)",
         "activate(binding:validate:)",
         "KidsAccountHost.identityChanges",
-        "signOut(validate:)"
+        "signOut(validate:)",
+        "KidsAuthenticatedAccount.init activation checkpoint lifetime"
       ],
-      "sha256": "fd577f3c71ca2d4d88f10172402116be0171316897606f769cb7c800ce1870ed"
+      "sha256": "05f01e75bd8cc14b587912617243c0ca207599db8fa411a19b62ac8451e54f91"
     },
     {
       "path": "Packages/KidsAccounts/Sources/KidsAccounts/KidsAccountAdmission.swift",
@@ -6008,15 +6057,19 @@
     },
     {
       "path": "Packages/SwiftfinSessions/Sources/SwiftfinSessions/SessionLifecycle.swift",
-      "reason": "Scoped checked replacement and teardown reviewed with the existing lifecycle consumers: borrowed main-actor Sendable admission checks precede teardown and follow noncooperating preparation/publication; expired work cleans its own resources without stopping an instance a newer request owns. Teardown revokes fields before synchronous stop callbacks. Four added contracts cover preflight preservation, retired preparation, publication reentry and teardown reentry; all 29 session library contracts pass. Already published app/settings effects are not rolled back; the complete global manager/routing audit remains open.",
+      "reason": "Checked scoped publication adds a borrowed escaping main-actor Sendable checkpoint between host effects, while preserving the existing two-argument publisher adapter. Account identity is Hashable over exact server/user. Active-session preflight/resource cleanup behavior remains; publication effects are not transactional rollback.",
       "reviewedConsumers": [
-        "Shared/Services/UserSession/UserSessionManager.swift"
+        "Shared/Services/UserSession/UserSessionManager.swift",
+        "Shared/Coordinators/Root/UserSessionRootView.swift"
       ],
       "reviewedInterfaces": [
         "ActiveSessionCoordinator.replace(with:validate:)",
-        "ActiveSessionCoordinator.stop()"
+        "ActiveSessionCoordinator.stop()",
+        "AccountSessionIdentity",
+        "ActiveSessionCoordinator.init(publishScoped:)",
+        "replace(with:validate:)"
       ],
-      "sha256": "764745ad0af34eb22659b87f261b54f26754708e9bf3d19e663713afa0bf36ff"
+      "sha256": "47c442729df8ba57269237cf30c02d00d81d81d5f0b33d7b5bf5f943abd832dd"
     },
     {
       "path": "Packages/SwiftfinPlaybackPreparation/Sources/SwiftfinPlaybackPreparation/PlaybackConnection.swift",
@@ -6330,6 +6383,39 @@
         "imageURL(itemID:image:)"
       ],
       "sha256": "f4e216b519287ddcf13a0af2d7aaf5f6c6f47a1eeb10b5944c39993cac8047b3"
+    },
+    {
+      "path": "Packages/SwiftfinSessions/Sources/SwiftfinSessions/SessionSelectionCoordinator.swift",
+      "reviewedInterfaces": [
+        "Priority",
+        "Request.check",
+        "Request.validating(_:)",
+        "init(sessions:)",
+        "begin(priority:validate:)",
+        "cancelPending(_:)",
+        "activate(_:with:prepare:willSelect:didSelect:)"
+      ],
+      "reviewedConsumers": [
+        "Shared/Services/UserSession/UserSessionManager.swift",
+        "Shared/ViewModels/UserSignInViewModel.swift",
+        "Shared/Views/UserSignInView.swift",
+        "Shared/Views/SelectUserView/SelectUserView.swift"
+      ],
+      "reason": "Complete current actor/Sendable API reviewed: opaque owner/generation receipt captures selection before task/prompt scheduling, restoration is denied while explicit work is unfinished, staged validation adds account binding without replacing intent, and request checks surround prepare/persist/resource publication/routing. Matching queued cancellation releases restoration but cannot revoke executing activation through native host disappearance. Late ordinary errors are canceled when their request expires; replay/transfer are denied. Native prompt/settings/storage remain injected host effects and accepted effects are not rolled back.",
+      "sha256": "df13bf5e6196952bfeb30a62dfe7755222573da649084dcc02710fda259a5cc2"
+    },
+    {
+      "path": "Packages/SwiftfinAccountAccess/Sources/SwiftfinAccountAccess/AccountAccessClient.swift",
+      "reviewedInterfaces": [
+        "splashURL()",
+        "profileURL(userID:imageTag:)"
+      ],
+      "reviewedConsumers": [
+        "Shared/ViewModels/AdminDashboard/ServerActivityDetailViewModel.swift",
+        "Swiftfin/Views/AdminDashboardView/ServerActivity/ServerActivityView/Components/ServerActivityEntry.swift"
+      ],
+      "reason": "Scoped URL construction revalidates the captured account before and after profile/splash resolver callbacks, rejecting synchronous binding replacement without enabling API-key query strings or invoking HTTP. Existing transport/auth/login/own-user contracts are unchanged.",
+      "sha256": "b1c3ba744f6f8a9d64b52f7a7d08bb146ab9ebe7c08372831cb0293ab1066e65"
     }
   ],
   "limits": "This ledger records bodies explicitly reviewed, with exact current hashes; earlier prose or lexical inventory is not automatically promoted. Pending and mixed entries prevent whole-source completion. Retained UI algorithms have specific presentation reasons, not folder/import-based blanket approval. API entries do not classify the rest of the public graph. Source review and offline tests do not satisfy held runtime acceptance.",
@@ -6338,11 +6424,10 @@
   "summary": {
     "applicationSwiftFiles": 665,
     "classification": {
-      "pending": 134,
-      "source-reviewed-mixed": 2,
-      "source-reviewed-retained": 529
+      "pending": 105,
+      "source-reviewed-retained": 560
     },
-    "currentAPIReviews": 56,
+    "currentAPIReviews": 58,
     "runtimeAcceptance": "held by human; no simulator/server testing"
   }
 }

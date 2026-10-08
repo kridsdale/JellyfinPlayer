@@ -26,6 +26,7 @@ private final class Transport: AccountAccessTransport {
     var calls: [Call] = []
     var urlCalls: [Call] = []
     var queryKeyFlags: [Bool] = []
+    var onURL: (@MainActor () -> Void)?
     var responseURL = URL(string: "https://redirect.example/jf/System/Info/Public")
     var info = PublicSystemInfo(id: "server", serverName: "Server")
     var currentUser = UserDto(id: "user", name: "User")
@@ -92,6 +93,7 @@ private final class Transport: AccountAccessTransport {
         guard let call = try? capture(request) else { return nil }
         urlCalls.append(call)
         queryKeyFlags.append(queryAPIKey)
+        onURL?()
         var result = URLComponents(string: "https://original.example/jf" + call.path)!
         result.queryItems = call.query.map { URLQueryItem(name: $0.key, value: $0.value) }
         return result.url
@@ -534,5 +536,23 @@ struct QuickConnectContracts {
         binding.current = false
         await #expect(throws: CancellationError.self) { try await client.signIn(quickConnectSecret: "approved") }
         #expect(t.authCalls.isEmpty)
+    }
+}
+
+@Test @MainActor
+func `profile and splash URL resolver reentry rejects the retired result`() throws {
+    for splash in [false, true] {
+        let transport = Transport(), binding = Binding()
+        let client = make(transport, binding)
+        transport.onURL = { binding.current = false }
+        #expect(throws: CancellationError.self) {
+            if splash {
+                _ = try client.splashURL()
+            } else {
+                _ = try client.profileURL(userID: "selected", imageTag: "tag")
+            }
+        }
+        #expect(transport.urlCalls.count == 1 && transport.queryKeyFlags == [false])
+        #expect(transport.calls.isEmpty)
     }
 }

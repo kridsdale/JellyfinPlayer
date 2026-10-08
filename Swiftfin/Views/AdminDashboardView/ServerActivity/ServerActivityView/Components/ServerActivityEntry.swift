@@ -22,13 +22,10 @@ extension ServerActivityView {
 
         @ViewBuilder
         private var userImage: some View {
-            if let user = viewModel.user, let userSession = viewModel.userSession {
+            if let user = viewModel.user {
                 UserProfileImage(
                     userID: user.id,
-                    source: user.profileImageSource(
-                        client: userSession.client,
-                        maxWidth: 60
-                    )
+                    source: viewModel.profileImageSource
                 )
             } else {
                 ZStack {

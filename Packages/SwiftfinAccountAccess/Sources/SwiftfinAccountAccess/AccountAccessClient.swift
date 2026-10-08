@@ -123,12 +123,16 @@ public final class AccountAccessClient {
 
     public func splashURL() throws -> URL? {
         try checkBinding()
-        return transport.url(with: Paths.getSplashscreen(), queryAPIKey: false)
+        let url = transport.url(with: Paths.getSplashscreen(), queryAPIKey: false)
+        try checkBinding()
+        return url
     }
 
     public func profileURL(userID: String, imageTag: String?) throws -> URL? {
         try checkBinding()
-        return transport.url(with: Paths.getUserImage(parameters: .init(userID: userID, tag: imageTag)), queryAPIKey: false)
+        let url = transport.url(with: Paths.getUserImage(parameters: .init(userID: userID, tag: imageTag)), queryAPIKey: false)
+        try checkBinding()
+        return url
     }
 
     private static func decodeBoolean(_ bytes: Data) -> Bool {

@@ -306,3 +306,24 @@ extension SessionLifecycleContracts {
         #expect(owner.current == nil && !log.events.contains("prepare-next"))
     }
 }
+
+extension SessionLifecycleContracts {
+    @Test
+    func `scoped publication checks between effects and stops revoked resources`() async throws {
+        let log = Log(), validity = AdmissionValidity()
+        let owner = ActiveSessionCoordinator<Session>(publishScoped: { _, _, checkpoint in
+            log.events.append("first-publication")
+            validity.current = false
+            try checkpoint()
+            log.events.append("second-publication")
+        })
+        await #expect(throws: CancellationError.self) {
+            try await owner.replace(
+                with: Session(user: "next", resources: [Resource("next", log: log)]),
+                validate: { try validity.check() }
+            )
+        }
+        #expect(owner.current == nil && log.events.contains("first-publication"))
+        #expect(!log.events.contains("second-publication") && !log.events.contains("start-next") && log.events.last == "stop-next")
+    }
+}

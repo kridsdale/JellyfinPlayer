@@ -7,13 +7,10 @@
 //
 
 import CasePaths
-import FactoryKit
 import Foundation
 import OrderedCollections
 import StatefulMacros
-import SwiftfinAccountStore
 import SwiftfinCollections
-import SwiftfinLocalization
 import SwiftfinStoredValues
 
 @MainActor
@@ -25,7 +22,6 @@ final class SelectUserViewModel: ViewModel {
         case deleteUsers(Set<UserState>)
         case error
         case getServers
-        case signIn(UserState, pin: String)
 
         var transition: Transition {
             switch self {
@@ -34,7 +30,7 @@ final class SelectUserViewModel: ViewModel {
                     .whenBackground(.refreshing)
             case .deleteUsers:
                 .background(.refreshing)
-            case .error, .signIn:
+            case .error:
                 .none
             }
         }
@@ -42,11 +38,6 @@ final class SelectUserViewModel: ViewModel {
 
     enum BackgroundState {
         case refreshing
-    }
-
-    enum Event {
-        case error
-        case signedIn(UserState)
     }
 
     enum State {
@@ -80,17 +71,5 @@ final class SelectUserViewModel: ViewModel {
                 partialResult[server] = usersByServerID[server.id, default: []]
                     .sorted(using: \.username)
             }
-    }
-
-    @Function(\Action.Cases.signIn)
-    private func _signIn(_ user: UserState, _ pin: String) async throws {
-        MainActor.preconditionIsolated()
-        if user.accessPolicy == .requirePin {
-            guard try Container.shared.localAccountStore().matchesPIN(pin, userID: user.id) else {
-                throw ErrorMessage(L10n.incorrectPinForUser(user.username))
-            }
-        }
-
-        events.send(.signedIn(user))
     }
 }

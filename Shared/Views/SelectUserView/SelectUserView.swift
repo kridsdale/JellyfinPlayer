@@ -133,24 +133,19 @@ struct SelectUserView: View {
     }
 
     private func select(user: UserState) {
-        Task { @MainActor in
-
-            do {
-                guard let authenticationAction else { return }
-
-                let evaluatedPolicy = try await authenticationAction(
-                    policy: user.accessPolicy,
-                    reason: user.accessPolicy.authenticateReason(user: user)
-                )
-                let pin = (evaluatedPolicy as? PinEvaluatedUserAccessPolicy)?.pin ?? ""
-
-                await viewModel.signIn(user, pin: pin)
-            } catch is CancellationError {
-                return
-            } catch {
-                await viewModel.error(error)
+        guard let authenticationAction else { return }
+        do {
+            let request = try userSessionManager.beginSignIn(userID: user.id, serverID: user.serverID)
+            Task { @MainActor in
+                do {
+                    try await userSessionManager.signIn(request, authenticationAction: authenticationAction)
+                    try request.selection.check()
+                    UIDevice.feedback(.success)
+                } catch is CancellationError { return
+                } catch { await viewModel.error(error) }
             }
-        }
+        } catch is CancellationError { return
+        } catch { Task { @MainActor in await viewModel.error(error) } }
     }
 
     @ViewBuilder
@@ -389,19 +384,6 @@ struct SelectUserView: View {
         .onReceive(viewModel.$error) { error in
             guard error != nil else { return }
             UIDevice.feedback(.error)
-        }
-        .onReceive(viewModel.events) { event in
-            switch event {
-            case let .signedIn(user):
-                Task { @MainActor in
-                    do {
-                        try await userSessionManager.signIn(userID: user.id)
-                        UIDevice.feedback(.success)
-                    } catch {
-                        await viewModel.error(error)
-                    }
-                }
-            }
         }
         .onNotification(.didConnectToServer) { server in
             viewModel.background.getServers()

@@ -36,16 +36,19 @@ final class UserSignInViewModel: ObservableObject {
 
     struct Request: Sendable {
         let access: AccountAccessClient
+        let selection: UserSessionManager.SelectionRequest?
         let validate: AsyncOperationGate.Checkpoint
     }
 
     struct SaveRequest: Sendable {
         let snapshot: UserAdmissionSnapshot
+        let selection: UserSessionManager.SelectionRequest
         let validate: AsyncOperationGate.Checkpoint
     }
 
     private struct PendingAuthentication {
         let user: UserStateDataPair
+        let selection: UserSessionManager.SelectionRequest
         let validate: AsyncOperationGate.Checkpoint
     }
 
@@ -71,7 +74,7 @@ final class UserSignInViewModel: ObservableObject {
     enum Event {
         case connected(UserStateDataPair)
         case existingUser(UserStateDataPair)
-        case saved(UserState)
+        case saved(UserState, UserSessionManager.SelectionRequest)
     }
 
     enum State { case initial, signingIn }
@@ -98,6 +101,8 @@ final class UserSignInViewModel: ObservableObject {
     private let logins = AsyncOperationGate()
     private let saves = AsyncOperationGate()
     private var pending: PendingAuthentication?
+    private var selectionIntent: UserSessionManager.SelectionRequest?
+    private let sessions = Container.shared.userSessionManager()
 
     init(server: ServerState) {
         self.server = server
@@ -114,13 +119,22 @@ final class UserSignInViewModel: ObservableObject {
         else { throw CancellationError() }
     }
 
-    private func request(_ gate: AsyncOperationGate) -> Request? {
+    private func request(_ gate: AsyncOperationGate, selectingAccount: Bool = false) -> Request? {
         guard (try? checkOrigin()) != nil else { return nil }
         let access = server.accountAccess
         guard (try? access.checkBinding()) != nil else { return nil }
+        let selection: UserSessionManager.SelectionRequest?
+        if selectingAccount {
+            guard let next = try? sessions.beginSignInIntent() else { return nil }
+            selection = next
+            selectionIntent = next
+        } else {
+            selection = nil
+        }
         let receipt = gate.begin()
-        return Request(access: access, validate: { [weak self] in
+        return Request(access: access, selection: selection, validate: { [weak self] in
             try receipt()
+            try selection?.check()
             guard let self else { throw CancellationError() }
             try checkOrigin()
             try access.checkBinding()
@@ -135,21 +149,21 @@ final class UserSignInViewModel: ObservableObject {
     }
 
     func signIn(username: String, password: String) {
-        guard let request = request(logins) else { return }
+        guard let request = request(logins, selectingAccount: true) else { return }
         saves.cancel()
         pending = nil
         runSignIn(request, username, password)
     }
 
     func signInQuickConnect(secret: String, access: AccountAccessClient) {
-        guard let request = request(logins) else { return }
+        guard let request = request(logins, selectingAccount: true) else { return }
         saves.cancel()
         pending = nil
         runQuick(request, secret, access)
     }
 
     func signInQuickConnect(secret: String, access: AccountAccessClient) async {
-        guard let request = request(logins) else { return }
+        guard let request = request(logins, selectingAccount: true) else { return }
         saves.cancel()
         pending = nil
         await runQuick(request, secret, access)
@@ -182,7 +196,7 @@ final class UserSignInViewModel: ObservableObject {
                 try checkOrigin()
                 try receipt()
             }
-            runSave(.init(snapshot: snapshot, validate: check), user, action, map)
+            runSave(.init(snapshot: snapshot, selection: pending.selection, validate: check), user, action, map)
         } catch { /* Invalid/stale local admission never reaches native authentication. */ }
     }
 
@@ -192,6 +206,10 @@ final class UserSignInViewModel: ObservableObject {
         logins.cancel()
         saves.cancel()
         pending = nil
+        if let selectionIntent {
+            sessions.cancelPendingSignIn(selectionIntent)
+        }
+        selectionIntent = nil
     }
 
     @Function(\Action.Cases.runPublic)
@@ -220,7 +238,8 @@ final class UserSignInViewModel: ObservableObject {
         let existing = matches.first
         let user = existing ?? UserState(id: response.userID, serverID: server.id, username: response.username)
         let pair: UserStateDataPair = ((user, response.accessToken), response.user)
-        pending = .init(user: pair, validate: request.validate)
+        guard let selection = request.selection else { throw CancellationError() }
+        pending = .init(user: pair, selection: selection, validate: request.validate)
         try request.validate()
         if existing != nil {
             events.send(.existingUser(pair))
@@ -237,6 +256,9 @@ final class UserSignInViewModel: ObservableObject {
             let password = password.trimmingCharacters(in: .whitespacesAndNewlines).trimmingCharacters(in: .objectReplacement)
             try await received(request.access.signIn(username: username, password: password), request: request)
         } catch { try request.validate()
+            if let selection = request.selection {
+                sessions.cancelPendingSignIn(selection)
+            }
             throw error
         }
     }
@@ -250,6 +272,9 @@ final class UserSignInViewModel: ObservableObject {
             try access.checkBinding()
             try received(response, request: request)
         } catch { try request.validate()
+            if let selection = request.selection {
+                sessions.cancelPendingSignIn(selection)
+            }
             throw error
         }
     }
@@ -276,7 +301,7 @@ final class UserSignInViewModel: ObservableObject {
                 validate: request.validate
             )
             try request.validate()
-            events.send(.saved(saved))
+            events.send(.saved(saved, request.selection))
         } catch AccountStoreError.incorrectPIN {
             try request.validate()
             throw ErrorMessage(L10n.incorrectPinForUser(user.state.state.username))

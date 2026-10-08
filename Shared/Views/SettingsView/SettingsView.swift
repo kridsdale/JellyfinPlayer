@@ -82,11 +82,8 @@ struct SettingsView: View {
 
         Section {
             Button {
-                Task { @MainActor in
-                    UIDevice.impact(.medium)
-                    await userSessionManager.signOut(reason: .explicit)
-                    router.dismiss()
-                }
+                UIDevice.impact(.medium)
+                userSessionManager.requestSignOut(reason: .explicit) { router.dismiss() }
             } label: {
                 Text(L10n.switchUser)
                     .frame(maxWidth: .infinity)

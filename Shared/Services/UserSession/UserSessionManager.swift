@@ -13,6 +13,7 @@ import Foundation
 import JellyfinAPI
 import Logging
 import SwiftfinAccountAccess
+import SwiftfinAccountModels
 import SwiftfinAccountStore
 import SwiftfinAsyncStreams
 import SwiftfinLocalization
@@ -102,179 +103,234 @@ final class UserSessionManager: ObservableObject {
         setupObservations()
     }
 
-    @MainActor
+    typealias SelectionRequest = SessionSelectionCoordinator<UserSession>.Request
+
+    struct SignInRequest {
+        let selection: SelectionRequest
+        let session: UserSession
+        let policy: LocalUserAccessPolicy
+    }
+
     func start() async {
         guard state == .initial else { return }
-
         do {
-            if Defaults[.signOutOnClose] {
-                Defaults[.lastSignedInUserID] = .signedOut
-            }
-
-            try await updateCurrentSession(with: resolveStoredSession())
+            guard let request = try selections.begin(priority: .restoration) else { return }
+            await restore(request, signOut: Defaults[.signOutOnClose], refreshMetadata: false)
+        } catch is CancellationError {
+            return
         } catch {
-            logger.error(
-                "Unable to restore launch session",
-                metadata: ["error": .string(error.localizedDescription)]
-            )
-
-            await updateCurrentSession(with: nil)
+            logger.error("Unable to restore launch session", metadata: ["error": .string(error.localizedDescription)])
         }
     }
 
-    @MainActor
-    private func refreshCurrentSession() async {
-        do {
-            try await updateCurrentSession(with: resolveStoredSession())
-        } catch {
-            logger.error(
-                "Unable to refresh current user session",
-                metadata: ["error": .string(error.localizedDescription)]
-            )
-            await updateCurrentSession(with: nil)
-        }
-    }
-
-    @MainActor
-    func signIn(userID: String) async throws {
-        Defaults[.lastSignedInUserID] = .signedIn(userID: userID)
-        let session = try resolveStoredSession()
-        await updateCurrentSession(with: session)
-        try Task.checkCancellation()
-        guard currentSession === session else { throw CancellationError() }
-        if let session {
-            refreshServerInformationIfNeeded(reason: .explicitSignIn, session: session)
-        }
-    }
-
-    /// Restricted child activation resolves the exact account pair before publication.
-    func signIn(
+    /// Capture an exact account choice before native authentication or scheduling.
+    func beginSignIn(
         userID: String,
         serverID: String,
-        validate: AsyncOperationGate.Checkpoint,
-        validateSession: @MainActor @Sendable (UserSession) throws -> Void
-    ) async throws {
+        selection: SelectionRequest? = nil,
+        validate: @escaping AsyncOperationGate.Checkpoint = {},
+        validateSession: @escaping @MainActor @Sendable (UserSession) throws -> Void = { _ in }
+    ) throws -> SignInRequest {
+        try Task.checkCancellation()
         try validate()
         guard let user = StoredValues[.User.users].first(where: { $0.id == userID && $0.serverID == serverID }),
               let server = StoredValues[.Server.servers].first(where: { $0.id == serverID })
         else { throw UserSessionError.invalidStoredSession(userID: userID) }
         let session = UserSession(server: server, user: user)
-        try validateSession(session)
-        try validate()
-        Defaults[.lastSignedInUserID] = .signedIn(userID: userID)
-        try validate()
-        metadataRefresh.cancel()
-        try await sessionCoordinator.replace(with: session, validate: {
+        let policy = user.accessPolicy
+        let accountCheck: AsyncOperationGate.Checkpoint = {
             try validate()
+            guard StoredValues[.User.users].contains(where: { $0.id == userID && $0.serverID == serverID }),
+                  StoredValues[.Server.servers].contains(where: { $0.id == serverID }),
+                  user.accessPolicy == policy
+            else { throw CancellationError() }
             try validateSession(session)
+        }
+        let receipt: SelectionRequest
+        if let selection {
+            receipt = selection.validating(accountCheck)
+            try receipt.check()
+        } else {
+            guard let next = try selections.begin(priority: .explicit, validate: accountCheck) else { throw CancellationError() }
+            receipt = next
+        }
+        return .init(selection: receipt, session: session, policy: policy)
+    }
+
+    func beginSignInIntent() throws -> SelectionRequest {
+        guard let request = try selections.begin(priority: .explicit) else { throw CancellationError() }
+        return request
+    }
+
+    func cancelPendingSignIn(_ request: SelectionRequest) {
+        selections.cancelPending(request)
+    }
+
+    func signIn(_ request: SignInRequest, authenticationAction: LocalUserAuthenticationAction? = nil) async throws {
+        try await activateSignIn(request, prepare: { checkpoint in
+            if let authenticationAction {
+                try await self.authenticate(
+                    user: request.session.user,
+                    policy: request.policy,
+                    authenticationAction: authenticationAction,
+                    validate: checkpoint
+                )
+            }
         })
-        try validate()
-        guard currentSession === session else { throw CancellationError() }
-        refreshServerInformationIfNeeded(reason: .explicitSignIn, session: session)
     }
 
-    @MainActor
-    func signOut(reason: SignOutReason) async {
-        metadataRefresh.cancel()
-        guard currentSession != nil else { return }
-
-        Defaults[.lastSignedInUserID] = .signedOut
-        await refreshCurrentSession()
-
-        logger.info(
-            "Signed out current user",
-            metadata: ["reason": .string(String(describing: reason))]
-        )
+    /// Child admission participates in the same sequence as ordinary UI choices.
+    func signIn(
+        userID: String,
+        serverID: String,
+        validate: @escaping AsyncOperationGate.Checkpoint,
+        validateSession: @escaping @MainActor @Sendable (UserSession) throws -> Void
+    ) async throws {
+        let request = try beginSignIn(userID: userID, serverID: serverID, validate: validate, validateSession: validateSession)
+        try await signIn(request)
     }
 
-    /// Child sign-out participates in the same admission scope as sign-in.
-    func signOut(reason: SignOutReason, validate: AsyncOperationGate.Checkpoint) async throws {
-        try validate()
-        metadataRefresh.cancel()
-        Defaults[.lastSignedInUserID] = .signedOut
-        try validate()
-        try await sessionCoordinator.replace(with: nil, validate: validate)
-        try validate()
-        logger.info("Signed out current user", metadata: ["reason": .string(String(describing: reason))])
+    private func activateSignIn(
+        _ request: SignInRequest,
+        prepare: @MainActor (AsyncOperationGate.Checkpoint) async throws -> Void = { _ in },
+        deepLink: DeepLink? = nil,
+        reuseCurrent: Bool = false
+    ) async throws {
+        let session = reuseCurrent ? currentSession : request.session
+        try await selections.activate(request.selection, with: session, prepare: prepare, willSelect: { checkpoint in
+            try checkpoint()
+            Defaults[.lastSignedInUserID] = .signedIn(userID: request.session.user.id)
+            try checkpoint()
+            self.metadataRefresh.cancel()
+        }, didSelect: { checkpoint in
+            try checkpoint()
+            guard let session, self.currentSession === session else { throw CancellationError() }
+            if !reuseCurrent {
+                self.refreshServerInformationIfNeeded(reason: .explicitSignIn, session: session)
+            }
+            try checkpoint()
+            if let deepLink {
+                self.pendingDeepLink = deepLink
+            }
+        })
     }
 
-    @MainActor
-    private func stopActivePlayback() async {
+    /// Synchronous submission keeps a queued sign-out tied to its original intent.
+    func requestSignOut(reason: SignOutReason, didSignOut: @escaping @MainActor () -> Void = {}) {
+        do {
+            guard let request = try selections.begin(priority: .explicit) else { return }
+            Task { @MainActor in
+                do {
+                    try await self.completeSignOut(reason: reason, request: request)
+                    try request.check()
+                    didSignOut()
+                } catch is CancellationError { return
+                } catch { self.logger.error("Unable to sign out", metadata: ["error": .string(error.localizedDescription)]) }
+            }
+        } catch { return }
+    }
+
+    func signOut(reason: SignOutReason, validate: @escaping AsyncOperationGate.Checkpoint) async throws {
+        guard let request = try selections.begin(priority: .explicit, validate: validate) else { throw CancellationError() }
+        try await completeSignOut(reason: reason, request: request)
+    }
+
+    private func completeSignOut(reason: SignOutReason, request: SelectionRequest) async throws {
+        try await selections.activate(request, with: nil, willSelect: { checkpoint in
+            try checkpoint()
+            self.metadataRefresh.cancel()
+            try checkpoint()
+            Defaults[.lastSignedInUserID] = .signedOut
+        }, didSelect: { checkpoint in
+            try checkpoint()
+            self.logger.info("Signed out current user", metadata: ["reason": .string(String(describing: reason))])
+        })
+    }
+
+    private func stopActivePlayback(validate: AsyncOperationGate.Checkpoint) async throws {
+        try validate()
         guard let manager = mediaPlayerManager else { return }
         await manager.stop()
+        try validate()
         playerSelection.apply(.retired(manager))
     }
 
-    @MainActor
     func scheduleServerConnectionResolution() {
         currentSession?.serverConnectionManager.scheduleConnectionResolution()
     }
 
-    @MainActor
-    func handleOpenURL(
-        _ url: URL,
-        authenticationAction: LocalUserAuthenticationAction
-    ) async {
+    func handleOpenURL(_ url: URL, authenticationAction: LocalUserAuthenticationAction) {
         guard let deepLink = DeepLink(url) else { return }
-
         do {
-            let deepLinkSession = try session(for: deepLink)
-            let currentSession = currentSession
-            let isSameUserSession = currentSession?.server.id == deepLinkSession.server.id && currentSession?.user.id == deepLinkSession
-                .user.id
-
-            if !isSameUserSession {
-                try await authenticate(
-                    user: deepLinkSession.user,
-                    authenticationAction: authenticationAction
-                )
-
-                if hasActivePlayback {
-                    await stopActivePlayback()
-                }
-
-                try await signIn(userID: deepLinkSession.user.id)
+            let target = try session(for: deepLink)
+            let request = try beginSignIn(userID: target.user.id, serverID: target.server.id)
+            let sameAccount = currentSession?.sessionIdentity == request.session.sessionIdentity
+            Task { @MainActor in
+                do {
+                    try await self.activateSignIn(request, prepare: { checkpoint in
+                        if !sameAccount {
+                            try await self.authenticate(
+                                user: request.session.user,
+                                policy: request.policy,
+                                authenticationAction: authenticationAction,
+                                validate: checkpoint
+                            )
+                            try checkpoint()
+                            if self.hasActivePlayback {
+                                try await self.stopActivePlayback(validate: checkpoint)
+                            }
+                        }
+                    }, deepLink: deepLink, reuseCurrent: sameAccount)
+                } catch is CancellationError { return
+                } catch { self.logger.error("Failed to process deep link", metadata: ["error": .string(error.localizedDescription)]) }
             }
-
-            pendingDeepLink = deepLink
-        } catch {
-            logger.error(
-                "Failed to process deep link",
-                metadata: ["error": .string(error.localizedDescription)]
-            )
-        }
+        } catch is CancellationError { return
+        } catch { logger.error("Failed to process deep link", metadata: ["error": .string(error.localizedDescription)]) }
     }
 
-    @MainActor
     func consumePendingDeepLink() -> DeepLink? {
-        defer {
-            pendingDeepLink = nil
-        }
-
+        defer { pendingDeepLink = nil }
         return pendingDeepLink
     }
 
-    @MainActor
-    func appDidEnterBackground() {
-        Defaults[.backgroundTimeStamp] = Date.now
+    private func scheduleForegroundRestoration() {
+        do {
+            let expires = currentSession != nil && Defaults[.signOutOnBackground] && !hasActivePlayback &&
+                Date.now.timeIntervalSince(Defaults[.backgroundTimeStamp]) > Defaults[.backgroundSignOutInterval]
+            guard let request = try selections.begin(priority: .restoration, validate: { [weak self] in
+                guard let self, !expires || !self.hasActivePlayback else { throw CancellationError() }
+            }) else { return }
+            Task { @MainActor in await self.restore(request, signOut: expires, refreshMetadata: true) }
+        } catch { return }
     }
 
-    @MainActor
-    func appWillEnterForeground() async {
-        await refreshCurrentSession()
-
-        if let session = currentSession {
-            refreshServerInformationIfNeeded(reason: .stale, session: session)
-        }
-
-        guard currentSession != nil else { return }
-        guard Defaults[.signOutOnBackground] else { return }
-        guard !hasActivePlayback else { return }
-
-        let backgroundedInterval = Date.now.timeIntervalSince(Defaults[.backgroundTimeStamp])
-        if backgroundedInterval > Defaults[.backgroundSignOutInterval] {
-            await signOut(reason: .backgroundTimeout)
-        }
+    private func restore(_ request: SelectionRequest, signOut: Bool, refreshMetadata: Bool) async {
+        do {
+            try request.check()
+            let session: UserSession?
+            var resetStamp = signOut
+            do { session = signOut ? nil : try resolveStoredSession()
+            } catch {
+                try request.check()
+                logger.error("Unable to resolve stored session", metadata: ["error": .string(error.localizedDescription)])
+                resetStamp = true
+                session = nil
+            }
+            try await selections.activate(request, with: session, willSelect: { checkpoint in
+                try checkpoint()
+                if resetStamp {
+                    Defaults[.lastSignedInUserID] = .signedOut
+                }
+                try checkpoint()
+                self.metadataRefresh.cancel()
+            }, didSelect: { checkpoint in
+                try checkpoint()
+                if refreshMetadata, let session {
+                    self.refreshServerInformationIfNeeded(reason: .stale, session: session)
+                }
+            })
+        } catch is CancellationError { return
+        } catch { logger.error("Unable to restore current session", metadata: ["error": .string(error.localizedDescription)]) }
     }
 
     private enum ServerInformationRefreshReason {
@@ -296,20 +352,20 @@ final class UserSessionManager: ObservableObject {
 
     private func authenticate(
         user: UserState,
-        authenticationAction: LocalUserAuthenticationAction
+        policy: LocalUserAccessPolicy,
+        authenticationAction: LocalUserAuthenticationAction,
+        validate: AsyncOperationGate.Checkpoint
     ) async throws {
-        guard user.accessPolicy != .none else { return }
-
-        let evaluatedPolicy = try await authenticationAction(
-            policy: user.accessPolicy,
-            reason: user.accessPolicy.authenticateReason(user: user)
-        )
-
-        guard let pinPolicy = evaluatedPolicy as? PinEvaluatedUserAccessPolicy else { return }
-
-        guard try Container.shared.localAccountStore().matchesPIN(pinPolicy.pin, userID: user.id) else {
-            throw ErrorMessage(L10n.incorrectPinForUser(user.username))
+        try validate()
+        guard policy != .none else { return }
+        let evaluatedPolicy = try await authenticationAction(policy: policy, reason: policy.authenticateReason(user: user))
+        try validate()
+        if policy == .requirePin {
+            guard let pinPolicy = evaluatedPolicy as? PinEvaluatedUserAccessPolicy,
+                  try Container.shared.localAccountStore().matchesPIN(pinPolicy.pin, userID: user.id)
+            else { throw ErrorMessage(L10n.incorrectPinForUser(user.username)) }
         }
+        try validate()
     }
 
     @MainActor
@@ -346,19 +402,15 @@ final class UserSessionManager: ObservableObject {
     private func setupObservations() {
         Notifications[.applicationDidEnterBackground]
             .publisher
-            .sink { [weak self] in
-                Task { @MainActor in
-                    self?.appDidEnterBackground()
-                }
+            .sink {
+                Defaults[.backgroundTimeStamp] = Date.now
             }
             .store(in: &cancellables)
 
         Notifications[.applicationWillEnterForeground]
             .publisher
             .sink { [weak self] in
-                Task { @MainActor in
-                    await self?.appWillEnterForeground()
-                }
+                self?.scheduleForegroundRestoration()
             }
             .store(in: &cancellables)
 
@@ -369,34 +421,36 @@ final class UserSessionManager: ObservableObject {
         observeSocketCommands()
     }
 
-    private lazy var sessionCoordinator = ActiveSessionCoordinator<UserSession> { [weak self] session, identityChanged in
-        guard let self else { return }
-        metadataRefresh.cancel()
-        currentSession = session
-        Container.shared.currentUserSession.reset()
-        if identityChanged {
-            playerSelection.clear()
-            Container.shared.mediaPlayerManager.reset()
-        }
-        state = session == nil ? .signedOut : .signedIn
-    }
+    private lazy var sessionCoordinator =
+        ActiveSessionCoordinator<UserSession>(publishScoped: { [weak self] session, identityChanged, checkpoint in
+            guard let self else { throw CancellationError() }
+            try checkpoint()
+            metadataRefresh.cancel()
+            try checkpoint()
+            currentSession = session
+            try checkpoint()
+            Container.shared.currentUserSession.reset()
+            try checkpoint()
+            if identityChanged {
+                playerSelection.clear()
+                try checkpoint()
+                Container.shared.mediaPlayerManager.reset()
+            }
+            try checkpoint()
+            state = session == nil ? .signedOut : .signedIn
+            try checkpoint()
+        })
 
-    @MainActor
-    private func updateCurrentSession(with newSession: UserSession?) async {
-        metadataRefresh.cancel()
-        await sessionCoordinator.replace(with: newSession)
-    }
+    private lazy var selections = SessionSelectionCoordinator(sessions: sessionCoordinator)
 
     private func resolveStoredSession() throws -> UserSession? {
         guard case let .signedIn(userId) = Defaults[.lastSignedInUserID] else { return nil }
 
         guard let user = StoredValues[.User.users].first(where: { $0.id == userId }) else {
-            Defaults[.lastSignedInUserID] = .signedOut
             throw UserSessionError.invalidStoredSession(userID: userId)
         }
 
         guard let server = StoredValues[.Server.servers].first(where: { $0.id == user.serverID }) else {
-            Defaults[.lastSignedInUserID] = .signedOut
             throw UserSessionError.invalidStoredSession(userID: userId)
         }
 

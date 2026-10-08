@@ -54,7 +54,7 @@ struct UserSessionRootView: View {
                 PosterPreferencesEnvironment {
                     MainTabView()
                 }
-                .id(userSessionManager.currentSession?.user.id)
+                .id(userSessionManager.currentSession?.sessionIdentity)
             }
         }
         .animation(.linear(duration: 0.1), value: userSessionManager.state)
@@ -64,12 +64,7 @@ struct UserSessionRootView: View {
         .onOpenURL { url in
             guard let authenticationAction else { return }
 
-            Task {
-                await userSessionManager.handleOpenURL(
-                    url,
-                    authenticationAction: authenticationAction
-                )
-            }
+            userSessionManager.handleOpenURL(url, authenticationAction: authenticationAction)
         }
         #endif
     }

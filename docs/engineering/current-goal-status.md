@@ -1,6 +1,6 @@
 # Current engineering goal disposition
 
-Scoped search and original-item image integration now pass:34 paging+79 metadata native contracts, including12 new regressions;53 package boundaries;tvOS Debug compile-for-testing and iOS Release with no owned Swift/generated-macro diagnostics. The665-source ledger has529 retained,2 mixed and134 pending, with56 scoped API reviews. Full source/API/actor/bootstrap and held runtime acceptance remain required; items1/2 stay active.
+Session choices and original-account avatars are now scoped through existing owners. Remote-login save/activation preserves its original intent; late authentication, restoration and synchronous publication reentry cannot proceed to newer-account effects. Offline acceptance:47 session+31 account-access+27 server-operation+10 kids-account tests;53 boundaries;tvOS Debug compile-for-testing and iOS Release, with no owned Swift/generated-macro diagnostics. The665-source ledger has560 retained,0 mixed and105 pending, with58 scoped API reviews. Whole source/API/actor/bootstrap and held runtime acceptance remain required; items1/2 remain active.
 
 The table below records the candidate checkpoint from 2026-10-05. The active goal on 2026-10-06 is full-client package extraction and Swift 6 completion; see [current package evidence](package-refactor.md). It remains active.
 
@@ -455,3 +455,10 @@ Debug134, tvOS Release58 and iOS Release77 pass compile-only without owned Swift
 Evidence: `/private/tmp/kids-admission-accounts-497.log`, `/private/tmp/kids-admission-sessions-500.log`, `/private/tmp/kids-admission-debug-134.log`, `/private/tmp/kids-admission-release-58.log`, `/private/tmp/kids-admission-ios-77.log`, `/private/tmp/kids-admission-audit-502.log` and `build/validation/account-admission-503.json`. Native commands: `swift test --package-path Packages/KidsAccounts` and `swift test --package-path Packages/SwiftfinSessions`.
 
 The child host adapter is now retained composition; UserSessionManager remains mixed because inherited startup/login/deep-link/foreground intent sequencing is outside this scoped approval. The full-client source/API/actor review and final whole-graph acceptance remain unfinished. Simulator automation, installation, launches, playback and server-facing diagnostics remain stopped until explicit human resumption. Native contracts and compilation do not establish current GUI, real credential, network, socket or playback acceptance. Physical Apple TV/live CloudKit and separately managed server/release gates remain deferred. No household credentials, RAID media or server state were accessed.
+
+
+## Session choice and account-avatar checkpoint (2026-10-07, offline)
+
+An explicit choice captures its receipt before remote/native authentication or UI task scheduling. Passive restoration waits for unfinished explicit work; canceled queued admission releases it. Remote-login credential admission and its saved event reuse the same receipt, adding the resolved account binding without submitting a new choice. Exact server/user and local policy are checked before native effects. Root identity includes both account IDs, and bound activity avatars retain their original transport.
+
+Offline regression/build evidence is recorded in package-refactor.md. Accepted synchronous effects are not rolled back, and no native credential query, prompt, simulator execution, server operation or RAID access occurred. The115 passing native tests and compile-only builds do not establish runtime acceptance. Items1/2 remain active with105 source bodies and whole API/actor/bootstrap acceptance outstanding.

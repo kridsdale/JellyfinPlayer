@@ -75,16 +75,21 @@ struct UserSignInView: View {
         case let .existingUser(existingUser):
             self.existingUser = existingUser
             self.isPresentingExistingUser = true
-        case let .saved(user):
-            Task { @MainActor in
-                do {
-                    try await userSessionManager.signIn(userID: user.id)
-                    UIDevice.feedback(.success)
-                    router.dismiss()
-                } catch {
-                    await viewModel.error(error)
+        case let .saved(user, selection):
+            do {
+                let request = try userSessionManager.beginSignIn(userID: user.id, serverID: user.serverID, selection: selection)
+                Task { @MainActor in
+                    do {
+                        try await userSessionManager.signIn(request)
+                        try request.selection.check()
+                        UIDevice.feedback(.success)
+                        try request.selection.check()
+                        router.dismiss()
+                    } catch is CancellationError { return
+                    } catch { await viewModel.error(error) }
                 }
-            }
+            } catch is CancellationError { return
+            } catch { Task { @MainActor in await viewModel.error(error) } }
         }
     }
 
@@ -344,6 +349,7 @@ struct UserSignInView: View {
             .navigationTitle(L10n.signIn.localizedCapitalized)
             .interactiveDismissDisabled(viewModel.state == .signingIn)
             .onReceive(viewModel.events, perform: handleEvent)
+            .onDisappear { viewModel.cancel() }
             .onFirstAppear {
                 focusedTextField = .username
                 viewModel.getPublicData()
@@ -387,7 +393,7 @@ struct UserSignInView: View {
                     )
                 }
 
-                Button(L10n.dismiss, role: .cancel) {}
+                Button(L10n.dismiss, role: .cancel) { viewModel.cancel() }
             } message: { existingUser in
                 Text(L10n.duplicateUserSaved(existingUser.state.state.username))
             }
