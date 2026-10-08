@@ -2,7 +2,7 @@
 
 Active goal: complete the minimal-responsibility package refactor and remaining Swift 6 compatibility warnings. This document records scope and evidence, not a narrower replacement objective.
 
-Latest offline evidence:53 libraries, 877 native contracts, clean compile-only Debug131/tvOS Release56/iOS Release75;665 app sources with396 retained,14 mixed,255 pending and33 scoped API reviews. Full source/API/actor and held runtime acceptance remain required.
+Latest offline evidence:53 libraries;26 current affected UserAdministration contracts;665 app sources with437 retained,10 mixed,218 pending and46 scoped API reviews. Final tvOS Debug compile-for-testing and iOS Release builds pass without owned Swift/generated-macro diagnostics. Full source/API/actor and held runtime acceptance remain required.
 
 ## Initial source map
 
@@ -800,3 +800,9 @@ Nine fake-sender contracts supplement the ten existing administration contracts.
 Five further settings bodies are retained platform preference/preview composition. Full inspection also exposed the same broader delayed-target pattern in VideoPlayerSettingsView and ServerUserAdminViewModel; those remain mixed for a coherent account/configuration repair rather than being promoted on single-request binding evidence. The ledger now contains 435 retained, 12 mixed and 218 pending sources, plus 45 scoped API reviews. Full API/actor/bootstrap and held runtime acceptance remain unfinished.
 
 Final tvOS Debug compile-for-testing and iOS Release compile-only builds pass without owned Swift/generated-macro diagnostics. All 53 package boundaries, ledger hashes and preservation checks pass. Protected workflow/resolution files, both original 40-SDK revision sets, signing, persistence/macros and cancelled-session progress exports remain unchanged. Simulator/server runtime testing remains held.
+
+## Bound settings and selected-user administration
+
+UserAdministrationTarget owns a fixed edited-user ID and bound authenticated client, matching-profile reads, policy writes and fresh-profile rename. Its serial predecessor handle survives cancellation until an accepted sender actually finishes. UserConfigurationUpdates owns general snapshot submission and the Auto Play transformation; the session composes one instance across settings and playback controls, keyed by transport. ServerUserAdminViewModel retains platform presentation, application-record adaptation and notifications with checkpoints between effects. VideoPlayerSettingsView retains controls and routes while submitting field edits against its captured account's current snapshot.
+
+Seven new native contracts extend the package to26 passing checks. Initial iOS compilation exposed an ErrorMessage-only binding mismatch; the existing generic error binding is restored. Runtime/server validation remains held, and the complete source/API/actor review remains unfinished. Next coherent domain work is the recorded image/item/subtitle mutation and reload sequencing; separate account-admission and EPG/search ownership gaps remain recorded.

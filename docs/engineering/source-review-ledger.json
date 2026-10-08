@@ -3125,8 +3125,8 @@
         "SwiftfinUserMediaState"
       ],
       "path": "Shared/Services/UserSession/UserSession+ItemMetadata.swift",
-      "reason": "Complete updated feature-composition body reviewed. Owners capture one transport/user and weak root/client/manager checks. Auto Play writer reuse requires exact transport identity; replacement cancels the obsolete owner and hands its retained tail to the new bound owner so accepted requests cannot be overtaken. No raw request or configuration queue implementation remains in this adapter. Full runtime account-switch acceptance remains held.",
-      "sha256": "68bd2058dbdb99658bff193a7136ec93efb91abf18f6640517e6b1828f42c4ca",
+      "reason": "Complete changed feature-composition body reviewed. Feature owners capture one transport/user and weak root/client/manager checks. One UserConfigurationUpdates owner is reused across settings and Auto Play, keyed by exact transport identity; replacement cancels obsolete work and transfers its retained tail so new writes cannot overtake an accepted predecessor. No RPC or configuration scheduling implementation remains here.",
+      "sha256": "9ba8caa5fb7ff62ae62dd462c4cd9870f29303c7f5133e708412355e767ffe4d",
       "status": "source-reviewed-retained"
     },
     {
@@ -3137,8 +3137,8 @@
         "SwiftfinUserMediaState"
       ],
       "path": "Shared/Services/UserSession/UserSession.swift",
-      "reason": "Complete updated session body reviewed. Immutable app account records compose cached transport and weak connection/socket resource adapters. A configuration writer is retained by the session, keyed by exact transport, and cancelled when the session stops. Libraries own writer/task and transport/lifecycle behavior; this file owns application lifetime composition. Persistence/schema fields are unchanged.",
-      "sha256": "a60c59cc33907373cf13966fe48f6ab19f468f62abba965a548d5edad699f02c",
+      "reason": "Complete changed session body reviewed. Immutable app account records compose cached transport and weak connection/socket resource adapters. A general configuration writer is retained by exact transport and cancelled on session stop. Libraries own writer and transport/lifecycle behavior; the app owns their lifetime composition. No persistence/schema changes.",
+      "sha256": "1c4aa8d14ab9e14a466f35a364927923526a6bcf85179b5e8787f3e7e5058546",
       "status": "source-reviewed-retained"
     },
     {
@@ -3317,12 +3317,13 @@
     {
       "owners": [
         "SwiftfinUserAdministration",
-        "SwiftfinAsyncStreams"
+        "SwiftfinAsyncStreams",
+        "SwiftfinUIState"
       ],
       "path": "Shared/ViewModels/AdminDashboard/Users/ServerUserAdminViewModel.swift",
-      "reason": "Complete146-line model reconsidered after the configuration-control review. SDK commands delegate, but a macro-scheduled action resolves requireUserAdministration at execution using the edited user captured earlier. The server/account intent is not bound at submission; after local DTO publication it resolves authenticatedUser again before active-account writes/notifications. Single-request executor binding checks do not close delayed target admission or synchronous publication reentry. Preserve selected-user administration semantics while enforcing one captured account/target and operation checkpoints; no live administration action was run.",
-      "sha256": "2c9951d77b23c201e888e8a86bd35fd743256b273cf8ca89093e2cdeaeb24e39",
-      "status": "source-reviewed-mixed"
+      "reason": "Complete explicit platform adapter reviewed. Model initialization captures one weak session, bound administrative target and configuration writer; no action resolves replacement account authority. Selected-user reads, policy and fresh-profile rename commands delegate to UserAdministrationTarget; generic LatestRequest and operation gates own scheduling/relevance. App code adapts committed presentation, active-record fields and weak notifications/events, checking the exact binding and intent between effects. Configuration edits read the captured current-user snapshot at the press and share the session writer with Auto Play. Refresh drains pending configuration work and preserves intervening local configuration edits. Error API retains Binding<any Error?> compatibility. This is source/compile and synthetic-owner evidence, not runtime acceptance.",
+      "sha256": "7e30e6f70ac4d1db9cb9acbd72065c5dbabafdf6309036dc950ec2eebb7ac94e",
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [
@@ -4194,9 +4195,9 @@
         "SwiftfinUserAdministration"
       ],
       "path": "Shared/Views/SettingsView/VideoPlayerSettingsView.swift",
-      "reason": "Complete385-line settings form read. Most controls are platform preference bindings and routes, but its initial ServerUserAdminViewModel user/configuration is modified into whole configuration snapshots and saved by a separately resolved delayed action. Fresh current-account intent, compound current-user configuration ownership and display/refresh receipt relevance remain required. No setting, server policy or playback action was actuated.",
-      "sha256": "1ea1a14b7ed6f35037ded0e59837539675398a867332a3788b0d9db381435ad2",
-      "status": "source-reviewed-mixed"
+      "reason": "Complete settings form reviewed. Platform preference controls, defaults, routes, local subtitle formatting and localization remain UI composition. Server-backed bindings read the model current-account configuration and submit a single-field edit; the view no longer copies its initial cached SDK configuration or invokes a delayed independently resolved save. The model/library writer owns fresh snapshot and account/write ordering. No settings UI or server action was executed.",
+      "sha256": "2a937e2740a9459636fd25c8dae6d9be7acb13170ddcb28ae15c1b3c5c4c2e8c",
+      "status": "source-reviewed-retained"
     },
     {
       "owners": [],
@@ -4260,8 +4261,8 @@
         "SwiftfinUserAdministration"
       ],
       "path": "Shared/Views/VideoPlayer/Components/Toolbar/ActionButtons/AutoPlayActionButton.swift",
-      "reason": "Complete updated control body reviewed. A press validates the exact prepared connection, captures current session/configuration before scheduling and supplies weak session/manager/connection checkpoints to its session-owned writer. UI composes optimistic configuration/labels and weak failure feedback; the owner supplies toggle and serialized coalescing writes to the captured authenticated user. Account/connection/manager retirement rejects stale work; transient menu or icon disappearance does not cancel admitted account saves. Queue remains required, so Kids queue-nil behavior stays disabled. An optimistic mirror is used only while matching the current account snapshot.",
-      "sha256": "12484b35bc6adf52c4e239fb6cc5fcecd0eaa1cd7d3e9f420d3c838f8e41f0c6",
+      "reason": "Complete current control reviewed: validates the prepared connection, captures current session/configuration at the press and supplies weak session/manager/connection checkpoints to the shared general configuration writer. UI adapts optimistic labels and feedback. Transient menu/icon disappearance does not cancel admitted saves; queue remains required, preserving Kids queue-nil behavior. Shared settings/Auto Play serialization is covered by synthetic owner contracts.",
+      "sha256": "e2465a11d3b42866de72cf4a1d72a52a03a7800b51c8254b4f16f1c6cfa08d65",
       "status": "source-reviewed-retained"
     },
     {
@@ -6007,31 +6008,52 @@
     },
     {
       "path": "Packages/SwiftfinUserAdministration/Sources/SwiftfinUserAdministration/UserAdministrationClient.swift",
-      "reason": "Scoped factory review only: captures the existing immutable authenticated user ID and client; no caller-supplied target ID is exposed by the writer. Optional predecessor transfers only an accepted-write ordering handle, not its account authority. All other existing methods/manifests are unchanged; complete administration API review remains separate.",
+      "reason": "Scoped factory review: configuration writer binds an explicit selected user or defaults to immutable authenticated user; predecessor transfers only ordering, never account authority. Administrative target factory checks original executor before binding a nonempty immutable selected ID. Existing endpoint APIs are unchanged; complete original administration API review remains separate.",
       "reviewedConsumers": [
-        "Shared/Services/UserSession/UserSession+ItemMetadata.swift"
+        "Shared/Services/UserSession/UserSession+ItemMetadata.swift",
+        "Shared/ViewModels/AdminDashboard/Users/ServerUserAdminViewModel.swift"
       ],
       "reviewedInterfaces": [
-        "autoPlayUpdates(after:)"
+        "configurationUpdates(userID:after:)",
+        "target(userID:)"
       ],
-      "sha256": "204e7c33412f0a12e7d8ce3ea660dee791f17bba299bdf6292834df497816ec4"
+      "sha256": "8b374ce2648243b937214109b48ac2d62632124bb32a3dddcd6b71dd451be59a"
     },
     {
-      "path": "Packages/SwiftfinUserAdministration/Sources/SwiftfinUserAdministration/AutoPlayConfigurationUpdates.swift",
-      "reason": "Complete MainActor writer body/API reviewed. Immutable current-user/client, fresh copied configuration, synchronous guarded optimistic admission, UUID intent checks and serial predecessor tail own every command. Already accepted writes drain; pending intents coalesce, cancelled/expired work is quiet, and a current error may reach weak UI feedback. Cancel retains the tail for later ordering; deinit cancels. Nine synthetic contracts verify pinned SDK method/path/userId/body, sibling values, rapid ordering, binding/caller replacement, failure/retry, cancellation/reentry and successor transport. Accepted remote writes and optimistic UI are not rolled back, and unrelated administrative writers are not claimed transactional.",
+      "path": "Packages/SwiftfinUserAdministration/Sources/SwiftfinUserAdministration/UserConfigurationUpdates.swift",
+      "reason": "Complete MainActor writer and public API reviewed. Generalized account configuration owner retains fixed client/user, copied submitted DTO, synchronous guarded admission and latest UUID, drains accepted predecessors and coalesces queued intent. Current-only failure/completion callbacks are cleared before publication; cancellation retains the predecessor handle. Settings and Auto Play use the same session owner. Existing nine regressions remain plus shared-field/order and current-completion contracts; no remote rollback or transactional behavior with unrelated administrative API callers is claimed.",
       "reviewedConsumers": [
         "Shared/Services/UserSession/UserSession.swift",
         "Shared/Services/UserSession/UserSession+ItemMetadata.swift",
-        "Shared/Views/VideoPlayer/Components/Toolbar/ActionButtons/AutoPlayActionButton.swift"
+        "Shared/Views/VideoPlayer/Components/Toolbar/ActionButtons/AutoPlayActionButton.swift",
+        "Shared/ViewModels/AdminDashboard/Users/ServerUserAdminViewModel.swift"
       ],
       "reviewedInterfaces": [
         "toggle(from:validate:willSubmit:failure:)",
+        "submit(_:validate:willSubmit:failure:completion:)",
         "cancel()",
         "waitUntilFinished()",
         "Checkpoint",
         "Failure"
       ],
-      "sha256": "73d4abdd193a16641a95e6a830a6a78d43bc1976d9f46ce4e1317e1563ccfbf9"
+      "sha256": "b3aa726adc56436a46e3c621bac3eedc12d6db9fed877ec0008422033de2bd3c"
+    },
+    {
+      "path": "Packages/SwiftfinUserAdministration/Sources/SwiftfinUserAdministration/UserAdministrationTarget.swift",
+      "reason": "Complete immutable selected-user owner/API reviewed. Reads reject mismatched returned user identity. Serial write handles preserve an accepted noncooperative predecessor across cancellation; retired queued work checks cancellation/binding before I/O. Rename reads the latest selected profile only after preceding writes drain and verifies identity before sending the copied profile. Policy and rename never resolve new current-session authority. Five synthetic target regressions cover missing/retired admission, exact selected target, protected sibling profile, cancellation/order, account replacement and mismatched read identity. This owner does not change server permissions or media.",
+      "reviewedConsumers": [
+        "Shared/ViewModels/AdminDashboard/Users/ServerUserAdminViewModel.swift"
+      ],
+      "reviewedInterfaces": [
+        "userID",
+        "TargetError",
+        "checkBinding()",
+        "user()",
+        "libraries(isHidden:)",
+        "updatePolicy(_:)",
+        "updateUsername(_:)"
+      ],
+      "sha256": "d53a941083b6dd3fd85cbd05de3ba60d29ffe58e4a9aa627ede6db4a504906b9"
     }
   ],
   "limits": "This ledger records bodies explicitly reviewed, with exact current hashes; earlier prose or lexical inventory is not automatically promoted. Pending and mixed entries prevent whole-source completion. Retained UI algorithms have specific presentation reasons, not folder/import-based blanket approval. API entries do not classify the rest of the public graph. Source review and offline tests do not satisfy held runtime acceptance.",
@@ -6041,10 +6063,10 @@
     "applicationSwiftFiles": 665,
     "classification": {
       "pending": 218,
-      "source-reviewed-mixed": 12,
-      "source-reviewed-retained": 435
+      "source-reviewed-mixed": 10,
+      "source-reviewed-retained": 437
     },
-    "currentAPIReviews": 45,
+    "currentAPIReviews": 46,
     "runtimeAcceptance": "held by human; no simulator/server testing"
   }
 }

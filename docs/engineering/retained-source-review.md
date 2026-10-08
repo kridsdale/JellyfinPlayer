@@ -1,6 +1,6 @@
 # Retained application responsibility review
 
-The application is intended to retain composition and platform presentation. This is a source-reviewed ledger, not an automatic approval of files based on their folder, filename or import count. The full-client refactor remains active. Live simulator/server activity is held by the human. Current ledger:396 retained, 14 mixed and 255 pending among 665 app files;33 scoped interface reviews.
+The application is intended to retain composition and platform presentation. This is a source-reviewed ledger, not an automatic approval of files based on their folder, filename or import count. The full-client refactor remains active. Live simulator/server activity is held by the human. Current ledger:437 retained,10 mixed and218 pending among665 app files;46 scoped interface reviews.
 
 ## Reviewed boundaries at the date/program checkpoint
 
@@ -242,3 +242,7 @@ Native sweep 60 passes 877 contracts (848 Swift Testing and 29 XCTest), eight ge
 Simulator automation, installation, launches, playback and server-facing diagnostics remain stopped until explicit human resumption. Cancelled acceptance79 remains cancelled. These checks prove synthetic contracts, source review and compilation; actual Combine debounce, Stateful background-state lifetime, GUI editing/authentication/native playback and full whole-graph acceptance remain held. No real credential access, native permission prompt, household-server request or RAID operation was performed. The complete items1/2 objective remains active; physical-device/live CloudKit and separate server/release gates remain deferred.
 
 The final input-handler correction uses a quiet task-cancellation guard in both component and identification search submission. Inspection of the pinned StatefulMacro confirms that a thrown cancellation can reach its error-publication path before the post-handler cancelled-task check. Library/test/helper source hashes are identical to native60; only these two app adapters changed afterward. Earlier Debug130/Release55/iOS74 compile the preceding adapter; final131/56/75 cover the corrected guard. Actual macro/UI runtime acceptance remains held.
+
+## Settings and selected-user administration checkpoint
+
+The two previously mixed settings/admin sources now retain explicit platform adapters. Fresh configuration edits and fixed selected-user commands are owned by the existing UserAdministration library. Application publication keeps committed DTO values and rechecks the bound account/intent between session-record, notification and event effects. Shared configuration submission prevents settings and Auto Play from overtaking accepted predecessors. Refresh does not replace an intervening local configuration intent. Scoped public reviews now include UserConfigurationUpdates, UserAdministrationTarget and their factories; the remaining public graph is not implicitly approved. All26 affected native contracts pass; no simulator or server action was run.

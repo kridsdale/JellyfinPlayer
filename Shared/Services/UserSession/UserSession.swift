@@ -18,7 +18,7 @@ final class UserSession: AccountSessionLifecycle {
     let server: ServerState
     let user: UserState
     var mediaStateOwner: (transport: JellyfinTransport, owner: UserMediaStateClient)?
-    var autoPlayUpdatesOwner: (transport: JellyfinTransport, owner: AutoPlayConfigurationUpdates)?
+    var configurationUpdatesOwner: (transport: JellyfinTransport, owner: UserConfigurationUpdates)?
 
     private let transports = AccountTransportCache { url, token in
         JellyfinTransport.swiftfin(url: url, accessToken: token)
@@ -59,7 +59,7 @@ final class UserSession: AccountSessionLifecycle {
     }
 
     func stop() {
-        autoPlayUpdatesOwner?.owner.cancel()
+        configurationUpdatesOwner?.owner.cancel()
         lifecycle.stop()
     }
 }

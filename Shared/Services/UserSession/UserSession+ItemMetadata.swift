@@ -100,15 +100,15 @@ extension UserSession {
 extension UserSession {
     /// Keep one writer across videos. A replaced transport drains its accepted
     /// predecessor before a new configuration command can be sent.
-    var autoPlayConfigurationUpdates: AutoPlayConfigurationUpdates {
+    var userConfigurationUpdates: UserConfigurationUpdates {
         let client = self.client
-        if let cached = autoPlayUpdatesOwner, cached.transport === client {
+        if let cached = configurationUpdatesOwner, cached.transport === client {
             return cached.owner
         }
-        let previous = autoPlayUpdatesOwner?.owner
+        let previous = configurationUpdatesOwner?.owner
         previous?.cancel()
-        let owner = userAdministration.autoPlayUpdates(after: previous)
-        autoPlayUpdatesOwner = (client, owner)
+        let owner = userAdministration.configurationUpdates(after: previous)
+        configurationUpdatesOwner = (client, owner)
         return owner
     }
 }

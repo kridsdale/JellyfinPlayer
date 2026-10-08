@@ -26,9 +26,15 @@ public final class UserAdministrationClient {
         try executor.checkBinding()
     }
 
-    /// A configuration writer for this captured authenticated user only.
-    public func autoPlayUpdates(after previous: AutoPlayConfigurationUpdates? = nil) -> AutoPlayConfigurationUpdates {
-        AutoPlayConfigurationUpdates(client: self, userID: currentUserID, after: previous)
+    /// A writer bound to an explicit edited user, defaulting to this authenticated account.
+    public func configurationUpdates(userID: String? = nil, after previous: UserConfigurationUpdates? = nil) -> UserConfigurationUpdates {
+        UserConfigurationUpdates(client: self, userID: userID ?? currentUserID, after: previous)
+    }
+
+    /// Capture the selected administrative target before any action is scheduled.
+    public func target(userID: String) throws -> UserAdministrationTarget {
+        try checkBinding()
+        return try UserAdministrationTarget(client: self, userID: userID)
     }
 
     public func users(isHidden: Bool? = nil, isDisabled: Bool? = nil) async throws -> [UserDto] {

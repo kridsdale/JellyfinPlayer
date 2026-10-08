@@ -9,11 +9,11 @@
 import Foundation
 import JellyfinAPI
 
-/// Owns one account's submitted Auto Play updates. Accepted writes drain in order;
+/// Owns one account's submitted configuration updates. Accepted writes drain in order;
 /// queued replacements coalesce and obsolete work never reports a UI failure.
 /// Optimistic presentation belongs to the caller and is not rolled back here.
 @MainActor
-public final class AutoPlayConfigurationUpdates {
+public final class UserConfigurationUpdates {
     public typealias Checkpoint = @MainActor @Sendable () throws -> Void
     public typealias Failure = @MainActor @Sendable (any Error) -> Void
 
@@ -22,7 +22,7 @@ public final class AutoPlayConfigurationUpdates {
     private var generation: UUID?
     private var tail: Task<Void, Never>?
 
-    init(client: UserAdministrationClient, userID: String, after previous: AutoPlayConfigurationUpdates?) {
+    init(client: UserAdministrationClient, userID: String, after previous: UserConfigurationUpdates?) {
         self.client = client
         self.userID = userID
         self.tail = previous?.tail
@@ -37,14 +37,27 @@ public final class AutoPlayConfigurationUpdates {
         willSubmit: @MainActor @Sendable (UserConfiguration) -> Void = { _ in },
         failure: @escaping Failure = { _ in }
     ) throws -> Bool {
+        var updated = configuration
+        let enabled = configuration.enableNextEpisodeAutoPlay != true
+        updated.enableNextEpisodeAutoPlay = enabled
+        try submit(updated, validate: validate, willSubmit: willSubmit, failure: failure)
+        return enabled
+    }
+
+    /// Submit a complete fresh snapshot. All callers for an account should share
+    /// this writer so an admitted older write cannot overtake a newer intent.
+    public func submit(
+        _ updated: UserConfiguration,
+        validate: @escaping Checkpoint = {},
+        willSubmit: @MainActor @Sendable (UserConfiguration) -> Void = { _ in },
+        failure: @escaping Failure = { _ in },
+        completion: @escaping @MainActor @Sendable () -> Void = {}
+    ) throws {
         try client.checkBinding()
         try validate()
         let ticket = UUID()
         let previous = tail
         generation = ticket
-        var updated = configuration
-        let enabled = configuration.enableNextEpisodeAutoPlay != true
-        updated.enableNextEpisodeAutoPlay = enabled
         willSubmit(updated)
         do {
             try client.checkBinding()
@@ -69,6 +82,7 @@ public final class AutoPlayConfigurationUpdates {
                 guard let self, accepts(ticket, validate: validate) else { return }
                 generation = nil
                 tail = nil
+                completion()
             } catch {
                 guard let self, accepts(ticket, validate: validate) else { return }
                 generation = nil
@@ -77,7 +91,6 @@ public final class AutoPlayConfigurationUpdates {
                 failure(error)
             }
         }
-        return enabled
     }
 
     private func accepts(_ ticket: UUID, validate: Checkpoint) -> Bool {

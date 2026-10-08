@@ -72,9 +72,9 @@ private func settleConfiguration(_ ready: () -> Bool) async {
 @Suite("Bound Auto Play configuration")
 @MainActor
 struct AutoPlayConfigurationContracts {
-    private func writer(_ sender: ConfigurationSender, _ binding: ConfigurationBinding = .init()) -> AutoPlayConfigurationUpdates {
+    private func writer(_ sender: ConfigurationSender, _ binding: ConfigurationBinding = .init()) -> UserConfigurationUpdates {
         UserAdministrationClient(executor: .init(sender: sender, isCurrent: { binding.current }), currentUserID: "captured-user")
-            .autoPlayUpdates()
+            .configurationUpdates()
     }
 
     @Test
@@ -223,7 +223,7 @@ struct AutoPlayConfigurationContracts {
         old.cancel()
         let newSender = ConfigurationSender()
         let client = UserAdministrationClient(executor: .init(sender: newSender), currentUserID: "replacement-user")
-        let replacement = client.autoPlayUpdates(after: old)
+        let replacement = client.configurationUpdates(after: old)
         try replacement.toggle(from: .init(enableNextEpisodeAutoPlay: true))
         for _ in 0 ..< 20 {
             await Task.yield()

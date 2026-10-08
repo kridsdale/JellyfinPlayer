@@ -30,7 +30,7 @@ extension VideoPlayer.PlaybackControls.Toolbar.ActionButtons {
         @State
         private var updateConnection: PlaybackConnection?
         @State
-        private var updates: AutoPlayConfigurationUpdates?
+        private var updates: UserConfigurationUpdates?
 
         @Toaster
         private var toaster
@@ -61,7 +61,7 @@ extension VideoPlayer.PlaybackControls.Toolbar.ActionButtons {
             do {
                 try connection.preparation.checkBinding()
                 guard let session = Container.shared.currentUserSession() else { throw CancellationError() }
-                let validate: AutoPlayConfigurationUpdates.Checkpoint = { [weak manager, weak session, weak connection] in
+                let validate: UserConfigurationUpdates.Checkpoint = { [weak manager, weak session, weak connection] in
                     guard let manager, let session, let connection,
                           Container.shared.currentUserSession() === session,
                           manager.playbackItem?.connection === connection,
@@ -72,7 +72,7 @@ extension VideoPlayer.PlaybackControls.Toolbar.ActionButtons {
                 try validate()
                 if updateConnection !== connection || updates == nil {
                     updates?.cancel()
-                    updates = session.autoPlayConfigurationUpdates
+                    updates = session.userConfigurationUpdates
                     updateConnection = connection
                 }
                 guard let updates else { throw CancellationError() }

@@ -80,10 +80,7 @@ struct VideoPlayerSettingsView: View {
     }
 
     private func updateConfiguration(_ modify: (inout UserConfiguration) -> Void) {
-        guard viewModel.user.id != nil else { return }
-        guard var configuration = viewModel.user.configuration else { return }
-        modify(&configuration)
-        viewModel.updateConfiguration(configuration)
+        viewModel.editConfiguration(modify)
     }
 
     // MARK: - Body
@@ -116,7 +113,7 @@ struct VideoPlayerSettingsView: View {
         .toolbarTitleDisplayMode(.inline)
         .navigationTitle(L10n.videoPlayer.localizedCapitalized)
         .topBarTrailing {
-            if viewModel.background.is(.updating) || viewModel.background.is(.refreshing) {
+            if viewModel.configurationUpdating || viewModel.background.is(.updating) || viewModel.background.is(.refreshing) {
                 ProgressView()
             }
         }
@@ -222,7 +219,7 @@ struct VideoPlayerSettingsView: View {
             }
 
             Toggle(L10n.autoPlay, isOn: Binding(
-                get: { viewModel.user.configuration?.enableNextEpisodeAutoPlay == true },
+                get: { viewModel.configuration?.enableNextEpisodeAutoPlay == true },
                 set: { newValue in
                     updateConfiguration { $0.enableNextEpisodeAutoPlay = newValue }
                 }
@@ -273,21 +270,21 @@ struct VideoPlayerSettingsView: View {
     private var audioSettings: some View {
         Section(L10n.audio) {
             CulturePicker(L10n.preferredLanguage, threeLetterISOLanguageName: Binding(
-                get: { viewModel.user.configuration?.audioLanguagePreference },
+                get: { viewModel.configuration?.audioLanguagePreference },
                 set: { newValue in
                     updateConfiguration { $0.audioLanguagePreference = newValue }
                 }
             ))
 
             Toggle(L10n.playDefaultTrack, isOn: Binding(
-                get: { viewModel.user.configuration?.isPlayDefaultAudioTrack == true },
+                get: { viewModel.configuration?.isPlayDefaultAudioTrack == true },
                 set: { newValue in
                     updateConfiguration { $0.isPlayDefaultAudioTrack = newValue }
                 }
             ))
 
             Toggle(L10n.rememberTrackSelection, isOn: Binding(
-                get: { viewModel.user.configuration?.isRememberAudioSelections == true },
+                get: { viewModel.configuration?.isRememberAudioSelections == true },
                 set: { newValue in
                     updateConfiguration { $0.isRememberAudioSelections = newValue }
                 }
@@ -311,21 +308,21 @@ struct VideoPlayerSettingsView: View {
     private var subtitleSettings: some View {
         Section(L10n.subtitles) {
             CulturePicker(L10n.preferredLanguage, threeLetterISOLanguageName: Binding(
-                get: { viewModel.user.configuration?.subtitleLanguagePreference },
+                get: { viewModel.configuration?.subtitleLanguagePreference },
                 set: { newValue in
                     updateConfiguration { $0.subtitleLanguagePreference = newValue }
                 }
             ))
 
             PlatformPicker(L10n.subtitleMode, selection: Binding(
-                get: { viewModel.user.configuration?.subtitleMode ?? .default },
+                get: { viewModel.configuration?.subtitleMode ?? .default },
                 set: { newValue in
                     updateConfiguration { $0.subtitleMode = newValue }
                 }
             ))
 
             Toggle(L10n.rememberTrackSelection, isOn: Binding(
-                get: { viewModel.user.configuration?.isRememberSubtitleSelections == true },
+                get: { viewModel.configuration?.isRememberSubtitleSelections == true },
                 set: { newValue in
                     updateConfiguration { $0.isRememberSubtitleSelections = newValue }
                 }
